@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'settings_controller.dart';
 
@@ -15,9 +16,10 @@ class SettingsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var t = AppLocalizations.of(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Settings'),
+        title: Text(t!.settingsTitle),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -25,24 +27,48 @@ class SettingsView extends StatelessWidget {
         //
         // When a user selects a theme from the dropdown list, the
         // SettingsController is updated, which rebuilds the MaterialApp.
-        child: DropdownButton<ThemeMode>(
-          // Read the selected themeMode from the controller
-          value: controller.themeMode,
-          // Call the updateThemeMode method any time the user selects a theme.
-          onChanged: controller.updateThemeMode,
-          items: const [
-            DropdownMenuItem(
-              value: ThemeMode.system,
-              child: Text('System Theme'),
+        child: Column(
+          children: [
+            DropdownButton<ThemeMode>(
+              // Read the selected themeMode from the controller
+              value: controller.themeMode,
+              // Call the updateThemeMode method any time the user selects a theme.
+              onChanged: controller.updateThemeMode,
+              items: const [
+                DropdownMenuItem(
+                  value: ThemeMode.system,
+                  child: Text('System Theme'),
+                ),
+                DropdownMenuItem(
+                  value: ThemeMode.light,
+                  child: Text('Light Theme'),
+                ),
+                DropdownMenuItem(
+                  value: ThemeMode.dark,
+                  child: Text('Dark Theme'),
+                )
+              ],
             ),
-            DropdownMenuItem(
-              value: ThemeMode.light,
-              child: Text('Light Theme'),
+            DropdownButton<Locale>(
+              // Read selected from the controller
+              value: controller.locale,
+              // Call the update method any time the user selects.
+              onChanged: controller.updateLocale,
+              items: const [
+                DropdownMenuItem(
+                  value: null,
+                  child: Text('System Locale'),
+                ),
+                DropdownMenuItem(
+                  value: Locale("de"),
+                  child: Text('Deutsch'),
+                ),
+                DropdownMenuItem(
+                  value: Locale("en"),
+                  child: Text('English'),
+                )
+              ],
             ),
-            DropdownMenuItem(
-              value: ThemeMode.dark,
-              child: Text('Dark Theme'),
-            )
           ],
         ),
       ),

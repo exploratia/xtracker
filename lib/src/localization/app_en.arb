@@ -1,6 +1,8 @@
 {
-  "appTitle": "Little Tracker",
+  "@@locale": "en",
+  "appTitle": "Little Tracker (EN)",
   "@appTitle": {
     "description": "The title of the application"
-  }
+  },
+  "settingsTitle": "Settings"
 }
