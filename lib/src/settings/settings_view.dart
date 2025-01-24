@@ -17,6 +17,13 @@ class SettingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var t = AppLocalizations.of(context);
+
+    var localeItems = [
+      {'l': null, 'text': "System"},
+      {'l': Locale("de"), 'text': "Deutsch"},
+      {'l': Locale("en"), 'text': "English"},
+    ];
+
     return Scaffold(
       appBar: AppBar(
         title: Text(t!.settingsTitle),
@@ -54,20 +61,11 @@ class SettingsView extends StatelessWidget {
               value: controller.locale,
               // Call the update method any time the user selects.
               onChanged: controller.updateLocale,
-              items: const [
-                DropdownMenuItem(
-                  value: null,
-                  child: Text('System Locale'),
-                ),
-                DropdownMenuItem(
-                  value: Locale("de"),
-                  child: Text('Deutsch'),
-                ),
-                DropdownMenuItem(
-                  value: Locale("en"),
-                  child: Text('English'),
-                )
-              ],
+              items: localeItems
+                  .map((i) => DropdownMenuItem<Locale>(
+                      value: i["l"] as Locale?,
+                      child: Text(i["text"] as String)))
+                  .toList(),
             ),
           ],
         ),
