@@ -16,14 +16,21 @@ class SettingsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var t = AppLocalizations.of(context);
+    final t = AppLocalizations.of(context);
 
-    var localeItems = [
-      {'l': null, 'text': "System"},
-      {'l': Locale("de"), 'text': "Deutsch"},
-      {'l': Locale("en"), 'text': "English"},
+    var actTheme = controller.themeMode;
+    var themeItems = [
+      {'v': ThemeMode.system, 'text': "System"},
+      {'v': ThemeMode.light, 'text': "Light"},
+      {'v': ThemeMode.dark, 'text': "Dark"},
     ];
 
+    var actLocale = controller.locale;
+    var localeItems = [
+      {'v': null, 'text': "System"},
+      {'v': Locale("de"), 'text': "Deutsch"},
+      {'v': Locale("en"), 'text': "English"},
+    ];
     return Scaffold(
       appBar: AppBar(
         title: Text(t!.settingsTitle),
@@ -38,38 +45,70 @@ class SettingsView extends StatelessWidget {
           children: [
             DropdownButton<ThemeMode>(
               // Read the selected themeMode from the controller
-              value: controller.themeMode,
+              value: actTheme,
               // Call the updateThemeMode method any time the user selects a theme.
               onChanged: controller.updateThemeMode,
-              items: const [
-                DropdownMenuItem(
-                  value: ThemeMode.system,
-                  child: Text('System Theme'),
-                ),
-                DropdownMenuItem(
-                  value: ThemeMode.light,
-                  child: Text('Light Theme'),
-                ),
-                DropdownMenuItem(
-                  value: ThemeMode.dark,
-                  child: Text('Dark Theme'),
-                )
-              ],
+              items: themeItems.map((i) {
+                var text = Text(i["text"] as String);
+                var value = i["v"] as ThemeMode;
+                var selected = actTheme == value;
+                return DropdownMenuItem<ThemeMode>(
+                    value: value,
+                    child:
+                        _DropDownMenuItemChild(selected: selected, text: text));
+              }).toList(),
             ),
             DropdownButton<Locale>(
               // Read selected from the controller
-              value: controller.locale,
+              value: actLocale,
               // Call the update method any time the user selects.
               onChanged: controller.updateLocale,
-              items: localeItems
-                  .map((i) => DropdownMenuItem<Locale>(
-                      value: i["l"] as Locale?,
-                      child: Text(i["text"] as String)))
-                  .toList(),
+              items: localeItems.map((i) {
+                var text = Text(i["text"] as String);
+                var value = i["v"] as Locale?;
+                var selected = actLocale == value;
+                return DropdownMenuItem<Locale>(
+                    value: value,
+                    child:
+                        _DropDownMenuItemChild(selected: selected, text: text));
+              }).toList(),
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _DropDownMenuItemChild extends StatelessWidget {
+  const _DropDownMenuItemChild({
+    required this.selected,
+    required this.text,
+  });
+
+  final bool selected;
+  final Text text;
+
+  @override
+  Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
+
+    BoxDecoration? boxDeco;
+    if (selected) {
+      boxDeco = BoxDecoration(
+          border: Border(
+              left:
+                  BorderSide(width: 2, color: themeData.colorScheme.primary)));
+    }
+
+    return Padding(
+      padding: const EdgeInsets.only(left: 8),
+      child: Container(
+          decoration: boxDeco,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 8),
+            child: text,
+          )),
     );
   }
 }
