@@ -1,0 +1,54 @@
+import 'package:flutter/material.dart';
+
+import './playground_screen.dart';
+import './settings_screen.dart';
+
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
+
+  static const routeName = '/';
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Home"),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () {
+              // Navigate to the settings page. If the user leaves and returns
+              // to the app after it has been killed while running in the
+              // background, the navigation stack is restored.
+              Navigator.restorablePushNamed(context, SettingsScreen.routeName);
+            },
+          ),
+        ],
+      ),
+      body: Column(
+        children: [
+          Padding(padding: const EdgeInsets.all(16), child: Text("Home")),
+          ElevatedButton(
+            onPressed: () {
+              print('button pressed!');
+            },
+            child: Text('Next'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.restorablePushNamed(
+                  context, PlaygroundScreen.routeName);
+            },
+            child: Text('Playground'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.restorablePushNamed(context, SettingsScreen.routeName);
+            },
+            child: Text('Settings'),
+          ),
+        ],
+      ),
+    );
+  }
+}

@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'sample_feature/sample_item_details_view.dart';
-import 'sample_feature/sample_item_list_view.dart';
-import 'settings/settings_controller.dart';
-import 'settings/settings_view.dart';
+import 'screens/home_screen.dart';
+import 'screens/playground_screen.dart';
+import 'screens/settings_screen.dart';
+import 'widgets/playground/sample_feature/sample_item_details_view.dart';
+import 'widgets/playground/sample_feature/sample_item_list_view.dart';
+import 'widgets/settings/settings_controller.dart';
 
 /// The Widget that configures your application.
 class MyApp extends StatelessWidget {
@@ -64,7 +66,7 @@ class MyApp extends StatelessWidget {
             colorScheme: ColorScheme.fromSeed(
                 seedColor: Colors.blueAccent), // TODO theme data
           ),
-          darkTheme: ThemeData.dark(),
+          darkTheme: ThemeData.dark(useMaterial3: false),
           themeMode: settingsController.themeMode,
           locale: settingsController.locale,
 
@@ -75,13 +77,17 @@ class MyApp extends StatelessWidget {
               settings: routeSettings,
               builder: (BuildContext context) {
                 switch (routeSettings.name) {
-                  case SettingsView.routeName:
-                    return SettingsView(controller: settingsController);
+                  case PlaygroundScreen.routeName:
+                    return PlaygroundScreen();
+                  case SettingsScreen.routeName:
+                    return SettingsScreen(controller: settingsController);
                   case SampleItemDetailsView.routeName:
                     return const SampleItemDetailsView();
                   case SampleItemListView.routeName:
-                  default:
                     return const SampleItemListView();
+                  case HomeScreen.routeName:
+                  default:
+                    return const HomeScreen();
                 }
               },
             );
