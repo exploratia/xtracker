@@ -20,62 +20,100 @@ class SettingsView extends StatelessWidget {
 
     var actTheme = controller.themeMode;
     var themeItems = [
-      {'v': ThemeMode.system, 'text': "System"},
-      {'v': ThemeMode.light, 'text': "Light"},
-      {'v': ThemeMode.dark, 'text': "Dark"},
+      {'v': ThemeMode.system, 'text': t!.settingsThemeNameSystem},
+      {'v': ThemeMode.light, 'text': t.settingsThemeNameLight},
+      {'v': ThemeMode.dark, 'text': t.settingsThemeNameDark},
     ];
 
     var actLocale = controller.locale;
     var localeItems = [
-      {'v': null, 'text': "System"},
-      {'v': Locale("de"), 'text': "Deutsch"},
-      {'v': Locale("en"), 'text': "English"},
+      {'v': null, 'text': t.settingsLangNameSystem},
+      {'v': Locale("de"), 'text': t.settingsLangNameGerman},
+      {'v': Locale("en"), 'text': t.settingsLangNameEnglish},
     ];
     return Scaffold(
       appBar: AppBar(
-        title: Text(t!.settingsTitle),
+        title: Text(t.settingsTitle),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
+
         // Glue the SettingsController to the theme selection DropdownButton.
         //
         // When a user selects a theme from the dropdown list, the
         // SettingsController is updated, which rebuilds the MaterialApp.
         child: Column(
           children: [
-            DropdownButton<ThemeMode>(
-              // Read the selected themeMode from the controller
-              value: actTheme,
-              // Call the updateThemeMode method any time the user selects a theme.
-              onChanged: controller.updateThemeMode,
-              items: themeItems.map((i) {
-                var text = Text(i["text"] as String);
-                var value = i["v"] as ThemeMode;
-                var selected = actTheme == value;
-                return DropdownMenuItem<ThemeMode>(
-                    value: value,
-                    child:
-                        _DropDownMenuItemChild(selected: selected, text: text));
-              }).toList(),
-            ),
-            DropdownButton<Locale>(
-              // Read selected from the controller
-              value: actLocale,
-              // Call the update method any time the user selects.
-              onChanged: controller.updateLocale,
-              items: localeItems.map((i) {
-                var text = Text(i["text"] as String);
-                var value = i["v"] as Locale?;
-                var selected = actLocale == value;
-                return DropdownMenuItem<Locale>(
-                    value: value,
-                    child:
-                        _DropDownMenuItemChild(selected: selected, text: text));
-              }).toList(),
+            Table(
+              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+              // https://api.flutter.dev/flutter/widgets/Table-class.html
+              columnWidths: const <int, TableColumnWidth>{
+                // 0: FixedColumnWidth(128),
+                0: IntrinsicColumnWidth(),
+                1: IntrinsicColumnWidth(),
+                // 1: FlexColumnWidth(),
+              },
+              // border: TableBorder.symmetric(
+              //   inside: const BorderSide(width: 1, color: Colors.black12),
+              // ),
+              children: [
+                TableRow(children: [
+                  _TableCellPadding(Text(t.settingsThemeLabel)),
+                  _TableCellPadding(DropdownButton<ThemeMode>(
+                    // Read the selected themeMode from the controller
+                    value: actTheme,
+                    // Call the updateThemeMode method any time the user selects a theme.
+                    onChanged: controller.updateThemeMode,
+                    items: themeItems.map((i) {
+                      var text = Text(i["text"] as String);
+                      var value = i["v"] as ThemeMode;
+                      var selected = actTheme == value;
+                      return DropdownMenuItem<ThemeMode>(
+                          value: value,
+                          child: _DropDownMenuItemChild(
+                              selected: selected, text: text));
+                    }).toList(),
+                  ))
+                ]),
+                TableRow(children: [
+                  _TableCellPadding(Text(t.settingsLangLabel)),
+                  _TableCellPadding(
+                    DropdownButton<Locale>(
+                      // Read selected from the controller
+                      value: actLocale,
+                      // Call the update method any time the user selects.
+                      onChanged: controller.updateLocale,
+                      items: localeItems.map((i) {
+                        var text = Text(i["text"] as String);
+                        var value = i["v"] as Locale?;
+                        var selected = actLocale == value;
+                        return DropdownMenuItem<Locale>(
+                            value: value,
+                            child: _DropDownMenuItemChild(
+                                selected: selected, text: text));
+                      }).toList(),
+                    ),
+                  )
+                ]),
+              ],
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _TableCellPadding extends StatelessWidget {
+  final Widget child;
+
+  const _TableCellPadding(this.child);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+      child: child,
     );
   }
 }

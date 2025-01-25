@@ -4,5 +4,13 @@
   "@appTitle": {
     "description": "The title of the application"
   },
-  "settingsTitle": "Einstellungen"
+  "settingsTitle": "Einstellungen",
+  "settingsLangLabel": "Sprache:",
+  "settingsLangNameSystem": "Systemeinstellung",
+  "settingsLangNameEnglish": "English",
+  "settingsLangNameGerman": "Deutsch",
+  "settingsThemeLabel": "Theme:",
+  "settingsThemeNameSystem": "Systemeinstellung",
+  "settingsThemeNameDark": "Dunkel",
+  "settingsThemeNameLight": "Hell"
 }
