@@ -31,3 +31,33 @@ To support additional languages, please visit the tutorial on
 [Internationalizing Flutter apps](https://flutter.dev/to/internationalization).
 TODO for iOS:
 https://docs.flutter.dev/ui/accessibility-and-internationalization/internationalization#localizing-for-ios-updating-the-ios-app-bundle
+
+## Dependencies
+
+### Appinfo
+
+https://pub.dev/packages/package_info_plus
+
+#### Usage
+
+- Init AppInfo in main before running the app.
+- Use AppInfo where needed.
+
+```dart
+import 'package:flutter_app_info/flutter_app_info.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await AppInfo.init();
+  runApp(const MyApp());
+}
+
+void doSomething() {
+  const appName = AppInfo.appName;
+}
+```
+
+### DeviceStorage
+
+https://pub.dev/packages/flutter_secure_storage
+

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../util/table_utils.dart';
 import './settings_controller.dart';
 
 /// Displays the various settings that can be customized by the user.
@@ -44,9 +45,9 @@ class SettingsView extends StatelessWidget {
           //   inside: const BorderSide(width: 1, color: Colors.black12),
           // ),
           children: [
-            TableRow(children: [
-              _TableCellPadding(Text(t.settingsThemeLabel)),
-              _TableCellPadding(DropdownButton<ThemeMode>(
+            TableUtils.tableRow([
+              Text(t.settingsThemeLabel),
+              DropdownButton<ThemeMode>(
                 // Read the selected themeMode from the controller
                 value: actTheme,
                 // Call the updateThemeMode method any time the user selects a theme.
@@ -60,45 +61,29 @@ class SettingsView extends StatelessWidget {
                       child: _DropDownMenuItemChild(
                           selected: selected, text: text));
                 }).toList(),
-              ))
-            ]),
-            TableRow(children: [
-              _TableCellPadding(Text(t.settingsLangLabel)),
-              _TableCellPadding(
-                DropdownButton<Locale>(
-                  // Read selected from the controller
-                  value: actLocale,
-                  // Call the update method any time the user selects.
-                  onChanged: controller.updateLocale,
-                  items: localeItems.map((i) {
-                    var text = Text(i["text"] as String);
-                    var value = i["v"] as Locale?;
-                    var selected = actLocale == value;
-                    return DropdownMenuItem<Locale>(
-                        value: value,
-                        child: _DropDownMenuItemChild(
-                            selected: selected, text: text));
-                  }).toList(),
-                ),
               )
+            ]),
+            TableUtils.tableRow([
+              Text(t.settingsLangLabel),
+              DropdownButton<Locale>(
+                // Read selected from the controller
+                value: actLocale,
+                // Call the update method any time the user selects.
+                onChanged: controller.updateLocale,
+                items: localeItems.map((i) {
+                  var text = Text(i["text"] as String);
+                  var value = i["v"] as Locale?;
+                  var selected = actLocale == value;
+                  return DropdownMenuItem<Locale>(
+                      value: value,
+                      child: _DropDownMenuItemChild(
+                          selected: selected, text: text));
+                }).toList(),
+              ),
             ]),
           ],
         ),
       ],
-    );
-  }
-}
-
-class _TableCellPadding extends StatelessWidget {
-  final Widget child;
-
-  const _TableCellPadding(this.child);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
-      child: child,
     );
   }
 }

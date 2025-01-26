@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../util/device_storage/device_storage.dart';
+import '../../util/device_storage/device_storage_keys.dart';
+
 /// A service that stores and retrieves user settings.
 ///
 /// By default, this class does not persist user settings. If you'd like to
@@ -7,17 +10,28 @@ import 'package:flutter/material.dart';
 /// you'd like to store settings on a web server, use the http package.
 class SettingsService {
   /// Loads the User's preferred ThemeMode from local or remote storage.
-  Future<ThemeMode> themeMode() async => ThemeMode.system;
+  Future<ThemeMode> themeMode() async {
+    var value = await DeviceStorage.read(DeviceStorageKeys.keyAppTheme);
+    if (value == 'dark') return ThemeMode.dark;
+    if (value == 'light') return ThemeMode.light;
+    return ThemeMode.system;
+  }
 
   /// Persists the user's preferred ThemeMode to local or remote storage.
   Future<void> updateThemeMode(ThemeMode theme) async {
-    // Use the shared_preferences package to persist settings locally or the
-    // http package to persist settings over the network.
+    var value = theme.name;
+    await DeviceStorage.write(DeviceStorageKeys.keyAppTheme, value);
   }
 
   /// Loads the User's preferred Locale
-  Future<Locale?> locale() async => null;
+  Future<Locale?> locale() async {
+    var value = await DeviceStorage.read(DeviceStorageKeys.keyAppLocale);
+    return value == null ? null : Locale(value);
+  }
 
   /// Persists the user's preferred Locale to local or remote storage.
-  Future<void> updateLocale(Locale? locale) async {}
+  Future<void> updateLocale(Locale? locale) async {
+    var value = locale == null ? "_SYSTEM_" : locale.languageCode;
+    await DeviceStorage.write(DeviceStorageKeys.keyAppLocale, value);
+  }
 }
