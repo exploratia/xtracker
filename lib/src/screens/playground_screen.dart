@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../widgets/playground/sample_feature/sample_item_list_view.dart';
-import 'settings_screen.dart';
+import 'administration/settings_screen.dart';
 
 class PlaygroundScreen extends StatelessWidget {
   const PlaygroundScreen({super.key});

@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'screens/administration/log_screen.dart';
+import 'screens/administration/log_settings_screen.dart';
+import 'screens/administration/logs_screen.dart';
+import 'screens/administration/settings_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/playground_screen.dart';
-import 'screens/settings_screen.dart';
+import 'widgets/administration/settings/settings_controller.dart';
 import 'widgets/playground/sample_feature/sample_item_details_view.dart';
 import 'widgets/playground/sample_feature/sample_item_list_view.dart';
-import 'widgets/settings/settings_controller.dart';
 
 /// The Widget that configures your application.
 class MyApp extends StatelessWidget {
@@ -79,8 +82,16 @@ class MyApp extends StatelessWidget {
                 switch (routeSettings.name) {
                   case PlaygroundScreen.routeName:
                     return PlaygroundScreen();
+                  // administration >>
                   case SettingsScreen.routeName:
                     return SettingsScreen(controller: settingsController);
+                  case LogsScreen.routeName:
+                    return const LogsScreen();
+                  case LogScreen.routeName:
+                    return const LogScreen();
+                  case LogSettingsScreen.routeName:
+                    return const LogSettingsScreen();
+                  // << administration
                   case SampleItemDetailsView.routeName:
                     return const SampleItemDetailsView();
                   case SampleItemListView.routeName:

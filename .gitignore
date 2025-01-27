@@ -57,3 +57,5 @@ app.*.map.json
 *.js.deps
 *.js.map
 
+# untranslated I10n
+untranslated.txt

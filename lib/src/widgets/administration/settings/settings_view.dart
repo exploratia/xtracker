@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../util/table_utils.dart';
+import '../../../util/table_utils.dart';
+import '../../layout/drop_down_menu_item_child.dart';
 import './settings_controller.dart';
 
 /// Displays the various settings that can be customized by the user.
@@ -15,6 +16,7 @@ class SettingsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
     final t = AppLocalizations.of(context);
 
     var actTheme = controller.themeMode;
@@ -30,6 +32,12 @@ class SettingsView extends StatelessWidget {
       {'v': Locale("de"), 'text': t.settingsLangNameGerman},
       {'v': Locale("en"), 'text': t.settingsLangNameEnglish},
     ];
+    if (actLocale != null) {
+      // check
+      var idx = localeItems.indexWhere((element) => element['v'] == actLocale);
+      if (idx < 0) actLocale = null;
+    }
+
     return Column(
       children: [
         Table(
@@ -48,6 +56,8 @@ class SettingsView extends StatelessWidget {
             TableUtils.tableRow([
               Text(t.settingsThemeLabel),
               DropdownButton<ThemeMode>(
+                key: Key('settingsThemeSelect'),
+                dropdownColor: themeData.cardColor,
                 // Read the selected themeMode from the controller
                 value: actTheme,
                 // Call the updateThemeMode method any time the user selects a theme.
@@ -57,15 +67,18 @@ class SettingsView extends StatelessWidget {
                   var value = i["v"] as ThemeMode;
                   var selected = actTheme == value;
                   return DropdownMenuItem<ThemeMode>(
+                      key: Key('settingsThemeSelect_$i'),
                       value: value,
-                      child: _DropDownMenuItemChild(
+                      child: DropDownMenuItemChild(
                           selected: selected, text: text));
                 }).toList(),
               )
             ]),
             TableUtils.tableRow([
               Text(t.settingsLangLabel),
-              DropdownButton<Locale>(
+              DropdownButton<Locale?>(
+                key: Key('settingsLocaleSelect'),
+                dropdownColor: themeData.cardColor,
                 // Read selected from the controller
                 value: actLocale,
                 // Call the update method any time the user selects.
@@ -74,9 +87,10 @@ class SettingsView extends StatelessWidget {
                   var text = Text(i["text"] as String);
                   var value = i["v"] as Locale?;
                   var selected = actLocale == value;
-                  return DropdownMenuItem<Locale>(
+                  return DropdownMenuItem<Locale?>(
+                      key: Key('settingsLocaleSelect_$i'),
                       value: value,
-                      child: _DropDownMenuItemChild(
+                      child: DropDownMenuItemChild(
                           selected: selected, text: text));
                 }).toList(),
               ),
@@ -84,39 +98,6 @@ class SettingsView extends StatelessWidget {
           ],
         ),
       ],
-    );
-  }
-}
-
-class _DropDownMenuItemChild extends StatelessWidget {
-  const _DropDownMenuItemChild({
-    required this.selected,
-    required this.text,
-  });
-
-  final bool selected;
-  final Text text;
-
-  @override
-  Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
-
-    BoxDecoration? boxDeco;
-    if (selected) {
-      boxDeco = BoxDecoration(
-          border: Border(
-              left:
-                  BorderSide(width: 2, color: themeData.colorScheme.primary)));
-    }
-
-    return Padding(
-      padding: const EdgeInsets.only(left: 8),
-      child: Container(
-          decoration: boxDeco,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 8),
-            child: text,
-          )),
     );
   }
 }

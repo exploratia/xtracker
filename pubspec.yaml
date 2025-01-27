@@ -26,12 +26,20 @@ dependencies:
   # AppInfo
   package_info_plus: ^8.1.3
 
+  # SimpleLogging
+  # determine paths like tmp or app data
+  path_provider: ^2.0.15
+  # zip files
+  flutter_archive: ^6.0.3
+  logger: ^2.5.0
+  # call native share dialog
+  share_plus: ^10.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  # from flutter_commons
-  # flutter_lints: ^5.0.0
+  flutter_lints: ^5.0.0
 
 flutter:
   uses-material-design: true

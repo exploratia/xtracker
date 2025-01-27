@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../util/device_storage/device_storage.dart';
-import '../../util/device_storage/device_storage_keys.dart';
+import '../../../util/device_storage/device_storage.dart';
+import '../../../util/device_storage/device_storage_keys.dart';
 
 /// A service that stores and retrieves user settings.
 ///
@@ -26,12 +26,12 @@ class SettingsService {
   /// Loads the User's preferred Locale
   Future<Locale?> locale() async {
     var value = await DeviceStorage.read(DeviceStorageKeys.keyAppLocale);
-    return value == null ? null : Locale(value);
+    return (value == null ? null : Locale(value));
   }
 
   /// Persists the user's preferred Locale to local or remote storage.
   Future<void> updateLocale(Locale? locale) async {
-    var value = locale == null ? "_SYSTEM_" : locale.languageCode;
+    var value = locale?.languageCode;
     await DeviceStorage.write(DeviceStorageKeys.keyAppLocale, value);
   }
 }

@@ -61,3 +61,9 @@ void doSomething() {
 
 https://pub.dev/packages/flutter_secure_storage
 
+### SimpleLogging
+
+https://pub.dev/packages/path_provider
+https://pub.dev/packages/flutter_archive
+https://pub.dev/packages/logger
+https://pub.dev/packages/share_plus

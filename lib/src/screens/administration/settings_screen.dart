@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../widgets/settings/settings_controller.dart';
-import '../widgets/settings/settings_view.dart';
+import '../../widgets/administration/settings/settings_controller.dart';
+import '../../widgets/administration/settings/settings_view.dart';
+
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key, required this.controller});
