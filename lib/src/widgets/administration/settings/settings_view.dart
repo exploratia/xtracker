@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../card/expandable_settings_card.dart';
 import '../../text/overflow_text.dart';
 import './settings_controller.dart';
+import 'device_storage_view.dart';
 import 'general_settings_view.dart';
 
 /// Displays the various settings that can be customized by the user.
@@ -26,6 +27,10 @@ class SettingsView extends StatelessWidget {
             title: OverflowText(t!.settingsGeneralCardTitle,
                 style: Theme.of(context).textTheme.titleLarge),
             content: GeneralSettingsView(controller: controller)),
+        ExpandableSettingsCard(
+            title: OverflowText(t.settingsDeviceStorageTitle,
+                style: Theme.of(context).textTheme.titleLarge),
+            content: DeviceStorageView()),
       ],
     );
   }

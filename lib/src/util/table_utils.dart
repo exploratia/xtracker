@@ -32,9 +32,9 @@ class TableUtils {
     return TableRow(children: [
       ...values.map((value) {
         Widget child;
-        if (value is Widget)
+        if (value is Widget) {
           child = value;
-        else {
+        } else {
           child = Text(
             value.toString(),
             textAlign: (value is num) ? TextAlign.right : TextAlign.left,
@@ -49,7 +49,7 @@ class TableUtils {
 class TableCellPadding extends StatelessWidget {
   final Widget child;
 
-  const TableCellPadding(this.child);
+  const TableCellPadding(this.child, {super.key});
 
   @override
   Widget build(BuildContext context) {
