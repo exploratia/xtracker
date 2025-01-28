@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/playground/hero/hero_view.dart';
 import '../widgets/playground/sample_feature/sample_item_list_view.dart';
 import 'administration/settings_screen.dart';
 
@@ -34,6 +35,12 @@ class PlaygroundScreen extends StatelessWidget {
                   context, SampleItemListView.routeName);
             },
             child: Text('SampleListView'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.restorablePushNamed(context, HeroView.routeName);
+            },
+            child: Text('HeroView'),
           ),
         ],
       ),

@@ -8,6 +8,7 @@ import 'screens/administration/settings_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/playground_screen.dart';
 import 'widgets/administration/settings/settings_controller.dart';
+import 'widgets/playground/hero/hero_view.dart';
 import 'widgets/playground/sample_feature/sample_item_details_view.dart';
 import 'widgets/playground/sample_feature/sample_item_list_view.dart';
 
@@ -92,10 +93,15 @@ class MyApp extends StatelessWidget {
                   case LogSettingsScreen.routeName:
                     return const LogSettingsScreen();
                   // << administration
+                  // playground >>
                   case SampleItemDetailsView.routeName:
                     return const SampleItemDetailsView();
                   case SampleItemListView.routeName:
                     return const SampleItemListView();
+                  case HeroView.routeName:
+                    return const HeroView();
+                  // << playground
+                  // home
                   case HomeScreen.routeName:
                   default:
                     return const HomeScreen();
