@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../../util/table_utils.dart';
-import '../../layout/drop_down_menu_item_child.dart';
+import '../../card/expandable_settings_card.dart';
+import '../../text/overflow_text.dart';
 import './settings_controller.dart';
+import 'general_settings_view.dart';
 
 /// Displays the various settings that can be customized by the user.
 ///
@@ -19,84 +20,12 @@ class SettingsView extends StatelessWidget {
     final themeData = Theme.of(context);
     final t = AppLocalizations.of(context);
 
-    var actTheme = controller.themeMode;
-    var themeItems = [
-      {'v': ThemeMode.system, 'text': t!.settingsThemeNameSystem},
-      {'v': ThemeMode.light, 'text': t.settingsThemeNameLight},
-      {'v': ThemeMode.dark, 'text': t.settingsThemeNameDark},
-    ];
-
-    var actLocale = controller.locale;
-    var localeItems = [
-      {'v': null, 'text': t.settingsLangNameSystem},
-      {'v': Locale("de"), 'text': t.settingsLangNameGerman},
-      {'v': Locale("en"), 'text': t.settingsLangNameEnglish},
-    ];
-    if (actLocale != null) {
-      // check
-      var idx = localeItems.indexWhere((element) => element['v'] == actLocale);
-      if (idx < 0) actLocale = null;
-    }
-
     return Column(
       children: [
-        Table(
-          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-          // https://api.flutter.dev/flutter/widgets/Table-class.html
-          columnWidths: const <int, TableColumnWidth>{
-            // 0: FixedColumnWidth(128),
-            0: IntrinsicColumnWidth(),
-            1: IntrinsicColumnWidth(),
-            // 1: FlexColumnWidth(),
-          },
-          // border: TableBorder.symmetric(
-          //   inside: const BorderSide(width: 1, color: Colors.black12),
-          // ),
-          children: [
-            TableUtils.tableRow([
-              Text(t.settingsThemeLabel),
-              DropdownButton<ThemeMode>(
-                key: Key('settingsThemeSelect'),
-                dropdownColor: themeData.cardColor,
-                // Read the selected themeMode from the controller
-                value: actTheme,
-                // Call the updateThemeMode method any time the user selects a theme.
-                onChanged: controller.updateThemeMode,
-                items: themeItems.map((i) {
-                  var text = Text(i["text"] as String);
-                  var value = i["v"] as ThemeMode;
-                  var selected = actTheme == value;
-                  return DropdownMenuItem<ThemeMode>(
-                      key: Key('settingsThemeSelect_$i'),
-                      value: value,
-                      child: DropDownMenuItemChild(
-                          selected: selected, text: text));
-                }).toList(),
-              )
-            ]),
-            TableUtils.tableRow([
-              Text(t.settingsLangLabel),
-              DropdownButton<Locale?>(
-                key: Key('settingsLocaleSelect'),
-                dropdownColor: themeData.cardColor,
-                // Read selected from the controller
-                value: actLocale,
-                // Call the update method any time the user selects.
-                onChanged: controller.updateLocale,
-                items: localeItems.map((i) {
-                  var text = Text(i["text"] as String);
-                  var value = i["v"] as Locale?;
-                  var selected = actLocale == value;
-                  return DropdownMenuItem<Locale?>(
-                      key: Key('settingsLocaleSelect_$i'),
-                      value: value,
-                      child: DropDownMenuItemChild(
-                          selected: selected, text: text));
-                }).toList(),
-              ),
-            ]),
-          ],
-        ),
+        ExpandableSettingsCard(
+            title: OverflowText(t!.settingsGeneralCardTitle,
+                style: Theme.of(context).textTheme.titleLarge),
+            content: GeneralSettingsView(controller: controller)),
       ],
     );
   }

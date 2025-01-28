@@ -26,12 +26,13 @@
   "logSettingsLogLevelLabel": "Log Level:",
   "logSettingsWriteTestLogMessagesLabel": "Test Log-Einträge schreiben:",
   "settingsTitle": "Einstellungen",
-  "settingsLangLabel": "Sprache:",
-  "settingsLangNameSystem": "Systemeinstellung",
-  "settingsLangNameEnglish": "English",
-  "settingsLangNameGerman": "Deutsch",
-  "settingsThemeLabel": "Theme:",
-  "settingsThemeNameSystem": "Systemeinstellung",
-  "settingsThemeNameDark": "Dunkel",
-  "settingsThemeNameLight": "Hell"
+  "settingsGeneralCardTitle": "Allgemeine Einstellungen",
+  "settingsGeneralLangLabel": "Sprache:",
+  "settingsGeneralLangNameSystem": "Systemeinstellung",
+  "settingsGeneralLangNameEnglish": "English",
+  "settingsGeneralLangNameGerman": "Deutsch",
+  "settingsGeneralThemeLabel": "Theme:",
+  "settingsGeneralThemeNameSystem": "Systemeinstellung",
+  "settingsGeneralThemeNameDark": "Dunkel",
+  "settingsGeneralThemeNameLight": "Hell"
 }
