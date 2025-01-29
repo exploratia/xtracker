@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../util/globals.dart';
 import './playground_screen.dart';
 import 'administration/info_screen.dart';
 import 'administration/logs_screen.dart';
@@ -14,7 +15,17 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Home"),
+        title: Row(
+          children: [
+            SizedBox(
+              width: 30,
+              child: Image.asset(
+                Globals.assetImgAppLogoWhite,
+                fit: BoxFit.cover,
+              ),
+            ),
+          ],
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),

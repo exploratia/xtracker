@@ -6,6 +6,7 @@ class Globals {
   static const assetImgExploratiaLogo =
       'assets/images/logos/exploratia_logo.jpg';
   static const assetImgBackground = 'assets/images/logos/app_logo.png';
+  static const assetImgAppLogoWhite = 'assets/images/logos/app_logo_white.png';
 
   static void goToHome(BuildContext context) {
     Navigator.of(context)
