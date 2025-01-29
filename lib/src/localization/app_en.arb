@@ -14,6 +14,7 @@
   "commonsMsgErrorFailedToLoadData": "Failed to load data...",
   "commonsMsgErrorFailedToSaveData": "Failed to save data...",
   "commonsMsgErrorFailedToShareData": "Failed to share...",
+  "infoTitle": "Info",
   "logDialogMsgErrorDeleteLogFailed": "Failed to delete log file!",
   "logDialogMsgQueryDeleteLog": "Do you really want to delete the log file?",
   "logTitle": "Log",

@@ -14,6 +14,7 @@
   "commonsMsgErrorFailedToLoadData": "Fehler beim Laden der Daten...",
   "commonsMsgErrorFailedToSaveData": "Fehler beim Speichern der Daten...",
   "commonsMsgErrorFailedToShareData": "Fehler beim Teilen...",
+  "infoTitle": "Info",
   "logDialogMsgErrorDeleteLogFailed": "Fehler beim Löschen der Log-Datei!",
   "logDialogMsgQueryDeleteLog": "Wollen sie wirklich die Log-Datei löschen?",
   "logTitle": "Log",

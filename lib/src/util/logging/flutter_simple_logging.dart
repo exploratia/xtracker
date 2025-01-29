@@ -1,5 +1,3 @@
-library flutter_simple_logging;
-
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import './playground_screen.dart';
+import 'administration/info_screen.dart';
 import 'administration/logs_screen.dart';
 import 'administration/settings_screen.dart';
 
@@ -53,6 +54,12 @@ class HomeScreen extends StatelessWidget {
               Navigator.restorablePushNamed(context, LogsScreen.routeName);
             },
             child: Text('Logs'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.restorablePushNamed(context, InfoScreen.routeName);
+            },
+            child: Text('Info'),
           ),
         ],
       ),
