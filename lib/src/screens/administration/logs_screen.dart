@@ -110,20 +110,17 @@ class _LogsScreenState extends State<LogsScreen> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: LogsView(
-          key: UniqueKey(),
-          logSelectHandler:
-              (String logFileName, void Function() rebuildLogsView) {
-            Navigator.of(context).push(
-              NavigatorTransitionBuilder.buildSlideHTransition(LogScreen(
-                logFileName: logFileName,
-                rebuildLogsView: rebuildLogsView,
-              )),
-            );
-          },
-        ),
+      body: LogsView(
+        key: UniqueKey(),
+        logSelectHandler:
+            (String logFileName, void Function() rebuildLogsView) {
+          Navigator.of(context).push(
+            NavigatorTransitionBuilder.buildSlideHTransition(LogScreen(
+              logFileName: logFileName,
+              rebuildLogsView: rebuildLogsView,
+            )),
+          );
+        },
       ),
     );
   }

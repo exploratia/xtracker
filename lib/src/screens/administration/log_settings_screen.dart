@@ -16,8 +16,7 @@ class LogSettingsScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(t!.logSettingsTitle),
       ),
-      body:
-          Padding(padding: const EdgeInsets.all(16), child: LogSettingsView()),
+      body: LogSettingsView(),
     );
   }
 }

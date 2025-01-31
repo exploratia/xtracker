@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../util/logging/daily_files.dart';
+import '../../card/settings_card.dart';
 import '../../layout/single_child_scroll_view_with_scrollbar.dart';
 
 class LogsView extends StatefulWidget {
@@ -22,52 +23,47 @@ class _LogsViewState extends State<LogsView> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Expanded(
-          child: FutureBuilder(
-            builder: (ctx, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const LinearProgressIndicator();
-              } else if (snapshot.hasError) {
-                // .. do error handling
-                return Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text(
-                        'Failed to load logs! ${snapshot.error?.toString() ?? ''}'),
-                  ),
-                );
-              }
-              final logFiles = snapshot.data;
-              if (logFiles == null) {
-                return const Center(
-                  child: Text('No log files found...'),
-                );
-              }
-              return SingleChildScrollViewWithScrollbar(
-                onRefreshCallback: () async {
-                  _rebuild();
-                },
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Center(
+    return SingleChildScrollViewWithScrollbar(
+      onRefreshCallback: () async {
+        _rebuild();
+      },
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SettingsCard(
+            showDivider: false,
+            children: [
+              FutureBuilder(
+                builder: (ctx, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const LinearProgressIndicator();
+                  } else if (snapshot.hasError) {
+                    // .. do error handling
+                    return Center(
+                        child: Text(
+                            'Failed to load logs! ${snapshot.error?.toString() ?? ''}'));
+                  }
+                  final logFiles = snapshot.data;
+                  if (logFiles == null) {
+                    return const Center(child: Text('No log files found...'));
+                  }
+
+                  return Center(
                     child: Wrap(
-                      spacing: 16,
+                      spacing: 20,
                       children: [
                         ...logFiles.map((logFile) => _Chip(logFile,
                             () => widget.logSelectHandler(logFile, _rebuild)))
                       ],
                     ),
-                  ),
-                ),
-              );
-            },
-            future: DailyFiles.listLogFileNames(),
+                  );
+                },
+                future: DailyFiles.listLogFileNames(),
+              ),
+            ],
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

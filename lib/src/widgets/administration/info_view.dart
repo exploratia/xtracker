@@ -27,16 +27,14 @@ class InfoView extends StatelessWidget {
     return SingleChildScrollViewWithScrollbar(
       // scrollPositionHandler: HideBottomNavigationBar.setScrollPosition, // TODO
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const SizedBox(height: 20),
           const Row(
             mainAxisAlignment: MainAxisAlignment.center,
+            spacing: 10,
             children: [
               EagleLogo(),
-              SizedBox(height: 10, width: 10),
               CaLogo(),
-              SizedBox(height: 10, width: 10),
               ExploratiaLogo(),
             ],
           ),
@@ -80,53 +78,26 @@ class _AppInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SettingsCard(title: AppInfo.appName, children: [
-      const Divider(height: 10),
+    return SettingsCard(title: AppInfo.appName, spacing: 10, children: [
       Row(
+        spacing: 10,
         children: [
-          SizedBox(
-            height: 20,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(100),
-              child: Image.asset(
-                Globals.assetImgCaLogo,
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
+          CaLogo(radius: 16),
           Text(
-              ' ${DateFormat('yyyy').format(DateTime.now())} \u00a9 Christian Adler'),
+              '${DateFormat('yyyy').format(DateTime.now())} \u00a9 Christian Adler'),
         ],
       ),
-      const SizedBox(height: 10),
       Row(
+        spacing: 10,
         children: [
-          SizedBox(
-            height: 20,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(100),
-              child: Image.asset(
-                Globals.assetImgExploratiaLogo,
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
+          ExploratiaLogo(radius: 16),
           const Text(' https://www.exploratia.de'),
         ],
       ),
-      const SizedBox(height: 10),
       Row(
+        spacing: 10,
         children: [
-          SizedBox(
-            height: 20,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(100),
-              child: Image.asset(
-                Globals.assetImgEagleLogo,
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
+          EagleLogo(radius: 16),
           const Text(' https://www.adlers-online.de'),
         ],
       ),

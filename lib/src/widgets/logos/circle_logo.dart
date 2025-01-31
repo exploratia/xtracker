@@ -1,22 +1,26 @@
 import 'package:flutter/material.dart';
 
 class CircleLogo extends StatelessWidget {
-  const CircleLogo(
-    this.imgAsset, {
+  const CircleLogo({
     super.key,
+    required this.imgAsset,
+    this.radius = 30,
+    this.padding = 2,
   });
 
   final String imgAsset;
+  final double radius;
+  final double padding;
 
   @override
   Widget build(BuildContext context) {
     return CircleAvatar(
-      backgroundColor: Colors.black26,
-      radius: 30,
+      backgroundColor: Colors.white,
+      radius: radius,
       child: Padding(
-        padding: const EdgeInsets.all(5.0),
+        padding: EdgeInsets.all(padding),
         child: ClipRRect(
-          borderRadius: BorderRadius.circular(100),
+          borderRadius: BorderRadius.circular(radius),
           child: Image.asset(
             imgAsset,
             fit: BoxFit.cover,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../card/expandable_settings_card.dart';
+import '../../layout/single_child_scroll_view_with_scrollbar.dart';
 import '../../text/overflow_text.dart';
 import './settings_controller.dart';
 import 'device_storage_view.dart';
@@ -18,20 +19,21 @@ class SettingsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
     final t = AppLocalizations.of(context);
 
-    return Column(
-      children: [
-        ExpandableSettingsCard(
-            title: OverflowText(t!.settingsGeneralCardTitle,
-                style: Theme.of(context).textTheme.titleLarge),
-            content: GeneralSettingsView(controller: controller)),
-        ExpandableSettingsCard(
-            title: OverflowText(t.settingsDeviceStorageTitle,
-                style: Theme.of(context).textTheme.titleLarge),
-            content: DeviceStorageView()),
-      ],
+    return SingleChildScrollViewWithScrollbar(
+      child: Column(
+        children: [
+          ExpandableSettingsCard(
+              title: OverflowText(t!.settingsGeneralCardTitle,
+                  style: Theme.of(context).textTheme.titleLarge),
+              content: GeneralSettingsView(controller: controller)),
+          ExpandableSettingsCard(
+              title: OverflowText(t.settingsDeviceStorageTitle,
+                  style: Theme.of(context).textTheme.titleLarge),
+              content: DeviceStorageView()),
+        ],
+      ),
     );
   }
 }

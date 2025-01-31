@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../util/theme_utils.dart';
+
 class SingleChildScrollViewWithScrollbar extends StatefulWidget {
   final Widget child;
   final Axis scrollDirection;
@@ -17,10 +19,12 @@ class SingleChildScrollViewWithScrollbar extends StatefulWidget {
   });
 
   @override
-  State<SingleChildScrollViewWithScrollbar> createState() => _SingleChildScrollViewWithScrollbarState();
+  State<SingleChildScrollViewWithScrollbar> createState() =>
+      _SingleChildScrollViewWithScrollbarState();
 }
 
-class _SingleChildScrollViewWithScrollbarState extends State<SingleChildScrollViewWithScrollbar> {
+class _SingleChildScrollViewWithScrollbarState
+    extends State<SingleChildScrollViewWithScrollbar> {
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -48,7 +52,19 @@ class _SingleChildScrollViewWithScrollbarState extends State<SingleChildScrollVi
     }
 
     final refreshHandler = widget.onRefreshCallback;
-    ScrollPhysics? scrollPhysics = (refreshHandler != null) ? const AlwaysScrollableScrollPhysics() : null;
+    ScrollPhysics? scrollPhysics =
+        (refreshHandler != null) ? const AlwaysScrollableScrollPhysics() : null;
+
+    Widget child;
+    if (widget.scrollDirection == Axis.vertical) {
+      child = Container(
+        // center horizontally
+        alignment: Alignment.center,
+        child: widget.child,
+      );
+    } else {
+      child = widget.child;
+    }
 
     final scrollbar = Scrollbar(
       controller: _scrollController,
@@ -56,7 +72,10 @@ class _SingleChildScrollViewWithScrollbarState extends State<SingleChildScrollVi
         physics: scrollPhysics,
         controller: _scrollController,
         scrollDirection: widget.scrollDirection,
-        child: widget.child,
+        child: Padding(
+          padding: ThemeUtils.screenPadding,
+          child: child,
+        ),
       ),
     );
 

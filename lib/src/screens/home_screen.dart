@@ -7,9 +7,9 @@ import 'administration/logs_screen.dart';
 import 'administration/settings_screen.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
-
   static const routeName = '/';
+
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

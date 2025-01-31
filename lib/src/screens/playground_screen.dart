@@ -5,9 +5,9 @@ import '../widgets/playground/sample_feature/sample_item_list_view.dart';
 import 'administration/settings_screen.dart';
 
 class PlaygroundScreen extends StatelessWidget {
-  const PlaygroundScreen({super.key});
-
   static const routeName = '/playground';
+
+  const PlaygroundScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

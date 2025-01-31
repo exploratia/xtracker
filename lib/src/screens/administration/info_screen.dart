@@ -4,9 +4,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../widgets/administration/info_view.dart';
 
 class InfoScreen extends StatelessWidget {
-  const InfoScreen({super.key});
-
   static const routeName = '/info';
+
+  const InfoScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class InfoScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(t!.infoTitle),
       ),
-      body: Padding(padding: const EdgeInsets.all(16), child: InfoView()),
+      body: InfoView(),
     );
   }
 }

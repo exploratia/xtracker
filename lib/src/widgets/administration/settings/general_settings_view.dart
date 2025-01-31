@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../util/table_utils.dart';
+import '../../../util/theme_utils.dart';
 import '../../layout/drop_down_menu_item_child.dart';
 import './settings_controller.dart';
 
@@ -16,7 +17,6 @@ class GeneralSettingsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
     final t = AppLocalizations.of(context);
 
     var actTheme = controller.themeMode;
@@ -55,7 +55,7 @@ class GeneralSettingsView extends StatelessWidget {
           Text(t.settingsGeneralThemeLabel),
           DropdownButton<ThemeMode>(
             key: Key('settingsThemeSelect'),
-            dropdownColor: themeData.cardColor,
+            borderRadius: ThemeUtils.cardBorderRadius,
             // Read the selected themeMode from the controller
             value: actTheme,
             // Call the updateThemeMode method any time the user selects a theme.
@@ -75,7 +75,7 @@ class GeneralSettingsView extends StatelessWidget {
           Text(t.settingsGeneralLangLabel),
           DropdownButton<Locale?>(
             key: Key('settingsLocaleSelect'),
-            dropdownColor: themeData.cardColor,
+            borderRadius: ThemeUtils.cardBorderRadius,
             // Read selected from the controller
             value: actLocale,
             // Call the update method any time the user selects.

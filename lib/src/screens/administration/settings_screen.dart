@@ -4,11 +4,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../widgets/administration/settings/settings_controller.dart';
 import '../../widgets/administration/settings/settings_view.dart';
 
-
 class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({super.key, required this.controller});
-
   static const routeName = '/settings';
+
+  const SettingsScreen({super.key, required this.controller});
 
   final SettingsController controller;
 
@@ -20,9 +19,7 @@ class SettingsScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(t!.settingsTitle),
       ),
-      body: Padding(
-          padding: const EdgeInsets.all(16),
-          child: SettingsView(controller: controller)),
+      body: SettingsView(controller: controller),
     );
   }
 }

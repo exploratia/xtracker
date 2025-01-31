@@ -8,6 +8,7 @@ import 'screens/administration/logs_screen.dart';
 import 'screens/administration/settings_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/playground_screen.dart';
+import 'util/theme_utils.dart';
 import 'widgets/administration/settings/settings_controller.dart';
 import 'widgets/playground/hero/hero_view.dart';
 import 'widgets/playground/sample_feature/sample_item_details_view.dart';
@@ -66,12 +67,8 @@ class MyApp extends StatelessWidget {
           // Define a light and dark color theme. Then, read the user's
           // preferred ThemeMode (light, dark, or system default) from the
           // SettingsController to display the correct theme.
-          theme: ThemeData(
-            useMaterial3: false,
-            colorScheme: ColorScheme.fromSeed(
-                seedColor: Colors.blueAccent), // TODO theme data
-          ),
-          darkTheme: ThemeData.dark(useMaterial3: false),
+          theme: ThemeUtils.buildThemeData(context, false),
+          darkTheme: ThemeUtils.buildThemeData(context, true),
           themeMode: settingsController.themeMode,
           locale: settingsController.locale,
 

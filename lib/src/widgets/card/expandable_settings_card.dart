@@ -26,10 +26,11 @@ class _ExpandableSettingsCardState extends State<ExpandableSettingsCard> {
   @override
   Widget build(BuildContext context) {
     return SettingsCard(
+        showDivider: false,
         title: InkWell(
           onTap: () => _toggleExpanded(),
           customBorder: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(16),
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
@@ -53,7 +54,14 @@ class _ExpandableSettingsCardState extends State<ExpandableSettingsCard> {
             crossFadeState: _expanded
                 ? CrossFadeState.showFirst
                 : CrossFadeState.showSecond,
-            firstChild: widget.content,
+            firstChild: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 10),
+                const Divider(),
+                widget.content,
+              ],
+            ),
             secondChild: Container(
               height: 0,
             ),

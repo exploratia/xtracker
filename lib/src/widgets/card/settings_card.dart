@@ -1,15 +1,27 @@
 import 'package:flutter/material.dart';
 
+import '../../util/theme_utils.dart';
 import '../responsive/device_dependent_constrained_box.dart';
 
 class SettingsCard extends StatelessWidget {
+  /// Damit die Card die Device-Constraints einhalten kann, muss umschliessende Column z.B. center sein.
+  const SettingsCard({
+    super.key,
+    this.title,
+    required this.children,
+    this.showDivider = true,
+    this.childrenColumnCrossAxisAlignment = CrossAxisAlignment.start,
+    this.spacing = 0,
+  });
+
   final dynamic title;
   final List<Widget> children;
-
-  /// Damit die Card die Device-Constraints einhalten kann, muss umschliessende Column z.B. center sein.
-  const SettingsCard({super.key, required this.title, required this.children});
+  final bool showDivider;
+  final CrossAxisAlignment childrenColumnCrossAxisAlignment;
+  final double spacing;
 
   Widget _buildTitle(BuildContext context) {
+    if (title == null) return Container(height: 0);
     if (title is Widget) {
       return title as Widget;
     }
@@ -19,26 +31,33 @@ class SettingsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DeviceDependentWidthConstrainedBox(
-      child: Card(
-        margin: const EdgeInsets.all(8.0),
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildTitle(context),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
+    return Column(
+      // center if more horizontal space is available
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        DeviceDependentWidthConstrainedBox(
+          child: Card(
+            // margin: const EdgeInsets.all(8.0),
+            child: Padding(
+              padding: ThemeUtils.cardPadding,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Divider(height: 10),
-                  ...children,
+                  _buildTitle(context),
+                  if (showDivider) SizedBox(height: 10),
+                  if (showDivider) const Divider(),
+                  if (showDivider) SizedBox(height: 10),
+                  Column(
+                    crossAxisAlignment: childrenColumnCrossAxisAlignment,
+                    spacing: spacing,
+                    children: [...children],
+                  )
                 ],
-              )
-            ],
+              ),
+            ),
           ),
         ),
-      ),
+      ],
     );
   }
 }

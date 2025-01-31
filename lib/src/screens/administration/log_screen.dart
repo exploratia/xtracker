@@ -83,8 +83,7 @@ class LogScreen extends StatelessWidget {
           ),
         ],
       ),
-      body:
-          Padding(padding: const EdgeInsets.all(16), child: LogView(logFileN)),
+      body: LogView(logFileN),
     );
   }
 }

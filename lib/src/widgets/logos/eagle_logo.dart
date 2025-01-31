@@ -1,13 +1,7 @@
-import 'package:flutter/material.dart';
-
 import '../../util/globals.dart';
 import 'circle_logo.dart';
 
-class EagleLogo extends StatelessWidget {
-  const EagleLogo({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return CircleLogo(Globals.assetImgEagleLogo);
-  }
+class EagleLogo extends CircleLogo {
+  const EagleLogo({super.key, super.radius, super.padding})
+      : super(imgAsset: Globals.assetImgEagleLogo);
 }

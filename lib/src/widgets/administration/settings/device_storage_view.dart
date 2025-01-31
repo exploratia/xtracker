@@ -14,7 +14,6 @@ class DeviceStorageView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const Divider(height: 10),
         FutureBuilder(
           builder: (context, deviceStorageSnapshot) {
             if (deviceStorageSnapshot.connectionState ==
@@ -53,7 +52,7 @@ class DeviceStorageView extends StatelessWidget {
           },
           future: DeviceStorage.readAll(),
         ),
-        const Divider(height: 10),
+        const Divider(),
         Wrap(
           alignment: WrapAlignment.spaceBetween,
           children: [
