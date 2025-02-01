@@ -7,6 +7,7 @@ import '../../widgets/layout/gradient_app_bar.dart';
 
 class SettingsScreen extends StatelessWidget {
   static const routeName = '/settings';
+  static const icon = Icon(Icons.settings_outlined);
 
   const SettingsScreen({super.key, required this.controller});
 

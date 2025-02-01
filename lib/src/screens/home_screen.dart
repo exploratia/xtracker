@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import '../util/globals.dart';
 import '../widgets/layout/gradient_app_bar.dart';
 import './playground_screen.dart';
-import 'administration/info_screen.dart';
-import 'administration/logs_screen.dart';
+import 'administration/administration_screen.dart';
 import 'administration/settings_screen.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -45,12 +44,6 @@ class HomeScreen extends StatelessWidget {
           Padding(padding: const EdgeInsets.all(16), child: Text("Home")),
           ElevatedButton(
             onPressed: () {
-              print('button pressed!');
-            },
-            child: Text('Next'),
-          ),
-          ElevatedButton(
-            onPressed: () {
               Navigator.restorablePushNamed(
                   context, PlaygroundScreen.routeName);
             },
@@ -58,21 +51,16 @@ class HomeScreen extends StatelessWidget {
           ),
           ElevatedButton(
             onPressed: () {
-              Navigator.restorablePushNamed(context, SettingsScreen.routeName);
+              Navigator.restorablePushNamed(
+                  context, AdministrationScreen.routeName);
             },
-            child: Text('Settings'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.restorablePushNamed(context, LogsScreen.routeName);
-            },
-            child: Text('Logs'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.restorablePushNamed(context, InfoScreen.routeName);
-            },
-            child: Text('Info'),
+            child: SizedBox(width: 100,
+              child: Row(
+                children: [AdministrationScreen.icon,
+                  Text('Mehr...'),
+                ],
+              ),
+            ),
           ),
         ],
       ),

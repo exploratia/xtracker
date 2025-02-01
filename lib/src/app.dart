@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'screens/administration/administration_screen.dart';
 import 'screens/administration/info_screen.dart';
 import 'screens/administration/log_screen.dart';
 import 'screens/administration/log_settings_screen.dart';
@@ -82,6 +83,8 @@ class MyApp extends StatelessWidget {
                   case PlaygroundScreen.routeName:
                     return PlaygroundScreen();
                   // administration >>
+                  case AdministrationScreen.routeName:
+                    return const AdministrationScreen();
                   case SettingsScreen.routeName:
                     return SettingsScreen(controller: settingsController);
                   case LogsScreen.routeName:

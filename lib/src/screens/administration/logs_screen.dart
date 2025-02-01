@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:littletracker/src/util/navigation/generic_route.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../util/dialogs.dart';
 import '../../util/logging/daily_files.dart';
 import '../../util/logging/flutter_simple_logging.dart';
+import '../../util/navigation/generic_route.dart';
 import '../../widgets/administration/logging/logs_view.dart';
 import '../../widgets/layout/gradient_app_bar.dart';
 import 'log_screen.dart';
@@ -15,6 +15,7 @@ import 'log_settings_screen.dart';
 
 class LogsScreen extends StatefulWidget {
   static const routeName = '/logs_screen';
+  static const icon = Icon(Icons.text_snippet_outlined);
 
   const LogsScreen({super.key});
 
@@ -41,7 +42,7 @@ class _LogsScreenState extends State<LogsScreen> {
               Navigator.restorablePushNamed(
                   context, LogSettingsScreen.routeName);
             },
-            icon: const Icon(Icons.settings_outlined),
+            icon: LogSettingsScreen.icon,
           ),
           IconButton(
             onPressed: () async {

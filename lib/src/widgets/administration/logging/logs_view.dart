@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../screens/administration/log_screen.dart';
 import '../../../util/logging/daily_files.dart';
 import '../../card/settings_card.dart';
 import '../../layout/single_child_scroll_view_with_scrollbar.dart';
@@ -77,7 +78,7 @@ class _Chip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ActionChip(
-      avatar: Icon(Icons.short_text_outlined,
+      avatar: Icon(LogScreen.iconData,
           color: Theme.of(context).colorScheme.primary),
       label: Text(logFileName.replaceAll('.txt', '')),
       onPressed: () => pressedHandler(),

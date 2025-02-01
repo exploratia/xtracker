@@ -6,6 +6,7 @@ import '../../widgets/layout/gradient_app_bar.dart';
 
 class LogSettingsScreen extends StatelessWidget {
   static const routeName = '/log_settings_screen';
+  static const icon = Icon(Icons.settings_outlined);
 
   const LogSettingsScreen({super.key});
 

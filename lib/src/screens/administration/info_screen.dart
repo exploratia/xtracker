@@ -6,6 +6,7 @@ import '../../widgets/layout/gradient_app_bar.dart';
 
 class InfoScreen extends StatelessWidget {
   static const routeName = '/info';
+  static const icon = Icon(Icons.info_outline);
 
   const InfoScreen({super.key});
 
