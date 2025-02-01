@@ -20,13 +20,13 @@ class GlowingBorderContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
     return Container(
       // width: width,
       // height: height,
       margin: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.black, // Inner background color
-        // color: Colors.transparent,
+        color: themeData.scaffoldBackgroundColor, // Inner background color
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: glowColor, width: borderWidth),
         boxShadow: [
