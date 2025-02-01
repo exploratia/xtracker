@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:littletracker/src/widgets/select/color_picker.dart';
 
 import '../widgets/card/glowing_border_container.dart';
 import '../widgets/layout/gradient_app_bar.dart';
@@ -13,6 +14,7 @@ class PlaygroundScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
     return Scaffold(
       appBar: GradientAppBar.build(
         context,
@@ -53,6 +55,10 @@ class PlaygroundScreen extends StatelessWidget {
               "Glowing Box",
               // style: TextStyle(color: Colors.white),
             ),
+          ),
+          ColorPick(
+            color: themeData.colorScheme.primary,
+            colorSelected: (color) => print('Color selected: $color'),
           ),
         ],
       ),

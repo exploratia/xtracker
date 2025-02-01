@@ -35,6 +35,9 @@ dependencies:
   # call native share dialog
   share_plus: ^10.0.0
 
+  #
+  flutter_colorpicker: ^1.1.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
