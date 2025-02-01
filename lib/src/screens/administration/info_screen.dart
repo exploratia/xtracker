@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../widgets/administration/info_view.dart';
+import '../../widgets/layout/gradient_app_bar.dart';
 
 class InfoScreen extends StatelessWidget {
   static const routeName = '/info';
@@ -13,10 +14,11 @@ class InfoScreen extends StatelessWidget {
     final t = AppLocalizations.of(context);
 
     return Scaffold(
-      appBar: AppBar(
+      appBar: GradientAppBar.build(
+        context,
         title: Text(t!.infoTitle),
       ),
-      body: InfoView(),
+      body: const InfoView(),
     );
   }
 }

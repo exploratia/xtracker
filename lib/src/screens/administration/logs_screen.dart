@@ -9,6 +9,7 @@ import '../../util/logging/daily_files.dart';
 import '../../util/logging/flutter_simple_logging.dart';
 import '../../util/navigation/navigator_transition_builder.dart';
 import '../../widgets/administration/logging/logs_view.dart';
+import '../../widgets/layout/gradient_app_bar.dart';
 import 'log_screen.dart';
 import 'log_settings_screen.dart';
 
@@ -31,7 +32,8 @@ class _LogsScreenState extends State<LogsScreen> {
     final t = AppLocalizations.of(context);
 
     return Scaffold(
-      appBar: AppBar(
+      appBar: GradientAppBar.build(
+        context,
         title: Text(t!.logsTitle),
         actions: [
           IconButton(

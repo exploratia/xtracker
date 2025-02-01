@@ -12,12 +12,7 @@ class ThemeUtils {
       ColorUtils.customMaterialColor(const Color(0xff911d31));
   static final MaterialColor tertiary =
       ColorUtils.customMaterialColor(const Color(0xffbfff00));
-  static final List<Color> gradientColors = [
-    const Color(0xff4c1a57),
-    const Color(0xff00a8aa),
-    const Color(0xffa6e300)
-  ];
-  static const Color onGradientColor = Colors.white;
+
   static const screenPadding =
       EdgeInsets.symmetric(horizontal: 16, vertical: 16); // .all(16);
   static const cardBorderRadius = BorderRadius.all(Radius.circular(20));

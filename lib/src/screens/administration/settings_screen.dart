@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../widgets/administration/settings/settings_controller.dart';
 import '../../widgets/administration/settings/settings_view.dart';
+import '../../widgets/layout/gradient_app_bar.dart';
 
 class SettingsScreen extends StatelessWidget {
   static const routeName = '/settings';
@@ -16,7 +17,8 @@ class SettingsScreen extends StatelessWidget {
     final t = AppLocalizations.of(context);
 
     return Scaffold(
-      appBar: AppBar(
+      appBar: GradientAppBar.build(
+        context,
         title: Text(t!.settingsTitle),
       ),
       body: SettingsView(controller: controller),

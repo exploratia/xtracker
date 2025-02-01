@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../widgets/card/glowing_border_container.dart';
+import '../widgets/layout/gradient_app_bar.dart';
 import '../widgets/playground/hero/hero_view.dart';
 import '../widgets/playground/sample_feature/sample_item_list_view.dart';
 import 'administration/settings_screen.dart';
@@ -13,8 +14,9 @@ class PlaygroundScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Playground"),
+      appBar: GradientAppBar.build(
+        context,
+        title: const Text("Playground"),
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
@@ -49,7 +51,7 @@ class PlaygroundScreen extends StatelessWidget {
             blurRadius: 10.0,
             child: Text(
               "Glowing Box",
-              style: TextStyle(color: Colors.white),
+              // style: TextStyle(color: Colors.white),
             ),
           ),
         ],

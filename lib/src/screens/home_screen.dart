@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../util/globals.dart';
+import '../widgets/layout/gradient_app_bar.dart';
 import './playground_screen.dart';
 import 'administration/info_screen.dart';
 import 'administration/logs_screen.dart';
@@ -14,7 +15,8 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
+      appBar: GradientAppBar.build(
+        context,
         title: Row(
           children: [
             SizedBox(

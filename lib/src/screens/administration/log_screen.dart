@@ -6,6 +6,7 @@ import '../../util/app_info.dart';
 import '../../util/dialogs.dart';
 import '../../util/logging/daily_files.dart';
 import '../../widgets/administration/logging/log_view.dart';
+import '../../widgets/layout/gradient_app_bar.dart';
 
 class LogScreen extends StatelessWidget {
   static const routeName = '/log_screen';
@@ -22,7 +23,8 @@ class LogScreen extends StatelessWidget {
     String logFileN = (logFileName ?? '');
 
     return Scaffold(
-      appBar: AppBar(
+      appBar: GradientAppBar.build(
+        context,
         title: Text(t!.logTitle + logFileN.replaceAll('.txt', '')),
         actions: [
           IconButton(
