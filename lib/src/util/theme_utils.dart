@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../widgets/navigation/transition/no_transition_builder.dart';
 import 'color_utils.dart';
 
 class ThemeUtils {
@@ -115,6 +116,12 @@ class ThemeUtils {
           style: OutlinedButton.styleFrom(
         shape: btnShape,
       )),
+      pageTransitionsTheme: const PageTransitionsTheme(
+        builders: {
+          TargetPlatform.android: NoTransitionsBuilder(),
+          // TargetPlatform.iOS: CustomPageTransition(),
+        },
+      ),
     );
 
     if (dark) {
