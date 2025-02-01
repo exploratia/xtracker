@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../widgets/navigation/transition/no_transition_builder.dart';
 import 'color_utils.dart';
+import 'navigation/fade_transition_builder.dart';
 
 class ThemeUtils {
   static final MaterialColor primary =
@@ -118,7 +118,7 @@ class ThemeUtils {
       )),
       pageTransitionsTheme: const PageTransitionsTheme(
         builders: {
-          TargetPlatform.android: NoTransitionsBuilder(),
+          TargetPlatform.android: FadeTransitionsBuilder(),
           // TargetPlatform.iOS: CustomPageTransition(),
         },
       ),

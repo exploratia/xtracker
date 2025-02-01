@@ -2,12 +2,12 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:littletracker/src/util/navigation/generic_route.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../util/dialogs.dart';
 import '../../util/logging/daily_files.dart';
 import '../../util/logging/flutter_simple_logging.dart';
-import '../../util/navigation/navigator_transition_builder.dart';
 import '../../widgets/administration/logging/logs_view.dart';
 import '../../widgets/layout/gradient_app_bar.dart';
 import 'log_screen.dart';
@@ -116,12 +116,10 @@ class _LogsScreenState extends State<LogsScreen> {
         key: UniqueKey(),
         logSelectHandler:
             (String logFileName, void Function() rebuildLogsView) {
-          Navigator.of(context).push(
-            NavigatorTransitionBuilder.buildSlideHTransition(LogScreen(
-              logFileName: logFileName,
-              rebuildLogsView: rebuildLogsView,
-            )),
-          );
+          Navigator.of(context).push(GenericRoute.route(LogScreen(
+            logFileName: logFileName,
+            rebuildLogsView: rebuildLogsView,
+          )));
         },
       ),
     );

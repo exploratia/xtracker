@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
-import '../../widgets/navigation/transition/no_transition_builder.dart';
+import 'no_transition_builder.dart';
 
 class NavigatorTransitionBuilder {
+  /// usage:
+  /// Navigator.of(context).push(
+  ///             NavigatorTransitionBuilder.buildSlideHTransition(SomeScreen()),
+  ///           );
   static PageRouteBuilder buildSlideHTransition(Widget screen) {
     return PageRouteBuilder(
       transitionDuration: const Duration(milliseconds: 500),
@@ -26,6 +30,20 @@ class NavigatorTransitionBuilder {
     );
   }
 
+  static PageRouteBuilder buildFadeTransition(Widget screen) {
+    return PageRouteBuilder(
+      transitionDuration: const Duration(milliseconds: 500),
+      reverseTransitionDuration: const Duration(milliseconds: 300),
+      pageBuilder: (context, animation, secondaryAnimation) => screen,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return FadeTransition(
+          opacity: animation,
+          child: child,
+        );
+      },
+    );
+  }
+
   static PageRouteBuilder buildNoTransition(Widget screen) {
     return PageRouteBuilder(
       transitionDuration: const Duration(milliseconds: 0),
@@ -34,6 +52,12 @@ class NavigatorTransitionBuilder {
       transitionsBuilder: (context, animation, secondaryAnimation, child) =>
           const NoTransitionsBuilder().buildTransitions(
               null, context, animation, secondaryAnimation, child),
+    );
+  }
+
+  static MaterialPageRoute route(Widget screen) {
+    return MaterialPageRoute(
+      builder: (BuildContext context) => screen,
     );
   }
 }
