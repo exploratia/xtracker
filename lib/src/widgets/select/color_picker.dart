@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
-class ColorPick extends StatefulWidget {
-  const ColorPick(
+class ColorPicker extends StatefulWidget {
+  const ColorPicker(
       {super.key,
       this.color = const Color(0xffde0b30),
       required this.colorSelected});
@@ -11,10 +11,10 @@ class ColorPick extends StatefulWidget {
   final void Function(Color) colorSelected;
 
   @override
-  State<ColorPick> createState() => _ColorPickState();
+  State<ColorPicker> createState() => _ColorPickerState();
 }
 
-class _ColorPickState extends State<ColorPick> {
+class _ColorPickerState extends State<ColorPicker> {
   Color currentColor = const Color(0xffde0b30);
 
   @override

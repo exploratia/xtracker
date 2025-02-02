@@ -5,11 +5,11 @@ class DropDownMenuItemChild extends StatelessWidget {
   const DropDownMenuItemChild({
     super.key,
     required this.selected,
-    required this.text,
+    required this.child,
   });
 
   final bool selected;
-  final Text text;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class DropDownMenuItemChild extends StatelessWidget {
           decoration: boxDeco,
           child: Padding(
             padding: const EdgeInsets.only(left: 8),
-            child: text,
+            child: child,
           )),
     );
   }

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:littletracker/src/widgets/select/color_picker.dart';
 
 import '../widgets/card/glowing_border_container.dart';
 import '../widgets/layout/gradient_app_bar.dart';
 import '../widgets/playground/hero/hero_view.dart';
 import '../widgets/playground/sample_feature/sample_item_list_view.dart';
+import '../widgets/select/color_picker.dart';
+import '../widgets/select/icon_picker.dart';
 import 'administration/settings_screen.dart';
 
 class PlaygroundScreen extends StatelessWidget {
@@ -56,9 +57,12 @@ class PlaygroundScreen extends StatelessWidget {
               // style: TextStyle(color: Colors.white),
             ),
           ),
-          ColorPick(
+          ColorPicker(
             color: themeData.colorScheme.primary,
             colorSelected: (color) => print('Color selected: $color'),
+          ),
+          IconPicker(
+            icoSelected: (icoName) => print('Icon selected: $icoName'),
           ),
         ],
       ),

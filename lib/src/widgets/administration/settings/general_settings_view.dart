@@ -54,7 +54,7 @@ class GeneralSettingsView extends StatelessWidget {
         TableUtils.tableRow([
           Text(t.settingsGeneralThemeLabel),
           DropdownButton<ThemeMode>(
-            key: Key('settingsThemeSelect'),
+            key: const Key('settingsThemeSelect'),
             borderRadius: ThemeUtils.cardBorderRadius,
             // Read the selected themeMode from the controller
             value: actTheme,
@@ -67,14 +67,15 @@ class GeneralSettingsView extends StatelessWidget {
               return DropdownMenuItem<ThemeMode>(
                   key: Key('settingsThemeSelect_$i'),
                   value: value,
-                  child: DropDownMenuItemChild(selected: selected, text: text));
+                  child:
+                      DropDownMenuItemChild(selected: selected, child: text));
             }).toList(),
           )
         ]),
         TableUtils.tableRow([
           Text(t.settingsGeneralLangLabel),
           DropdownButton<Locale?>(
-            key: Key('settingsLocaleSelect'),
+            key: const Key('settingsLocaleSelect'),
             borderRadius: ThemeUtils.cardBorderRadius,
             // Read selected from the controller
             value: actLocale,
@@ -87,7 +88,8 @@ class GeneralSettingsView extends StatelessWidget {
               return DropdownMenuItem<Locale?>(
                   key: Key('settingsLocaleSelect_$i'),
                   value: value,
-                  child: DropDownMenuItemChild(selected: selected, text: text));
+                  child:
+                      DropDownMenuItemChild(selected: selected, child: text));
             }).toList(),
           ),
         ]),

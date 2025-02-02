@@ -96,7 +96,8 @@ class _LogLevelSelectorState extends State<_LogLevelSelector> {
               key: Key('logSettingsLogLevelSelect_${logLevel.name}'),
               value: logLevel,
               child: DropDownMenuItemChild(
-                  selected: selected, text: Text(logLevel.name.toUpperCase())));
+                  selected: selected,
+                  child: Text(logLevel.name.toUpperCase())));
         }).toList(),
         onChanged: (value) {
           if (value != null) {
