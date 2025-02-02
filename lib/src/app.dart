@@ -1,19 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'screens/administration/administration_screen.dart';
-import 'screens/administration/info_screen.dart';
-import 'screens/administration/log_screen.dart';
-import 'screens/administration/log_settings_screen.dart';
-import 'screens/administration/logs_screen.dart';
-import 'screens/administration/settings_screen.dart';
-import 'screens/home_screen.dart';
-import 'screens/playground_screen.dart';
+import 'routing.dart';
 import 'util/theme_utils.dart';
 import 'widgets/administration/settings/settings_controller.dart';
-import 'widgets/playground/hero/hero_view.dart';
-import 'widgets/playground/sample_feature/sample_item_details_view.dart';
-import 'widgets/playground/sample_feature/sample_item_list_view.dart';
 
 /// The Widget that configures your application.
 class MyApp extends StatelessWidget {
@@ -26,6 +16,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final routing = Routing(settingsController);
+
     // Glue the SettingsController to the MaterialApp.
     //
     // The ListenableBuilder Widget listens to the SettingsController for changes.
@@ -75,43 +67,7 @@ class MyApp extends StatelessWidget {
 
           // Define a function to handle named routes in order to support
           // Flutter web url navigation and deep linking.
-          onGenerateRoute: (RouteSettings routeSettings) {
-            return MaterialPageRoute<void>(
-              settings: routeSettings,
-              builder: (BuildContext context) {
-                switch (routeSettings.name) {
-                  case PlaygroundScreen.routeName:
-                    return PlaygroundScreen();
-                  // administration >>
-                  case AdministrationScreen.routeName:
-                    return const AdministrationScreen();
-                  case SettingsScreen.routeName:
-                    return SettingsScreen(controller: settingsController);
-                  case LogsScreen.routeName:
-                    return const LogsScreen();
-                  case LogScreen.routeName:
-                    return const LogScreen();
-                  case LogSettingsScreen.routeName:
-                    return const LogSettingsScreen();
-                  case InfoScreen.routeName:
-                    return const InfoScreen();
-                  // << administration
-                  // playground >>
-                  case SampleItemDetailsView.routeName:
-                    return const SampleItemDetailsView();
-                  case SampleItemListView.routeName:
-                    return const SampleItemListView();
-                  case HeroView.routeName:
-                    return const HeroView();
-                  // << playground
-                  // home
-                  case HomeScreen.routeName:
-                  default:
-                    return const HomeScreen();
-                }
-              },
-            );
-          },
+          onGenerateRoute: routing.generateRoute,
         );
       },
     );
