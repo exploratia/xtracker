@@ -25,7 +25,7 @@ class ThemeUtils {
   static ThemeData? _dark;
 
   static ThemeData buildThemeData(BuildContext context, bool dark) {
-    // already stored? Return instantly...
+    // already stored? Return instantly... TODO uncomment after theme is ready
     // if (dark && _dark != null) return _dark!;
     // if (!dark && _light != null) return _light!;
 
@@ -49,16 +49,7 @@ class ThemeUtils {
       brightness: brightness,
       // canvas e.g. DropdownButton-Menu in settings
       canvasColor: canvasColor,
-      appBarTheme: AppBarTheme(
-        backgroundColor: backgroundColor,
-        foregroundColor: dark ? Colors.white : Colors.black,
-        actionsIconTheme:
-            IconThemeData(color: dark ? Colors.white : Colors.black),
-        systemOverlayStyle:
-            dark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
-      ),
-      tabBarTheme:
-          TabBarThemeData(indicatorColor: dark ? Colors.white : Colors.black),
+
       colorScheme:
           ColorScheme.fromSeed(seedColor: primary, brightness: brightness)
               .copyWith(
@@ -73,6 +64,16 @@ class ThemeUtils {
           // titleMedium: TextStyle(fontWeight: FontWeight.bold),
           // titleSmall: TextStyle(color: dynamicThemeData.getPrimaryColor(dark)),
           ),
+      appBarTheme: AppBarTheme(
+        backgroundColor: backgroundColor,
+        foregroundColor: dark ? Colors.white : Colors.black,
+        actionsIconTheme:
+            IconThemeData(color: dark ? Colors.white : Colors.black),
+        systemOverlayStyle:
+            dark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
+      ),
+      tabBarTheme:
+          TabBarThemeData(indicatorColor: dark ? Colors.white : Colors.black),
       drawerTheme: Theme.of(context)
           .drawerTheme
           .copyWith(backgroundColor: drawerBackgroundColor),
@@ -88,7 +89,9 @@ class ThemeUtils {
             // trackColor: const MaterialStatePropertyAll(Colors.blueAccent),
             // trackBorderColor: const MaterialStatePropertyAll(Colors.purpleAccent),
           ),
-
+      snackBarTheme: SnackBarThemeData(
+          backgroundColor: cardBackgroundColor,
+          contentTextStyle: const TextStyle(color: onPrimary)),
       // Card (e.g. in Settings)
       cardTheme: Theme.of(context).cardTheme.copyWith(
             color: cardBackgroundColor,
