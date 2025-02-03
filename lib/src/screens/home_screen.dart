@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
 
 import '../util/globals.dart';
+import '../util/navigation/hide_bottom_navigation_bar.dart';
 import '../widgets/layout/gradient_app_bar.dart';
+import '../widgets/layout/single_child_scroll_view_with_scrollbar.dart';
+import '../widgets/navigation/app_bottom_navigation_bar.dart';
+import '../widgets/navigation/app_drawer.dart';
+import '../widgets/navigation/app_navigation_rail.dart';
 import '../widgets/navigation/double_back_to_close.dart';
+import '../widgets/responsive/screen_builder.dart';
 import './playground_screen.dart';
 import 'administration/administration_screen.dart';
 import 'administration/settings_screen.dart';
@@ -15,8 +21,8 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DoubleBackToClose(
-      child: Scaffold(
-        appBar: GradientAppBar.build(
+      child: ScreenBuilder(
+        appBarBuilder: (context) => GradientAppBar.build(
           context,
           title: Row(
             children: [
@@ -42,32 +48,40 @@ class HomeScreen extends StatelessWidget {
             ),
           ],
         ),
-        body: Column(
-          children: [
-            Padding(padding: const EdgeInsets.all(16), child: Text("Home")),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.restorablePushNamed(
-                    context, PlaygroundScreen.routeName);
-              },
-              child: Text('Playground'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.restorablePushNamed(
-                    context, AdministrationScreen.routeName);
-              },
-              child: SizedBox(
-                width: 100,
-                child: Row(
-                  children: [
-                    AdministrationScreen.icon,
-                    Text('Mehr...'),
-                  ],
+        bottomNavigationBarBuilder: (context) => const AppBottomNavigationBar(),
+        navigationRailBuilder: (context) => const AppNavigationRail(),
+        drawerBuilder: (context) => const AppDrawer(),
+        bodyBuilder: (context) => SingleChildScrollViewWithScrollbar(
+          scrollPositionHandler: HideBottomNavigationBar.setScrollPosition,
+          child: Column(
+            children: [
+              Padding(padding: const EdgeInsets.all(16), child: Text("Home")),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.restorablePushNamed(
+                      context, PlaygroundScreen.routeName);
+                },
+                child: Text('Playground'),
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.restorablePushNamed(
+                      context, AdministrationScreen.routeName);
+                },
+                child: SizedBox(
+                  width: 100,
+                  child: Row(
+                    children: [
+                      AdministrationScreen.icon,
+                      Text('Mehr...'),
+                    ],
+                  ),
                 ),
               ),
-            ),
-          ],
+              Placeholder(fallbackHeight: 500),
+              Placeholder(fallbackHeight: 500),
+            ],
+          ),
         ),
       ),
     );

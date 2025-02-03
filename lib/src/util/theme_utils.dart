@@ -89,6 +89,8 @@ class ThemeUtils {
             // trackColor: const MaterialStatePropertyAll(Colors.blueAccent),
             // trackBorderColor: const MaterialStatePropertyAll(Colors.purpleAccent),
           ),
+      bottomNavigationBarTheme:
+          BottomNavigationBarThemeData(backgroundColor: cardBackgroundColor),
       snackBarTheme: SnackBarThemeData(
           backgroundColor: cardBackgroundColor,
           contentTextStyle: const TextStyle(color: onPrimary)),
@@ -107,6 +109,8 @@ class ThemeUtils {
         ),
       ),
       dividerTheme: DividerThemeData(color: secondary, thickness: 1, space: 10),
+      navigationRailTheme:
+          NavigationRailThemeData(backgroundColor: backgroundColor),
       elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
         shape: btnShape,

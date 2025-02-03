@@ -41,6 +41,7 @@ class MediaQueryUtils {
   }
 
   static bool mediaIsTablet(MediaQueryData mediaQueryData) {
-    return mediaQueryData.size.width > 750;
+    return mediaQueryData.size.shortestSide >= 600;
+    // return mediaQueryData.size.width > 750;
   }
 }
