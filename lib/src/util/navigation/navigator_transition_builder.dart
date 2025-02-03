@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'fade_transition_builder.dart';
 import 'no_transition_builder.dart';
 
 class NavigatorTransitionBuilder {
@@ -35,12 +36,9 @@ class NavigatorTransitionBuilder {
       transitionDuration: const Duration(milliseconds: 500),
       reverseTransitionDuration: const Duration(milliseconds: 300),
       pageBuilder: (context, animation, secondaryAnimation) => screen,
-      transitionsBuilder: (context, animation, secondaryAnimation, child) {
-        return FadeTransition(
-          opacity: animation,
-          child: child,
-        );
-      },
+      transitionsBuilder: (context, animation, secondaryAnimation, child) =>
+          const FadeTransitionsBuilder().buildTransitions(
+              null, context, animation, secondaryAnimation, child),
     );
   }
 
@@ -52,12 +50,6 @@ class NavigatorTransitionBuilder {
       transitionsBuilder: (context, animation, secondaryAnimation, child) =>
           const NoTransitionsBuilder().buildTransitions(
               null, context, animation, secondaryAnimation, child),
-    );
-  }
-
-  static MaterialPageRoute route(Widget screen) {
-    return MaterialPageRoute(
-      builder: (BuildContext context) => screen,
     );
   }
 }
