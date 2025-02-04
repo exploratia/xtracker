@@ -43,7 +43,7 @@ class AppDrawer extends StatelessWidget {
         title: Text(navItem.titleBuilder(t)),
         onTap: () {
           NavigationUtils.closeDrawerIfOpen(context);
-          MainNavigation.setCurrentIdx(itemIdx);
+          MainNavigation.setCurrentIdx(itemIdx, context);
         },
       ));
     }

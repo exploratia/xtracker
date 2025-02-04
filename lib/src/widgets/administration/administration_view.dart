@@ -5,6 +5,7 @@ import '../../screens/administration/info_screen.dart';
 import '../../screens/administration/logs_screen.dart';
 import '../../screens/administration/settings_screen.dart';
 import '../../util/about_dlg.dart';
+import '../../util/navigation/hide_bottom_navigation_bar.dart';
 import '../card/settings_card.dart';
 import '../layout/single_child_scroll_view_with_scrollbar.dart';
 
@@ -35,7 +36,7 @@ class AdministrationView extends StatelessWidget {
     ];
 
     return SingleChildScrollViewWithScrollbar(
-      // scrollPositionHandler: HideBottomNavigationBar.setScrollPosition, // TODO
+      scrollPositionHandler: HideBottomNavigationBar.setScrollPosition,
       child: SettingsCard(
         spacing: 10,
         showDivider: false,
@@ -55,6 +56,8 @@ class AdministrationView extends StatelessWidget {
             icon: const Icon(Icons.info_outline),
             label: const Text("Version"),
           ),
+          Placeholder(fallbackHeight: 500),
+          Placeholder(fallbackHeight: 500),
         ],
       ),
     );

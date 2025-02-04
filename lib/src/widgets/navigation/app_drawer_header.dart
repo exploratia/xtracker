@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../util/globals.dart';
 import '../../util/navigation/navigation_utils.dart';
@@ -10,7 +9,6 @@ class AppDrawerHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    final t = AppLocalizations.of(context)!;
 
     List<Color> gradientColors = [
       themeData.scaffoldBackgroundColor,

@@ -11,10 +11,19 @@ import 'main_navigation_item.dart';
 class MainNavigation {
   static final ValueNotifier<int> currentIdx = ValueNotifier<int>(0);
 
-  static void setCurrentIdx(int value) {
-    if (currentIdx.value != value) {
-      currentIdx.value = value;
-    }
+  static void setCurrentIdx(int value, BuildContext context) {
+    if (value < 0 || currentIdx.value == value) return;
+
+    currentIdx.value = value;
+    var currentItem = mainNavigationItems[value];
+    Navigator.pushReplacementNamed(context, currentItem.routeName);
+  }
+
+  static void setRoute(String routeName, BuildContext context) {
+    setCurrentIdx(
+        mainNavigationItems
+            .indexWhere((navItem) => navItem.routeName == routeName),
+        context);
   }
 
   static final List<MainNavigationItem> mainNavigationItems =

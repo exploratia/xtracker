@@ -13,8 +13,4 @@ class MainNavigationItem {
     required this.titleBuilder,
     required this.screenBuilder,
   });
-
-  void onNav(BuildContext context) {
-    print("TODO nav");
-  }
 }

@@ -32,7 +32,7 @@ class _AppNavigationRailState extends State<AppNavigationRail> {
                     if (index == 0) {
                       _extended = !_extended;
                     } else {
-                      MainNavigation.setCurrentIdx(index - 1);
+                      MainNavigation.setCurrentIdx(index - 1, ctx2);
                     }
                   });
                 },

@@ -23,11 +23,11 @@ class AppBottomNavigationBar extends StatelessWidget {
               valueListenable: MainNavigation.currentIdx,
               builder: (BuildContext ctx2, currentIdx, _) =>
                   BottomNavigationBar(
-                items: _buildNavItems(context),
+                items: _buildNavItems(ctx2),
                 currentIndex: currentIdx,
                 type: BottomNavigationBarType.fixed,
                 onTap: (selectedIdx) =>
-                    MainNavigation.setCurrentIdx(selectedIdx),
+                    MainNavigation.setCurrentIdx(selectedIdx, ctx2),
               ),
             ),
           ),
