@@ -9,6 +9,8 @@ class AppBottomNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
+
     return ValueListenableBuilder(
       valueListenable: HideBottomNavigationBar.visible,
       builder: (BuildContext ctx1, isVisible, _) => AnimatedContainer(
@@ -21,13 +23,20 @@ class AppBottomNavigationBar extends StatelessWidget {
           child: SafeArea(
             child: ValueListenableBuilder(
               valueListenable: MainNavigation.currentIdx,
-              builder: (BuildContext ctx2, currentIdx, _) =>
-                  BottomNavigationBar(
-                items: _buildNavItems(ctx2),
-                currentIndex: currentIdx,
-                type: BottomNavigationBarType.fixed,
-                onTap: (selectedIdx) =>
-                    MainNavigation.setCurrentIdx(selectedIdx, ctx2),
+              builder: (BuildContext ctx2, currentIdx, _) => Container(
+                decoration: BoxDecoration(
+                  border: Border(
+                      top: BorderSide(
+                          color: themeData.colorScheme.secondary, width: 1.0)),
+                ),
+                child: BottomNavigationBar(
+                  backgroundColor: themeData.scaffoldBackgroundColor,
+                  items: _buildNavItems(ctx2),
+                  currentIndex: currentIdx,
+                  type: BottomNavigationBarType.fixed,
+                  onTap: (selectedIdx) =>
+                      MainNavigation.setCurrentIdx(selectedIdx, ctx2),
+                ),
               ),
             ),
           ),

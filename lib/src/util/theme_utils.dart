@@ -41,8 +41,6 @@ class ThemeUtils {
     final canvasColor =
         dark ? const Color(0xff38364c) : const Color.fromRGBO(240, 240, 240, 1);
 
-    final drawerBackgroundColor = backgroundColor;
-
     var themeData = ThemeData(
       useMaterial3: false,
       brightness: brightness,
@@ -74,7 +72,7 @@ class ThemeUtils {
       tabBarTheme:
           TabBarThemeData(indicatorColor: dark ? Colors.white : Colors.black),
       drawerTheme: DrawerThemeData(
-        backgroundColor: drawerBackgroundColor,
+        backgroundColor: backgroundColor,
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
           topRight: Radius.circular(20),
@@ -94,7 +92,7 @@ class ThemeUtils {
             // trackBorderColor: const MaterialStatePropertyAll(Colors.purpleAccent),
           ),
       bottomNavigationBarTheme:
-          BottomNavigationBarThemeData(backgroundColor: cardBackgroundColor),
+          BottomNavigationBarThemeData(backgroundColor: backgroundColor),
       snackBarTheme: SnackBarThemeData(
           backgroundColor: cardBackgroundColor,
           contentTextStyle: const TextStyle(color: onPrimary)),
