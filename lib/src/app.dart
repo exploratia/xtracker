@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import 'model/navigation/main_navigation.dart';
+import 'model/navigation/navigation.dart';
 import 'routing.dart';
 import 'util/theme_utils.dart';
 import 'widgets/administration/settings/settings_controller.dart';
@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
           // directory.
           onGenerateTitle: (BuildContext context) {
             // settings changed -> maybe locale? ->
-            MainNavigation.determineMaxTextWidth(context: context);
+            Navigation.determineMaxTextWidth(context: context);
             return AppLocalizations.of(context)!.appTitle;
           },
 

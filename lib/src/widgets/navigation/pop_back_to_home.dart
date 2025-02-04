@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../model/navigation/main_navigation.dart';
+import '../../model/navigation/navigation.dart';
 import '../../util/navigation/navigation_utils.dart';
 
 class PopBackToHome extends StatelessWidget {
@@ -25,7 +25,7 @@ class PopBackToHome extends StatelessWidget {
           return;
         }
 
-        MainNavigation.setCurrentIdx(0, context);
+        Navigation.setCurrentMainNavigationRouteIdx(0, context);
       },
       child: child,
     );

@@ -19,10 +19,9 @@ class AdministrationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context)!;
     return ScreenBuilder.withStandardNavBuilders(
-        appBarBuilder: (context) => GradientAppBar.build(
-              context,
-              title: Text(t.administrationTitle),
-            ),
+        routeName: mainNavigationItem.routeName,
+        appBarBuilder: (context) =>
+            GradientAppBar.build(context, title: Text(t.administrationTitle)),
         bodyBuilder: (context) => const AdministrationView());
   }
 }

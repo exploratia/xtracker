@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'model/navigation/main_navigation.dart';
+import 'model/navigation/navigation.dart';
 import 'screens/administration/info_screen.dart';
 import 'screens/administration/log_screen.dart';
 import 'screens/administration/log_settings_screen.dart';
@@ -24,7 +24,7 @@ class Routing {
       builder: (BuildContext context) {
         var routeName = routeSettings.name;
         // generic routing
-        for (var mainNavItem in MainNavigation.mainNavigationItems) {
+        for (var mainNavItem in Navigation.mainNavigationItems) {
           if (mainNavItem.routeName == routeName) {
             return mainNavItem.screenBuilder();
           }

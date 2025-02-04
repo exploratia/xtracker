@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../model/navigation/navigation.dart';
 import '../../util/media_query_utils.dart';
 import '../navigation/app_bottom_navigation_bar.dart';
 import '../navigation/app_drawer.dart';
@@ -17,8 +18,11 @@ class ScreenBuilder extends StatelessWidget {
   final Widget Function(BuildContext context)? navigationRailBuilder;
   final Widget Function(BuildContext context)? floatingActionButtonBuilder;
 
-  /// HomeScreen ? for double back to close
+  /// routeName -> HomeScreen ? for double back to close
   final bool isHome;
+
+  /// MainNav ? on tap back goto home
+  final bool isMainNavigation;
 
   const ScreenBuilder({
     super.key,
@@ -28,22 +32,25 @@ class ScreenBuilder extends StatelessWidget {
     this.drawerBuilder,
     this.bottomNavigationBarBuilder,
     this.navigationRailBuilder,
-    this.isHome = false,
+    required this.isHome,
+    required this.isMainNavigation,
   });
 
   /// ShortHand constructor for standard navigation
+  /// [isHome] and [isMainNavigation] are determined by routeName
   ScreenBuilder.withStandardNavBuilders({
     Key? key,
     PreferredSizeWidget Function(BuildContext context)? appBarBuilder,
     required Widget Function(BuildContext context) bodyBuilder,
     Widget Function(BuildContext context)? floatingActionButtonBuilder,
-    bool isHome = false,
+    required String routeName,
   }) : this(
             key: key,
             appBarBuilder: appBarBuilder,
             bodyBuilder: bodyBuilder,
             floatingActionButtonBuilder: floatingActionButtonBuilder,
-            isHome: isHome,
+            isHome: routeName == '/',
+            isMainNavigation: Navigation.containsMainNavigationRoute(routeName),
             drawerBuilder: (context) => const AppDrawer(),
             navigationRailBuilder: (context) => const AppNavigationRail(),
             bottomNavigationBarBuilder: (context) =>
@@ -69,11 +76,14 @@ class ScreenBuilder extends StatelessWidget {
       ],
     ));
 
+    // PopScope depending on nav
     Widget bodyPopScope;
     if (isHome) {
       bodyPopScope = DoubleBackToClose(child: bodySafeArea);
-    } else {
+    } else if (isMainNavigation) {
       bodyPopScope = PopBackToHome(child: bodySafeArea);
+    } else {
+      bodyPopScope = bodySafeArea;
     }
 
     return Scaffold(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../model/navigation/main_navigation.dart';
 import '../model/navigation/main_navigation_item.dart';
+import '../model/navigation/navigation.dart';
 import '../util/globals.dart';
 import '../util/navigation/hide_bottom_navigation_bar.dart';
 import '../widgets/layout/gradient_app_bar.dart';
@@ -22,7 +22,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenBuilder.withStandardNavBuilders(
-      isHome: true,
+      routeName: mainNavigationItem.routeName,
       appBarBuilder: (context) => GradientAppBar.build(
         context,
         title: Row(
@@ -51,7 +51,7 @@ class HomeScreen extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                MainNavigation.setRoute(
+                Navigation.setCurrentMainNavigationRoute(
                     AdministrationScreen.mainNavigationItem.routeName, context);
               },
               child: SizedBox(

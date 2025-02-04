@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-import '../../model/navigation/main_navigation.dart';
+import '../../model/navigation/navigation.dart';
 import '../../util/navigation/navigation_utils.dart';
 import '../layout/single_child_scroll_view_with_scrollbar.dart';
 import 'app_drawer_header.dart';
@@ -12,7 +12,7 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-        width: MainNavigation.maxTextWidth + 130,
+        width: Navigation.maxTextWidth + 130,
         child: Column(
           children: [
             const AppDrawerHeader(),
@@ -20,7 +20,7 @@ class AppDrawer extends StatelessWidget {
             Expanded(
               child: SingleChildScrollViewWithScrollbar(
                 child: ValueListenableBuilder(
-                  valueListenable: MainNavigation.currentIdx,
+                  valueListenable: Navigation.currentMainNavigationIdx,
                   builder: (BuildContext ctx, currentIdx, _) =>
                       _buildNavItems(ctx, currentIdx),
                 ),
@@ -35,7 +35,7 @@ class AppDrawer extends StatelessWidget {
     List<Widget> result = [];
 
     int actIdx = -1;
-    for (var navItem in MainNavigation.mainNavigationItems) {
+    for (var navItem in Navigation.mainNavigationItems) {
       int itemIdx = ++actIdx;
       result.add(ListTile(
         selected: actIdx == currentIdx,
@@ -43,7 +43,7 @@ class AppDrawer extends StatelessWidget {
         title: Text(navItem.titleBuilder(t)),
         onTap: () {
           NavigationUtils.closeDrawerIfOpen(context);
-          MainNavigation.setCurrentIdx(itemIdx, context);
+          Navigation.setCurrentMainNavigationRouteIdx(itemIdx, context);
         },
       ));
     }

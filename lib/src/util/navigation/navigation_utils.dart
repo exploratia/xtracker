@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class NavigationUtils {
@@ -16,5 +17,15 @@ class NavigationUtils {
       return true;
     }
     return false;
+  }
+
+  /// only for debug - destroys app
+  static void printNavStack(BuildContext context) {
+    Navigator.of(context).popUntil((route) {
+      if (kDebugMode) {
+        print('Debug navigator stack: ${route.settings.name}');
+      }
+      return false;
+    });
   }
 }

@@ -1,12 +1,12 @@
 import 'abstract_navigation_item.dart';
 import 'navigation.dart';
 
-class MainNavigationItem extends AbstractNavigationItem {
-  MainNavigationItem(
+class NavigationItem extends AbstractNavigationItem {
+  NavigationItem(
       {required super.icon,
       required super.routeName,
       required super.titleBuilder,
       required super.screenBuilder}) {
-    Navigation.mainNavigationItems.add(this);
+    Navigation.navigationItems.add(this);
   }
 }

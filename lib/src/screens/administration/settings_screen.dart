@@ -20,7 +20,8 @@ class SettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context)!;
 
-    return ScreenBuilder(
+    return ScreenBuilder.withStandardNavBuilders(
+      routeName: routeName,
       appBarBuilder: (context) =>
           GradientAppBar.build(context, title: Text(titleBuilder(t))),
       bodyBuilder: (context) => SettingsView(controller: controller),
