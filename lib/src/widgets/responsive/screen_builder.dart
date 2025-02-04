@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../util/media_query_utils.dart';
+import '../navigation/app_bottom_navigation_bar.dart';
+import '../navigation/app_drawer.dart';
+import '../navigation/app_navigation_rail.dart';
 import '../navigation/double_back_to_close.dart';
 import '../navigation/pop_back_to_home.dart';
 
@@ -27,6 +30,24 @@ class ScreenBuilder extends StatelessWidget {
     this.navigationRailBuilder,
     this.isHome = false,
   });
+
+  /// ShortHand constructor for standard navigation
+  ScreenBuilder.withStandardNavBuilders({
+    Key? key,
+    PreferredSizeWidget Function(BuildContext context)? appBarBuilder,
+    required Widget Function(BuildContext context) bodyBuilder,
+    Widget Function(BuildContext context)? floatingActionButtonBuilder,
+    bool isHome = false,
+  }) : this(
+            key: key,
+            appBarBuilder: appBarBuilder,
+            bodyBuilder: bodyBuilder,
+            floatingActionButtonBuilder: floatingActionButtonBuilder,
+            isHome: isHome,
+            drawerBuilder: (context) => const AppDrawer(),
+            navigationRailBuilder: (context) => const AppNavigationRail(),
+            bottomNavigationBarBuilder: (context) =>
+                const AppBottomNavigationBar());
 
   @override
   Widget build(BuildContext context) {

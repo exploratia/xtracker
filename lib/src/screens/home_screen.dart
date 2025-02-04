@@ -6,9 +6,6 @@ import '../util/globals.dart';
 import '../util/navigation/hide_bottom_navigation_bar.dart';
 import '../widgets/layout/gradient_app_bar.dart';
 import '../widgets/layout/single_child_scroll_view_with_scrollbar.dart';
-import '../widgets/navigation/app_bottom_navigation_bar.dart';
-import '../widgets/navigation/app_drawer.dart';
-import '../widgets/navigation/app_navigation_rail.dart';
 import '../widgets/responsive/screen_builder.dart';
 import './playground_screen.dart';
 import 'administration/administration_screen.dart';
@@ -24,7 +21,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenBuilder(
+    return ScreenBuilder.withStandardNavBuilders(
       isHome: true,
       appBarBuilder: (context) => GradientAppBar.build(
         context,
@@ -40,9 +37,6 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBarBuilder: (context) => const AppBottomNavigationBar(),
-      navigationRailBuilder: (context) => const AppNavigationRail(),
-      drawerBuilder: (context) => const AppDrawer(),
       bodyBuilder: (context) => SingleChildScrollViewWithScrollbar(
         scrollPositionHandler: HideBottomNavigationBar.setScrollPosition,
         child: Column(

@@ -4,9 +4,6 @@ import '../../model/navigation/main_navigation_item.dart';
 import '../../util/globals.dart';
 import '../../widgets/administration/administration_view.dart';
 import '../../widgets/layout/gradient_app_bar.dart';
-import '../../widgets/navigation/app_bottom_navigation_bar.dart';
-import '../../widgets/navigation/app_drawer.dart';
-import '../../widgets/navigation/app_navigation_rail.dart';
 import '../../widgets/responsive/screen_builder.dart';
 
 class AdministrationScreen extends StatelessWidget {
@@ -20,7 +17,7 @@ class AdministrationScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenBuilder(
+    return ScreenBuilder.withStandardNavBuilders(
         appBarBuilder: (context) => GradientAppBar.build(
               context,
               title: SizedBox(
@@ -31,9 +28,6 @@ class AdministrationScreen extends StatelessWidget {
                 ),
               ),
             ),
-        bottomNavigationBarBuilder: (context) => const AppBottomNavigationBar(),
-        navigationRailBuilder: (context) => const AppNavigationRail(),
-        drawerBuilder: (context) => const AppDrawer(),
         bodyBuilder: (context) => const AdministrationView());
   }
 }
