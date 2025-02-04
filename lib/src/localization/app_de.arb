@@ -1,6 +1,7 @@
 {
   "@@locale": "de",
-  "administrationTitle": "Mehr",
+  "administrationNavTitle": "Mehr",
+  "administrationTitle": "Service & Kontakt",
   "appTitle": "Little Tracker (DE)",
   "@appTitle": {
     "description": "The title of the application"
