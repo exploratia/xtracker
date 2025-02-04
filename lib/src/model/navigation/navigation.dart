@@ -40,20 +40,41 @@ class Navigation {
   /// [NavigationItem] registers itself in constructor
   static final List<NavigationItem> navigationItems = [];
 
+  static void registerMainNavigationItem(
+      MainNavigationItem mainNavigationItem) {
+    mainNavigationItems.add(mainNavigationItem);
+    _maxTextWidth = -1;
+  }
+
   /// initial default drawer width
-  static double maxTextWidth = 304;
+  static double _maxTextWidth = -1;
+
+  static double getDrawerTextWidth(BuildContext context,
+      {TextStyle? textStyle}) {
+    if (_maxTextWidth < 0) {
+      _determineMaxTextWidth(context: context, textStyle: textStyle);
+    }
+    return _maxTextWidth;
+  }
+
+  /// force recalculation on next usage
+  static void resetMaxTextWidth() {
+    _maxTextWidth = -1;
+  }
 
   /// determines the maxTextWidth for all main navigation items to know the required drawer width.
   /// Has to be called after language changed.
-  static void determineMaxTextWidth(
+  static void _determineMaxTextWidth(
       {required BuildContext context, TextStyle? textStyle}) {
     final t = AppLocalizations.of(context)!;
-    double maxW = 0;
+    double maxW = -1;
     for (var navItem in mainNavigationItems) {
       var text = navItem.titleBuilder(t);
       var width = TextUtils.determineTextSize(text, context, textStyle).width;
       maxW = max(maxW, width);
     }
-    maxTextWidth = maxW;
+    print('Determined main nav text width: $maxW');
+    if (maxW < 0) maxW = 304;
+    _maxTextWidth = maxW;
   }
 }

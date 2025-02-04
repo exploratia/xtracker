@@ -12,7 +12,8 @@ class AppDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-        width: Navigation.maxTextWidth + 130,
+        // + icon and padding
+        width: Navigation.getDrawerTextWidth(context) + 130,
         child: Column(
           children: [
             const AppDrawerHeader(),

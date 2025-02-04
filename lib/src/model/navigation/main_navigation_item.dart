@@ -7,6 +7,6 @@ class MainNavigationItem extends AbstractNavigationItem {
       required super.routeName,
       required super.titleBuilder,
       required super.screenBuilder}) {
-    Navigation.mainNavigationItems.add(this);
+    Navigation.registerMainNavigationItem(this);
   }
 }

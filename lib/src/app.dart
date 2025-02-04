@@ -57,7 +57,7 @@ class MyApp extends StatelessWidget {
           // directory.
           onGenerateTitle: (BuildContext context) {
             // settings changed -> maybe locale? ->
-            Navigation.determineMaxTextWidth(context: context);
+            Navigation.resetMaxTextWidth();
             return AppLocalizations.of(context)!.appTitle;
           },
 
