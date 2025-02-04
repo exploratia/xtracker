@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../util/globals.dart';
 import '../../util/media_query_utils.dart';
 
 class ScreenBuilder extends StatelessWidget {
@@ -13,6 +12,9 @@ class ScreenBuilder extends StatelessWidget {
   final Widget Function(BuildContext context)? navigationRailBuilder;
   final Widget Function(BuildContext context)? floatingActionButtonBuilder;
 
+  /// HomeScreen global ScaffoldKey for double back to close
+  final Key? homeScaffoldKey;
+
   const ScreenBuilder(
       {super.key,
       required this.bodyBuilder,
@@ -20,7 +22,8 @@ class ScreenBuilder extends StatelessWidget {
       this.floatingActionButtonBuilder,
       this.drawerBuilder,
       this.bottomNavigationBarBuilder,
-      this.navigationRailBuilder});
+      this.navigationRailBuilder,
+      this.homeScaffoldKey});
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +36,7 @@ class ScreenBuilder extends StatelessWidget {
         ((mediaQueryInfo.isLandscape || mediaQueryInfo.isTablet) &&
             navigationRailBuilder != null);
     return Scaffold(
-      key: Globals.scaffoldKey,
+      key: homeScaffoldKey,
       appBar: appBarBuilder != null ? appBarBuilder!(context) : null,
       drawer: buildDrawer ? SafeArea(child: drawerBuilder!(context)) : null,
       bottomNavigationBar: buildBottomNavigationBar

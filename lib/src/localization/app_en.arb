@@ -1,5 +1,6 @@
 {
   "@@locale": "en",
+  "administrationTitle": "More",
   "appTitle": "Little Tracker (EN)",
   "@appTitle": {
     "description": "The title of the application"
@@ -15,6 +16,7 @@
   "commonsMsgErrorFailedToSaveData": "Failed to save data...",
   "commonsMsgErrorFailedToShareData": "Failed to share...",
   "commonsMsgPressBackAgainToExit": "Press BACK again to exit...",
+  "homeTitle": "Home",
   "infoTitle": "Info",
   "logDialogMsgErrorDeleteLogFailed": "Failed to delete log file!",
   "logDialogMsgQueryDeleteLog": "Do you really want to delete the log file?",

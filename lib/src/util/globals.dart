@@ -14,6 +14,6 @@ class Globals {
   }
 
   /// global scaffoldKey - to check the drawer state and close the drawer on back-tap
-  static final GlobalKey<ScaffoldState> scaffoldKey =
+  static final GlobalKey<ScaffoldState> homeScaffoldKey =
       GlobalKey<ScaffoldState>();
 }

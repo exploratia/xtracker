@@ -41,8 +41,7 @@ class ThemeUtils {
     final canvasColor =
         dark ? const Color(0xff38364c) : const Color.fromRGBO(240, 240, 240, 1);
 
-    final drawerBackgroundColor =
-        dark ? const Color.fromRGBO(7, 7, 7, 1) : Colors.white;
+    final drawerBackgroundColor = backgroundColor;
 
     var themeData = ThemeData(
       useMaterial3: false,
@@ -74,9 +73,14 @@ class ThemeUtils {
       ),
       tabBarTheme:
           TabBarThemeData(indicatorColor: dark ? Colors.white : Colors.black),
-      drawerTheme: Theme.of(context)
-          .drawerTheme
-          .copyWith(backgroundColor: drawerBackgroundColor),
+      drawerTheme: DrawerThemeData(
+        backgroundColor: drawerBackgroundColor,
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.only(
+          topRight: Radius.circular(20),
+          // bottomRight: Radius.circular(2),
+        )),
+      ),
       // dividerColor: dividerColor, // Trenner bei MenuItems-Gruppierung
       scaffoldBackgroundColor: backgroundColor /* otherwise white|black */,
       scrollbarTheme: Theme.of(context).scrollbarTheme.copyWith(

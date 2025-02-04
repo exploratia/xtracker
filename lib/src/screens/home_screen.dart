@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../model/navigation/main_navigation_item.dart';
 import '../util/globals.dart';
 import '../util/navigation/hide_bottom_navigation_bar.dart';
 import '../widgets/layout/gradient_app_bar.dart';
@@ -15,6 +16,11 @@ import 'administration/settings_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   static const routeName = '/';
+  static MainNavigationItem mainNavigationItem = MainNavigationItem(
+      icon: const Icon(Icons.home_outlined),
+      routeName: routeName,
+      titleBuilder: (t) => t.homeTitle,
+      screenBuilder: () => const HomeScreen());
 
   const HomeScreen({super.key});
 
@@ -22,6 +28,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return DoubleBackToClose(
       child: ScreenBuilder(
+        homeScaffoldKey: Globals.homeScaffoldKey,
         appBarBuilder: (context) => GradientAppBar.build(
           context,
           title: Row(
@@ -65,14 +72,14 @@ class HomeScreen extends StatelessWidget {
               ),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.restorablePushNamed(
-                      context, AdministrationScreen.routeName);
+                  Navigator.restorablePushNamed(context,
+                      AdministrationScreen.mainNavigationItem.routeName);
                 },
                 child: SizedBox(
                   width: 100,
                   child: Row(
                     children: [
-                      AdministrationScreen.icon,
+                      AdministrationScreen.mainNavigationItem.icon,
                       Text('Mehr...'),
                     ],
                   ),

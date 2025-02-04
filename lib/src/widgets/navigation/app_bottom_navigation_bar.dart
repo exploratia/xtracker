@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../model/navigation/main_navigation.dart';
 import '../../util/navigation/hide_bottom_navigation_bar.dart';
 
 class AppBottomNavigationBar extends StatelessWidget {
@@ -8,21 +9,26 @@ class AppBottomNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
-    final t = AppLocalizations.of(context)!;
     return ValueListenableBuilder(
       valueListenable: HideBottomNavigationBar.visible,
-      builder: (BuildContext ctx, value, child) => AnimatedContainer(
+      builder: (BuildContext ctx1, isVisible, _) => AnimatedContainer(
         duration: const Duration(milliseconds: 300),
-        height: value ? 80 : 0,
+        height: isVisible ? 80 : 0,
         child: OverflowBox(
           maxHeight: 80,
           minHeight: 0,
           alignment: AlignmentDirectional.topCenter,
           child: SafeArea(
-            child: BottomNavigationBar(
-              items: _buildNavItems(context),
-              type: BottomNavigationBarType.fixed,
+            child: ValueListenableBuilder(
+              valueListenable: MainNavigation.currentIdx,
+              builder: (BuildContext ctx2, currentIdx, _) =>
+                  BottomNavigationBar(
+                items: _buildNavItems(context),
+                currentIndex: currentIdx,
+                type: BottomNavigationBarType.fixed,
+                onTap: (selectedIdx) =>
+                    MainNavigation.setCurrentIdx(selectedIdx),
+              ),
             ),
           ),
         ),
@@ -31,32 +37,15 @@ class AppBottomNavigationBar extends StatelessWidget {
   }
 
   List<BottomNavigationBarItem> _buildNavItems(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
     List<BottomNavigationBarItem> result = [];
 
-    result.add(const BottomNavigationBarItem(
-      icon: Icon(Icons.menu),
-      label: 'Menu1',
-    ));
-    result.add(const BottomNavigationBarItem(
-      icon: Icon(Icons.menu),
-      label: 'Menu2',
-    ));
-    result.add(const BottomNavigationBarItem(
-      icon: Icon(Icons.menu),
-      label: 'Menu3',
-    ));
-    result.add(const BottomNavigationBarItem(
-      icon: Icon(Icons.menu),
-      label: 'Menu4',
-    ));
-    result.add(const BottomNavigationBarItem(
-      icon: Icon(Icons.menu),
-      label: 'Menu5',
-    ));
-    result.add(const BottomNavigationBarItem(
-      icon: Icon(Icons.menu),
-      label: 'Menu6',
-    ));
+    for (var navItem in MainNavigation.mainNavigationItems) {
+      result.add(BottomNavigationBarItem(
+        icon: navItem.icon,
+        label: navItem.titleBuilder(t),
+      ));
+    }
 
     return result;
   }

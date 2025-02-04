@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../util/dialogs.dart';
 import '../../util/globals.dart';
+import '../../util/navigation/navigation_utils.dart';
 
 class DoubleBackToClose extends StatefulWidget {
   /// Make Sure this child has a Scaffold widget as parent.
@@ -59,8 +60,8 @@ class _DoubleBackToCloseState extends State<DoubleBackToClose> {
           if (didPop) return;
 
           // is the drawer open? => first close the drawer
-          if (Globals.scaffoldKey.currentState?.isDrawerOpen ?? false) {
-            Globals.scaffoldKey.currentState?.closeDrawer();
+          if (NavigationUtils.closeDrawer(
+              Globals.homeScaffoldKey.currentState)) {
             return;
           }
 

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'screens/administration/administration_screen.dart';
+import 'model/navigation/main_navigation.dart';
 import 'screens/administration/info_screen.dart';
 import 'screens/administration/log_screen.dart';
 import 'screens/administration/log_settings_screen.dart';
@@ -22,12 +22,18 @@ class Routing {
     return MaterialPageRoute<void>(
       settings: routeSettings,
       builder: (BuildContext context) {
+        var routeName = routeSettings.name;
+        // generic routing
+        for (var mainNavItem in MainNavigation.mainNavigationItems) {
+          if (mainNavItem.routeName == routeName) {
+            return mainNavItem.screenBuilder();
+          }
+        }
+        // non generic routes...?
         switch (routeSettings.name) {
           case PlaygroundScreen.routeName:
             return const PlaygroundScreen();
           // administration >>
-          case AdministrationScreen.routeName:
-            return const AdministrationScreen();
           case SettingsScreen.routeName:
             return SettingsScreen(controller: settingsController);
           case LogsScreen.routeName:
@@ -47,8 +53,6 @@ class Routing {
           case HeroView.routeName:
             return const HeroView();
           // << playground
-          // home
-          case HomeScreen.routeName:
           default:
             return const HomeScreen();
         }
