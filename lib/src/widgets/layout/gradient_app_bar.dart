@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../navigation/nav_back_icon_button.dart';
+
 class GradientAppBar extends AppBar {
   GradientAppBar(
       {super.key,
@@ -22,12 +24,16 @@ class GradientAppBar extends AppBar {
           ),
         );
 
+  /// [addLeadingBackBtn] if true and no [leading] is given a back icon
+  /// button is added. Hides therefore a possible drawer menu.
+  /// Alternative would be a endDrawer.
   static GradientAppBar build(BuildContext context,
       {Key? key,
       required Widget title,
       Color? foregroundColor,
       List<Widget>? actions,
       Widget? leading,
+      bool? addLeadingBackBtn,
       bool automaticallyImplyLeading = true}) {
     final themeData = Theme.of(context);
     List<Color> gradientColors = [
@@ -36,12 +42,17 @@ class GradientAppBar extends AppBar {
       themeData.scaffoldBackgroundColor
     ];
 
+    Widget? leadingWidget = leading;
+    if (leadingWidget == null && addLeadingBackBtn == true) {
+      leadingWidget = const NavBackIconButton();
+    }
+
     return GradientAppBar(
       title: title,
       gradientColors: gradientColors,
       foregroundColor: themeData.colorScheme.onPrimary,
       actionsIconTheme: IconThemeData(color: themeData.colorScheme.onPrimary),
-      leading: leading,
+      leading: leadingWidget,
       automaticallyImplyLeading: automaticallyImplyLeading,
       actions: actions,
     );
