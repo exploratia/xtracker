@@ -45,7 +45,11 @@ class _SingleChildScrollViewWithScrollbarState
       _scrollController.addListener(() {
         scrollPositionCb(_scrollController.position);
       });
+      // Call callback once direct with initial scroll pos (Show Bottom NavBar if not visible)
+      WidgetsBinding.instance.addPostFrameCallback(
+          (_) => scrollPositionCb(_scrollController.position));
     }
+
     final getScrollP = widget.getScrollPosCallback;
     if (getScrollP != null) {
       WidgetsBinding.instance.addPostFrameCallback((_) => scroll(getScrollP()));
