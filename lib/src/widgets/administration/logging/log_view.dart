@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../util/logging/daily_files.dart';
 import '../../../util/media_query_utils.dart';
+import '../../../util/navigation/hide_bottom_navigation_bar.dart';
 
 class LogView extends StatefulWidget {
   const LogView(this.logFileName, {super.key});
@@ -19,6 +20,10 @@ class _LogViewState extends State<LogView> {
 
   @override
   Widget build(BuildContext context) {
+    // In the ListViewBuilder we have no ScrollPosHandler -> hide BottomNavBar always.
+    WidgetsBinding.instance
+        .addPostFrameCallback((_) => HideBottomNavigationBar.setVisible(false));
+
     return SizedBox(
       width: double.infinity,
       child: FutureBuilder(
@@ -62,49 +67,47 @@ class _LogLines extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scrollbar(
-      child: RefreshIndicator(
-        onRefresh: () async {
-          refreshHandler();
-        },
-        child: ListView.builder(
-            itemBuilder: (context, index) {
-              var logLineText = logLines[index];
-              var logLine = _LogLine(
-                logLine: logLineText,
-                key: ValueKey(logLineText.length > 28
-                    ? logLineText.substring(0, 27)
-                    : logLineText),
-              );
+    return RefreshIndicator(
+      onRefresh: () async {
+        refreshHandler();
+      },
+      child: ListView.builder(
+          itemBuilder: (context, index) {
+            var logLineText = logLines[index];
+            var logLine = _LogLine(
+              logLine: logLineText,
+              key: ValueKey(logLineText.length > 28
+                  ? logLineText.substring(0, 27)
+                  : logLineText),
+            );
 
-              if (index == 0) {
-                return Padding(
-                  padding: const EdgeInsets.only(
-                      left: outerPad,
-                      right: outerPad,
-                      top: outerPad,
-                      bottom: linePad),
-                  child: logLine,
-                );
-              }
-              if (index == logLines.length - 1) {
-                return Padding(
-                  padding: const EdgeInsets.only(
-                      left: outerPad,
-                      right: outerPad,
-                      top: linePad,
-                      bottom: outerPad),
-                  child: logLine,
-                );
-              }
+            if (index == 0) {
               return Padding(
-                padding: const EdgeInsets.symmetric(
-                    vertical: linePad, horizontal: outerPad),
+                padding: const EdgeInsets.only(
+                    left: outerPad,
+                    right: outerPad,
+                    top: outerPad,
+                    bottom: linePad),
                 child: logLine,
               );
-            },
-            itemCount: logLines.length),
-      ),
+            }
+            if (index == logLines.length - 1) {
+              return Padding(
+                padding: const EdgeInsets.only(
+                    left: outerPad,
+                    right: outerPad,
+                    top: linePad,
+                    bottom: outerPad),
+                child: logLine,
+              );
+            }
+            return Padding(
+              padding: const EdgeInsets.symmetric(
+                  vertical: linePad, horizontal: outerPad),
+              child: logLine,
+            );
+          },
+          itemCount: logLines.length),
     );
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../../util/navigation/hide_bottom_navigation_bar.dart';
 import '../../card/expandable_settings_card.dart';
 import '../../layout/scroll_footer.dart';
 import '../../layout/single_child_scroll_view_with_scrollbar.dart';
@@ -23,6 +24,7 @@ class SettingsView extends StatelessWidget {
     final t = AppLocalizations.of(context);
 
     return SingleChildScrollViewWithScrollbar(
+      scrollPositionHandler: HideBottomNavigationBar.setScrollPosition,
       child: Column(
         children: [
           ExpandableSettingsCard(

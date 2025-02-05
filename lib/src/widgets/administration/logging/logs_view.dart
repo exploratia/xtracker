@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../screens/administration/log_screen.dart';
 import '../../../util/logging/daily_files.dart';
+import '../../../util/navigation/hide_bottom_navigation_bar.dart';
 import '../../card/settings_card.dart';
 import '../../layout/single_child_scroll_view_with_scrollbar.dart';
 
@@ -25,6 +26,7 @@ class _LogsViewState extends State<LogsView> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollViewWithScrollbar(
+      scrollPositionHandler: HideBottomNavigationBar.setScrollPosition,
       onRefreshCallback: () async {
         _rebuild();
       },

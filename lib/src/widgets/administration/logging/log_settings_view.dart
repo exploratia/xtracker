@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:logger/logger.dart';
 
 import '../../../util/logging/flutter_simple_logging.dart';
+import '../../../util/navigation/hide_bottom_navigation_bar.dart';
 import '../../../util/table_utils.dart';
 import '../../card/settings_card.dart';
 import '../../layout/drop_down_menu_item_child.dart';
@@ -16,6 +17,7 @@ class LogSettingsView extends StatelessWidget {
     final t = AppLocalizations.of(context);
 
     return SingleChildScrollViewWithScrollbar(
+      scrollPositionHandler: HideBottomNavigationBar.setScrollPosition,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -25,7 +27,7 @@ class LogSettingsView extends StatelessWidget {
               Row(
                 children: [
                   Text(t!.logSettingsLogLevelLabel),
-                  _LogLevelSelector(),
+                  const _LogLevelSelector(),
                 ],
               ),
               const Divider(),
@@ -44,7 +46,7 @@ class LogSettingsView extends StatelessWidget {
                 children: [
                   TableUtils.tableRow([
                     Text(t.logSettingsLogFullStackLabel),
-                    _FullStackSwitch(),
+                    const _FullStackSwitch(),
                   ]),
                   TableUtils.tableRow([
                     Text(t.logSettingsWriteTestLogMessagesLabel),
@@ -58,7 +60,7 @@ class LogSettingsView extends StatelessWidget {
                           // logger.wtf('WTF Message');
                         },
                         shape: const CircleBorder(),
-                        child: Icon(
+                        child: const Icon(
                           Icons.short_text_rounded,
                         )),
                   ]),
@@ -85,7 +87,7 @@ class _LogLevelSelectorState extends State<_LogLevelSelector> {
     final themeData = Theme.of(context);
 
     return DropdownButton<Level>(
-        key: Key('logSettingsLogLevelSelect'),
+        key: const Key('logSettingsLogLevelSelect'),
         dropdownColor: themeData.cardColor,
         // borderRadius: BorderRadius.circular(4),
         value: SimpleLogging.logLevel,
