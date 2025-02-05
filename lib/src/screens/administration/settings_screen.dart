@@ -25,12 +25,7 @@ class SettingsScreen extends StatelessWidget {
     return ScreenBuilder.withStandardNavBuilders(
       navItem: navItem,
       appBarBuilder: (context) => GradientAppBar.build(context,
-          // TODO back instead of Drawer
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () => Navigator.pop(context),
-          ),
-          title: Text(navItem.titleBuilder(t))),
+          addLeadingBackBtn: true, title: Text(navItem.titleBuilder(t))),
       bodyBuilder: (context) => SettingsView(controller: controller),
     );
   }

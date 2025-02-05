@@ -40,7 +40,7 @@ class _LogsScreenState extends State<LogsScreen> {
     return ScreenBuilder.withStandardNavBuilders(
       navItem: LogsScreen.navItem,
       appBarBuilder: (context) => GradientAppBar.build(context,
-          // TODO BackButton as on Settings -> extract as Widget
+          addLeadingBackBtn: true,
           title: Text(LogScreen.navItem.titleBuilder(t)),
           actions: [
             IconButton(

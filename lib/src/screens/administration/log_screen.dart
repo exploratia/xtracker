@@ -32,6 +32,7 @@ class LogScreen extends StatelessWidget {
       navItem: navItem,
       appBarBuilder: (context) => GradientAppBar.build(
         context,
+        addLeadingBackBtn: true,
         title: Text(navItem.titleBuilder(t) + logFileN.replaceAll('.txt', '')),
         actions: [
           IconButton(
