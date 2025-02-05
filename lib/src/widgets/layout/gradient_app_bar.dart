@@ -8,6 +8,7 @@ class GradientAppBar extends AppBar {
       super.foregroundColor,
       super.actions,
       super.actionsIconTheme,
+      super.leading,
       super.automaticallyImplyLeading})
       : super(
           flexibleSpace: Container(
@@ -26,6 +27,7 @@ class GradientAppBar extends AppBar {
       required Widget title,
       Color? foregroundColor,
       List<Widget>? actions,
+      Widget? leading,
       bool automaticallyImplyLeading = true}) {
     final themeData = Theme.of(context);
     List<Color> gradientColors = [
@@ -39,6 +41,7 @@ class GradientAppBar extends AppBar {
       gradientColors: gradientColors,
       foregroundColor: themeData.colorScheme.onPrimary,
       actionsIconTheme: IconThemeData(color: themeData.colorScheme.onPrimary),
+      leading: leading,
       automaticallyImplyLeading: automaticallyImplyLeading,
       actions: actions,
     );

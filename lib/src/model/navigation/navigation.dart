@@ -1,11 +1,11 @@
 import 'dart:math';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../util/text_utils.dart';
 import 'main_navigation_item.dart';
-import 'navigation_item.dart';
 
 class Navigation {
   static final ValueNotifier<int> currentMainNavigationIdx =
@@ -36,9 +36,6 @@ class Navigation {
 
   /// [MainNavigationItem] registers itself in constructor
   static final List<MainNavigationItem> mainNavigationItems = [];
-
-  /// [NavigationItem] registers itself in constructor
-  static final List<NavigationItem> navigationItems = [];
 
   static void registerMainNavigationItem(
       MainNavigationItem mainNavigationItem) {
@@ -73,7 +70,9 @@ class Navigation {
       var width = TextUtils.determineTextSize(text, context, textStyle).width;
       maxW = max(maxW, width);
     }
-    print('Determined main nav text width: $maxW');
+    if (kDebugMode) {
+      print('Determined main nav text width: $maxW');
+    }
     if (maxW < 0) maxW = 304;
     _maxTextWidth = maxW;
   }

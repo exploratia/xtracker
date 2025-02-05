@@ -7,11 +7,11 @@ import '../../widgets/layout/gradient_app_bar.dart';
 import '../../widgets/responsive/screen_builder.dart';
 
 class AdministrationScreen extends StatelessWidget {
-  static MainNavigationItem mainNavigationItem = MainNavigationItem(
-      icon: const Icon(Icons.more_horiz),
-      routeName: '/administration_screen',
-      titleBuilder: (t) => t.administrationNavTitle,
-      screenBuilder: () => const AdministrationScreen());
+  static MainNavigationItem navItem = MainNavigationItem(
+    icon: const Icon(Icons.more_horiz),
+    routeName: '/administration_screen',
+    titleBuilder: (t) => t.administrationNavTitle,
+  );
 
   const AdministrationScreen({super.key});
 
@@ -19,9 +19,10 @@ class AdministrationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context)!;
     return ScreenBuilder.withStandardNavBuilders(
-        routeName: mainNavigationItem.routeName,
-        appBarBuilder: (context) =>
-            GradientAppBar.build(context, title: Text(t.administrationTitle)),
-        bodyBuilder: (context) => const AdministrationView());
+      navItem: navItem,
+      appBarBuilder: (context) =>
+          GradientAppBar.build(context, title: Text(navItem.titleBuilder(t))),
+      bodyBuilder: (context) => const AdministrationView(),
+    );
   }
 }

@@ -2,17 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../model/navigation/navigation_item.dart';
 import '../../util/app_info.dart';
 import '../../util/dialogs.dart';
 import '../../util/logging/daily_files.dart';
 import '../../widgets/administration/logging/log_view.dart';
 import '../../widgets/layout/gradient_app_bar.dart';
+import '../../widgets/responsive/screen_builder.dart';
 
 class LogScreen extends StatelessWidget {
-  static const routeName = '/log_screen';
-
-  static const iconData = Icons.short_text_outlined;
-  static const icon = Icon(iconData);
+  static NavigationItem navItem = NavigationItem(
+    icon: const Icon(Icons.short_text_outlined),
+    routeName: '/log_screen',
+    titleBuilder: (t) => t.logTitle,
+  );
 
   const LogScreen({super.key, this.logFileName, this.rebuildLogsView});
 
@@ -21,14 +24,15 @@ class LogScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = AppLocalizations.of(context);
+    final t = AppLocalizations.of(context)!;
 
     String logFileN = (logFileName ?? '');
 
-    return Scaffold(
-      appBar: GradientAppBar.build(
+    return ScreenBuilder.withStandardNavBuilders(
+      navItem: navItem,
+      appBarBuilder: (context) => GradientAppBar.build(
         context,
-        title: Text(t!.logTitle + logFileN.replaceAll('.txt', '')),
+        title: Text(navItem.titleBuilder(t) + logFileN.replaceAll('.txt', '')),
         actions: [
           IconButton(
             onPressed: () async {
@@ -88,7 +92,7 @@ class LogScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: LogView(logFileN),
+      bodyBuilder: (context) => LogView(logFileN),
     );
   }
 }

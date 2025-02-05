@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../model/navigation/navigation_item.dart';
 import '../widgets/card/glowing_border_container.dart';
 import '../widgets/layout/gradient_app_bar.dart';
 import '../widgets/playground/hero/hero_view.dart';
@@ -9,7 +10,11 @@ import '../widgets/select/icon_picker.dart';
 import 'administration/settings_screen.dart';
 
 class PlaygroundScreen extends StatelessWidget {
-  static const routeName = '/playground';
+  static NavigationItem navItem = NavigationItem(
+    icon: const Icon(Icons.adb_outlined),
+    routeName: '/playground',
+    titleBuilder: (t) => "Playground",
+  );
 
   const PlaygroundScreen({super.key});
 
@@ -27,7 +32,8 @@ class PlaygroundScreen extends StatelessWidget {
               // Navigate to the settings page. If the user leaves and returns
               // to the app after it has been killed while running in the
               // background, the navigation stack is restored.
-              Navigator.restorablePushNamed(context, SettingsScreen.routeName);
+              Navigator.restorablePushNamed(
+                  context, SettingsScreen.navItem.routeName);
             },
           ),
         ],

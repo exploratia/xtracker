@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../model/navigation/navigation.dart';
+import '../../model/navigation/navigation_item.dart';
 import '../../util/media_query_utils.dart';
 import '../navigation/app_bottom_navigation_bar.dart';
 import '../navigation/app_drawer.dart';
@@ -43,14 +44,15 @@ class ScreenBuilder extends StatelessWidget {
     PreferredSizeWidget Function(BuildContext context)? appBarBuilder,
     required Widget Function(BuildContext context) bodyBuilder,
     Widget Function(BuildContext context)? floatingActionButtonBuilder,
-    required String routeName,
+    required NavigationItem navItem,
   }) : this(
             key: key,
             appBarBuilder: appBarBuilder,
             bodyBuilder: bodyBuilder,
             floatingActionButtonBuilder: floatingActionButtonBuilder,
-            isHome: routeName == '/',
-            isMainNavigation: Navigation.containsMainNavigationRoute(routeName),
+            isHome: navItem.routeName == '/',
+            isMainNavigation:
+                Navigation.containsMainNavigationRoute(navItem.routeName),
             drawerBuilder: (context) => const AppDrawer(),
             navigationRailBuilder: (context) => const AppNavigationRail(),
             bottomNavigationBarBuilder: (context) =>

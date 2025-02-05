@@ -18,22 +18,14 @@ class AdministrationView extends StatelessWidget {
     final t = AppLocalizations.of(context)!;
 
     final links = [
-      {
-        'ico': SettingsScreen.icon,
-        'title': t.settingsTitle,
-        'routeName': SettingsScreen.routeName,
-      },
-      {
-        'ico': LogsScreen.icon,
-        'title': t.logsTitle,
-        'routeName': LogsScreen.routeName,
-      },
-      {
-        'ico': InfoScreen.icon,
-        'title': t.infoTitle,
-        'routeName': InfoScreen.routeName,
-      },
-    ];
+      SettingsScreen.navItem,
+      LogsScreen.navItem,
+      InfoScreen.navItem
+    ].map((navItem) => {
+          'ico': navItem.icon,
+          'title': navItem.titleBuilder(t),
+          'routeName': navItem.routeName,
+        });
 
     return SingleChildScrollViewWithScrollbar(
       scrollPositionHandler: HideBottomNavigationBar.setScrollPosition,

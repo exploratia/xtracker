@@ -1,12 +1,14 @@
-import 'abstract_navigation_item.dart';
-import 'navigation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-class NavigationItem extends AbstractNavigationItem {
-  NavigationItem(
-      {required super.icon,
-      required super.routeName,
-      required super.titleBuilder,
-      required super.screenBuilder}) {
-    Navigation.navigationItems.add(this);
-  }
+class NavigationItem {
+  final Icon icon;
+  final String routeName;
+  final String Function(AppLocalizations t) titleBuilder;
+
+  NavigationItem({
+    required this.icon,
+    required this.routeName,
+    required this.titleBuilder,
+  });
 }
