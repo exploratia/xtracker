@@ -9,6 +9,7 @@ import '../layout/single_child_scroll_view_with_scrollbar.dart';
 import '../logos/ca_logo.dart';
 import '../logos/eagle_logo.dart';
 import '../logos/exploratia_logo.dart';
+import '../text/overflow_text.dart';
 
 class InfoView extends StatelessWidget {
   const InfoView({super.key});
@@ -53,29 +54,26 @@ class _AppInfoCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var rows = [
+      [
+        const CaLogo(radius: 16),
+        OverflowText(
+            '${DateFormat('yyyy').format(DateTime.now())} \u00a9 Christian Adler')
+      ],
+      [
+        const ExploratiaLogo(radius: 16),
+        const OverflowText(maxLines: 100, 'https://www.exploratia.de')
+      ],
+      [
+        const EagleLogo(radius: 16),
+        const OverflowText('https://www.adlers-online.de'),
+      ],
+    ];
     return SettingsCard(title: AppInfo.appName, spacing: 10, children: [
-      Row(
-        spacing: 10,
-        children: [
-          const CaLogo(radius: 16),
-          Text(
-              '${DateFormat('yyyy').format(DateTime.now())} \u00a9 Christian Adler'),
-        ],
-      ),
-      const Row(
-        spacing: 10,
-        children: [
-          ExploratiaLogo(radius: 16),
-          Text(' https://www.exploratia.de'),
-        ],
-      ),
-      const Row(
-        spacing: 10,
-        children: [
-          EagleLogo(radius: 16),
-          Text(' https://www.adlers-online.de'),
-        ],
-      ),
+      ...rows.map((r) => Row(
+            spacing: 10,
+            children: [...r],
+          )),
     ]);
   }
 }
