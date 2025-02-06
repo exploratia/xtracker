@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 
 import '../model/navigation/navigation_item.dart';
+import '../util/dialogs.dart';
+import '../util/navigation/hide_bottom_navigation_bar.dart';
 import '../widgets/card/glowing_border_container.dart';
+import '../widgets/fab/fab_action_button_data.dart';
+import '../widgets/fab/fab_builder.dart';
 import '../widgets/layout/gradient_app_bar.dart';
+import '../widgets/layout/single_child_scroll_view_with_scrollbar.dart';
 import '../widgets/playground/hero/hero_view.dart';
 import '../widgets/playground/sample_feature/sample_item_list_view.dart';
+import '../widgets/responsive/screen_builder.dart';
 import '../widgets/select/color_picker.dart';
 import '../widgets/select/icon_picker.dart';
 import 'administration/settings_screen.dart';
@@ -21,10 +27,12 @@ class PlaygroundScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    return Scaffold(
-      appBar: GradientAppBar.build(
+    return ScreenBuilder.withStandardNavBuilders(
+      navItem: navItem,
+      appBarBuilder: (context) => GradientAppBar.build(
         context,
         title: const Text("Playground"),
+        addLeadingBackBtn: true,
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
@@ -38,40 +46,58 @@ class PlaygroundScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Column(
-        children: [
-          Padding(padding: const EdgeInsets.all(16), child: Text("Playground")),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.restorablePushNamed(
-                  context, SampleItemListView.routeName);
-            },
-            child: Text('SampleListView'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.restorablePushNamed(context, HeroView.routeName);
-            },
-            child: Text('HeroView'),
-          ),
-          const GlowingBorderContainer(
-            // glowColor: Colors.red, // Customize glow color
-            borderWidth: 1.0,
-            blurRadius: 10.0,
-            child: Text(
-              "Glowing Box",
-              // style: TextStyle(color: Colors.white),
+      bodyBuilder: (context) => SingleChildScrollViewWithScrollbar(
+        scrollPositionHandler: HideBottomNavigationBar.setScrollPosition,
+        child: Column(
+          children: [
+            Padding(
+                padding: const EdgeInsets.all(16), child: Text("Playground")),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.restorablePushNamed(
+                    context, SampleItemListView.routeName);
+              },
+              child: Text('SampleListView'),
             ),
-          ),
-          ColorPicker(
-            color: themeData.colorScheme.primary,
-            colorSelected: (color) => print('Color selected: $color'),
-          ),
-          IconPicker(
-            icoSelected: (icoName) => print('Icon selected: $icoName'),
-          ),
-        ],
+            ElevatedButton(
+              onPressed: () {
+                Navigator.restorablePushNamed(context, HeroView.routeName);
+              },
+              child: Text('HeroView'),
+            ),
+            const GlowingBorderContainer(
+              // glowColor: Colors.red, // Customize glow color
+              borderWidth: 1.0,
+              blurRadius: 10.0,
+              child: Text(
+                "Glowing Box",
+                // style: TextStyle(color: Colors.white),
+              ),
+            ),
+            ColorPicker(
+              color: themeData.colorScheme.primary,
+              colorSelected: (color) => print('Color selected: $color'),
+            ),
+            IconPicker(
+              icoSelected: (icoName) => print('Icon selected: $icoName'),
+            ),
+          ],
+        ),
       ),
+      floatingActionButtonBuilder: (context) {
+        var fabActions = [
+          FabActionButtonData(
+            Icons.add_box,
+            () => Dialogs.showSnackBar("Pressed FAB 1", context),
+          ),
+          FabActionButtonData(
+            Icons.add_alarm,
+            () => Dialogs.showSnackBar("Pressed FAB 2", context),
+          ),
+        ];
+
+        return FABBuilder.build(context, fabActions);
+      },
     );
   }
 }
