@@ -34,4 +34,16 @@ class SettingsService {
     var value = locale?.languageCode;
     await DeviceStorage.write(DeviceStorageKeys.keyAppLocale, value);
   }
+
+  /// Loads the User's preferred nav label settings
+  Future<bool> hideNavigationLabels() async {
+    var value = await DeviceStorage.read(DeviceStorageKeys.keyAppHideNavLabels);
+    return (value == null ? false : true);
+  }
+
+  /// Persists the user's preferred setting
+  Future<void> updateHideNavigationLabels(bool value) async {
+    await DeviceStorage.write(
+        DeviceStorageKeys.keyAppHideNavLabels, value ? 'true' : null);
+  }
 }

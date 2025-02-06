@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../util/navigation/hide_navigation_labels.dart';
 import 'settings_service.dart';
 
 /// A class that many Widgets can interact with to read user settings, update
@@ -24,12 +25,18 @@ class SettingsController with ChangeNotifier {
 
   Locale? get locale => _locale;
 
+  bool _hideNavigationLabels = true;
+
+  bool get hideNavigationLabels => _hideNavigationLabels;
+
   /// Load the user's settings from the SettingsService. It may load from a
   /// local database or the internet. The controller only knows it can load the
   /// settings from the service.
   Future<void> loadSettings() async {
     _themeMode = await _settingsService.themeMode();
     _locale = await _settingsService.locale();
+    _hideNavigationLabels = await _settingsService.hideNavigationLabels();
+    HideNavigationLabels.setVisible(!_hideNavigationLabels);
     // Important! Inform listeners a change has occurred.
     notifyListeners();
   }
@@ -67,5 +74,21 @@ class SettingsController with ChangeNotifier {
 
     // Persist the changes to a local database or the internet using the SettingService.
     await _settingsService.updateLocale(newLocale);
+  }
+
+  /// Update and persist the hide nav labels based on the user's selection.
+  Future<void> updateHideNavigationLabels(bool value) async {
+    // Do not perform any work if new and old are identical
+    if (value == _hideNavigationLabels) return;
+
+    // Otherwise, store in memory
+    _hideNavigationLabels = value;
+
+    // Important! Inform listeners a change has occurred.
+    // notifyListeners();
+    HideNavigationLabels.setVisible(!_hideNavigationLabels);
+
+    // Persist the changes to a local database or the internet using the SettingService.
+    await _settingsService.updateHideNavigationLabels(value);
   }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../model/navigation/navigation.dart';
+import '../../util/navigation/hide_navigation_labels.dart';
 import '../../util/navigation/navigation_utils.dart';
 import '../layout/single_child_scroll_view_with_scrollbar.dart';
 import 'app_drawer_header.dart';
@@ -11,27 +12,33 @@ class AppDrawer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-        // + icon and padding
-        width: Navigation.getDrawerTextWidth(context) + 130,
-        child: Column(
-          children: [
-            const AppDrawerHeader(),
-            // Divider(),
-            Expanded(
-              child: SingleChildScrollViewWithScrollbar(
-                child: ValueListenableBuilder(
-                  valueListenable: Navigation.currentMainNavigationIdx,
-                  builder: (BuildContext ctx, currentIdx, _) =>
-                      _buildNavItems(ctx, currentIdx),
+    return ValueListenableBuilder(
+      valueListenable: HideNavigationLabels.visible,
+      builder: (BuildContext ctx0, navLabelsVisible, _) => Drawer(
+          // + icon and padding
+          width:
+              (navLabelsVisible ? Navigation.getDrawerTextWidth(context) : 0) +
+                  130,
+          child: Column(
+            children: [
+              const AppDrawerHeader(),
+              // Divider(),
+              Expanded(
+                child: SingleChildScrollViewWithScrollbar(
+                  child: ValueListenableBuilder(
+                    valueListenable: Navigation.currentMainNavigationIdx,
+                    builder: (BuildContext ctx, currentIdx, _) =>
+                        _buildNavItems(ctx, currentIdx, navLabelsVisible),
+                  ),
                 ),
               ),
-            ),
-          ],
-        ));
+            ],
+          )),
+    );
   }
 
-  Widget _buildNavItems(BuildContext context, int currentIdx) {
+  Widget _buildNavItems(
+      BuildContext context, int currentIdx, bool navLabelsVisible) {
     final t = AppLocalizations.of(context)!;
     List<Widget> result = [];
 
@@ -40,8 +47,8 @@ class AppDrawer extends StatelessWidget {
       int itemIdx = ++actIdx;
       result.add(ListTile(
         selected: actIdx == currentIdx,
-        leading: navItem.icon,
-        title: Text(navItem.titleBuilder(t)),
+        leading: navLabelsVisible ? navItem.icon : null,
+        title: navLabelsVisible ? Text(navItem.titleBuilder(t)) : navItem.icon,
         onTap: () {
           NavigationUtils.closeDrawerIfOpen(context);
           Navigation.setCurrentMainNavigationRouteIdx(itemIdx, context);

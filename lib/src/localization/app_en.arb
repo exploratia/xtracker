@@ -38,6 +38,7 @@
   "settingsDeviceStorageTitle": "Device Storage",
   "settingsTitle": "Settings",
   "settingsGeneralCardTitle": "General settings",
+  "settingsGeneralHideNavigationLabelsLabel": "Hide navigation labels (menu & bottom navigation):",
   "settingsGeneralLangLabel": "Language:",
   "settingsGeneralLangNameSystem": "System",
   "settingsGeneralLangNameEnglish": "English",
