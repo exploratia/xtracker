@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../model/navigation/navigation_item.dart';
 import '../util/dialogs.dart';
 import '../util/navigation/hide_bottom_navigation_bar.dart';
+import '../widgets/animation/fade_in.dart';
 import '../widgets/card/glowing_border_container.dart';
 import '../widgets/fab/fab_action_button_data.dart';
 import '../widgets/fab/fab_builder.dart';
@@ -50,20 +51,20 @@ class PlaygroundScreen extends StatelessWidget {
         scrollPositionHandler: HideBottomNavigationBar.setScrollPosition,
         child: Column(
           children: [
-            Padding(
-                padding: const EdgeInsets.all(16), child: Text("Playground")),
+            const Padding(
+                padding: EdgeInsets.all(16), child: Text("Playground")),
             ElevatedButton(
               onPressed: () {
                 Navigator.restorablePushNamed(
                     context, SampleItemListView.routeName);
               },
-              child: Text('SampleListView'),
+              child: const Text('SampleListView'),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.restorablePushNamed(context, HeroView.routeName);
               },
-              child: Text('HeroView'),
+              child: const Text('HeroView'),
             ),
             const GlowingBorderContainer(
               // glowColor: Colors.red, // Customize glow color
@@ -81,6 +82,15 @@ class PlaygroundScreen extends StatelessWidget {
             IconPicker(
               icoSelected: (icoName) => print('Icon selected: $icoName'),
             ),
+            Container(
+                decoration:
+                    BoxDecoration(border: Border.all(color: Colors.yellow)),
+                child: const Padding(
+                  padding: EdgeInsets.all(24.0),
+                  child: FadeIn(
+                      durationMS: 10000,
+                      child: Text("Fade in Widget child ;)")),
+                )),
           ],
         ),
       ),
