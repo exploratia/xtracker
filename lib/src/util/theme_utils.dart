@@ -46,7 +46,7 @@ class ThemeUtils {
       brightness: brightness,
       // canvas e.g. DropdownButton-Menu in settings
       canvasColor: canvasColor,
-
+      shadowColor: dark ? backgroundColor : Colors.black,
       colorScheme:
           ColorScheme.fromSeed(seedColor: primary, brightness: brightness)
               .copyWith(
@@ -91,8 +91,8 @@ class ThemeUtils {
             // trackColor: const MaterialStatePropertyAll(Colors.blueAccent),
             // trackBorderColor: const MaterialStatePropertyAll(Colors.purpleAccent),
           ),
-      bottomNavigationBarTheme:
-          BottomNavigationBarThemeData(backgroundColor: backgroundColor),
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+          backgroundColor: backgroundColor, selectedItemColor: primary),
       snackBarTheme: SnackBarThemeData(
           backgroundColor: cardBackgroundColor,
           contentTextStyle: const TextStyle(color: onPrimary)),
@@ -140,5 +140,9 @@ class ThemeUtils {
     }
 
     return themeData;
+  }
+
+  static bool isDarkMode(BuildContext context) {
+    return Theme.of(context).brightness == Brightness.dark;
   }
 }
