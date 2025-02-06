@@ -67,3 +67,51 @@ https://pub.dev/packages/path_provider
 https://pub.dev/packages/flutter_archive
 https://pub.dev/packages/logger
 https://pub.dev/packages/share_plus
+
+### Launcher icon (dev)
+
+https://pub.dev/packages/flutter_launcher_icons
+
+## Create Launcher Icons
+
+- run `dart run flutter_launcher_icons`
+
+## Build apk (Android)
+
+- Increase version in pubspec.yaml
+
+### CPU special apk
+
+- run `flutter build apk --split-per-abi`
+- use e.g. `build\app\outputs\flutter-apk\app-arm64-v8a-release.apk`
+
+### one apk bundle for all CPUs
+
+- run `flutter build apk`
+- use `build\app\outputs\flutter-apk\app-release.apk`
+
+## IOS
+
+### How to fix Using `ARCHS` setting to build architectures of target `Pods-Runner`
+
+Pod-File ändern:
+
+```
+target 'Runner' do
+  use_frameworks!
+  use_modular_headers!
+
+  flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
+end
+```
+
+Installation des pod-files (M1/M2-Chip) - Did you try:
+
+- sudo gem install cocoapods
+- sudo arch -x86_64 gem install ffi
+- arch -x86_64 pod repo update
+- arch -x86_64 pod install (im ios Verzeichnis auf Console ausführen!)
+
+## Edit readme.md
+
+https://stackedit.io/app#
