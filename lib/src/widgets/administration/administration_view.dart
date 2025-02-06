@@ -48,8 +48,6 @@ class AdministrationView extends StatelessWidget {
             icon: const Icon(Icons.info_outline),
             label: const Text("Version"),
           ),
-          Placeholder(fallbackHeight: 500),
-          Placeholder(fallbackHeight: 500),
         ],
       ),
     );
