@@ -41,12 +41,13 @@ class ThemeUtils {
     final canvasColor =
         dark ? const Color(0xff38364c) : const Color.fromRGBO(240, 240, 240, 1);
 
+    final shadowColor = dark ? backgroundColor : Colors.black45;
     var themeData = ThemeData(
       useMaterial3: false,
       brightness: brightness,
       // canvas e.g. DropdownButton-Menu in settings
       canvasColor: canvasColor,
-      shadowColor: dark ? backgroundColor : Colors.black,
+      shadowColor: shadowColor,
       colorScheme:
           ColorScheme.fromSeed(seedColor: primary, brightness: brightness)
               .copyWith(
@@ -62,12 +63,14 @@ class ThemeUtils {
           // titleSmall: TextStyle(color: dynamicThemeData.getPrimaryColor(dark)),
           ),
       appBarTheme: AppBarTheme(
+        elevation: 8,
         backgroundColor: backgroundColor,
         foregroundColor: dark ? Colors.white : Colors.black,
         actionsIconTheme:
             IconThemeData(color: dark ? Colors.white : Colors.black),
         systemOverlayStyle:
             dark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
+        shadowColor: shadowColor,
       ),
       tabBarTheme:
           TabBarThemeData(indicatorColor: dark ? Colors.white : Colors.black),
