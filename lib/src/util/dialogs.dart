@@ -8,24 +8,44 @@ class Dialogs {
   }
 
   static Future<void> simpleOkDialog(
-    String text,
+    dynamic content,
     BuildContext context, {
-    String? title,
+    dynamic title,
     String? buttonText,
   }) async {
+    final t = AppLocalizations.of(context)!;
+
+    Widget? titleWidget;
+    if (title != null) {
+      if (title is String) {
+        titleWidget = Text(title);
+      } else if (title is Widget) {
+        titleWidget = title;
+      }
+    }
+
+    Widget? contentWidget;
+    if (content != null) {
+      if (content is String) {
+        contentWidget = Text(content);
+      } else if (content is Widget) {
+        contentWidget = content;
+      } else {
+        contentWidget = const Icon(Icons.question_mark_outlined);
+      }
+    }
+
     return showDialog<void>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: title == null ? null : Text(title),
-        content: Text(
-          text,
-        ),
+        title: titleWidget,
+        content: contentWidget,
         actions: [
           TextButton(
               onPressed: () {
                 Navigator.of(ctx).pop();
               },
-              child: Text(buttonText ?? 'Okay'))
+              child: Text(buttonText ?? t.commonsDialogBtnOkay))
         ],
       ),
     );
