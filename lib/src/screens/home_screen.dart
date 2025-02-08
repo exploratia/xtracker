@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../model/navigation/main_navigation_item.dart';
+import '../model/series/series_def.dart';
 import '../util/globals.dart';
-import '../util/navigation/hide_bottom_navigation_bar.dart';
 import '../widgets/layout/gradient_app_bar.dart';
-import '../widgets/layout/single_child_scroll_view_with_scrollbar.dart';
 import '../widgets/responsive/screen_builder.dart';
-import './playground_screen.dart';
+import '../widgets/series/home_view.dart';
 
 class HomeScreen extends StatelessWidget {
   static MainNavigationItem navItem = MainNavigationItem(
@@ -21,50 +20,28 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScreenBuilder.withStandardNavBuilders(
       navItem: navItem,
-      appBarBuilder: (context) => GradientAppBar.build(
-        context,
-        title: Row(
-          children: [
-            SizedBox(
-              width: 30,
-              child: Image.asset(
-                Globals.assetImgAppLogoWhite,
-                fit: BoxFit.cover,
+      appBarBuilder: (context) => GradientAppBar.build(context,
+          title: Row(
+            children: [
+              SizedBox(
+                width: 30,
+                child: Image.asset(
+                  Globals.assetImgAppLogoWhite,
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
-          ],
-        ),
-      ),
-      bodyBuilder: (context) => SingleChildScrollViewWithScrollbar(
-        scrollPositionHandler: HideBottomNavigationBar.setScrollPosition,
-        child: Column(
-          children: [
-            Padding(padding: const EdgeInsets.all(16), child: Text("Home")),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.restorablePushNamed(
-                    context, PlaygroundScreen.navItem.routeName);
-              },
-              child: Text('Playground'),
-            ),
-            // ElevatedButton(
-            //   onPressed: () {
-            //     Navigation.setCurrentMainNavigationRoute(
-            //         AdministrationScreen.mainNavigationItem.routeName, context);
-            //   },
-            //   child: SizedBox(
-            //     width: 100,
-            //     child: Row(
-            //       children: [
-            //         AdministrationScreen.mainNavigationItem.icon,
-            //         Text('Mehr...'),
-            //       ],
-            //     ),
-            //   ),
-            // ),
-          ],
-        ),
-      ),
+            ],
+          ),
+          actions: [
+            IconButton(
+                onPressed: () async {
+                  SeriesDef? seriesDef = await SeriesDef.addNewSeries(context);
+                  print(seriesDef); // TODO handle
+                },
+                icon: const Icon(Icons.add_chart_outlined)),
+            IconButton(onPressed: () {}, icon: const Icon(Icons.edit_outlined)),
+          ]),
+      bodyBuilder: (context) => const HomeView(),
     );
   }
 }
