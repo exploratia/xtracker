@@ -3,11 +3,11 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:logger/logger.dart';
 
 import '../../../util/logging/flutter_simple_logging.dart';
-import '../../../util/navigation/hide_bottom_navigation_bar.dart';
 import '../../../util/table_utils.dart';
 import '../../card/settings_card.dart';
 import '../../layout/drop_down_menu_item_child.dart';
 import '../../layout/single_child_scroll_view_with_scrollbar.dart';
+import '../../navigation/hide_bottom_navigation_bar.dart';
 
 class LogSettingsView extends StatelessWidget {
   const LogSettingsView({super.key});

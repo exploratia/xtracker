@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-import '../model/navigation/navigation_item.dart';
+import '../model/navigation/main_navigation_item.dart';
 import '../util/dialogs.dart';
-import '../util/navigation/hide_bottom_navigation_bar.dart';
 import '../widgets/animation/fade_in.dart';
 import '../widgets/card/glowing_border_container.dart';
 import '../widgets/fab/fab_action_button_data.dart';
 import '../widgets/fab/fab_builder.dart';
 import '../widgets/layout/gradient_app_bar.dart';
 import '../widgets/layout/single_child_scroll_view_with_scrollbar.dart';
+import '../widgets/navigation/hide_bottom_navigation_bar.dart';
 import '../widgets/playground/hero/hero_view.dart';
 import '../widgets/playground/sample_feature/sample_item_list_view.dart';
 import '../widgets/responsive/screen_builder.dart';
@@ -17,7 +17,7 @@ import '../widgets/select/icon_picker.dart';
 import 'administration/settings_screen.dart';
 
 class PlaygroundScreen extends StatelessWidget {
-  static NavigationItem navItem = NavigationItem(
+  static MainNavigationItem navItem = MainNavigationItem(
     icon: const Icon(Icons.adb_outlined),
     routeName: '/playground',
     titleBuilder: (t) => "Playground",

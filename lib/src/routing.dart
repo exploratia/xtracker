@@ -27,6 +27,9 @@ class Routing {
     // Build map for all Screens. Because of flutters code optimization we have to call every widget itself.
     // No generic solution possible :(
     _addMapping(const HomeScreen(), HomeScreen.navItem);
+
+    _addMapping(const PlaygroundScreen(), PlaygroundScreen.navItem);
+
     // administration
     _addMapping(const AdministrationScreen(), AdministrationScreen.navItem);
     _addMapping(const LogsScreen(), LogsScreen.navItem);
@@ -35,8 +38,6 @@ class Routing {
     _addMapping(const InfoScreen(), InfoScreen.navItem);
     _addMapping(
         SettingsScreen(controller: settingsController), SettingsScreen.navItem);
-
-    _addMapping(const PlaygroundScreen(), PlaygroundScreen.navItem);
   }
 
   Route<dynamic>? generateRoute(RouteSettings routeSettings) {

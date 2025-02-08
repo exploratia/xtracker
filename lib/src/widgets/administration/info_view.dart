@@ -3,12 +3,12 @@ import 'package:intl/intl.dart';
 
 import '../../util/app_info.dart';
 import '../../util/globals.dart';
-import '../../util/navigation/hide_bottom_navigation_bar.dart';
 import '../card/settings_card.dart';
 import '../layout/single_child_scroll_view_with_scrollbar.dart';
 import '../logos/ca_logo.dart';
 import '../logos/eagle_logo.dart';
 import '../logos/exploratia_logo.dart';
+import '../navigation/hide_bottom_navigation_bar.dart';
 import '../text/overflow_text.dart';
 
 class InfoView extends StatelessWidget {

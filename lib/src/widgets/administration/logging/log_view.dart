@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../util/logging/daily_files.dart';
 import '../../../util/media_query_utils.dart';
-import '../../../util/navigation/hide_bottom_navigation_bar.dart';
+import '../../navigation/hide_bottom_navigation_bar.dart';
 
 class LogView extends StatefulWidget {
   const LogView(this.logFileName, {super.key});

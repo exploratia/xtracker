@@ -5,9 +5,9 @@ import '../../screens/administration/info_screen.dart';
 import '../../screens/administration/logs_screen.dart';
 import '../../screens/administration/settings_screen.dart';
 import '../../util/about_dlg.dart';
-import '../../util/navigation/hide_bottom_navigation_bar.dart';
 import '../card/settings_card.dart';
 import '../layout/single_child_scroll_view_with_scrollbar.dart';
+import '../navigation/hide_bottom_navigation_bar.dart';
 
 class AdministrationView extends StatelessWidget {
   const AdministrationView({super.key});
