@@ -128,6 +128,7 @@ class IconMap {
     map["savings_outlined"] = Icons.savings_outlined;
 
     map["check_box_outlined"] = Icons.check_box_outlined;
+    map["check_circle_outline"] = Icons.check_circle_outline;
     map["adjust_outlined"] = Icons.adjust_outlined;
     map["chat_outlined"] = Icons.chat_outlined;
     map["access_time_outlined"] = Icons.access_time_outlined;
@@ -142,7 +143,17 @@ class IconMap {
     return map;
   }
 
-  static IconData _materialIconData(int codePoint) {
-    return IconData(codePoint, fontFamily: 'MaterialIcons');
+  static IconData iconData(String iconName) {
+    var iconData = icons[iconName];
+    iconData ??= Icons.question_mark_outlined;
+    return iconData;
   }
+
+  static Icon icon(String iconName) {
+    return Icon(iconData(iconName));
+  }
+
+// static IconData _materialIconData(int codePoint) {
+//   return IconData(codePoint, fontFamily: 'MaterialIcons');
+// }
 }
