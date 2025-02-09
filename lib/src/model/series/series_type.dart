@@ -2,15 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 enum SeriesType {
-  bloodPressure('bloodPressure', Icon(Icons.monitor_heart_outlined)),
-  dailyCheck("dailyCheck", Icon(Icons.check_circle_outline)),
-  monthly("monthly", Icon(Icons.calendar_month_outlined)),
-  free("free", Icon(Icons.calendar_today));
+  bloodPressure('bloodPressure', 'monitor_heart_outlined', Colors.red),
+  dailyCheck("dailyCheck", 'check_box_outlined', Colors.blue),
+  monthly("monthly", 'calendar_month_outlined', Colors.deepPurple),
+  free("free", 'calendar_today_outlined', Colors.green);
 
   final String typeName;
-  final Icon icon;
+  final String iconName;
+  final Color color;
 
-  const SeriesType(this.typeName, this.icon);
+  const SeriesType(this.typeName, this.iconName, this.color);
 
   static String displayNameOf(SeriesType seriesType, AppLocalizations t) {
     return switch (seriesType) {
