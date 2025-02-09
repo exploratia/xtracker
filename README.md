@@ -68,6 +68,10 @@ https://pub.dev/packages/flutter_archive
 https://pub.dev/packages/logger
 https://pub.dev/packages/share_plus
 
+### UUId
+
+https://pub.dev/packages/uuid
+
 ### Launcher icon (dev)
 
 https://pub.dev/packages/flutter_launcher_icons
