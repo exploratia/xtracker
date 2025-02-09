@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 
 import '../../../model/series/series_def.dart';
 import '../../../model/series/series_type.dart';
+import '../../../providers/series_provider.dart';
 import '../../../util/dialogs.dart';
 import '../../layout/scrollable_centered_form_wrapper.dart';
 import '../../layout/v_centered_single_child_scroll_view_with_scrollbar.dart';
@@ -21,6 +23,7 @@ class SeriesEdit extends StatefulWidget {
 
 class _SeriesEditState extends State<SeriesEdit> {
   final _form = GlobalKey<FormState>();
+  var _isLoading = false;
   late SeriesDef? _seriesDef;
   late final bool _isNew;
 
@@ -36,27 +39,33 @@ class _SeriesEditState extends State<SeriesEdit> {
     setState(() {});
   }
 
-  void _saveHandler() {
+  void _createSeriesDef(SeriesType seriesType) {
+    _seriesDef = SeriesDef(seriesType: seriesType);
+    setState(() {});
+  }
+
+  Future<void> _saveHandler() async {
+    if (_seriesDef == null) return;
     var currentState = _form.currentState;
     if (currentState == null || !currentState.validate()) return;
     currentState.save();
 
-    // setState(() {
-    //   isLoading = true;
-    // });
-    //
-    // var power = Provider.of<Car>(context, listen: false);
-    // try {
-    //   await power.addCarRefuelEntry(_liter, _centPerLiter, _km);
-    //   _showSuccessMessage();
-    // } catch (err) {
-    //   await DialogUtils.showSimpleOkErrDialog(err, context);
-    // }
-    //
-    // setState(() {
-    //   isLoading = false;
-    // });
-    if (context.mounted) Navigator.of(context).pop(_seriesDef);
+    setState(() => _isLoading = true);
+
+    final t = AppLocalizations.of(context)!;
+    try {
+      var seriesProvider = context.read<SeriesProvider>();
+      await seriesProvider.add(_seriesDef!);
+      if (mounted) Dialogs.showSnackBar(t.commonsMsgSaved, context);
+    } catch (err) {
+      if (mounted) {
+        await Dialogs.simpleErrOkDialog(err.toString(), context);
+      }
+    }
+
+    setState(() => _isLoading = false);
+
+    if (mounted) Navigator.of(context).pop(_seriesDef);
   }
 
   @override
@@ -66,7 +75,9 @@ class _SeriesEditState extends State<SeriesEdit> {
 
     Widget body;
 
-    if (_seriesDef == null) {
+    if (_isLoading) {
+      body = const LinearProgressIndicator();
+    } else if (_seriesDef == null) {
       body = VCenteredSingleChildScrollViewWithScrollbar(
           child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -82,10 +93,7 @@ class _SeriesEditState extends State<SeriesEdit> {
                         ElevatedButton.icon(
                           icon: IconMap.icon(st.iconName),
                           label: Text(SeriesType.displayNameOf(st, t)),
-                          onPressed: () {
-                            _seriesDef = SeriesDef(seriesType: st);
-                            setState(() {});
-                          },
+                          onPressed: () => _createSeriesDef(st),
                         )
                       ])),
             ],

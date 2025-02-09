@@ -18,8 +18,7 @@ class AddFirstSeries extends StatelessWidget {
             iconSize: 40,
             color: themeData.colorScheme.primary,
             onPressed: () async {
-              SeriesDef? seriesDef = await SeriesDef.addNewSeries(context);
-              print(seriesDef); // TODO handle
+              /*SeriesDef? s=*/ await SeriesDef.addNewSeries(context);
             },
             icon: const Icon(Icons.add_chart_outlined)),
         Center(child: Text(t.seriesAddFirstSeries)),

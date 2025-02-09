@@ -35,8 +35,7 @@ class HomeScreen extends StatelessWidget {
           actions: [
             IconButton(
                 onPressed: () async {
-                  SeriesDef? seriesDef = await SeriesDef.addNewSeries(context);
-                  print(seriesDef); // TODO handle
+                  /*SeriesDef? s=*/ await SeriesDef.addNewSeries(context);
                 },
                 icon: const Icon(Icons.add_chart_outlined)),
             IconButton(onPressed: () {}, icon: const Icon(Icons.edit_outlined)),

@@ -108,6 +108,7 @@ class ThemeUtils {
           ),
       chipTheme: ChipThemeData(backgroundColor: chipBackgroundColor),
       dialogTheme: DialogTheme(
+        // for fullscreen background has to be set manually
         backgroundColor: chipBackgroundColor,
         shape: const RoundedRectangleBorder(
           borderRadius: ThemeUtils.cardBorderRadius,
