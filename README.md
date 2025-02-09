@@ -72,6 +72,10 @@ https://pub.dev/packages/share_plus
 
 https://pub.dev/packages/uuid
 
+### Provider
+
+https://pub.dev/packages/provider
+
 ### Launcher icon (dev)
 
 https://pub.dev/packages/flutter_launcher_icons
