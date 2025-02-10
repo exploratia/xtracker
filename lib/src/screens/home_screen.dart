@@ -5,7 +5,7 @@ import '../model/series/series_def.dart';
 import '../util/globals.dart';
 import '../widgets/layout/gradient_app_bar.dart';
 import '../widgets/responsive/screen_builder.dart';
-import '../widgets/series/home_view.dart';
+import '../widgets/series/series_view.dart';
 
 class HomeScreen extends StatelessWidget {
   static MainNavigationItem navItem = MainNavigationItem(
@@ -40,7 +40,7 @@ class HomeScreen extends StatelessWidget {
                 icon: const Icon(Icons.add_chart_outlined)),
             IconButton(onPressed: () {}, icon: const Icon(Icons.edit_outlined)),
           ]),
-      bodyBuilder: (context) => const HomeView(),
+      bodyBuilder: (context) => const SeriesView(),
     );
   }
 }

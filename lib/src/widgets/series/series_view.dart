@@ -8,23 +8,14 @@ import '../layout/v_centered_single_child_scroll_view_with_scrollbar.dart';
 import '../select/icon_map.dart';
 import 'add_first_series.dart';
 
-class HomeView extends StatelessWidget {
-  const HomeView({super.key});
+class SeriesView extends StatefulWidget {
+  const SeriesView({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return const _SeriesView();
-  }
+  State<SeriesView> createState() => _SeriesViewState();
 }
 
-class _SeriesView extends StatefulWidget {
-  const _SeriesView();
-
-  @override
-  State<_SeriesView> createState() => _SeriesViewState();
-}
-
-class _SeriesViewState extends State<_SeriesView> {
+class _SeriesViewState extends State<SeriesView> {
   late Future _dataProviderFuture;
 
   Future _obtainDataProviderFuture() {
