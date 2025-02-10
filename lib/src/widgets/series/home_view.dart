@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:littletracker/src/widgets/select/icon_map.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/series_provider.dart';
+import '../../util/dialogs.dart';
 import '../card/glowing_border_container.dart';
 import '../layout/v_centered_single_child_scroll_view_with_scrollbar.dart';
+import '../select/icon_map.dart';
 import 'add_first_series.dart';
 
 class HomeView extends StatelessWidget {
@@ -12,19 +13,6 @@ class HomeView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // TODO wo einhaengen muss der direkt uber Scrollbar? Dann funktion rein reichen
-    // return RefreshIndicator(
-    //   onRefresh: () async {
-    //     try {
-    //       await Provider.of<SeriesProvider>(context, listen: false).fetchData();
-    //     } catch (e) {
-    //       if (context.mounted) {
-    //         await Dialogs.simpleErrOkDialog(e.toString(), context);
-    //       }
-    //     }
-    //   },
-    //   child: const _SeriesView(),
-    // );
     return const _SeriesView();
   }
 }
@@ -51,6 +39,16 @@ class _SeriesViewState extends State<_SeriesView> {
     super.initState();
   }
 
+  Future<void> onRefresh() async {
+    try {
+      await context.read<SeriesProvider>().fetchData();
+    } catch (e) {
+      if (mounted) {
+        await Dialogs.simpleErrOkDialog(e.toString(), context);
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
@@ -65,7 +63,10 @@ class _SeriesViewState extends State<_SeriesView> {
           child = const _SeriesList();
         }
 
-        return VCenteredSingleChildScrollViewWithScrollbar(child: child);
+        return VCenteredSingleChildScrollViewWithScrollbar(
+          onRefreshCallback: onRefresh,
+          child: child,
+        );
       },
     );
   }

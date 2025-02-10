@@ -7,9 +7,11 @@ class VCenteredSingleChildScrollViewWithScrollbar extends StatelessWidget {
   const VCenteredSingleChildScrollViewWithScrollbar({
     super.key,
     required this.child,
+    this.onRefreshCallback,
   });
 
   final Widget child;
+  final Future<void> Function()? onRefreshCallback;
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +22,7 @@ class VCenteredSingleChildScrollViewWithScrollbar extends StatelessWidget {
             builder: (context, constraints) =>
                 SingleChildScrollViewWithScrollbar(
               scrollPositionHandler: HideBottomNavigationBar.setScrollPosition,
+              onRefreshCallback: onRefreshCallback,
               child: Container(
                 constraints: BoxConstraints(
                     minHeight: constraints.maxHeight - 32) /*-padding*/,
