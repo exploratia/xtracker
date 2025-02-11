@@ -8,8 +8,8 @@ class SeriesProvider with ChangeNotifier {
   Future<void> fetchDataIfNotYetLoaded() async {
     if (_series == null) {
       await fetchData();
+      notifyListeners();
     }
-    notifyListeners();
   }
 
   Future<void> fetchData() async {

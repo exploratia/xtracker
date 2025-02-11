@@ -38,7 +38,6 @@ class HomeScreen extends StatelessWidget {
                     child: SeriesManagementView()),
               );
             });
-        // const HideBottomNavigationBar(child: SeriesReorderView())));
       };
     } else {
       showReorderDlg = null;
