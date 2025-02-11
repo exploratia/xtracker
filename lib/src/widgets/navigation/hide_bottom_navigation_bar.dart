@@ -11,11 +11,9 @@ class HideBottomNavigationBar extends StatefulWidget {
     // Scroller ganz oben? Dann auf jeden Fall wieder anzeigen
     if (scrollPos.pixels == 0) {
       visible.value = true;
-    } else if (scrollPos.userScrollDirection == ScrollDirection.reverse &&
-        visible.value) {
+    } else if (scrollPos.userScrollDirection == ScrollDirection.reverse && visible.value) {
       visible.value = false;
-    } else if (scrollPos.userScrollDirection == ScrollDirection.forward &&
-        !visible.value) {
+    } else if (scrollPos.userScrollDirection == ScrollDirection.forward && !visible.value) {
       visible.value = true;
     }
   }
@@ -43,15 +41,13 @@ class HideBottomNavigationBar extends StatefulWidget {
 class _HideBottomNavigationBar extends State<HideBottomNavigationBar> {
   @override
   void dispose() {
-    WidgetsBinding.instance.addPostFrameCallback(
-        (_) => HideBottomNavigationBar.setForceHide(false));
+    WidgetsBinding.instance.addPostFrameCallback((_) => HideBottomNavigationBar.setForceHide(false));
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback(
-        (_) => HideBottomNavigationBar.setForceHide(true));
+    WidgetsBinding.instance.addPostFrameCallback((_) => HideBottomNavigationBar.setForceHide(true));
     return widget.child;
   }
 }

@@ -34,8 +34,7 @@ class HomeScreen extends StatelessWidget {
             builder: (context) {
               return Dialog.fullscreen(
                 backgroundColor: themeData.scaffoldBackgroundColor,
-                child: const HideBottomNavigationBar(
-                    child: SeriesManagementView()),
+                child: const HideBottomNavigationBar(child: SeriesManagementView()),
               );
             });
       };
@@ -64,9 +63,7 @@ class HomeScreen extends StatelessWidget {
                     /*SeriesDef? s=*/ await SeriesDef.addNewSeries(context);
                   },
                   icon: const Icon(Icons.add_chart_outlined)),
-              IconButton(
-                  onPressed: showReorderDlg,
-                  icon: const Icon(Icons.edit_outlined)),
+              IconButton(onPressed: showReorderDlg, icon: const Icon(Icons.edit_outlined)),
             ]);
       },
       bodyBuilder: (context) => const SeriesView(),

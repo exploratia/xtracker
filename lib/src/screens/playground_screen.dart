@@ -41,8 +41,7 @@ class PlaygroundScreen extends StatelessWidget {
               // Navigate to the settings page. If the user leaves and returns
               // to the app after it has been killed while running in the
               // background, the navigation stack is restored.
-              Navigator.restorablePushNamed(
-                  context, SettingsScreen.navItem.routeName);
+              Navigator.restorablePushNamed(context, SettingsScreen.navItem.routeName);
             },
           ),
         ],
@@ -51,12 +50,10 @@ class PlaygroundScreen extends StatelessWidget {
         scrollPositionHandler: HideBottomNavigationBar.setScrollPosition,
         child: Column(
           children: [
-            const Padding(
-                padding: EdgeInsets.all(16), child: Text("Playground")),
+            const Padding(padding: EdgeInsets.all(16), child: Text("Playground")),
             ElevatedButton(
               onPressed: () {
-                Navigator.restorablePushNamed(
-                    context, SampleItemListView.routeName);
+                Navigator.restorablePushNamed(context, SampleItemListView.routeName);
               },
               child: const Text('SampleListView'),
             ),
@@ -83,13 +80,10 @@ class PlaygroundScreen extends StatelessWidget {
               icoSelected: (icoName) => print('Icon selected: $icoName'),
             ),
             Container(
-                decoration:
-                    BoxDecoration(border: Border.all(color: Colors.yellow)),
+                decoration: BoxDecoration(border: Border.all(color: Colors.yellow)),
                 child: const Padding(
                   padding: EdgeInsets.all(24.0),
-                  child: FadeIn(
-                      durationMS: 10000,
-                      child: Text("Fade in Widget child ;)")),
+                  child: FadeIn(durationMS: 10000, child: Text("Fade in Widget child ;)")),
                 )),
           ],
         ),

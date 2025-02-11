@@ -20,8 +20,7 @@ class DeviceStorageView extends StatelessWidget {
       children: [
         FutureBuilder(
           builder: (context, deviceStorageSnapshot) {
-            if (deviceStorageSnapshot.connectionState ==
-                ConnectionState.waiting) {
+            if (deviceStorageSnapshot.connectionState == ConnectionState.waiting) {
               return const LinearProgressIndicator();
             }
 
@@ -31,8 +30,7 @@ class DeviceStorageView extends StatelessWidget {
             }
 
             List<TableRow> rows = [
-              TableUtils.tableHeadline(t!.settingsDeviceStorageTableHeadKey,
-                  [t.settingsDeviceStorageTableHeadValue])
+              TableUtils.tableHeadline(t!.settingsDeviceStorageTableHeadKey, [t.settingsDeviceStorageTableHeadValue])
             ];
 
             final keys = storageData.keys.toList();
@@ -79,9 +77,7 @@ class _ClearDeviceStorage extends StatelessWidget {
 
     return OutlinedButton.icon(
       onPressed: () async {
-        bool? res = await Dialogs.simpleYesNoDialog(
-            t.settingsDeviceStorageDialogMsgQueryRemoveAllData, context,
-            title: t.commonsDialogTitleAreYouSure);
+        bool? res = await Dialogs.simpleYesNoDialog(t.settingsDeviceStorageDialogMsgQueryRemoveAllData, context, title: t.commonsDialogTitleAreYouSure);
         if (res == true) {
           await DeviceStorage.deleteAll();
           await controller.loadSettings();

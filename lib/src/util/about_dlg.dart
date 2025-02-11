@@ -18,7 +18,6 @@ class AboutDlg {
           ),
         ),
         applicationName: AppInfo.appName,
-        applicationLegalese:
-            '${DateFormat('yyyy').format(DateTime.now())} \u00a9 Christian Adler');
+        applicationLegalese: '${DateFormat('yyyy').format(DateTime.now())} \u00a9 Christian Adler');
   }
 }

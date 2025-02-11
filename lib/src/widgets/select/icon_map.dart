@@ -98,8 +98,7 @@ class IconMap {
     // human
     map["female_outlined"] = Icons.female_outlined;
     map["male_outlined"] = Icons.male_outlined;
-    map["sentiment_dissatisfied_outlined"] =
-        Icons.sentiment_dissatisfied_outlined;
+    map["sentiment_dissatisfied_outlined"] = Icons.sentiment_dissatisfied_outlined;
     map["sentiment_neutral_outlined"] = Icons.sentiment_neutral_outlined;
     map["sentiment_satisfied_outlined"] = Icons.sentiment_satisfied_outlined;
     map["thumb_down_outlined"] = Icons.thumb_down_outlined;

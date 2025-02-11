@@ -17,11 +17,7 @@ class AdministrationView extends StatelessWidget {
     final themeData = Theme.of(context);
     final t = AppLocalizations.of(context)!;
 
-    final links = [
-      SettingsScreen.navItem,
-      LogsScreen.navItem,
-      InfoScreen.navItem
-    ].map((navItem) => {
+    final links = [SettingsScreen.navItem, LogsScreen.navItem, InfoScreen.navItem].map((navItem) => {
           'ico': navItem.icon,
           'title': navItem.titleBuilder(t),
           'routeName': navItem.routeName,
@@ -40,8 +36,7 @@ class AdministrationView extends StatelessWidget {
                   Icons.navigate_next,
                   color: themeData.colorScheme.primary,
                 ),
-                onTap: () => Navigator.restorablePushNamed(
-                    context, lnk['routeName'] as String),
+                onTap: () => Navigator.restorablePushNamed(context, lnk['routeName'] as String),
               )),
           OutlinedButton.icon(
             onPressed: () => AboutDlg.showAboutDlg(context),

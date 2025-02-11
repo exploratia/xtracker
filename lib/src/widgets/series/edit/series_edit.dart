@@ -87,15 +87,14 @@ class _SeriesEditState extends State<SeriesEdit> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ...SeriesType.values
-                  .map((st) => Row(mainAxisSize: MainAxisSize.min, children: [
-                        _SeriesTypeInfoBtn(st),
-                        ElevatedButton.icon(
-                          icon: IconMap.icon(st.iconName),
-                          label: Text(SeriesType.displayNameOf(st, t)),
-                          onPressed: () => _createSeriesDef(st),
-                        )
-                      ])),
+              ...SeriesType.values.map((st) => Row(mainAxisSize: MainAxisSize.min, children: [
+                    _SeriesTypeInfoBtn(st),
+                    ElevatedButton.icon(
+                      icon: IconMap.icon(st.iconName),
+                      label: Text(SeriesType.displayNameOf(st, t)),
+                      onPressed: () => _createSeriesDef(st),
+                    )
+                  ])),
             ],
           )
         ],
@@ -112,14 +111,9 @@ class _SeriesEditState extends State<SeriesEdit> {
       appBar: AppBar(
           backgroundColor: themeData.colorScheme.secondary,
           title: Text(t.seriesEditTitle),
-          leading: IconButton(
-              onPressed: () => Navigator.pop(context),
-              icon: const Icon(Icons.close_outlined)),
+          leading: IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.close_outlined)),
           actions: [
-            if (_seriesDef != null)
-              IconButton(
-                  onPressed: _saveHandler,
-                  icon: const Icon(Icons.save_outlined)),
+            if (_seriesDef != null) IconButton(onPressed: _saveHandler, icon: const Icon(Icons.save_outlined)),
           ]),
       body: body,
     );
@@ -138,18 +132,14 @@ class _SeriesTypeInfoBtn extends StatelessWidget {
         onPressed: () => Dialogs.simpleOkDialog(
               SeriesType.infoOf(st, t),
               context,
-              title: Row(spacing: 10, children: [
-                IconMap.icon(st.iconName),
-                Text(SeriesType.displayNameOf(st, t))
-              ]),
+              title: Row(spacing: 10, children: [IconMap.icon(st.iconName), Text(SeriesType.displayNameOf(st, t))]),
             ),
         icon: const Icon(Icons.info_outline));
   }
 }
 
 class _SeriesEditor extends StatelessWidget {
-  const _SeriesEditor(
-      {required this.form, required this.seriesDef, required this.goBack});
+  const _SeriesEditor({required this.form, required this.seriesDef, required this.goBack});
 
   final GlobalKey<FormState> form;
   final SeriesDef seriesDef;
@@ -165,11 +155,7 @@ class _SeriesEditor extends StatelessWidget {
         // is new - then go back is allowed
         if (goBack != null)
           Row(
-            children: [
-              IconButton(
-                  onPressed: goBack,
-                  icon: const Icon(Icons.arrow_back_outlined))
-            ],
+            children: [IconButton(onPressed: goBack, icon: const Icon(Icons.arrow_back_outlined))],
           ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,

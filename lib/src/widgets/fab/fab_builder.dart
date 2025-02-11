@@ -6,11 +6,9 @@ import 'fab_radial_expandable.dart';
 import 'fab_vertical_expandable.dart';
 
 class FABBuilder {
-  static Widget build(
-      BuildContext context, List<FabActionButtonData> fabActions) {
+  static Widget build(BuildContext context, List<FabActionButtonData> fabActions) {
     final mediaQueryInfo = MediaQueryUtils(MediaQuery.of(context));
-    final isLandscapePhone =
-        mediaQueryInfo.isLandscape && !mediaQueryInfo.isTablet;
+    final isLandscapePhone = mediaQueryInfo.isLandscape && !mediaQueryInfo.isTablet;
 
     if (isLandscapePhone) {
       return FabRadialExpandable(

@@ -16,13 +16,12 @@ class SeriesManagementView extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: themeData.colorScheme.secondary,
-          title: Text(t.seriesManagementTitle),
-          actions: [
-            IconButton(
-                onPressed: () => Navigator.pop(context),
-                icon: const Icon(Icons.edit_off_outlined))
-          ]),
+        backgroundColor: themeData.colorScheme.secondary,
+        title: Text(t.seriesManagementTitle),
+        actions: [
+          IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.edit_off_outlined)),
+        ],
+      ),
       body: ReorderableListView(
         buildDefaultDragHandles: true,
         padding: const EdgeInsets.all(16),
@@ -33,8 +32,7 @@ class SeriesManagementView extends StatelessWidget {
                 seriesDef: s,
               ))
         ],
-        onReorder: (int oldIndex, int newIndex) =>
-            context.read<SeriesProvider>().reorder(oldIndex, newIndex),
+        onReorder: (int oldIndex, int newIndex) => context.read<SeriesProvider>().reorder(oldIndex, newIndex),
       ),
     );
   }

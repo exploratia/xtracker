@@ -19,13 +19,11 @@ class VCenteredSingleChildScrollViewWithScrollbar extends StatelessWidget {
       children: [
         Expanded(
           child: LayoutBuilder(
-            builder: (context, constraints) =>
-                SingleChildScrollViewWithScrollbar(
+            builder: (context, constraints) => SingleChildScrollViewWithScrollbar(
               scrollPositionHandler: HideBottomNavigationBar.setScrollPosition,
               onRefreshCallback: onRefreshCallback,
               child: Container(
-                constraints: BoxConstraints(
-                    minHeight: constraints.maxHeight - 32) /*-padding*/,
+                constraints: BoxConstraints(minHeight: constraints.maxHeight - 32) /*-padding*/,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

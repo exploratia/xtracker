@@ -43,8 +43,7 @@ class _DoubleBackToCloseState extends State<DoubleBackToClose> {
   }
 
   bool _canPop() {
-    return (DateTime.now().difference(_lastTimeBackButtonWasTapped) <
-        _exitTimeInMillis);
+    return (DateTime.now().difference(_lastTimeBackButtonWasTapped) < _exitTimeInMillis);
   }
 
   bool get _isAndroid => Theme.of(context).platform == TargetPlatform.android;

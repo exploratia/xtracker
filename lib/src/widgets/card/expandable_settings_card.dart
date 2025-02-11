@@ -4,8 +4,7 @@ import 'settings_card.dart';
 
 class ExpandableSettingsCard extends StatefulWidget {
   /// Damit die Card die Device-Constraints einhalten kann, muss umschliessende Column z.B. center sein.
-  const ExpandableSettingsCard(
-      {super.key, required this.title, required this.content});
+  const ExpandableSettingsCard({super.key, required this.title, required this.content});
 
   final Widget title;
   final Widget content;
@@ -39,11 +38,7 @@ class _ExpandableSettingsCardState extends State<ExpandableSettingsCard> {
               children: [
                 widget.title,
                 const SizedBox(width: 10),
-                Icon(
-                    _expanded
-                        ? Icons.arrow_drop_up_outlined
-                        : Icons.arrow_drop_down_outlined,
-                    color: Theme.of(context).colorScheme.primary),
+                Icon(_expanded ? Icons.arrow_drop_up_outlined : Icons.arrow_drop_down_outlined, color: Theme.of(context).colorScheme.primary),
               ],
             ),
           ),
@@ -51,9 +46,7 @@ class _ExpandableSettingsCardState extends State<ExpandableSettingsCard> {
         children: [
           AnimatedCrossFade(
             duration: Duration(milliseconds: _expanded ? 300 : 150),
-            crossFadeState: _expanded
-                ? CrossFadeState.showFirst
-                : CrossFadeState.showSecond,
+            crossFadeState: _expanded ? CrossFadeState.showFirst : CrossFadeState.showSecond,
             firstChild: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

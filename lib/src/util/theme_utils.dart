@@ -5,21 +5,16 @@ import 'color_utils.dart';
 import 'navigation/fade_transition_builder.dart';
 
 class ThemeUtils {
-  static final MaterialColor primary =
-      ColorUtils.customMaterialColor(const Color(0xffde0b30));
+  static final MaterialColor primary = ColorUtils.customMaterialColor(const Color(0xffde0b30));
   static const Color onPrimary = Colors.white;
-  static final MaterialColor
-      secondary = // e.g. when pulling down | toggle switch
+  static final MaterialColor secondary = // e.g. when pulling down | toggle switch
       ColorUtils.customMaterialColor(const Color(0xff911d31));
-  static final MaterialColor tertiary =
-      ColorUtils.customMaterialColor(const Color(0xffbfff00));
+  static final MaterialColor tertiary = ColorUtils.customMaterialColor(const Color(0xffbfff00));
 
-  static const screenPadding =
-      EdgeInsets.symmetric(horizontal: 16, vertical: 16); // .all(16);
+  static const screenPadding = EdgeInsets.symmetric(horizontal: 16, vertical: 16); // .all(16);
   static const cardBorderRadius = BorderRadius.all(Radius.circular(20));
   static const cardPadding = EdgeInsets.all(20);
-  static final btnShape =
-      RoundedRectangleBorder(borderRadius: BorderRadius.circular(24));
+  static final btnShape = RoundedRectangleBorder(borderRadius: BorderRadius.circular(24));
 
   static ThemeData? _light;
   static ThemeData? _dark;
@@ -30,16 +25,10 @@ class ThemeUtils {
     // if (!dark && _light != null) return _light!;
 
     final brightness = dark ? Brightness.dark : Brightness.light;
-    final backgroundColor =
-        dark ? const Color(0xff06041f) : const Color.fromRGBO(240, 240, 240, 1);
-    final cardBackgroundColor = dark
-        ? const Color(0xff1f1d35)
-        : const Color.fromRGBO(235, 235, 235, 1.0);
-    final chipBackgroundColor = dark
-        ? const Color(0xff38364c)
-        : const Color.fromRGBO(209, 209, 209, 1.0);
-    final canvasColor =
-        dark ? const Color(0xff38364c) : const Color.fromRGBO(240, 240, 240, 1);
+    final backgroundColor = dark ? const Color(0xff06041f) : const Color.fromRGBO(240, 240, 240, 1);
+    final cardBackgroundColor = dark ? const Color(0xff1f1d35) : const Color.fromRGBO(235, 235, 235, 1.0);
+    final chipBackgroundColor = dark ? const Color(0xff38364c) : const Color.fromRGBO(209, 209, 209, 1.0);
+    final canvasColor = dark ? const Color(0xff38364c) : const Color.fromRGBO(240, 240, 240, 1);
 
     final shadowColor = dark ? backgroundColor : Colors.black45;
     var themeData = ThemeData(
@@ -48,9 +37,7 @@ class ThemeUtils {
       // canvas e.g. DropdownButton-Menu in settings
       canvasColor: canvasColor,
       shadowColor: shadowColor,
-      colorScheme:
-          ColorScheme.fromSeed(seedColor: primary, brightness: brightness)
-              .copyWith(
+      colorScheme: ColorScheme.fromSeed(seedColor: primary, brightness: brightness).copyWith(
         primary: primary,
         onPrimary: onPrimary,
         secondary: secondary,
@@ -66,14 +53,11 @@ class ThemeUtils {
         elevation: 8,
         backgroundColor: backgroundColor,
         foregroundColor: dark ? Colors.white : Colors.black,
-        actionsIconTheme:
-            IconThemeData(color: dark ? Colors.white : Colors.black),
-        systemOverlayStyle:
-            dark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
+        actionsIconTheme: IconThemeData(color: dark ? Colors.white : Colors.black),
+        systemOverlayStyle: dark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
         shadowColor: shadowColor,
       ),
-      tabBarTheme:
-          TabBarThemeData(indicatorColor: dark ? Colors.white : Colors.black),
+      tabBarTheme: TabBarThemeData(indicatorColor: dark ? Colors.white : Colors.black),
       drawerTheme: DrawerThemeData(
         backgroundColor: backgroundColor,
         shape: const RoundedRectangleBorder(
@@ -94,11 +78,8 @@ class ThemeUtils {
             // trackColor: const MaterialStatePropertyAll(Colors.blueAccent),
             // trackBorderColor: const MaterialStatePropertyAll(Colors.purpleAccent),
           ),
-      bottomNavigationBarTheme: BottomNavigationBarThemeData(
-          backgroundColor: backgroundColor, selectedItemColor: primary),
-      snackBarTheme: SnackBarThemeData(
-          backgroundColor: cardBackgroundColor,
-          contentTextStyle: const TextStyle(color: onPrimary)),
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(backgroundColor: backgroundColor, selectedItemColor: primary),
+      snackBarTheme: SnackBarThemeData(backgroundColor: cardBackgroundColor, contentTextStyle: const TextStyle(color: onPrimary)),
       // Card (e.g. in Settings)
       cardTheme: Theme.of(context).cardTheme.copyWith(
             color: cardBackgroundColor,
@@ -115,8 +96,7 @@ class ThemeUtils {
         ),
       ),
       dividerTheme: DividerThemeData(color: secondary, thickness: 1, space: 10),
-      navigationRailTheme:
-          NavigationRailThemeData(backgroundColor: backgroundColor),
+      navigationRailTheme: NavigationRailThemeData(backgroundColor: backgroundColor),
       elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
         shape: btnShape,

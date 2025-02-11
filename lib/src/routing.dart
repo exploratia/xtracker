@@ -36,8 +36,7 @@ class Routing {
     _addMapping(const LogScreen(), LogScreen.navItem);
     _addMapping(const LogSettingsScreen(), LogSettingsScreen.navItem);
     _addMapping(const InfoScreen(), InfoScreen.navItem);
-    _addMapping(
-        SettingsScreen(controller: settingsController), SettingsScreen.navItem);
+    _addMapping(SettingsScreen(controller: settingsController), SettingsScreen.navItem);
   }
 
   Route<dynamic>? generateRoute(RouteSettings routeSettings) {

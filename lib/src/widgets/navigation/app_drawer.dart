@@ -16,9 +16,7 @@ class AppDrawer extends StatelessWidget {
       valueListenable: HideNavigationLabels.visible,
       builder: (BuildContext ctx0, navLabelsVisible, _) => Drawer(
           // + icon and padding
-          width:
-              (navLabelsVisible ? Navigation.getDrawerTextWidth(context) : 0) +
-                  130,
+          width: (navLabelsVisible ? Navigation.getDrawerTextWidth(context) : 0) + 130,
           child: Column(
             children: [
               const AppDrawerHeader(),
@@ -27,8 +25,7 @@ class AppDrawer extends StatelessWidget {
                 child: SingleChildScrollViewWithScrollbar(
                   child: ValueListenableBuilder(
                     valueListenable: Navigation.currentMainNavigationIdx,
-                    builder: (BuildContext ctx, currentIdx, _) =>
-                        _buildNavItems(ctx, currentIdx, navLabelsVisible),
+                    builder: (BuildContext ctx, currentIdx, _) => _buildNavItems(ctx, currentIdx, navLabelsVisible),
                   ),
                 ),
               ),
@@ -37,8 +34,7 @@ class AppDrawer extends StatelessWidget {
     );
   }
 
-  Widget _buildNavItems(
-      BuildContext context, int currentIdx, bool navLabelsVisible) {
+  Widget _buildNavItems(BuildContext context, int currentIdx, bool navLabelsVisible) {
     final t = AppLocalizations.of(context)!;
     List<Widget> result = [];
 

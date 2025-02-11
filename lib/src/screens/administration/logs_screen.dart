@@ -39,73 +39,67 @@ class _LogsScreenState extends State<LogsScreen> {
 
     return ScreenBuilder.withStandardNavBuilders(
       navItem: LogsScreen.navItem,
-      appBarBuilder: (context) => GradientAppBar.build(context,
-          addLeadingBackBtn: true,
-          title: Text(LogScreen.navItem.titleBuilder(t)),
-          actions: [
-            IconButton(
-              onPressed: () async {
-                Navigator.restorablePushNamed(
-                    context, LogSettingsScreen.navItem.routeName);
-              },
-              icon: LogSettingsScreen.navItem.icon,
-            ),
-            IconButton(
-              onPressed: () async {
+      appBarBuilder: (context) => GradientAppBar.build(
+        context,
+        addLeadingBackBtn: true,
+        title: Text(LogScreen.navItem.titleBuilder(t)),
+        actions: [
+          IconButton(
+            onPressed: () async {
+              Navigator.restorablePushNamed(context, LogSettingsScreen.navItem.routeName);
+            },
+            icon: LogSettingsScreen.navItem.icon,
+          ),
+          IconButton(
+            onPressed: () async {
+              try {
+                final zipAllLogs = await DailyFiles.zipAllLogs();
                 try {
-                  final zipAllLogs = await DailyFiles.zipAllLogs();
-                  try {
-                    await Share.shareXFiles([XFile(zipAllLogs)],
-                        text: 'App Logs');
-                  } catch (err) {
-                    if (context.mounted) {
-                      Dialogs.simpleErrOkDialog(
-                          '${t.commonsMsgErrorFailedToShareData}\n\n$err',
-                          context);
-                    }
-                  } finally {
-                    try {
-                      await File(zipAllLogs).delete();
-                    } catch (err2) {
-                      SimpleLogging.w(
-                          'Failed to delete zipped logs "$zipAllLogs" after sharing!');
-                    }
-                  }
+                  await Share.shareXFiles([XFile(zipAllLogs)], text: 'App Logs');
                 } catch (err) {
                   if (context.mounted) {
-                    Dialogs.simpleErrOkDialog(
-                        '${t.logsDialogMsgErrorFailedToZipLogs}\n\n$err',
-                        context);
+                    Dialogs.simpleErrOkDialog('${t.commonsMsgErrorFailedToShareData}\n\n$err', context);
                   }
-                }
-              },
-              icon: const Icon(Icons.share_outlined),
-            ),
-            IconButton(
-              onPressed: () async {
-                bool? res = await Dialogs.simpleYesNoDialog(
-                    t.logsDialogMsgQueryDeleteAllLogs, context,
-                    title: t.commonsDialogTitleAreYouSure);
-                if (res == true) {
+                } finally {
                   try {
-                    await DailyFiles.deleteAllLogs();
-                  } catch (err) {
-                    if (context.mounted) {
-                      Dialogs.simpleErrOkDialog(
-                          '${t.logsDialogMsgErrorDeleteAllLogsFailed}\n\n$err',
-                          context);
-                    }
+                    await File(zipAllLogs).delete();
+                  } catch (err2) {
+                    SimpleLogging.w('Failed to delete zipped logs "$zipAllLogs" after sharing!');
                   }
-                  _rebuild();
                 }
-              },
-              icon: const Icon(Icons.delete_outline),
-            ),
-          ]),
+              } catch (err) {
+                if (context.mounted) {
+                  Dialogs.simpleErrOkDialog('${t.logsDialogMsgErrorFailedToZipLogs}\n\n$err', context);
+                }
+              }
+            },
+            icon: const Icon(Icons.share_outlined),
+          ),
+          IconButton(
+            onPressed: () async {
+              bool? res = await Dialogs.simpleYesNoDialog(
+                t.logsDialogMsgQueryDeleteAllLogs,
+                context,
+                title: t.commonsDialogTitleAreYouSure,
+              );
+              if (res == true) {
+                try {
+                  await DailyFiles.deleteAllLogs();
+                } catch (err) {
+                  if (context.mounted) {
+                    Dialogs.simpleErrOkDialog('${t.logsDialogMsgErrorDeleteAllLogsFailed}\n\n$err', context);
+                  }
+                }
+                _rebuild();
+              }
+            },
+            icon: const Icon(Icons.delete_outline),
+          ),
+        ],
+      ),
       bodyBuilder: (context) => LogsView(
         key: UniqueKey(),
-        logSelectHandler:
-            (String logFileName, void Function() rebuildLogsView) {
+        logSelectHandler: (String logFileName, void Function() rebuildLogsView) {
           Navigator.of(context).push(GenericRoute.route(LogScreen(
             logFileName: logFileName,
             rebuildLogsView: rebuildLogsView,

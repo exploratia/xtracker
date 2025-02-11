@@ -18,8 +18,7 @@ class NavigatorTransitionBuilder {
         const end = Offset.zero;
         const curve = Curves.easeOut;
 
-        var tween =
-            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var tween = Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
 
         return SlideTransition(
           position: animation.drive(tween),
@@ -37,8 +36,7 @@ class NavigatorTransitionBuilder {
       reverseTransitionDuration: const Duration(milliseconds: 300),
       pageBuilder: (context, animation, secondaryAnimation) => screen,
       transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-          const FadeTransitionsBuilder().buildTransitions(
-              null, context, animation, secondaryAnimation, child),
+          const FadeTransitionsBuilder().buildTransitions(null, context, animation, secondaryAnimation, child),
     );
   }
 
@@ -48,8 +46,7 @@ class NavigatorTransitionBuilder {
       reverseTransitionDuration: const Duration(milliseconds: 0),
       pageBuilder: (context, animation, secondaryAnimation) => screen,
       transitionsBuilder: (context, animation, secondaryAnimation, child) =>
-          const NoTransitionsBuilder().buildTransitions(
-              null, context, animation, secondaryAnimation, child),
+          const NoTransitionsBuilder().buildTransitions(null, context, animation, secondaryAnimation, child),
     );
   }
 }

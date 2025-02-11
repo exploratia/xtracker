@@ -29,7 +29,8 @@ class SeriesDef {
         builder: (context) => Dialog.fullscreen(
             backgroundColor: themeData.scaffoldBackgroundColor,
             child: const HideBottomNavigationBar(
-                child: SeriesEdit(seriesDef: null))));
+              child: SeriesEdit(seriesDef: null),
+            )));
     return editedSeriesDef;
   }
 }

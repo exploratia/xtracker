@@ -5,10 +5,7 @@ import '../layout/drop_down_menu_item_child.dart';
 import 'icon_map.dart';
 
 class IconPicker extends StatefulWidget {
-  const IconPicker(
-      {super.key,
-      this.icoName = 'onetwothree_outlined',
-      required this.icoSelected});
+  const IconPicker({super.key, this.icoName = 'onetwothree_outlined', required this.icoSelected});
 
   final String icoName;
   final void Function(String) icoSelected;
@@ -43,10 +40,7 @@ class _IconPickerState extends State<IconPicker> {
       items: IconMap.icons.keys.map((icoName) {
         var text = Icon(IconMap.icons[icoName]);
         var selected = currentIcoName == icoName;
-        return DropdownMenuItem<String>(
-            key: Key('icoSelect_$icoName'),
-            value: icoName,
-            child: DropDownMenuItemChild(selected: selected, child: text));
+        return DropdownMenuItem<String>(key: Key('icoSelect_$icoName'), value: icoName, child: DropDownMenuItemChild(selected: selected, child: text));
       }).toList(),
     );
 

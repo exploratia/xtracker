@@ -19,12 +19,10 @@ class SingleChildScrollViewWithScrollbar extends StatefulWidget {
   });
 
   @override
-  State<SingleChildScrollViewWithScrollbar> createState() =>
-      _SingleChildScrollViewWithScrollbarState();
+  State<SingleChildScrollViewWithScrollbar> createState() => _SingleChildScrollViewWithScrollbarState();
 }
 
-class _SingleChildScrollViewWithScrollbarState
-    extends State<SingleChildScrollViewWithScrollbar> {
+class _SingleChildScrollViewWithScrollbarState extends State<SingleChildScrollViewWithScrollbar> {
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -46,8 +44,7 @@ class _SingleChildScrollViewWithScrollbarState
         scrollPositionCb(_scrollController.position);
       });
       // Call callback once direct with initial scroll pos (Show Bottom NavBar if not visible)
-      WidgetsBinding.instance.addPostFrameCallback(
-          (_) => scrollPositionCb(_scrollController.position));
+      WidgetsBinding.instance.addPostFrameCallback((_) => scrollPositionCb(_scrollController.position));
     }
 
     final getScrollP = widget.getScrollPosCallback;
@@ -56,8 +53,7 @@ class _SingleChildScrollViewWithScrollbarState
     }
 
     final refreshHandler = widget.onRefreshCallback;
-    ScrollPhysics? scrollPhysics =
-        (refreshHandler != null) ? const AlwaysScrollableScrollPhysics() : null;
+    ScrollPhysics? scrollPhysics = (refreshHandler != null) ? const AlwaysScrollableScrollPhysics() : null;
 
     Widget child;
     if (widget.scrollDirection == Axis.vertical) {

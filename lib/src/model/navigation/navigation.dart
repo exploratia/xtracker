@@ -8,11 +8,9 @@ import '../../util/text_utils.dart';
 import 'main_navigation_item.dart';
 
 class Navigation {
-  static final ValueNotifier<int> currentMainNavigationIdx =
-      ValueNotifier<int>(0);
+  static final ValueNotifier<int> currentMainNavigationIdx = ValueNotifier<int>(0);
 
-  static void setCurrentMainNavigationRouteIdx(
-      int value, BuildContext context) {
+  static void setCurrentMainNavigationRouteIdx(int value, BuildContext context) {
     if (value < 0 || currentMainNavigationIdx.value == value) return;
 
     currentMainNavigationIdx.value = value;
@@ -20,8 +18,7 @@ class Navigation {
     Navigator.pushReplacementNamed(context, currentItem.routeName);
   }
 
-  static void setCurrentMainNavigationRoute(
-      String routeName, BuildContext context) {
+  static void setCurrentMainNavigationRoute(String routeName, BuildContext context) {
     setCurrentMainNavigationRouteIdx(_indexOfRoute(routeName), context);
   }
 
@@ -30,15 +27,13 @@ class Navigation {
   }
 
   static int _indexOfRoute(String routeName) {
-    return mainNavigationItems
-        .indexWhere((navItem) => navItem.routeName == routeName);
+    return mainNavigationItems.indexWhere((navItem) => navItem.routeName == routeName);
   }
 
   /// [MainNavigationItem] registers itself in constructor
   static final List<MainNavigationItem> mainNavigationItems = [];
 
-  static void registerMainNavigationItem(
-      MainNavigationItem mainNavigationItem) {
+  static void registerMainNavigationItem(MainNavigationItem mainNavigationItem) {
     mainNavigationItems.add(mainNavigationItem);
     _maxTextWidth = -1;
   }
@@ -46,8 +41,7 @@ class Navigation {
   /// initial default drawer width
   static double _maxTextWidth = -1;
 
-  static double getDrawerTextWidth(BuildContext context,
-      {TextStyle? textStyle}) {
+  static double getDrawerTextWidth(BuildContext context, {TextStyle? textStyle}) {
     if (_maxTextWidth < 0) {
       _determineMaxTextWidth(context: context, textStyle: textStyle);
     }
@@ -61,8 +55,7 @@ class Navigation {
 
   /// determines the maxTextWidth for all main navigation items to know the required drawer width.
   /// Has to be called after language changed.
-  static void _determineMaxTextWidth(
-      {required BuildContext context, TextStyle? textStyle}) {
+  static void _determineMaxTextWidth({required BuildContext context, TextStyle? textStyle}) {
     final t = AppLocalizations.of(context)!;
     double maxW = -1;
     for (var navItem in mainNavigationItems) {

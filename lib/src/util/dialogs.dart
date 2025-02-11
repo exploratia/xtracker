@@ -42,8 +42,7 @@ class Dialogs {
     String? buttonText,
   }) async {
     final t = AppLocalizations.of(context);
-    return Dialogs.simpleOkDialog(content, context,
-        title: title ?? t!.commonsDialogTitleErrorOccurred);
+    return Dialogs.simpleOkDialog(content, context, title: title ?? t!.commonsDialogTitleErrorOccurred);
   }
 
   /// returns true|false=null (null in case of back-tap)
@@ -83,8 +82,7 @@ class Dialogs {
 
   /// show [SnackBar]
   /// * [content] Widget or Text
-  static void showSnackBar(dynamic content, BuildContext context,
-      {Duration? duration, SnackBarAction? snackBarAction}) {
+  static void showSnackBar(dynamic content, BuildContext context, {Duration? duration, SnackBarAction? snackBarAction}) {
     Duration d = duration ?? const Duration(seconds: 2);
     Widget c = (content is Widget)
         ? content

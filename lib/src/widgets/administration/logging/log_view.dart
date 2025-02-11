@@ -21,8 +21,7 @@ class _LogViewState extends State<LogView> {
   @override
   Widget build(BuildContext context) {
     // In the ListViewBuilder we have no ScrollPosHandler -> hide BottomNavBar always.
-    WidgetsBinding.instance
-        .addPostFrameCallback((_) => HideBottomNavigationBar.setVisible(false));
+    WidgetsBinding.instance.addPostFrameCallback((_) => HideBottomNavigationBar.setVisible(false));
 
     return SizedBox(
       width: double.infinity,
@@ -35,8 +34,7 @@ class _LogViewState extends State<LogView> {
               return Center(
                 child: Padding(
                   padding: const EdgeInsets.all(10.0),
-                  child: Text(
-                      'Failed to load log! ${snapshot.error?.toString() ?? ''}'),
+                  child: Text('Failed to load log! ${snapshot.error?.toString() ?? ''}'),
                 ),
               );
             }
@@ -50,8 +48,7 @@ class _LogViewState extends State<LogView> {
               refreshHandler: _rebuild,
             );
           },
-          future: DailyFiles.readLogLines(widget.logFileName, context,
-              !MediaQueryUtils.of(context).isTablet)),
+          future: DailyFiles.readLogLines(widget.logFileName, context, !MediaQueryUtils.of(context).isTablet)),
     );
   }
 }
@@ -76,34 +73,23 @@ class _LogLines extends StatelessWidget {
             var logLineText = logLines[index];
             var logLine = _LogLine(
               logLine: logLineText,
-              key: ValueKey(logLineText.length > 28
-                  ? logLineText.substring(0, 27)
-                  : logLineText),
+              key: ValueKey(logLineText.length > 28 ? logLineText.substring(0, 27) : logLineText),
             );
 
             if (index == 0) {
               return Padding(
-                padding: const EdgeInsets.only(
-                    left: outerPad,
-                    right: outerPad,
-                    top: outerPad,
-                    bottom: linePad),
+                padding: const EdgeInsets.only(left: outerPad, right: outerPad, top: outerPad, bottom: linePad),
                 child: logLine,
               );
             }
             if (index == logLines.length - 1) {
               return Padding(
-                padding: const EdgeInsets.only(
-                    left: outerPad,
-                    right: outerPad,
-                    top: linePad,
-                    bottom: outerPad),
+                padding: const EdgeInsets.only(left: outerPad, right: outerPad, top: linePad, bottom: outerPad),
                 child: logLine,
               );
             }
             return Padding(
-              padding: const EdgeInsets.symmetric(
-                  vertical: linePad, horizontal: outerPad),
+              padding: const EdgeInsets.symmetric(vertical: linePad, horizontal: outerPad),
               child: logLine,
             );
           },

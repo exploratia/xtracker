@@ -91,15 +91,12 @@ class _LogLevelSelectorState extends State<_LogLevelSelector> {
         dropdownColor: themeData.cardColor,
         // borderRadius: BorderRadius.circular(4),
         value: SimpleLogging.logLevel,
-        items: SimpleLogging.getKnownLevels()
-            .map<DropdownMenuItem<Level>>((logLevel) {
+        items: SimpleLogging.getKnownLevels().map<DropdownMenuItem<Level>>((logLevel) {
           var selected = (logLevel == SimpleLogging.logLevel);
           return DropdownMenuItem(
               key: Key('logSettingsLogLevelSelect_${logLevel.name}'),
               value: logLevel,
-              child: DropDownMenuItemChild(
-                  selected: selected,
-                  child: Text(logLevel.name.toUpperCase())));
+              child: DropDownMenuItemChild(selected: selected, child: Text(logLevel.name.toUpperCase())));
         }).toList(),
         onChanged: (value) {
           if (value != null) {

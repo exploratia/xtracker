@@ -39,7 +39,7 @@ class GradientAppBar extends AppBar {
     List<Color> gradientColors = [
       themeData.colorScheme.primary,
       themeData.colorScheme.secondary,
-      themeData.scaffoldBackgroundColor
+      themeData.scaffoldBackgroundColor,
     ];
 
     Widget? leadingWidget = leading;

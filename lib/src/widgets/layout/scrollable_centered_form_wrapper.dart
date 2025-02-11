@@ -10,8 +10,7 @@ class ScrollableCenteredFormWrapper extends StatelessWidget {
   final Key formKey;
   final List<Widget> children;
 
-  const ScrollableCenteredFormWrapper(
-      {super.key, required this.formKey, required this.children});
+  const ScrollableCenteredFormWrapper({super.key, required this.formKey, required this.children});
 
   @override
   Widget build(BuildContext context) {

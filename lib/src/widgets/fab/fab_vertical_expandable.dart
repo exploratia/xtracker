@@ -26,8 +26,7 @@ class FabVerticalExpandable extends StatefulWidget {
   State<FabVerticalExpandable> createState() => _FabVerticalExpandableState();
 }
 
-class _FabVerticalExpandableState extends State<FabVerticalExpandable>
-    with SingleTickerProviderStateMixin {
+class _FabVerticalExpandableState extends State<FabVerticalExpandable> with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _expandAnimation;
   bool _open = false;
@@ -81,8 +80,7 @@ class _FabVerticalExpandableState extends State<FabVerticalExpandable>
         children: [
           TabToCloseFab(toggle: _toggle),
           ..._buildExpandingActionButtons(widget.distance),
-          TabToOpenFab(
-              openFabIconData: widget.iconData, open: _open, toggle: _toggle),
+          TabToOpenFab(openFabIconData: widget.iconData, open: _open, toggle: _toggle),
         ],
       ),
     );

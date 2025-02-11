@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class TabToCloseFab extends StatelessWidget {
   const TabToCloseFab({super.key, required this.toggle});
+
   final VoidCallback toggle;
 
   @override

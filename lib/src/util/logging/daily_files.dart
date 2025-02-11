@@ -47,8 +47,7 @@ class DailyFiles {
 
   static Future<void> _writeLogStart() async {
     // LogStart direkt schreiben, damit das File sofort angelegt wird.
-    final messageItem = _createMessageQueueItem(
-        'START\n-------------------------\n ${AppInfo.appName} (v ${AppInfo.version})\n-------------------------');
+    final messageItem = _createMessageQueueItem('START\n-------------------------\n ${AppInfo.appName} (v ${AppInfo.version})\n-------------------------');
 
     try {
       await _writeToTodayFile([messageItem]);
@@ -86,8 +85,7 @@ class DailyFiles {
   }
 
   static void writeToFile(String value, {DateTime? dateTime}) {
-    _MsgQueueItem msgQueueItem =
-        _createMessageQueueItem(value, dateTime: dateTime);
+    _MsgQueueItem msgQueueItem = _createMessageQueueItem(value, dateTime: dateTime);
     _msgQueue.add(msgQueueItem);
     if (_timerSet) return;
     _timerSet = true;
@@ -109,19 +107,14 @@ class DailyFiles {
     );
   }
 
-  static _MsgQueueItem _createMessageQueueItem(String value,
-      {DateTime? dateTime}) {
+  static _MsgQueueItem _createMessageQueueItem(String value, {DateTime? dateTime}) {
     final logDateTime = dateTime ?? DateTime.now();
     final ms = logDateTime.millisecond.toString().padLeft(3, '0');
-    final msgQueueItem = _MsgQueueItem(
-        DateFormat('yyyy-MM-dd').format(logDateTime),
-        '${DateFormat('HH:mm:ss').format(logDateTime)}.$ms',
-        value);
+    final msgQueueItem = _MsgQueueItem(DateFormat('yyyy-MM-dd').format(logDateTime), '${DateFormat('HH:mm:ss').format(logDateTime)}.$ms', value);
     return msgQueueItem;
   }
 
-  static Future<void> _writeToTodayFile(
-      List<_MsgQueueItem> msgQueueItems) async {
+  static Future<void> _writeToTodayFile(List<_MsgQueueItem> msgQueueItems) async {
     final logsDir = _logsDir;
     if (logsDir == null) return;
 
@@ -150,16 +143,14 @@ class DailyFiles {
         sink = logFile.openWrite(mode: FileMode.append);
       }
 
-      sink.write(
-          '[${msgQueueItem.date} ${msgQueueItem.time}] ${msgQueueItem.text}\n');
+      sink.write('[${msgQueueItem.date} ${msgQueueItem.time}] ${msgQueueItem.text}\n');
     }
 
     await sink.flush();
     await sink.close();
   }
 
-  static Future<String> readLog(
-      String filename, BuildContext context, bool addNLAfterLogLevel) async {
+  static Future<String> readLog(String filename, BuildContext context, bool addNLAfterLogLevel) async {
     final logsDir = _logsDir;
     if (logsDir == null) return 'No logs dir set/found!';
     String fn = filename;
@@ -175,8 +166,7 @@ class DailyFiles {
     return lines.join('\n');
   }
 
-  static Future<List<String>> readLogLines(
-      String filename, BuildContext context, bool addNLAfterLogLevel) async {
+  static Future<List<String>> readLogLines(String filename, BuildContext context, bool addNLAfterLogLevel) async {
     final logsDir = _logsDir;
     if (logsDir == null) return ['No logs dir set/found!'];
     String fn = filename;
@@ -297,10 +287,8 @@ class DailyFiles {
     if (tmpDir == null) throw 'No tmp dir available!';
     final logsDir = _logsDir;
     if (logsDir == null) throw 'No log dir found!';
-    var zipFile = File(
-        '${tmpDir.path}/logs_${DateFormat('yyyy-MM-dd_HH_mm_ss').format(DateTime.now())}.zip');
-    await ZipFile.createFromDirectory(
-        sourceDir: logsDir, zipFile: zipFile, recurseSubDirs: true);
+    var zipFile = File('${tmpDir.path}/logs_${DateFormat('yyyy-MM-dd_HH_mm_ss').format(DateTime.now())}.zip');
+    await ZipFile.createFromDirectory(sourceDir: logsDir, zipFile: zipFile, recurseSubDirs: true);
     return zipFile.path;
   }
 }

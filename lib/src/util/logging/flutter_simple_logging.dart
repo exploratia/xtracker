@@ -116,9 +116,7 @@ class SimpleLogging {
       final data = jsonDecode(dataStr) as Map<String, dynamic>;
       if (data.containsKey('logLevel')) {
         final level = data['logLevel'] as String;
-        _logLevel = getKnownLevels().firstWhere(
-            (element) => element.name == level,
-            orElse: () => Level.warning);
+        _logLevel = getKnownLevels().firstWhere((element) => element.name == level, orElse: () => Level.warning);
       }
       if (data.containsKey('fullStack')) {
         _useFullStack = data['fullStack'] as bool;
@@ -174,37 +172,32 @@ class _Outputs {
     // Level.wtf: 'WTF  ',
   };
 
-  static void outFile(
-      OutputEvent event, _FileLineAndStack fileLineAndStack, dynamic error) {
+  static void outFile(OutputEvent event, _FileLineAndStack fileLineAndStack, dynamic error) {
     String logMsg = '';
     for (var line in event.lines) {
       if (logMsg.isNotEmpty) logMsg += '\n';
       logMsg += line;
     }
 
-    logMsg =
-        '${_normalizedLevel(event.level)} | ${fileLineAndStack.fileLine} $logMsg';
+    logMsg = '${_normalizedLevel(event.level)} | ${fileLineAndStack.fileLine} $logMsg';
     if (error != null) {
       logMsg += '\n  Error:\n$error';
     }
 
-    if (fileLineAndStack.stack != null &&
-        event.level.index >= Level.warning.index) {
+    if (fileLineAndStack.stack != null && event.level.index >= Level.warning.index) {
       logMsg += '\n  Stack:\n${fileLineAndStack.stack}';
     }
 
     DailyFiles.writeToFile(logMsg, dateTime: event.origin.time);
   }
 
-  static void outCons(
-      OutputEvent event, _FileLineAndStack fileLineAndStack, dynamic error) {
+  static void outCons(OutputEvent event, _FileLineAndStack fileLineAndStack, dynamic error) {
     bool first = true;
     for (var line in event.lines) {
       if (kDebugMode) {
         if (first) {
           first = false;
-          print(
-              '${_normalizedLevel(event.level)} ${fileLineAndStack.fileLine} $line');
+          print('${_normalizedLevel(event.level)} ${fileLineAndStack.fileLine} $line');
         } else {
           print(line);
         }
@@ -217,8 +210,7 @@ class _Outputs {
       }
     }
 
-    if (fileLineAndStack.stack != null &&
-        event.level.index >= Level.warning.index) {
+    if (fileLineAndStack.stack != null && event.level.index >= Level.warning.index) {
       if (kDebugMode) {
         print('  Stack:');
         print(fileLineAndStack.stack);
@@ -241,17 +233,12 @@ class _StackUtils {
         .replaceAll('<anonymous closure>', '')
         .replaceAll('<asynchronous suspension>', '')
         .split('\n')
-        .where((line) =>
-            !line.contains('package:logger') &&
-            !line.contains(
-                'package:flutter_simple_logging/flutter_simple_logging') &&
-            line.trim().isNotEmpty)
+        .where((line) => !line.contains('package:logger') && !line.contains('package:flutter_simple_logging/flutter_simple_logging') && line.trim().isNotEmpty)
         .where((line) {
           // FullStack? Dann immer True
           if (SimpleLogging.useFullStack) return true;
           // Sonst nur packageName erlauben
-          return line.contains('package:$packageName/') ||
-              line.contains('package:flutter_simple_logging/widgets/logs_view');
+          return line.contains('package:$packageName/') || line.contains('package:flutter_simple_logging/widgets/logs_view');
         }) // ist das gut? wg. Fremdpaketen evtl.?
         .map((line) => line.substring(line.indexOf(' ')).trimLeft())
         .toList();

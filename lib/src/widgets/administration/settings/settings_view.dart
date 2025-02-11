@@ -28,12 +28,10 @@ class SettingsView extends StatelessWidget {
       child: Column(
         children: [
           ExpandableSettingsCard(
-              title: OverflowText(t!.settingsGeneralCardTitle,
-                  style: Theme.of(context).textTheme.titleLarge),
+              title: OverflowText(t!.settingsGeneralCardTitle, style: Theme.of(context).textTheme.titleLarge),
               content: GeneralSettingsView(controller: controller)),
           ExpandableSettingsCard(
-              title: OverflowText(t.settingsDeviceStorageTitle,
-                  style: Theme.of(context).textTheme.titleLarge),
+              title: OverflowText(t.settingsDeviceStorageTitle, style: Theme.of(context).textTheme.titleLarge),
               content: DeviceStorageView(
                 controller: controller,
               )),

@@ -17,10 +17,7 @@ class DropDownMenuItemChild extends StatelessWidget {
 
     BoxDecoration? boxDeco;
     if (selected) {
-      boxDeco = BoxDecoration(
-          border: Border(
-              left:
-                  BorderSide(width: 2, color: themeData.colorScheme.primary)));
+      boxDeco = BoxDecoration(border: Border(left: BorderSide(width: 2, color: themeData.colorScheme.primary)));
     }
 
     return Padding(

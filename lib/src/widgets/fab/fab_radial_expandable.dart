@@ -30,8 +30,7 @@ class FabRadialExpandable extends StatefulWidget {
   State<FabRadialExpandable> createState() => _FabRadialExpandableState();
 }
 
-class _FabRadialExpandableState extends State<FabRadialExpandable>
-    with SingleTickerProviderStateMixin {
+class _FabRadialExpandableState extends State<FabRadialExpandable> with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
   late final Animation<double> _expandAnimation;
   bool _open = false;
@@ -85,8 +84,7 @@ class _FabRadialExpandableState extends State<FabRadialExpandable>
         children: [
           TabToCloseFab(toggle: _toggle),
           ..._buildExpandingActionButtons(widget.maxAngle, widget.startAngle),
-          TabToOpenFab(
-              openFabIconData: widget.iconData, open: _open, toggle: _toggle),
+          TabToOpenFab(openFabIconData: widget.iconData, open: _open, toggle: _toggle),
         ],
       ),
     );
@@ -99,9 +97,7 @@ class _FabRadialExpandableState extends State<FabRadialExpandable>
     final children = <Widget>[];
     final count = widget.actions.length;
     final step = math.min(90.0, maxAngle) / (count - 1);
-    for (var i = 0, angleInDegrees = math.max(0.0, startAngle);
-        i < count;
-        i++, angleInDegrees += step) {
+    for (var i = 0, angleInDegrees = math.max(0.0, startAngle); i < count; i++, angleInDegrees += step) {
       var action = widget.actions[i];
       children.add(
         _ExpandingActionButton(

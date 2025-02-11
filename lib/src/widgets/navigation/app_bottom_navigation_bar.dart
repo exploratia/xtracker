@@ -13,54 +13,43 @@ class AppBottomNavigationBar extends StatelessWidget {
     final themeData = Theme.of(context);
     return ValueListenableBuilder(
       valueListenable: HideNavigationLabels.visible,
-      builder: (BuildContext ctx0, navLabelsVisible, _) =>
-          ValueListenableBuilder(
-            valueListenable: HideBottomNavigationBar.visible,
-            builder: (BuildContext ctx1, isVisible, _) =>
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 300),
-                  height: isVisible
-                      ? MediaQuery
-                      .of(context)
-                      .padding
-                      .bottom +
-                      (40 + (navLabelsVisible ? 16 : 0))
-                      : 0,
-                  child: OverflowBox(
-                    maxHeight: double.infinity,
-                    minHeight: 0,
-                    alignment: AlignmentDirectional.topCenter,
-                    child: ValueListenableBuilder(
-                      valueListenable: Navigation.currentMainNavigationIdx,
-                      builder: (BuildContext ctx2, currentIdx, _) =>
-                          Container(
-                            decoration: BoxDecoration(
-                              boxShadow: <BoxShadow>[
-                                BoxShadow(
-                                  color: themeData.shadowColor,
-                                  blurRadius: 8,
-                                ),
-                              ],
-                              // border: Border(
-                              //     top: BorderSide(
-                              //         color: themeData.scaffoldBackgroundColor, width: 1.0)),
-                            ),
-                            child: BottomNavigationBar(
-                              showUnselectedLabels: navLabelsVisible,
-                              showSelectedLabels: navLabelsVisible,
-                              backgroundColor: themeData.cardTheme.color,
-                              items: _buildNavItems(ctx2),
-                              currentIndex: currentIdx,
-                              type: BottomNavigationBarType.fixed,
-                              onTap: (selectedIdx) =>
-                                  Navigation.setCurrentMainNavigationRouteIdx(
-                                      selectedIdx, ctx2),
-                            ),
-                          ),
+      builder: (BuildContext ctx0, navLabelsVisible, _) => ValueListenableBuilder(
+        valueListenable: HideBottomNavigationBar.visible,
+        builder: (BuildContext ctx1, isVisible, _) => AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          height: isVisible ? MediaQuery.of(context).padding.bottom + (40 + (navLabelsVisible ? 16 : 0)) : 0,
+          child: OverflowBox(
+            maxHeight: double.infinity,
+            minHeight: 0,
+            alignment: AlignmentDirectional.topCenter,
+            child: ValueListenableBuilder(
+              valueListenable: Navigation.currentMainNavigationIdx,
+              builder: (BuildContext ctx2, currentIdx, _) => Container(
+                decoration: BoxDecoration(
+                  boxShadow: <BoxShadow>[
+                    BoxShadow(
+                      color: themeData.shadowColor,
+                      blurRadius: 8,
                     ),
-                  ),
+                  ],
+                  // border: Border(
+                  //     top: BorderSide(
+                  //         color: themeData.scaffoldBackgroundColor, width: 1.0)),
                 ),
+                child: BottomNavigationBar(
+                  showUnselectedLabels: navLabelsVisible,
+                  showSelectedLabels: navLabelsVisible,
+                  backgroundColor: themeData.cardTheme.color,
+                  items: _buildNavItems(ctx2),
+                  currentIndex: currentIdx,
+                  type: BottomNavigationBarType.fixed,
+                  onTap: (selectedIdx) => Navigation.setCurrentMainNavigationRouteIdx(selectedIdx, ctx2),
+                ),
+              ),
+            ),
           ),
+        ),
+      ),
     );
   }
 

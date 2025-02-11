@@ -51,23 +51,18 @@ class ScreenBuilder extends StatelessWidget {
             bodyBuilder: bodyBuilder,
             floatingActionButtonBuilder: floatingActionButtonBuilder,
             isHome: navItem.routeName == '/',
-            isMainNavigation:
-                Navigation.containsMainNavigationRoute(navItem.routeName),
+            isMainNavigation: Navigation.containsMainNavigationRoute(navItem.routeName),
             drawerBuilder: (context) => const AppDrawer(),
             navigationRailBuilder: (context) => const AppNavigationRail(),
-            bottomNavigationBarBuilder: (context) =>
-                const AppBottomNavigationBar());
+            bottomNavigationBarBuilder: (context) => const AppBottomNavigationBar());
 
   @override
   Widget build(BuildContext context) {
     final mediaQueryInfo = MediaQueryUtils(MediaQuery.of(context));
     final buildDrawer = (/*!mediaQueryInfo.isTablet &&*/
         mediaQueryInfo.isLandscape && drawerBuilder != null);
-    final buildBottomNavigationBar =
-        (mediaQueryInfo.isPortrait && bottomNavigationBarBuilder != null);
-    final buildNavigationRail =
-        ((mediaQueryInfo.isLandscape || mediaQueryInfo.isTablet) &&
-            navigationRailBuilder != null);
+    final buildBottomNavigationBar = (mediaQueryInfo.isPortrait && bottomNavigationBarBuilder != null);
+    final buildNavigationRail = ((mediaQueryInfo.isLandscape || mediaQueryInfo.isTablet) && navigationRailBuilder != null);
 
     Widget bodySafeArea = SafeArea(
         child: Row(
@@ -91,13 +86,9 @@ class ScreenBuilder extends StatelessWidget {
     return Scaffold(
       appBar: appBarBuilder != null ? appBarBuilder!(context) : null,
       drawer: buildDrawer ? SafeArea(child: drawerBuilder!(context)) : null,
-      bottomNavigationBar: buildBottomNavigationBar
-          ? bottomNavigationBarBuilder!(context)
-          : null,
+      bottomNavigationBar: buildBottomNavigationBar ? bottomNavigationBarBuilder!(context) : null,
       body: bodyPopScope,
-      floatingActionButton: floatingActionButtonBuilder != null
-          ? floatingActionButtonBuilder!(context)
-          : null,
+      floatingActionButton: floatingActionButtonBuilder != null ? floatingActionButtonBuilder!(context) : null,
     );
   }
 }

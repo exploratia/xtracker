@@ -24,8 +24,10 @@ class SeriesDefRenderer extends StatelessWidget {
 
     deleteHandler() async {
       bool? res = await Dialogs.simpleYesNoDialog(
-          t.seriesDialogMsgQueryDeleteSeries(seriesDef.name), context,
-          title: t.commonsDialogTitleAreYouSure);
+        t.seriesDialogMsgQueryDeleteSeries(seriesDef.name),
+        context,
+        title: t.commonsDialogTitleAreYouSure,
+      );
       if (res == true) {
         try {
           if (context.mounted) {
@@ -59,10 +61,7 @@ class SeriesDefRenderer extends StatelessWidget {
                       color: seriesDef.color,
                     ),
                   ),
-                if (editMode)
-                  IconButton(
-                      onPressed: deleteHandler,
-                      icon: const Icon(Icons.close_outlined)),
+                if (editMode) IconButton(onPressed: deleteHandler, icon: const Icon(Icons.close_outlined)),
                 if (editMode)
                   const Padding(
                     padding: EdgeInsets.all(8.0),

@@ -71,8 +71,6 @@ class _SeriesList extends StatelessWidget {
     if (series.isEmpty) {
       return const AddFirstSeries();
     }
-    return Column(
-        spacing: 16,
-        children: [...series.map((s) => SeriesDefRenderer(seriesDef: s))]);
+    return Column(spacing: 16, children: [...series.map((s) => SeriesDefRenderer(seriesDef: s))]);
   }
 }

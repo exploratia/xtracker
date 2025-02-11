@@ -55,15 +55,8 @@ class _AppInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var rows = [
-      [
-        const CaLogo(radius: 16),
-        OverflowText(
-            '${DateFormat('yyyy').format(DateTime.now())} \u00a9 Christian Adler')
-      ],
-      [
-        const ExploratiaLogo(radius: 16),
-        const OverflowText(maxLines: 100, 'https://www.exploratia.de')
-      ],
+      [const CaLogo(radius: 16), OverflowText('${DateFormat('yyyy').format(DateTime.now())} \u00a9 Christian Adler')],
+      [const ExploratiaLogo(radius: 16), const OverflowText(maxLines: 100, 'https://www.exploratia.de')],
       [
         const EagleLogo(radius: 16),
         const OverflowText('https://www.adlers-online.de'),

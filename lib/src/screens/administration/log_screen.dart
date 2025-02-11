@@ -38,13 +38,10 @@ class LogScreen extends StatelessWidget {
           IconButton(
             onPressed: () async {
               try {
-                await Share.shareXFiles(
-                    [XFile(DailyFiles.getFullLogPath(logFileN))],
-                    text: '${AppInfo.appName} Log $logFileName');
+                await Share.shareXFiles([XFile(DailyFiles.getFullLogPath(logFileN))], text: '${AppInfo.appName} Log $logFileName');
               } catch (err) {
                 if (context.mounted) {
-                  Dialogs.simpleErrOkDialog(
-                      '${t.commonsMsgErrorFailedToShareData}\n\n$err', context);
+                  Dialogs.simpleErrOkDialog('${t.commonsMsgErrorFailedToShareData}\n\n$err', context);
                 }
               }
             },
@@ -52,9 +49,7 @@ class LogScreen extends StatelessWidget {
           ),
           IconButton(
             onPressed: () async {
-              bool? res = await Dialogs.simpleYesNoDialog(
-                  t.logDialogMsgQueryDeleteLog, context,
-                  title: t.commonsDialogTitleAreYouSure);
+              bool? res = await Dialogs.simpleYesNoDialog(t.logDialogMsgQueryDeleteLog, context, title: t.commonsDialogTitleAreYouSure);
               if (res == true) {
                 try {
                   await DailyFiles.deleteLog(logFileN);
@@ -62,9 +57,7 @@ class LogScreen extends StatelessWidget {
                   await Future.delayed(const Duration(seconds: 1), () {});
                 } catch (err) {
                   if (context.mounted) {
-                    Dialogs.simpleErrOkDialog(
-                        '${t.logDialogMsgErrorDeleteLogFailed}\n\n$err',
-                        context);
+                    Dialogs.simpleErrOkDialog('${t.logDialogMsgErrorDeleteLogFailed}\n\n$err', context);
                   }
                 }
                 final rebuildLogs = rebuildLogsView;
