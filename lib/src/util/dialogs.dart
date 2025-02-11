@@ -15,25 +15,9 @@ class Dialogs {
   }) async {
     final t = AppLocalizations.of(context)!;
 
-    Widget? titleWidget;
-    if (title != null) {
-      if (title is String) {
-        titleWidget = Text(title);
-      } else if (title is Widget) {
-        titleWidget = title;
-      }
-    }
+    Widget? titleWidget = _titleWidget(title);
 
-    Widget? contentWidget;
-    if (content != null) {
-      if (content is String) {
-        contentWidget = Text(content);
-      } else if (content is Widget) {
-        contentWidget = content;
-      } else {
-        contentWidget = const Icon(Icons.question_mark_outlined);
-      }
-    }
+    Widget? contentWidget = _contentWidget(content);
 
     return showDialog<void>(
       context: context,
@@ -52,14 +36,48 @@ class Dialogs {
   }
 
   static Future<void> simpleErrOkDialog(
-    String text,
+    dynamic content,
     BuildContext context, {
-    String? title,
+    dynamic title,
     String? buttonText,
   }) async {
     final t = AppLocalizations.of(context);
-    return Dialogs.simpleOkDialog(text, context,
+    return Dialogs.simpleOkDialog(content, context,
         title: title ?? t!.commonsDialogTitleErrorOccurred);
+  }
+
+  static Future<bool?> simpleYesNoDialog(
+    dynamic content,
+    BuildContext context, {
+    dynamic title,
+  }) async {
+    final t = AppLocalizations.of(context)!;
+
+    Widget? titleWidget = _titleWidget(title);
+
+    Widget? contentWidget = _contentWidget(content);
+
+    return await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: titleWidget,
+        content: contentWidget,
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(ctx).pop(false);
+            },
+            child: Text(t.commonsDialogBtnNo),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(ctx).pop(true);
+            },
+            child: Text(t.commonsDialogBtnYes),
+          ),
+        ],
+      ),
+    );
   }
 
   /// show [SnackBar]
@@ -81,5 +99,31 @@ class Dialogs {
         // behavior: SnackBarBehavior.floating,
       ),
     );
+  }
+
+  static Widget? _contentWidget(content) {
+    Widget? contentWidget;
+    if (content != null) {
+      if (content is String) {
+        contentWidget = Text(content);
+      } else if (content is Widget) {
+        contentWidget = content;
+      } else {
+        contentWidget = const Icon(Icons.question_mark_outlined);
+      }
+    }
+    return contentWidget;
+  }
+
+  static Widget? _titleWidget(title) {
+    Widget? titleWidget;
+    if (title != null) {
+      if (title is String) {
+        titleWidget = Text(title);
+      } else if (title is Widget) {
+        titleWidget = title;
+      }
+    }
+    return titleWidget;
   }
 }
