@@ -83,37 +83,21 @@ class _LogsScreenState extends State<LogsScreen> {
             ),
             IconButton(
               onPressed: () async {
-                showDialog(
-                  context: context,
-                  builder: (ctx) => AlertDialog(
-                    title: Text(t.commonsDialogTitleAreYouSure),
-                    content: Text(t.logsDialogMsgQueryDeleteAllLogs),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.of(ctx).pop(false);
-                        },
-                        child: Text(t.commonsDialogBtnNo),
-                      ),
-                      TextButton(
-                        onPressed: () async {
-                          Navigator.of(ctx).pop(false);
-                          try {
-                            await DailyFiles.deleteAllLogs();
-                          } catch (err) {
-                            if (ctx.mounted) {
-                              Dialogs.simpleErrOkDialog(
-                                  '${t.logsDialogMsgErrorDeleteAllLogsFailed}\n\n$err',
-                                  ctx);
-                            }
-                          }
-                          _rebuild();
-                        },
-                        child: Text(t.commonsDialogBtnYes),
-                      ),
-                    ],
-                  ),
-                );
+                bool? res = await Dialogs.simpleYesNoDialog(
+                    t.logsDialogMsgQueryDeleteAllLogs, context,
+                    title: t.commonsDialogTitleAreYouSure);
+                if (res == true) {
+                  try {
+                    await DailyFiles.deleteAllLogs();
+                  } catch (err) {
+                    if (context.mounted) {
+                      Dialogs.simpleErrOkDialog(
+                          '${t.logsDialogMsgErrorDeleteAllLogsFailed}\n\n$err',
+                          context);
+                    }
+                  }
+                  _rebuild();
+                }
               },
               icon: const Icon(Icons.delete_outline),
             ),

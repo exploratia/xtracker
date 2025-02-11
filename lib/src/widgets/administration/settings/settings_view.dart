@@ -34,7 +34,9 @@ class SettingsView extends StatelessWidget {
           ExpandableSettingsCard(
               title: OverflowText(t.settingsDeviceStorageTitle,
                   style: Theme.of(context).textTheme.titleLarge),
-              content: const DeviceStorageView()),
+              content: DeviceStorageView(
+                controller: controller,
+              )),
           const ScrollFooter(marginTop: 20),
         ],
       ),

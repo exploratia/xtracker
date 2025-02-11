@@ -52,42 +52,25 @@ class LogScreen extends StatelessWidget {
           ),
           IconButton(
             onPressed: () async {
-              showDialog(
-                context: context,
-                builder: (ctx) => AlertDialog(
-                  title: Text(t.commonsDialogTitleAreYouSure),
-                  content: Text(t.logDialogMsgQueryDeleteLog),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.of(ctx).pop(false);
-                      },
-                      child: Text(t.commonsDialogBtnNo),
-                    ),
-                    TextButton(
-                      onPressed: () async {
-                        Navigator.of(ctx).pop(false);
-                        Navigator.of(ctx).pop(false);
-                        try {
-                          await DailyFiles.deleteLog(logFileN);
-                          // 1s warten, damit im Fall von heutigem Log das heutige File dann schon wieder erstellt wurde.
-                          await Future.delayed(
-                              const Duration(seconds: 1), () {});
-                        } catch (err) {
-                          if (ctx.mounted) {
-                            Dialogs.simpleErrOkDialog(
-                                '${t.logDialogMsgErrorDeleteLogFailed}\n\n$err',
-                                ctx);
-                          }
-                        }
-                        final rebuildLogs = rebuildLogsView;
-                        if (rebuildLogs != null) rebuildLogs();
-                      },
-                      child: Text(t.commonsDialogBtnYes),
-                    ),
-                  ],
-                ),
-              );
+              bool? res = await Dialogs.simpleYesNoDialog(
+                  t.logDialogMsgQueryDeleteLog, context,
+                  title: t.commonsDialogTitleAreYouSure);
+              if (res == true) {
+                try {
+                  await DailyFiles.deleteLog(logFileN);
+                  // 1s warten, damit im Fall von heutigem Log das heutige File dann schon wieder erstellt wurde.
+                  await Future.delayed(const Duration(seconds: 1), () {});
+                } catch (err) {
+                  if (context.mounted) {
+                    Dialogs.simpleErrOkDialog(
+                        '${t.logDialogMsgErrorDeleteLogFailed}\n\n$err',
+                        context);
+                  }
+                }
+                final rebuildLogs = rebuildLogsView;
+                if (rebuildLogs != null) rebuildLogs();
+                if (context.mounted) Navigator.of(context).pop();
+              }
             },
             icon: const Icon(Icons.delete_outline),
           ),

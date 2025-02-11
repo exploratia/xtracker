@@ -46,6 +46,7 @@ class Dialogs {
         title: title ?? t!.commonsDialogTitleErrorOccurred);
   }
 
+  /// returns true|false=null (null in case of back-tap)
   static Future<bool?> simpleYesNoDialog(
     dynamic content,
     BuildContext context, {
