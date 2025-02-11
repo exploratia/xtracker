@@ -10,11 +10,11 @@ class HeroView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Dashboard')),
+      appBar: AppBar(title: const Text('Dashboard')),
       body: ListView(
         children: [
           ListTile(
-            title: Hero(
+            title: const Hero(
               tag: 'item1', // Tag should be unique
               child: Material(
                 color: Colors.transparent,
@@ -28,13 +28,13 @@ class HeroView extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => HeroDetail(itemId: 'item1'),
+                  builder: (context) => const HeroDetail(itemId: 'item1'),
                 ),
               );
             },
           ),
           ListTile(
-            title: Hero(
+            title: const Hero(
               tag: 'item2',
               child: Material(
                 color: Colors.transparent,
@@ -48,13 +48,13 @@ class HeroView extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => HeroDetail(itemId: 'item2'),
+                  builder: (context) => const HeroDetail(itemId: 'item2'),
                 ),
               );
             },
           ),
           ListTile(
-            title: Hero(
+            title: const Hero(
               tag: 'item3',
               child: Material(
                 color: Colors.transparent,
@@ -68,7 +68,7 @@ class HeroView extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => HeroDetail(itemId: 'item3'),
+                  builder: (context) => const HeroDetail(itemId: 'item3'),
                 ),
               );
             },

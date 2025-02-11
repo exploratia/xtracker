@@ -16,7 +16,7 @@ class HeroDetail extends StatelessWidget {
             color: Colors.transparent,
             child: Text(
               'Details for $itemId',
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
             ),
           ),
         ),

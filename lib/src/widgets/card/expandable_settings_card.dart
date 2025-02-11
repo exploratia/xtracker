@@ -50,7 +50,7 @@ class _ExpandableSettingsCardState extends State<ExpandableSettingsCard> {
             firstChild: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 const Divider(),
                 widget.content,
               ],

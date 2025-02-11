@@ -44,9 +44,9 @@ class SettingsCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _buildTitle(context),
-                  if (showDivider) SizedBox(height: 10),
+                  if (showDivider) const SizedBox(height: 10),
                   if (showDivider) const Divider(),
-                  if (showDivider) SizedBox(height: 10),
+                  if (showDivider) const SizedBox(height: 10),
                   Column(
                     crossAxisAlignment: childrenColumnCrossAxisAlignment,
                     spacing: spacing,
