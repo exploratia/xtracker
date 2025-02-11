@@ -24,7 +24,7 @@ class GlowingBorderContainer extends StatelessWidget {
     return Container(
       // width: width,
       // height: height,
-      margin: const EdgeInsets.all(20),
+      margin: EdgeInsets.all(blurRadius),
       decoration: BoxDecoration(
         color: themeData.scaffoldBackgroundColor, // Inner background color
         borderRadius: BorderRadius.circular(12),

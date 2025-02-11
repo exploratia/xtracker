@@ -3,10 +3,9 @@ import 'package:provider/provider.dart';
 
 import '../../providers/series_provider.dart';
 import '../../util/dialogs.dart';
-import '../card/glowing_border_container.dart';
 import '../layout/v_centered_single_child_scroll_view_with_scrollbar.dart';
-import '../select/icon_map.dart';
 import 'add_first_series.dart';
+import 'series_def_renderer.dart';
 
 class SeriesView extends StatefulWidget {
   const SeriesView({super.key});
@@ -49,7 +48,7 @@ class _SeriesViewState extends State<SeriesView> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const LinearProgressIndicator();
         } else if (snapshot.hasError) {
-          return Text(snapshot.error!.toString());
+          child = Text(snapshot.error!.toString());
         } else {
           child = const _SeriesList();
         }
@@ -72,22 +71,8 @@ class _SeriesList extends StatelessWidget {
     if (series.isEmpty) {
       return const AddFirstSeries();
     }
-    return Column(children: [
-      ...series.map((s) => GlowingBorderContainer(
-          glowColor: s.color,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              children: [
-                Row(
-                  children: [
-                    IconMap.icon(s.iconName),
-                    Text(s.name),
-                  ],
-                ),
-              ],
-            ),
-          )))
-    ]);
+    return Column(
+        spacing: 16,
+        children: [...series.map((s) => SeriesDefRenderer(seriesDef: s))]);
   }
 }

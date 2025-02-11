@@ -33,11 +33,22 @@
   "logSettingsLogLevelLabel": "Log level:",
   "logSettingsWriteTestLogMessagesLabel": "Write some test log messages:",
   "seriesAddFirstSeries": "Add first series...",
+  "seriesDialogMsgQueryDeleteSeries": "Do you really want to delete the series '{name}'?",
+  "@seriesDialogMsgQueryDeleteSeries": {
+    "description": "Delete query with given name.",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "blood pressure"
+      }
+    }
+  },
   "seriesEditTitle": "Series",
   "seriesEditSelectSeriesTypeLabel": "Select series type:",
   "seriesEditSeriesNameLabel": "Name",
   "seriesEditSeriesIconLabel": "Icon",
   "seriesEditSeriesColorLabel": "Color",
+  "seriesManagementTitle": "Series Management",
   "seriesSeriesTypeBloodPressure": "Blood pressure",
   "seriesSeriesTypeBloodPressureInfo": "Measure blood pressure 3 times a day.",
   "seriesSeriesTypeDailyCheck": "Daily check",
