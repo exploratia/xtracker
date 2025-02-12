@@ -9,6 +9,7 @@ import 'package:path_provider/path_provider.dart';
 
 import '../app_info.dart';
 
+/// Logging is not working in web!
 class DailyFiles {
   static Directory? _appDocumentsDir;
   static Directory? _tmpDir;
@@ -22,10 +23,19 @@ class DailyFiles {
   static bool _timerSet = false;
 
   static Future<void> init() async {
-    _appDocumentsDir = await getApplicationDocumentsDirectory();
-    _tmpDir = await getTemporaryDirectory();
-    final appDocDir = _appDocumentsDir;
-    if (appDocDir == null) return;
+    try {
+      _appDocumentsDir = await getApplicationDocumentsDirectory();
+      _tmpDir = await getTemporaryDirectory();
+    } catch (err) {
+      if (kDebugMode) {
+        print('Failed to get app documents dir! Started in browser?\n $err');
+      }
+    }
+    if (_appDocumentsDir == null) {
+      await _writeLogStart();
+      return;
+    }
+    final appDocDir = _appDocumentsDir!;
     var logsDir = Directory('${appDocDir.path}/logs');
     if (!(await logsDir.exists())) logsDir = await logsDir.create();
     _logsDir = logsDir;
@@ -115,10 +125,17 @@ class DailyFiles {
   }
 
   static Future<void> _writeToTodayFile(List<_MsgQueueItem> msgQueueItems) async {
-    final logsDir = _logsDir;
-    if (logsDir == null) return;
-
     if (msgQueueItems.isEmpty) return;
+
+    final logsDir = _logsDir;
+    if (logsDir == null) {
+      if (kDebugMode) {
+        for (var msgQueueItem in msgQueueItems) {
+          print('[${msgQueueItem.date} ${msgQueueItem.time}] ${msgQueueItem.text}');
+        }
+      }
+      return;
+    }
 
     var soFarDate = msgQueueItems.first.date;
     var todayLog = '$soFarDate.txt';
