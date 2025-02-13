@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../util/media_query_utils.dart';
+import 'device_layout_builder.dart';
 
 class DeviceDependentWidthConstrainedBox extends StatelessWidget {
   static const double tabletMaxWidth = 700;
@@ -12,19 +12,15 @@ class DeviceDependentWidthConstrainedBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mediaQueryInfo = MediaQueryUtils(MediaQuery.of(context));
-
-    if (mediaQueryInfo.isTablet) {
-      return ConstrainedBox(
-        // return Container(        color: Colors.red,
+    return DeviceLayoutBuilder(
+      phoneBuilder: (context) => child,
+      tabletBuilder: (context) => ConstrainedBox(
         constraints: const BoxConstraints(
           minWidth: tabletMinWidth,
           maxWidth: tabletMaxWidth,
         ),
         child: child,
-      );
-    }
-
-    return child;
+      ),
+    );
   }
 }

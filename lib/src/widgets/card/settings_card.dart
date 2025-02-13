@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../util/theme_utils.dart';
+import '../layout/center_horizontal.dart';
 import '../responsive/device_dependent_constrained_box.dart';
 
 class SettingsCard extends StatelessWidget {
@@ -31,33 +32,29 @@ class SettingsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      // center if more horizontal space is available
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        DeviceDependentWidthConstrainedBox(
-          child: Card(
-            // margin: const EdgeInsets.all(8.0),
-            child: Padding(
-              padding: ThemeUtils.cardPadding,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildTitle(context),
-                  if (showDivider) const SizedBox(height: 10),
-                  if (showDivider) const Divider(),
-                  if (showDivider) const SizedBox(height: 10),
-                  Column(
-                    crossAxisAlignment: childrenColumnCrossAxisAlignment,
-                    spacing: spacing,
-                    children: [...children],
-                  )
-                ],
-              ),
+    return CenterH(
+      child: DeviceDependentWidthConstrainedBox(
+        child: Card(
+          // margin: const EdgeInsets.all(8.0),
+          child: Padding(
+            padding: ThemeUtils.cardPadding,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                _buildTitle(context),
+                if (showDivider) const SizedBox(height: 10),
+                if (showDivider) const Divider(),
+                if (showDivider) const SizedBox(height: 10),
+                Column(
+                  crossAxisAlignment: childrenColumnCrossAxisAlignment,
+                  spacing: spacing,
+                  children: [...children],
+                )
+              ],
             ),
           ),
         ),
-      ],
+      ),
     );
   }
 }
