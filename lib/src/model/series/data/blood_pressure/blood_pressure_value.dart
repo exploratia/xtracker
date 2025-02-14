@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../../../../util/color_utils.dart';
+import '../series_data_value.dart';
 
-class BloodPressureValue {
-  final String uuid;
-  final DateTime dateTime;
-
+class BloodPressureValue extends SeriesDataValue {
   final int high;
   final int low;
 
-  BloodPressureValue(this.uuid, this.dateTime, this.high, this.low);
+  BloodPressureValue(super.uuid, super.dateTime, this.high, this.low);
 
   BloodPressureValue cloneWith(int high, int low) {
     return BloodPressureValue(uuid, dateTime, high, low);

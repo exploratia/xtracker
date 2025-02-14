@@ -6,7 +6,7 @@ import '../../widgets/series/edit/series_edit.dart';
 import 'series_type.dart';
 
 class SeriesDef {
-  final String uuid = const Uuid().v4();
+  final String uuid = const Uuid().v4().toString();
   final SeriesType seriesType;
   String name = "";
   Color color = Colors.red;
