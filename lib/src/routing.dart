@@ -17,26 +17,17 @@ import 'widgets/playground/sample_feature/sample_item_list_view.dart';
 class Routing {
   final SettingsController settingsController;
 
-  final Map<String, Widget> _routeMapping = {};
+  final Map<String, Widget> _mainNavigationRouteMapping = {};
 
   void _addMapping(Widget widget, NavigationItem navItem) {
-    _routeMapping[navItem.routeName] = widget;
+    _mainNavigationRouteMapping[navItem.routeName] = widget;
   }
 
   Routing(this.settingsController) {
-    // Build map for all Screens. Because of flutters code optimization we have to call every widget itself.
-    // No generic solution possible :(
+    // this order is also used in Nav
     _addMapping(const HomeScreen(), HomeScreen.navItem);
-
     _addMapping(const PlaygroundScreen(), PlaygroundScreen.navItem);
-
-    // administration
     _addMapping(const AdministrationScreen(), AdministrationScreen.navItem);
-    _addMapping(const LogsScreen(), LogsScreen.navItem);
-    _addMapping(const LogScreen(), LogScreen.navItem);
-    _addMapping(const LogSettingsScreen(), LogSettingsScreen.navItem);
-    _addMapping(const InfoScreen(), InfoScreen.navItem);
-    _addMapping(SettingsScreen(controller: settingsController), SettingsScreen.navItem);
   }
 
   Route<dynamic>? generateRoute(RouteSettings routeSettings) {
@@ -46,20 +37,24 @@ class Routing {
         String? routeName = routeSettings.name;
 
         if (routeName != null) {
-          var widget = _routeMapping[routeName];
+          var widget = _mainNavigationRouteMapping[routeName];
           if (widget != null) return widget;
         }
 
-        switch (routeSettings.name) {
-          // playground >>
-          case SampleItemDetailsView.routeName:
-            return const SampleItemDetailsView();
-          case SampleItemListView.routeName:
-            return const SampleItemListView();
-          case HeroView.routeName:
-            return const HeroView();
-          // << playground
-        }
+        // playground >>
+        if (routeName == PlaygroundScreen.navItem.routeName) return const PlaygroundScreen();
+        if (routeName == SampleItemDetailsView.routeName) return const SampleItemDetailsView();
+        if (routeName == SampleItemListView.routeName) return const SampleItemListView();
+        if (routeName == HeroView.routeName) return const HeroView();
+        // << playground
+        // administration >>
+        if (routeName == AdministrationScreen.navItem.routeName) return const AdministrationScreen();
+        if (routeName == LogsScreen.navItem.routeName) return const LogsScreen();
+        if (routeName == LogScreen.navItem.routeName) return const LogScreen();
+        if (routeName == LogSettingsScreen.navItem.routeName) return const LogSettingsScreen();
+        if (routeName == InfoScreen.navItem.routeName) return const InfoScreen();
+        if (routeName == SettingsScreen.navItem.routeName) return SettingsScreen(controller: settingsController);
+        // << administration
 
         // fallback
         return const HomeScreen();
