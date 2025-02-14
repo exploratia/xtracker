@@ -39,6 +39,9 @@
   "logSettingsLogFullStackLabel": "Log full stack:",
   "logSettingsLogLevelLabel": "Log level:",
   "logSettingsWriteTestLogMessagesLabel": "Write some test log messages:",
+  "patternDate": "M/d/yyyy",
+  "patternDateTime": "M/d/yyyy h:mm a",
+  "patternTime": "h:mm a",
   "seriesAddFirstSeries": "Add first series...",
   "seriesDialogMsgQueryDeleteSeries": "Do you really want to delete the series '{name}'?",
   "@seriesDialogMsgQueryDeleteSeries": {
