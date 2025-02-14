@@ -3,6 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 import 'model/navigation/navigation.dart';
+import 'providers/series_data_provider.dart';
 import 'providers/series_provider.dart';
 import 'routing.dart';
 import 'util/theme_utils.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         return MultiProvider(
           providers: [
             ChangeNotifierProvider(create: (context) => SeriesProvider()),
+            ChangeNotifierProvider(create: (context) => SeriesDataProvider()),
           ],
           child: MaterialApp(
             // Providing a restorationScopeId allows the Navigator built by the
