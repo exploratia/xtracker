@@ -4,11 +4,16 @@ import '../../../../util/color_utils.dart';
 
 class BloodPressureValue {
   final String uuid;
+  final DateTime dateTime;
 
   final int high;
   final int low;
 
-  BloodPressureValue(this.uuid, this.high, this.low);
+  BloodPressureValue(this.uuid, this.dateTime, this.high, this.low);
+
+  BloodPressureValue cloneWith(int high, int low) {
+    return BloodPressureValue(uuid, dateTime, high, low);
+  }
 
   static Color bestPossibleValueColor = const Color.fromRGBO(0, 160, 0, 1);
 

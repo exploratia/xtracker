@@ -5,17 +5,20 @@ import 'package:uuid/uuid.dart';
 import '../../../../../model/series/data/blood_pressure/blood_pressure_value.dart';
 import '../../../../../model/series/series_def.dart';
 import '../../../../../model/series/series_type.dart';
+import '../../../../../util/date_time_utils.dart';
 
 class BloodPressureQuickInput extends StatefulWidget {
-  const BloodPressureQuickInput({super.key});
+  const BloodPressureQuickInput({super.key, this.bloodPressureValue});
 
-  static Future<BloodPressureValue?> showInputDlg(BuildContext context, SeriesDef seriesDef) async {
+  final BloodPressureValue? bloodPressureValue;
+
+  static Future<BloodPressureValue?> showInputDlg(BuildContext context, SeriesDef seriesDef, {BloodPressureValue? bloodPressureValue}) async {
     final t = AppLocalizations.of(context)!;
     return await showDialog<BloodPressureValue>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: Text(SeriesType.displayNameOf(seriesDef.seriesType, t)),
-        content: const BloodPressureQuickInput(),
+        content: BloodPressureQuickInput(bloodPressureValue: bloodPressureValue),
         actions: [
           TextButton(
             onPressed: () {
@@ -33,11 +36,19 @@ class BloodPressureQuickInput extends StatefulWidget {
 }
 
 class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
+  late DateTime dateTime;
+
   int _high = 120;
   int _highRough = 120;
   int _low = 80;
   int _lowRough = 80;
   _DialogStep _dialogStep = _DialogStep.highRough;
+
+  @override
+  initState() {
+    dateTime = widget.bloodPressureValue?.dateTime ?? DateTime.now();
+    super.initState();
+  }
 
   _setStep(_DialogStep step) {
     setState(() {
@@ -62,7 +73,12 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
   _setLow(int value) {
     setState(() {
       _low = _lowRough + value;
-      var val = BloodPressureValue(const Uuid().v4(), _high, _low);
+      BloodPressureValue val;
+      if (widget.bloodPressureValue != null) {
+        val = widget.bloodPressureValue!.cloneWith(_high, _low);
+      } else {
+        val = BloodPressureValue(const Uuid().v4(), dateTime, _high, _low);
+      }
       Navigator.pop(context, val);
     });
   }
@@ -83,6 +99,8 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
         child: Column(
           spacing: 10,
           children: [
+            _DateTimeHeader(dateTime: dateTime),
+            const Divider(height: 1),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -91,6 +109,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
               ],
             ),
             const Divider(height: 1),
+            const SizedBox(height: 3),
             _ValBtnRow(values: [14, 15, 16], setValue: _setHighRough, dialogStep: _dialogStep),
             _ValBtnRow(values: [11, 12, 13], setValue: _setHighRough, dialogStep: _dialogStep),
             _ValBtnRow(values: [8, 9, 10], setValue: _setHighRough, dialogStep: _dialogStep),
@@ -103,6 +122,8 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
         child: Column(
           spacing: 10,
           children: [
+            _DateTimeHeader(dateTime: dateTime),
+            const Divider(height: 1),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -111,6 +132,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
               ],
             ),
             const Divider(height: 1),
+            const SizedBox(height: 3),
             _ValBtnRow(values: [7, 8, 9], setValue: _setHigh, roughVal: _highRough, dialogStep: _dialogStep),
             _ValBtnRow(values: [4, 5, 6], setValue: _setHigh, roughVal: _highRough, dialogStep: _dialogStep),
             _ValBtnRow(values: [1, 2, 3], setValue: _setHigh, roughVal: _highRough, dialogStep: _dialogStep),
@@ -123,6 +145,8 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
         child: Column(
           spacing: 10,
           children: [
+            _DateTimeHeader(dateTime: dateTime),
+            const Divider(height: 1),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -131,6 +155,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
               ],
             ),
             const Divider(height: 1),
+            const SizedBox(height: 3),
             _ValBtnRow(values: [10, 11, 12], setValue: _setLowRough, dialogStep: _dialogStep),
             _ValBtnRow(values: [7, 8, 9], setValue: _setLowRough, dialogStep: _dialogStep),
             _ValBtnRow(values: [4, 5, 6], setValue: _setLowRough, dialogStep: _dialogStep),
@@ -143,6 +168,8 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
         child: Column(
           spacing: 10,
           children: [
+            _DateTimeHeader(dateTime: dateTime),
+            const Divider(height: 1),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -151,6 +178,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
               ],
             ),
             const Divider(height: 1),
+            const SizedBox(height: 3),
             _ValBtnRow(values: [7, 8, 9], setValue: _setLow, roughVal: _lowRough, dialogStep: _dialogStep),
             _ValBtnRow(values: [4, 5, 6], setValue: _setLow, roughVal: _lowRough, dialogStep: _dialogStep),
             _ValBtnRow(values: [1, 2, 3], setValue: _setLow, roughVal: _lowRough, dialogStep: _dialogStep),
@@ -161,6 +189,26 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
     }
 
     return const Placeholder();
+  }
+}
+
+class _DateTimeHeader extends StatelessWidget {
+  const _DateTimeHeader({
+    required this.dateTime,
+  });
+
+  final DateTime dateTime;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      spacing: 20,
+      children: [
+        Text(DateTimeUtils.formateDate(dateTime)),
+        Text(DateTimeUtils.formateTime(dateTime)),
+      ],
+    );
   }
 }
 
