@@ -6,6 +6,10 @@
   "@appTitle": {
     "description": "The title of the application"
   },
+  "bloodPressureInputDiastolicRoughTitle": "▽... diastolisch [mmHg]",
+  "bloodPressureInputDiastolicFineTitle": "...▽ diastolisch [mmHg]",
+  "bloodPressureInputSystolicRoughTitle": "△... systolisch [mmHg]",
+  "bloodPressureInputSystolicFineTitle": "...△ systolisch [mmHg]",
   "commonsDialogTitleAreYouSure": "Sicher?",
   "commonsDialogTitleErrorOccurred": "Fehler",
   "commonsDialogBtnCancel": "Abbrechen",

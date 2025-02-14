@@ -12,7 +12,7 @@ class SeriesDef {
   Color color = Colors.red;
   String iconName = "";
 
-  SeriesDef({required this.seriesType})
+  SeriesDef({required this.seriesType, this.name = ""})
       : color = seriesType.color,
         iconName = seriesType.iconName;
 

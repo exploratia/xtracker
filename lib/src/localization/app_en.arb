@@ -6,6 +6,13 @@
   "@appTitle": {
     "description": "The title of the application"
   },
+  "bloodPressureInputDiastolicRoughTitle": "▽... diastolic [mmHg]",
+  "@bloodPressureInputDiastolicRoughTitle": {
+    "source": "https://www.compart.com/de/unicode/U+25BC"
+  },
+  "bloodPressureInputDiastolicFineTitle": "...▽ diastolic [mmHg]",
+  "bloodPressureInputSystolicRoughTitle": "△... systolic [mmHg]",
+  "bloodPressureInputSystolicFineTitle": "...△ systolic [mmHg]",
   "commonsDialogTitleAreYouSure": "Are you sure?",
   "commonsDialogTitleErrorOccurred": "An Error Occurred",
   "commonsDialogBtnCancel": "Cancel",

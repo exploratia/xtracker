@@ -8,7 +8,7 @@ import '../util/globals.dart';
 import '../widgets/layout/gradient_app_bar.dart';
 import '../widgets/navigation/hide_bottom_navigation_bar.dart';
 import '../widgets/responsive/screen_builder.dart';
-import '../widgets/series/series_management_view.dart';
+import '../widgets/series/management/series_management_view.dart';
 import '../widgets/series/series_view.dart';
 
 class HomeScreen extends StatelessWidget {

@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
-import '../../providers/series_provider.dart';
-import '../responsive/device_dependent_constrained_box.dart';
-import 'series_def_renderer.dart';
+import '../../../providers/series_provider.dart';
+import '../../responsive/device_dependent_constrained_box.dart';
+import '../series_def_renderer.dart';
 
 class SeriesManagementView extends StatelessWidget {
   const SeriesManagementView({super.key});
@@ -39,7 +39,7 @@ class _SeriesList extends StatelessWidget {
       children: [
         ...series.map((s) => SeriesDefRenderer(
               key: Key(s.uuid),
-              editMode: true,
+              managementMode: true,
               seriesDef: s,
             )),
       ],
