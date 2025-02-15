@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../widgets/responsive/device_dependent_constrained_box.dart';
+
 class Dialogs {
   /// Dismiss | hide | remove OnScreenKeyboard
   static void dismissKeyboard(BuildContext context) {
@@ -104,7 +106,7 @@ class Dialogs {
     Widget? contentWidget;
     if (content != null) {
       if (content is String) {
-        contentWidget = Text(content);
+        contentWidget = DeviceDependentWidthConstrainedBox(child: Text(content));
       } else if (content is Widget) {
         contentWidget = content;
       } else {
