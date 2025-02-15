@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../widgets/navigation/hide_bottom_navigation_bar.dart';
+import '../../widgets/select/icon_map.dart';
 import '../../widgets/series/edit/series_edit.dart';
 import 'series_type.dart';
 
@@ -19,6 +20,14 @@ class SeriesDef {
   @override
   String toString() {
     return 'SeriesDef{uuid: $uuid, seriesType: $seriesType, name: $name, color: $color, iconName: $iconName}';
+  }
+
+  Icon icon() {
+    return Icon(iconData(), color: color);
+  }
+
+  IconData iconData() {
+    return IconMap.iconData(iconName);
   }
 
   static Future<SeriesDef?> addNewSeries(BuildContext context) async {

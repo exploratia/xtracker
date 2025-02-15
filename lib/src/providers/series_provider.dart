@@ -18,9 +18,16 @@ class SeriesProvider with ChangeNotifier {
   }
 
   Future<void> _get() async {
+    // await Future.delayed(const Duration(seconds: 10)); // for testing
     // TODO load from files
     print('TODO get from files');
-    _series ??= [];
+    _series ??= [
+      // SeriesDef(
+      //     seriesType: SeriesType.bloodPressure,
+      //     name: "1 mit sehr sehr sehr sehr sehr sehr viel sehr sehr sehr sehr sehr sehr und noch Mehr sehr sehr sehr sehr sehr sehr viel Text"),
+      // SeriesDef(seriesType: SeriesType.bloodPressure, name: '2'),
+    ]; // for dev add one directly
+    // _series ??= [];
     // todo sort by phone storage order
     return;
   }
@@ -45,6 +52,10 @@ class SeriesProvider with ChangeNotifier {
   List<SeriesDef> get series {
     if (_series == null) return [];
     return [..._series!];
+  }
+
+  SeriesDef? getSeries(String seriesUuid) {
+    return series.firstWhere((s) => s.uuid == seriesUuid);
   }
 
   Future<void> add(SeriesDef seriesDef) async {

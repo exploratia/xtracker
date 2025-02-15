@@ -6,35 +6,17 @@ import '../../util/dialogs.dart';
 import '../layout/v_centered_single_child_scroll_view_with_scrollbar.dart';
 import '../responsive/device_dependent_constrained_box.dart';
 import 'add_first_series.dart';
+import 'data_provider_loader.dart';
 import 'series_def_renderer.dart';
 
-class SeriesView extends StatefulWidget {
+class SeriesView extends StatelessWidget {
   const SeriesView({super.key});
 
-  @override
-  State<SeriesView> createState() => _SeriesViewState();
-}
-
-class _SeriesViewState extends State<SeriesView> {
-  late Future _dataProviderFuture;
-
-  Future _obtainDataProviderFuture() {
-    return context.read<SeriesProvider>().fetchDataIfNotYetLoaded();
-  }
-
-  @override
-  void initState() {
-    // Falls build aufgrund anderer state-Aenderungen mehrmals ausgefuehrt wuerde.
-    // Future nur einmal ausfuehren und speichern.
-    _dataProviderFuture = _obtainDataProviderFuture();
-    super.initState();
-  }
-
-  Future<void> onRefresh() async {
+  Future<void> onRefresh(BuildContext context) async {
     try {
       await context.read<SeriesProvider>().fetchData();
     } catch (e) {
-      if (mounted) {
+      if (context.mounted) {
         await Dialogs.simpleErrOkDialog(e.toString(), context);
       }
     }
@@ -42,23 +24,12 @@ class _SeriesViewState extends State<SeriesView> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: _dataProviderFuture,
-      builder: (context, snapshot) {
-        Widget child;
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const LinearProgressIndicator();
-        } else if (snapshot.hasError) {
-          child = Text(snapshot.error!.toString());
-        } else {
-          child = const _SeriesList();
-        }
-
-        return VCenteredSingleChildScrollViewWithScrollbar(
-          onRefreshCallback: onRefresh,
-          child: child,
-        );
-      },
+    return DataProviderLoader(
+      obtainDataProviderFuture: context.read<SeriesProvider>().fetchDataIfNotYetLoaded(),
+      child: VCenteredSingleChildScrollViewWithScrollbar(
+        onRefreshCallback: () => onRefresh(context),
+        child: const _SeriesList(),
+      ),
     );
   }
 }

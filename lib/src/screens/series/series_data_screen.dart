@@ -1,13 +1,19 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../model/navigation/navigation_item.dart';
+import '../../model/series/data/series_data.dart';
+import '../../model/series/series_def.dart';
+import '../../providers/series_provider.dart';
 import '../../util/globals.dart';
+import '../../widgets/layout/centered_message.dart';
 import '../../widgets/layout/gradient_app_bar.dart';
 import '../../widgets/responsive/screen_builder.dart';
 import '../../widgets/series/data/series_data_view.dart';
+import '../../widgets/series/data_provider_loader.dart';
 
 class SeriesDataScreen extends StatelessWidget {
   static NavigationItem navItem = NavigationItem(
@@ -22,29 +28,100 @@ class SeriesDataScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = AppLocalizations.of(context)!;
-
     String seriesUuid = Globals.invalid;
     var seriesParameterValue = args['series'];
     if (seriesParameterValue is String) {
       if (Uuid.isValidUUID(fromString: seriesParameterValue)) {
         seriesUuid = seriesParameterValue;
       } else if (kDebugMode) {
-        print('Got invalid series uuid!');
+        print('Got invalid arg series uuid!');
       }
     }
 
+    return _ScreenBuilder(seriesUuid: seriesUuid);
+  }
+}
+
+class _ScreenBuilder extends StatefulWidget {
+  const _ScreenBuilder({required this.seriesUuid});
+
+  final String seriesUuid;
+
+  @override
+  State<_ScreenBuilder> createState() => _ScreenBuilderState();
+}
+
+class _ScreenBuilderState extends State<_ScreenBuilder> {
+  SeriesDef? _seriesDef;
+
+  void _setSeriesDef(SeriesDef seriesDef) {
+    setState(() {
+      _seriesDef = seriesDef;
+    });
+  }
+
+  void _addSeriesValueHandler(BuildContext context) async {
+    await SeriesData.showSeriesDataInputDlg(context, _seriesDef!);
+    setState(() {});
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
+    NavigationItem navItem = SeriesDataScreen.navItem;
+
+    String title = _seriesDef?.name ?? navItem.titleBuilder(t);
+
     Widget view;
-    if (seriesUuid == Globals.invalid) {
-      view = Center(child: Text(seriesUuid));
+    if (widget.seriesUuid == Globals.invalid) {
+      view = const CenteredMessage(message: 'Got invalid series id!');
     } else {
-      view = SeriesDataView(seriesUuid: seriesUuid);
+      view = DataProviderLoader(
+        obtainDataProviderFuture: context.read<SeriesProvider>().fetchDataIfNotYetLoaded(),
+        child: _SeriesDataViewTitleWrapper(
+          seriesUuid: widget.seriesUuid,
+          setSeriesDef: _setSeriesDef,
+          appBarTitle: title,
+        ),
+      );
+    }
+
+    List<Widget> actions = [];
+    if (_seriesDef != null) {
+      actions = [IconButton(onPressed: () => _addSeriesValueHandler(context), icon: const Icon(Icons.add))];
     }
 
     return ScreenBuilder.withStandardNavBuilders(
       navItem: navItem,
-      appBarBuilder: (context) => GradientAppBar.build(context, addLeadingBackBtn: true, title: Text(navItem.titleBuilder(t))),
+      appBarBuilder: (context) => GradientAppBar.build(context, addLeadingBackBtn: true, title: Text(title), actions: actions),
       bodyBuilder: (context) => view,
     );
+  }
+}
+
+/// read series def from provider -> set AppBar title and then show series data
+class _SeriesDataViewTitleWrapper extends StatelessWidget {
+  const _SeriesDataViewTitleWrapper({required this.seriesUuid, required this.setSeriesDef, required this.appBarTitle});
+
+  final String seriesUuid;
+  final String appBarTitle;
+
+  final Function(SeriesDef seriesDef) setSeriesDef;
+
+  @override
+  Widget build(BuildContext context) {
+    SeriesDef? seriesDef = context.read<SeriesProvider>().getSeries(seriesUuid);
+
+    if (seriesDef == null) {
+      return const CenteredMessage(message: 'No series found for given id!');
+    }
+
+    // set title and actions if not already correct
+    if (appBarTitle != seriesDef.name) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => setSeriesDef(seriesDef));
+      return Container();
+    }
+
+    return SeriesDataView(seriesDef: seriesDef);
   }
 }
