@@ -41,7 +41,7 @@ class _ShowSeriesDataBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     showDataHandler() async {
-      await Navigator.pushNamed(context, SeriesDataScreen.navItem.routeName, arguments: seriesDef.uuid);
+      await Navigator.pushNamed(context, SeriesDataScreen.navItem.routeName, arguments: {'series': seriesDef.uuid});
     }
 
     return IconButton(onPressed: showDataHandler, icon: const Icon(Icons.area_chart_outlined));
