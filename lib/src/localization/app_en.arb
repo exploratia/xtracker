@@ -43,6 +43,10 @@
   "patternDateTime": "M/d/yyyy h:mm a",
   "patternTime": "h:mm a",
   "seriesAddFirstSeries": "Add first series...",
+  "seriesDataTitle": "Series",
+  "@seriesDataTitle": {
+    "description": "Fallback title. Title should be the name of the series."
+  },
   "seriesDialogMsgQueryDeleteSeries": "Do you really want to delete the series '{name}'?",
   "@seriesDialogMsgQueryDeleteSeries": {
     "description": "Delete query with given name.",

@@ -9,6 +9,8 @@ import 'screens/administration/logs_screen.dart';
 import 'screens/administration/settings_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/playground_screen.dart';
+import 'screens/series/series_data_screen.dart';
+import 'util/logging/flutter_simple_logging.dart';
 import 'widgets/administration/settings/settings_controller.dart';
 import 'widgets/playground/hero/hero_view.dart';
 import 'widgets/playground/sample_feature/sample_item_details_view.dart';
@@ -35,10 +37,24 @@ class Routing {
       settings: routeSettings,
       builder: (BuildContext context) {
         String? routeName = routeSettings.name;
+        Map<String, dynamic> args = {};
 
         if (routeName != null) {
+          // Handle parameters
+          try {
+            var uri = Uri.parse('https://domain.com$routeName');
+            routeName = uri.path;
+            args = uri.queryParameters;
+          } catch (err) {
+            SimpleLogging.w('Failed to parse route uri!', error: err);
+          }
+          // main navigation?
           var widget = _mainNavigationRouteMapping[routeName];
           if (widget != null) return widget;
+        }
+
+        if (routeSettings.arguments is Map<String, dynamic>) {
+          args = routeSettings.arguments as Map<String, dynamic>;
         }
 
         // playground >>
@@ -55,6 +71,9 @@ class Routing {
         if (routeName == InfoScreen.navItem.routeName) return const InfoScreen();
         if (routeName == SettingsScreen.navItem.routeName) return SettingsScreen(controller: settingsController);
         // << administration
+        // series >>
+        if (routeName == SeriesDataScreen.navItem.routeName) return SeriesDataScreen(args: args);
+        // << series
 
         // fallback
         return const HomeScreen();

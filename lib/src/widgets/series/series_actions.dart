@@ -3,7 +3,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../model/series/series_def.dart';
 import '../../model/series/series_type.dart';
-import '../../util/dialogs.dart';
+import '../../screens/series/series_data_screen.dart';
 import 'data/input/blood_pressure/blood_pressure_quick_input.dart';
 
 class SeriesActions extends StatelessWidget {
@@ -41,21 +41,7 @@ class _ShowSeriesDataBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     showDataHandler() async {
-      bool? res = await Dialogs.simpleYesNoDialog(
-        'TODO show Series data', // TODO show data
-        context,
-      );
-      if (res == true) {
-        try {
-          // if (context.mounted) {
-          //   await context.read<SeriesProvider>().remove(seriesDef);
-          // }
-        } catch (err) {
-          if (context.mounted) {
-            Dialogs.simpleErrOkDialog('$err', context);
-          }
-        }
-      }
+      await Navigator.pushNamed(context, SeriesDataScreen.navItem.routeName, arguments: seriesDef.uuid);
     }
 
     return IconButton(onPressed: showDataHandler, icon: const Icon(Icons.area_chart_outlined));
@@ -74,27 +60,19 @@ class _ShowSeriesDataInputDlgBtn extends StatelessWidget {
     final t = AppLocalizations.of(context)!;
 
     showDlgHandler() async {
-      bool? res = false;
-      if (seriesDef.seriesType == SeriesType.bloodPressure) {
-        var val = await BloodPressureQuickInput.showInputDlg(context, seriesDef);
-        print(val);
-      } else {
-        res = await Dialogs.simpleYesNoDialog(
-          'TODO show edit dlg ${seriesDef.seriesType}', // TODO
-          context,
-          title: t.commonsDialogTitleAreYouSure,
-        );
-        if (res == true) {
-          try {
-            // if (context.mounted) {
-            //   await context.read<SeriesProvider>().remove(seriesDef);
-            // }
-          } catch (err) {
-            if (context.mounted) {
-              Dialogs.simpleErrOkDialog('$err', context);
-            }
-          }
-        }
+      switch (seriesDef.seriesType) {
+        case SeriesType.bloodPressure:
+          var val = await BloodPressureQuickInput.showInputDlg(context, seriesDef);
+          print(val);
+        case SeriesType.dailyCheck:
+          // TODO: Handle this case.
+          throw UnimplementedError();
+        case SeriesType.monthly:
+          // TODO: Handle this case.
+          throw UnimplementedError();
+        case SeriesType.free:
+          // TODO: Handle this case.
+          throw UnimplementedError();
       }
     }
 
