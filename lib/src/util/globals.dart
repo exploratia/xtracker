@@ -7,6 +7,8 @@ class Globals {
   static const assetImgBackground = 'assets/images/logos/app_logo.png';
   static const assetImgAppLogoWhite = 'assets/images/logos/app_logo_white.png';
 
+  static const invalid = 'INVALID';
+
   static void goToHome(BuildContext context) {
     Navigator.of(context).pushNamedAndRemoveUntil('/', (Route<dynamic> route) => false);
   }
