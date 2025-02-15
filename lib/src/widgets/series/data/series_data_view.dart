@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../model/series/series_def.dart';
 import '../../../providers/series_data_provider.dart';
 import '../../layout/centered_message.dart';
-import '../data_provider_loader.dart';
+import '../../provider/data_provider_loader.dart';
 
 class SeriesDataView extends StatelessWidget {
   const SeriesDataView({super.key, required this.seriesDef});

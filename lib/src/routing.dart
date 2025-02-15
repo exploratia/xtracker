@@ -26,7 +26,7 @@ class Routing {
   }
 
   Routing(this.settingsController) {
-    // this order is also used in Nav
+    // this order (order of instantiation) is also used in Nav
     _addMapping(const HomeScreen(), HomeScreen.navItem);
     _addMapping(const PlaygroundScreen(), PlaygroundScreen.navItem);
     _addMapping(const AdministrationScreen(), AdministrationScreen.navItem);

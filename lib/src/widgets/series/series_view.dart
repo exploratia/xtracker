@@ -4,9 +4,9 @@ import 'package:provider/provider.dart';
 import '../../providers/series_provider.dart';
 import '../../util/dialogs.dart';
 import '../layout/v_centered_single_child_scroll_view_with_scrollbar.dart';
+import '../provider/data_provider_loader.dart';
 import '../responsive/device_dependent_constrained_box.dart';
 import 'add_first_series.dart';
-import 'data_provider_loader.dart';
 import 'series_def_renderer.dart';
 
 class SeriesView extends StatelessWidget {

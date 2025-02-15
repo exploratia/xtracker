@@ -13,7 +13,7 @@ import '../../widgets/layout/centered_message.dart';
 import '../../widgets/layout/gradient_app_bar.dart';
 import '../../widgets/responsive/screen_builder.dart';
 import '../../widgets/series/data/series_data_view.dart';
-import '../../widgets/series/data_provider_loader.dart';
+import '../../widgets/provider/data_provider_loader.dart';
 
 class SeriesDataScreen extends StatelessWidget {
   static NavigationItem navItem = NavigationItem(
