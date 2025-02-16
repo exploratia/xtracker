@@ -4,16 +4,6 @@ Generic tracker app
 
 Skeleton by flutter create --org com.yourdomain -t skeleton your_app_name
 
-## Getting Started
-
-This project is a starting point for a Flutter application that follows the
-[simple app state management
-tutorial](https://flutter.dev/to/state-management-sample).
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
-
 ## Assets
 
 The `assets` directory houses images, fonts, and any other files you want to
@@ -79,6 +69,11 @@ https://pub.dev/packages/provider
 ### Launcher icon (dev)
 
 https://pub.dev/packages/flutter_launcher_icons
+
+## App Icon
+
+resources/`app_icon_source.png`
+Save origin img as 192px and then increase (not resize) image to 432px
 
 ## Create Launcher Icons
 
