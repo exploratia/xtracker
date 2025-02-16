@@ -7,13 +7,15 @@ import 'package:uuid/uuid.dart';
 import '../../model/navigation/navigation_item.dart';
 import '../../model/series/data/series_data.dart';
 import '../../model/series/series_def.dart';
+import '../../model/series/view_type.dart';
 import '../../providers/series_provider.dart';
 import '../../util/globals.dart';
+import '../../widgets/layout/app_bar_actions_divider.dart';
 import '../../widgets/layout/centered_message.dart';
 import '../../widgets/layout/gradient_app_bar.dart';
-import '../../widgets/responsive/screen_builder.dart';
-import '../../widgets/series/data/series_data_view.dart';
 import '../../widgets/provider/data_provider_loader.dart';
+import '../../widgets/responsive/screen_builder.dart';
+import '../../widgets/series/data/view/series_data_view.dart';
 
 class SeriesDataScreen extends StatelessWidget {
   static NavigationItem navItem = NavigationItem(
@@ -53,10 +55,18 @@ class _ScreenBuilder extends StatefulWidget {
 
 class _ScreenBuilderState extends State<_ScreenBuilder> {
   SeriesDef? _seriesDef;
+  ViewType _viewType = ViewType.chart;
 
   void _setSeriesDef(SeriesDef seriesDef) {
     setState(() {
       _seriesDef = seriesDef;
+      _viewType = seriesDef.seriesType.viewTypes.first;
+    });
+  }
+
+  void _setViewType(ViewType viewType) {
+    setState(() {
+      _viewType = viewType;
     });
   }
 
@@ -75,6 +85,7 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
     Widget view;
     if (widget.seriesUuid == Globals.invalid) {
       view = const CenteredMessage(message: 'Got invalid series id!');
+      // WidgetsBinding.instance.addPostFrameCallback((_) => Navigator.pop(context));
     } else {
       view = DataProviderLoader(
         obtainDataProviderFuture: context.read<SeriesProvider>().fetchDataIfNotYetLoaded(),
@@ -82,13 +93,21 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
           seriesUuid: widget.seriesUuid,
           setSeriesDef: _setSeriesDef,
           appBarTitle: title,
+          viewType: _viewType,
         ),
       );
     }
 
     List<Widget> actions = [];
     if (_seriesDef != null) {
-      actions = [IconButton(onPressed: () => _addSeriesValueHandler(context), icon: const Icon(Icons.add))];
+      actions = [
+        // TODO conditional depending on chart switches: const AppBarActionsDivider(),
+        // show buttons for all available view types without the active one
+        ..._seriesDef!.seriesType.viewTypes.where((vt) => vt != _viewType).map((vt) => IconButton(onPressed: () => _setViewType(vt), icon: Icon(vt.iconData))),
+        const AppBarActionsDivider(),
+        // add value btn
+        IconButton(onPressed: () => _addSeriesValueHandler(context), icon: const Icon(Icons.add)),
+      ];
     }
 
     return ScreenBuilder.withStandardNavBuilders(
@@ -101,12 +120,13 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
 
 /// read series def from provider -> set AppBar title and then show series data
 class _SeriesDataViewTitleWrapper extends StatelessWidget {
-  const _SeriesDataViewTitleWrapper({required this.seriesUuid, required this.setSeriesDef, required this.appBarTitle});
+  const _SeriesDataViewTitleWrapper({required this.seriesUuid, required this.setSeriesDef, required this.appBarTitle, required this.viewType});
 
   final String seriesUuid;
   final String appBarTitle;
 
   final Function(SeriesDef seriesDef) setSeriesDef;
+  final ViewType viewType;
 
   @override
   Widget build(BuildContext context) {
@@ -122,6 +142,9 @@ class _SeriesDataViewTitleWrapper extends StatelessWidget {
       return Container();
     }
 
-    return SeriesDataView(seriesDef: seriesDef);
+    return SeriesDataView(
+      seriesDef: seriesDef,
+      viewType: viewType,
+    );
   }
 }
