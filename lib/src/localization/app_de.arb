@@ -41,6 +41,7 @@
   "patternTime": "H:mm",
   "seriesAddFirstSeries": "Erste Messreihe erstellen...",
   "seriesDataTitle": "Messreihe",
+  "seriesDataNoData": "Diese Messreihe enthält noch keine Daten...",
   "seriesDialogMsgQueryDeleteSeries": "Wirklich die Messreihe '{name}' löschen?",
   "seriesEditTitle": "Messreihe",
   "seriesEditSeriesNameLabel": "Name",

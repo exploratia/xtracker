@@ -47,6 +47,7 @@
   "@seriesDataTitle": {
     "description": "Fallback title. Title should be the name of the series."
   },
+  "seriesDataNoData": "This series contains no data yet...",
   "seriesDialogMsgQueryDeleteSeries": "Do you really want to delete the series '{name}'?",
   "@seriesDialogMsgQueryDeleteSeries": {
     "description": "Delete query with given name.",
