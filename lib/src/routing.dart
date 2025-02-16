@@ -43,7 +43,7 @@ class Routing {
           // Handle parameters
           try {
             var uri = Uri.parse('https://domain.com$routeName');
-            routeName = uri.path;
+            // routeName = uri.path;
             args = uri.queryParameters;
           } catch (err) {
             SimpleLogging.w('Failed to parse route uri!', error: err);

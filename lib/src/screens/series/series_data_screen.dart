@@ -20,7 +20,7 @@ import '../../widgets/series/data/view/series_data_view.dart';
 class SeriesDataScreen extends StatelessWidget {
   static NavigationItem navItem = NavigationItem(
     icon: const Icon(Icons.settings_outlined),
-    routeName: '/series/data',
+    routeName: '/series_data',
     titleBuilder: (t) => t.seriesDataTitle,
   );
 
