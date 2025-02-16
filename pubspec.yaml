@@ -60,9 +60,9 @@ flutter:
   assets:
     # Add assets from the images directory to the application.
     - assets/images/
-    - assets/images/logos/eagle_logo.jpg
-    - assets/images/logos/ca_logo.jpg
-    - assets/images/logos/exploratia_logo.jpg
+    - assets/images/logos/eagle_logo.png
+    - assets/images/logos/ca_logo.png
+    - assets/images/logos/exploratia_logo.png
     - assets/images/logos/app_logo.png
     - assets/images/logos/app_logo_white.png
 

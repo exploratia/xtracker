@@ -25,12 +25,12 @@ class InfoView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             spacing: 10,
             children: [
-              EagleLogo(),
               CaLogo(),
               ExploratiaLogo(),
+              EagleLogo(),
             ],
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 20),
           SizedBox(
             height: 96,
             width: 96,
@@ -41,7 +41,7 @@ class InfoView extends StatelessWidget {
               ),
             ),
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 20),
           const _AppInfoCard(),
         ],
       ),
@@ -55,10 +55,10 @@ class _AppInfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var rows = [
-      [const CaLogo(radius: 16), OverflowText('${DateFormat('yyyy').format(DateTime.now())} \u00a9 Christian Adler')],
-      [const ExploratiaLogo(radius: 16), const OverflowText(maxLines: 100, 'https://www.exploratia.de')],
+      [const CaLogo(radius: 16, backgroundColor: Colors.white), OverflowText('${DateFormat('yyyy').format(DateTime.now())} \u00a9 Christian Adler')],
+      [const ExploratiaLogo(radius: 16, backgroundColor: Colors.white), const OverflowText(maxLines: 100, 'https://www.exploratia.de')],
       [
-        const EagleLogo(radius: 16),
+        const EagleLogo(radius: 16, backgroundColor: Colors.white),
         const OverflowText('https://www.adlers-online.de'),
       ],
     ];

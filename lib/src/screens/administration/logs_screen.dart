@@ -42,7 +42,7 @@ class _LogsScreenState extends State<LogsScreen> {
       appBarBuilder: (context) => GradientAppBar.build(
         context,
         addLeadingBackBtn: true,
-        title: Text(LogScreen.navItem.titleBuilder(t)),
+        title: Text(LogsScreen.navItem.titleBuilder(t)),
         actions: [
           IconButton(
             onPressed: () async {
