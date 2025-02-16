@@ -19,7 +19,15 @@ class BloodPressureValue extends SeriesDataValue {
     return ColorUtils.hue(bestPossibleValueColor, (120.0 - value) * 3);
   }
 
+  static Color colorHighOf(BloodPressureValue bloodPressureValue) {
+    return colorHigh(bloodPressureValue.high);
+  }
+
   static Color colorLow(int value) {
     return ColorUtils.hue(bestPossibleValueColor, (80.0 - value) * 3);
+  }
+
+  static Color colorLowOf(BloodPressureValue bloodPressureValue) {
+    return colorLow(bloodPressureValue.low);
   }
 }
