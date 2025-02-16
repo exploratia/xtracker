@@ -16,6 +16,7 @@ import '../../widgets/layout/gradient_app_bar.dart';
 import '../../widgets/provider/data_provider_loader.dart';
 import '../../widgets/responsive/screen_builder.dart';
 import '../../widgets/series/data/view/series_data_view.dart';
+import '../../widgets/text/overflow_text.dart';
 
 class SeriesDataScreen extends StatelessWidget {
   static NavigationItem navItem = NavigationItem(
@@ -78,9 +79,39 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context)!;
+    final themeData = Theme.of(context);
     NavigationItem navItem = SeriesDataScreen.navItem;
 
-    String title = _seriesDef?.name ?? navItem.titleBuilder(t);
+    Widget title;
+    if (_seriesDef != null) {
+      title = Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(
+            width: 40,
+            height: 40,
+            margin: const EdgeInsets.only(right: 10),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              gradient: LinearGradient(
+                begin: const AlignmentDirectional(0, -1),
+                end: const AlignmentDirectional(0, 1),
+                colors: [
+                  Colors.transparent,
+                  themeData.scaffoldBackgroundColor,
+                  themeData.scaffoldBackgroundColor,
+                  Colors.transparent,
+                ],
+              ),
+            ),
+            child: _seriesDef!.icon(),
+          ),
+          OverflowText(_seriesDef!.name),
+        ],
+      );
+    } else {
+      title = Text(navItem.titleBuilder(t));
+    }
 
     Widget view;
     if (widget.seriesUuid == Globals.invalid) {
@@ -92,7 +123,7 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
         child: _SeriesDataViewTitleWrapper(
           seriesUuid: widget.seriesUuid,
           setSeriesDef: _setSeriesDef,
-          appBarTitle: title,
+          useSeriesCallback: _seriesDef == null,
           viewType: _viewType,
         ),
       );
@@ -112,7 +143,7 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
 
     return ScreenBuilder.withStandardNavBuilders(
       navItem: navItem,
-      appBarBuilder: (context) => GradientAppBar.build(context, addLeadingBackBtn: true, title: Text(title), actions: actions),
+      appBarBuilder: (context) => GradientAppBar.build(context, addLeadingBackBtn: true, title: title, actions: actions),
       bodyBuilder: (context) => view,
     );
   }
@@ -120,10 +151,10 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
 
 /// read series def from provider -> set AppBar title and then show series data
 class _SeriesDataViewTitleWrapper extends StatelessWidget {
-  const _SeriesDataViewTitleWrapper({required this.seriesUuid, required this.setSeriesDef, required this.appBarTitle, required this.viewType});
+  const _SeriesDataViewTitleWrapper({required this.seriesUuid, required this.setSeriesDef, required this.useSeriesCallback, required this.viewType});
 
   final String seriesUuid;
-  final String appBarTitle;
+  final bool useSeriesCallback;
 
   final Function(SeriesDef seriesDef) setSeriesDef;
   final ViewType viewType;
@@ -137,7 +168,7 @@ class _SeriesDataViewTitleWrapper extends StatelessWidget {
     }
 
     // set title and actions if not already correct
-    if (appBarTitle != seriesDef.name) {
+    if (useSeriesCallback) {
       WidgetsBinding.instance.addPostFrameCallback((_) => setSeriesDef(seriesDef));
       return Container();
     }

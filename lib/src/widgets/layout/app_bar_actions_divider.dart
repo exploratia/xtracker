@@ -22,6 +22,5 @@ class AppBarActionsDivider extends StatelessWidget {
       ),
       margin: const EdgeInsets.symmetric(horizontal: 8), // Spacing
     );
-    ;
   }
 }
