@@ -3,13 +3,12 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../../../../model/series/data/blood_pressure/blood_pressure_value.dart';
 import '../../../../../model/series/data/series_data.dart';
-import '../../../../../model/series/series_def.dart';
-import 'blood_pressure_value_renderer.dart';
+import '../../../../../model/series/series_view_meta_data.dart';
 
 class SeriesDataBloodPressureDotsView extends StatelessWidget {
-  const SeriesDataBloodPressureDotsView({super.key, required this.seriesDef, required this.seriesData});
+  const SeriesDataBloodPressureDotsView({super.key, required this.seriesViewMetaData, required this.seriesData});
 
-  final SeriesDef seriesDef;
+  final SeriesViewMetaData seriesViewMetaData;
   final SeriesData<BloodPressureValue> seriesData;
 
   @override
@@ -19,10 +18,7 @@ class SeriesDataBloodPressureDotsView extends StatelessWidget {
 
     return Column(
       children: [
-        Text("TODO Dots for ${seriesDef.name} ${seriesData.seriesItems.length}"),
-        ...seriesData.seriesItems.map(
-          (e) => BloodPressureValueRenderer(bloodPressureValue: e),
-        ),
+        Text("TODO Dots for ${seriesViewMetaData.seriesDef.name} ${seriesData.seriesItems.length}"),
       ],
     );
   }

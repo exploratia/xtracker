@@ -7,6 +7,7 @@ import 'package:uuid/uuid.dart';
 import '../../model/navigation/navigation_item.dart';
 import '../../model/series/data/series_data.dart';
 import '../../model/series/series_def.dart';
+import '../../model/series/series_view_meta_data.dart';
 import '../../model/series/view_type.dart';
 import '../../providers/series_provider.dart';
 import '../../util/globals.dart';
@@ -57,17 +58,24 @@ class _ScreenBuilder extends StatefulWidget {
 class _ScreenBuilderState extends State<_ScreenBuilder> {
   SeriesDef? _seriesDef;
   ViewType _viewType = ViewType.chart;
+  bool _editMode = false;
 
   void _setSeriesDef(SeriesDef seriesDef) {
     setState(() {
       _seriesDef = seriesDef;
-      _viewType = seriesDef.seriesType.viewTypes.first;
+      _viewType = seriesDef.seriesType.viewTypes.last;
     });
   }
 
   void _setViewType(ViewType viewType) {
     setState(() {
       _viewType = viewType;
+    });
+  }
+
+  void _toggleEditMode() {
+    setState(() {
+      _editMode = !_editMode;
     });
   }
 
@@ -116,7 +124,8 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
     Widget view;
     if (widget.seriesUuid == Globals.invalid) {
       view = const CenteredMessage(message: 'Got invalid series id!');
-      // WidgetsBinding.instance.addPostFrameCallback((_) => Navigator.pop(context));
+      // pop screen if no series id is available.
+      WidgetsBinding.instance.addPostFrameCallback((_) => Navigator.pop(context));
     } else {
       view = DataProviderLoader(
         obtainDataProviderFuture: context.read<SeriesProvider>().fetchDataIfNotYetLoaded(),
@@ -125,19 +134,39 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
           setSeriesDef: _setSeriesDef,
           useSeriesCallback: _seriesDef == null,
           viewType: _viewType,
+          editMode: _editMode,
         ),
       );
     }
 
     List<Widget> actions = [];
+
     if (_seriesDef != null) {
-      actions = [
-        // TODO conditional depending on chart switches: const AppBarActionsDivider(),
-        // show buttons for all available view types without the active one
+      List<Widget> editActions = [];
+      if (_viewType == ViewType.table) {
+        editActions.add(IconButton(onPressed: () => _toggleEditMode(), icon: Icon(_editMode ? Icons.edit_off_outlined : Icons.edit_outlined)));
+        editActions.add(const AppBarActionsDivider());
+      }
+
+      List<Widget> chartActions = [];
+      if (_viewType == ViewType.chart) {
+// Je nach Typ Umschalter erstellen : Monat/Jahr ...
+//       chartActions.add(const AppBarActionsDivider());
+      }
+      List<Widget> viewActions = [
         ..._seriesDef!.seriesType.viewTypes.where((vt) => vt != _viewType).map((vt) => IconButton(onPressed: () => _setViewType(vt), icon: Icon(vt.iconData))),
         const AppBarActionsDivider(),
+      ];
+      List<Widget> dataActions = [
         // add value btn
         IconButton(onPressed: () => _addSeriesValueHandler(context), icon: const Icon(Icons.add)),
+      ];
+
+      actions = [
+        ...editActions,
+        ...chartActions,
+        ...viewActions,
+        ...dataActions,
       ];
     }
 
@@ -151,13 +180,15 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
 
 /// read series def from provider -> set AppBar title and then show series data
 class _SeriesDataViewTitleWrapper extends StatelessWidget {
-  const _SeriesDataViewTitleWrapper({required this.seriesUuid, required this.setSeriesDef, required this.useSeriesCallback, required this.viewType});
+  const _SeriesDataViewTitleWrapper(
+      {required this.seriesUuid, required this.setSeriesDef, required this.useSeriesCallback, required this.viewType, required this.editMode});
 
   final String seriesUuid;
   final bool useSeriesCallback;
 
   final Function(SeriesDef seriesDef) setSeriesDef;
   final ViewType viewType;
+  final bool editMode;
 
   @override
   Widget build(BuildContext context) {
@@ -174,8 +205,11 @@ class _SeriesDataViewTitleWrapper extends StatelessWidget {
     }
 
     return SeriesDataView(
-      seriesDef: seriesDef,
-      viewType: viewType,
+      seriesViewMetaData: SeriesViewMetaData(
+        seriesDef: seriesDef,
+        viewType: viewType,
+        editMode: editMode,
+      ),
     );
   }
 }
