@@ -42,7 +42,7 @@ class _ShowSeriesDataBtn extends StatelessWidget {
       await Navigator.pushNamed(context, SeriesDataScreen.navItem.routeName, arguments: {'series': seriesDef.uuid});
     }
 
-    return IconButton(onPressed: showDataHandler, icon: const Icon(Icons.area_chart_outlined));
+    return IconButton(onPressed: showDataHandler, icon: const Icon(Icons.remove_red_eye_outlined));
   }
 }
 
