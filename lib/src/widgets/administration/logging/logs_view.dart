@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../screens/administration/log_screen.dart';
 import '../../../util/logging/daily_files.dart';
 import '../../card/settings_card.dart';
+import '../../future/future_builder_with_progress_indicator.dart';
 import '../../layout/single_child_scroll_view_with_scrollbar.dart';
 import '../../navigation/hide_bottom_navigation_bar.dart';
 
@@ -35,19 +36,13 @@ class _LogsViewState extends State<LogsView> {
           SettingsCard(
             showDivider: false,
             children: [
-              FutureBuilder(
-                builder: (ctx, snapshot) {
-                  if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const LinearProgressIndicator();
-                  } else if (snapshot.hasError) {
-                    // .. do error handling
-                    return Center(child: Text('Failed to load logs! ${snapshot.error?.toString() ?? ''}'));
-                  }
-                  final logFiles = snapshot.data;
+              FutureBuilderWithProgressIndicator(
+                future: DailyFiles.listLogFileNames(),
+                errorBuilder: (error) => 'Failed to load logs!',
+                widgetBuilder: (logFiles) {
                   if (logFiles == null) {
-                    return const Center(child: Text('No log files found...'));
+                    return const Center(child: Text('No log files found!'));
                   }
-
                   return Center(
                     child: Wrap(
                       spacing: 20,
@@ -55,7 +50,6 @@ class _LogsViewState extends State<LogsView> {
                     ),
                   );
                 },
-                future: DailyFiles.listLogFileNames(),
               ),
             ],
           ),

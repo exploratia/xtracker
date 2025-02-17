@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../util/logging/daily_files.dart';
 import '../../../util/media_query_utils.dart';
+import '../../future/future_builder_with_progress_indicator.dart';
 import '../../navigation/hide_bottom_navigation_bar.dart';
 
 class LogView extends StatefulWidget {
@@ -25,30 +26,20 @@ class _LogViewState extends State<LogView> {
 
     return SizedBox(
       width: double.infinity,
-      child: FutureBuilder(
-          builder: (ctx, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const LinearProgressIndicator();
-            } else if (snapshot.hasError) {
-              // .. do error handling
-              return Center(
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Text('Failed to load log! ${snapshot.error?.toString() ?? ''}'),
-                ),
-              );
-            }
-            final logFileContent = snapshot.data;
-            if (logFileContent == null) {
-              return Text('Log file "${widget.logFileName}" not found!');
-            }
+      child: FutureBuilderWithProgressIndicator(
+        future: DailyFiles.readLogLines(widget.logFileName, context, !MediaQueryUtils.of(context).isTablet),
+        errorBuilder: (error) => 'Failed to load log!',
+        widgetBuilder: (logFileContent) {
+          if (logFileContent == null) {
+            return Center(child: Text('Log file "${widget.logFileName}" not found!'));
+          }
 
-            return _LogLines(
-              logLines: logFileContent,
-              refreshHandler: _rebuild,
-            );
-          },
-          future: DailyFiles.readLogLines(widget.logFileName, context, !MediaQueryUtils.of(context).isTablet)),
+          return _LogLines(
+            logLines: logFileContent,
+            refreshHandler: _rebuild,
+          );
+        },
+      ),
     );
   }
 }

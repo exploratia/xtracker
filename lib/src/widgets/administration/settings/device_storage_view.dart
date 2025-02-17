@@ -4,6 +4,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../util/device_storage/device_storage.dart';
 import '../../../util/dialogs.dart';
 import '../../../util/table_utils.dart';
+import '../../future/future_builder_with_progress_indicator.dart';
 import 'settings_controller.dart';
 
 class DeviceStorageView extends StatelessWidget {
@@ -18,17 +19,13 @@ class DeviceStorageView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        FutureBuilder(
-          builder: (context, deviceStorageSnapshot) {
-            if (deviceStorageSnapshot.connectionState == ConnectionState.waiting) {
-              return const LinearProgressIndicator();
-            }
-
-            final storageData = deviceStorageSnapshot.data;
+        FutureBuilderWithProgressIndicator(
+          future: DeviceStorage.readAll(),
+          errorBuilder: (error) => 'Failed to storage data!',
+          widgetBuilder: (storageData) {
             if (storageData == null) {
               return Text(t.settingsDeviceStorageNoData);
             }
-
             List<TableRow> rows = [
               TableUtils.tableHeadline([t.settingsDeviceStorageTableHeadKey, t.settingsDeviceStorageTableHeadValue])
             ];
@@ -52,7 +49,6 @@ class DeviceStorageView extends StatelessWidget {
               children: rows,
             );
           },
-          future: DeviceStorage.readAll(),
         ),
         const Divider(),
         Wrap(
