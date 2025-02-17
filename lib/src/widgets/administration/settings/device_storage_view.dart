@@ -13,7 +13,7 @@ class DeviceStorageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = AppLocalizations.of(context);
+    final t = AppLocalizations.of(context)!;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -26,11 +26,11 @@ class DeviceStorageView extends StatelessWidget {
 
             final storageData = deviceStorageSnapshot.data;
             if (storageData == null) {
-              return Text(t!.settingsDeviceStorageNoData);
+              return Text(t.settingsDeviceStorageNoData);
             }
 
             List<TableRow> rows = [
-              TableUtils.tableHeadline(t!.settingsDeviceStorageTableHeadKey, [t.settingsDeviceStorageTableHeadValue])
+              TableUtils.tableHeadline([t.settingsDeviceStorageTableHeadKey, t.settingsDeviceStorageTableHeadValue])
             ];
 
             final keys = storageData.keys.toList();

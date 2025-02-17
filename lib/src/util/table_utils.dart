@@ -1,18 +1,8 @@
 import 'package:flutter/material.dart';
 
 class TableUtils {
-  static TableRow tableHeadline(String key, List<String> values) {
+  static TableRow tableHeadline(List<String> values) {
     return TableRow(children: [
-      Padding(
-        padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
-        child: Text(
-          key,
-          textAlign: TextAlign.left,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
       ...values.map(
         (value) => Padding(
           padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 4),
@@ -28,8 +18,8 @@ class TableUtils {
     ]);
   }
 
-  static TableRow tableRow(List<dynamic> values) {
-    return TableRow(children: [
+  static TableRow tableRow(List<dynamic> values, {Decoration? decoration}) {
+    return TableRow(decoration: decoration, children: [
       ...values.map((value) {
         Widget child;
         if (value is Widget) {
