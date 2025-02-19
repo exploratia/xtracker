@@ -5,7 +5,6 @@ import '../../util/theme_utils.dart';
 class SingleChildScrollViewWithScrollbar extends StatefulWidget {
   final Widget child;
   final Axis scrollDirection;
-  final double Function()? getScrollPosCallback;
   final Future<void> Function()? onRefreshCallback;
   final void Function(ScrollPosition value)? scrollPositionHandler;
 
@@ -13,7 +12,6 @@ class SingleChildScrollViewWithScrollbar extends StatefulWidget {
     super.key,
     required this.child,
     this.scrollDirection = Axis.vertical,
-    this.getScrollPosCallback,
     this.onRefreshCallback,
     this.scrollPositionHandler,
   });
@@ -31,11 +29,6 @@ class _SingleChildScrollViewWithScrollbarState extends State<SingleChildScrollVi
     super.dispose();
   }
 
-  void scroll(double position) {
-    _scrollController.jumpTo(position);
-    // animateTo(20, duration: Duration(seconds: 0), curve: Curves.linear);
-  }
-
   @override
   Widget build(BuildContext context) {
     final scrollPositionCb = widget.scrollPositionHandler;
@@ -45,11 +38,6 @@ class _SingleChildScrollViewWithScrollbarState extends State<SingleChildScrollVi
       });
       // Call callback once direct with initial scroll pos (Show Bottom NavBar if not visible)
       WidgetsBinding.instance.addPostFrameCallback((_) => scrollPositionCb(_scrollController.position));
-    }
-
-    final getScrollP = widget.getScrollPosCallback;
-    if (getScrollP != null) {
-      WidgetsBinding.instance.addPostFrameCallback((_) => scroll(getScrollP()));
     }
 
     final refreshHandler = widget.onRefreshCallback;
