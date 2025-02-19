@@ -4,7 +4,7 @@ import 'package:flutter/rendering.dart';
 /// Widget which hides BottomNavigationBar
 class HideBottomNavigationBar extends StatefulWidget {
   static final ValueNotifier<bool> visible = ValueNotifier<bool>(true);
-  static bool _forceHide = true;
+  static bool _forceHide = false;
 
   static void setScrollPosition(ScrollPosition scrollPos) {
     if (_forceHide) return;
