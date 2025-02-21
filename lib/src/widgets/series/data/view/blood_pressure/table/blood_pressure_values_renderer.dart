@@ -13,10 +13,13 @@ class BloodPressureValuesRenderer extends StatelessWidget {
     if (bloodPressureValues.isEmpty) return Container();
 
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        ...bloodPressureValues.map((bpv) => BloodPressureValueRenderer(bloodPressureValue: bpv)),
+        ...bloodPressureValues.map(
+          (bpv) => BloodPressureValueRenderer(
+            key: Key('bloodPressureValue_${bpv.uuid}'),
+            bloodPressureValue: bpv,
+          ),
+        ),
       ],
     );
   }
