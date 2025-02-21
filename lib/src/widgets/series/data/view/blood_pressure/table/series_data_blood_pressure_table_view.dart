@@ -27,8 +27,8 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
   Widget build(BuildContext context) {
     final TableColumnProfile tableColumnProfile = TableColumnProfile(columns: [
       TableColumn(minWidth: 80),
-      TableColumn(minWidth: 80),
-      TableColumn(minWidth: 80),
+      TableColumn(minWidth: 280),
+      TableColumn(minWidth: 180),
       TableColumn(minWidth: 80),
     ]);
 
@@ -61,13 +61,16 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
                 maxXIndex: 3,
                 maxYIndex: data.length - 1,
                 builder: (BuildContext context, ChildVicinity vicinity) {
+                  TableColumn tableColumn = tableColumnProfile.getColumnAt(vicinity.xIndex);
+                  var columnWidth = tableColumn.minWidth.toDouble();
+
                   _BloodPressureDayItem bloodPressureDayItem = data[vicinity.yIndex];
                   Color? backgroundColor = bloodPressureDayItem.backgroundColor;
                   if (vicinity.xIndex == 0) {
                     return Container(
                       color: backgroundColor,
                       height: lineHeight.toDouble(),
-                      width: 200,
+                      width: columnWidth,
                       child: Text(bloodPressureDayItem.date),
                     );
                   }
@@ -84,7 +87,7 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
                   return Container(
                     color: backgroundColor,
                     height: lineHeight.toDouble(),
-                    width: 200,
+                    width: columnWidth,
                     child: BloodPressureValuesRenderer(bloodPressureValues: bloodPressureValues),
                   );
                 }),
@@ -355,22 +358,37 @@ class RenderTwoDimensionalGridViewport extends RenderTwoDimensionalViewport {
     final int maxRowIndex = builderDelegate.maxYIndex!;
     final int maxColumnIndex = builderDelegate.maxXIndex!;
 
-    final int leadingColumn = math.max((horizontalPixels / 200).floor(), 0);
+    int leadingColumnIdx = 0;
+    int trailingColumnIdx = maxColumnIndex;
+
+    int summedColumnPixels = 0;
+    for (var tableColumn in tableColumnProfile.columns) {
+      if (summedColumnPixels < horizontalPixels + viewportWidth) {
+        trailingColumnIdx++;
+      }
+      summedColumnPixels += tableColumn.minWidth;
+      if (summedColumnPixels < horizontalPixels) {
+        leadingColumnIdx++;
+      }
+    }
+    trailingColumnIdx = math.min(maxColumnIndex, trailingColumnIdx);
+
     final int leadingRow = math.max((verticalPixels / lineHeight).floor(), 0);
-    final int trailingColumn = math.min(
-      ((horizontalPixels + viewportWidth) / 200).ceil(),
-      maxColumnIndex,
-    );
     final int trailingRow = math.min(
       ((verticalPixels + viewportHeight) / lineHeight).ceil(),
       maxRowIndex,
     );
 
-    double xLayoutOffset = (leadingColumn * 200) - horizontalOffset.pixels;
-    for (int column = leadingColumn; column <= trailingColumn; column++) {
+    int leadingColumnPixels = 0;
+    for (var idx = 0; idx < leadingColumnIdx; ++idx) {
+      leadingColumnPixels += tableColumnProfile.getColumnAt(idx).minWidth;
+    }
+
+    double xLayoutOffset = leadingColumnPixels - horizontalOffset.pixels;
+    for (int columnIdx = leadingColumnIdx; columnIdx <= trailingColumnIdx; columnIdx++) {
       double yLayoutOffset = (leadingRow * lineHeight) - verticalOffset.pixels;
       for (int row = leadingRow; row <= trailingRow; row++) {
-        final ChildVicinity vicinity = ChildVicinity(xIndex: column, yIndex: row);
+        final ChildVicinity vicinity = ChildVicinity(xIndex: columnIdx, yIndex: row);
         final RenderBox child = buildOrObtainChildFor(vicinity)!;
         child.layout(constraints.loosen());
 
@@ -379,7 +397,7 @@ class RenderTwoDimensionalGridViewport extends RenderTwoDimensionalViewport {
         parentDataOf(child).layoutOffset = Offset(xLayoutOffset, yLayoutOffset);
         yLayoutOffset += lineHeight;
       }
-      xLayoutOffset += 200;
+      xLayoutOffset += tableColumnProfile.getColumnAt(columnIdx).minWidth;
     }
 
     // Set the min and max scroll extents for each axis.
@@ -388,7 +406,8 @@ class RenderTwoDimensionalGridViewport extends RenderTwoDimensionalViewport {
       0.0,
       clampDouble(verticalExtent - viewportDimension.height, 0.0, double.infinity),
     );
-    final double horizontalExtent = 200 * (maxColumnIndex + 1);
+
+    final double horizontalExtent = tableColumnProfile.minWidth().toDouble();
     horizontalOffset.applyContentDimensions(
       0.0,
       clampDouble(horizontalExtent - viewportDimension.width, 0.0, double.infinity),
