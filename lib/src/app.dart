@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
@@ -76,6 +78,13 @@ class MyApp extends StatelessWidget {
             darkTheme: ThemeUtils.buildThemeData(context, true),
             themeMode: settingsController.themeMode,
             locale: settingsController.locale,
+
+            // Mouse dragging enabled
+            scrollBehavior: const MaterialScrollBehavior().copyWith(
+              dragDevices: PointerDeviceKind.values.toSet(),
+            ),
+
+            debugShowCheckedModeBanner: false,
 
             // Define a function to handle named routes in order to support
             // Flutter web url navigation and deep linking.

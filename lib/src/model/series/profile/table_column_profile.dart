@@ -6,6 +6,15 @@ class TableColumnProfile {
   int minWidth() {
     return columns.fold(0, (previousValue, element) => previousValue + element.minWidth);
   }
+
+  TableColumn getColumnAt(int index) {
+    if (index >= 0 && index < columns.length) {
+      return columns[index];
+    }
+
+    // fallback - should never happen
+    return TableColumn(minWidth: 200);
+  }
 }
 
 class TableColumn {
