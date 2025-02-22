@@ -56,50 +56,50 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
           int lineHeight = 26 * maxItemsPerDayPart;
 
           // adjusted from https://dartpad.dev/?id=4424936c57ed13093eb389123383e894
-          return TwoDimensionalGridView(
-            lineHeight,
-            adjustedTableColumnProfile,
-            // provide a key depending on maxWidth to the ViewPort to force a rebuild if size changes
-            ValueKey('blood_pressure_2d_grid_view_size_key_${constraints.maxWidth}'),
-            diagonalDragBehavior: DiagonalDragBehavior.free,
-            delegate: TwoDimensionalChildBuilderDelegate(
-                maxXIndex: adjustedTableColumnProfile.length() - 1,
-                maxYIndex: data.length - 1,
-                builder: (BuildContext context, ChildVicinity vicinity) {
-                  // print('$vicinity');
-                  TableColumn tableColumn = adjustedTableColumnProfile.getColumnAt(vicinity.xIndex);
-                  var columnWidth = tableColumn.minWidth.toDouble();
+          var viewportSizeKey = ValueKey('blood_pressure_2d_grid_view_size_key_${constraints.maxWidth}');
+          var twoDimensionalChildBuilderDelegate = TwoDimensionalChildBuilderDelegate(
+              maxXIndex: adjustedTableColumnProfile.length() - 1,
+              maxYIndex: data.length - 1,
+              builder: (BuildContext context, ChildVicinity vicinity) {
+                // print('$vicinity');
+                TableColumn tableColumn = adjustedTableColumnProfile.getColumnAt(vicinity.xIndex);
+                var columnWidth = tableColumn.minWidth.toDouble();
 
-                  _BloodPressureDayItem bloodPressureDayItem = data[vicinity.yIndex];
-                  Color? backgroundColor = bloodPressureDayItem.backgroundColor;
-                  if (vicinity.xIndex == 0) {
-                    return Padding(
-                      padding: EdgeInsets.only(left: adjustedTableColumnProfile.marginLeft),
-                      child: Container(
-                        color: backgroundColor,
-                        height: lineHeight.toDouble(),
-                        width: columnWidth - adjustedTableColumnProfile.marginLeft,
-                        child: Center(child: Text(bloodPressureDayItem.date)),
-                      ),
-                    );
-                  }
-
-                  List<BloodPressureValue> bloodPressureValues;
-                  if (vicinity.xIndex == 1) {
-                    bloodPressureValues = bloodPressureDayItem.morning;
-                  } else if (vicinity.xIndex == 2) {
-                    bloodPressureValues = bloodPressureDayItem.midday;
-                  } else {
-                    bloodPressureValues = bloodPressureDayItem.evening;
-                  }
-
-                  return Container(
-                    color: backgroundColor,
-                    height: lineHeight.toDouble(),
-                    width: columnWidth,
-                    child: BloodPressureValuesRenderer(bloodPressureValues: bloodPressureValues),
+                _BloodPressureDayItem bloodPressureDayItem = data[vicinity.yIndex];
+                Color? backgroundColor = bloodPressureDayItem.backgroundColor;
+                if (vicinity.xIndex == 0) {
+                  return Padding(
+                    padding: EdgeInsets.only(left: adjustedTableColumnProfile.marginLeft),
+                    child: Container(
+                      color: backgroundColor,
+                      height: lineHeight.toDouble(),
+                      width: columnWidth - adjustedTableColumnProfile.marginLeft,
+                      child: Center(child: Text(bloodPressureDayItem.date)),
+                    ),
                   );
-                }),
+                }
+
+                List<BloodPressureValue> bloodPressureValues;
+                if (vicinity.xIndex == 1) {
+                  bloodPressureValues = bloodPressureDayItem.morning;
+                } else if (vicinity.xIndex == 2) {
+                  bloodPressureValues = bloodPressureDayItem.midday;
+                } else {
+                  bloodPressureValues = bloodPressureDayItem.evening;
+                }
+
+                return Container(
+                  color: backgroundColor,
+                  height: lineHeight.toDouble(),
+                  width: columnWidth,
+                  child: BloodPressureValuesRenderer(bloodPressureValues: bloodPressureValues),
+                );
+              });
+          return TwoDimensionalGridViewWithScrollbar(
+            lineHeight: lineHeight,
+            adjustedTableColumnProfile: adjustedTableColumnProfile,
+            viewportSizeKey: viewportSizeKey,
+            twoDimensionalChildBuilderDelegate: twoDimensionalChildBuilderDelegate,
           );
         }
         // TEST 2D
@@ -245,27 +245,82 @@ class _TableHeadline extends StatelessWidget {
   }
 }
 
+class TwoDimensionalGridViewWithScrollbar extends StatefulWidget {
+  const TwoDimensionalGridViewWithScrollbar({
+    super.key,
+    required this.lineHeight,
+    required this.adjustedTableColumnProfile,
+    required this.viewportSizeKey,
+    required this.twoDimensionalChildBuilderDelegate,
+  });
+
+  final int lineHeight;
+  final TableColumnProfile adjustedTableColumnProfile;
+  final ValueKey<String> viewportSizeKey;
+  final TwoDimensionalChildBuilderDelegate twoDimensionalChildBuilderDelegate;
+
+  @override
+  State<TwoDimensionalGridViewWithScrollbar> createState() => _TwoDimensionalGridViewWithScrollbarState();
+}
+
+class _TwoDimensionalGridViewWithScrollbarState extends State<TwoDimensionalGridViewWithScrollbar> {
+  final ScrollController _verticalController = ScrollController();
+  final ScrollController _horizontalController = ScrollController();
+
+  @override
+  void dispose() {
+    _verticalController.dispose();
+    _horizontalController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scrollbar(
+      controller: _verticalController,
+      child: Scrollbar(
+        controller: _horizontalController,
+        notificationPredicate: (notification) => notification.depth == 0, // Ensure it listens only for the main scroll view
+        child: TwoDimensionalGridView(
+          widget.lineHeight,
+          widget.adjustedTableColumnProfile,
+          // provide a key depending on maxWidth to the ViewPort to force a rebuild if size changes
+          widget.viewportSizeKey,
+          diagonalDragBehavior: DiagonalDragBehavior.free,
+          delegate: widget.twoDimensionalChildBuilderDelegate,
+          verticalController: _verticalController,
+          horizontalController: _horizontalController,
+        ),
+      ),
+    );
+  }
+}
+
 class TwoDimensionalGridView extends TwoDimensionalScrollView {
   final int lineHeight;
   final TableColumnProfile tableColumnProfile;
   final Key viewportSizeKey;
 
-  const TwoDimensionalGridView(
+  TwoDimensionalGridView(
     this.lineHeight,
     this.tableColumnProfile,
     this.viewportSizeKey, {
     super.key,
     super.primary,
     super.mainAxis = Axis.vertical,
-    super.verticalDetails = const ScrollableDetails.vertical(),
-    super.horizontalDetails = const ScrollableDetails.horizontal(),
     required TwoDimensionalChildBuilderDelegate delegate,
     super.cacheExtent,
     super.diagonalDragBehavior = DiagonalDragBehavior.none,
     super.dragStartBehavior = DragStartBehavior.start,
     super.keyboardDismissBehavior = ScrollViewKeyboardDismissBehavior.manual,
     super.clipBehavior = Clip.hardEdge,
-  }) : super(delegate: delegate);
+    required ScrollController verticalController,
+    required ScrollController horizontalController,
+  }) : super(
+          delegate: delegate,
+          verticalDetails: ScrollableDetails.vertical(controller: verticalController),
+          horizontalDetails: ScrollableDetails.horizontal(controller: horizontalController),
+        );
 
   @override
   Widget buildViewport(
