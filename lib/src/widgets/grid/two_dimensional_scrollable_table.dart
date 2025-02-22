@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:uuid/v4.dart';
 
 import '../../model/series/profile/table_column_profile.dart';
@@ -12,7 +13,6 @@ class TwoDimensionalScrollableTable extends StatelessWidget {
     required this.tableColumnProfile,
     required this.gridCellBuilder,
     required this.lineHeight,
-    required this.tableHead,
     required this.lineCount,
   });
 
@@ -20,11 +20,11 @@ class TwoDimensionalScrollableTable extends StatelessWidget {
   final GridCell Function(BuildContext context, int yIndex, int xIndex) gridCellBuilder;
   final int lineHeight;
   final int lineCount;
-  final List<String> tableHead;
   final String uniqueViewportSizeKeyId = const UuidV4().generate().toString();
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
     return HideBottomNavigationBar(
       child: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
         final TableColumnProfile adjustedTableColumnProfile = tableColumnProfile.adjustToWidth(constraints.maxWidth);
@@ -64,7 +64,7 @@ class TwoDimensionalScrollableTable extends StatelessWidget {
             lineHeight: lineHeight,
             tableColumnProfile: adjustedTableColumnProfile,
             viewportSizeKey: viewportSizeKey,
-            tableHead: tableHead,
+            tableHead: tableColumnProfile.getTitles(t),
             twoDimensionalChildBuilderDelegate: twoDimensionalChildBuilderDelegate);
       }),
     );

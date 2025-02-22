@@ -11,22 +11,21 @@ import '../../../../../grid/two_dimensional_scrollable_table.dart';
 import 'blood_pressure_values_renderer.dart';
 
 class SeriesDataBloodPressureTableView extends StatelessWidget {
-  const SeriesDataBloodPressureTableView({super.key, required this.seriesViewMetaData, required this.seriesData});
+  static final TableColumnProfile _tableColumnProfile = TableColumnProfile(columns: [
+    TableColumn(minWidth: 80, title: '-', msgId: 'bloodPressureTableColumnTitleDate'),
+    TableColumn(minWidth: 80, title: '-', msgId: 'bloodPressureTableColumnTitleMorning'),
+    TableColumn(minWidth: 80, title: '-', msgId: 'bloodPressureTableColumnTitleMidday'),
+    TableColumn(minWidth: 80, title: '-', msgId: 'bloodPressureTableColumnTitleEvening'),
+  ]);
 
   final SeriesData<BloodPressureValue> seriesData;
   final SeriesViewMetaData seriesViewMetaData;
 
+  const SeriesDataBloodPressureTableView({super.key, required this.seriesViewMetaData, required this.seriesData});
+
   @override
   Widget build(BuildContext context) {
-    // TODO move column profile to series def
-    final TableColumnProfile tableColumnProfile = TableColumnProfile(columns: [
-      TableColumn(minWidth: 80),
-      TableColumn(minWidth: 280),
-      TableColumn(minWidth: 280),
-      TableColumn(minWidth: 80),
-    ]);
-
-    var tableHead = ['Datum', 'Morgens', 'Mittags', 'Abends'];
+    // for blood pressure we need a special TableColumnProfile
 
     List<_BloodPressureDayItem> data = _buildTableDataProvider(seriesData);
     // calc line height = single line height * max lines per day of all items
@@ -66,11 +65,10 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
     // TODO immer nur Diagrammsicht / Tabelle und immer Icon + Name als erstes in der View?
 
     return TwoDimensionalScrollableTable(
-      tableColumnProfile: tableColumnProfile,
+      tableColumnProfile: _tableColumnProfile,
       lineCount: data.length,
       gridCellBuilder: gridCellBuilder,
       lineHeight: lineHeight,
-      tableHead: tableHead,
     );
   }
 

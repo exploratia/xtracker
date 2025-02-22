@@ -1,3 +1,7 @@
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../../../util/i18n.dart';
+
 class TableColumnProfile {
   final List<TableColumn> columns;
   final bool hasHorizontalMarginColumns;
@@ -21,7 +25,11 @@ class TableColumnProfile {
     }
 
     // fallback - should never happen
-    return TableColumn(minWidth: 200);
+    return TableColumn(minWidth: 200, title: '-?-');
+  }
+
+  List<String> getTitles(AppLocalizations t) {
+    return columns.map((e) => e.getTitle(t)).toList();
   }
 
   /// stretch to given width
@@ -40,15 +48,15 @@ class TableColumnProfile {
       widthFactor = 2;
       addMargin = true;
     }
-    List<TableColumn> adjustedColumns = columns.map((e) => TableColumn(minWidth: (e.minWidth * widthFactor))).toList();
+    List<TableColumn> adjustedColumns = columns.map((e) => TableColumn(minWidth: (e.minWidth * widthFactor), title: e.title, msgId: e.msgId)).toList();
 
     if (addMargin) {
       var adjustedWidth = adjustedColumns.fold(0.toDouble(), (previousValue, element) => previousValue + element.minWidth);
       horizontalMargin = (width - adjustedWidth) / 2;
       adjustedColumns = [
-        TableColumn(minWidth: horizontalMargin, isMarginColumn: true),
+        TableColumn(minWidth: horizontalMargin, isMarginColumn: true, title: ''),
         ...adjustedColumns,
-        TableColumn(minWidth: horizontalMargin, isMarginColumn: true),
+        TableColumn(minWidth: horizontalMargin, isMarginColumn: true, title: ''),
       ];
     }
 
@@ -62,13 +70,19 @@ class TableColumnProfile {
 }
 
 class TableColumn {
-  final double minWidth;
   final bool isMarginColumn;
+  final double minWidth;
+  final String title;
+  final String? msgId;
 
-  TableColumn({required this.minWidth, this.isMarginColumn = false});
+  TableColumn({required this.minWidth, this.isMarginColumn = false, required this.title, this.msgId});
 
   @override
   String toString() {
     return 'TableColumn{minWidth: $minWidth}';
+  }
+
+  String getTitle(AppLocalizations t) {
+    return I18N.compose(msgId, t) ?? title;
   }
 }

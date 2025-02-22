@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/v4.dart';
 
 import '../../../model/series/series_def.dart';
 import '../../../model/series/series_type.dart';
@@ -40,7 +41,11 @@ class _SeriesEditState extends State<SeriesEdit> {
   }
 
   void _createSeriesDef(SeriesType seriesType) {
-    _seriesDef = SeriesDef(seriesType: seriesType);
+    _seriesDef = SeriesDef(
+      uuid: const UuidV4().generate().toString(),
+      seriesType: seriesType,
+      seriesItems: [],
+    );
     setState(() {});
   }
 
