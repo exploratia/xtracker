@@ -13,6 +13,7 @@ class BloodPressureValuesRenderer extends StatelessWidget {
     if (bloodPressureValues.isEmpty) return Container();
 
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ...bloodPressureValues.map(
           (bpv) => BloodPressureValueRenderer(

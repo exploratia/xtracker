@@ -27,8 +27,8 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
   Widget build(BuildContext context) {
     final TableColumnProfile tableColumnProfile = TableColumnProfile(columns: [
       TableColumn(minWidth: 80),
-      TableColumn(minWidth: 280),
-      TableColumn(minWidth: 180),
+      TableColumn(minWidth: 80),
+      TableColumn(minWidth: 80),
       TableColumn(minWidth: 80),
     ]);
 
@@ -41,6 +41,9 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
       builder: (BuildContext context, BoxConstraints constraints) {
         // TEST 2D
         if (true) {
+          // TODO scrollbars
+          // TODO title - in Grid oder ausserhalb stehen bleibend -> scroll controller abfangen
+          final TableColumnProfile adjustedTableColumnProfile = tableColumnProfile.adjustToWidth(constraints.maxWidth);
           List<_BloodPressureDayItem> data = _buildTableDataProvider(seriesData);
           // calc line height = single line height * max lines per day of all items
           var maxItemsPerDayPart = data.fold(
@@ -55,23 +58,29 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
           // adjusted from https://dartpad.dev/?id=4424936c57ed13093eb389123383e894
           return TwoDimensionalGridView(
             lineHeight,
-            tableColumnProfile,
+            adjustedTableColumnProfile,
+            // provide a key depending on maxWidth to the ViewPort to force a rebuild if size changes
+            ValueKey('blood_pressure_2d_grid_view_size_key_${constraints.maxWidth}'),
             diagonalDragBehavior: DiagonalDragBehavior.free,
             delegate: TwoDimensionalChildBuilderDelegate(
-                maxXIndex: 3,
+                maxXIndex: adjustedTableColumnProfile.length() - 1,
                 maxYIndex: data.length - 1,
                 builder: (BuildContext context, ChildVicinity vicinity) {
-                  TableColumn tableColumn = tableColumnProfile.getColumnAt(vicinity.xIndex);
+                  // print('$vicinity');
+                  TableColumn tableColumn = adjustedTableColumnProfile.getColumnAt(vicinity.xIndex);
                   var columnWidth = tableColumn.minWidth.toDouble();
 
                   _BloodPressureDayItem bloodPressureDayItem = data[vicinity.yIndex];
                   Color? backgroundColor = bloodPressureDayItem.backgroundColor;
                   if (vicinity.xIndex == 0) {
-                    return Container(
-                      color: backgroundColor,
-                      height: lineHeight.toDouble(),
-                      width: columnWidth,
-                      child: Text(bloodPressureDayItem.date),
+                    return Padding(
+                      padding: EdgeInsets.only(left: adjustedTableColumnProfile.marginLeft),
+                      child: Container(
+                        color: backgroundColor,
+                        height: lineHeight.toDouble(),
+                        width: columnWidth - adjustedTableColumnProfile.marginLeft,
+                        child: Center(child: Text(bloodPressureDayItem.date)),
+                      ),
                     );
                   }
 
@@ -239,10 +248,12 @@ class _TableHeadline extends StatelessWidget {
 class TwoDimensionalGridView extends TwoDimensionalScrollView {
   final int lineHeight;
   final TableColumnProfile tableColumnProfile;
+  final Key viewportSizeKey;
 
   const TwoDimensionalGridView(
     this.lineHeight,
-    this.tableColumnProfile, {
+    this.tableColumnProfile,
+    this.viewportSizeKey, {
     super.key,
     super.primary,
     super.mainAxis = Axis.vertical,
@@ -265,6 +276,7 @@ class TwoDimensionalGridView extends TwoDimensionalScrollView {
     return TwoDimensionalGridViewport(
       lineHeight,
       tableColumnProfile,
+      key: viewportSizeKey,
       horizontalOffset: horizontalOffset,
       horizontalAxisDirection: horizontalDetails.direction,
       verticalOffset: verticalOffset,
