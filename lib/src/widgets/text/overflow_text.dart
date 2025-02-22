@@ -8,23 +8,30 @@ class OverflowText extends StatelessWidget {
     this.maxLines = 1,
     this.textOverflow = TextOverflow.ellipsis,
     this.style,
+    this.textAlign,
+    this.expanded = true,
   });
 
   final String text;
   final TextOverflow? textOverflow;
   final TextStyle? style;
   final int maxLines;
+  final TextAlign? textAlign;
+  final bool expanded;
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Text(
-        text,
-        overflow: textOverflow,
-        maxLines: maxLines,
-        softWrap: false,
-        style: style,
-      ),
+    var textWidget = Text(
+      text,
+      textAlign: textAlign ?? TextAlign.start,
+      overflow: textOverflow,
+      maxLines: maxLines,
+      softWrap: false,
+      style: style,
     );
+
+    if (!expanded) return textWidget;
+
+    return Expanded(child: textWidget);
   }
 }
