@@ -15,6 +15,7 @@ import '../../../../../../util/table_utils.dart';
 import '../../../../../layout/single_child_scroll_view_with_scrollbar.dart';
 import '../../../../../navigation/hide_bottom_navigation_bar.dart';
 import '../../../../../responsive/device_dependent_constrained_box.dart';
+import '../../../../../text/overflow_text.dart';
 import 'blood_pressure_values_renderer.dart';
 
 class SeriesDataBloodPressureTableView extends StatelessWidget {
@@ -25,16 +26,28 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // TODO move column profile to series def
     final TableColumnProfile tableColumnProfile = TableColumnProfile(columns: [
       TableColumn(minWidth: 80),
-      TableColumn(minWidth: 80),
-      TableColumn(minWidth: 80),
+      TableColumn(minWidth: 280),
+      TableColumn(minWidth: 280),
       TableColumn(minWidth: 80),
     ]);
 
+    List<_BloodPressureDayItem> data = _buildTableDataProvider(seriesData);
+    // calc line height = single line height * max lines per day of all items
+    var maxItemsPerDayPart = data.fold(
+      1,
+      (previousValue, item) {
+        var maxItems = math.max(math.max(item.morning.length, item.midday.length), item.evening.length);
+        return math.max(previousValue, maxItems);
+      },
+    );
+    int lineHeight = 26 * maxItemsPerDayPart;
+
     final themeData = Theme.of(context);
-// TODO seriesViewMetaData.editMode => klick on Renderer
     final t = AppLocalizations.of(context)!;
+    // TODO seriesViewMetaData.editMode => klick on Renderer
     // TODO Anhand Breite (zu schmal) fesetlegen, ob Titel in AppBar oder hier in der View anzgeiezt werdne muss
     // TODO immer nur Diagrammsicht / Tabelle und immer Icon + Name als erstes in der View?
     return HideBottomNavigationBar(
@@ -42,48 +55,44 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
         builder: (BuildContext context, BoxConstraints constraints) {
           // TEST 2D
           if (true) {
-            // TODO scrollbars
-            // TODO title - in Grid oder ausserhalb stehen bleibend -> scroll controller abfangen
             final TableColumnProfile adjustedTableColumnProfile = tableColumnProfile.adjustToWidth(constraints.maxWidth);
-            List<_BloodPressureDayItem> data = _buildTableDataProvider(seriesData);
-            // calc line height = single line height * max lines per day of all items
-            var maxItemsPerDayPart = data.fold(
-              1,
-              (previousValue, item) {
-                var maxItems = math.max(math.max(item.morning.length, item.midday.length), item.evening.length);
-                return math.max(previousValue, maxItems);
-              },
-            );
-            int lineHeight = 26 * maxItemsPerDayPart;
 
-            // adjusted from https://dartpad.dev/?id=4424936c57ed13093eb389123383e894
             var viewportSizeKey = ValueKey('blood_pressure_2d_grid_view_size_key_${constraints.maxWidth}');
+
             var twoDimensionalChildBuilderDelegate = TwoDimensionalChildBuilderDelegate(
                 maxXIndex: adjustedTableColumnProfile.length() - 1,
                 maxYIndex: data.length - 1,
+                // TODO extract to extended builder fnc (context, tableColumn, rowData
                 builder: (BuildContext context, ChildVicinity vicinity) {
                   // print('$vicinity');
                   TableColumn tableColumn = adjustedTableColumnProfile.getColumnAt(vicinity.xIndex);
-                  var columnWidth = tableColumn.minWidth.toDouble();
+                  var columnWidth = tableColumn.minWidth;
+
+                  if (tableColumn.isMarginColumn) {
+                    return SizedBox(width: columnWidth);
+                  }
+
+                  var tableDataXIndex = vicinity.xIndex;
+                  // if column profile has margin columns adjust data idx
+                  if (adjustedTableColumnProfile.hasHorizontalMarginColumns) {
+                    tableDataXIndex--;
+                  }
 
                   _BloodPressureDayItem bloodPressureDayItem = data[vicinity.yIndex];
                   Color? backgroundColor = bloodPressureDayItem.backgroundColor;
-                  if (vicinity.xIndex == 0) {
-                    return Padding(
-                      padding: EdgeInsets.only(left: adjustedTableColumnProfile.marginLeft),
-                      child: Container(
-                        color: backgroundColor,
-                        height: lineHeight.toDouble(),
-                        width: columnWidth - adjustedTableColumnProfile.marginLeft,
-                        child: Center(child: Text(bloodPressureDayItem.date)),
-                      ),
+                  if (tableDataXIndex == 0) {
+                    return Container(
+                      color: backgroundColor,
+                      height: lineHeight.toDouble(),
+                      width: columnWidth,
+                      child: Center(child: Text(bloodPressureDayItem.date)),
                     );
                   }
 
                   List<BloodPressureValue> bloodPressureValues;
-                  if (vicinity.xIndex == 1) {
+                  if (tableDataXIndex == 1) {
                     bloodPressureValues = bloodPressureDayItem.morning;
-                  } else if (vicinity.xIndex == 2) {
+                  } else if (tableDataXIndex == 2) {
                     bloodPressureValues = bloodPressureDayItem.midday;
                   } else {
                     bloodPressureValues = bloodPressureDayItem.evening;
@@ -96,16 +105,11 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
                     child: BloodPressureValuesRenderer(bloodPressureValues: bloodPressureValues),
                   );
                 });
-            return TwoDimensionalGridViewWithScrollbar(
-              lineHeight: lineHeight,
-              tableColumnProfile: adjustedTableColumnProfile,
-              viewportSizeKey: viewportSizeKey,
-              twoDimensionalChildBuilderDelegate: twoDimensionalChildBuilderDelegate,
-
-              // Hide bottom nav bar on scroll is not really possible because the hide forces the layout builder to rebuild
-              // => the scroll breaks. => Hide bottom nav bar always in grid view
-              // verticalScrollPositionHandler: HideBottomNavigationBar.setScrollPosition,
-            );
+            return ScrollableGrid(
+                lineHeight: lineHeight,
+                adjustedTableColumnProfile: adjustedTableColumnProfile,
+                viewportSizeKey: viewportSizeKey,
+                twoDimensionalChildBuilderDelegate: twoDimensionalChildBuilderDelegate);
           }
           // TEST 2D
 
@@ -204,6 +208,97 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
     }
 
     return list;
+  }
+}
+
+class ScrollableGrid extends StatefulWidget {
+  ScrollableGrid({
+    super.key,
+    required this.lineHeight,
+    required this.adjustedTableColumnProfile,
+    required this.viewportSizeKey,
+    required this.twoDimensionalChildBuilderDelegate,
+  });
+
+  final int lineHeight;
+  final TableColumnProfile adjustedTableColumnProfile;
+  final ValueKey<String> viewportSizeKey;
+  final TwoDimensionalChildBuilderDelegate twoDimensionalChildBuilderDelegate;
+  final List<dynamic> tableHead = [const Text('Datum'), const Text('Abends'), const Text('Mittags'), const Text('Abends')];
+
+  @override
+  State<ScrollableGrid> createState() => _ScrollableGridState();
+}
+
+class _ScrollableGridState extends State<ScrollableGrid> {
+  final ScrollController _tableHeadScrollController = ScrollController();
+
+  void _scrollToPosition(double position) {
+    _tableHeadScrollController.jumpTo(position);
+    //  .animateTo(
+    //   position,
+    //   duration: const Duration(milliseconds: 500),
+    //   curve: Curves.easeInOut,
+    // );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var columnProfile = widget.adjustedTableColumnProfile;
+
+    List<Widget> tableHeader = [];
+    int tableHeadItemIdx = -1;
+    for (var tableColumn in columnProfile.columns) {
+      if (tableColumn.isMarginColumn) {
+        tableHeader.add(SizedBox(width: tableColumn.minWidth));
+      } else {
+        tableHeadItemIdx++;
+        Widget tableHeaderItemWidget = SizedBox(
+          width: tableColumn.minWidth.toDouble(),
+          child: _getTableHeadItemWidget(tableHeadItemIdx),
+        );
+        tableHeader.add(tableHeaderItemWidget);
+      }
+    }
+    return Column(
+      children: [
+        SingleChildScrollView(
+          controller: _tableHeadScrollController,
+          scrollDirection: Axis.horizontal,
+          child: SizedBox(
+            height: 40,
+            width: columnProfile.minWidth().toDouble(),
+            child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: tableHeader),
+          ),
+        ),
+        const Divider(),
+        Expanded(
+          child: TwoDimensionalGridViewWithScrollbar(
+            lineHeight: widget.lineHeight,
+            tableColumnProfile: columnProfile,
+            viewportSizeKey: widget.viewportSizeKey,
+            twoDimensionalChildBuilderDelegate: widget.twoDimensionalChildBuilderDelegate,
+
+            // Hide bottom nav bar on scroll is not really possible because the hide forces the layout builder to rebuild
+            // => the scroll breaks. => Hide bottom nav bar always in grid view
+            // verticalScrollPositionHandler: HideBottomNavigationBar.setScrollPosition,
+
+            horizontalScrollPositionHandler: (hScrollPos) => _scrollToPosition(hScrollPos.pixels),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _getTableHeadItemWidget(int idx) {
+    var tableHeadItem = widget.tableHead[idx];
+    Widget tableHeadItemWidget;
+    if (tableHeadItem is Widget) {
+      tableHeadItemWidget = tableHeadItem;
+    } else {
+      tableHeadItemWidget = OverflowText(tableHeadItem.toString());
+    }
+    return tableHeadItemWidget;
   }
 }
 
@@ -324,6 +419,7 @@ class _TwoDimensionalGridViewWithScrollbarState extends State<TwoDimensionalGrid
   }
 }
 
+// adjusted from https://dartpad.dev/?id=4424936c57ed13093eb389123383e894
 class TwoDimensionalGridView extends TwoDimensionalScrollView {
   final int lineHeight;
   final TableColumnProfile tableColumnProfile;
@@ -456,7 +552,7 @@ class RenderTwoDimensionalGridViewport extends RenderTwoDimensionalViewport {
     int leadingColumnIdx = 0;
     int trailingColumnIdx = maxColumnIndex;
 
-    int summedColumnPixels = 0;
+    double summedColumnPixels = 0;
     for (var tableColumn in tableColumnProfile.columns) {
       if (summedColumnPixels < horizontalPixels + viewportWidth) {
         trailingColumnIdx++;
@@ -474,7 +570,7 @@ class RenderTwoDimensionalGridViewport extends RenderTwoDimensionalViewport {
       maxRowIndex,
     );
 
-    int leadingColumnPixels = 0;
+    double leadingColumnPixels = 0;
     for (var idx = 0; idx < leadingColumnIdx; ++idx) {
       leadingColumnPixels += tableColumnProfile.getColumnAt(idx).minWidth;
     }

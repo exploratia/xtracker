@@ -1,13 +1,13 @@
 class TableColumnProfile {
   final List<TableColumn> columns;
-  final double marginLeft;
+  final bool hasHorizontalMarginColumns;
 
   TableColumnProfile({
     required this.columns,
-    this.marginLeft = 0,
+    this.hasHorizontalMarginColumns = false,
   });
 
-  int minWidth() {
+  double minWidth() {
     return columns.fold(0, (previousValue, element) => previousValue + element.minWidth);
   }
 
@@ -32,7 +32,7 @@ class TableColumnProfile {
 
     // otherwise adjust
     bool addMargin = false;
-    double marginLeft = 0;
+    double horizontalMargin = -1000;
 
     double widthFactor = width / minW;
     // if too wide limit and add margin to first (=date) column
@@ -40,17 +40,19 @@ class TableColumnProfile {
       widthFactor = 2;
       addMargin = true;
     }
-    List<TableColumn> adjustedColumns = columns.map((e) => TableColumn(minWidth: (e.minWidth * widthFactor).truncate())).toList();
+    List<TableColumn> adjustedColumns = columns.map((e) => TableColumn(minWidth: (e.minWidth * widthFactor))).toList();
 
     if (addMargin) {
-      var adjustedWidth = adjustedColumns.fold(0, (previousValue, element) => previousValue + element.minWidth);
-      marginLeft = (width - adjustedWidth) / 2;
-      TableColumn firstColumn = adjustedColumns[0];
-      firstColumn = TableColumn(minWidth: (firstColumn.minWidth + marginLeft).truncate());
-      adjustedColumns = [firstColumn, ...adjustedColumns.sublist(1)];
+      var adjustedWidth = adjustedColumns.fold(0.toDouble(), (previousValue, element) => previousValue + element.minWidth);
+      horizontalMargin = (width - adjustedWidth) / 2;
+      adjustedColumns = [
+        TableColumn(minWidth: horizontalMargin, isMarginColumn: true),
+        ...adjustedColumns,
+        TableColumn(minWidth: horizontalMargin, isMarginColumn: true),
+      ];
     }
 
-    return TableColumnProfile(columns: adjustedColumns, marginLeft: marginLeft);
+    return TableColumnProfile(columns: adjustedColumns, hasHorizontalMarginColumns: horizontalMargin >= 0);
   }
 
   @override
@@ -60,9 +62,10 @@ class TableColumnProfile {
 }
 
 class TableColumn {
-  final int minWidth;
+  final double minWidth;
+  final bool isMarginColumn;
 
-  TableColumn({required this.minWidth});
+  TableColumn({required this.minWidth, this.isMarginColumn = false});
 
   @override
   String toString() {
