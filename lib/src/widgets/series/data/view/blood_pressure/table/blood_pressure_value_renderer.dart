@@ -30,11 +30,11 @@ class BloodPressureValueRenderer extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        spacing: 4,
+        // spacing: 4,
         children: [
-          Text('${bloodPressureValue.high}', textAlign: TextAlign.center),
-          const SizedBox(height: 16, child: VerticalDivider(thickness: 1, width: 1, color: Colors.white)),
-          Text('${bloodPressureValue.low}', textAlign: TextAlign.center),
+          SizedBox(width: 30, child: Text('${bloodPressureValue.high}', textAlign: TextAlign.center)),
+          const SizedBox(height: 16, child: VerticalDivider(thickness: 1, width: 8, color: Colors.white)),
+          SizedBox(width: 30, child: Text('${bloodPressureValue.low}', textAlign: TextAlign.center)),
         ],
       ),
     );
