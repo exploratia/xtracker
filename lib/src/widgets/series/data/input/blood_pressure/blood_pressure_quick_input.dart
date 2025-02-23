@@ -111,13 +111,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
         child: Column(
           spacing: 10,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _DateTimeHeader(dateTime: dateTime),
-                if (widget.bloodPressureValue != null) BloodPressureValueRenderer(bloodPressureValue: widget.bloodPressureValue!, seriesDef: widget.seriesDef),
-              ],
-            ),
+            _Header(dateTime: dateTime, widget: widget),
             const Divider(height: 1),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -140,7 +134,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
         child: Column(
           spacing: 10,
           children: [
-            _DateTimeHeader(dateTime: dateTime),
+            _Header(dateTime: dateTime, widget: widget),
             const Divider(height: 1),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -163,7 +157,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
         child: Column(
           spacing: 10,
           children: [
-            _DateTimeHeader(dateTime: dateTime),
+            _Header(dateTime: dateTime, widget: widget),
             const Divider(height: 1),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -186,7 +180,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
         child: Column(
           spacing: 10,
           children: [
-            _DateTimeHeader(dateTime: dateTime),
+            _Header(dateTime: dateTime, widget: widget),
             const Divider(height: 1),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -207,6 +201,29 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
     }
 
     return const Placeholder();
+  }
+}
+
+class _Header extends StatelessWidget {
+  const _Header({
+    super.key,
+    required this.dateTime,
+    required this.widget,
+  });
+
+  final DateTime dateTime;
+  final BloodPressureQuickInput widget;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      spacing: 20,
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        _DateTimeHeader(dateTime: dateTime),
+        if (widget.bloodPressureValue != null) BloodPressureValueRenderer(bloodPressureValue: widget.bloodPressureValue!, seriesDef: widget.seriesDef),
+      ],
+    );
   }
 }
 
