@@ -24,6 +24,10 @@ class SeriesData<T extends SeriesDataValue> {
   void insert(T value) {
     seriesItems.add(value);
     // sort - probably not necessary but maybe date could also be set?
+    sort();
+  }
+
+  void sort() {
     seriesItems.sort((a, b) => a.dateTime.millisecondsSinceEpoch.compareTo(b.dateTime.millisecondsSinceEpoch));
   }
 
