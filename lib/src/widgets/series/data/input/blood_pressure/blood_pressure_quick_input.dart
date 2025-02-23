@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../../model/series/data/blood_pressure/blood_pressure_value.dart';
 import '../../../../../model/series/series_def.dart';
 import '../../../../../model/series/series_type.dart';
+import '../../../../../providers/series_data_provider.dart';
 import '../../../../../util/date_time_utils.dart';
+import '../../../../../util/dialogs.dart';
 import '../../view/blood_pressure/table/blood_pressure_value_renderer.dart';
 
 class BloodPressureQuickInput extends StatefulWidget {
@@ -16,18 +19,44 @@ class BloodPressureQuickInput extends StatefulWidget {
 
   static Future<BloodPressureValue?> showInputDlg(BuildContext context, SeriesDef seriesDef, {BloodPressureValue? bloodPressureValue}) async {
     final t = AppLocalizations.of(context)!;
+    final themeData = Theme.of(context);
+
+    deleteHandler() async {
+      bool? res = await Dialogs.simpleYesNoDialog(
+        t.seriesDataInputDialogMsgQueryDeleteValue,
+        context,
+        title: t.commonsDialogTitleAreYouSure,
+      );
+      if (res == true) {
+        try {
+          if (context.mounted) {
+            await context.read<SeriesDataProvider>().deleteValue(seriesDef, bloodPressureValue);
+            if (context.mounted) Navigator.pop(context, null);
+          }
+        } catch (err) {
+          if (context.mounted) {
+            Dialogs.simpleErrOkDialog('$err', context);
+          }
+        }
+      }
+    }
 
     return await showDialog<BloodPressureValue>(
       context: context,
       builder: (ctx) => AlertDialog(
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            if (bloodPressureValue != null) const Icon(Icons.edit_outlined),
-            if (bloodPressureValue == null) const Icon(Icons.add_circle_outline),
-            const SizedBox(width: 10),
-            Text(SeriesType.displayNameOf(seriesDef.seriesType, t)),
+            Row(
+              children: [
+                if (bloodPressureValue != null) const Icon(Icons.edit_outlined),
+                if (bloodPressureValue == null) const Icon(Icons.add_circle_outline),
+                const SizedBox(width: 10),
+                Text(SeriesType.displayNameOf(seriesDef.seriesType, t)),
+              ],
+            ),
+            if (bloodPressureValue != null) IconButton(onPressed: deleteHandler, color: themeData.colorScheme.primary, icon: const Icon(Icons.delete_outlined)),
           ],
         ),
         content: BloodPressureQuickInput(bloodPressureValue: bloodPressureValue, seriesDef: seriesDef),
@@ -206,7 +235,6 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
 
 class _Header extends StatelessWidget {
   const _Header({
-    super.key,
     required this.dateTime,
     required this.widget,
   });
