@@ -3,10 +3,10 @@ import 'package:provider/provider.dart';
 
 import '../../../providers/series_data_provider.dart';
 import '../../../util/dialogs.dart';
-import '../../../util/logging/flutter_simple_logging.dart';
 import '../../../widgets/series/data/input/blood_pressure/blood_pressure_quick_input.dart';
 import '../series_def.dart';
 import '../series_type.dart';
+import 'blood_pressure/blood_pressure_value.dart';
 import 'series_data_value.dart';
 
 class SeriesData<T extends SeriesDataValue> {
@@ -21,28 +21,48 @@ class SeriesData<T extends SeriesDataValue> {
     return seriesItems.isEmpty;
   }
 
-  void add(T value) {
+  void insert(T value) {
     seriesItems.add(value);
+    // sort - probably not necessary but maybe date could also be set?
+    seriesItems.sort((a, b) => a.dateTime.millisecondsSinceEpoch.compareTo(b.dateTime.millisecondsSinceEpoch));
   }
 
-  static showSeriesDataInputDlg(BuildContext context, SeriesDef seriesDef) async {
+  void update(T value) {
+    var idx = seriesItems.indexWhere((element) => element.uuid == value.uuid);
+    if (idx < 0) return;
+    seriesItems.removeAt(idx);
+    seriesItems.insert(idx, value);
+  }
+
+  void delete(T value) {
+    seriesItems.remove(value);
+  }
+
+  void deleteById(String uuid) {
+    seriesItems.removeWhere((element) => element.uuid == uuid);
+  }
+
+  static showSeriesDataInputDlg(BuildContext context, SeriesDef seriesDef, {dynamic value}) async {
     switch (seriesDef.seriesType) {
       case SeriesType.bloodPressure:
-        var val = await BloodPressureQuickInput.showInputDlg(context, seriesDef);
+        BloodPressureValue? bloodPressureValue;
+        if (value is BloodPressureValue) bloodPressureValue = value;
+        var val = await BloodPressureQuickInput.showInputDlg(context, seriesDef, bloodPressureValue: bloodPressureValue);
         if (val == null) return;
         if (context.mounted) {
           var seriesDataProvider = context.read<SeriesDataProvider>();
-          await seriesDataProvider.fetchDataIfNotYetLoaded(seriesDef);
-          var bloodPressureSeriesData = seriesDataProvider.bloodPressureData(seriesDef);
-          if (bloodPressureSeriesData == null) {
-            if (context.mounted) {
-              Dialogs.simpleErrOkDialog("Failed to store series value!", context);
+
+          try {
+            if (bloodPressureValue == null) {
+              await seriesDataProvider.addValue(seriesDef, val); // insert
             } else {
-              SimpleLogging.w("Failed to store series value vor series '${seriesDef.uuid}'! SeriesData is null.");
+              await seriesDataProvider.updateValue(seriesDef, val); // update
             }
-            return;
+          } catch (ex) {
+            if (context.mounted) {
+              Dialogs.simpleErrOkDialog(ex.toString(), context);
+            }
           }
-          bloodPressureSeriesData.add(val);
         }
       case SeriesType.dailyCheck:
         // TODO: Handle this case.

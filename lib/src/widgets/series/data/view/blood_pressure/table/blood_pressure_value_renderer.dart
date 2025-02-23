@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../../model/series/data/blood_pressure/blood_pressure_value.dart';
+import '../../../../../../model/series/data/series_data.dart';
+import '../../../../../../model/series/series_def.dart';
 
 class BloodPressureValueRenderer extends StatelessWidget {
-  const BloodPressureValueRenderer({super.key, required this.bloodPressureValue});
+  const BloodPressureValueRenderer({super.key, required this.bloodPressureValue, this.editMode, required this.seriesDef});
 
   final BloodPressureValue bloodPressureValue;
+  final bool? editMode;
+  final SeriesDef seriesDef;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      // TODO callback? dann klickable
-      // width: 270,
+    var container = Container(
       margin: const EdgeInsets.all(2),
       padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 3),
       decoration: BoxDecoration(
@@ -36,5 +38,13 @@ class BloodPressureValueRenderer extends StatelessWidget {
         ],
       ),
     );
+
+    if (editMode != null && editMode!) {
+      return InkWell(
+        onTap: () => SeriesData.showSeriesDataInputDlg(context, seriesDef, value: bloodPressureValue),
+        child: container,
+      );
+    }
+    return container;
   }
 }

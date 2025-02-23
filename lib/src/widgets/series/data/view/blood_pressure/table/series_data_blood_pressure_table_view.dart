@@ -56,13 +56,16 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
       }
       return GridCell(
         backgroundColor: bloodPressureDayItem.backgroundColor,
-        child: BloodPressureValuesRenderer(bloodPressureValues: bloodPressureValues),
+        child: BloodPressureValuesRenderer(
+          bloodPressureValues: bloodPressureValues,
+          seriesViewMetaData: seriesViewMetaData,
+        ),
       );
     };
 
     // TODO seriesViewMetaData.editMode => klick on Renderer
     // TODO Anhand Breite (zu schmal) fesetlegen, ob Titel in AppBar oder hier in der View anzgeiezt werdne muss
-    // TODO immer nur Diagrammsicht / Tabelle und immer Icon + Name als erstes in der View?
+    // TODO immer nur Titel Diagrammsicht / Tabelle / Dots und immer Icon + Name als erstes in der View?
 
     return TwoDimensionalScrollableTable(
       tableColumnProfile: _tableColumnProfile,

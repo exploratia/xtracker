@@ -6,19 +6,31 @@ import '../../../../../model/series/data/blood_pressure/blood_pressure_value.dar
 import '../../../../../model/series/series_def.dart';
 import '../../../../../model/series/series_type.dart';
 import '../../../../../util/date_time_utils.dart';
+import '../../view/blood_pressure/table/blood_pressure_value_renderer.dart';
 
 class BloodPressureQuickInput extends StatefulWidget {
-  const BloodPressureQuickInput({super.key, this.bloodPressureValue});
+  const BloodPressureQuickInput({super.key, this.bloodPressureValue, required this.seriesDef});
 
+  final SeriesDef seriesDef;
   final BloodPressureValue? bloodPressureValue;
 
   static Future<BloodPressureValue?> showInputDlg(BuildContext context, SeriesDef seriesDef, {BloodPressureValue? bloodPressureValue}) async {
     final t = AppLocalizations.of(context)!;
+
     return await showDialog<BloodPressureValue>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text(SeriesType.displayNameOf(seriesDef.seriesType, t)),
-        content: BloodPressureQuickInput(bloodPressureValue: bloodPressureValue),
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            if (bloodPressureValue != null) const Icon(Icons.edit_outlined),
+            if (bloodPressureValue == null) const Icon(Icons.add_circle_outline),
+            const SizedBox(width: 10),
+            Text(SeriesType.displayNameOf(seriesDef.seriesType, t)),
+          ],
+        ),
+        content: BloodPressureQuickInput(bloodPressureValue: bloodPressureValue, seriesDef: seriesDef),
         actions: [
           TextButton(
             onPressed: () {
@@ -99,7 +111,13 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
         child: Column(
           spacing: 10,
           children: [
-            _DateTimeHeader(dateTime: dateTime),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _DateTimeHeader(dateTime: dateTime),
+                if (widget.bloodPressureValue != null) BloodPressureValueRenderer(bloodPressureValue: widget.bloodPressureValue!, seriesDef: widget.seriesDef),
+              ],
+            ),
             const Divider(height: 1),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
