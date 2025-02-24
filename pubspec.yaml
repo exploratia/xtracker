@@ -42,6 +42,9 @@ dependencies:
   uuid: ^4.5.1
   provider: ^6.1.2
 
+  # 2d grid
+  linked_scroll_controller: ^0.2.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

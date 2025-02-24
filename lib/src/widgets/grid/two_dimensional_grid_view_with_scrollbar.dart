@@ -12,6 +12,8 @@ class TwoDimensionalGridViewWithScrollbar extends StatefulWidget {
     required this.twoDimensionalChildBuilderDelegate,
     this.verticalScrollPositionHandler,
     this.horizontalScrollPositionHandler,
+    this.verticalScrollController,
+    this.horizontalScrollController,
   });
 
   final int lineHeight;
@@ -20,30 +22,29 @@ class TwoDimensionalGridViewWithScrollbar extends StatefulWidget {
   final TwoDimensionalChildBuilderDelegate twoDimensionalChildBuilderDelegate;
   final void Function(ScrollPosition value)? verticalScrollPositionHandler;
   final void Function(ScrollPosition value)? horizontalScrollPositionHandler;
+  final ScrollController? verticalScrollController;
+  final ScrollController? horizontalScrollController;
 
   @override
   State<TwoDimensionalGridViewWithScrollbar> createState() => _TwoDimensionalGridViewWithScrollbarState();
 }
 
 class _TwoDimensionalGridViewWithScrollbarState extends State<TwoDimensionalGridViewWithScrollbar> {
-  final ScrollController _verticalController = ScrollController();
-  final ScrollController _horizontalController = ScrollController();
+  late ScrollController _verticalController;
+  late ScrollController _horizontalController;
 
   @override
-  void dispose() {
-    _verticalController.dispose();
-    _horizontalController.dispose();
-    super.dispose();
-  }
+  void initState() {
+    // ScrollControllers given as parameter?
+    _verticalController = widget.verticalScrollController ?? ScrollController();
+    _horizontalController = widget.horizontalScrollController ?? ScrollController();
 
-  @override
-  Widget build(BuildContext context) {
     final verticalScrollPositionHandler = widget.verticalScrollPositionHandler;
     if (verticalScrollPositionHandler != null) {
       _verticalController.addListener(() {
         verticalScrollPositionHandler(_verticalController.position);
       });
-      // Call callback once direct with initial scroll pos (Show Bottom NavBar if not visible)
+      // Call callback once direct with initial scroll pos
       WidgetsBinding.instance.addPostFrameCallback((_) => verticalScrollPositionHandler(_verticalController.position));
     }
 
@@ -56,6 +57,23 @@ class _TwoDimensionalGridViewWithScrollbarState extends State<TwoDimensionalGrid
       WidgetsBinding.instance.addPostFrameCallback((_) => horizontalScrollPositionHandler(_horizontalController.position));
     }
 
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    // only dispose if not as parameter from parent
+    if (widget.verticalScrollController == null) {
+      _verticalController.dispose();
+    }
+    if (widget.horizontalScrollController == null) {
+      _horizontalController.dispose();
+    }
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scrollbar(
       controller: _verticalController,
       child: Scrollbar(

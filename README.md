@@ -66,6 +66,10 @@ https://pub.dev/packages/uuid
 
 https://pub.dev/packages/provider
 
+### LinkedScrollController
+
+https://pub.dev/packages/linked_scroll_controller
+
 ### Launcher icon (dev)
 
 https://pub.dev/packages/flutter_launcher_icons

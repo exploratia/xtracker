@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:uuid/v4.dart';
 
 import '../../model/series/profile/table_column_profile.dart';
@@ -14,31 +15,38 @@ class TwoDimensionalScrollableTable extends StatelessWidget {
     required this.gridCellBuilder,
     required this.lineHeight,
     required this.lineCount,
+    this.useFixedFirstColumn = true,
   });
 
   final TableColumnProfile tableColumnProfile;
   final GridCell Function(BuildContext context, int yIndex, int xIndex) gridCellBuilder;
   final int lineHeight;
   final int lineCount;
+  final bool useFixedFirstColumn;
   final String uniqueViewportSizeKeyId = const UuidV4().generate().toString();
 
   @override
   Widget build(BuildContext context) {
-    final t = AppLocalizations.of(context)!;
     return HideBottomNavigationBar(
       child: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
         final TableColumnProfile adjustedTableColumnProfile = tableColumnProfile.adjustToWidth(constraints.maxWidth);
 
-        var viewportSizeKey = ValueKey('2d_grid_view_size_key_${constraints.maxWidth}_$uniqueViewportSizeKeyId');
+        TableColumn? fixedFirstColumnTableColumn;
+        final bool showFixedFirstColumn = useFixedFirstColumn && adjustedTableColumnProfile.minWidth() > constraints.maxWidth;
+        if (showFixedFirstColumn) {
+          fixedFirstColumnTableColumn = adjustedTableColumnProfile.columns.removeAt(0);
+        }
 
-        var twoDimensionalChildBuilderDelegate = TwoDimensionalChildBuilderDelegate(
+        final viewportSizeKey = ValueKey('2d_grid_view_size_key_${constraints.maxWidth}_$uniqueViewportSizeKeyId');
+
+        final twoDimensionalChildBuilderDelegate = TwoDimensionalChildBuilderDelegate(
             maxXIndex: adjustedTableColumnProfile.length() - 1,
             maxYIndex: lineCount - 1,
             builder: (BuildContext context, ChildVicinity vicinity) {
               // print('$vicinity');
               int yIndex = vicinity.yIndex;
               TableColumn tableColumn = adjustedTableColumnProfile.getColumnAt(vicinity.xIndex);
-              var columnWidth = tableColumn.minWidth;
+              final columnWidth = tableColumn.minWidth;
 
               if (tableColumn.isMarginColumn) {
                 return SizedBox(width: columnWidth);
@@ -48,9 +56,12 @@ class TwoDimensionalScrollableTable extends StatelessWidget {
               // if column profile has margin columns adjust data idx
               if (adjustedTableColumnProfile.hasHorizontalMarginColumns) {
                 tableDataXIndex--;
+              } // if column profile has fix first column adjust data idx
+              else if (showFixedFirstColumn) {
+                tableDataXIndex++;
               }
 
-              var cellData = gridCellBuilder(context, yIndex, tableDataXIndex);
+              final cellData = gridCellBuilder(context, yIndex, tableDataXIndex);
 
               return Container(
                 color: cellData.backgroundColor,
@@ -61,11 +72,14 @@ class TwoDimensionalScrollableTable extends StatelessWidget {
             });
 
         return _ScrollableGrid(
-            lineHeight: lineHeight,
-            tableColumnProfile: adjustedTableColumnProfile,
-            viewportSizeKey: viewportSizeKey,
-            tableHead: tableColumnProfile.getTitles(t),
-            twoDimensionalChildBuilderDelegate: twoDimensionalChildBuilderDelegate);
+          lineHeight: lineHeight,
+          lineCount: lineCount,
+          fixedFirstColumnTableColumn: fixedFirstColumnTableColumn,
+          tableColumnProfile: adjustedTableColumnProfile,
+          viewportSizeKey: viewportSizeKey,
+          twoDimensionalChildBuilderDelegate: twoDimensionalChildBuilderDelegate,
+          gridCellBuilder: gridCellBuilder,
+        );
       }),
     );
   }
@@ -81,103 +95,162 @@ class GridCell {
 class _ScrollableGrid extends StatefulWidget {
   const _ScrollableGrid({
     required this.lineHeight,
+    required this.lineCount,
     required this.tableColumnProfile,
+    required this.fixedFirstColumnTableColumn,
     required this.viewportSizeKey,
     required this.twoDimensionalChildBuilderDelegate,
-    required this.tableHead,
+    required this.gridCellBuilder,
   });
 
   final int lineHeight;
+  final int lineCount;
+
   final TableColumnProfile tableColumnProfile;
+  final TableColumn? fixedFirstColumnTableColumn;
+
+  final double tableHeadHeight = 40;
+
   final ValueKey<String> viewportSizeKey;
   final TwoDimensionalChildBuilderDelegate twoDimensionalChildBuilderDelegate;
-  final List<dynamic> tableHead;
+  final GridCell Function(BuildContext context, int yIndex, int xIndex) gridCellBuilder;
 
   @override
   State<_ScrollableGrid> createState() => _ScrollableGridState();
 }
 
 class _ScrollableGridState extends State<_ScrollableGrid> {
-  final ScrollController _tableHeadScrollController = ScrollController();
+  late LinkedScrollControllerGroup _verticalScrollControllersGroup;
+  late ScrollController _verticalScrollControllerGrid;
 
-  void _scrollToPosition(double position) {
-    _tableHeadScrollController.jumpTo(position);
-    //  .animateTo(
-    //   position,
-    //   duration: const Duration(milliseconds: 500),
-    //   curve: Curves.easeInOut,
-    // );
+  late ScrollController _verticalScrollControllerFirstColumn;
+
+  late LinkedScrollControllerGroup _horizontalScrollControllersGroup;
+  late ScrollController _horizontalScrollControllerGrid;
+  late ScrollController _horizontalScrollControllerTableHead;
+
+  @override
+  void initState() {
+    super.initState();
+    _verticalScrollControllersGroup = LinkedScrollControllerGroup();
+    _verticalScrollControllerGrid = _verticalScrollControllersGroup.addAndGet();
+    _verticalScrollControllerFirstColumn = _verticalScrollControllersGroup.addAndGet();
+    _horizontalScrollControllersGroup = LinkedScrollControllerGroup();
+    _horizontalScrollControllerGrid = _horizontalScrollControllersGroup.addAndGet();
+    _horizontalScrollControllerTableHead = _horizontalScrollControllersGroup.addAndGet();
   }
 
   @override
   void dispose() {
-    _tableHeadScrollController.dispose();
+    _verticalScrollControllerGrid.dispose();
+    _verticalScrollControllerFirstColumn.dispose();
+    _horizontalScrollControllerGrid.dispose();
+    _horizontalScrollControllerTableHead.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    final t = AppLocalizations.of(context)!;
     var columnProfile = widget.tableColumnProfile;
 
     List<Widget> tableHeader = [];
-    int tableHeadItemIdx = -1;
     for (var tableColumn in columnProfile.columns) {
       if (tableColumn.isMarginColumn) {
         tableHeader.add(SizedBox(width: tableColumn.minWidth));
       } else {
-        tableHeadItemIdx++;
         Widget tableHeaderItemWidget = SizedBox(
           width: tableColumn.minWidth.toDouble(),
-          child: _getTableHeadItemWidget(tableHeadItemIdx),
+          child: _getTableHeadItemWidget(tableColumn.getTitle(t)),
         );
         tableHeader.add(tableHeaderItemWidget);
       }
     }
-    return Column(
-      children: [
-        SingleChildScrollView(
-          controller: _tableHeadScrollController,
-          scrollDirection: Axis.horizontal,
-          child: SizedBox(
-            height: 40,
-            width: columnProfile.minWidth().toDouble(),
-            child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: tableHeader),
-          ),
+
+    Widget? firstColumn;
+    if (widget.fixedFirstColumnTableColumn != null) {
+      var fixedFirstColumnTableColumn = widget.fixedFirstColumnTableColumn!;
+      double firstColumnWidth = fixedFirstColumnTableColumn.minWidth;
+      firstColumn = SizedBox(
+        width: firstColumnWidth,
+        child: Column(
+          children: [
+            SizedBox(
+                height: widget.tableHeadHeight,
+                width: firstColumnWidth,
+                child: Center(child: _getTableHeadItemWidget(fixedFirstColumnTableColumn.getTitle(t)))),
+            const Divider(height: 0),
+            Expanded(
+              child: ScrollConfiguration(
+                behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
+                child: ListView.builder(
+                  controller: _verticalScrollControllerFirstColumn,
+                  scrollDirection: Axis.vertical,
+                  itemCount: widget.lineCount,
+                  itemBuilder: (context, yIndex) {
+                    final cellData = widget.gridCellBuilder(context, yIndex, 0);
+
+                    return Container(
+                      color: cellData.backgroundColor,
+                      height: widget.lineHeight.toDouble(),
+                      width: firstColumnWidth,
+                      child: cellData.child,
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
         ),
-        const Divider(height: 0),
+      );
+    }
+
+    return Row(
+      children: [
+        if (firstColumn != null) firstColumn,
         Expanded(
-          child: TwoDimensionalGridViewWithScrollbar(
-            lineHeight: widget.lineHeight,
-            tableColumnProfile: columnProfile,
-            viewportSizeKey: widget.viewportSizeKey,
-            twoDimensionalChildBuilderDelegate: widget.twoDimensionalChildBuilderDelegate,
+          child: Column(
+            children: [
+              SingleChildScrollView(
+                controller: _horizontalScrollControllerTableHead,
+                scrollDirection: Axis.horizontal,
+                child: SizedBox(
+                  height: widget.tableHeadHeight,
+                  width: columnProfile.minWidth().toDouble(),
+                  child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: tableHeader),
+                ),
+              ),
+              const Divider(height: 0),
+              Expanded(
+                child: TwoDimensionalGridViewWithScrollbar(
+                  lineHeight: widget.lineHeight,
+                  tableColumnProfile: columnProfile,
+                  viewportSizeKey: widget.viewportSizeKey,
+                  twoDimensionalChildBuilderDelegate: widget.twoDimensionalChildBuilderDelegate,
 
-            // Hide bottom nav bar on scroll is not really possible because the hide forces the layout builder to rebuild
-            // => the scroll breaks. => Hide bottom nav bar always in grid view
-            // verticalScrollPositionHandler: HideBottomNavigationBar.setScrollPosition,
+                  verticalScrollController: _verticalScrollControllerGrid,
+                  horizontalScrollController: _horizontalScrollControllerGrid,
 
-            horizontalScrollPositionHandler: (hScrollPos) => _scrollToPosition(hScrollPos.pixels),
+                  // Hide bottom nav bar on scroll is not really possible because the hide forces the layout builder to rebuild
+                  // => the scroll breaks. => Hide bottom nav bar always in grid view
+                  // verticalScrollPositionHandler: HideBottomNavigationBar.setScrollPosition,
+                ),
+              ),
+            ],
           ),
         ),
       ],
     );
   }
 
-  Widget _getTableHeadItemWidget(int idx) {
-    var tableHeadItem = widget.tableHead[idx];
-    Widget tableHeadItemWidget;
-    if (tableHeadItem is Widget) {
-      tableHeadItemWidget = tableHeadItem;
-    } else {
-      tableHeadItemWidget = Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4),
-        child: OverflowText(
-          expanded: false,
-          tableHeadItem.toString(),
-          textAlign: TextAlign.center,
-        ),
-      );
-    }
-    return tableHeadItemWidget;
+  Widget _getTableHeadItemWidget(String columnTitle) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      child: OverflowText(
+        expanded: false,
+        columnTitle,
+        textAlign: TextAlign.center,
+      ),
+    );
   }
 }

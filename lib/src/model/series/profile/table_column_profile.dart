@@ -28,15 +28,13 @@ class TableColumnProfile {
     return TableColumn(minWidth: 200, title: '-?-');
   }
 
-  List<String> getTitles(AppLocalizations t) {
-    return columns.map((e) => e.getTitle(t)).toList();
-  }
-
   /// stretch to given width
   TableColumnProfile adjustToWidth(double width) {
     double minW = minWidth().toDouble();
-    // is column profile wider then available width - return
-    if (minW >= width) return this;
+    // is column profile wider then available width - return clone
+    if (minW >= width) {
+      return TableColumnProfile(columns: [...columns]);
+    }
 
     // otherwise adjust
     bool addMargin = false;

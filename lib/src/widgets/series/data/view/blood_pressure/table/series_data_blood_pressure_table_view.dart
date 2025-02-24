@@ -38,8 +38,7 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
     );
     int lineHeight = 26 * maxItemsPerDayPart;
 
-    GridCell Function(BuildContext context, int yIndex, int xIndex) gridCellBuilder;
-    gridCellBuilder = (BuildContext context, int yIndex, int xIndex) {
+    gridCellBuilder(BuildContext context, int yIndex, int xIndex) {
       _BloodPressureDayItem bloodPressureDayItem = data[yIndex];
 
       if (xIndex == 0) {
@@ -61,11 +60,11 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
           seriesViewMetaData: seriesViewMetaData,
         ),
       );
-    };
+    }
 
-    // TODO seriesViewMetaData.editMode => klick on Renderer
     // TODO Anhand Breite (zu schmal) fesetlegen, ob Titel in AppBar oder hier in der View anzgeiezt werdne muss
     // TODO immer nur Titel Diagrammsicht / Tabelle / Dots und immer Icon + Name als erstes in der View?
+    // TODO im Titel immer nur Serien-Icon + Anzeige-Typ-Icon in gleicher Farbe -> in View dann als Headline der SerienName
 
     return TwoDimensionalScrollableTable(
       tableColumnProfile: _tableColumnProfile,
