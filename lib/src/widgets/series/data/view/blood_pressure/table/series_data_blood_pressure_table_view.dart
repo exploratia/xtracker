@@ -71,6 +71,7 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
       lineCount: data.length,
       gridCellBuilder: gridCellBuilder,
       lineHeight: lineHeight,
+      useFixedFirstColumn: true,
     );
   }
 
