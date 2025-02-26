@@ -69,4 +69,6 @@ class Navigation {
     if (maxW < 0) maxW = 304;
     _maxTextWidth = maxW;
   }
+
+  static bool navRailExpanded = false;
 }

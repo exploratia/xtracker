@@ -11,38 +11,33 @@ class AppNavigationRail extends StatefulWidget {
 }
 
 class _AppNavigationRailState extends State<AppNavigationRail> {
-  bool _extended = false;
-
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
-      builder: (ctx1, constraints) =>
-          SingleChildScrollView(
-            child: ConstrainedBox(
-              constraints: BoxConstraints(minHeight: constraints.maxHeight),
-              // ohne LayoutBuilder:  constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height,
-              child: IntrinsicHeight(
-                child: ValueListenableBuilder(
-                  valueListenable: Navigation.currentMainNavigationIdx,
-                  builder: (BuildContext ctx2, currentIdx, _) =>
-                      NavigationRail(
-                        selectedIndex: currentIdx + 1,
-                        destinations: _buildDestinations(ctx2),
-                        extended: _extended,
-                        onDestinationSelected: (int index) {
-                          setState(() {
-                            if (index == 0) {
-                              _extended = !_extended;
-                            } else {
-                              Navigation.setCurrentMainNavigationRouteIdx(index - 1, ctx2);
-                            }
-                          });
-                        },
-                      ),
-                ),
+      builder: (ctx1, constraints) => SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: constraints.maxHeight),
+          // ohne LayoutBuilder:  constraints: BoxConstraints(minHeight: MediaQuery.of(context).size.height,
+          child: IntrinsicHeight(
+            child: ValueListenableBuilder(
+              valueListenable: Navigation.currentMainNavigationIdx,
+              builder: (BuildContext ctx2, currentIdx, _) => NavigationRail(
+                selectedIndex: currentIdx + 1,
+                destinations: _buildDestinations(ctx2),
+                extended: Navigation.navRailExpanded,
+                onDestinationSelected: (int index) {
+                  if (index == 0) {
+                    Navigation.navRailExpanded = !Navigation.navRailExpanded;
+                  } else {
+                    Navigation.setCurrentMainNavigationRouteIdx(index - 1, ctx2);
+                  }
+                  setState(() {});
+                },
               ),
             ),
           ),
+        ),
+      ),
     );
   }
 
@@ -52,7 +47,7 @@ class _AppNavigationRailState extends State<AppNavigationRail> {
 
     // special expand item
     result.add(NavigationRailDestination(
-      icon: Icon(_extended ? Icons.arrow_left : Icons.arrow_right),
+      icon: Icon(Navigation.navRailExpanded ? Icons.arrow_left : Icons.arrow_right),
       label: const SizedBox(width: 0, height: 0),
     ));
 
