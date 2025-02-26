@@ -16,8 +16,8 @@ class SeriesDef {
   Color color = Colors.red;
   String iconName = "";
 
-  SeriesDef({required this.uuid, required this.seriesType, this.name = "", required this.seriesItems})
-      : color = seriesType.color,
+  SeriesDef({required this.uuid, required this.seriesType, this.name = "", Color? color, required this.seriesItems})
+      : color = color ?? seriesType.color,
         iconName = seriesType.iconName;
 
   @override
