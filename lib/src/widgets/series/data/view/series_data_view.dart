@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../../../model/series/series_type.dart';
 import '../../../../model/series/series_view_meta_data.dart';
 import '../../../../providers/series_data_provider.dart';
+import '../../../../util/theme_utils.dart';
 import '../../../provider/data_provider_loader.dart';
 import '../../../text/overflow_text.dart';
 import 'blood_pressure/series_data_blood_pressure_view.dart';
@@ -62,7 +63,7 @@ class _Title extends StatelessWidget {
       left: 40,
       right: 40,
       top: 0,
-      height: 48,
+      height: ThemeUtils.seriesDataViewTopPadding,
       child: IgnorePointer(
         child: Column(
           children: [

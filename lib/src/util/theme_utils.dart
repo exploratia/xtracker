@@ -15,6 +15,7 @@ class ThemeUtils {
   static const cardBorderRadius = BorderRadius.all(Radius.circular(20));
   static const cardPadding = EdgeInsets.all(20);
   static final btnShape = RoundedRectangleBorder(borderRadius: BorderRadius.circular(24));
+  static const double seriesDataViewTopPadding = 48;
 
   static ThemeData? _light;
   static ThemeData? _dark;

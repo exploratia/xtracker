@@ -7,6 +7,7 @@ import '../../../../../../model/series/data/series_data.dart';
 import '../../../../../../model/series/profile/table_column_profile.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
 import '../../../../../../util/date_time_utils.dart';
+import '../../../../../../util/theme_utils.dart';
 import '../../../../../grid/two_dimensional_scrollable_table.dart';
 import 'blood_pressure_values_renderer.dart';
 
@@ -62,12 +63,9 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
       );
     }
 
-    // TODO Anhand Breite (zu schmal) fesetlegen, ob Titel in AppBar oder hier in der View anzgeiezt werdne muss
-    // TODO immer nur Titel Diagrammsicht / Tabelle / Dots und immer Icon + Name als erstes in der View?
-    // TODO im Titel immer nur Serien-Icon + Anzeige-Typ-Icon in gleicher Farbe -> in View dann als Headline der SerienName
-
+    // padding because of headline in stack
     return Padding(
-      padding: const EdgeInsets.only(top: 48),
+      padding: const EdgeInsets.only(top: ThemeUtils.seriesDataViewTopPadding),
       child: TwoDimensionalScrollableTable(
         tableColumnProfile: _tableColumnProfile,
         lineCount: data.length,
