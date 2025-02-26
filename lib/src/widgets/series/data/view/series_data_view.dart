@@ -5,6 +5,7 @@ import '../../../../model/series/series_type.dart';
 import '../../../../model/series/series_view_meta_data.dart';
 import '../../../../providers/series_data_provider.dart';
 import '../../../provider/data_provider_loader.dart';
+import '../../../text/overflow_text.dart';
 import 'blood_pressure/series_data_blood_pressure_view.dart';
 
 class SeriesDataView extends StatelessWidget {
@@ -28,11 +29,91 @@ class _SeriesDataView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return switch (seriesViewMetaData.seriesDef.seriesType) {
+    final themeData = Theme.of(context);
+    Widget view = switch (seriesViewMetaData.seriesDef.seriesType) {
       SeriesType.bloodPressure => SeriesDataBloodPressureView(seriesViewMetaData: seriesViewMetaData),
       SeriesType.dailyCheck => throw UnimplementedError(),
       SeriesType.monthly => throw UnimplementedError(),
       SeriesType.free => throw UnimplementedError(),
     };
+
+    return Stack(
+      fit: StackFit.loose,
+      children: [
+        view,
+        _Title(themeData: themeData, seriesViewMetaData: seriesViewMetaData),
+      ],
+    );
+  }
+}
+
+class _Title extends StatelessWidget {
+  const _Title({
+    required this.themeData,
+    required this.seriesViewMetaData,
+  });
+
+  final ThemeData themeData;
+  final SeriesViewMetaData seriesViewMetaData;
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      left: 40,
+      right: 40,
+      top: 0,
+      height: 48,
+      child: IgnorePointer(
+        child: Column(
+          children: [
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: const AlignmentDirectional(0, -1),
+                  end: const AlignmentDirectional(0, 1),
+                  colors: [
+                    themeData.colorScheme.primary,
+                    seriesViewMetaData.seriesDef.color,
+                  ],
+                ),
+                borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                boxShadow: [
+                  BoxShadow(
+                    color: seriesViewMetaData.seriesDef.color.withValues(alpha: 0.8), // Glow effect
+                    blurRadius: 10,
+                    spreadRadius: 1, // Intensity of the glow
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.only(left: 2, right: 2, bottom: 1, top: 0),
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: themeData.scaffoldBackgroundColor, // Inner background color
+                    borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: IntrinsicWidth(
+                      child: Row(
+                        spacing: 8,
+                        children: [
+                          seriesViewMetaData.seriesDef.icon(),
+                          OverflowText(
+                            seriesViewMetaData.seriesDef.name,
+                            expanded: true,
+                            style: themeData.textTheme.titleLarge,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

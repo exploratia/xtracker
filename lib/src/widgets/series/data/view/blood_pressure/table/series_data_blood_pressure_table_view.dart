@@ -66,12 +66,15 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
     // TODO immer nur Titel Diagrammsicht / Tabelle / Dots und immer Icon + Name als erstes in der View?
     // TODO im Titel immer nur Serien-Icon + Anzeige-Typ-Icon in gleicher Farbe -> in View dann als Headline der SerienName
 
-    return TwoDimensionalScrollableTable(
-      tableColumnProfile: _tableColumnProfile,
-      lineCount: data.length,
-      gridCellBuilder: gridCellBuilder,
-      lineHeight: lineHeight,
-      useFixedFirstColumn: true,
+    return Padding(
+      padding: const EdgeInsets.only(top: 48),
+      child: TwoDimensionalScrollableTable(
+        tableColumnProfile: _tableColumnProfile,
+        lineCount: data.length,
+        gridCellBuilder: gridCellBuilder,
+        lineHeight: lineHeight,
+        useFixedFirstColumn: true,
+      ),
     );
   }
 
