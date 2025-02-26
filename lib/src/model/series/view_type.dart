@@ -5,11 +5,11 @@ enum ViewType {
   chart(Icons.area_chart_outlined),
   table(Icons.grid_on_outlined),
   // table(Icons.table_chart_outlined),
-  dots(Icons.margin_outlined);
+  // dots(Icons.margin_outlined);
   // dots(Icons.drag_indicator_outlined);
   // dots(Icons.dataset_outlined);
   // dots(Icons.blur_linear_outlined);
-  // dots(Icons.apps_rounded);
+  dots(Icons.apps_rounded);
 
   final IconData iconData;
 
