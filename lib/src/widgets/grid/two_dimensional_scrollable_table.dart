@@ -179,7 +179,7 @@ class _ScrollableGridState extends State<_ScrollableGrid> {
                 height: widget.tableHeadHeight,
                 width: firstColumnWidth,
                 child: Center(child: _getTableHeadItemWidget(fixedFirstColumnTableColumn.getTitle(t)))),
-            const Divider(height: 0),
+            const _TextColoredDivider(),
             Expanded(
               child: ScrollConfiguration(
                 behavior: ScrollConfiguration.of(context).copyWith(scrollbars: false),
@@ -220,7 +220,7 @@ class _ScrollableGridState extends State<_ScrollableGrid> {
                   child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: tableHeader),
                 ),
               ),
-              const Divider(height: 0),
+              const _TextColoredDivider(),
               Expanded(
                 child: TwoDimensionalGridViewWithScrollbar(
                   lineHeight: widget.lineHeight,
@@ -252,5 +252,15 @@ class _ScrollableGridState extends State<_ScrollableGrid> {
         textAlign: TextAlign.center,
       ),
     );
+  }
+}
+
+class _TextColoredDivider extends StatelessWidget {
+  const _TextColoredDivider();
+
+  @override
+  Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
+    return Divider(height: 0, color: themeData.textTheme.bodyLarge?.color?.withAlpha(64));
   }
 }
