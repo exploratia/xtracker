@@ -93,28 +93,11 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
     Widget title;
     if (_seriesDef != null) {
       title = Row(
+        spacing: 8,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Container(
-            width: 40,
-            height: 40,
-            margin: const EdgeInsets.only(right: 10),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              gradient: LinearGradient(
-                begin: const AlignmentDirectional(0, -1),
-                end: const AlignmentDirectional(0, 1),
-                colors: [
-                  Colors.transparent,
-                  themeData.scaffoldBackgroundColor,
-                  themeData.scaffoldBackgroundColor,
-                  Colors.transparent,
-                ],
-              ),
-            ),
-            child: _seriesDef!.icon(),
-          ),
-          OverflowText(_seriesDef!.name),
+          Icon(_viewType.iconData, color: themeData.colorScheme.onPrimary),
+          OverflowText(ViewType.displayNameOf(_viewType, t)),
         ],
       );
     } else {
