@@ -16,9 +16,12 @@ class SeriesDataView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DataProviderLoader(
-      obtainDataProviderFuture: context.read<SeriesDataProvider>().fetchDataIfNotYetLoaded(seriesViewMetaData.seriesDef),
-      child: _SeriesDataView(seriesViewMetaData: seriesViewMetaData),
+    return Stack(
+      fit: StackFit.loose,
+      children: [
+        _SeriesDataView(seriesViewMetaData: seriesViewMetaData),
+        _Title(seriesViewMetaData: seriesViewMetaData),
+      ],
     );
   }
 }
@@ -30,7 +33,6 @@ class _SeriesDataView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
     Widget view = switch (seriesViewMetaData.seriesDef.seriesType) {
       SeriesType.bloodPressure => SeriesDataBloodPressureView(seriesViewMetaData: seriesViewMetaData),
       SeriesType.dailyCheck => throw UnimplementedError(),
@@ -38,27 +40,23 @@ class _SeriesDataView extends StatelessWidget {
       SeriesType.free => throw UnimplementedError(),
     };
 
-    return Stack(
-      fit: StackFit.loose,
-      children: [
-        view,
-        _Title(themeData: themeData, seriesViewMetaData: seriesViewMetaData),
-      ],
+    return DataProviderLoader(
+      obtainDataProviderFuture: context.read<SeriesDataProvider>().fetchDataIfNotYetLoaded(seriesViewMetaData.seriesDef),
+      child: view,
     );
   }
 }
 
 class _Title extends StatelessWidget {
   const _Title({
-    required this.themeData,
     required this.seriesViewMetaData,
   });
 
-  final ThemeData themeData;
   final SeriesViewMetaData seriesViewMetaData;
 
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
     return Positioned(
       left: 40,
       right: 40,
@@ -99,7 +97,7 @@ class _Title extends StatelessWidget {
                       child: Row(
                         spacing: 8,
                         children: [
-                          seriesViewMetaData.seriesDef.icon(),
+                          Hero(tag: 'seriesDef_${seriesViewMetaData.seriesDef.uuid}', child: seriesViewMetaData.seriesDef.icon()),
                           OverflowText(
                             seriesViewMetaData.seriesDef.name,
                             expanded: true,

@@ -29,9 +29,12 @@ class SeriesDefRenderer extends StatelessWidget {
             children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Icon(
-                  IconMap.iconData(seriesDef.iconName),
-                  color: seriesDef.color,
+                child: Hero(
+                  tag: 'seriesDef_${seriesDef.uuid}',
+                  child: Icon(
+                    IconMap.iconData(seriesDef.iconName),
+                    color: seriesDef.color,
+                  ),
                 ),
               ),
               Expanded(child: Text(seriesDef.name)),

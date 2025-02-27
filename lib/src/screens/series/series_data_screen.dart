@@ -26,6 +26,7 @@ class SeriesDataScreen extends StatelessWidget {
     titleBuilder: (t) => t.seriesDataTitle,
   );
 
+  /// args(series) = seriesDef | seriesDefUuid
   const SeriesDataScreen({super.key, required this.args});
 
   final Map<String, dynamic> args;
@@ -33,6 +34,7 @@ class SeriesDataScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     String seriesUuid = Globals.invalid;
+    SeriesDef? seriesDef;
     var seriesParameterValue = args['series'];
     if (seriesParameterValue is String) {
       if (Uuid.isValidUUID(fromString: seriesParameterValue)) {
@@ -40,16 +42,20 @@ class SeriesDataScreen extends StatelessWidget {
       } else if (kDebugMode) {
         print('Got invalid arg series uuid!');
       }
+    } else if (seriesParameterValue is SeriesDef) {
+      seriesDef = seriesParameterValue;
+      seriesUuid = seriesDef.uuid;
     }
 
-    return _ScreenBuilder(seriesUuid: seriesUuid);
+    return _ScreenBuilder(seriesUuid: seriesUuid, seriesDef: seriesDef);
   }
 }
 
 class _ScreenBuilder extends StatefulWidget {
-  const _ScreenBuilder({required this.seriesUuid});
+  const _ScreenBuilder({required this.seriesUuid, this.seriesDef});
 
   final String seriesUuid;
+  final SeriesDef? seriesDef;
 
   @override
   State<_ScreenBuilder> createState() => _ScreenBuilderState();
@@ -59,6 +65,15 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
   SeriesDef? _seriesDef;
   ViewType _viewType = ViewType.chart;
   bool _editMode = false;
+
+  @override
+  void initState() {
+    _seriesDef = widget.seriesDef;
+    if (_seriesDef != null) {
+      _viewType = _seriesDef!.seriesType.viewTypes.last;
+    }
+    super.initState();
+  }
 
   void _setSeriesDef(SeriesDef seriesDef) {
     setState(() {
@@ -109,6 +124,14 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
       view = const CenteredMessage(message: 'Got invalid series id!');
       // pop screen if no series id is available.
       WidgetsBinding.instance.addPostFrameCallback((_) => Navigator.pop(context));
+    } else if (_seriesDef != null) {
+      view = _SeriesDataViewTitleWrapper(
+        seriesUuid: widget.seriesUuid,
+        setSeriesDef: _setSeriesDef,
+        useSeriesCallback: _seriesDef == null,
+        viewType: _viewType,
+        editMode: _editMode,
+      );
     } else {
       view = DataProviderLoader(
         obtainDataProviderFuture: context.read<SeriesProvider>().fetchDataIfNotYetLoaded(),
