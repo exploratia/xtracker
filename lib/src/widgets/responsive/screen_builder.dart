@@ -66,6 +66,7 @@ class ScreenBuilder extends StatelessWidget {
 
     Widget bodySafeArea = SafeArea(
         child: Row(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         if (buildNavigationRail) navigationRailBuilder!(context),
         if (buildNavigationRail) const VerticalDivider(thickness: 1, width: 1),
