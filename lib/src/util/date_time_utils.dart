@@ -39,12 +39,20 @@ class DateTimeUtils {
     return dateTime.day == 1;
   }
 
+  static bool isMonthEnd(DateTime dateTime) {
+    return dateTime.day == lastDayOfMonth(dateTime).day;
+  }
+
   static DateTime lastDayOfMonth(DateTime date) {
     return DateTime(date.year, date.month + 1, 0);
   }
 
   static DateTime firstDayOfMonth(DateTime date) {
     return DateTime(date.year, date.month, 1);
+  }
+
+  static DateTime truncateToDay(DateTime date) {
+    return DateTime(date.year, date.month, date.day);
   }
 
   static Color? backgroundColor(DateTime dateTime) {
