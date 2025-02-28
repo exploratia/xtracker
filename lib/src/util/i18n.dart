@@ -36,4 +36,16 @@ class I18N {
       _ => null, // default
     };
   }
+
+  static List<String> composeShortWeekdays(AppLocalizations t) {
+    return [
+      compose(commonsDateShortWeekdayMonday, t)!,
+      compose(commonsDateShortWeekdayTuesday, t)!,
+      compose(commonsDateShortWeekdayWednesday, t)!,
+      compose(commonsDateShortWeekdayThursday, t)!,
+      compose(commonsDateShortWeekdayFriday, t)!,
+      compose(commonsDateShortWeekdaySaturday, t)!,
+      compose(commonsDateShortWeekdaySunday, t)!,
+    ];
+  }
 }
