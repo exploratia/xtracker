@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../../model/series/data/blood_pressure/blood_pressure_value.dart';
 import '../../../../../../model/series/data/series_data.dart';
-import '../../../../../../model/series/profile/table_column_profile.dart';
+import '../../../../../../model/series/profile/fix_table_column_profiles.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
 import '../../../../../../util/date_time_utils.dart';
 import '../../../../../../util/theme_utils.dart';
@@ -12,13 +12,6 @@ import '../../../../../grid/two_dimensional_scrollable_table.dart';
 import 'blood_pressure_values_renderer.dart';
 
 class SeriesDataBloodPressureTableView extends StatelessWidget {
-  static final TableColumnProfile _tableColumnProfile = TableColumnProfile(columns: [
-    TableColumn(minWidth: 80, title: '-', msgId: 'bloodPressureTableColumnTitleDate'),
-    TableColumn(minWidth: 80, title: '-', msgId: 'bloodPressureTableColumnTitleMorning'),
-    TableColumn(minWidth: 80, title: '-', msgId: 'bloodPressureTableColumnTitleMidday'),
-    TableColumn(minWidth: 80, title: '-', msgId: 'bloodPressureTableColumnTitleEvening'),
-  ]);
-
   final SeriesData<BloodPressureValue> seriesData;
   final SeriesViewMetaData seriesViewMetaData;
 
@@ -67,7 +60,7 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: ThemeUtils.seriesDataViewTopPadding),
       child: TwoDimensionalScrollableTable(
-        tableColumnProfile: _tableColumnProfile,
+        tableColumnProfile: FixTableColumnProfiles.tableColumnProfileBloodPressure,
         lineCount: data.length,
         gridCellBuilder: gridCellBuilder,
         lineHeight: lineHeight,
