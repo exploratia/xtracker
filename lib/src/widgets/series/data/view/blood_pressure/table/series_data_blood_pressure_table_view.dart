@@ -7,6 +7,7 @@ import '../../../../../../model/series/data/series_data.dart';
 import '../../../../../../model/series/profile/fix_table_column_profiles.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
 import '../../../../../../util/date_time_utils.dart';
+import '../../../../../../util/globals.dart';
 import '../../../../../../util/theme_utils.dart';
 import '../../../../../grid/two_dimensional_scrollable_table.dart';
 import 'blood_pressure_values_renderer.dart';
@@ -71,9 +72,6 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
 
   List<_BloodPressureDayItem> _buildTableDataProvider(SeriesData<BloodPressureValue> seriesData) {
     List<_BloodPressureDayItem> list = [];
-    const tableItemSaturdayColor = Color.fromRGBO(128, 128, 128, 0.1);
-    const tableItemSundayColor = Color.fromRGBO(128, 128, 128, 0.2);
-
     _BloodPressureDayItem? actItem;
 
     for (var item in seriesData.seriesItems.reversed) {
@@ -84,9 +82,9 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
         }
         Color? backgroundColor;
         if (item.dateTime.weekday == DateTime.sunday) {
-          backgroundColor = tableItemSundayColor;
+          backgroundColor = Globals.backgroundColorSunday;
         } else if (item.dateTime.weekday == DateTime.saturday) {
-          backgroundColor = tableItemSaturdayColor;
+          backgroundColor = Globals.backgroundColorSaturday;
         }
         actItem = _BloodPressureDayItem(dateDay, backgroundColor);
       }
