@@ -7,6 +7,7 @@ import 'package:uuid/uuid.dart';
 import '../../model/navigation/navigation_item.dart';
 import '../../model/series/data/series_data.dart';
 import '../../model/series/series_def.dart';
+import '../../model/series/series_type.dart';
 import '../../model/series/series_view_meta_data.dart';
 import '../../model/series/view_type.dart';
 import '../../providers/series_provider.dart';
@@ -65,6 +66,7 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
   SeriesDef? _seriesDef;
   ViewType _viewType = ViewType.chart;
   bool _editMode = false;
+  bool _showYearly = false;
 
   @override
   void initState() {
@@ -91,6 +93,12 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
   void _toggleEditMode() {
     setState(() {
       _editMode = !_editMode;
+    });
+  }
+
+  void _toggleMonthlyYearlyMode() {
+    setState(() {
+      _showYearly = !_showYearly;
     });
   }
 
@@ -131,6 +139,7 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
         useSeriesCallback: _seriesDef == null,
         viewType: _viewType,
         editMode: _editMode,
+        showYearly: _showYearly,
       );
     } else {
       view = DataProviderLoader(
@@ -141,6 +150,7 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
           useSeriesCallback: _seriesDef == null,
           viewType: _viewType,
           editMode: _editMode,
+          showYearly: _showYearly,
         ),
       );
     }
@@ -156,8 +166,12 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
 
       List<Widget> chartActions = [];
       if (_viewType == ViewType.chart) {
-// Je nach Typ Umschalter erstellen : Monat/Jahr ...
-//       chartActions.add(const AppBarActionsDivider());
+        // Je nach Typ Umschalter erstellen : Monat/Jahr ...
+        if (_seriesDef!.seriesType == SeriesType.monthly) {
+          chartActions.add(
+              IconButton(onPressed: () => _toggleMonthlyYearlyMode(), icon: Icon(_showYearly ? Icons.calendar_month_outlined : Icons.calendar_today_outlined)));
+        }
+        if (chartActions.isNotEmpty) chartActions.add(const AppBarActionsDivider());
       }
       List<Widget> viewActions = [
         ..._seriesDef!.seriesType.viewTypes.where((vt) => vt != _viewType).map((vt) => IconButton(onPressed: () => _setViewType(vt), icon: Icon(vt.iconData))),
@@ -187,7 +201,12 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
 /// read series def from provider -> set AppBar title and then show series data
 class _SeriesDataViewTitleWrapper extends StatelessWidget {
   const _SeriesDataViewTitleWrapper(
-      {required this.seriesUuid, required this.setSeriesDef, required this.useSeriesCallback, required this.viewType, required this.editMode});
+      {required this.seriesUuid,
+      required this.setSeriesDef,
+      required this.useSeriesCallback,
+      required this.viewType,
+      required this.editMode,
+      required this.showYearly});
 
   final String seriesUuid;
   final bool useSeriesCallback;
@@ -195,6 +214,7 @@ class _SeriesDataViewTitleWrapper extends StatelessWidget {
   final Function(SeriesDef seriesDef) setSeriesDef;
   final ViewType viewType;
   final bool editMode;
+  final bool showYearly;
 
   @override
   Widget build(BuildContext context) {
@@ -215,6 +235,7 @@ class _SeriesDataViewTitleWrapper extends StatelessWidget {
         seriesDef: seriesDef,
         viewType: viewType,
         editMode: editMode,
+        showYearly: showYearly,
       ),
     );
   }
