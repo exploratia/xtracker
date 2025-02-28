@@ -89,7 +89,7 @@ class GridCell {
   final Color? backgroundColor;
   final Widget child;
 
-  GridCell({required this.backgroundColor, required this.child});
+  GridCell({this.backgroundColor, required this.child});
 }
 
 class _ScrollableGrid extends StatefulWidget {
