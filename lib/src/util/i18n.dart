@@ -8,14 +8,31 @@ class I18N {
   static const String bloodPressureTableColumnTitleMidday = 'bloodPressureTableColumnTitleMidday';
   static const String bloodPressureTableColumnTitleEvening = 'bloodPressureTableColumnTitleEvening';
 
+  static const String commonsDateShortWeekdayMonday = 'commonsDateShortWeekdayMonday';
+  static const String commonsDateShortWeekdayTuesday = 'commonsDateShortWeekdayTuesday';
+  static const String commonsDateShortWeekdayWednesday = 'commonsDateShortWeekdayWednesday';
+  static const String commonsDateShortWeekdayThursday = 'commonsDateShortWeekdayThursday';
+  static const String commonsDateShortWeekdayFriday = 'commonsDateShortWeekdayFriday';
+  static const String commonsDateShortWeekdaySaturday = 'commonsDateShortWeekdaySaturday';
+  static const String commonsDateShortWeekdaySunday = 'commonsDateShortWeekdaySunday';
+
   static String? compose(String? msgId, AppLocalizations t) {
     return switch (msgId) {
+      // blood pressure
       bloodPressureSeriesItemTitleDiastolic => t.bloodPressureSeriesItemTitleDiastolic,
       bloodPressureSeriesItemTitleSystolic => t.bloodPressureSeriesItemTitleSystolic,
       bloodPressureTableColumnTitleDate => t.bloodPressureTableColumnTitleDate,
       bloodPressureTableColumnTitleMorning => t.bloodPressureTableColumnTitleMorning,
       bloodPressureTableColumnTitleMidday => t.bloodPressureTableColumnTitleMidday,
       bloodPressureTableColumnTitleEvening => t.bloodPressureTableColumnTitleEvening,
+      // date
+      commonsDateShortWeekdayMonday => t.commonsDateShortWeekdayMonday,
+      commonsDateShortWeekdayTuesday => t.commonsDateShortWeekdayTuesday,
+      commonsDateShortWeekdayWednesday => t.commonsDateShortWeekdayWednesday,
+      commonsDateShortWeekdayThursday => t.commonsDateShortWeekdayThursday,
+      commonsDateShortWeekdayFriday => t.commonsDateShortWeekdayFriday,
+      commonsDateShortWeekdaySaturday => t.commonsDateShortWeekdaySaturday,
+      commonsDateShortWeekdaySunday => t.commonsDateShortWeekdaySunday,
       _ => null, // default
     };
   }
