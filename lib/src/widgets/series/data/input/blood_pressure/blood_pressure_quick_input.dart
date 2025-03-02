@@ -9,6 +9,7 @@ import '../../../../../model/series/series_type.dart';
 import '../../../../../providers/series_data_provider.dart';
 import '../../../../../util/date_time_utils.dart';
 import '../../../../../util/dialogs.dart';
+import '../../../../layout/single_child_scroll_view_with_scrollbar.dart';
 import '../../view/blood_pressure/table/blood_pressure_value_renderer.dart';
 
 class BloodPressureQuickInput extends StatefulWidget {
@@ -135,101 +136,97 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context)!;
 
+    Widget stepWidget;
+
     if (_dialogStep == _DialogStep.highRough) {
-      return IntrinsicHeight(
-        child: Column(
-          spacing: 10,
-          children: [
-            _Header(dateTime: dateTime, widget: widget),
-            const Divider(height: 1),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(onPressed: () => Navigator.pop(context, null), icon: const Icon(Icons.arrow_back_outlined)),
-                Text(_DialogStep.displayNameOf(_dialogStep, t)),
-              ],
-            ),
-            const Divider(height: 1),
-            const SizedBox(height: 3),
-            _ValBtnRow(values: [14, 15, 16], setValue: _setHighRough, dialogStep: _dialogStep),
-            _ValBtnRow(values: [11, 12, 13], setValue: _setHighRough, dialogStep: _dialogStep),
-            _ValBtnRow(values: [8, 9, 10], setValue: _setHighRough, dialogStep: _dialogStep),
-            const SizedBox(height: 40),
-          ],
-        ),
+      stepWidget = Column(
+        spacing: 10,
+        children: [
+          _Header(dateTime: dateTime, widget: widget),
+          const Divider(height: 1),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(onPressed: () => Navigator.pop(context, null), icon: const Icon(Icons.arrow_back_outlined)),
+              Text(_DialogStep.displayNameOf(_dialogStep, t)),
+            ],
+          ),
+          const Divider(height: 1),
+          const SizedBox(height: 3),
+          _ValBtnRow(values: [14, 15, 16], setValue: _setHighRough, dialogStep: _dialogStep),
+          _ValBtnRow(values: [11, 12, 13], setValue: _setHighRough, dialogStep: _dialogStep),
+          _ValBtnRow(values: [8, 9, 10], setValue: _setHighRough, dialogStep: _dialogStep),
+          const SizedBox(height: 40),
+        ],
       );
     } else if (_dialogStep == _DialogStep.highFine) {
-      return IntrinsicHeight(
-        child: Column(
-          spacing: 10,
-          children: [
-            _Header(dateTime: dateTime, widget: widget),
-            const Divider(height: 1),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(onPressed: () => _setStep(_DialogStep.highRough), icon: const Icon(Icons.arrow_back_outlined)),
-                Text(_DialogStep.displayNameOf(_dialogStep, t)),
-              ],
-            ),
-            const Divider(height: 1),
-            const SizedBox(height: 3),
-            _ValBtnRow(values: [7, 8, 9], setValue: _setHigh, roughVal: _highRough, dialogStep: _dialogStep),
-            _ValBtnRow(values: [4, 5, 6], setValue: _setHigh, roughVal: _highRough, dialogStep: _dialogStep),
-            _ValBtnRow(values: [1, 2, 3], setValue: _setHigh, roughVal: _highRough, dialogStep: _dialogStep),
-            _ValBtn(setValue: _setHigh, val: 0, roughVal: _highRough, dialogStep: _dialogStep)
-          ],
-        ),
+      stepWidget = Column(
+        spacing: 10,
+        children: [
+          _Header(dateTime: dateTime, widget: widget),
+          const Divider(height: 1),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(onPressed: () => _setStep(_DialogStep.highRough), icon: const Icon(Icons.arrow_back_outlined)),
+              Text(_DialogStep.displayNameOf(_dialogStep, t)),
+            ],
+          ),
+          const Divider(height: 1),
+          const SizedBox(height: 3),
+          _ValBtnRow(values: [7, 8, 9], setValue: _setHigh, roughVal: _highRough, dialogStep: _dialogStep),
+          _ValBtnRow(values: [4, 5, 6], setValue: _setHigh, roughVal: _highRough, dialogStep: _dialogStep),
+          _ValBtnRow(values: [1, 2, 3], setValue: _setHigh, roughVal: _highRough, dialogStep: _dialogStep),
+          _ValBtn(setValue: _setHigh, val: 0, roughVal: _highRough, dialogStep: _dialogStep)
+        ],
       );
     } else if (_dialogStep == _DialogStep.lowRough) {
-      return IntrinsicHeight(
-        child: Column(
-          spacing: 10,
-          children: [
-            _Header(dateTime: dateTime, widget: widget),
-            const Divider(height: 1),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(onPressed: () => _setStep(_DialogStep.highFine), icon: const Icon(Icons.arrow_back_outlined)),
-                Text(_DialogStep.displayNameOf(_dialogStep, t)),
-              ],
-            ),
-            const Divider(height: 1),
-            const SizedBox(height: 3),
-            _ValBtnRow(values: [10, 11, 12], setValue: _setLowRough, dialogStep: _dialogStep),
-            _ValBtnRow(values: [7, 8, 9], setValue: _setLowRough, dialogStep: _dialogStep),
-            _ValBtnRow(values: [4, 5, 6], setValue: _setLowRough, dialogStep: _dialogStep),
-            const SizedBox(height: 40),
-          ],
-        ),
+      stepWidget = Column(
+        spacing: 10,
+        children: [
+          _Header(dateTime: dateTime, widget: widget),
+          const Divider(height: 1),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(onPressed: () => _setStep(_DialogStep.highFine), icon: const Icon(Icons.arrow_back_outlined)),
+              Text(_DialogStep.displayNameOf(_dialogStep, t)),
+            ],
+          ),
+          const Divider(height: 1),
+          const SizedBox(height: 3),
+          _ValBtnRow(values: [10, 11, 12], setValue: _setLowRough, dialogStep: _dialogStep),
+          _ValBtnRow(values: [7, 8, 9], setValue: _setLowRough, dialogStep: _dialogStep),
+          _ValBtnRow(values: [4, 5, 6], setValue: _setLowRough, dialogStep: _dialogStep),
+          const SizedBox(height: 40),
+        ],
       );
     } else if (_dialogStep == _DialogStep.lowFine) {
-      return IntrinsicHeight(
-        child: Column(
-          spacing: 10,
-          children: [
-            _Header(dateTime: dateTime, widget: widget),
-            const Divider(height: 1),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                IconButton(onPressed: () => _setStep(_DialogStep.lowRough), icon: const Icon(Icons.arrow_back_outlined)),
-                Text(_DialogStep.displayNameOf(_dialogStep, t)),
-              ],
-            ),
-            const Divider(height: 1),
-            const SizedBox(height: 3),
-            _ValBtnRow(values: [7, 8, 9], setValue: _setLow, roughVal: _lowRough, dialogStep: _dialogStep),
-            _ValBtnRow(values: [4, 5, 6], setValue: _setLow, roughVal: _lowRough, dialogStep: _dialogStep),
-            _ValBtnRow(values: [1, 2, 3], setValue: _setLow, roughVal: _lowRough, dialogStep: _dialogStep),
-            _ValBtn(setValue: _setLow, val: 0, roughVal: _lowRough, dialogStep: _dialogStep)
-          ],
-        ),
+      stepWidget = Column(
+        spacing: 10,
+        children: [
+          _Header(dateTime: dateTime, widget: widget),
+          const Divider(height: 1),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              IconButton(onPressed: () => _setStep(_DialogStep.lowRough), icon: const Icon(Icons.arrow_back_outlined)),
+              Text(_DialogStep.displayNameOf(_dialogStep, t)),
+            ],
+          ),
+          const Divider(height: 1),
+          const SizedBox(height: 3),
+          _ValBtnRow(values: [7, 8, 9], setValue: _setLow, roughVal: _lowRough, dialogStep: _dialogStep),
+          _ValBtnRow(values: [4, 5, 6], setValue: _setLow, roughVal: _lowRough, dialogStep: _dialogStep),
+          _ValBtnRow(values: [1, 2, 3], setValue: _setLow, roughVal: _lowRough, dialogStep: _dialogStep),
+          _ValBtn(setValue: _setLow, val: 0, roughVal: _lowRough, dialogStep: _dialogStep)
+        ],
       );
+    } else {
+      stepWidget = const Placeholder();
     }
 
-    return const Placeholder();
+    return SingleChildScrollViewWithScrollbar(useScreenPadding: false, child: IntrinsicHeight(child: stepWidget));
   }
 }
 
