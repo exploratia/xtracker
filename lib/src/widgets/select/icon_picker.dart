@@ -32,7 +32,7 @@ class _IconPickerState extends State<IconPicker> {
   @override
   Widget build(BuildContext context) {
     return DropdownButton<String>(
-      key: const Key('settingsThemeSelect'),
+      key: const Key('iconPickerSelect'),
       borderRadius: ThemeUtils.cardBorderRadius,
       value: currentIcoName,
       onChanged: (value) => changeIco(value),
