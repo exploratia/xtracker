@@ -60,7 +60,7 @@ class ChartUtilsBloodPressure {
       preventCurveOverShooting: true,
       // curveSmoothness: 0.02, // only makes sense if no BetweenBarsData
       barWidth: 2,
-      gradient: ChartUtils.createTopToBottomGradient([BloodPressureValue.colorHigh(lowMax), BloodPressureValue.colorHigh(lowMin)]),
+      gradient: ChartUtils.createTopToBottomGradient([BloodPressureValue.colorLow(lowMax), BloodPressureValue.colorLow(lowMin)]),
       dotData: ChartUtils.createDotData(chartMetaData),
       isStrokeCapRound: true,
     ));
@@ -86,7 +86,11 @@ class ChartUtilsBloodPressure {
       ],
       borderData: ChartUtils.borderData,
       gridData: ChartUtils.noGridData,
-      lineTouchData: ChartUtils.createLineTouchData(fractionDigits: 0, themeData: themeData),
+      lineTouchData: ChartUtils.createLineTouchData(
+        fractionDigits: 0,
+        themeData: themeData,
+        provideTooltipTextColor: (x, y, barIdx) => (barIdx == 0) ? BloodPressureValue.colorHigh(y.truncate()) : BloodPressureValue.colorLow(y.truncate()),
+      ),
       titlesData: FlTitlesData(
         rightTitles: ChartUtils.axisTitlesNoTitles,
         topTitles: ChartUtils.axisTitlesNoTitles,

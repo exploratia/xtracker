@@ -67,6 +67,7 @@ class ChartUtils {
     int fractionDigits = 2,
     required ThemeData themeData,
     List<TextSpan> Function(double, double, int)? provideTooltipExt,
+    Color Function(double, double, int)? provideTooltipTextColor,
   }) {
     return LineTouchData(
       enabled: true,
@@ -84,7 +85,10 @@ class ChartUtils {
           // alles wie default, nur y-Wert gerundet auf <fractionDigits> Stellen
           return touchedSpots.map((touchedSpot) {
             final textStyle = TextStyle(
-              color: touchedSpot.bar.gradient?.colors.first ?? touchedSpot.bar.color ?? Colors.blueGrey,
+              color: provideTooltipTextColor?.call(touchedSpot.x, touchedSpot.y, touchedSpot.barIndex) ??
+                  touchedSpot.bar.gradient?.colors.first ??
+                  touchedSpot.bar.color ??
+                  Colors.blueGrey,
               fontWeight: FontWeight.bold,
               fontSize: 14,
               shadows: const [Shadow(color: Colors.black, blurRadius: 0, offset: Offset(1, 1))],
