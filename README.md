@@ -70,6 +70,10 @@ https://pub.dev/packages/provider
 
 https://pub.dev/packages/linked_scroll_controller
 
+### Chart
+
+https://pub.dev/packages/fl_chart
+
 ### Launcher icon (dev)
 
 https://pub.dev/packages/flutter_launcher_icons

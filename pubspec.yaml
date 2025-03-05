@@ -45,6 +45,9 @@ dependencies:
   # 2d grid
   linked_scroll_controller: ^0.2.0
 
+  # chart
+  fl_chart: ^0.70.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

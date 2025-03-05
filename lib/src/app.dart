@@ -8,6 +8,7 @@ import 'model/navigation/navigation.dart';
 import 'providers/series_data_provider.dart';
 import 'providers/series_provider.dart';
 import 'routing.dart';
+import 'util/date_time_utils.dart';
 import 'util/theme_utils.dart';
 import 'widgets/administration/settings/settings_controller.dart';
 
@@ -67,6 +68,7 @@ class MyApp extends StatelessWidget {
             // directory.
             onGenerateTitle: (BuildContext context) {
               // settings changed -> maybe locale? ->
+              DateTimeUtils.init();
               Navigation.resetMaxTextWidth();
               return AppLocalizations.of(context)!.appTitle;
             },
