@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../../../model/series/series_view_meta_data.dart';
 import '../../../../../model/series/view_type.dart';
 import '../../../../../providers/series_data_provider.dart';
+import '../../../../../util/date_time_utils.dart';
 import '../../../../layout/centered_message.dart';
 import 'chart/series_data_blood_pressure_chart_view.dart';
 import 'dots/series_data_blood_pressure_dots_view.dart';
@@ -35,10 +36,17 @@ class SeriesDataBloodPressureView extends StatelessWidget {
       );
     }
 
-    return switch (seriesViewMetaData.viewType) {
-      ViewType.table => SeriesDataBloodPressureTableView(seriesViewMetaData: seriesViewMetaData, seriesData: bloodPressureSeriesData),
-      ViewType.chart => SeriesDataBloodPressureChartView(seriesViewMetaData: seriesViewMetaData, seriesData: bloodPressureSeriesData),
-      ViewType.dots => SeriesDataBloodPressureDotsView(seriesViewMetaData: seriesViewMetaData, seriesData: bloodPressureSeriesData),
-    };
+    switch (seriesViewMetaData.viewType) {
+      case ViewType.table:
+        return SeriesDataBloodPressureTableView(seriesViewMetaData: seriesViewMetaData, seriesData: bloodPressureSeriesData);
+      case ViewType.chart:
+        return SeriesDataBloodPressureChartView(seriesViewMetaData: seriesViewMetaData, seriesData: bloodPressureSeriesData);
+      case ViewType.dots:
+        {
+          DateTime reduceToNewerThen = DateTimeUtils.firstDayOfYear(DateTimeUtils.truncateToDay(DateTime.timestamp().subtract(const Duration(days: 365 * 5))));
+          return SeriesDataBloodPressureDotsView(
+              seriesViewMetaData: seriesViewMetaData, seriesData: bloodPressureSeriesData.reduceToNewerThen(reduceToNewerThen));
+        }
+    }
   }
 }

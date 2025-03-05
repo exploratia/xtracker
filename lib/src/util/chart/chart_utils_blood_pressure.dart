@@ -8,7 +8,8 @@ import '../date_time_utils.dart';
 import 'chart_utils.dart';
 
 class ChartUtilsBloodPressure {
-  static LineChartData buildLineChartData(SeriesData<BloodPressureValue> seriesData, ThemeData themeData) {
+  static LineChartData buildLineChartData(
+      SeriesData<BloodPressureValue> seriesData, ThemeData themeData, Function(FlTouchEvent, LineTouchResponse?)? touchCallback) {
     List<LineChartBarData> lineBarsData = [];
 
     ChartMetaData chartMetaData = ChartMetaData();
@@ -89,6 +90,7 @@ class ChartUtilsBloodPressure {
       lineTouchData: ChartUtils.createLineTouchData(
         fractionDigits: 0,
         themeData: themeData,
+        touchCallback: touchCallback,
         provideTooltipTextColor: (x, y, barIdx) => (barIdx == 0) ? BloodPressureValue.colorHigh(y.truncate()) : BloodPressureValue.colorLow(y.truncate()),
       ),
       titlesData: FlTitlesData(

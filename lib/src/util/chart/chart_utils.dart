@@ -63,16 +63,17 @@ class ChartUtils {
     );
   }
 
-  static LineTouchData createLineTouchData({
-    int fractionDigits = 2,
-    required ThemeData themeData,
-    List<TextSpan> Function(double, double, int)? provideTooltipExt,
-    Color Function(double, double, int)? provideTooltipTextColor,
-  }) {
+  static LineTouchData createLineTouchData(
+      {int fractionDigits = 2,
+      required ThemeData themeData,
+      List<TextSpan> Function(double, double, int)? provideTooltipExt,
+      Color Function(double, double, int)? provideTooltipTextColor,
+      void Function(FlTouchEvent, LineTouchResponse?)? touchCallback}) {
     return LineTouchData(
       enabled: true,
       touchSpotThreshold: 30,
       handleBuiltInTouches: true,
+      touchCallback: touchCallback,
       touchTooltipData: LineTouchTooltipData(
         fitInsideHorizontally: true,
         fitInsideVertically: true,

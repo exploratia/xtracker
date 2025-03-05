@@ -80,6 +80,10 @@ class DateTimeUtils {
     return DateTime(date.year, date.month, 1);
   }
 
+  static DateTime firstDayOfYear(DateTime date) {
+    return DateTime(date.year, 1, 1);
+  }
+
   static DateTime truncateToDay(DateTime date) {
     return DateTime(date.year, date.month, date.day);
   }

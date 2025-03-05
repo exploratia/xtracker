@@ -46,6 +46,12 @@ class SeriesData<T extends SeriesDataValue> {
     seriesItems.removeWhere((element) => element.uuid == uuid);
   }
 
+  /// returns reduced copy (must not be used edit)
+  SeriesData<T> reduceToNewerThen(DateTime dateTime) {
+    List<T> reducedSeriesItems = seriesItems.where((item) => item.dateTime.isAfter(dateTime)).toList();
+    return SeriesData(uuid, reducedSeriesItems);
+  }
+
   static showSeriesDataInputDlg(BuildContext context, SeriesDef seriesDef, {dynamic value}) async {
     switch (seriesDef.seriesType) {
       case SeriesType.bloodPressure:
