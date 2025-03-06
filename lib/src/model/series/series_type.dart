@@ -28,6 +28,10 @@ enum SeriesType {
 
   const SeriesType(this.typeName, this.iconName, this.color, this.viewTypes);
 
+  static SeriesType byTypeName(String typeName) {
+    return SeriesType.values.firstWhere((element) => element.typeName == typeName, orElse: () => throw Exception("Unexpected SeriesType '$typeName'"));
+  }
+
   static String displayNameOf(SeriesType seriesType, AppLocalizations t) {
     return switch (seriesType) {
       SeriesType.bloodPressure => t.seriesSeriesTypeBloodPressure,
