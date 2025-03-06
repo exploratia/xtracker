@@ -245,7 +245,7 @@ class _DotViewPainterWeeklyRows<T extends DayItem> extends _DotViewPainter<T> {
         canvas.drawLine(topLeft.translate(0, lineHeight), bottomRight, borderPaint);
       }
 
-      actDate = actDate.subtract(const Duration(days: 1));
+      actDate = DateTimeUtils.dayBefore(actDate);
       if (actDate.weekday == DateTime.sunday) lineIdx++;
     }
   }
@@ -336,8 +336,8 @@ class _DotViewPainterMonthlyRows<T extends DayItem> extends _DotViewPainter<T> {
         // canvas.drawLine(topLeft, topLeft.translate(colWidth, 0), borderPaint);
       }
 
-      actDate = actDate.subtract(const Duration(days: 1));
-      if (DateTimeUtils.isMonthEnd(actDate)) lineIdx++;
+      if (DateTimeUtils.isMonthStart(actDate)) lineIdx++;
+      actDate = DateTimeUtils.dayBefore(actDate);
     }
   }
 }

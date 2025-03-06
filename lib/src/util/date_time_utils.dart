@@ -73,6 +73,8 @@ class DateTimeUtils {
   }
 
   static DateTime lastDayOfMonth(DateTime date) {
+    return firstDayOfMonth(firstDayOfMonth(date).add(const Duration(days: 40))).subtract(const Duration(days: 1));
+    // was not always correct: missing april - probably because of the 29th
     return DateTime(date.year, date.month + 1, 0);
   }
 
@@ -82,6 +84,11 @@ class DateTimeUtils {
 
   static DateTime firstDayOfYear(DateTime date) {
     return DateTime(date.year, 1, 1);
+  }
+
+  static DateTime dayBefore(DateTime date) {
+    // Because of time change (de:Zeitumstellung) subtract only half a day and then truncate to day start
+    return DateTimeUtils.truncateToDay(date.subtract(Duration(hours: date.hour + 12)));
   }
 
   static DateTime truncateToDay(DateTime date) {

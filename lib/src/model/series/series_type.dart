@@ -4,7 +4,16 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'view_type.dart';
 
 enum SeriesType {
-  bloodPressure('bloodPressure', 'monitor_heart_outlined', Colors.red, [ViewType.dots, ViewType.chart, ViewType.table]),
+  bloodPressure(
+    'bloodPressure',
+    'monitor_heart_outlined',
+    Colors.red,
+    [
+      ViewType.dots,
+      ViewType.chart,
+      ViewType.table,
+    ],
+  ),
   dailyCheck("dailyCheck", 'check_box_outlined', Colors.blue, [ViewType.dots]),
   monthly("monthly", 'calendar_month_outlined', Colors.deepPurple, [ViewType.table, ViewType.chart]),
   free("free", 'calendar_today_outlined', Colors.green, [ViewType.chart, ViewType.table]);

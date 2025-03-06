@@ -28,7 +28,7 @@ class SeriesDataBloodPressureDotsView extends StatelessWidget {
     painterFnc(_BloodPressureDayItem dataItem, Canvas canvas, Offset topLeft, Offset bottomRight) {
       List<Color> colors = [BloodPressureValue.colorHigh(dataItem.high), BloodPressureValue.colorLow(dataItem.low)];
       final rect = Rect.fromPoints(topLeft, bottomRight);
-      CustomPaintUtils.paintGradientFilledRect(canvas, rect, colors, const Alignment(0, -1), const Alignment(0, 1));
+      CustomPaintUtils.paintGradientFilledRect(canvas, rect, colors, Alignment.topCenter, Alignment.bottomCenter);
     }
 
     return ResponsiveDotsView(
