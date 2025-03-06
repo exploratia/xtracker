@@ -78,7 +78,7 @@ class BloodPressureQuickInput extends StatefulWidget {
 }
 
 class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
-  late DateTime dateTime;
+  late DateTime _dateTime;
 
   int _high = 120;
   int _highRough = 120;
@@ -88,7 +88,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
 
   @override
   initState() {
-    dateTime = widget.bloodPressureValue?.dateTime ?? DateTime.now();
+    _dateTime = widget.bloodPressureValue?.dateTime ?? DateTime.now();
     super.initState();
   }
 
@@ -98,10 +98,9 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
     });
   }
 
-  _setHigh(int value) {
+  _setDateTime(DateTime value) {
     setState(() {
-      _high = _highRough + value;
-      _dialogStep = _DialogStep.lowRough;
+      _dateTime = value;
     });
   }
 
@@ -112,16 +111,10 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
     });
   }
 
-  _setLow(int value) {
+  _setHigh(int value) {
     setState(() {
-      _low = _lowRough + value;
-      BloodPressureValue val;
-      if (widget.bloodPressureValue != null) {
-        val = widget.bloodPressureValue!.cloneWith(_high, _low);
-      } else {
-        val = BloodPressureValue(const Uuid().v4(), dateTime, _high, _low);
-      }
-      Navigator.pop(context, val);
+      _high = _highRough + value;
+      _dialogStep = _DialogStep.lowRough;
     });
   }
 
@@ -132,17 +125,31 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
     });
   }
 
+  _setLow(int value) {
+    setState(() {
+      _low = _lowRough + value;
+      BloodPressureValue val;
+      if (widget.bloodPressureValue != null) {
+        val = widget.bloodPressureValue!.cloneWith(_dateTime, _high, _low);
+      } else {
+        val = BloodPressureValue(const Uuid().v4(), _dateTime, _high, _low);
+      }
+      Navigator.pop(context, val);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final t = AppLocalizations.of(context)!;
 
     Widget stepWidget;
 
+    var header = _Header(dateTime: _dateTime, bloodPressureValue: widget.bloodPressureValue, seriesDef: widget.seriesDef, setDateTime: _setDateTime);
     if (_dialogStep == _DialogStep.highRough) {
       stepWidget = Column(
         spacing: 10,
         children: [
-          _Header(dateTime: dateTime, widget: widget),
+          header,
           const Divider(height: 1),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -163,7 +170,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
       stepWidget = Column(
         spacing: 10,
         children: [
-          _Header(dateTime: dateTime, widget: widget),
+          header,
           const Divider(height: 1),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -184,7 +191,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
       stepWidget = Column(
         spacing: 10,
         children: [
-          _Header(dateTime: dateTime, widget: widget),
+          header,
           const Divider(height: 1),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -205,7 +212,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
       stepWidget = Column(
         spacing: 10,
         children: [
-          _Header(dateTime: dateTime, widget: widget),
+          header,
           const Divider(height: 1),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -233,11 +240,15 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
 class _Header extends StatelessWidget {
   const _Header({
     required this.dateTime,
-    required this.widget,
+    required this.setDateTime,
+    this.bloodPressureValue,
+    required this.seriesDef,
   });
 
   final DateTime dateTime;
-  final BloodPressureQuickInput widget;
+  final BloodPressureValue? bloodPressureValue;
+  final SeriesDef seriesDef;
+  final Function(DateTime value) setDateTime;
 
   @override
   Widget build(BuildContext context) {
@@ -245,8 +256,8 @@ class _Header extends StatelessWidget {
       spacing: 20,
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        _DateTimeHeader(dateTime: dateTime),
-        if (widget.bloodPressureValue != null) BloodPressureValueRenderer(bloodPressureValue: widget.bloodPressureValue!, seriesDef: widget.seriesDef),
+        _DateTimeHeader(dateTime: dateTime, setDateTime: setDateTime),
+        if (bloodPressureValue != null) BloodPressureValueRenderer(bloodPressureValue: bloodPressureValue!, seriesDef: seriesDef),
       ],
     );
   }
@@ -255,9 +266,31 @@ class _Header extends StatelessWidget {
 class _DateTimeHeader extends StatelessWidget {
   const _DateTimeHeader({
     required this.dateTime,
+    required this.setDateTime,
   });
 
   final DateTime dateTime;
+  final Function(DateTime value) setDateTime;
+
+  Future<void> _selectDate(context, DateTime dateTime) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: dateTime,
+      firstDate: DateTime(2000),
+      lastDate: DateTime.now().add(const Duration(days: 366 * 10)),
+    );
+
+    if (pickedDate != null) setDateTime(pickedDate.copyWith(hour: dateTime.hour, minute: dateTime.minute));
+  }
+
+  Future<void> _selectTime(context, DateTime dateTime) async {
+    final TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(dateTime),
+    );
+
+    if (pickedTime != null) setDateTime(dateTime.copyWith(hour: pickedTime.hour, minute: pickedTime.minute));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -265,8 +298,14 @@ class _DateTimeHeader extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       spacing: 20,
       children: [
-        Text(DateTimeUtils.formateDate(dateTime)),
-        Text(DateTimeUtils.formateTime(dateTime)),
+        InkWell(
+          onTap: () => _selectDate(context, dateTime),
+          child: Text(DateTimeUtils.formateDate(dateTime)),
+        ),
+        InkWell(
+          onTap: () => _selectTime(context, dateTime),
+          child: Text(DateTimeUtils.formateTime(dateTime)),
+        ),
       ],
     );
   }

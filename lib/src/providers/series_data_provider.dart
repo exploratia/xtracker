@@ -1,6 +1,8 @@
 import 'dart:collection';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:uuid/v4.dart';
 
 import '../model/series/data/blood_pressure/blood_pressure_value.dart';
 import '../model/series/data/series_data.dart';
@@ -50,7 +52,21 @@ class SeriesDataProvider with ChangeNotifier {
         var seriesData = _uuid2seriesDataBloodPressure[seriesDef.uuid];
         if (seriesData == null) {
           // TODO try load from file - if not exists create
-          seriesData = SeriesData<BloodPressureValue>(seriesDef.uuid, []);
+          var list = [
+            BloodPressureValue(const UuidV4().generate().toString(), DateTime.now(), 120, 80),
+            BloodPressureValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(days: 28)), 140, 80),
+            BloodPressureValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(hours: 25)), 140, 80),
+            BloodPressureValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(hours: 28)), 130, 97),
+            BloodPressureValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(hours: 30)), 120, 75),
+            BloodPressureValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(hours: 40)), 155, 110),
+            ...List.generate(
+                10040,
+                (index) => BloodPressureValue(const UuidV4().generate().toString(), DateTime.now().subtract(Duration(hours: 40 + index * 25)),
+                    (155 - 5 * sin(index * 0.01)).truncate(), (80 - 10 * sin(index * 0.01 + 1)).truncate())),
+          ];
+          // var list =[];
+          seriesData = SeriesData<BloodPressureValue>(seriesDef.uuid, list);
+          seriesData.sort();
           _uuid2seriesDataBloodPressure[seriesDef.uuid] = seriesData;
         }
       case SeriesType.dailyCheck:
@@ -82,16 +98,59 @@ class SeriesDataProvider with ChangeNotifier {
     return seriesData;
   }
 
-  Future<void> addBloodPressureValue(SeriesDef seriesDef, BloodPressureValue value) async {
-    await _createSeriesDataIfNotExists(seriesDef);
-    var seriesData = bloodPressureData(seriesDef);
-    if (seriesData == null) {
-      SimpleLogging.w("Failed to create/load series data!");
-      return;
-    }
+  Future<void> addValue(SeriesDef seriesDef, dynamic value) async {
+    await _addOrUpdateValue(seriesDef, value, _Action.insert);
+  }
 
-    seriesData.add(value);
+  Future<void> updateValue(SeriesDef seriesDef, dynamic value) async {
+    await _addOrUpdateValue(seriesDef, value, _Action.update);
+  }
+
+  Future<void> deleteValue(SeriesDef seriesDef, dynamic value) async {
+    await _addOrUpdateValue(seriesDef, value, _Action.delete);
+  }
+
+  Future<void> _addOrUpdateValue(SeriesDef seriesDef, dynamic value, _Action action) async {
+    await fetchDataIfNotYetLoaded(seriesDef);
+// TODO save file
+    switch (seriesDef.seriesType) {
+      case SeriesType.bloodPressure:
+        if (value is! BloodPressureValue) {
+          var errMsg = 'Failure on storing series value: Type mismatch! Expected: "$BloodPressureValue", got: "${value.runtimeType}"';
+          SimpleLogging.w(errMsg);
+          throw Exception(errMsg);
+        }
+        var seriesData = _uuid2seriesDataBloodPressure[seriesDef.uuid];
+        if (seriesData == null) {
+          var errMsg = "Failed to create/load series data for ${seriesDef.name} (type: ${seriesDef.seriesType.typeName})!";
+          SimpleLogging.w(errMsg);
+          throw Exception(errMsg);
+        }
+        if (action == _Action.insert) {
+          seriesData.insert(value);
+        } else if (action == _Action.update) {
+          seriesData.update(value);
+        } else if (action == _Action.delete) {
+          seriesData.delete(value);
+        }
+        seriesData.sort();
+      case SeriesType.dailyCheck:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case SeriesType.monthly:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case SeriesType.free:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+    }
 
     notifyListeners();
   }
+}
+
+enum _Action {
+  insert,
+  update,
+  delete;
 }

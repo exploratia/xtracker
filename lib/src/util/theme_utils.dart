@@ -96,6 +96,8 @@ class ThemeUtils {
           borderRadius: ThemeUtils.cardBorderRadius,
         ),
       ),
+      datePickerTheme: DatePickerThemeData(headerBackgroundColor: cardBackgroundColor),
+      timePickerTheme: TimePickerThemeData(backgroundColor: chipBackgroundColor),
       dividerTheme: DividerThemeData(color: secondary, thickness: 1, space: 10),
       navigationRailTheme: NavigationRailThemeData(backgroundColor: backgroundColor),
       elevatedButtonTheme: ElevatedButtonThemeData(

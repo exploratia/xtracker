@@ -9,7 +9,7 @@ class BloodPressureValue extends SeriesDataValue {
 
   BloodPressureValue(super.uuid, super.dateTime, this.high, this.low);
 
-  BloodPressureValue cloneWith(int high, int low) {
+  BloodPressureValue cloneWith(DateTime dateTime, int high, int low) {
     return BloodPressureValue(uuid, dateTime, high, low);
   }
 
