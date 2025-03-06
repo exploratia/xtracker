@@ -117,9 +117,10 @@ class ChartUtilsBloodPressure {
             interval: (lowValues.last.x - lowValues.first.x),
             getTitlesWidget: (value, meta) {
               if (value == meta.min) {
-                return TitlesWidgetBottomAxis(alignment: Alignment.topLeft, value: value);
+                // use chartMetaData min/max - not the value which has padding!
+                return TitlesWidgetBottomAxis(alignment: Alignment.topLeft, value: chartMetaData.xMin);
               } else if (value == meta.max) {
-                return TitlesWidgetBottomAxis(alignment: Alignment.topRight, value: value);
+                return TitlesWidgetBottomAxis(alignment: Alignment.topRight, value: chartMetaData.xMax);
               }
               return Container();
             },
