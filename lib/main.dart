@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'src/app.dart';
+import 'src/store/stores_utils.dart';
 import 'src/util/app_info.dart';
 import 'src/util/logging/daily_files.dart';
 import 'src/widgets/administration/settings/settings_controller.dart';
@@ -21,6 +22,8 @@ void main() async {
   await AppInfo.init();
 
   await DailyFiles.init();
+
+  await StoresUtils.initDb();
 
   // Run the app and pass in the SettingsController. The app listens to the
   // SettingsController for changes, then passes it further down to the

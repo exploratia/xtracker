@@ -48,6 +48,10 @@ dependencies:
   # chart
   fl_chart: ^0.70.2
 
+  # data storage
+  sembast: ^3.8.3
+  sembast_web: ^2.4.0+4
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

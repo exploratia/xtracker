@@ -1,87 +1,105 @@
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 import '../model/series/series_def.dart';
+import '../model/series/series_type.dart';
+import '../store/stores.dart';
 
 class SeriesProvider with ChangeNotifier {
-  List<SeriesDef>? _series;
+  final _storeMain = Stores.storeMain;
+  final _storeSeriesDef = Stores.storeSeriesDef;
+  List<SeriesDef> _series = [];
+  bool _seriesLoaded = false;
 
   Future<void> fetchDataIfNotYetLoaded() async {
-    if (_series == null) {
+    if (!_seriesLoaded) {
       await fetchData();
       notifyListeners();
     }
   }
 
   Future<void> fetchData() async {
-    await _get();
+    // await Future.delayed(const Duration(seconds: 10)); // for testing
+
+    _series = await _storeSeriesDef.getAllSeries();
+
+    // TODO only for testing - remove it
+    if (_series.isEmpty) {
+      await _storeSeriesDef.save(SeriesDef(
+        uuid: const Uuid().v4().toString(),
+        seriesType: SeriesType.bloodPressure,
+        color: Colors.green,
+        name: "1 mit sehr sehr sehr sehr sehr sehr viel sehr sehr sehr sehr sehr sehr und noch Mehr sehr sehr sehr sehr sehr sehr viel Text",
+        seriesItems: SeriesItem.bloodPressureSeriesItems(),
+      ));
+
+      await _storeSeriesDef.save(SeriesDef(
+        uuid: const Uuid().v4().toString(),
+        seriesType: SeriesType.bloodPressure,
+        name: '2',
+        seriesItems: SeriesItem.bloodPressureSeriesItems(),
+      ));
+
+      _series = await _storeSeriesDef.getAllSeries();
+    }
+
+    List<String> orderedSeriesUuids = await _storeMain.loadSeriesOrder();
+
+    _sortSeries(orderedSeriesUuids);
+
+    _seriesLoaded = true;
     notifyListeners();
   }
 
-  Future<void> _get() async {
-    // await Future.delayed(const Duration(seconds: 10)); // for testing
-    // TODO load from files
-    print('TODO get from files');
-    _series ??= [
-      // SeriesDef(
-      //     seriesType: SeriesType.bloodPressure,
-      //     name: "1 mit sehr sehr sehr sehr sehr sehr viel sehr sehr sehr sehr sehr sehr und noch Mehr sehr sehr sehr sehr sehr sehr viel Text"),
-      // SeriesDef(seriesType: SeriesType.bloodPressure, name: '2'),
-    ]; // for dev add one directly
-    // _series ??= [];
-    // todo sort by phone storage order
-    return;
-  }
-
-  Future<void> _post(SeriesDef seriesDef) async {
-    //  await Future.delayed(const Duration(seconds: 10)); // for testing
-// TODO save to file
-    // at the moment add directly to _series
-    _series ??= [];
-    _series!.add(seriesDef);
-  }
-
-  Future<void> _del(SeriesDef seriesDef) async {
-    //  await Future.delayed(const Duration(seconds: 10)); // for testing
-// TODO save to file
-    // TODO remove from phone storage order
-    // at the moment add directly to _series
-    _series ??= [];
-    _series!.remove(seriesDef);
-  }
-
   List<SeriesDef> get series {
-    if (_series == null) return [];
-    return [..._series!];
+    return [..._series];
   }
 
   SeriesDef? getSeries(String seriesUuid) {
     return series.firstWhere((s) => s.uuid == seriesUuid);
   }
 
-  Future<void> add(SeriesDef seriesDef) async {
-    await _post(seriesDef);
+  Future<void> save(SeriesDef seriesDef) async {
+    //  await Future.delayed(const Duration(seconds: 10)); // for testing
+    await _storeSeriesDef.save(seriesDef);
     await fetchData();
-    notifyListeners();
+    // notifyListeners(); notify is in fetch
   }
 
-  Future<void> remove(SeriesDef seriesDef) async {
-    await _del(seriesDef);
+  Future<void> delete(SeriesDef seriesDef) async {
+    await _storeSeriesDef.delete(seriesDef);
     await fetchData();
-    notifyListeners();
+    // notifyListeners(); notify is in fetch
   }
 
   Future<void> reorder(int oldIndex, int newIndex) async {
-    _series ??= [];
     if (oldIndex < newIndex) {
       newIndex -= 1;
     }
-    if (_series!.length <= oldIndex || _series!.length <= newIndex) return;
-    final SeriesDef? item = _series?.removeAt(oldIndex);
-    if (item != null) {
-      _series?.insert(newIndex, item);
-    }
-    // TODO save order in phone storage
+    if (_series.length <= oldIndex || _series.length <= newIndex) return;
+    var seriesUuids = [..._series.map((e) => e.uuid)];
+
+    final item = seriesUuids.removeAt(oldIndex);
+    seriesUuids.insert(newIndex, item);
+
+    await _storeMain.saveSeriesOrder(seriesUuids);
+
+    _sortSeries(seriesUuids);
 
     notifyListeners();
+  }
+
+  void _sortSeries(List<String> orderedSeriesUuids) {
+    if (orderedSeriesUuids.isEmpty) return;
+    _series.sort((a, b) {
+      int indexA = orderedSeriesUuids.indexOf(a.uuid);
+      int indexB = orderedSeriesUuids.indexOf(b.uuid);
+
+      // Falls die UUID nicht in der zweiten Liste ist, setzen wir einen großen Index-Wert
+      if (indexA == -1) indexA = orderedSeriesUuids.length;
+      if (indexB == -1) indexB = orderedSeriesUuids.length;
+
+      return indexA.compareTo(indexB);
+    });
   }
 }

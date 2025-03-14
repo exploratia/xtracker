@@ -60,7 +60,7 @@ class _SeriesEditState extends State<SeriesEdit> {
     final t = AppLocalizations.of(context)!;
     try {
       var seriesProvider = context.read<SeriesProvider>();
-      await seriesProvider.add(_seriesDef!);
+      await seriesProvider.save(_seriesDef!);
       if (mounted) Dialogs.showSnackBar(t.commonsMsgSaved, context);
     } catch (err) {
       if (mounted) {

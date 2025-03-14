@@ -74,6 +74,17 @@ https://pub.dev/packages/linked_scroll_controller
 
 https://pub.dev/packages/fl_chart
 
+### Storage (Hive)
+
+for mobile
+https://pub.dev/packages/sembast
+
+for web
+https://pub.dev/packages/sembast_web
+
+(for desktop
+https://pub.dev/packages/sembast_sqflite)
+
 ### Launcher icon (dev)
 
 https://pub.dev/packages/flutter_launcher_icons

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../util/color_utils.dart';
 import '../../util/i18n.dart';
 import '../../widgets/navigation/hide_bottom_navigation_bar.dart';
 import '../../widgets/select/icon_map.dart';
@@ -33,6 +34,23 @@ class SeriesDef {
     return IconMap.iconData(iconName);
   }
 
+  factory SeriesDef.fromJson(Map<String, dynamic> json) => SeriesDef(
+        uuid: json['uuid'] as String,
+        seriesType: SeriesType.byTypeName(json['seriesType'] as String),
+        seriesItems: [...(json['seriesItems'] as List<dynamic>).whereType<Map<String, dynamic>>().map((e) => SeriesItem.fromJson(e))],
+        name: json['name'] as String,
+        color: ColorUtils.fromHex(json['color'] as String),
+      );
+
+  Map<String, dynamic> toJson() => {
+        'uuid': uuid,
+        'seriesType': seriesType.typeName,
+        'seriesItems': [...seriesItems.map((e) => e.toJson())],
+        'name': name,
+        'color': ColorUtils.toHex(color),
+        'iconName': iconName,
+      };
+
   static Future<SeriesDef?> addNewSeries(BuildContext context) async {
     final themeData = Theme.of(context);
 
@@ -49,7 +67,7 @@ class SeriesDef {
 
 class SeriesItem {
   final String uuid;
-  late String title;
+  final String title;
   final String unit;
   final String? msgId;
   final double tableColumnMinWidth;
@@ -60,6 +78,22 @@ class SeriesItem {
     var titleStr = msgId != null ? (I18N.compose(msgId, t) ?? title) : title;
     return titleStr;
   }
+
+  factory SeriesItem.fromJson(Map<String, dynamic> json) => SeriesItem(
+        uuid: json['uuid'] as String,
+        title: json['title'] as String,
+        unit: json['unit'] as String,
+        msgId: json['msgId'] == null ? null : json['msgId'] as String,
+        tableColumnMinWidth: json['tableColumnMinWidth'] as double,
+      );
+
+  Map<String, dynamic> toJson() => {
+        'uuid': uuid,
+        'title': title,
+        'unit': unit,
+        'msgId': msgId,
+        'tableColumnMinWidth': tableColumnMinWidth,
+      };
 
   static List<SeriesItem> bloodPressureSeriesItems() {
     return [
