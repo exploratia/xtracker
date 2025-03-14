@@ -23,12 +23,18 @@ class DailyFiles {
   static bool _timerSet = false;
 
   static Future<void> init() async {
-    try {
-      _appDocumentsDir = await getApplicationDocumentsDirectory();
-      _tmpDir = await getTemporaryDirectory();
-    } catch (err) {
+    if (kIsWeb) {
       if (kDebugMode) {
-        print('Failed to get app documents dir! Started in browser?\n $err');
+        print('In web there is no app documents dir! Only console logging...');
+      }
+    } else {
+      try {
+        _appDocumentsDir = await getApplicationDocumentsDirectory();
+        _tmpDir = await getTemporaryDirectory();
+      } catch (err) {
+        if (kDebugMode) {
+          print('Failed to get app documents dir! Started in browser?\n $err');
+        }
       }
     }
     if (_appDocumentsDir == null) {
