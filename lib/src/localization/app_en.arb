@@ -2,7 +2,7 @@
   "@@locale": "en",
   "administrationNavTitle": "More",
   "administrationTitle": "Service & Contact",
-  "appTitle": "Little Tracker (EN)",
+  "appTitle": "xTracker",
   "@appTitle": {
     "description": "The title of the application"
   },

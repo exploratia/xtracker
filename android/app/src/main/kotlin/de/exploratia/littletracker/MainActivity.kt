@@ -1,5 +1,5 @@
-package de.exploratia.littletracker
+package de.exploratia.xtracker
 
 import io.flutter.embedding.android.FlutterActivity
 
-class MainActivity: FlutterActivity()
+class MainActivity : FlutterActivity()
