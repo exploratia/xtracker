@@ -18,7 +18,8 @@ class CustomPaintUtils {
     canvas.drawPath(path, paint);
   }
 
-  static void paintGradientFilledRect(Canvas canvas, Rect rect, List<Color> colors, AlignmentGeometry begin, AlignmentGeometry end, {List<double>? stops}) {
+  static void paintGradientFilledRect(Canvas canvas, Rect rect, double rectRadius, List<Color> colors, AlignmentGeometry begin, AlignmentGeometry end,
+      {List<double>? stops}) {
     final LinearGradient gradient = LinearGradient(
       colors: colors,
       stops: stops,
@@ -26,6 +27,10 @@ class CustomPaintUtils {
       end: end,
     );
     final Paint paint = Paint()..shader = gradient.createShader(rect);
-    canvas.drawRect(rect, paint);
+    if (rectRadius > 0) {
+      canvas.drawRRect(RRect.fromRectAndRadius(rect, Radius.circular(rectRadius)), paint);
+    } else {
+      canvas.drawRect(rect, paint);
+    }
   }
 }

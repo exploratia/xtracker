@@ -206,6 +206,7 @@ class _DotViewPainterWeeklyRows<T extends DayItem> extends _DotViewPainter<T> {
     canvas.drawLine(Offset(0, lineHeight - 6), Offset(width, lineHeight - 6), borderPaint);
 
     // Data
+    final Paint noDataPaint = Paint()..color = Colors.grey.withAlpha(64);
     DateTime actDate = maxDateTime;
     double headerHeight = lineHeight;
     int lineIdx = 0;
@@ -232,9 +233,9 @@ class _DotViewPainterWeeklyRows<T extends DayItem> extends _DotViewPainter<T> {
         final br = Offset(center.dx + paddingX, center.dy + paddingY);
         painterFnc(dataItem, canvas, tl, br);
       } else {
-        final Paint rectPaint = Paint()..color = Colors.grey.withAlpha(64);
         final Rect rect = Rect.fromCenter(center: center, width: paddingX * 2, height: paddingY * 2);
-        canvas.drawRect(rect, rectPaint);
+        // canvas.drawRect(rect, noDataPaint);
+        canvas.drawRRect(RRect.fromRectAndRadius(rect, const Radius.circular(2)), noDataPaint);
       }
 
       // month
@@ -295,6 +296,7 @@ class _DotViewPainterMonthlyRows<T extends DayItem> extends _DotViewPainter<T> {
     canvas.drawLine(Offset(0, lineHeight - 6), Offset(width, lineHeight - 6), borderPaint);
 
     // Data
+    final Paint noDataPaint = Paint()..color = Colors.grey.withAlpha(64);
     DateTime actDate = maxDateTime;
     double headerHeight = lineHeight;
     int lineIdx = 0;
@@ -321,9 +323,9 @@ class _DotViewPainterMonthlyRows<T extends DayItem> extends _DotViewPainter<T> {
         final br = Offset(center.dx + paddingX, center.dy + paddingY);
         painterFnc(dataItem, canvas, tl, br);
       } else {
-        final Paint rectPaint = Paint()..color = Colors.grey.withAlpha(64);
         final Rect rect = Rect.fromCenter(center: center, width: paddingX * 2, height: paddingY * 2);
-        canvas.drawRect(rect, rectPaint);
+        // canvas.drawRect(rect, noDataPaint);
+        canvas.drawRRect(RRect.fromRectAndRadius(rect, const Radius.circular(2)), noDataPaint);
       }
 
       // month
