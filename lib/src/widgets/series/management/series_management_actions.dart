@@ -16,13 +16,7 @@ class SeriesManagementActions extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        SizedBox(
-          height: 40,
-          child: VerticalDivider(
-            thickness: 1,
-            color: seriesDef.color,
-          ),
-        ),
+        Container(color: seriesDef.color, width: 2, height: 40),
         _DeleteSeriesBtn(seriesDef: seriesDef),
         const Padding(
           padding: EdgeInsets.all(8.0),

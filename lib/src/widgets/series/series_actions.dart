@@ -14,13 +14,7 @@ class SeriesActions extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        SizedBox(
-          height: 40,
-          child: VerticalDivider(
-            thickness: 1,
-            color: seriesDef.color,
-          ),
-        ),
+        Container(color: seriesDef.color, width: 2, height: 40),
         _ShowSeriesDataBtn(seriesDef: seriesDef),
         const SizedBox(width: 10),
         _ShowSeriesDataInputDlgBtn(seriesDef: seriesDef),
