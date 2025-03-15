@@ -134,7 +134,7 @@
     "dialog": {
       "msg": {
         "query": {
-          "deleteSeries": "Die Messreihe '{name}' wirklich löschen?"
+          "deleteSeries": "Die Messreihe '{}' wirklich löschen?"
         }
       }
     },

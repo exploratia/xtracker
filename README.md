@@ -41,6 +41,7 @@ dart run easy_localization:generate -f keys -S assets/translations -o locale_key
 #### Auto generate keys when saving translation files
 
 ![GenerateLocaleKeys](/resources/docu/auto_generate_locale_keys_with_file_watcher.png?raw=true)
+![auto_generate_locale_keys_with_file_watcher_scope.png](resources/docu/auto_generate_locale_keys_with_file_watcher_scope.png)
 
 ## Dependencies
 
