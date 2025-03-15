@@ -134,7 +134,7 @@
     "dialog": {
       "msg": {
         "query": {
-          "deleteSeries": "Do you really want to delete the series '{name}'?"
+          "deleteSeries": "Do you really want to delete the series '{}'?"
         }
       }
     },
