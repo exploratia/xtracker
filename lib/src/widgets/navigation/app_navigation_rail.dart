@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../model/navigation/navigation.dart';
 
@@ -42,7 +41,6 @@ class _AppNavigationRailState extends State<AppNavigationRail> {
   }
 
   List<NavigationRailDestination> _buildDestinations(BuildContext context) {
-    final t = AppLocalizations.of(context)!;
     List<NavigationRailDestination> result = [];
 
     // special expand item
@@ -54,7 +52,7 @@ class _AppNavigationRailState extends State<AppNavigationRail> {
     for (var navItem in Navigation.mainNavigationItems) {
       result.add(NavigationRailDestination(
         icon: navItem.icon,
-        label: Text(navItem.titleBuilder(t)),
+        label: Text(navItem.titleBuilder()),
       ));
     }
 

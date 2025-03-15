@@ -1,6 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../generated/locale_keys.g.dart';
 import '../model/navigation/main_navigation_item.dart';
 import '../model/series/series_def.dart';
 import '../providers/series_provider.dart';
@@ -15,7 +17,7 @@ class HomeScreen extends StatelessWidget {
   static MainNavigationItem navItem = MainNavigationItem(
     icon: const Icon(Icons.home_outlined),
     routeName: '/',
-    titleBuilder: (t) => t.homeTitle,
+    titleBuilder: () => LocaleKeys.home_title.tr(),
   );
 
   const HomeScreen({super.key});

@@ -1,6 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../../generated/locale_keys.g.dart';
 import '../../model/navigation/main_navigation_item.dart';
 import '../../widgets/administration/administration_view.dart';
 import '../../widgets/layout/gradient_app_bar.dart';
@@ -10,17 +11,16 @@ class AdministrationScreen extends StatelessWidget {
   static MainNavigationItem navItem = MainNavigationItem(
     icon: const Icon(Icons.more_horiz),
     routeName: '/administration_screen',
-    titleBuilder: (t) => t.administrationNavTitle,
+    titleBuilder: () => LocaleKeys.administration_navTitle.tr(),
   );
 
   const AdministrationScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final t = AppLocalizations.of(context)!;
     return ScreenBuilder.withStandardNavBuilders(
       navItem: navItem,
-      appBarBuilder: (context) => GradientAppBar.build(context, addLeadingBackBtn: true, title: Text(navItem.titleBuilder(t))),
+      appBarBuilder: (context) => GradientAppBar.build(context, addLeadingBackBtn: true, title: Text(navItem.titleBuilder())),
       bodyBuilder: (context) => const AdministrationView(),
     );
   }

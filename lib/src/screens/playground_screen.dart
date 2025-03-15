@@ -20,7 +20,7 @@ class PlaygroundScreen extends StatelessWidget {
   static MainNavigationItem navItem = MainNavigationItem(
     icon: const Icon(Icons.adb_outlined),
     routeName: '/playground',
-    titleBuilder: (t) => "Playground",
+    titleBuilder: () => "Playground",
   );
 
   const PlaygroundScreen({super.key});

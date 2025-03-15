@@ -1,9 +1,10 @@
 import 'dart:ui';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 
+import '../generated/locale_keys.g.dart';
 import 'model/navigation/navigation.dart';
 import 'providers/series_data_provider.dart';
 import 'providers/series_provider.dart';
@@ -44,33 +45,17 @@ class MyApp extends StatelessWidget {
             // background.
             restorationScopeId: 'app',
 
-            // Provide the generated AppLocalizations to the MaterialApp. This
-            // allows descendant Widgets to display the correct translations
-            // depending on the user's locale.
-            // localizationsDelegates: const [
-            //   AppLocalizations.delegate,
-            //   GlobalMaterialLocalizations.delegate,
-            //   GlobalWidgetsLocalizations.delegate,
-            //   GlobalCupertinoLocalizations.delegate,
-            // ],
-            // supportedLocales: const [
-            //   Locale('en', ''), // English, no country code
-            //   Locale('de', ''), // German, no country code
-            // ],
-            // instead of doing it manually use generic:
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
+            // locale
+            localizationsDelegates: context.localizationDelegates,
+            supportedLocales: context.supportedLocales,
+            locale: context.locale,
+            // locale: settingsController.locale,
 
-            // Use AppLocalizations to configure the correct application title
-            // depending on the user's locale.
-            //
-            // The appTitle is defined in .arb files found in the localization
-            // directory.
             onGenerateTitle: (BuildContext context) {
               // settings changed -> maybe locale? ->
               DateTimeUtils.init();
               Navigation.resetMaxTextWidth();
-              return AppLocalizations.of(context)!.appTitle;
+              return LocaleKeys.appTitle.tr();
             },
 
             // Define a light and dark color theme. Then, read the user's
@@ -79,7 +64,6 @@ class MyApp extends StatelessWidget {
             theme: ThemeUtils.buildThemeData(context, false),
             darkTheme: ThemeUtils.buildThemeData(context, true),
             themeMode: settingsController.themeMode,
-            locale: settingsController.locale,
 
             // Mouse dragging enabled
             scrollBehavior: const MaterialScrollBehavior().copyWith(

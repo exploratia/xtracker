@@ -1,9 +1,9 @@
 import 'dart:math';
-import 'dart:ui';
 
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:intl/intl.dart';
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/cupertino.dart';
 
+import '../../../generated/locale_keys.g.dart';
 import 'globals.dart';
 
 /// Date format pattern see: https://api.flutter.dev/flutter/intl/DateFormat-class.html
@@ -36,24 +36,24 @@ class DateTimeUtils {
     return thisOrLastMonth;
   }
 
-  static String formateDateT(DateTime dateTime, AppLocalizations t) {
-    return DateFormat(t.patternDate).format(dateTime);
+  static String formateDateT(DateTime dateTime) {
+    return DateFormat(LocaleKeys.patterns_date.tr()).format(dateTime);
   }
 
-  static String formateTimeT(DateTime dateTime, AppLocalizations t) {
-    return DateFormat(t.patternTime).format(dateTime);
+  static String formateTimeT(DateTime dateTime) {
+    return DateFormat(LocaleKeys.patterns_time.tr()).format(dateTime);
   }
 
-  static String formateDateTimeT(DateTime dateTime, AppLocalizations t) {
-    return DateFormat(t.patternDateTime).format(dateTime);
+  static String formateDateTimeT(DateTime dateTime) {
+    return DateFormat(LocaleKeys.patterns_dateTime.tr()).format(dateTime);
   }
 
   static String formateDate(DateTime dateTime) {
     return DateFormat('yyyy-MM-dd').format(dateTime);
   }
 
-  static String formateMMMYYYY(DateTime dateTime) {
-    return DateFormat("MMM yyyy").format(dateTime);
+  static String formateMMMYYYY(DateTime dateTime, BuildContext context) {
+    return DateFormat("MMM yyyy", context.locale.languageCode).format(dateTime);
   }
 
   static String formateTime(DateTime dateTime) {
@@ -75,7 +75,7 @@ class DateTimeUtils {
   static DateTime lastDayOfMonth(DateTime date) {
     return firstDayOfMonth(firstDayOfMonth(date).add(const Duration(days: 40))).subtract(const Duration(days: 1));
     // was not always correct: missing april - probably because of the 29th
-    return DateTime(date.year, date.month + 1, 0);
+    // return DateTime(date.year, date.month + 1, 0);
   }
 
   static DateTime firstDayOfMonth(DateTime date) {

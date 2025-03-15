@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:uuid/v4.dart';
 
@@ -151,7 +150,6 @@ class _ScrollableGridState extends State<_ScrollableGrid> {
 
   @override
   Widget build(BuildContext context) {
-    final t = AppLocalizations.of(context)!;
     var columnProfile = widget.tableColumnProfile;
 
     List<Widget> tableHeader = [];
@@ -161,7 +159,7 @@ class _ScrollableGridState extends State<_ScrollableGrid> {
       } else {
         Widget tableHeaderItemWidget = SizedBox(
           width: tableColumn.minWidth.toDouble(),
-          child: _getTableHeadItemWidget(tableColumn.getTitle(t)),
+          child: _getTableHeadItemWidget(tableColumn.getTitle()),
         );
         tableHeader.add(tableHeaderItemWidget);
       }
@@ -176,9 +174,7 @@ class _ScrollableGridState extends State<_ScrollableGrid> {
         child: Column(
           children: [
             SizedBox(
-                height: widget.tableHeadHeight,
-                width: firstColumnWidth,
-                child: Center(child: _getTableHeadItemWidget(fixedFirstColumnTableColumn.getTitle(t)))),
+                height: widget.tableHeadHeight, width: firstColumnWidth, child: Center(child: _getTableHeadItemWidget(fixedFirstColumnTableColumn.getTitle()))),
             const _TextColoredDivider(),
             Expanded(
               child: ScrollConfiguration(

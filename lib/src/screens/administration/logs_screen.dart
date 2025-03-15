@@ -1,9 +1,10 @@
 import 'dart:io';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../../generated/locale_keys.g.dart';
 import '../../model/navigation/navigation_item.dart';
 import '../../util/dialogs.dart';
 import '../../util/logging/daily_files.dart';
@@ -19,7 +20,7 @@ class LogsScreen extends StatefulWidget {
   static NavigationItem navItem = NavigationItem(
     icon: const Icon(Icons.text_snippet_outlined),
     routeName: '/logs_screen',
-    titleBuilder: (t) => t.logsTitle,
+    titleBuilder: () => LocaleKeys.logs_title.tr(),
   );
 
   const LogsScreen({super.key});
@@ -35,14 +36,12 @@ class _LogsScreenState extends State<LogsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final t = AppLocalizations.of(context)!;
-
     return ScreenBuilder.withStandardNavBuilders(
       navItem: LogsScreen.navItem,
       appBarBuilder: (context) => GradientAppBar.build(
         context,
         addLeadingBackBtn: true,
-        title: Text(LogsScreen.navItem.titleBuilder(t)),
+        title: Text(LogsScreen.navItem.titleBuilder()),
         actions: [
           IconButton(
             onPressed: () async {
@@ -58,7 +57,7 @@ class _LogsScreenState extends State<LogsScreen> {
                   await Share.shareXFiles([XFile(zipAllLogs)], text: 'App Logs');
                 } catch (err) {
                   if (context.mounted) {
-                    Dialogs.simpleErrOkDialog('${t.commonsMsgErrorFailedToShareData}\n\n$err', context);
+                    Dialogs.simpleErrOkDialog('${LocaleKeys.commons_msg_error_failedToShareData.tr()}\n\n$err', context);
                   }
                 } finally {
                   try {
@@ -69,7 +68,7 @@ class _LogsScreenState extends State<LogsScreen> {
                 }
               } catch (err) {
                 if (context.mounted) {
-                  Dialogs.simpleErrOkDialog('${t.logsDialogMsgErrorFailedToZipLogs}\n\n$err', context);
+                  Dialogs.simpleErrOkDialog('${LocaleKeys.logs_dialog_msg_error_failedToZipLogs.tr()}\n\n$err', context);
                 }
               }
             },
@@ -78,16 +77,16 @@ class _LogsScreenState extends State<LogsScreen> {
           IconButton(
             onPressed: () async {
               bool? res = await Dialogs.simpleYesNoDialog(
-                t.logsDialogMsgQueryDeleteAllLogs,
+                LocaleKeys.logs_dialog_msg_query_deleteAllLogs.tr(),
                 context,
-                title: t.commonsDialogTitleAreYouSure,
+                title: LocaleKeys.commons_dialog_title_areYouSure.tr(),
               );
               if (res == true) {
                 try {
                   await DailyFiles.deleteAllLogs();
                 } catch (err) {
                   if (context.mounted) {
-                    Dialogs.simpleErrOkDialog('${t.logsDialogMsgErrorDeleteAllLogsFailed}\n\n$err', context);
+                    Dialogs.simpleErrOkDialog('${LocaleKeys.logs_dialog_msg_error_deleteAllLogsFailed.tr()}\n\n$err', context);
                   }
                 }
                 _rebuild();

@@ -1,7 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:share_plus/share_plus.dart';
 
+import '../../../generated/locale_keys.g.dart';
 import '../../model/navigation/navigation_item.dart';
 import '../../util/app_info.dart';
 import '../../util/dialogs.dart';
@@ -14,7 +15,7 @@ class LogScreen extends StatelessWidget {
   static NavigationItem navItem = NavigationItem(
     icon: const Icon(Icons.short_text_outlined),
     routeName: '/log_screen',
-    titleBuilder: (t) => t.logTitle,
+    titleBuilder: () => LocaleKeys.log_title.tr(),
   );
 
   const LogScreen({super.key, this.logFileName, this.rebuildLogsView});
@@ -24,8 +25,6 @@ class LogScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = AppLocalizations.of(context)!;
-
     String logFileN = (logFileName ?? '');
 
     return ScreenBuilder.withStandardNavBuilders(
@@ -33,7 +32,7 @@ class LogScreen extends StatelessWidget {
       appBarBuilder: (context) => GradientAppBar.build(
         context,
         addLeadingBackBtn: true,
-        title: Text(navItem.titleBuilder(t) + logFileN.replaceAll('.txt', '')),
+        title: Text(navItem.titleBuilder() + logFileN.replaceAll('.txt', '')),
         actions: [
           IconButton(
             onPressed: () async {
@@ -41,7 +40,7 @@ class LogScreen extends StatelessWidget {
                 await Share.shareXFiles([XFile(DailyFiles.getFullLogPath(logFileN))], text: '${AppInfo.appName} Log $logFileName');
               } catch (err) {
                 if (context.mounted) {
-                  Dialogs.simpleErrOkDialog('${t.commonsMsgErrorFailedToShareData}\n\n$err', context);
+                  Dialogs.simpleErrOkDialog('${LocaleKeys.commons_msg_error_failedToShareData.tr()}\n\n$err', context);
                 }
               }
             },
@@ -49,7 +48,11 @@ class LogScreen extends StatelessWidget {
           ),
           IconButton(
             onPressed: () async {
-              bool? res = await Dialogs.simpleYesNoDialog(t.logDialogMsgQueryDeleteLog, context, title: t.commonsDialogTitleAreYouSure);
+              bool? res = await Dialogs.simpleYesNoDialog(
+                LocaleKeys.log_dialog_msg_query_deleteLog.tr(),
+                context,
+                title: LocaleKeys.commons_dialog_title_areYouSure.tr(),
+              );
               if (res == true) {
                 try {
                   await DailyFiles.deleteLog(logFileN);
@@ -57,7 +60,7 @@ class LogScreen extends StatelessWidget {
                   await Future.delayed(const Duration(seconds: 1), () {});
                 } catch (err) {
                   if (context.mounted) {
-                    Dialogs.simpleErrOkDialog('${t.logDialogMsgErrorDeleteLogFailed}\n\n$err', context);
+                    Dialogs.simpleErrOkDialog('${LocaleKeys.log_dialog_msg_error_deleteLogFailed.tr()}\n\n$err', context);
                   }
                 }
                 final rebuildLogs = rebuildLogsView;

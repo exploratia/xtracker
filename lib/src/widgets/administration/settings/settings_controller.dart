@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../util/navigation/hide_navigation_labels.dart';
@@ -60,7 +61,7 @@ class SettingsController with ChangeNotifier {
   }
 
   /// Update and persist the Locale based on the user's selection.
-  Future<void> updateLocale(Locale? newLocale) async {
+  Future<void> updateLocale(Locale? newLocale, BuildContext context) async {
     // if (val == null) return; // null is ok -> system language
 
     // Do not perform any work if new and old ThemeMode are identical
@@ -70,10 +71,25 @@ class SettingsController with ChangeNotifier {
     _locale = newLocale;
 
     // Important! Inform listeners a change has occurred.
-    notifyListeners();
+    await updateContextLocale(context);
+    notifyListeners(); // necessary for UI rebuild
 
     // Persist the changes to a local database or the internet using the SettingService.
     await _settingsService.updateLocale(newLocale);
+  }
+
+  Future<void> updateContextLocale(BuildContext context) async {
+    Locale locale = context.deviceLocale;
+    if (_locale != null) {
+      locale = _locale!;
+    }
+    if (!context.supportedLocales.contains(locale)) {
+      locale = context.deviceLocale;
+      if (!context.supportedLocales.contains(locale)) {
+        locale = SettingsService.supportedLocales[0];
+      }
+    }
+    await context.setLocale(locale);
   }
 
   /// Update and persist the hide nav labels based on the user's selection.

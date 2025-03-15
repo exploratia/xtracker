@@ -14,17 +14,37 @@ images](https://flutter.dev/to/resolution-aware-images).
 
 ## Localization
 
-This project generates localized messages based on arb files found in
-the `lib/src/localization` directory.
+[//]: # (This project generates localized messages based on arb files found in)
 
-To support additional languages, please visit the tutorial on
-[Internationalizing Flutter apps](https://flutter.dev/to/internationalization).
-TODO for iOS:
-https://docs.flutter.dev/ui/accessibility-and-internationalization/internationalization#localizing-for-ios-updating-the-ios-app-bundle
+[//]: # (the `lib/src/localization` directory.)
+
+[//]: # ()
+
+[//]: # (To support additional languages, please visit the tutorial on)
+
+[//]: # ([Internationalizing Flutter apps]&#40;https://flutter.dev/to/internationalization&#41;.)
+
+[//]: # (TODO for iOS:)
+
+[//]: # (https://docs.flutter.dev/ui/accessibility-and-internationalization/internationalization#localizing-for-ios-updating-the-ios-app-bundle)
+
+### easy localization
+
+#### generate keys
+
+see: https://github.com/aissat/easy_localization/blob/develop/README.md#-code-generation
+
+```
+dart run easy_localization:generate -f keys -S assets/translations -o locale_keys.g.dart -u true
+```
+
+#### Auto generate keys when saving translation files
+
+![GenerateLocaleKeys](/resources/docu/auto_generate_locale_keys_with_file_watcher.png?raw=true)
 
 ## Dependencies
 
-### Appinfo
+### AppInfo
 
 https://pub.dev/packages/package_info_plus
 
@@ -51,6 +71,10 @@ void doSomething() {
 
 https://pub.dev/packages/flutter_secure_storage
 
+### Translation
+
+https://pub.dev/packages/easy_localization
+
 ### SimpleLogging
 
 https://pub.dev/packages/path_provider
@@ -74,7 +98,7 @@ https://pub.dev/packages/linked_scroll_controller
 
 https://pub.dev/packages/fl_chart
 
-### Storage (Hive)
+### Storage (Sembast)
 
 for mobile
 https://pub.dev/packages/sembast

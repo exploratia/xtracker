@@ -1,7 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:logger/logger.dart';
 
+import '../../../../generated/locale_keys.g.dart';
 import '../../../util/logging/flutter_simple_logging.dart';
 import '../../../util/table_utils.dart';
 import '../../card/settings_card.dart';
@@ -14,8 +15,6 @@ class LogSettingsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = AppLocalizations.of(context);
-
     return SingleChildScrollViewWithScrollbar(
       scrollPositionHandler: HideBottomNavigationBar.setScrollPosition,
       child: Column(
@@ -26,7 +25,7 @@ class LogSettingsView extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Text(t!.logSettingsLogLevelLabel),
+                  Text(LocaleKeys.log_settings_labels_logLevel.tr()),
                   const _LogLevelSelector(),
                 ],
               ),
@@ -45,11 +44,11 @@ class LogSettingsView extends StatelessWidget {
                 // ),
                 children: [
                   TableUtils.tableRow([
-                    Text(t.logSettingsLogFullStackLabel),
+                    Text(LocaleKeys.log_settings_labels_logFullStack.tr()),
                     const _FullStackSwitch(),
                   ]),
                   TableUtils.tableRow([
-                    Text(t.logSettingsWriteTestLogMessagesLabel),
+                    Text(LocaleKeys.log_settings_labels_writeTestLogMessages.tr()),
                     MaterialButton(
                         height: 50,
                         onPressed: () {

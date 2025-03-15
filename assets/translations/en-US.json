@@ -1,0 +1,218 @@
+{
+  "administration": {
+    "navTitle": "More",
+    "title": "Service & Contact"
+  },
+  "appTitle": "xTracker",
+  "bloodPressure": {
+    "input": {
+      "diastolic": {
+        "roughTitle": "▽... diastolic [mmHg]",
+        "fineTitle": "...▽ diastolic [mmHg]"
+      },
+      "systolic": {
+        "roughTitle": "△... systolic [mmHg]",
+        "fineTitle": "...△ systolic [mmHg]"
+      }
+    },
+    "seriesItem": {
+      "title": {
+        "diastolic": "Diastolic",
+        "systolic": "Systolic"
+      }
+    },
+    "table": {
+      "columns": {
+        "date": "Date",
+        "morning": "Morning",
+        "midday": "Midday",
+        "evening": "Evening"
+      }
+    }
+  },
+  "commons": {
+    "date": {
+      "shortWeekday": {
+        "monday": "Mon",
+        "tuesday": "Tue",
+        "wednesday": "Wed",
+        "thursday": "Thu",
+        "friday": "Fri",
+        "saturday": "Sat",
+        "sunday": "Sun"
+      }
+    },
+    "dialog": {
+      "title": {
+        "areYouSure": "Are you sure?",
+        "errorOccurred": "An Error Occurred"
+      },
+      "btn": {
+        "cancel": "Cancel",
+        "no": "No",
+        "okay": "Ok",
+        "save": "Save",
+        "yes": "Yes"
+      }
+    },
+    "msg": {
+      "error": {
+        "failedToLoadData": "Failed to load data...",
+        "failedToSaveData": "Failed to save data...",
+        "failedToShareData": "Failed to share..."
+      },
+      "pressBackAgainToExit": "Press BACK again to exit...",
+      "saved": "Saved..."
+    },
+    "validator": {
+      "msg": {
+        "emptyValue": "Please enter a value"
+      }
+    }
+  },
+  "home": {
+    "title": "Home"
+  },
+  "info": {
+    "title": "Info"
+  },
+  "log": {
+    "title": "Log",
+    "dialog": {
+      "msg": {
+        "error": {
+          "deleteLogFailed": "Failed to delete log file!"
+        },
+        "query": {
+          "deleteLog": "Do you really want to delete the log file?"
+        }
+      }
+    },
+    "settings": {
+      "title": "Log Settings",
+      "labels": {
+        "logFullStack": "Log full stack:",
+        "logLevel": "Log level:",
+        "writeTestLogMessages": "Write some test log messages:"
+      }
+    }
+  },
+  "logs": {
+    "title": "Logs",
+    "dialog": {
+      "msg": {
+        "error": {
+          "deleteAllLogsFailed": "Failed to delete all log files!",
+          "failedToZipLogs": "Failed to zip logs!"
+        },
+        "query": {
+          "deleteAllLogs": "Do you really want to delete all log files?"
+        }
+      }
+    }
+  },
+  "patterns": {
+    "date": "M/d/yyyy",
+    "dateTime": "M/d/yyyy h:mm a",
+    "time": "h:mm a"
+  },
+  "series": {
+    "addFirstSeries": "Add first series...",
+    "data": {
+      "title": "Series",
+      "input": {
+        "dialog": {
+          "msg": {
+            "query": {
+              "deleteValue": "Do you really want to delete this value?"
+            }
+          }
+        }
+      },
+      "noData": "This series contains no data yet..."
+    },
+    "dialog": {
+      "msg": {
+        "query": {
+          "deleteSeries": "Do you really want to delete the series '{name}'?"
+        }
+      }
+    },
+    "edit": {
+      "title": "Series",
+      "labels": {
+        "selectSeriesType": "Select series type:",
+        "seriesName": "Name",
+        "seriesIcon": "Icon",
+        "seriesColor": "Color"
+      }
+    },
+    "management": {
+      "title": "Series Management"
+    },
+    "seriesType": {
+      "bloodPressure": {
+        "title": "Blood pressure",
+        "info": "Measure blood pressure 3 times a day."
+      },
+      "dailyCheck": {
+        "title": "Daily check",
+        "info": "Check something daily - e.g. sports or a pause or stand up instead of sitting."
+      },
+      "free": {
+        "title": "Free",
+        "info": "Measure something with no repeating interval. E.g. car refuel distance and costs."
+      },
+      "monthly": {
+        "title": "Monthly",
+        "info": "Track monthly values - e.g. water or current consumption to see the yearly progress."
+      }
+    },
+    "viewType": {
+      "chart": "Chart",
+      "dots": "Overview",
+      "table": "Table"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "deviceStorage": {
+      "title": "Device Storage",
+      "btn": {
+        "clearStorage": "Clear device storage..."
+      },
+      "dialog": {
+        "msg": {
+          "query": {
+            "removeAllData": "Do you really want to remove all app data from your device?"
+          }
+        }
+      },
+      "noData": "No data stored",
+      "table": {
+        "columns": {
+          "key": "Key",
+          "value": "Value"
+        }
+      }
+    },
+    "general": {
+      "title": "General settings",
+      "labels": {
+        "hideNavigationLabels": "Hide navigation labels (menu & bottom navigation):",
+        "lang": "Language:",
+        "theme": "Theme:"
+      },
+      "languages": {
+        "system": "System",
+        "english": "English",
+        "german": "Deutsch"
+      },
+      "themes": {
+        "system": "System",
+        "dark": "Dark",
+        "light": "Light"
+      }
+    }
+  }
+}

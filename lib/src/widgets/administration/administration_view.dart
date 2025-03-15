@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../screens/administration/info_screen.dart';
 import '../../screens/administration/logs_screen.dart';
@@ -15,11 +14,10 @@ class AdministrationView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    final t = AppLocalizations.of(context)!;
 
     final links = [SettingsScreen.navItem, LogsScreen.navItem, InfoScreen.navItem].map((navItem) => {
           'ico': navItem.icon,
-          'title': navItem.titleBuilder(t),
+          'title': navItem.titleBuilder(),
           'routeName': navItem.routeName,
         });
 

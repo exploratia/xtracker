@@ -1,9 +1,10 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../generated/locale_keys.g.dart';
 import '../../model/navigation/navigation_item.dart';
 import '../../model/series/data/series_data.dart';
 import '../../model/series/series_def.dart';
@@ -24,7 +25,7 @@ class SeriesDataScreen extends StatelessWidget {
   static NavigationItem navItem = NavigationItem(
     icon: const Icon(Icons.settings_outlined),
     routeName: '/series_data',
-    titleBuilder: (t) => t.seriesDataTitle,
+    titleBuilder: () => LocaleKeys.series_data_title.tr(),
   );
 
   /// args(series) = seriesDef | seriesDefUuid
@@ -109,7 +110,6 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
 
   @override
   Widget build(BuildContext context) {
-    final t = AppLocalizations.of(context)!;
     final themeData = Theme.of(context);
     NavigationItem navItem = SeriesDataScreen.navItem;
 
@@ -120,11 +120,11 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Icon(_viewType.iconData, color: themeData.colorScheme.onPrimary),
-          OverflowText(ViewType.displayNameOf(_viewType, t)),
+          OverflowText(ViewType.displayNameOf(_viewType)),
         ],
       );
     } else {
-      title = Text(navItem.titleBuilder(t));
+      title = Text(navItem.titleBuilder());
     }
 
     Widget view;

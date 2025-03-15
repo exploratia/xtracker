@@ -1,0 +1,218 @@
+{
+  "administration": {
+    "navTitle": "Mehr",
+    "title": "Service & Kontakt"
+  },
+  "appTitle": "xTracker",
+  "bloodPressure": {
+    "input": {
+      "diastolic": {
+        "roughTitle": "▽... diastolisch [mmHg]",
+        "fineTitle": "...▽ diastolisch [mmHg]"
+      },
+      "systolic": {
+        "roughTitle": "△... systolisch [mmHg]",
+        "fineTitle": "...△ systolisch [mmHg]"
+      }
+    },
+    "seriesItem": {
+      "title": {
+        "diastolic": "Diastolisch",
+        "systolic": "Systolisch"
+      }
+    },
+    "table": {
+      "columns": {
+        "date": "Datum",
+        "morning": "Morgens",
+        "midday": "Mittags",
+        "evening": "Abends"
+      }
+    }
+  },
+  "commons": {
+    "date": {
+      "shortWeekday": {
+        "monday": "Mo",
+        "tuesday": "Di",
+        "wednesday": "Mi",
+        "thursday": "Do",
+        "friday": "Fr",
+        "saturday": "Sa",
+        "sunday": "So"
+      }
+    },
+    "dialog": {
+      "title": {
+        "areYouSure": "Sicher?",
+        "errorOccurred": "Fehler"
+      },
+      "btn": {
+        "cancel": "Abbrechen",
+        "no": "Nein",
+        "okay": "Ok",
+        "save": "Speichern",
+        "yes": "Ja"
+      }
+    },
+    "msg": {
+      "error": {
+        "failedToLoadData": "Fehler beim Laden der Daten...",
+        "failedToSaveData": "Fehler beim Speichern der Daten...",
+        "failedToShareData": "Fehler beim Teilen..."
+      },
+      "pressBackAgainToExit": "Zum Beenden nochmal drücken...",
+      "saved": "Gespeichert..."
+    },
+    "validator": {
+      "msg": {
+        "emptyValue": "Ungültiger Wert"
+      }
+    }
+  },
+  "home": {
+    "title": "Start"
+  },
+  "info": {
+    "title": "Info"
+  },
+  "log": {
+    "title": "Log",
+    "dialog": {
+      "msg": {
+        "error": {
+          "deleteLogFailed": "Fehler beim Löschen der Log-Datei!"
+        },
+        "query": {
+          "deleteLog": "Log-Datei wirklich löschen?"
+        }
+      }
+    },
+    "settings": {
+      "title": "Log Einstellungen",
+      "labels": {
+        "logFullStack": "Vollständigen Stack schreiben:",
+        "logLevel": "Log Level:",
+        "writeTestLogMessages": "Test Log-Einträge schreiben:"
+      }
+    }
+  },
+  "logs": {
+    "title": "Logs",
+    "dialog": {
+      "msg": {
+        "error": {
+          "deleteAllLogsFailed": "Fehler beim Löschen der Log-Dateien!",
+          "failedToZipLogs": "Fehler beim Zippen der Log-Dateien!"
+        },
+        "query": {
+          "deleteAllLogs": "Wirklich alle Log-Dateien löschen?"
+        }
+      }
+    }
+  },
+  "patterns": {
+    "date": "dd.MM.yyyy",
+    "dateTime": "dd.MM.yyyy HH:mm",
+    "time": "H:mm"
+  },
+  "series": {
+    "addFirstSeries": "Erste Messreihe erstellen...",
+    "data": {
+      "title": "Messreihe",
+      "input": {
+        "dialog": {
+          "msg": {
+            "query": {
+              "deleteValue": "Diesen Messwert wirklich löschen?"
+            }
+          }
+        }
+      },
+      "noData": "Diese Messreihe enthält noch keine Daten..."
+    },
+    "dialog": {
+      "msg": {
+        "query": {
+          "deleteSeries": "Die Messreihe '{name}' wirklich löschen?"
+        }
+      }
+    },
+    "edit": {
+      "title": "Messreihe",
+      "labels": {
+        "seriesName": "Name",
+        "seriesIcon": "Symbol",
+        "seriesColor": "Farbe",
+        "selectSeriesType": "Wähle den Messreihen-Typ"
+      }
+    },
+    "management": {
+      "title": "Messreihen verwalten"
+    },
+    "seriesType": {
+      "bloodPressure": {
+        "title": "Blutdruck",
+        "info": "Blutdruck-Messung 3x am Tag (Morgens - Mittags - Abends)"
+      },
+      "dailyCheck": {
+        "title": "Täglicher Check",
+        "info": "Erledige täglich etwas - z.B. Sport oder Pause oder Aufstehen während einer sitzenden Tätigkeit."
+      },
+      "free": {
+        "title": "Frei",
+        "info": "Etwas ohne regelmäßiges Intervall aufzeichnen. Z.B. Auto betanken (Kosten und gefahrene Distanz)."
+      },
+      "monthly": {
+        "title": "Monatlich",
+        "info": "Monatliche Werte aufzeichnen um diese über das Jahr oder Jahre zu verfolgen. Z.B. Wasser- oder Stromverbrauch."
+      }
+    },
+    "viewType": {
+      "chart": "Diagramm",
+      "dots": "Übersicht",
+      "table": "Tabelle"
+    }
+  },
+  "settings": {
+    "title": "Einstellungen",
+    "deviceStorage": {
+      "title": "Geräte-Speicher",
+      "btn": {
+        "clearStorage": "Gespeicherte App-Daten löschen..."
+      },
+      "dialog": {
+        "msg": {
+          "query": {
+            "removeAllData": "Wirklich alle App-Daten löschen?"
+          }
+        }
+      },
+      "noData": "Keine App-Daten gespeichert",
+      "table": {
+        "columns": {
+          "key": "Schlüssel",
+          "value": "Wert"
+        }
+      }
+    },
+    "general": {
+      "title": "Allgemeine Einstellungen",
+      "labels": {
+        "hideNavigationLabels": "Navigationslabels verstecken (Menü & Navigationsleiste):",
+        "lang": "Sprache:",
+        "theme": "Theme:"
+      },
+      "languages": {
+        "system": "Systemeinstellung",
+        "english": "English",
+        "german": "Deutsch"
+      },
+      "themes": {
+        "system": "Systemeinstellung",
+        "dark": "Dunkel",
+        "light": "Hell"
+      }
+    }
+  }
+}

@@ -1,7 +1,6 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../util/custom_paint_utils.dart';
 import '../../util/date_time_utils.dart';
@@ -83,8 +82,8 @@ class _DotsWeekly<T extends DayItem> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    final t = AppLocalizations.of(context)!;
-    final List<String> shortWeekDays = I18N.composeShortWeekdays(t);
+
+    final List<String> shortWeekDays = I18N.composeShortWeekdays();
 
     const double lineHeight = 26;
     final height = ((maxDateTime.difference(minDateTime).inDays + 1) / 7 + 1) * lineHeight;
@@ -98,7 +97,8 @@ class _DotsWeekly<T extends DayItem> extends StatelessWidget {
           maxDateTime: maxDateTime,
           shortWeekDays: shortWeekDays,
           lineHeight: lineHeight,
-          textStyle: themeData.textTheme.bodyLarge ?? const TextStyle(color: Colors.grey, fontSize: 16)),
+          textStyle: themeData.textTheme.bodyLarge ?? const TextStyle(color: Colors.grey, fontSize: 16),
+          context: context),
     );
   }
 }
@@ -132,7 +132,8 @@ class _DotsMonthly<T extends DayItem> extends StatelessWidget {
           minDateTime: minDateTime,
           maxDateTime: maxDateTime,
           lineHeight: lineHeight,
-          textStyle: themeData.textTheme.bodyLarge ?? const TextStyle(color: Colors.grey, fontSize: 16)),
+          textStyle: themeData.textTheme.bodyLarge ?? const TextStyle(color: Colors.grey, fontSize: 16),
+          context: context),
     );
   }
 
@@ -147,12 +148,20 @@ abstract class _DotViewPainter<T extends DayItem> extends CustomPainter {
   final DateTime minDateTime;
   final DateTime maxDateTime;
   final double lineHeight;
+  final BuildContext context;
 
-  _DotViewPainter({super.repaint, required this.textStyle, required this.data, required this.minDateTime, required this.maxDateTime, required this.lineHeight});
+  _DotViewPainter(
+      {super.repaint,
+      required this.textStyle,
+      required this.data,
+      required this.minDateTime,
+      required this.maxDateTime,
+      required this.lineHeight,
+      required this.context});
 
-  void _paintDate(DateTime dateTime, double yPos, double lineHeight, double firstColWidth, Canvas canvas) {
+  void _paintDate(DateTime dateTime, double yPos, double lineHeight, double firstColWidth, Canvas canvas, BuildContext context) {
     final TextPainter textPainter = CustomPaintUtils.textPainter();
-    String dateString = DateTimeUtils.formateMMMYYYY(dateTime);
+    String dateString = DateTimeUtils.formateMMMYYYY(dateTime, context);
     textPainter.text = TextSpan(text: dateString, style: textStyle);
     textPainter.layout();
     textPainter.paint(canvas, Offset(firstColWidth - 10 - textPainter.width, yPos + lineHeight / 2 - textPainter.height / 2));
@@ -176,7 +185,8 @@ class _DotViewPainterWeeklyRows<T extends DayItem> extends _DotViewPainter<T> {
       required super.maxDateTime,
       required super.lineHeight,
       required this.painterFnc,
-      required this.shortWeekDays});
+      required this.shortWeekDays,
+      required super.context});
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -240,7 +250,7 @@ class _DotViewPainterWeeklyRows<T extends DayItem> extends _DotViewPainter<T> {
 
       // month
       if (DateTimeUtils.isMonthStart(actDate)) {
-        _paintDate(actDate, topLeft.dy, lineHeight, firstColWidth, canvas);
+        _paintDate(actDate, topLeft.dy, lineHeight, firstColWidth, canvas, context);
 
         canvas.drawLine(topLeft.translate(0, lineHeight), topLeft.translate(0, lineHeight / 2), borderPaint);
         canvas.drawLine(topLeft.translate(0, lineHeight), bottomRight, borderPaint);
@@ -263,6 +273,7 @@ class _DotViewPainterMonthlyRows<T extends DayItem> extends _DotViewPainter<T> {
     required super.maxDateTime,
     required super.lineHeight,
     required this.painterFnc,
+    required super.context,
   });
 
   @override
@@ -331,7 +342,7 @@ class _DotViewPainterMonthlyRows<T extends DayItem> extends _DotViewPainter<T> {
       // month
       if (DateTimeUtils.isMonthStart(actDate)) {
         if (actDate.month % 2 != 0) {
-          _paintDate(actDate, topLeft.dy, lineHeight, firstColWidth, canvas);
+          _paintDate(actDate, topLeft.dy, lineHeight, firstColWidth, canvas, context);
         }
 
         // canvas.drawLine(topLeft, topLeft.translate(0, lineHeight / 2), borderPaint);

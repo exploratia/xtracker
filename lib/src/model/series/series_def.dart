@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../util/color_utils.dart';
 import '../../util/i18n.dart';
@@ -74,8 +73,8 @@ class SeriesItem {
 
   SeriesItem({required this.uuid, required this.title, this.msgId, required this.unit, required this.tableColumnMinWidth});
 
-  String getTitle(AppLocalizations t) {
-    var titleStr = msgId != null ? (I18N.compose(msgId, t) ?? title) : title;
+  String getTitle() {
+    var titleStr = msgId != null ? (I18N.compose(msgId) ?? title) : title;
     return titleStr;
   }
 

@@ -1,5 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import '../../../generated/locale_keys.g.dart';
 
 enum ViewType {
   chart(Icons.area_chart_outlined),
@@ -15,11 +17,11 @@ enum ViewType {
 
   const ViewType(this.iconData);
 
-  static String displayNameOf(ViewType seriesType, AppLocalizations t) {
+  static String displayNameOf(ViewType seriesType) {
     return switch (seriesType) {
-      ViewType.chart => t.seriesViewTypeChart,
-      ViewType.table => t.seriesViewTypeTable,
-      ViewType.dots => t.seriesViewTypeDots,
+      ViewType.chart => LocaleKeys.series_viewType_chart.tr(),
+      ViewType.table => LocaleKeys.series_viewType_table.tr(),
+      ViewType.dots => LocaleKeys.series_viewType_dots.tr(),
     };
   }
 }

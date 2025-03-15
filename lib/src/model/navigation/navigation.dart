@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../util/text_utils.dart';
 import 'main_navigation_item.dart';
@@ -56,10 +55,9 @@ class Navigation {
   /// determines the maxTextWidth for all main navigation items to know the required drawer width.
   /// Has to be called after language changed.
   static void _determineMaxTextWidth({required BuildContext context, TextStyle? textStyle}) {
-    final t = AppLocalizations.of(context)!;
     double maxW = -1;
     for (var navItem in mainNavigationItems) {
-      var text = navItem.titleBuilder(t);
+      var text = navItem.titleBuilder();
       var width = TextUtils.determineTextSize(text, context, textStyle).width;
       maxW = max(maxW, width);
     }

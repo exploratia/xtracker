@@ -1,8 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../../../../generated/locale_keys.g.dart';
 import '../../../../../model/series/data/blood_pressure/blood_pressure_value.dart';
 import '../../../../../model/series/series_def.dart';
 import '../../../../../model/series/series_type.dart';
@@ -19,14 +20,13 @@ class BloodPressureQuickInput extends StatefulWidget {
   final BloodPressureValue? bloodPressureValue;
 
   static Future<BloodPressureValue?> showInputDlg(BuildContext context, SeriesDef seriesDef, {BloodPressureValue? bloodPressureValue}) async {
-    final t = AppLocalizations.of(context)!;
     final themeData = Theme.of(context);
 
     deleteHandler() async {
       bool? res = await Dialogs.simpleYesNoDialog(
-        t.seriesDataInputDialogMsgQueryDeleteValue,
+        LocaleKeys.series_data_input_dialog_msg_query_deleteValue.tr(),
         context,
-        title: t.commonsDialogTitleAreYouSure,
+        title: LocaleKeys.commons_dialog_title_areYouSure.tr(),
       );
       if (res == true) {
         try {
@@ -54,7 +54,7 @@ class BloodPressureQuickInput extends StatefulWidget {
                 if (bloodPressureValue != null) const Icon(Icons.edit_outlined),
                 if (bloodPressureValue == null) const Icon(Icons.add_circle_outline),
                 const SizedBox(width: 10),
-                Text(SeriesType.displayNameOf(seriesDef.seriesType, t)),
+                Text(SeriesType.displayNameOf(seriesDef.seriesType)),
               ],
             ),
             if (bloodPressureValue != null) IconButton(onPressed: deleteHandler, color: themeData.colorScheme.primary, icon: const Icon(Icons.delete_outlined)),
@@ -66,7 +66,7 @@ class BloodPressureQuickInput extends StatefulWidget {
             onPressed: () {
               Navigator.pop(ctx, null);
             },
-            child: Text(t.commonsDialogBtnCancel),
+            child: Text(LocaleKeys.commons_dialog_btn_cancel.tr()),
           ),
         ],
       ),
@@ -140,8 +140,6 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
 
   @override
   Widget build(BuildContext context) {
-    final t = AppLocalizations.of(context)!;
-
     Widget stepWidget;
 
     var header = _Header(dateTime: _dateTime, bloodPressureValue: widget.bloodPressureValue, seriesDef: widget.seriesDef, setDateTime: _setDateTime);
@@ -155,7 +153,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconButton(onPressed: () => Navigator.pop(context, null), icon: const Icon(Icons.arrow_back_outlined)),
-              Text(_DialogStep.displayNameOf(_dialogStep, t)),
+              Text(_DialogStep.displayNameOf(_dialogStep)),
             ],
           ),
           const Divider(height: 1),
@@ -176,7 +174,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconButton(onPressed: () => _setStep(_DialogStep.highRough), icon: const Icon(Icons.arrow_back_outlined)),
-              Text(_DialogStep.displayNameOf(_dialogStep, t)),
+              Text(_DialogStep.displayNameOf(_dialogStep)),
             ],
           ),
           const Divider(height: 1),
@@ -197,7 +195,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconButton(onPressed: () => _setStep(_DialogStep.highFine), icon: const Icon(Icons.arrow_back_outlined)),
-              Text(_DialogStep.displayNameOf(_dialogStep, t)),
+              Text(_DialogStep.displayNameOf(_dialogStep)),
             ],
           ),
           const Divider(height: 1),
@@ -218,7 +216,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               IconButton(onPressed: () => _setStep(_DialogStep.lowRough), icon: const Icon(Icons.arrow_back_outlined)),
-              Text(_DialogStep.displayNameOf(_dialogStep, t)),
+              Text(_DialogStep.displayNameOf(_dialogStep)),
             ],
           ),
           const Divider(height: 1),
@@ -386,12 +384,14 @@ enum _DialogStep {
 
   const _DialogStep();
 
-  static String displayNameOf(_DialogStep seriesType, AppLocalizations t) {
+  static String displayNameOf(
+    _DialogStep seriesType,
+  ) {
     return switch (seriesType) {
-      _DialogStep.highRough => t.bloodPressureInputSystolicRoughTitle,
-      _DialogStep.highFine => t.bloodPressureInputSystolicFineTitle,
-      _DialogStep.lowRough => t.bloodPressureInputDiastolicRoughTitle,
-      _DialogStep.lowFine => t.bloodPressureInputDiastolicFineTitle,
+      _DialogStep.highRough => LocaleKeys.bloodPressure_input_systolic_roughTitle.tr(),
+      _DialogStep.highFine => LocaleKeys.bloodPressure_input_systolic_fineTitle.tr(),
+      _DialogStep.lowRough => LocaleKeys.bloodPressure_input_diastolic_roughTitle.tr(),
+      _DialogStep.lowFine => LocaleKeys.bloodPressure_input_diastolic_fineTitle.tr(),
     };
   }
 }

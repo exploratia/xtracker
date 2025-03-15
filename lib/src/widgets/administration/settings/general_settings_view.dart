@@ -1,11 +1,13 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../../../generated/locale_keys.g.dart';
 import '../../../util/navigation/hide_navigation_labels.dart';
 import '../../../util/table_utils.dart';
 import '../../../util/theme_utils.dart';
 import '../../layout/drop_down_menu_item_child.dart';
 import './settings_controller.dart';
+import 'settings_service.dart';
 
 /// Displays the various settings that can be customized by the user.
 ///
@@ -18,20 +20,18 @@ class GeneralSettingsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = AppLocalizations.of(context);
-
     var actTheme = controller.themeMode;
     var themeItems = [
-      {'v': ThemeMode.system, 'text': t!.settingsGeneralThemeNameSystem},
-      {'v': ThemeMode.light, 'text': t.settingsGeneralThemeNameLight},
-      {'v': ThemeMode.dark, 'text': t.settingsGeneralThemeNameDark},
+      {'v': ThemeMode.system, 'text': LocaleKeys.settings_general_themes_system.tr()},
+      {'v': ThemeMode.light, 'text': LocaleKeys.settings_general_themes_light.tr()},
+      {'v': ThemeMode.dark, 'text': LocaleKeys.settings_general_themes_dark.tr()},
     ];
 
     var actLocale = controller.locale;
     var localeItems = [
-      {'v': null, 'text': t.settingsGeneralLangNameSystem},
-      {'v': const Locale("de"), 'text': t.settingsGeneralLangNameGerman},
-      {'v': const Locale("en"), 'text': t.settingsGeneralLangNameEnglish},
+      {'v': null, 'text': LocaleKeys.settings_general_languages_system.tr()},
+      {'v': SettingsService.supportedLocales[1], 'text': LocaleKeys.settings_general_languages_german.tr()},
+      {'v': SettingsService.supportedLocales[0], 'text': LocaleKeys.settings_general_languages_english.tr()},
     ];
     if (actLocale != null) {
       // check
@@ -56,7 +56,7 @@ class GeneralSettingsView extends StatelessWidget {
           // ),
           children: [
             TableUtils.tableRow([
-              Text(t.settingsGeneralThemeLabel),
+              Text(LocaleKeys.settings_general_labels_theme.tr()),
               DropdownButton<ThemeMode>(
                 key: const Key('settingsThemeSelect'),
                 borderRadius: ThemeUtils.cardBorderRadius,
@@ -74,14 +74,14 @@ class GeneralSettingsView extends StatelessWidget {
               )
             ]),
             TableUtils.tableRow([
-              Text(t.settingsGeneralLangLabel),
+              Text(LocaleKeys.settings_general_labels_lang.tr()),
               DropdownButton<Locale?>(
                 key: const Key('settingsLocaleSelect'),
                 borderRadius: ThemeUtils.cardBorderRadius,
                 // Read selected from the controller
                 value: actLocale,
                 // Call the update method any time the user selects.
-                onChanged: controller.updateLocale,
+                onChanged: (value) => controller.updateLocale(value, context),
                 items: localeItems.map((i) {
                   var text = Text(i["text"] as String);
                   var value = i["v"] as Locale?;
@@ -101,7 +101,7 @@ class GeneralSettingsView extends StatelessWidget {
             onChanged: (bool value) {
               controller.updateHideNavigationLabels(value);
             },
-            title: Text(t.settingsGeneralHideNavigationLabelsLabel),
+            title: Text(LocaleKeys.settings_general_labels_hideNavigationLabels.tr()),
           ),
         ),
       ],

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../model/navigation/navigation.dart';
 import '../../util/navigation/hide_navigation_labels.dart';
@@ -54,13 +53,12 @@ class AppBottomNavigationBar extends StatelessWidget {
   }
 
   List<BottomNavigationBarItem> _buildNavItems(BuildContext context) {
-    final t = AppLocalizations.of(context)!;
     List<BottomNavigationBarItem> result = [];
 
     for (var navItem in Navigation.mainNavigationItems) {
       result.add(BottomNavigationBarItem(
         icon: navItem.icon,
-        label: navItem.titleBuilder(t),
+        label: navItem.titleBuilder(),
       ));
     }
 

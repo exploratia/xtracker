@@ -1,6 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../../generated/locale_keys.g.dart';
 import '../widgets/responsive/device_dependent_constrained_box.dart';
 
 class Dialogs {
@@ -15,8 +16,6 @@ class Dialogs {
     dynamic title,
     String? buttonText,
   }) async {
-    final t = AppLocalizations.of(context)!;
-
     Widget? titleWidget = _titleWidget(title);
 
     Widget? contentWidget = _contentWidget(content);
@@ -31,7 +30,7 @@ class Dialogs {
               onPressed: () {
                 Navigator.of(ctx).pop();
               },
-              child: Text(buttonText ?? t.commonsDialogBtnOkay))
+              child: Text(buttonText ?? LocaleKeys.commons_dialog_btn_okay.tr()))
         ],
       ),
     );
@@ -43,8 +42,7 @@ class Dialogs {
     dynamic title,
     String? buttonText,
   }) async {
-    final t = AppLocalizations.of(context);
-    return Dialogs.simpleOkDialog(content, context, title: title ?? t!.commonsDialogTitleErrorOccurred);
+    return Dialogs.simpleOkDialog(content, context, title: title ?? LocaleKeys.commons_dialog_title_errorOccurred.tr());
   }
 
   /// returns true|false=null (null in case of back-tap)
@@ -53,8 +51,6 @@ class Dialogs {
     BuildContext context, {
     dynamic title,
   }) async {
-    final t = AppLocalizations.of(context)!;
-
     Widget? titleWidget = _titleWidget(title);
 
     Widget? contentWidget = _contentWidget(content);
@@ -69,13 +65,13 @@ class Dialogs {
             onPressed: () {
               Navigator.of(ctx).pop(false);
             },
-            child: Text(t.commonsDialogBtnNo),
+            child: Text(LocaleKeys.commons_dialog_btn_no.tr()),
           ),
           TextButton(
             onPressed: () {
               Navigator.of(ctx).pop(true);
             },
-            child: Text(t.commonsDialogBtnYes),
+            child: Text(LocaleKeys.commons_dialog_btn_yes.tr()),
           ),
         ],
       ),

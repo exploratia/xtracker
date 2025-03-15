@@ -1,6 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../../../generated/locale_keys.g.dart';
 import '../../card/expandable_settings_card.dart';
 import '../../layout/scroll_footer.dart';
 import '../../layout/single_child_scroll_view_with_scrollbar.dart';
@@ -21,17 +22,15 @@ class SettingsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = AppLocalizations.of(context);
-
     return SingleChildScrollViewWithScrollbar(
       scrollPositionHandler: HideBottomNavigationBar.setScrollPosition,
       child: Column(
         children: [
           ExpandableSettingsCard(
-              title: OverflowText(t!.settingsGeneralCardTitle, style: Theme.of(context).textTheme.titleLarge),
+              title: OverflowText(LocaleKeys.settings_general_title.tr(), style: Theme.of(context).textTheme.titleLarge),
               content: GeneralSettingsView(controller: controller)),
           ExpandableSettingsCard(
-              title: OverflowText(t.settingsDeviceStorageTitle, style: Theme.of(context).textTheme.titleLarge),
+              title: OverflowText(LocaleKeys.settings_deviceStorage_title.tr(), style: Theme.of(context).textTheme.titleLarge),
               content: DeviceStorageView(
                 controller: controller,
               )),

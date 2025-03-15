@@ -9,6 +9,8 @@ import '../../../util/device_storage/device_storage_keys.dart';
 /// persist the user settings locally, use the shared_preferences package. If
 /// you'd like to store settings on a web server, use the http package.
 class SettingsService {
+  static const supportedLocales = [Locale('en', 'US'), Locale('de', 'DE')];
+
   /// Loads the User's preferred ThemeMode from local or remote storage.
   Future<ThemeMode> themeMode() async {
     var value = await DeviceStorage.read(DeviceStorageKeys.keyAppTheme);
@@ -26,12 +28,18 @@ class SettingsService {
   /// Loads the User's preferred Locale
   Future<Locale?> locale() async {
     var value = await DeviceStorage.read(DeviceStorageKeys.keyAppLocale);
-    return (value == null ? null : Locale(value));
+    if (value == null) return null;
+    // if language code is not enough add country code as well
+    var localeIdx = supportedLocales.indexWhere((element) => element.languageCode == value);
+    if (localeIdx < 0) return null;
+
+    var locale = supportedLocales[localeIdx];
+    return locale;
   }
 
   /// Persists the user's preferred Locale to local or remote storage.
   Future<void> updateLocale(Locale? locale) async {
-    var value = locale?.languageCode;
+    var value = locale == null ? null : (locale.languageCode);
     await DeviceStorage.write(DeviceStorageKeys.keyAppLocale, value);
   }
 

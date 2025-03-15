@@ -1,6 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../../generated/locale_keys.g.dart';
 import '../../model/navigation/navigation_item.dart';
 import '../../widgets/administration/settings/settings_controller.dart';
 import '../../widgets/administration/settings/settings_view.dart';
@@ -11,7 +12,7 @@ class SettingsScreen extends StatelessWidget {
   static NavigationItem navItem = NavigationItem(
     icon: const Icon(Icons.settings_outlined),
     routeName: '/settings',
-    titleBuilder: (t) => t.settingsTitle,
+    titleBuilder: () => LocaleKeys.settings_title.tr(),
   );
 
   const SettingsScreen({super.key, required this.controller});
@@ -20,11 +21,9 @@ class SettingsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = AppLocalizations.of(context)!;
-
     return ScreenBuilder.withStandardNavBuilders(
       navItem: navItem,
-      appBarBuilder: (context) => GradientAppBar.build(context, addLeadingBackBtn: true, title: Text(navItem.titleBuilder(t))),
+      appBarBuilder: (context) => GradientAppBar.build(context, addLeadingBackBtn: true, title: Text(navItem.titleBuilder())),
       bodyBuilder: (context) => SettingsView(controller: controller),
     );
   }

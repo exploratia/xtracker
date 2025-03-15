@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../model/navigation/navigation.dart';
 import '../../util/navigation/hide_navigation_labels.dart';
@@ -35,7 +34,6 @@ class AppDrawer extends StatelessWidget {
   }
 
   Widget _buildNavItems(BuildContext context, int currentIdx, bool navLabelsVisible) {
-    final t = AppLocalizations.of(context)!;
     List<Widget> result = [];
 
     int actIdx = -1;
@@ -44,7 +42,7 @@ class AppDrawer extends StatelessWidget {
       result.add(ListTile(
         selected: actIdx == currentIdx,
         leading: navLabelsVisible ? navItem.icon : null,
-        title: navLabelsVisible ? Text(navItem.titleBuilder(t)) : navItem.icon,
+        title: navLabelsVisible ? Text(navItem.titleBuilder()) : navItem.icon,
         onTap: () {
           NavigationUtils.closeDrawerIfOpen(context);
           Navigation.setCurrentMainNavigationRouteIdx(itemIdx, context);

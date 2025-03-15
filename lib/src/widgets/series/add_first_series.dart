@@ -1,6 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../../generated/locale_keys.g.dart';
 import '../../model/series/series_def.dart';
 
 class AddFirstSeries extends StatelessWidget {
@@ -8,7 +9,6 @@ class AddFirstSeries extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = AppLocalizations.of(context)!;
     final themeData = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -21,7 +21,7 @@ class AddFirstSeries extends StatelessWidget {
               /*SeriesDef? s=*/ await SeriesDef.addNewSeries(context);
             },
             icon: const Icon(Icons.add_chart_outlined)),
-        Center(child: Text(t.seriesAddFirstSeries)),
+        Center(child: Text(LocaleKeys.series_addFirstSeries.tr())),
       ],
     );
   }

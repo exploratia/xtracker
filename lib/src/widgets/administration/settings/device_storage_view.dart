@@ -1,6 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../../../generated/locale_keys.g.dart';
 import '../../../util/device_storage/device_storage.dart';
 import '../../../util/dialogs.dart';
 import '../../../util/table_utils.dart';
@@ -14,8 +15,6 @@ class DeviceStorageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = AppLocalizations.of(context)!;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -24,10 +23,13 @@ class DeviceStorageView extends StatelessWidget {
           errorBuilder: (error) => 'Failed to storage data!',
           widgetBuilder: (storageData) {
             if (storageData == null) {
-              return Text(t.settingsDeviceStorageNoData);
+              return Text(LocaleKeys.settings_deviceStorage_noData.tr());
             }
             List<TableRow> rows = [
-              TableUtils.tableHeadline([t.settingsDeviceStorageTableHeadKey, t.settingsDeviceStorageTableHeadValue])
+              TableUtils.tableHeadline([
+                LocaleKeys.settings_deviceStorage_table_columns_key.tr(),
+                LocaleKeys.settings_deviceStorage_table_columns_value.tr(),
+              ])
             ];
 
             final keys = storageData.keys.toList();
@@ -69,11 +71,13 @@ class _ClearDeviceStorage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = AppLocalizations.of(context);
-
     return OutlinedButton.icon(
       onPressed: () async {
-        bool? res = await Dialogs.simpleYesNoDialog(t.settingsDeviceStorageDialogMsgQueryRemoveAllData, context, title: t.commonsDialogTitleAreYouSure);
+        bool? res = await Dialogs.simpleYesNoDialog(
+          LocaleKeys.settings_deviceStorage_dialog_msg_query_removeAllData.tr(),
+          context,
+          title: LocaleKeys.commons_dialog_title_areYouSure.tr(),
+        );
         if (res == true) {
           await DeviceStorage.deleteAll();
           await controller.loadSettings();
@@ -81,7 +85,7 @@ class _ClearDeviceStorage extends StatelessWidget {
         }
       },
       icon: const Icon(Icons.clear_outlined),
-      label: Text(t!.settingsDeviceStorageBtnClearStorage),
+      label: Text(LocaleKeys.settings_deviceStorage_btn_clearStorage.tr()),
     );
   }
 }

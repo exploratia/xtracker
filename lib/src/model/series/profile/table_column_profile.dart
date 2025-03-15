@@ -1,5 +1,3 @@
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import '../../../util/i18n.dart';
 
 class TableColumnProfile {
@@ -80,7 +78,7 @@ class TableColumn {
     return 'TableColumn{minWidth: $minWidth}';
   }
 
-  String getTitle(AppLocalizations t) {
-    return I18N.compose(msgId, t) ?? title;
+  String getTitle() {
+    return I18N.compose(msgId) ?? title;
   }
 }

@@ -1,8 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/v4.dart';
 
+import '../../../../generated/locale_keys.g.dart';
 import '../../../model/series/series_def.dart';
 import '../../../model/series/series_type.dart';
 import '../../../providers/series_provider.dart';
@@ -57,11 +58,10 @@ class _SeriesEditState extends State<SeriesEdit> {
 
     setState(() => _isLoading = true);
 
-    final t = AppLocalizations.of(context)!;
     try {
       var seriesProvider = context.read<SeriesProvider>();
       await seriesProvider.save(_seriesDef!);
-      if (mounted) Dialogs.showSnackBar(t.commonsMsgSaved, context);
+      if (mounted) Dialogs.showSnackBar(LocaleKeys.commons_msg_saved.tr(), context);
     } catch (err) {
       if (mounted) {
         await Dialogs.simpleErrOkDialog(err.toString(), context);
@@ -76,7 +76,6 @@ class _SeriesEditState extends State<SeriesEdit> {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    final t = AppLocalizations.of(context)!;
 
     Widget body;
 
@@ -87,7 +86,7 @@ class _SeriesEditState extends State<SeriesEdit> {
           child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(t.seriesEditSelectSeriesTypeLabel),
+          Text(LocaleKeys.series_edit_labels_selectSeriesType.tr()),
           const Divider(),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,7 +95,7 @@ class _SeriesEditState extends State<SeriesEdit> {
                     _SeriesTypeInfoBtn(st),
                     ElevatedButton.icon(
                       icon: IconMap.icon(st.iconName),
-                      label: Text(SeriesType.displayNameOf(st, t)),
+                      label: Text(SeriesType.displayNameOf(st)),
                       onPressed: () => _createSeriesDef(st),
                     )
                   ])),
@@ -115,7 +114,7 @@ class _SeriesEditState extends State<SeriesEdit> {
     return Scaffold(
       appBar: AppBar(
           backgroundColor: themeData.colorScheme.secondary,
-          title: Text(t.seriesEditTitle),
+          title: Text(LocaleKeys.series_edit_title.tr()),
           leading: IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.close_outlined)),
           actions: [
             if (_seriesDef != null) IconButton(onPressed: _saveHandler, icon: const Icon(Icons.save_outlined)),
@@ -132,12 +131,11 @@ class _SeriesTypeInfoBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = AppLocalizations.of(context)!;
     return IconButton(
         onPressed: () => Dialogs.simpleOkDialog(
-              SeriesType.infoOf(st, t),
+              SeriesType.infoOf(st),
               context,
-              title: Row(spacing: 10, children: [IconMap.icon(st.iconName), Text(SeriesType.displayNameOf(st, t))]),
+              title: Row(spacing: 10, children: [IconMap.icon(st.iconName), Text(SeriesType.displayNameOf(st))]),
             ),
         icon: const Icon(Icons.info_outline));
   }
@@ -152,7 +150,6 @@ class _SeriesEditor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final t = AppLocalizations.of(context)!;
     final themeData = Theme.of(context);
     return ScrollableCenteredFormWrapper(
       formKey: form,
@@ -168,7 +165,7 @@ class _SeriesEditor extends StatelessWidget {
             IconMap.icon(seriesDef.seriesType.iconName),
             const SizedBox(width: 10),
             Text(
-              SeriesType.displayNameOf(seriesDef.seriesType, t),
+              SeriesType.displayNameOf(seriesDef.seriesType),
               style: themeData.textTheme.headlineSmall,
             ),
           ],
@@ -177,12 +174,12 @@ class _SeriesEditor extends StatelessWidget {
         Text(seriesDef.name),
         TextFormField(
           autofocus: true,
-          decoration: InputDecoration(labelText: t.seriesEditSeriesNameLabel),
+          decoration: InputDecoration(labelText: LocaleKeys.series_edit_labels_seriesName.tr()),
           textInputAction: TextInputAction.next,
           initialValue: seriesDef.name,
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return t.commonsValidatorMsgEmptyValue;
+              return LocaleKeys.commons_validator_msg_emptyValue.tr();
             }
             return null;
           },
@@ -196,7 +193,7 @@ class _SeriesEditor extends StatelessWidget {
             Row(
               spacing: 10,
               children: [
-                Text(t.seriesEditSeriesIconLabel),
+                Text(LocaleKeys.series_edit_labels_seriesIcon.tr()),
                 IconPicker(
                   icoName: seriesDef.iconName,
                   icoSelected: (icoName) => seriesDef.iconName = icoName,
@@ -206,7 +203,7 @@ class _SeriesEditor extends StatelessWidget {
             Row(
               spacing: 10,
               children: [
-                Text(t.seriesEditSeriesColorLabel),
+                Text(LocaleKeys.series_edit_labels_seriesColor.tr()),
                 ColorPicker(
                   color: seriesDef.color,
                   colorSelected: (color) => seriesDef.color = color,

@@ -1,6 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../../generated/locale_keys.g.dart';
 import '../../model/navigation/navigation_item.dart';
 import '../../widgets/administration/info_view.dart';
 import '../../widgets/layout/gradient_app_bar.dart';
@@ -10,18 +11,16 @@ class InfoScreen extends StatelessWidget {
   static NavigationItem navItem = NavigationItem(
     icon: const Icon(Icons.info_outline),
     routeName: '/info',
-    titleBuilder: (t) => t.infoTitle,
+    titleBuilder: () => LocaleKeys.info_title.tr(),
   );
 
   const InfoScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final t = AppLocalizations.of(context)!;
-
     return ScreenBuilder.withStandardNavBuilders(
       navItem: navItem,
-      appBarBuilder: (context) => GradientAppBar.build(context, addLeadingBackBtn: true, title: Text(navItem.titleBuilder(t))),
+      appBarBuilder: (context) => GradientAppBar.build(context, addLeadingBackBtn: true, title: Text(navItem.titleBuilder())),
       bodyBuilder: (context) => const InfoView(),
     );
   }

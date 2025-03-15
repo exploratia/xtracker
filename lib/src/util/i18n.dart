@@ -1,4 +1,6 @@
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:easy_localization/easy_localization.dart';
+
+import '../../../generated/locale_keys.g.dart';
 
 class I18N {
   static const String bloodPressureSeriesItemTitleDiastolic = 'bloodPressureSeriesItemTitleDiastolic';
@@ -16,36 +18,36 @@ class I18N {
   static const String commonsDateShortWeekdaySaturday = 'commonsDateShortWeekdaySaturday';
   static const String commonsDateShortWeekdaySunday = 'commonsDateShortWeekdaySunday';
 
-  static String? compose(String? msgId, AppLocalizations t) {
+  static String? compose(String? msgId) {
     return switch (msgId) {
       // blood pressure
-      bloodPressureSeriesItemTitleDiastolic => t.bloodPressureSeriesItemTitleDiastolic,
-      bloodPressureSeriesItemTitleSystolic => t.bloodPressureSeriesItemTitleSystolic,
-      bloodPressureTableColumnTitleDate => t.bloodPressureTableColumnTitleDate,
-      bloodPressureTableColumnTitleMorning => t.bloodPressureTableColumnTitleMorning,
-      bloodPressureTableColumnTitleMidday => t.bloodPressureTableColumnTitleMidday,
-      bloodPressureTableColumnTitleEvening => t.bloodPressureTableColumnTitleEvening,
+      bloodPressureSeriesItemTitleDiastolic => LocaleKeys.bloodPressure_seriesItem_title_diastolic.tr(),
+      bloodPressureSeriesItemTitleSystolic => LocaleKeys.bloodPressure_seriesItem_title_systolic.tr(),
+      bloodPressureTableColumnTitleDate => LocaleKeys.bloodPressure_table_columns_date.tr(),
+      bloodPressureTableColumnTitleMorning => LocaleKeys.bloodPressure_table_columns_morning.tr(),
+      bloodPressureTableColumnTitleMidday => LocaleKeys.bloodPressure_table_columns_midday.tr(),
+      bloodPressureTableColumnTitleEvening => LocaleKeys.bloodPressure_table_columns_evening.tr(),
       // date
-      commonsDateShortWeekdayMonday => t.commonsDateShortWeekdayMonday,
-      commonsDateShortWeekdayTuesday => t.commonsDateShortWeekdayTuesday,
-      commonsDateShortWeekdayWednesday => t.commonsDateShortWeekdayWednesday,
-      commonsDateShortWeekdayThursday => t.commonsDateShortWeekdayThursday,
-      commonsDateShortWeekdayFriday => t.commonsDateShortWeekdayFriday,
-      commonsDateShortWeekdaySaturday => t.commonsDateShortWeekdaySaturday,
-      commonsDateShortWeekdaySunday => t.commonsDateShortWeekdaySunday,
+      commonsDateShortWeekdayMonday => LocaleKeys.commons_date_shortWeekday_monday.tr(),
+      commonsDateShortWeekdayTuesday => LocaleKeys.commons_date_shortWeekday_tuesday.tr(),
+      commonsDateShortWeekdayWednesday => LocaleKeys.commons_date_shortWeekday_wednesday.tr(),
+      commonsDateShortWeekdayThursday => LocaleKeys.commons_date_shortWeekday_thursday.tr(),
+      commonsDateShortWeekdayFriday => LocaleKeys.commons_date_shortWeekday_friday.tr(),
+      commonsDateShortWeekdaySaturday => LocaleKeys.commons_date_shortWeekday_saturday.tr(),
+      commonsDateShortWeekdaySunday => LocaleKeys.commons_date_shortWeekday_sunday.tr(),
       _ => null, // default
     };
   }
 
-  static List<String> composeShortWeekdays(AppLocalizations t) {
+  static List<String> composeShortWeekdays() {
     return [
-      compose(commonsDateShortWeekdayMonday, t)!,
-      compose(commonsDateShortWeekdayTuesday, t)!,
-      compose(commonsDateShortWeekdayWednesday, t)!,
-      compose(commonsDateShortWeekdayThursday, t)!,
-      compose(commonsDateShortWeekdayFriday, t)!,
-      compose(commonsDateShortWeekdaySaturday, t)!,
-      compose(commonsDateShortWeekdaySunday, t)!,
+      compose(commonsDateShortWeekdayMonday)!,
+      compose(commonsDateShortWeekdayTuesday)!,
+      compose(commonsDateShortWeekdayWednesday)!,
+      compose(commonsDateShortWeekdayThursday)!,
+      compose(commonsDateShortWeekdayFriday)!,
+      compose(commonsDateShortWeekdaySaturday)!,
+      compose(commonsDateShortWeekdaySunday)!,
     ];
   }
 }

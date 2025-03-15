@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import './sample_item.dart';
 import 'sample_item_details_view.dart';
@@ -17,14 +16,9 @@ class SampleItemListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var t = AppLocalizations.of(context);
-    // get act locale
-    Locale myLocale = Localizations.localeOf(context);
-    print('act locale: $myLocale');
-
     return Scaffold(
       appBar: AppBar(
-        title: Text('Sample Items - ${t!.appTitle}'),
+        title: const Text('Sample Items'),
       ),
 
       // To work with lists that may contain a large number of items, it’s best

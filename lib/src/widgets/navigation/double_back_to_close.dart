@@ -1,6 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../../generated/locale_keys.g.dart';
 import '../../util/dialogs.dart';
 import '../../util/navigation/navigation_utils.dart';
 
@@ -50,7 +51,6 @@ class _DoubleBackToCloseState extends State<DoubleBackToClose> {
 
   @override
   Widget build(BuildContext context) {
-    final t = AppLocalizations.of(context)!;
     if (_isAndroid) {
       return PopScope(
         canPop: _canPopNow,
@@ -63,7 +63,7 @@ class _DoubleBackToCloseState extends State<DoubleBackToClose> {
           }
 
           if (!_canPop()) {
-            Dialogs.showSnackBar(t.commonsMsgPressBackAgainToExit, context);
+            Dialogs.showSnackBar(LocaleKeys.commons_msg_pressBackAgainToExit.tr(), context);
             _setLastTapped();
             Future.delayed(_exitTimeInMillis, () => _resetCanPop());
           }
