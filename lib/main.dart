@@ -38,15 +38,14 @@ void main() async {
   await StoresUtils.initDb();
 
   // Run the app and pass in the SettingsController. The app listens to the
-  // SettingsController for changes, then passes it further down to the
-  // SettingsView.
+  // SettingsController for changes, then passes it further down to the SettingsView.
   runApp(EasyLocalization(
     supportedLocales: SettingsService.supportedLocales,
     path: 'assets/translations',
     fallbackLocale: SettingsService.supportedLocales[0],
     startLocale: settingsController.locale,
+    // done by ourselves:
     saveLocale: false,
-    // done by ourselves
     child: MyApp(settingsController: settingsController),
   ));
 }

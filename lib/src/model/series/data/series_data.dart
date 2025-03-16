@@ -11,11 +11,11 @@ import 'series_data_value.dart';
 
 class SeriesData<T extends SeriesDataValue> {
   /// same as in SeriesDef
-  final String uuid;
+  final String seriesDefUuid;
 
   final List<T> seriesItems;
 
-  SeriesData(this.uuid, this.seriesItems);
+  SeriesData(this.seriesDefUuid, this.seriesItems);
 
   bool isEmpty() {
     return seriesItems.isEmpty;
@@ -49,7 +49,7 @@ class SeriesData<T extends SeriesDataValue> {
   /// returns reduced copy (must not be used edit)
   SeriesData<T> reduceToNewerThen(DateTime dateTime) {
     List<T> reducedSeriesItems = seriesItems.where((item) => item.dateTime.isAfter(dateTime)).toList();
-    return SeriesData(uuid, reducedSeriesItems);
+    return SeriesData(seriesDefUuid, reducedSeriesItems);
   }
 
   static showSeriesDataInputDlg(BuildContext context, SeriesDef seriesDef, {dynamic value}) async {

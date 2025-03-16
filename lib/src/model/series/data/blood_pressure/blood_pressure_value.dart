@@ -13,6 +13,21 @@ class BloodPressureValue extends SeriesDataValue {
     return BloodPressureValue(uuid, dateTime, high, low);
   }
 
+  factory BloodPressureValue.fromJson(Map<String, dynamic> json) => BloodPressureValue(
+        json['uuid'] as String,
+        DateTime.fromMillisecondsSinceEpoch(json['dateTime'] as int),
+        json['high'] as int,
+        json['low'] as int,
+      );
+
+  @override
+  Map<String, dynamic> toJson() => {
+        'uuid': uuid,
+        'dateTime': dateTime.millisecondsSinceEpoch,
+        'high': high,
+        'low': low,
+      };
+
   static Color bestPossibleValueColor = const Color.fromRGBO(0, 160, 0, 1);
 
   static Color colorHigh(int value) {

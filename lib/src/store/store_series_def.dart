@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:sembast/sembast.dart';
 
 import '../model/series/series_def.dart';
+import 'stores.dart';
 import 'stores_utils.dart';
 
 // https://github.com/tekartik/sembast.dart/blob/master/sembast/doc/queries.md
@@ -15,7 +16,7 @@ class StoreSeriesDef {
   }
 
   Future<void> delete(SeriesDef seriesDef) async {
-    // TODO Delete from series_data_store
+    await Stores.dropSeriesDataStore(seriesDef);
     await _store.record(seriesDef.uuid).delete(_db);
   }
 

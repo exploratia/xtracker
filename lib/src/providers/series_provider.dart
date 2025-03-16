@@ -66,6 +66,12 @@ class SeriesProvider with ChangeNotifier {
     // notifyListeners(); notify is in fetch
   }
 
+  Future<void> deleteById(String seriesDefUuid) async {
+    var idx = _series.indexWhere((s) => s.uuid == seriesDefUuid);
+    if (idx < 0) return;
+    await delete(_series.removeAt(idx));
+  }
+
   Future<void> delete(SeriesDef seriesDef) async {
     await _storeSeriesDef.delete(seriesDef);
     await fetchData();
