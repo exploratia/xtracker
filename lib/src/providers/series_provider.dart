@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 import '../model/series/series_def.dart';
 import '../model/series/series_type.dart';
 import '../store/stores.dart';
+import 'series_data_provider.dart';
 
 class SeriesProvider with ChangeNotifier {
   final _storeMain = Stores.storeMain;
@@ -66,14 +68,17 @@ class SeriesProvider with ChangeNotifier {
     // notifyListeners(); notify is in fetch
   }
 
-  Future<void> deleteById(String seriesDefUuid) async {
+  Future<void> deleteById(String seriesDefUuid, BuildContext context) async {
     var idx = _series.indexWhere((s) => s.uuid == seriesDefUuid);
     if (idx < 0) return;
-    await delete(_series.removeAt(idx));
+    await delete(_series.removeAt(idx), context);
   }
 
-  Future<void> delete(SeriesDef seriesDef) async {
-    // TODO delete from seriesDataProvider -> ProxyProvider?
+  Future<void> delete(SeriesDef seriesDef, BuildContext context) async {
+    // delete series data
+    SeriesDataProvider seriesDataProvider = context.read<SeriesDataProvider>();
+    await seriesDataProvider.delete(seriesDef);
+
     await _storeSeriesDef.delete(seriesDef);
     await fetchData();
     // notifyListeners(); notify is in fetch

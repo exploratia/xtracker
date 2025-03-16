@@ -46,7 +46,7 @@ class _DeleteSeriesBtn extends StatelessWidget {
       if (res == true) {
         try {
           if (context.mounted) {
-            await context.read<SeriesProvider>().delete(seriesDef);
+            await context.read<SeriesProvider>().delete(seriesDef, context);
           }
         } catch (err) {
           if (context.mounted) {
