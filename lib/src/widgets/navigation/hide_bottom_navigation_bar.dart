@@ -4,10 +4,10 @@ import 'package:flutter/rendering.dart';
 /// Widget which hides BottomNavigationBar
 class HideBottomNavigationBar extends StatefulWidget {
   static final ValueNotifier<bool> visible = ValueNotifier<bool>(true);
-  static bool _forceHide = false;
+  static int _forceHide = 0;
 
   static void setScrollPosition(ScrollPosition scrollPos) {
-    if (_forceHide) return;
+    if (_forceHide > 0) return;
     // Scroller ganz oben? Dann auf jeden Fall wieder anzeigen
     if (scrollPos.pixels == 0) {
       visible.value = true;
@@ -19,15 +19,15 @@ class HideBottomNavigationBar extends StatefulWidget {
   }
 
   static void setVisible(bool value) {
-    if (_forceHide && value) return;
+    if (_forceHide > 0 && value) return;
     if (visible.value != value) {
       visible.value = value;
     }
   }
 
   static void setForceHide(bool value) {
-    _forceHide = value;
-    setVisible(!value);
+    _forceHide += value ? 1 : -1;
+    setVisible(_forceHide <= 0);
   }
 
   const HideBottomNavigationBar({super.key, required this.child});
@@ -46,8 +46,13 @@ class _HideBottomNavigationBar extends State<HideBottomNavigationBar> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) => HideBottomNavigationBar.setForceHide(true));
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return widget.child;
   }
 }
