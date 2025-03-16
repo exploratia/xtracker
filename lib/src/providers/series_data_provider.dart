@@ -8,6 +8,7 @@ import '../model/series/data/blood_pressure/blood_pressure_value.dart';
 import '../model/series/data/series_data.dart';
 import '../model/series/series_def.dart';
 import '../model/series/series_type.dart';
+import '../store/stores.dart';
 import '../util/logging/flutter_simple_logging.dart';
 
 class SeriesDataProvider with ChangeNotifier {
@@ -51,20 +52,26 @@ class SeriesDataProvider with ChangeNotifier {
       case SeriesType.bloodPressure:
         var seriesData = _uuid2seriesDataBloodPressure[seriesDef.uuid];
         if (seriesData == null) {
-          // TODO try load from file - if not exists create
-          var list = [
-            BloodPressureValue(const UuidV4().generate().toString(), DateTime.now(), 120, 80),
-            BloodPressureValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(days: 28)), 140, 80),
-            BloodPressureValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(hours: 25)), 140, 80),
-            BloodPressureValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(hours: 28)), 130, 97),
-            BloodPressureValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(hours: 30)), 120, 75),
-            BloodPressureValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(hours: 40)), 155, 110),
-            ...List.generate(
-                10040,
-                (index) => BloodPressureValue(const UuidV4().generate().toString(), DateTime.now().subtract(Duration(hours: 40 + index * 25)),
-                    (155 - 5 * sin(index * 0.01)).truncate(), (80 - 10 * sin(index * 0.01 + 1)).truncate())),
-          ];
-          // var list =[];
+          var store = Stores.getOrCreateSeriesDataStore(seriesDef);
+          var list = await store.getAllSeriesDataValuesAsBloodPressureValue();
+          // TODO only for dev - remove!
+          if (list.isEmpty) {
+            list = [
+              BloodPressureValue(const UuidV4().generate().toString(), DateTime.now(), 120, 80),
+              BloodPressureValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(days: 28)), 140, 80),
+              BloodPressureValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(hours: 25)), 140, 80),
+              BloodPressureValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(hours: 28)), 130, 97),
+              BloodPressureValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(hours: 30)), 120, 75),
+              BloodPressureValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(hours: 40)), 155, 110),
+              ...List.generate(
+                  10040,
+                  (index) => BloodPressureValue(const UuidV4().generate().toString(), DateTime.now().subtract(Duration(hours: 40 + index * 25)),
+                      (155 - 5 * sin(index * 0.01)).truncate(), (80 - 10 * sin(index * 0.01 + 1)).truncate())),
+            ];
+            await store.saveAll(list);
+            list = await store.getAllSeriesDataValuesAsBloodPressureValue();
+          }
+
           seriesData = SeriesData<BloodPressureValue>(seriesDef.uuid, list);
           seriesData.sort();
           _uuid2seriesDataBloodPressure[seriesDef.uuid] = seriesData;
@@ -81,16 +88,12 @@ class SeriesDataProvider with ChangeNotifier {
     }
   }
 
-  Future<void> remove(SeriesDef seriesDef) async {
-    await _del(seriesDef);
-    notifyListeners();
-  }
-
-  Future<void> _del(SeriesDef seriesDef) async {
+  Future<void> delete(SeriesDef seriesDef) async {
     //  await Future.delayed(const Duration(seconds: 10)); // for testing
-// TODO delete  file
+    await Stores.dropSeriesDataStore(seriesDef);
     _uuid2seriesDataBloodPressure.remove(seriesDef.uuid);
     // TODO remove on other maps
+    notifyListeners();
   }
 
   SeriesData<BloodPressureValue>? bloodPressureData(SeriesDef seriesDef) {

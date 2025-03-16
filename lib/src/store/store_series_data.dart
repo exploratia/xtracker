@@ -23,6 +23,16 @@ class StoreSeriesData {
     // TODO save in currentValue store
   }
 
+  Future<void> saveAll(List<SeriesDataValue> seriesDataValues) async {
+    await _db.transaction(
+      (transaction) async {
+        for (var seriesDataValue in seriesDataValues) {
+          await _store.record(seriesDataValue.uuid).put(transaction, seriesDataValue.toJson());
+        }
+      },
+    );
+  }
+
   Future<void> delete(SeriesDataValue seriesDataValue) async {
     await _store.record(seriesDataValue.uuid).delete(_db);
     // TODO Delete from currentValue_store

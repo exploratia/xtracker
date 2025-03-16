@@ -73,6 +73,7 @@ class SeriesProvider with ChangeNotifier {
   }
 
   Future<void> delete(SeriesDef seriesDef) async {
+    // TODO delete from seriesDataProvider -> ProxyProvider?
     await _storeSeriesDef.delete(seriesDef);
     await fetchData();
     // notifyListeners(); notify is in fetch
