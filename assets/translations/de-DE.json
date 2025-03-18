@@ -111,11 +111,6 @@
       }
     }
   },
-  "patterns": {
-    "date": "dd.MM.yyyy",
-    "dateTime": "dd.MM.yyyy HH:mm",
-    "time": "H:mm"
-  },
   "series": {
     "addFirstSeries": "Erste Messreihe erstellen...",
     "data": {

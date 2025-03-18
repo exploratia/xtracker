@@ -14,6 +14,12 @@ images](https://flutter.dev/to/resolution-aware-images).
 
 ## Localization
 
+### Intl -> Date/Time
+
+https://pub.dev/packages/intl
+
+https://pub.dev/documentation/intl/latest/intl/DateFormat-class.html
+
 [//]: # (This project generates localized messages based on arb files found in)
 
 [//]: # (the `lib/src/localization` directory.)
