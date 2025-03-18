@@ -111,11 +111,6 @@
       }
     }
   },
-  "patterns": {
-    "date": "M/d/yyyy",
-    "dateTime": "M/d/yyyy h:mm a",
-    "time": "h:mm a"
-  },
   "series": {
     "addFirstSeries": "Add first series...",
     "data": {

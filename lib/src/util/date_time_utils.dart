@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 
-import '../../../generated/locale_keys.g.dart';
 import 'globals.dart';
 
 /// Date format pattern see: https://api.flutter.dev/flutter/intl/DateFormat-class.html
@@ -36,32 +35,16 @@ class DateTimeUtils {
     return thisOrLastMonth;
   }
 
-  static String formateDateT(DateTime dateTime) {
-    return DateFormat(LocaleKeys.patterns_date.tr()).format(dateTime);
-  }
-
-  static String formateTimeT(DateTime dateTime) {
-    return DateFormat(LocaleKeys.patterns_time.tr()).format(dateTime);
-  }
-
-  static String formateDateTimeT(DateTime dateTime) {
-    return DateFormat(LocaleKeys.patterns_dateTime.tr()).format(dateTime);
-  }
-
   static String formateDate(DateTime dateTime) {
-    return DateFormat('yyyy-MM-dd').format(dateTime);
+    return DateFormat.yMd().format(dateTime);
   }
 
-  static String formateMMMYYYY(DateTime dateTime) {
-    return DateFormat("MMM yyyy").format(dateTime);
+  static String formateMonthYear(DateTime dateTime) {
+    return DateFormat.yMMM().format(dateTime);
   }
 
   static String formateTime(DateTime dateTime) {
-    return DateFormat('HH:mm').format(dateTime);
-  }
-
-  static String formateDateTime(DateTime dateTime) {
-    return DateFormat('yyyy-MM-dd HH:mm').format(dateTime);
+    return DateFormat.jm().format(dateTime);
   }
 
   static bool isMonthStart(DateTime dateTime) {

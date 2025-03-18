@@ -49,9 +49,6 @@ abstract class  LocaleKeys {
   static const logs_dialog_msg_error_deleteAllLogsFailed = 'logs.dialog.msg.error.deleteAllLogsFailed';
   static const logs_dialog_msg_error_failedToZipLogs = 'logs.dialog.msg.error.failedToZipLogs';
   static const logs_dialog_msg_query_deleteAllLogs = 'logs.dialog.msg.query.deleteAllLogs';
-  static const patterns_date = 'patterns.date';
-  static const patterns_dateTime = 'patterns.dateTime';
-  static const patterns_time = 'patterns.time';
   static const series_addFirstSeries = 'series.addFirstSeries';
   static const series_data_title = 'series.data.title';
   static const series_data_input_dialog_msg_query_deleteValue = 'series.data.input.dialog.msg.query.deleteValue';
