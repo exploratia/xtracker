@@ -52,8 +52,8 @@ class DateTimeUtils {
     return DateFormat('yyyy-MM-dd').format(dateTime);
   }
 
-  static String formateMMMYYYY(DateTime dateTime, BuildContext context) {
-    return DateFormat("MMM yyyy", context.locale.languageCode).format(dateTime);
+  static String formateMMMYYYY(DateTime dateTime) {
+    return DateFormat("MMM yyyy").format(dateTime);
   }
 
   static String formateTime(DateTime dateTime) {

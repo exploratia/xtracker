@@ -53,7 +53,9 @@ class MyApp extends StatelessWidget {
 
             onGenerateTitle: (BuildContext context) {
               // settings changed -> maybe locale? ->
+              Intl.defaultLocale = context.locale.languageCode;
               DateTimeUtils.init();
+              // when locale is changed text width could be different -> recalc
               Navigation.resetMaxTextWidth();
               return LocaleKeys.appTitle.tr();
             },

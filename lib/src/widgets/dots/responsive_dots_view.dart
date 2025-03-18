@@ -161,7 +161,7 @@ abstract class _DotViewPainter<T extends DayItem> extends CustomPainter {
 
   void _paintDate(DateTime dateTime, double yPos, double lineHeight, double firstColWidth, Canvas canvas, BuildContext context) {
     final TextPainter textPainter = CustomPaintUtils.textPainter();
-    String dateString = DateTimeUtils.formateMMMYYYY(dateTime, context);
+    String dateString = DateTimeUtils.formateMMMYYYY(dateTime);
     textPainter.text = TextSpan(text: dateString, style: textStyle);
     textPainter.layout();
     textPainter.paint(canvas, Offset(firstColWidth - 10 - textPainter.width, yPos + lineHeight / 2 - textPainter.height / 2));
