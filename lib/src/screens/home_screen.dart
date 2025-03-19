@@ -2,11 +2,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../gen/assets.gen.dart';
 import '../../generated/locale_keys.g.dart';
 import '../model/navigation/main_navigation_item.dart';
 import '../model/series/series_def.dart';
 import '../providers/series_provider.dart';
-import '../util/globals.dart';
 import '../widgets/layout/gradient_app_bar.dart';
 import '../widgets/navigation/hide_bottom_navigation_bar.dart';
 import '../widgets/responsive/screen_builder.dart';
@@ -52,10 +52,7 @@ class HomeScreen extends StatelessWidget {
               children: [
                 SizedBox(
                   width: 30,
-                  child: Image.asset(
-                    Globals.assetImgAppLogoWhite,
-                    fit: BoxFit.cover,
-                  ),
+                  child: Assets.images.logos.appLogoWhite.image(fit: BoxFit.cover),
                 ),
               ],
             ),

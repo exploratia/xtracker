@@ -40,14 +40,44 @@ https://pub.dev/documentation/intl/latest/intl/DateFormat-class.html
 
 see: https://github.com/aissat/easy_localization/blob/develop/README.md#-code-generation
 
-```
+```shell
 dart run easy_localization:generate -f keys -S assets/translations -o locale_keys.g.dart -u true
 ```
 
-#### Auto generate keys when saving translation files
+#### Auto generate keys when saving translation files with file watcher
 
-![GenerateLocaleKeys](/resources/docu/auto_generate_locale_keys_with_file_watcher.png?raw=true)
+![auto_generate_locale_keys_with_file_watcher.png](/resources/docu/auto_generate_locale_keys_with_file_watcher.png?raw=true)
 ![auto_generate_locale_keys_with_file_watcher_scope.png](resources/docu/auto_generate_locale_keys_with_file_watcher_scope.png)
+scope-pattern:
+
+```text
+file[xtracker]:assets/translations//*
+```
+
+## Assets
+
+Generate assets to use them in code with code completion/compiler warning:
+
+```shell
+dart run build_runner build
+```
+
+#### Auto generate assets.gen when saving pubspec.yaml
+
+![auto_generate_assets_with_file_watcher.png](resources/docu/auto_generate_assets_with_file_watcher.png)
+scope-pattern:
+
+```text
+file[xtracker]:assets/images//*
+```
+
+### Usage example
+
+Direct as Img-Widget:
+
+```flutter
+Assets.images.logos.appLogo.image(fit: BoxFit.cover)
+```
 
 ## Dependencies
 

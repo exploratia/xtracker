@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../util/globals.dart';
+import '../../../gen/assets.gen.dart';
 import '../../util/navigation/navigation_utils.dart';
 
 class AppDrawerHeader extends StatelessWidget {
@@ -33,10 +33,7 @@ class AppDrawerHeader extends StatelessWidget {
             padding: const EdgeInsets.only(right: 20),
             child: SizedBox(
               width: 30,
-              child: Image.asset(
-                Globals.assetImgAppLogoWhite,
-                fit: BoxFit.cover,
-              ),
+              child: Assets.images.logos.appLogoWhite.image(fit: BoxFit.cover),
             ),
           ),
         ],

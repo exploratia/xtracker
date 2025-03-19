@@ -64,6 +64,10 @@ dev_dependencies:
   # launcher icon
   flutter_launcher_icons: "^0.14.3"
 
+  # build assets
+  flutter_gen_runner: any
+  build_runner: any
+
 flutter:
   uses-material-design: true
 
@@ -73,11 +77,7 @@ flutter:
   assets:
     # Add assets from the images directory to the application.
     - assets/images/
-    - assets/images/logos/eagle_logo.png
-    - assets/images/logos/ca_logo.png
-    - assets/images/logos/exploratia_logo.png
-    - assets/images/logos/app_logo.png
-    - assets/images/logos/app_logo_white.png
+    - assets/images/logos/
     - assets/translations/
 
 # launcher icon
