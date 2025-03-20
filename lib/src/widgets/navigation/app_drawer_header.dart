@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../gen/assets.gen.dart';
+import '../../../generated/assets.gen.dart';
 import '../../util/navigation/navigation_utils.dart';
 
 class AppDrawerHeader extends StatelessWidget {

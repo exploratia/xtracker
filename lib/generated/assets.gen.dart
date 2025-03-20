@@ -13,8 +13,7 @@ class $AssetsImagesGen {
   const $AssetsImagesGen();
 
   /// File path: assets/images/flutter_logo.png
-  AssetGenImage get flutterLogo =>
-      const AssetGenImage('assets/images/flutter_logo.png');
+  AssetGenImage get flutterLogo => const AssetGenImage('assets/images/flutter_logo.png');
 
   /// Directory path: assets/images/logos
   $AssetsImagesLogosGen get logos => const $AssetsImagesLogosGen();
@@ -23,57 +22,32 @@ class $AssetsImagesGen {
   List<AssetGenImage> get values => [flutterLogo];
 }
 
-class $AssetsTranslationsGen {
-  const $AssetsTranslationsGen();
-
-  /// File path: assets/translations/de-DE.json
-  String get deDE => 'assets/translations/de-DE.json';
-
-  /// File path: assets/translations/en-US.json
-  String get enUS => 'assets/translations/en-US.json';
-
-  /// List of all assets
-  List<String> get values => [deDE, enUS];
-}
-
 class $AssetsImagesLogosGen {
   const $AssetsImagesLogosGen();
 
   /// File path: assets/images/logos/app_logo.png
-  AssetGenImage get appLogo =>
-      const AssetGenImage('assets/images/logos/app_logo.png');
+  AssetGenImage get appLogo => const AssetGenImage('assets/images/logos/app_logo.png');
 
   /// File path: assets/images/logos/app_logo_white.png
-  AssetGenImage get appLogoWhite =>
-      const AssetGenImage('assets/images/logos/app_logo_white.png');
+  AssetGenImage get appLogoWhite => const AssetGenImage('assets/images/logos/app_logo_white.png');
 
   /// File path: assets/images/logos/ca_logo.png
-  AssetGenImage get caLogo =>
-      const AssetGenImage('assets/images/logos/ca_logo.png');
+  AssetGenImage get caLogo => const AssetGenImage('assets/images/logos/ca_logo.png');
 
   /// File path: assets/images/logos/eagle_logo.png
-  AssetGenImage get eagleLogo =>
-      const AssetGenImage('assets/images/logos/eagle_logo.png');
+  AssetGenImage get eagleLogo => const AssetGenImage('assets/images/logos/eagle_logo.png');
 
   /// File path: assets/images/logos/exploratia_logo.png
-  AssetGenImage get exploratiaLogo =>
-      const AssetGenImage('assets/images/logos/exploratia_logo.png');
+  AssetGenImage get exploratiaLogo => const AssetGenImage('assets/images/logos/exploratia_logo.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [
-    appLogo,
-    appLogoWhite,
-    caLogo,
-    eagleLogo,
-    exploratiaLogo,
-  ];
+  List<AssetGenImage> get values => [appLogo, appLogoWhite, caLogo, eagleLogo, exploratiaLogo];
 }
 
 class Assets {
   const Assets._();
 
   static const $AssetsImagesGen images = $AssetsImagesGen();
-  static const $AssetsTranslationsGen translations = $AssetsTranslationsGen();
 }
 
 class AssetGenImage {

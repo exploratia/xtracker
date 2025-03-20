@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../gen/assets.gen.dart';
+import '../../../generated/assets.gen.dart';
 
 /// Footer vor scroll views in order to have enough space when bottom nav bar is not visible
 class ScrollFooter extends StatelessWidget {

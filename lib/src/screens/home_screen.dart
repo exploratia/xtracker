@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../gen/assets.gen.dart';
+import '../../generated/assets.gen.dart';
 import '../../generated/locale_keys.g.dart';
 import '../model/navigation/main_navigation_item.dart';
 import '../model/series/series_def.dart';

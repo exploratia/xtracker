@@ -89,3 +89,13 @@ flutter_launcher_icons:
   min_sdk_android: 21 # android min sdk min:16, default 21
   adaptive_icon_background: "#f0f0f0"
   adaptive_icon_foreground: "resources/app_icon_source.png"
+
+
+# assets constants generation
+flutter_gen:
+  line_length: 160
+  output: lib/generated/
+  #    package_parameter_enabled: true
+  assets:
+    exclude:
+      - assets/translations/**

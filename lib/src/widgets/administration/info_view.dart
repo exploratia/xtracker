@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../../gen/assets.gen.dart';
+import '../../../generated/assets.gen.dart';
 import '../../util/app_info.dart';
 import '../card/settings_card.dart';
 import '../layout/single_child_scroll_view_with_scrollbar.dart';

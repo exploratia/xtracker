@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../../gen/assets.gen.dart';
+import '../../generated/assets.gen.dart';
 import 'app_info.dart';
 
 class AboutDlg {
