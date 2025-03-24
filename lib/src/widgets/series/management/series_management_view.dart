@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../generated/locale_keys.g.dart';
 import '../../../providers/series_provider.dart';
+import '../../animation/fade_in.dart';
 import '../../responsive/device_dependent_constrained_box.dart';
 import '../series_def_renderer.dart';
 
@@ -33,16 +34,30 @@ class _SeriesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var series = context.watch<SeriesProvider>().series;
+
+    List<Widget> children = [];
+    var idx = 0;
+    for (var s in series) {
+      children.add(FadeIn(key: Key(s.uuid), durationMS: 200 + idx * 400, child: SeriesDefRenderer(managementMode: true, seriesDef: s)));
+      idx++;
+    }
+
     return ReorderableListView(
       buildDefaultDragHandles: true,
+      proxyDecorator: (Widget child, int index, Animation<double> animation) {
+        return Opacity(
+          opacity: 0.6,
+          child: Material(
+            // elevation: 8, // Shadow effect while dragging
+            borderRadius: BorderRadius.circular(16), // Rounded corners
+            color: Colors.transparent,
+            child: child,
+          ),
+        );
+      },
       padding: const EdgeInsets.all(16),
-      children: [
-        ...series.map((s) => SeriesDefRenderer(
-              key: Key(s.uuid),
-              managementMode: true,
-              seriesDef: s,
-            )),
-      ],
+      children: children,
+      // children: [...series.map((s) => SeriesDefRenderer(key: Key(s.uuid), managementMode: true, seriesDef: s))],
       onReorder: (int oldIndex, int newIndex) => context.read<SeriesProvider>().reorder(oldIndex, newIndex),
     );
   }
