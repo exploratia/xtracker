@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../providers/series_provider.dart';
 import '../../util/dialogs.dart';
+import '../animation/fade_in.dart';
 import '../layout/v_centered_single_child_scroll_view_with_scrollbar.dart';
 import '../provider/data_provider_loader.dart';
 import '../responsive/device_dependent_constrained_box.dart';
@@ -43,12 +44,19 @@ class _SeriesList extends StatelessWidget {
     if (series.isEmpty) {
       return const AddFirstSeries();
     }
+
+    List<Widget> children = [];
+    var idx = 0;
+    for (var s in series) {
+      children.add(FadeIn(durationMS: 200 + idx * 400, child: SeriesDefRenderer(seriesDef: s)));
+      idx++;
+    }
+
     return DeviceDependentWidthConstrainedBox(
       child: Column(
         spacing: 16,
-        children: [
-          ...series.map((s) => SeriesDefRenderer(seriesDef: s)),
-        ],
+        children: children,
+        // children: [ ...series.map((s) => SeriesDefRenderer(seriesDef: s)) ],
       ),
     );
   }
