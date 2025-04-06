@@ -12,11 +12,10 @@ class StoreSeriesDef {
 
   Future<void> save(SeriesDef seriesDef) async {
     await _store.record(seriesDef.uuid).put(_db, seriesDef.toJson());
-    // TODO check if series_data_store exists - if not create
+    Stores.getOrCreateSeriesDataStore(seriesDef);
   }
 
   Future<void> delete(SeriesDef seriesDef) async {
-    await Stores.dropSeriesDataStore(seriesDef);
     await _store.record(seriesDef.uuid).delete(_db);
   }
 

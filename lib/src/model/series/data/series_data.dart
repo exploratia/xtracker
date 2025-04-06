@@ -64,9 +64,9 @@ class SeriesData<T extends SeriesDataValue> {
 
           try {
             if (bloodPressureValue == null) {
-              await seriesDataProvider.addValue(seriesDef, val); // insert
+              await seriesDataProvider.addValue(seriesDef, val, context); // insert
             } else {
-              await seriesDataProvider.updateValue(seriesDef, val); // update
+              await seriesDataProvider.updateValue(seriesDef, val, context); // update
             }
           } catch (ex) {
             if (context.mounted) {

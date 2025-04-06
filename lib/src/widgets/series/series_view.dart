@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../providers/series_current_value_provider.dart';
 import '../../providers/series_provider.dart';
 import '../../util/dialogs.dart';
 import '../animation/fade_in.dart';
@@ -26,7 +27,10 @@ class SeriesView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DataProviderLoader(
-      obtainDataProviderFuture: context.read<SeriesProvider>().fetchDataIfNotYetLoaded(),
+      obtainDataProviderFuture: Future.wait([
+        context.read<SeriesProvider>().fetchDataIfNotYetLoaded(),
+        context.read<SeriesCurrentValueProvider>().fetchDataIfNotYetLoaded(),
+      ]),
       child: VCenteredSingleChildScrollViewWithScrollbar(
         onRefreshCallback: () => onRefresh(context),
         child: const _SeriesList(),
@@ -40,6 +44,7 @@ class _SeriesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<SeriesCurrentValueProvider>();
     var series = context.watch<SeriesProvider>().series;
     if (series.isEmpty) {
       return const AddFirstSeries();

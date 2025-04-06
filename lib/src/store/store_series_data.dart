@@ -20,7 +20,6 @@ class StoreSeriesData {
 
   Future<void> save(SeriesDataValue seriesDataValue) async {
     await _store.record(seriesDataValue.uuid).put(_db, seriesDataValue.toJson());
-    // TODO save in currentValue store
   }
 
   Future<void> saveAll(List<SeriesDataValue> seriesDataValues) async {
@@ -35,7 +34,6 @@ class StoreSeriesData {
 
   Future<void> delete(SeriesDataValue seriesDataValue) async {
     await _store.record(seriesDataValue.uuid).delete(_db);
-    // TODO Delete from currentValue_store
   }
 
   Future<void> dropStore() async {

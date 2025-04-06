@@ -5,6 +5,7 @@ import 'package:uuid/uuid.dart';
 import '../model/series/series_def.dart';
 import '../model/series/series_type.dart';
 import '../store/stores.dart';
+import 'series_current_value_provider.dart';
 import 'series_data_provider.dart';
 
 class SeriesProvider with ChangeNotifier {
@@ -16,7 +17,6 @@ class SeriesProvider with ChangeNotifier {
   Future<void> fetchDataIfNotYetLoaded() async {
     if (!_seriesLoaded) {
       await fetchData();
-      notifyListeners();
     }
   }
 
@@ -75,8 +75,13 @@ class SeriesProvider with ChangeNotifier {
   }
 
   Future<void> delete(SeriesDef seriesDef, BuildContext context) async {
-    // delete series data
+    SeriesCurrentValueProvider seriesCurrentValueProvider = context.read<SeriesCurrentValueProvider>();
     SeriesDataProvider seriesDataProvider = context.read<SeriesDataProvider>();
+
+    // delete current value
+    await seriesCurrentValueProvider.delete(seriesDef);
+
+    // delete series data
     await seriesDataProvider.delete(seriesDef);
 
     await _storeSeriesDef.delete(seriesDef);

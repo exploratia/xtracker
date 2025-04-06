@@ -31,7 +31,7 @@ class BloodPressureQuickInput extends StatefulWidget {
       if (res == true) {
         try {
           if (context.mounted) {
-            await context.read<SeriesDataProvider>().deleteValue(seriesDef, bloodPressureValue);
+            await context.read<SeriesDataProvider>().deleteValue(seriesDef, bloodPressureValue, context);
             if (context.mounted) Navigator.pop(context, null);
           }
         } catch (err) {

@@ -11,10 +11,6 @@ class StoreMain {
 
   static const _keySeriesOrder = 'seriesOrder';
 
-  Future<void> save(SeriesDef seriesDef) async {
-    await _store.record(seriesDef.uuid).put(_db, seriesDef.toJson());
-  }
-
   Future<List<SeriesDef>> getAllSeries() async {
     List<SeriesDef> result = [];
     var records = await _store.find(_db, finder: Finder()); // find all

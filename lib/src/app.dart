@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../generated/locale_keys.g.dart';
 import 'model/navigation/navigation.dart';
+import 'providers/series_current_value_provider.dart';
 import 'providers/series_data_provider.dart';
 import 'providers/series_provider.dart';
 import 'routing.dart';
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
           providers: [
             ChangeNotifierProvider(create: (context) => SeriesProvider()),
             ChangeNotifierProvider(create: (context) => SeriesDataProvider()),
+            ChangeNotifierProvider(create: (context) => SeriesCurrentValueProvider()),
           ],
           child: MaterialApp(
             // Providing a restorationScopeId allows the Navigator built by the

@@ -1,7 +1,7 @@
 import 'dart:collection';
-import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:uuid/v4.dart';
 
 import '../model/series/data/blood_pressure/blood_pressure_value.dart';
@@ -10,6 +10,7 @@ import '../model/series/series_def.dart';
 import '../model/series/series_type.dart';
 import '../store/stores.dart';
 import '../util/logging/flutter_simple_logging.dart';
+import 'series_current_value_provider.dart';
 
 class SeriesDataProvider with ChangeNotifier {
   final Map<String, SeriesData<BloodPressureValue>> _uuid2seriesDataBloodPressure = HashMap();
@@ -30,7 +31,6 @@ class SeriesDataProvider with ChangeNotifier {
 
     if (seriesData == null) {
       await fetchData(seriesDef);
-      notifyListeners();
     }
   }
 
@@ -63,10 +63,10 @@ class SeriesDataProvider with ChangeNotifier {
               BloodPressureValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(hours: 28)), 130, 97),
               BloodPressureValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(hours: 30)), 120, 75),
               BloodPressureValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(hours: 40)), 155, 110),
-              ...List.generate(
-                  10040,
-                  (index) => BloodPressureValue(const UuidV4().generate().toString(), DateTime.now().subtract(Duration(hours: 40 + index * 25)),
-                      (155 - 5 * sin(index * 0.01)).truncate(), (80 - 10 * sin(index * 0.01 + 1)).truncate())),
+              // ...List.generate(
+              //     10040,
+              //     (index) => BloodPressureValue(const UuidV4().generate().toString(), DateTime.now().subtract(Duration(hours: 40 + index * 25)),
+              //         (155 - 5 * sin(index * 0.01)).truncate(), (80 - 10 * sin(index * 0.01 + 1)).truncate())),
             ];
             await store.saveAll(list);
             list = await store.getAllSeriesDataValuesAsBloodPressureValue();
@@ -101,21 +101,24 @@ class SeriesDataProvider with ChangeNotifier {
     return seriesData;
   }
 
-  Future<void> addValue(SeriesDef seriesDef, dynamic value) async {
-    await _addOrUpdateValue(seriesDef, value, _Action.insert);
+  Future<void> addValue(SeriesDef seriesDef, dynamic value, BuildContext context) async {
+    await _addOrUpdateValue(seriesDef, value, _Action.insert, context);
   }
 
-  Future<void> updateValue(SeriesDef seriesDef, dynamic value) async {
-    await _addOrUpdateValue(seriesDef, value, _Action.update);
+  Future<void> updateValue(SeriesDef seriesDef, dynamic value, BuildContext context) async {
+    await _addOrUpdateValue(seriesDef, value, _Action.update, context);
   }
 
-  Future<void> deleteValue(SeriesDef seriesDef, dynamic value) async {
-    await _addOrUpdateValue(seriesDef, value, _Action.delete);
+  Future<void> deleteValue(SeriesDef seriesDef, dynamic value, BuildContext context) async {
+    await _addOrUpdateValue(seriesDef, value, _Action.delete, context);
   }
 
-  Future<void> _addOrUpdateValue(SeriesDef seriesDef, dynamic value, _Action action) async {
+  Future<void> _addOrUpdateValue(SeriesDef seriesDef, dynamic value, _Action action, BuildContext context) async {
+    SeriesCurrentValueProvider seriesCurrentValueProvider = context.read<SeriesCurrentValueProvider>();
+
     await fetchDataIfNotYetLoaded(seriesDef);
-// TODO save file
+    var store = Stores.getOrCreateSeriesDataStore(seriesDef);
+
     switch (seriesDef.seriesType) {
       case SeriesType.bloodPressure:
         if (value is! BloodPressureValue) {
@@ -131,10 +134,16 @@ class SeriesDataProvider with ChangeNotifier {
         }
         if (action == _Action.insert) {
           seriesData.insert(value);
+          await store.save(value);
+          await seriesCurrentValueProvider.save(seriesDef, value);
         } else if (action == _Action.update) {
           seriesData.update(value);
+          await store.save(value);
+          await seriesCurrentValueProvider.save(seriesDef, value);
         } else if (action == _Action.delete) {
           seriesData.delete(value);
+          await store.delete(value);
+          await seriesCurrentValueProvider.deleteValue(seriesDef, value);
         }
         seriesData.sort();
       case SeriesType.dailyCheck:
