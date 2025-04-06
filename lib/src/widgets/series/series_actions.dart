@@ -13,10 +13,10 @@ class SeriesActions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
+      spacing: 8,
       children: [
         Container(color: seriesDef.color, width: 2, height: 40),
         _ShowSeriesDataBtn(seriesDef: seriesDef),
-        const SizedBox(width: 10),
         _ShowSeriesDataInputDlgBtn(seriesDef: seriesDef),
       ],
     );
