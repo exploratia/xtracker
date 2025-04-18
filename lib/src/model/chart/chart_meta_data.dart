@@ -27,8 +27,17 @@ class ChartMetaData {
   }
 
   void calcPadding() {
-    _xPadding = (xMax - xMin).abs() / 20;
-    _yPadding = (yMax - yMin).abs() / 10;
+    if ((xMax - xMin).abs() == 0) {
+      _xPadding = 1;
+    } else {
+      _xPadding = (xMax - xMin).abs() / 20;
+    }
+
+    if ((yMax - yMin).abs() == 0) {
+      _yPadding = 1;
+    } else {
+      _yPadding = (yMax - yMin).abs() / 10;
+    }
   }
 
   double get xMinPadded {
