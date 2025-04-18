@@ -4,9 +4,11 @@ import 'package:provider/provider.dart';
 import '../../../providers/series_data_provider.dart';
 import '../../../util/dialogs.dart';
 import '../../../widgets/series/data/input/blood_pressure/blood_pressure_quick_input.dart';
+import '../../../widgets/series/data/input/daily_check/daily_check_input.dart';
 import '../series_def.dart';
 import '../series_type.dart';
 import 'blood_pressure/blood_pressure_value.dart';
+import 'daily_check/daily_check_value.dart';
 import 'series_data_value.dart';
 
 class SeriesData<T extends SeriesDataValue> {
@@ -55,28 +57,49 @@ class SeriesData<T extends SeriesDataValue> {
   static showSeriesDataInputDlg(BuildContext context, SeriesDef seriesDef, {dynamic value}) async {
     switch (seriesDef.seriesType) {
       case SeriesType.bloodPressure:
-        BloodPressureValue? bloodPressureValue;
-        if (value is BloodPressureValue) bloodPressureValue = value;
-        var val = await BloodPressureQuickInput.showInputDlg(context, seriesDef, bloodPressureValue: bloodPressureValue);
-        if (val == null) return;
-        if (context.mounted) {
-          var seriesDataProvider = context.read<SeriesDataProvider>();
+        {
+          BloodPressureValue? bloodPressureValue;
+          if (value is BloodPressureValue) bloodPressureValue = value;
+          var val = await BloodPressureQuickInput.showInputDlg(context, seriesDef, bloodPressureValue: bloodPressureValue);
+          if (val == null) return;
+          if (context.mounted) {
+            var seriesDataProvider = context.read<SeriesDataProvider>();
 
-          try {
-            if (bloodPressureValue == null) {
-              await seriesDataProvider.addValue(seriesDef, val, context); // insert
-            } else {
-              await seriesDataProvider.updateValue(seriesDef, val, context); // update
-            }
-          } catch (ex) {
-            if (context.mounted) {
-              Dialogs.simpleErrOkDialog(ex.toString(), context);
+            try {
+              if (bloodPressureValue == null) {
+                await seriesDataProvider.addValue(seriesDef, val, context); // insert
+              } else {
+                await seriesDataProvider.updateValue(seriesDef, val, context); // update
+              }
+            } catch (ex) {
+              if (context.mounted) {
+                Dialogs.simpleErrOkDialog(ex.toString(), context);
+              }
             }
           }
         }
       case SeriesType.dailyCheck:
-        // TODO: Handle this case.
-        throw UnimplementedError();
+        {
+          DailyCheckValue? dailyCheckValue;
+          if (value is DailyCheckValue) dailyCheckValue = value;
+          var val = await DailyCheckInput.showInputDlg(context, seriesDef, dailyCheckValue: dailyCheckValue);
+          if (val == null) return;
+          if (context.mounted) {
+            var seriesDataProvider = context.read<SeriesDataProvider>();
+
+            try {
+              if (dailyCheckValue == null) {
+                await seriesDataProvider.addValue(seriesDef, val, context); // insert
+              } else {
+                await seriesDataProvider.updateValue(seriesDef, val, context); // update
+              }
+            } catch (ex) {
+              if (context.mounted) {
+                Dialogs.simpleErrOkDialog(ex.toString(), context);
+              }
+            }
+          }
+        }
       case SeriesType.monthly:
         // TODO: Handle this case.
         throw UnimplementedError();

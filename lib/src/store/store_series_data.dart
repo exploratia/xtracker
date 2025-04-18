@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:sembast/sembast.dart';
 
 import '../model/series/data/blood_pressure/blood_pressure_value.dart';
+import '../model/series/data/daily_check/daily_check_value.dart';
 import '../model/series/data/series_data_value.dart';
 import '../model/series/series_def.dart';
 import '../model/series/series_type.dart';
@@ -64,6 +65,16 @@ class StoreSeriesData {
     List<RecordSnapshot<Object?, Object?>> records = await _findAllSeriesDataValues();
     for (var value in records.values) {
       result.add(BloodPressureValue.fromJson(value as Map<String, dynamic>));
+    }
+    return result;
+  }
+
+  /// returns unsorted list of SeriesDataValues
+  Future<List<DailyCheckValue>> getAllSeriesDataValuesAsDailyCheckValue() async {
+    List<DailyCheckValue> result = [];
+    List<RecordSnapshot<Object?, Object?>> records = await _findAllSeriesDataValues();
+    for (var value in records.values) {
+      result.add(DailyCheckValue.fromJson(value as Map<String, dynamic>));
     }
     return result;
   }

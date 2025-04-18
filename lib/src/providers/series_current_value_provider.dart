@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../model/series/current_value/series_current_value.dart';
 import '../model/series/data/blood_pressure/blood_pressure_value.dart';
+import '../model/series/data/daily_check/daily_check_value.dart';
 import '../model/series/data/series_data_value.dart';
 import '../model/series/series_def.dart';
 import '../store/stores.dart';
@@ -70,6 +71,14 @@ class SeriesCurrentValueProvider with ChangeNotifier {
   BloodPressureValue? bloodPressureCurrentValue(SeriesDef seriesDef) {
     var seriesCurrentValue = get(seriesDef);
     if (seriesCurrentValue != null && seriesCurrentValue is BloodPressureValue) {
+      return seriesCurrentValue;
+    }
+    return null;
+  }
+
+  DailyCheckValue? dailyCheckCurrentValue(SeriesDef seriesDef) {
+    var seriesCurrentValue = get(seriesDef);
+    if (seriesCurrentValue != null && seriesCurrentValue is DailyCheckValue) {
       return seriesCurrentValue;
     }
     return null;

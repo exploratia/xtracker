@@ -6,6 +6,7 @@ import '../../../../model/series/series_type.dart';
 import '../../../../providers/series_current_value_provider.dart';
 import '../../../../util/date_time_utils.dart';
 import '../view/blood_pressure/table/blood_pressure_value_renderer.dart';
+import '../view/daily_check/daily_check_value_renderer.dart';
 
 class SeriesLatestValue extends StatelessWidget {
   const SeriesLatestValue({super.key, required this.seriesDef});
@@ -35,8 +36,24 @@ class SeriesLatestValue extends StatelessWidget {
           return const Text("no data");
         }
       case SeriesType.dailyCheck:
-        // TODO: Handle this case.
-        throw UnimplementedError();
+        {
+          var currentValue = context.read<SeriesCurrentValueProvider>().dailyCheckCurrentValue(seriesDef);
+          if (currentValue != null) {
+            return Padding(
+              padding: const EdgeInsets.all(4.0),
+              child: Row(
+                spacing: 10,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(DateTimeUtils.formateDate(currentValue.dateTime)),
+                  Text(DateTimeUtils.formateTime(currentValue.dateTime)),
+                  DailyCheckValueRenderer(dailyCheckValue: currentValue, seriesDef: seriesDef),
+                ],
+              ),
+            );
+          }
+          return const Text("no data");
+        }
       case SeriesType.monthly:
         // TODO: Handle this case.
         throw UnimplementedError();
