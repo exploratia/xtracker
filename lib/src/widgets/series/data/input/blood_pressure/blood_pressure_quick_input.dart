@@ -8,10 +8,10 @@ import '../../../../../model/series/data/blood_pressure/blood_pressure_value.dar
 import '../../../../../model/series/series_def.dart';
 import '../../../../../model/series/series_type.dart';
 import '../../../../../providers/series_data_provider.dart';
-import '../../../../../util/date_time_utils.dart';
 import '../../../../../util/dialogs.dart';
 import '../../../../layout/single_child_scroll_view_with_scrollbar.dart';
 import '../../view/blood_pressure/table/blood_pressure_value_renderer.dart';
+import '../input_header.dart';
 
 class BloodPressureQuickInput extends StatefulWidget {
   const BloodPressureQuickInput({super.key, this.bloodPressureValue, required this.seriesDef});
@@ -141,8 +141,9 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
   @override
   Widget build(BuildContext context) {
     Widget stepWidget;
-
-    var header = _Header(dateTime: _dateTime, bloodPressureValue: widget.bloodPressureValue, seriesDef: widget.seriesDef, setDateTime: _setDateTime);
+    Widget? headerValueWidget =
+        (widget.bloodPressureValue != null) ? BloodPressureValueRenderer(bloodPressureValue: widget.bloodPressureValue!, seriesDef: widget.seriesDef) : null;
+    var header = InputHeader(dateTime: _dateTime, valueWidget: headerValueWidget, seriesDef: widget.seriesDef, setDateTime: _setDateTime);
     if (_dialogStep == _DialogStep.highRough) {
       stepWidget = Column(
         spacing: 10,
@@ -232,80 +233,6 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
     }
 
     return SingleChildScrollViewWithScrollbar(useScreenPadding: false, child: IntrinsicHeight(child: stepWidget));
-  }
-}
-
-class _Header extends StatelessWidget {
-  const _Header({
-    required this.dateTime,
-    required this.setDateTime,
-    this.bloodPressureValue,
-    required this.seriesDef,
-  });
-
-  final DateTime dateTime;
-  final BloodPressureValue? bloodPressureValue;
-  final SeriesDef seriesDef;
-  final Function(DateTime value) setDateTime;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      spacing: 20,
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        _DateTimeHeader(dateTime: dateTime, setDateTime: setDateTime),
-        if (bloodPressureValue != null) BloodPressureValueRenderer(bloodPressureValue: bloodPressureValue!, seriesDef: seriesDef),
-      ],
-    );
-  }
-}
-
-class _DateTimeHeader extends StatelessWidget {
-  const _DateTimeHeader({
-    required this.dateTime,
-    required this.setDateTime,
-  });
-
-  final DateTime dateTime;
-  final Function(DateTime value) setDateTime;
-
-  Future<void> _selectDate(context, DateTime dateTime) async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: dateTime,
-      firstDate: DateTime(2000),
-      lastDate: DateTime.now().add(const Duration(days: 366 * 10)),
-    );
-
-    if (pickedDate != null) setDateTime(pickedDate.copyWith(hour: dateTime.hour, minute: dateTime.minute));
-  }
-
-  Future<void> _selectTime(context, DateTime dateTime) async {
-    final TimeOfDay? pickedTime = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.fromDateTime(dateTime),
-    );
-
-    if (pickedTime != null) setDateTime(dateTime.copyWith(hour: pickedTime.hour, minute: pickedTime.minute));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      spacing: 20,
-      children: [
-        InkWell(
-          onTap: () => _selectDate(context, dateTime),
-          child: Text(DateTimeUtils.formateDate(dateTime)),
-        ),
-        InkWell(
-          onTap: () => _selectTime(context, dateTime),
-          child: Text(DateTimeUtils.formateTime(dateTime)),
-        ),
-      ],
-    );
   }
 }
 
