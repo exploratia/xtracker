@@ -31,15 +31,30 @@ class ChartUtilsDailyCheck {
     }
 
     lineBarsData.add(LineChartBarData(
-      spots: values,
-      isCurved: false,
-      preventCurveOverShooting: true,
-      barWidth: 0,
-      gradient: ChartUtils.createTopToBottomGradient([seriesViewMetaData.seriesDef.color, ColorUtils.hue(seriesViewMetaData.seriesDef.color)]),
-      dotData: ChartUtils.createDotData(chartMetaData),
-      isStrokeCapRound: true,
-      // dashArray: [5, 5],
-    ));
+        spots: values,
+        isCurved: false,
+        preventCurveOverShooting: true,
+        // hide bar:
+        barWidth: 0,
+        color: seriesViewMetaData.seriesDef.color,
+        dotData: ChartUtils.createDotData(chartMetaData),
+        isStrokeCapRound: true,
+        // dashArray: [5, 5],
+        belowBarData: BarAreaData(
+          show: true,
+          color: Colors.transparent,
+          spotsLine: BarAreaSpotsLine(
+            show: true,
+            flLineStyle: FlLine(
+              // color: seriesViewMetaData.seriesDef.color,
+              strokeWidth: 5,
+              gradient: ChartUtils.createTopToBottomGradient([
+                ColorUtils.hue(seriesViewMetaData.seriesDef.color, 30),
+                seriesViewMetaData.seriesDef.color,
+              ]),
+            ),
+          ),
+        )));
 
     chartMetaData.calcPadding();
 
