@@ -71,6 +71,7 @@ class ChartUtilsDailyCheck {
       gridData: ChartUtils.noGridData,
       lineTouchData: ChartUtils.createLineTouchData(
         fractionDigits: 0,
+        showToucheLine: false,
         themeData: themeData,
         touchCallback: touchCallback,
         provideTooltipTextColor: (x, y, barIdx) => seriesViewMetaData.seriesDef.color,

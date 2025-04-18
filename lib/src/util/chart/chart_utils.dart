@@ -66,6 +66,7 @@ class ChartUtils {
   static LineTouchData createLineTouchData(
       {int fractionDigits = 2,
       required ThemeData themeData,
+      bool showToucheLine = true,
       List<TextSpan> Function(double, double, int)? provideTooltipExt,
       Color Function(double, double, int)? provideTooltipTextColor,
       void Function(FlTouchEvent, LineTouchResponse?)? touchCallback}) {
@@ -99,29 +100,58 @@ class ChartUtils {
           }).toList();
         },
       ),
-      getTouchedSpotIndicator: _createTouchedSpotIndicators,
+      getTouchedSpotIndicator: showToucheLine ? _createTouchedSpotIndicators : _createTouchedSpotIndicatorsWithoutLine,
     );
   }
 
   static List<TouchedSpotIndicatorData?> _createTouchedSpotIndicators(barData, spotIndexes) {
+    var flLine = const FlLine(
+      color: Colors.grey,
+      strokeWidth: 2,
+      dashArray: [2, 4],
+    );
+    var flDotData = FlDotData(
+      getDotPainter: (spot, percent, barData, index) {
+        return FlDotCirclePainter(
+          radius: 4,
+          color: Colors.white70,
+          strokeWidth: 2,
+          strokeColor: Colors.grey,
+        );
+      },
+    );
+
     List<TouchedSpotIndicatorData?> result = [];
     for (var _ in spotIndexes) {
       result.add(TouchedSpotIndicatorData(
-        const FlLine(
-          color: Colors.grey,
+        flLine,
+        flDotData,
+      ));
+    }
+    return result;
+  }
+
+  static List<TouchedSpotIndicatorData?> _createTouchedSpotIndicatorsWithoutLine(barData, spotIndexes) {
+    var flLine = const FlLine(
+      color: Colors.transparent,
+      strokeWidth: 0,
+    );
+    var flDotData = FlDotData(
+      getDotPainter: (spot, percent, barData, index) {
+        return FlDotCirclePainter(
+          radius: 4,
+          color: Colors.white70,
           strokeWidth: 2,
-          dashArray: [2, 4],
-        ),
-        FlDotData(
-          getDotPainter: (spot, percent, barData, index) {
-            return FlDotCirclePainter(
-              radius: 4,
-              color: Colors.white70,
-              strokeWidth: 2,
-              strokeColor: Colors.grey,
-            );
-          },
-        ),
+          strokeColor: Colors.grey,
+        );
+      },
+    );
+
+    List<TouchedSpotIndicatorData?> result = [];
+    for (var _ in spotIndexes) {
+      result.add(TouchedSpotIndicatorData(
+        flLine,
+        flDotData,
       ));
     }
     return result;
