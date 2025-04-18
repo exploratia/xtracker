@@ -20,14 +20,6 @@
         "diastolic": "Diastolisch",
         "systolic": "Systolisch"
       }
-    },
-    "table": {
-      "columns": {
-        "date": "Datum",
-        "morning": "Morgens",
-        "midday": "Mittags",
-        "evening": "Abends"
-      }
     }
   },
   "commons": {
@@ -40,7 +32,11 @@
         "friday": "Fr",
         "saturday": "Sa",
         "sunday": "So"
-      }
+      },
+      "date": "Datum",
+      "morning": "Morgens",
+      "midday": "Mittags",
+      "evening": "Abends"
     },
     "dialog": {
       "title": {

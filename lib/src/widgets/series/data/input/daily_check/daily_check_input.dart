@@ -9,7 +9,7 @@ import '../../../../../model/series/series_def.dart';
 import '../../../../../model/series/series_type.dart';
 import '../../../../../providers/series_data_provider.dart';
 import '../../../../../util/dialogs.dart';
-import '../../view/daily_check/daily_check_value_renderer.dart';
+import '../../view/daily_check/table/daily_check_value_renderer.dart';
 import '../input_header.dart';
 
 class DailyCheckInput extends StatefulWidget {

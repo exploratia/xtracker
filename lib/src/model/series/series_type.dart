@@ -15,7 +15,7 @@ enum SeriesType {
       ViewType.table,
     ],
   ),
-  dailyCheck("dailyCheck", 'check_box_outlined', Colors.blue, [ViewType.dots]),
+  dailyCheck("dailyCheck", 'check_box_outlined', Colors.blue, [ViewType.dots, ViewType.table]),
   monthly("monthly", 'calendar_month_outlined', Colors.deepPurple, [ViewType.table, ViewType.chart]),
   free("free", 'calendar_today_outlined', Colors.green, [ViewType.chart, ViewType.table]);
   // TODO TimeTracker

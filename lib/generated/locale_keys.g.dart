@@ -12,10 +12,6 @@ abstract class  LocaleKeys {
   static const bloodPressure_input_systolic_fineTitle = 'bloodPressure.input.systolic.fineTitle';
   static const bloodPressure_seriesItem_title_diastolic = 'bloodPressure.seriesItem.title.diastolic';
   static const bloodPressure_seriesItem_title_systolic = 'bloodPressure.seriesItem.title.systolic';
-  static const bloodPressure_table_columns_date = 'bloodPressure.table.columns.date';
-  static const bloodPressure_table_columns_morning = 'bloodPressure.table.columns.morning';
-  static const bloodPressure_table_columns_midday = 'bloodPressure.table.columns.midday';
-  static const bloodPressure_table_columns_evening = 'bloodPressure.table.columns.evening';
   static const commons_date_shortWeekday_monday = 'commons.date.shortWeekday.monday';
   static const commons_date_shortWeekday_tuesday = 'commons.date.shortWeekday.tuesday';
   static const commons_date_shortWeekday_wednesday = 'commons.date.shortWeekday.wednesday';
@@ -23,6 +19,10 @@ abstract class  LocaleKeys {
   static const commons_date_shortWeekday_friday = 'commons.date.shortWeekday.friday';
   static const commons_date_shortWeekday_saturday = 'commons.date.shortWeekday.saturday';
   static const commons_date_shortWeekday_sunday = 'commons.date.shortWeekday.sunday';
+  static const commons_date_date = 'commons.date.date';
+  static const commons_date_morning = 'commons.date.morning';
+  static const commons_date_midday = 'commons.date.midday';
+  static const commons_date_evening = 'commons.date.evening';
   static const commons_dialog_title_areYouSure = 'commons.dialog.title.areYouSure';
   static const commons_dialog_title_errorOccurred = 'commons.dialog.title.errorOccurred';
   static const commons_dialog_btn_cancel = 'commons.dialog.btn.cancel';

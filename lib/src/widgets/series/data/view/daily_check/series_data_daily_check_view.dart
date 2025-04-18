@@ -9,6 +9,7 @@ import '../../../../../providers/series_data_provider.dart';
 import '../../../../../util/date_time_utils.dart';
 import '../../../../layout/centered_message.dart';
 import 'dots/series_data_daily_check_dots_view.dart';
+import 'table/series_data_blood_pressure_table_view.dart';
 
 class SeriesDataDailyCheckView extends StatelessWidget {
   const SeriesDataDailyCheckView({super.key, required this.seriesViewMetaData});
@@ -40,11 +41,9 @@ class SeriesDataDailyCheckView extends StatelessWidget {
           DateTime reduceToNewerThen = DateTimeUtils.firstDayOfYear(DateTimeUtils.truncateToDay(DateTime.timestamp().subtract(const Duration(days: 365 * 5))));
           return SeriesDataDailyCheckDotsView(seriesViewMetaData: seriesViewMetaData, seriesData: dailyCheckSeriesData.reduceToNewerThen(reduceToNewerThen));
         }
-      case ViewType.chart:
-        // TODO: Handle this case.
-        //   return SeriesDataDailyCheckTableView(seriesViewMetaData: seriesViewMetaData, seriesData: dailyCheckSeriesData);
-        throw UnimplementedError();
       case ViewType.table:
+        return SeriesDataDailyCheckTableView(seriesViewMetaData: seriesViewMetaData, seriesData: dailyCheckSeriesData);
+      case ViewType.chart:
         // TODO: Handle this case.
         //   return SeriesDataDailyCheckChartView(seriesViewMetaData: seriesViewMetaData, seriesData: dailyCheckSeriesData);
         throw UnimplementedError();

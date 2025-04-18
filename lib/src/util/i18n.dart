@@ -5,11 +5,11 @@ import '../../../generated/locale_keys.g.dart';
 class I18N {
   static const String bloodPressureSeriesItemTitleDiastolic = 'bloodPressureSeriesItemTitleDiastolic';
   static const String bloodPressureSeriesItemTitleSystolic = 'bloodPressureSeriesItemTitleSystolic';
-  static const String bloodPressureTableColumnTitleDate = 'bloodPressureTableColumnTitleDate';
-  static const String bloodPressureTableColumnTitleMorning = 'bloodPressureTableColumnTitleMorning';
-  static const String bloodPressureTableColumnTitleMidday = 'bloodPressureTableColumnTitleMidday';
-  static const String bloodPressureTableColumnTitleEvening = 'bloodPressureTableColumnTitleEvening';
 
+  static const String commonsDateDate = 'commonsDateDate';
+  static const String commonsDateMorning = 'commonsDateMorning';
+  static const String commonsDateMidday = 'commonsDateMidday';
+  static const String commonsDateEvening = 'commonsDateEvening';
   static const String commonsDateShortWeekdayMonday = 'commonsDateShortWeekdayMonday';
   static const String commonsDateShortWeekdayTuesday = 'commonsDateShortWeekdayTuesday';
   static const String commonsDateShortWeekdayWednesday = 'commonsDateShortWeekdayWednesday';
@@ -23,11 +23,11 @@ class I18N {
       // blood pressure
       bloodPressureSeriesItemTitleDiastolic => LocaleKeys.bloodPressure_seriesItem_title_diastolic.tr(),
       bloodPressureSeriesItemTitleSystolic => LocaleKeys.bloodPressure_seriesItem_title_systolic.tr(),
-      bloodPressureTableColumnTitleDate => LocaleKeys.bloodPressure_table_columns_date.tr(),
-      bloodPressureTableColumnTitleMorning => LocaleKeys.bloodPressure_table_columns_morning.tr(),
-      bloodPressureTableColumnTitleMidday => LocaleKeys.bloodPressure_table_columns_midday.tr(),
-      bloodPressureTableColumnTitleEvening => LocaleKeys.bloodPressure_table_columns_evening.tr(),
       // date
+      commonsDateDate => LocaleKeys.commons_date_date.tr(),
+      commonsDateMorning => LocaleKeys.commons_date_morning.tr(),
+      commonsDateMidday => LocaleKeys.commons_date_midday.tr(),
+      commonsDateEvening => LocaleKeys.commons_date_evening.tr(),
       commonsDateShortWeekdayMonday => LocaleKeys.commons_date_shortWeekday_monday.tr(),
       commonsDateShortWeekdayTuesday => LocaleKeys.commons_date_shortWeekday_tuesday.tr(),
       commonsDateShortWeekdayWednesday => LocaleKeys.commons_date_shortWeekday_wednesday.tr(),
