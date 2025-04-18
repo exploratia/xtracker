@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
@@ -41,6 +43,8 @@ class ChartUtilsDailyCheck {
 
     chartMetaData.calcPadding();
 
+    final String Function(DateTime dateTime) dateFormatter = seriesViewMetaData.showYearly ? DateTimeUtils.formateYear : DateTimeUtils.formateMonthYear;
+
     return LineChartData(
       minY: chartMetaData.yMinPadded,
       maxY: chartMetaData.yMaxPadded,
@@ -77,13 +81,13 @@ class ChartUtilsDailyCheck {
             minIncluded: true,
             // https://www.reddit.com/r/flutterhelp/comments/rhb7iu/fl_chart_set_time_series_interval_in_linechart/?rdt=36768
             // interval: (chartMetaData.xMax - chartMetaData.xMin),
-            interval: (values.last.x - values.first.x),
+            interval: math.max(1, values.last.x - values.first.x),
             getTitlesWidget: (value, meta) {
               if (value == meta.min) {
                 // use chartMetaData min/max - not the value which has padding!
-                return TitlesWidgetBottomAxis(alignment: Alignment.topLeft, value: chartMetaData.xMin);
+                return TitlesWidgetBottomAxis(alignment: Alignment.topLeft, value: chartMetaData.xMin, dateFormatter: dateFormatter);
               } else if (value == meta.max) {
-                return TitlesWidgetBottomAxis(alignment: Alignment.topRight, value: chartMetaData.xMax);
+                return TitlesWidgetBottomAxis(alignment: Alignment.topRight, value: chartMetaData.xMax, dateFormatter: dateFormatter);
               }
               return Container();
             },
@@ -99,10 +103,12 @@ class TitlesWidgetBottomAxis extends StatelessWidget {
     super.key,
     required this.alignment,
     required this.value,
+    required this.dateFormatter,
   });
 
   final Alignment alignment;
   final double value;
+  final String Function(DateTime dateTime) dateFormatter;
 
   @override
   Widget build(BuildContext context) {
@@ -115,7 +121,7 @@ class TitlesWidgetBottomAxis extends StatelessWidget {
         // maxHeight: 22,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-          child: Text(DateTimeUtils.formateMonthYear(DateTime.fromMillisecondsSinceEpoch(value.truncate()))),
+          child: Text(dateFormatter(DateTime.fromMillisecondsSinceEpoch(value.truncate()))),
         ),
       ),
     );

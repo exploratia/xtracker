@@ -165,16 +165,24 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
       }
 
       List<Widget> chartActions = [];
+      var seriesType = _seriesDef!.seriesType;
       if (_viewType == ViewType.lineChart) {
         // Je nach Typ Umschalter erstellen : Monat/Jahr ...
-        if (_seriesDef!.seriesType == SeriesType.monthly) {
+        if (seriesType == SeriesType.monthly) {
+          chartActions.add(
+              IconButton(onPressed: () => _toggleMonthlyYearlyMode(), icon: Icon(_showYearly ? Icons.calendar_month_outlined : Icons.calendar_today_outlined)));
+        }
+        if (chartActions.isNotEmpty) chartActions.add(const AppBarActionsDivider());
+      } else if (_viewType == ViewType.barChart) {
+        // Je nach Typ Umschalter erstellen : Monat/Jahr ...
+        if (seriesType == SeriesType.dailyCheck) {
           chartActions.add(
               IconButton(onPressed: () => _toggleMonthlyYearlyMode(), icon: Icon(_showYearly ? Icons.calendar_month_outlined : Icons.calendar_today_outlined)));
         }
         if (chartActions.isNotEmpty) chartActions.add(const AppBarActionsDivider());
       }
       List<Widget> viewActions = [
-        ..._seriesDef!.seriesType.viewTypes.where((vt) => vt != _viewType).map((vt) => IconButton(onPressed: () => _setViewType(vt), icon: Icon(vt.iconData))),
+        ...seriesType.viewTypes.where((vt) => vt != _viewType).map((vt) => IconButton(onPressed: () => _setViewType(vt), icon: Icon(vt.iconData))),
         const AppBarActionsDivider(),
       ];
       List<Widget> dataActions = [
