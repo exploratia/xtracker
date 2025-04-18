@@ -72,9 +72,15 @@ class _ChartContainerWithDateTooltipState extends State<_ChartContainerWithDateT
   void touchCallback(FlTouchEvent event, LineTouchResponse? touchResponse) {
     if (event is FlTapDownEvent || event is FlPointerHoverEvent) {
       setState(() {
-        if (touchResponse != null && touchResponse.lineBarSpots != null && touchResponse.lineBarSpots!.isNotEmpty) {
-          _xValue = touchResponse.lineBarSpots!.first.x;
-          _tooltipPosition = event.localPosition;
+        if (touchResponse != null) {
+          if (touchResponse.lineBarSpots != null && touchResponse.lineBarSpots!.isNotEmpty) {
+            _xValue = touchResponse.lineBarSpots!.first.x;
+            _tooltipPosition = event.localPosition;
+          } else {
+            // if no lineBarSpots hide DateTooltip
+            _xValue = null;
+            _tooltipPosition = null;
+          }
         }
       });
     } else if (event is FlPointerExitEvent || event is FlTapUpEvent) {
