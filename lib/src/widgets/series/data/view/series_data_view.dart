@@ -9,6 +9,7 @@ import '../../../navigation/hide_bottom_navigation_bar.dart';
 import '../../../provider/data_provider_loader.dart';
 import '../../../text/overflow_text.dart';
 import 'blood_pressure/series_data_blood_pressure_view.dart';
+import 'daily_check/series_data_daily_check_view.dart';
 
 class SeriesDataView extends StatelessWidget {
   const SeriesDataView({super.key, required this.seriesViewMetaData});
@@ -38,7 +39,7 @@ class _SeriesDataView extends StatelessWidget {
   Widget build(BuildContext context) {
     Widget view = switch (seriesViewMetaData.seriesDef.seriesType) {
       SeriesType.bloodPressure => SeriesDataBloodPressureView(seriesViewMetaData: seriesViewMetaData),
-      SeriesType.dailyCheck => throw UnimplementedError(),
+      SeriesType.dailyCheck => SeriesDataDailyCheckView(seriesViewMetaData: seriesViewMetaData),
       SeriesType.monthly => throw UnimplementedError(),
       SeriesType.free => throw UnimplementedError(),
     };
