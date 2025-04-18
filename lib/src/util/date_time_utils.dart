@@ -39,6 +39,10 @@ class DateTimeUtils {
     return DateFormat.yMd().format(dateTime);
   }
 
+  static String formateYear(DateTime dateTime) {
+    return DateFormat.y().format(dateTime);
+  }
+
   static String formateMonthYear(DateTime dateTime) {
     return DateFormat.yMMM().format(dateTime);
   }

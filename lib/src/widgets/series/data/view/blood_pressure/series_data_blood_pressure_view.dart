@@ -39,7 +39,7 @@ class SeriesDataBloodPressureView extends StatelessWidget {
     switch (seriesViewMetaData.viewType) {
       case ViewType.table:
         return SeriesDataBloodPressureTableView(seriesViewMetaData: seriesViewMetaData, seriesData: bloodPressureSeriesData);
-      case ViewType.chart:
+      case ViewType.lineChart:
         return SeriesDataBloodPressureChartView(seriesViewMetaData: seriesViewMetaData, seriesData: bloodPressureSeriesData);
       case ViewType.dots:
         {
@@ -47,6 +47,8 @@ class SeriesDataBloodPressureView extends StatelessWidget {
           return SeriesDataBloodPressureDotsView(
               seriesViewMetaData: seriesViewMetaData, seriesData: bloodPressureSeriesData.reduceToNewerThen(reduceToNewerThen));
         }
+      case ViewType.barChart:
+        throw UnimplementedError();
     }
   }
 }

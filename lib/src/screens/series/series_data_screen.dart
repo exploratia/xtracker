@@ -65,7 +65,7 @@ class _ScreenBuilder extends StatefulWidget {
 
 class _ScreenBuilderState extends State<_ScreenBuilder> {
   SeriesDef? _seriesDef;
-  ViewType _viewType = ViewType.chart;
+  ViewType _viewType = ViewType.lineChart;
   bool _editMode = false;
   bool _showYearly = false;
 
@@ -165,7 +165,7 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
       }
 
       List<Widget> chartActions = [];
-      if (_viewType == ViewType.chart) {
+      if (_viewType == ViewType.lineChart) {
         // Je nach Typ Umschalter erstellen : Monat/Jahr ...
         if (_seriesDef!.seriesType == SeriesType.monthly) {
           chartActions.add(

@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import '../../../generated/locale_keys.g.dart';
 
 enum ViewType {
-  chart(Icons.area_chart_outlined),
+  lineChart(Icons.area_chart_outlined),
+  barChart(Icons.bar_chart_outlined),
   table(Icons.grid_on_outlined),
   // table(Icons.table_chart_outlined),
   // dots(Icons.margin_outlined);
@@ -19,7 +20,8 @@ enum ViewType {
 
   static String displayNameOf(ViewType seriesType) {
     return switch (seriesType) {
-      ViewType.chart => LocaleKeys.series_viewType_chart.tr(),
+      ViewType.lineChart => LocaleKeys.series_viewType_seriesChart.tr(),
+      ViewType.barChart => LocaleKeys.series_viewType_barChart.tr(),
       ViewType.table => LocaleKeys.series_viewType_table.tr(),
       ViewType.dots => LocaleKeys.series_viewType_dots.tr(),
     };

@@ -68,7 +68,8 @@ abstract class  LocaleKeys {
   static const series_seriesType_free_info = 'series.seriesType.free.info';
   static const series_seriesType_monthly_title = 'series.seriesType.monthly.title';
   static const series_seriesType_monthly_info = 'series.seriesType.monthly.info';
-  static const series_viewType_chart = 'series.viewType.chart';
+  static const series_viewType_seriesChart = 'series.viewType.seriesChart';
+  static const series_viewType_barChart = 'series.viewType.barChart';
   static const series_viewType_dots = 'series.viewType.dots';
   static const series_viewType_table = 'series.viewType.table';
   static const settings_title = 'settings.title';

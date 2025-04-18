@@ -11,13 +11,13 @@ enum SeriesType {
     Colors.red,
     [
       ViewType.dots,
-      ViewType.chart,
+      ViewType.lineChart,
       ViewType.table,
     ],
   ),
-  dailyCheck("dailyCheck", 'check_box_outlined', Colors.blue, [ViewType.dots, ViewType.table]),
-  monthly("monthly", 'calendar_month_outlined', Colors.deepPurple, [ViewType.table, ViewType.chart]),
-  free("free", 'calendar_today_outlined', Colors.green, [ViewType.chart, ViewType.table]);
+  dailyCheck("dailyCheck", 'check_box_outlined', Colors.blue, [ViewType.dots, ViewType.barChart, ViewType.table]),
+  monthly("monthly", 'calendar_month_outlined', Colors.deepPurple, [ViewType.table, ViewType.lineChart]),
+  free("free", 'calendar_today_outlined', Colors.green, [ViewType.lineChart, ViewType.table]);
   // TODO TimeTracker
 
   final String typeName;

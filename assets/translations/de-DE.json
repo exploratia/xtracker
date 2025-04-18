@@ -160,7 +160,8 @@
       }
     },
     "viewType": {
-      "chart": "Diagramm",
+      "seriesChart": "Diagramm",
+      "barChart": "Diagramm",
       "dots": "Übersicht",
       "table": "Tabelle"
     }

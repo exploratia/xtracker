@@ -160,7 +160,8 @@
       }
     },
     "viewType": {
-      "chart": "Chart",
+      "seriesChart": "Chart",
+      "barChart": "Chart",
       "dots": "Overview",
       "table": "Table"
     }

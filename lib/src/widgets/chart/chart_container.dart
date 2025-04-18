@@ -4,11 +4,12 @@ import 'package:flutter/material.dart';
 import '../../util/date_time_utils.dart';
 
 class ChartContainer extends StatelessWidget {
-  const ChartContainer({super.key, this.title, this.showDateTooltip = false, required this.chartWidgetBuilder});
+  const ChartContainer({super.key, this.title, this.showDateTooltip = false, required this.chartWidgetBuilder, this.dateFormatter});
 
   final Widget? title;
   final bool showDateTooltip;
   final Widget Function(int maxWidth, Function(FlTouchEvent, LineTouchResponse?)? touchCallback) chartWidgetBuilder;
+  final String Function(DateTime dateTime)? dateFormatter;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,12 @@ class ChartContainer extends StatelessWidget {
             return SizedBox(
               width: double.infinity,
               height: 300,
-              child: chart ?? _ChartContainerWithDateTooltip(maxWidth: maxWidth, chartWidgetBuilder: chartWidgetBuilder),
+              child: chart ??
+                  _ChartContainerWithDateTooltip(
+                    maxWidth: maxWidth,
+                    chartWidgetBuilder: chartWidgetBuilder,
+                    dateFormatter: dateFormatter ?? DateTimeUtils.formateDate,
+                  ),
               // child: AspectRatio(
               //   aspectRatio: isPortrait ? 3 / 2 : 3 / 1,
               //   child: child,
@@ -43,10 +49,12 @@ class _ChartContainerWithDateTooltip extends StatefulWidget {
   const _ChartContainerWithDateTooltip({
     required this.chartWidgetBuilder,
     required this.maxWidth,
+    required this.dateFormatter,
   });
 
   final int maxWidth;
   final Widget Function(int maxWidth, Function(FlTouchEvent, LineTouchResponse?)? touchCallback) chartWidgetBuilder;
+  final String Function(DateTime dateTime) dateFormatter;
 
   @override
   State<_ChartContainerWithDateTooltip> createState() => _ChartContainerWithDateTooltipState();
@@ -93,7 +101,7 @@ class _ChartContainerWithDateTooltipState extends State<_ChartContainerWithDateT
                 ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
-                  child: Text(DateTimeUtils.formateDate(DateTime.fromMillisecondsSinceEpoch(_xValue!.truncate()))),
+                  child: Text(widget.dateFormatter(DateTime.fromMillisecondsSinceEpoch(_xValue!.truncate()))),
                 ))),
     ]);
   }
