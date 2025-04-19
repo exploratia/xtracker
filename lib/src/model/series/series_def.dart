@@ -16,9 +16,9 @@ class SeriesDef {
   Color color = Colors.red;
   String iconName = "";
 
-  SeriesDef({required this.uuid, required this.seriesType, this.name = "", Color? color, required this.seriesItems})
+  SeriesDef({required this.uuid, required this.seriesType, this.name = "", Color? color, String? iconName, required this.seriesItems})
       : color = color ?? seriesType.color,
-        iconName = seriesType.iconName;
+        iconName = iconName ?? seriesType.iconName;
 
   @override
   String toString() {
@@ -39,6 +39,7 @@ class SeriesDef {
         seriesItems: [...(json['seriesItems'] as List<dynamic>).whereType<Map<String, dynamic>>().map((e) => SeriesItem.fromJson(e))],
         name: json['name'] as String,
         color: ColorUtils.fromHex(json['color'] as String),
+        iconName: json['iconName'] as String,
       );
 
   Map<String, dynamic> toJson() => {
@@ -51,14 +52,22 @@ class SeriesDef {
       };
 
   static Future<SeriesDef?> addNewSeries(BuildContext context) async {
+    return _showSeriesEdit(null, context);
+  }
+
+  static Future<SeriesDef?> editSeries(SeriesDef seriesDef, BuildContext context) async {
+    return _showSeriesEdit(seriesDef, context);
+  }
+
+  static Future<SeriesDef?> _showSeriesEdit(SeriesDef? seriesDef, BuildContext context) async {
     final themeData = Theme.of(context);
 
     SeriesDef? editedSeriesDef = await showDialog<SeriesDef>(
         context: context,
         builder: (context) => Dialog.fullscreen(
             backgroundColor: themeData.scaffoldBackgroundColor,
-            child: const HideBottomNavigationBar(
-              child: SeriesEdit(seriesDef: null),
+            child: HideBottomNavigationBar(
+              child: SeriesEdit(seriesDef: seriesDef),
             )));
     return editedSeriesDef;
   }

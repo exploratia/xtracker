@@ -162,7 +162,7 @@ class _SeriesEditor extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            IconMap.icon(seriesDef.seriesType.iconName),
+            IconMap.icon(seriesDef.iconName),
             const SizedBox(width: 10),
             Text(
               SeriesType.displayNameOf(seriesDef.seriesType),
