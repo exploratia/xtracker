@@ -19,6 +19,7 @@ class SeriesManagementActions extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(color: seriesDef.color, width: 2, height: 40),
+        _EditSeriesBtn(seriesDef: seriesDef),
         _DeleteSeriesBtn(seriesDef: seriesDef),
         if (!kIsWeb)
           const Padding(
@@ -60,5 +61,23 @@ class _DeleteSeriesBtn extends StatelessWidget {
     }
 
     return IconButton(onPressed: deleteHandler, icon: const Icon(Icons.close_outlined));
+  }
+}
+
+class _EditSeriesBtn extends StatelessWidget {
+  const _EditSeriesBtn({
+    required this.seriesDef,
+  });
+
+  final SeriesDef seriesDef;
+
+  @override
+  Widget build(BuildContext context) {
+    editHandler() async {
+      /* SeriesDef? editedSeriesDef = */
+      await SeriesDef.editSeries(seriesDef, context);
+    }
+
+    return IconButton(onPressed: editHandler, icon: const Icon(Icons.edit_outlined));
   }
 }
