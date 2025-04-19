@@ -42,6 +42,13 @@ class SeriesProvider with ChangeNotifier {
         seriesItems: SeriesItem.bloodPressureSeriesItems(),
       ));
 
+      await _storeSeriesDef.save(SeriesDef(
+        uuid: const Uuid().v4().toString(),
+        seriesType: SeriesType.dailyCheck,
+        name: '3',
+        seriesItems: [],
+      ));
+
       _series = await _storeSeriesDef.getAllSeries();
     }
 

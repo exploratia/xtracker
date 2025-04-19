@@ -89,6 +89,8 @@ class SeriesDataProvider with ChangeNotifier {
               DailyCheckValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(hours: 28))),
               DailyCheckValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(hours: 30))),
               DailyCheckValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(hours: 40))),
+              // ...List.generate(
+              //     10040, (index) => DailyCheckValue(const UuidV4().generate().toString(), DateTime.now().subtract(Duration(hours: 40 + index * 25)))),
             ];
             await store.saveAll(list);
             list = await store.getAllSeriesDataValuesAsDailyCheckValue();

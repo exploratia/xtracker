@@ -5,17 +5,8 @@ import '../../../generated/locale_keys.g.dart';
 import 'view_type.dart';
 
 enum SeriesType {
-  bloodPressure(
-    'bloodPressure',
-    'monitor_heart_outlined',
-    Colors.red,
-    [
-      ViewType.dots,
-      ViewType.lineChart,
-      ViewType.table,
-    ],
-  ),
-  dailyCheck("dailyCheck", 'check_box_outlined', Colors.blue, [ViewType.dots, ViewType.barChart, ViewType.table]),
+  bloodPressure('bloodPressure', 'monitor_heart_outlined', Colors.red, [ViewType.dots, ViewType.lineChart, ViewType.table]),
+  dailyCheck("dailyCheck", 'check_box_outlined', Colors.blue, [ViewType.table, ViewType.barChart, ViewType.dots]),
   monthly("monthly", 'calendar_month_outlined', Colors.deepPurple, [ViewType.table, ViewType.lineChart]),
   free("free", 'calendar_today_outlined', Colors.green, [ViewType.lineChart, ViewType.table]);
   // TODO TimeTracker
