@@ -10,7 +10,7 @@ import '../../../../../util/date_time_utils.dart';
 import '../../../../layout/centered_message.dart';
 import 'chart/series_data_daily_check_chart_view.dart';
 import 'dots/series_data_daily_check_dots_view.dart';
-import 'table/series_data_blood_pressure_table_view.dart';
+import 'table/series_data_daily_check_table_view.dart';
 
 class SeriesDataDailyCheckView extends StatelessWidget {
   const SeriesDataDailyCheckView({super.key, required this.seriesViewMetaData});
