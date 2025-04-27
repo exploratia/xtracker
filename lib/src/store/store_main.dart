@@ -1,7 +1,5 @@
-import 'package:flutter/foundation.dart';
 import 'package:sembast/sembast.dart';
 
-import '../model/series/series_def.dart';
 import 'stores_utils.dart';
 
 // https://github.com/tekartik/sembast.dart/blob/master/sembast/doc/queries.md
@@ -10,18 +8,6 @@ class StoreMain {
   final Database _db = StoresUtils.db;
 
   static const _keySeriesOrder = 'seriesOrder';
-
-  Future<List<SeriesDef>> getAllSeries() async {
-    List<SeriesDef> result = [];
-    var records = await _store.find(_db, finder: Finder()); // find all
-    if (kDebugMode) {
-      print('Loaded SeriesDef count: ${records.length}');
-    }
-    for (var value in records.values) {
-      result.add(SeriesDef.fromJson(value as Map<String, dynamic>));
-    }
-    return result;
-  }
 
   Future<void> saveSeriesOrder(List<String> seriesUuids) async {
     await _store.record(_keySeriesOrder).put(_db, seriesUuids);
