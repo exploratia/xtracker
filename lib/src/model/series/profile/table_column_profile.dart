@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import '../../../util/i18n.dart';
 
 class TableColumnProfile {
@@ -44,7 +46,8 @@ class TableColumnProfile {
       widthFactor = 2;
       addMargin = true;
     }
-    List<TableColumn> adjustedColumns = columns.map((e) => TableColumn(minWidth: (e.minWidth * widthFactor), title: e.title, msgId: e.msgId)).toList();
+    List<TableColumn> adjustedColumns =
+        columns.map((e) => TableColumn(minWidth: (e.minWidth * widthFactor), title: e.title, msgId: e.msgId, textAlign: e.textAlign)).toList();
 
     if (addMargin) {
       var adjustedWidth = adjustedColumns.fold(0.toDouble(), (previousValue, element) => previousValue + element.minWidth);
@@ -70,8 +73,9 @@ class TableColumn {
   final double minWidth;
   final String title;
   final String? msgId;
+  final TextAlign? textAlign;
 
-  TableColumn({required this.minWidth, this.isMarginColumn = false, required this.title, this.msgId});
+  TableColumn({required this.minWidth, this.isMarginColumn = false, required this.title, this.msgId, this.textAlign});
 
   @override
   String toString() {

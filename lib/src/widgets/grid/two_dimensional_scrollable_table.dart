@@ -26,6 +26,8 @@ class TwoDimensionalScrollableTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (lineCount < 1) return const Text("At least on line is required!");
+
     return HideBottomNavigationBar(
       child: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
         final TableColumnProfile adjustedTableColumnProfile = tableColumnProfile.adjustToWidth(constraints.maxWidth);
@@ -159,7 +161,7 @@ class _ScrollableGridState extends State<_ScrollableGrid> {
       } else {
         Widget tableHeaderItemWidget = SizedBox(
           width: tableColumn.minWidth.toDouble(),
-          child: _getTableHeadItemWidget(tableColumn.getTitle()),
+          child: _getTableHeadItemWidget(tableColumn),
         );
         tableHeader.add(tableHeaderItemWidget);
       }
@@ -174,7 +176,10 @@ class _ScrollableGridState extends State<_ScrollableGrid> {
         child: Column(
           children: [
             SizedBox(
-                height: widget.tableHeadHeight, width: firstColumnWidth, child: Center(child: _getTableHeadItemWidget(fixedFirstColumnTableColumn.getTitle()))),
+              height: widget.tableHeadHeight,
+              width: firstColumnWidth,
+              child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [_getTableHeadItemWidget(fixedFirstColumnTableColumn)]),
+            ),
             const _TextColoredDivider(),
             Expanded(
               child: ScrollConfiguration(
@@ -239,13 +244,13 @@ class _ScrollableGridState extends State<_ScrollableGrid> {
     );
   }
 
-  Widget _getTableHeadItemWidget(String columnTitle) {
+  Widget _getTableHeadItemWidget(TableColumn tableColumn) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: OverflowText(
         expanded: false,
-        columnTitle,
-        textAlign: TextAlign.center,
+        tableColumn.getTitle(),
+        textAlign: tableColumn.textAlign ?? TextAlign.center,
       ),
     );
   }
