@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
@@ -114,7 +116,7 @@ class ChartUtilsBloodPressure {
             minIncluded: true,
             // https://www.reddit.com/r/flutterhelp/comments/rhb7iu/fl_chart_set_time_series_interval_in_linechart/?rdt=36768
             // interval: (chartMetaData.xMax - chartMetaData.xMin),
-            interval: (lowValues.last.x - lowValues.first.x),
+            interval: math.max(1, lowValues.last.x - lowValues.first.x),
             getTitlesWidget: (value, meta) {
               if (value == meta.min) {
                 // use chartMetaData min/max - not the value which has padding!
