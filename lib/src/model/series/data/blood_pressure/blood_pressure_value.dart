@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../../../util/color_utils.dart';
 import '../series_data_value.dart';
@@ -14,16 +15,16 @@ class BloodPressureValue extends SeriesDataValue {
   }
 
   factory BloodPressureValue.fromJson(Map<String, dynamic> json) => BloodPressureValue(
-        json['uuid'] as String,
-        DateTime.fromMillisecondsSinceEpoch(json['dateTime'] as int),
+        json['uuid'] as String? ?? const Uuid().v4().toString(),
+        DateTime.fromMillisecondsSinceEpoch(json['utcMs'] as int),
         json['high'] as int,
         json['low'] as int,
       );
 
   @override
-  Map<String, dynamic> toJson() => {
-        'uuid': uuid,
-        'dateTime': dateTime.millisecondsSinceEpoch,
+  Map<String, dynamic> toJson({bool exportUuid = true}) => {
+        if (exportUuid) 'uuid': uuid,
+        'utcMs': dateTime.millisecondsSinceEpoch,
         'high': high,
         'low': low,
       };

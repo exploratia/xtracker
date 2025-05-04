@@ -8,7 +8,7 @@ abstract class SeriesDataValue {
 
   SeriesDataValue(this.uuid, this.dateTime);
 
-  Map<String, dynamic> toJson();
+  Map<String, dynamic> toJson({bool exportUuid = true});
 
   static SeriesDataValue fromJson(Map<String, dynamic> json, SeriesType seriesType) {
     return switch (seriesType) {

@@ -19,6 +19,25 @@ class SeriesData<T extends SeriesDataValue> {
 
   SeriesData(this.seriesDefUuid, this.seriesItems);
 
+  Map<String, dynamic> toJson({bool exportUuid = true}) => {
+        'uuid': seriesDefUuid,
+        'seriesItems': [
+          ...seriesItems.map(
+            (e) => e.toJson(exportUuid: exportUuid),
+          )
+        ],
+      };
+
+  static SeriesData<BloodPressureValue> fromJsonBloodPressureData(Map<String, dynamic> json) => SeriesData(
+        json['uuid'] as String,
+        [...(json['seriesItems'] as List<dynamic>).map((e) => BloodPressureValue.fromJson(e))],
+      );
+
+  static SeriesData<DailyCheckValue> fromJsonDailyCheckData(Map<String, dynamic> json) => SeriesData(
+        json['uuid'] as String,
+        [...(json['seriesItems'] as List<dynamic>).map((e) => DailyCheckValue.fromJson(e))],
+      );
+
   bool isEmpty() {
     return seriesItems.isEmpty;
   }

@@ -1,3 +1,5 @@
+import 'package:uuid/uuid.dart';
+
 import '../series_data_value.dart';
 
 class DailyCheckValue extends SeriesDataValue {
@@ -9,12 +11,14 @@ class DailyCheckValue extends SeriesDataValue {
     return DailyCheckValue(uuid, dateTime);
   }
 
-  factory DailyCheckValue.fromJson(Map<String, dynamic> json) =>
-      DailyCheckValue(json['uuid'] as String, DateTime.fromMillisecondsSinceEpoch(json['dateTime'] as int));
+  factory DailyCheckValue.fromJson(Map<String, dynamic> json) => DailyCheckValue(
+        json['uuid'] as String? ?? const Uuid().v4().toString(),
+        DateTime.fromMillisecondsSinceEpoch(json['utcMs'] as int),
+      );
 
   @override
-  Map<String, dynamic> toJson() => {
-        'uuid': uuid,
-        'dateTime': dateTime.millisecondsSinceEpoch,
+  Map<String, dynamic> toJson({bool exportUuid = true}) => {
+        if (exportUuid) 'uuid': uuid,
+        'utcMs': dateTime.millisecondsSinceEpoch,
       };
 }
