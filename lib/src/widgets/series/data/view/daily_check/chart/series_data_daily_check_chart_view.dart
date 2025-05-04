@@ -22,7 +22,7 @@ class SeriesDataDailyCheckChartView extends StatelessWidget {
 
     List<CombinedValue> combinedSeriesData = [];
     CombinedValue? actCombinedValue;
-    for (var seriesItem in seriesData.seriesItems) {
+    for (var seriesItem in seriesData.data) {
       var dateTime = seriesViewMetaData.showYearly ? DateTimeUtils.firstDayOfYear(seriesItem.dateTime) : DateTimeUtils.firstDayOfMonth(seriesItem.dateTime);
       if (actCombinedValue == null || actCombinedValue.dateTime != dateTime) {
         actCombinedValue = CombinedValue(dateTime);

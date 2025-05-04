@@ -161,7 +161,12 @@
             "importSeriesTip": "Tip: To import data from external sources, first create a matching series yourself and export it.\nThen, add your own data to this exported file and import it again. This ensures the correct format is used."
           },
           "msg": {
-            "exportSuccessful": "Export successful..."
+            "exportSuccessful": "Export successful...",
+            "importSuccessful": "Import successful...",
+            "error": {
+              "unexpectedFileOrDataStructure": "Unexpected file or file structure.",
+              "unexpectedDataStructure": "Unexpected file structure."
+            }
           }
         }
       }

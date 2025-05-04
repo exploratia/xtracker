@@ -161,7 +161,12 @@
             "importSeriesTip": "Tipp: Um Daten aus externen Quellen zu importieren, erstelle zunächst eine passende eigene Messreihe und exportiere sie.\nFüge dann Daten in diese exportierte Datei ein und importiere sie wieder. So wird sicher gestellt, dass das Format korrekt ist."
           },
           "msg": {
-            "exportSuccessful": "Export erfolgreich..."
+            "exportSuccessful": "Export erfolgreich...",
+            "importSuccessful": "Import erfolgreich...",
+            "error": {
+              "unexpectedFileOrDataStructure": "Unerwartete Datei oder Dateistruktur.",
+              "unexpectedDataStructure": "Unerwartete Dateistruktur."
+            }
           }
         }
       }

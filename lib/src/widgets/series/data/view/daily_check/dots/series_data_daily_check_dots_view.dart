@@ -19,9 +19,9 @@ class SeriesDataDailyCheckDotsView extends StatelessWidget {
     final Map<String, _DailyCheckDayItem> data = _buildDataProvider(seriesData);
     DateTime minDateTime = DateTime.now();
     DateTime maxDateTime = DateTime.now();
-    if (seriesData.seriesItems.isNotEmpty) {
-      minDateTime = seriesData.seriesItems.first.dateTime;
-      maxDateTime = seriesData.seriesItems.last.dateTime;
+    if (seriesData.data.isNotEmpty) {
+      minDateTime = seriesData.data.first.dateTime;
+      maxDateTime = seriesData.data.last.dateTime;
     }
 
     var color1 = seriesViewMetaData.seriesDef.color;
@@ -44,7 +44,7 @@ class SeriesDataDailyCheckDotsView extends StatelessWidget {
   Map<String, _DailyCheckDayItem> _buildDataProvider(SeriesData<DailyCheckValue> seriesData) {
     Map<String, _DailyCheckDayItem> map = {};
 
-    for (var item in seriesData.seriesItems) {
+    for (var item in seriesData.data) {
       String dateDay = DateTimeUtils.formateDate(item.dateTime);
       map[dateDay] = _DailyCheckDayItem(dateTime: item.dateTime);
     }

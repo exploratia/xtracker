@@ -21,4 +21,10 @@ class DailyCheckValue extends SeriesDataValue {
         if (exportUuid) 'uuid': uuid,
         'utcMs': dateTime.millisecondsSinceEpoch,
       };
+
+  static DailyCheckValue checkOnDailyCheckValue(value) {
+    if (value is DailyCheckValue) return value;
+    var errMsg = 'Failure for series value: Type mismatch! Expected: "$DailyCheckValue", got: "${value.runtimeType}"';
+    throw Exception(errMsg);
+  }
 }

@@ -139,9 +139,21 @@ class SeriesDataProvider with ChangeNotifier {
     return seriesData;
   }
 
+  SeriesData<BloodPressureValue> requireBloodPressureData(SeriesDef seriesDef) {
+    var seriesData = bloodPressureData(seriesDef);
+    _checkOnSeriesData(seriesData, seriesDef);
+    return seriesData!;
+  }
+
   SeriesData<DailyCheckValue>? dailyCheckData(SeriesDef seriesDef) {
     var seriesData = _uuid2seriesDataDailyCheck[seriesDef.uuid];
     return seriesData;
+  }
+
+  SeriesData<DailyCheckValue> requireDailyCheckData(SeriesDef seriesDef) {
+    var seriesData = dailyCheckData(seriesDef);
+    _checkOnSeriesData(seriesData, seriesDef);
+    return seriesData!;
   }
 
   Future<void> addValue(SeriesDef seriesDef, dynamic value, BuildContext context) async {
@@ -162,59 +174,62 @@ class SeriesDataProvider with ChangeNotifier {
     await fetchDataIfNotYetLoaded(seriesDef);
     var store = Stores.getOrCreateSeriesDataStore(seriesDef);
 
+    SeriesData seriesData;
+
     switch (seriesDef.seriesType) {
       case SeriesType.bloodPressure:
-        if (value is! BloodPressureValue) {
-          var errMsg = 'Failure on storing series value: Type mismatch! Expected: "$BloodPressureValue", got: "${value.runtimeType}"';
-          SimpleLogging.w(errMsg);
-          throw Exception(errMsg);
-        }
-        var seriesData = _uuid2seriesDataBloodPressure[seriesDef.uuid];
-        if (seriesData == null) {
-          var errMsg = "Failed to create/load series data for ${seriesDef.name} (type: ${seriesDef.seriesType.typeName})!";
-          SimpleLogging.w(errMsg);
-          throw Exception(errMsg);
-        }
-        if (action == _Action.insert) {
-          seriesData.insert(value);
-          await store.save(value);
-          await seriesCurrentValueProvider.save(seriesDef, value);
-        } else if (action == _Action.update) {
-          seriesData.update(value);
-          await store.save(value);
-          await seriesCurrentValueProvider.save(seriesDef, value);
-        } else if (action == _Action.delete) {
-          seriesData.delete(value);
-          await store.delete(value);
-          await seriesCurrentValueProvider.deleteValue(seriesDef, value);
-        }
-        seriesData.sort();
+        BloodPressureValue.checkOnBloodPressureValue(value);
+        seriesData = requireBloodPressureData(seriesDef);
       case SeriesType.dailyCheck:
-        if (value is! DailyCheckValue) {
-          var errMsg = 'Failure on storing series value: Type mismatch! Expected: "$DailyCheckValue", got: "${value.runtimeType}"';
-          SimpleLogging.w(errMsg);
-          throw Exception(errMsg);
-        }
-        var seriesData = _uuid2seriesDataDailyCheck[seriesDef.uuid];
-        if (seriesData == null) {
-          var errMsg = "Failed to create/load series data for ${seriesDef.name} (type: ${seriesDef.seriesType.typeName})!";
-          SimpleLogging.w(errMsg);
-          throw Exception(errMsg);
-        }
-        if (action == _Action.insert) {
-          seriesData.insert(value);
-          await store.save(value);
-          await seriesCurrentValueProvider.save(seriesDef, value);
-        } else if (action == _Action.update) {
-          seriesData.update(value);
-          await store.save(value);
-          await seriesCurrentValueProvider.save(seriesDef, value);
-        } else if (action == _Action.delete) {
-          seriesData.delete(value);
-          await store.delete(value);
-          await seriesCurrentValueProvider.deleteValue(seriesDef, value);
-        }
+        DailyCheckValue.checkOnDailyCheckValue(value);
+        seriesData = requireDailyCheckData(seriesDef);
+      case SeriesType.monthly:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+      case SeriesType.free:
+        // TODO: Handle this case.
+        throw UnimplementedError();
+    }
+
+    if (action == _Action.insert) {
+      seriesData.insert(value);
+      await store.save(value);
+      await seriesCurrentValueProvider.save(seriesDef, value);
+    } else if (action == _Action.update) {
+      seriesData.update(value);
+      await store.save(value);
+      await seriesCurrentValueProvider.save(seriesDef, value);
+    } else if (action == _Action.delete) {
+      seriesData.delete(value);
+      await store.delete(value);
+      await seriesCurrentValueProvider.deleteValue(seriesDef, value);
+    }
+    seriesData.sort();
+
+    notifyListeners();
+  }
+
+  Future<void> addValues(SeriesDef seriesDef, List<dynamic> values, BuildContext context) async {
+    SeriesCurrentValueProvider seriesCurrentValueProvider = context.read<SeriesCurrentValueProvider>();
+
+    await fetchDataIfNotYetLoaded(seriesDef);
+    var store = Stores.getOrCreateSeriesDataStore(seriesDef);
+
+    switch (seriesDef.seriesType) {
+      case SeriesType.bloodPressure:
+        var seriesData = requireBloodPressureData(seriesDef);
+        seriesData.insertAll(values.map(BloodPressureValue.checkOnBloodPressureValue));
         seriesData.sort();
+        await store.saveAll(seriesData.data);
+        var latest = seriesData.data.lastOrNull;
+        if (latest != null) await seriesCurrentValueProvider.save(seriesDef, latest);
+      case SeriesType.dailyCheck:
+        var seriesData = requireDailyCheckData(seriesDef);
+        seriesData.insertAll(values.map(DailyCheckValue.checkOnDailyCheckValue));
+        seriesData.sort();
+        await store.saveAll(seriesData.data);
+        var latest = seriesData.data.lastOrNull;
+        if (latest != null) await seriesCurrentValueProvider.save(seriesDef, latest);
       case SeriesType.monthly:
         // TODO: Handle this case.
         throw UnimplementedError();
@@ -224,6 +239,14 @@ class SeriesDataProvider with ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  void _checkOnSeriesData(SeriesData? seriesData, SeriesDef seriesDef) {
+    if (seriesData == null) {
+      var errMsg = "Failed to create/load series data for ${seriesDef.name} (type: ${seriesDef.seriesType.typeName})!";
+      SimpleLogging.w(errMsg);
+      throw Exception(errMsg);
+    }
   }
 }
 

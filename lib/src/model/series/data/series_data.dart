@@ -15,61 +15,65 @@ class SeriesData<T extends SeriesDataValue> {
   /// same as in SeriesDef
   final String seriesDefUuid;
 
-  final List<T> seriesItems;
+  final List<T> data;
 
-  SeriesData(this.seriesDefUuid, this.seriesItems);
+  SeriesData(this.seriesDefUuid, this.data);
 
   Map<String, dynamic> toJson({bool exportUuid = true}) => {
         'uuid': seriesDefUuid,
-        'seriesItems': [
-          ...seriesItems.map(
-            (e) => e.toJson(exportUuid: exportUuid),
-          )
-        ],
+        'data': [...data.map((e) => e.toJson(exportUuid: exportUuid))],
       };
 
   static SeriesData<BloodPressureValue> fromJsonBloodPressureData(Map<String, dynamic> json) => SeriesData(
         json['uuid'] as String,
-        [...(json['seriesItems'] as List<dynamic>).map((e) => BloodPressureValue.fromJson(e))],
+        [...(json['data'] as List<dynamic>).map((e) => BloodPressureValue.fromJson(e))],
       );
 
   static SeriesData<DailyCheckValue> fromJsonDailyCheckData(Map<String, dynamic> json) => SeriesData(
         json['uuid'] as String,
-        [...(json['seriesItems'] as List<dynamic>).map((e) => DailyCheckValue.fromJson(e))],
+        [...(json['data'] as List<dynamic>).map((e) => DailyCheckValue.fromJson(e))],
       );
 
+  // TODO implement other series
+
   bool isEmpty() {
-    return seriesItems.isEmpty;
+    return data.isEmpty;
   }
 
   void insert(T value) {
-    seriesItems.add(value);
+    data.add(value);
+    // sort - probably not necessary but maybe date could also be set?
+    sort();
+  }
+
+  void insertAll(Iterable<T> values) {
+    data.addAll(values);
     // sort - probably not necessary but maybe date could also be set?
     sort();
   }
 
   void sort() {
-    seriesItems.sort((a, b) => a.dateTime.millisecondsSinceEpoch.compareTo(b.dateTime.millisecondsSinceEpoch));
+    data.sort((a, b) => a.dateTime.millisecondsSinceEpoch.compareTo(b.dateTime.millisecondsSinceEpoch));
   }
 
   void update(T value) {
-    var idx = seriesItems.indexWhere((element) => element.uuid == value.uuid);
+    var idx = data.indexWhere((element) => element.uuid == value.uuid);
     if (idx < 0) return;
-    seriesItems.removeAt(idx);
-    seriesItems.insert(idx, value);
+    data.removeAt(idx);
+    data.insert(idx, value);
   }
 
   void delete(T value) {
-    seriesItems.remove(value);
+    data.remove(value);
   }
 
   void deleteById(String uuid) {
-    seriesItems.removeWhere((element) => element.uuid == uuid);
+    data.removeWhere((element) => element.uuid == uuid);
   }
 
   /// returns reduced copy (must not be used edit)
   SeriesData<T> reduceToNewerThen(DateTime dateTime) {
-    List<T> reducedSeriesItems = seriesItems.where((item) => item.dateTime.isAfter(dateTime)).toList();
+    List<T> reducedSeriesItems = data.where((item) => item.dateTime.isAfter(dateTime)).toList();
     return SeriesData(seriesDefUuid, reducedSeriesItems);
   }
 

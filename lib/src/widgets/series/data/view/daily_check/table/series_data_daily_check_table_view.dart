@@ -74,7 +74,7 @@ class SeriesDataDailyCheckTableView extends StatelessWidget {
     List<_DailyCheckDayItem> list = [];
     _DailyCheckDayItem? actItem;
 
-    for (var item in seriesData.seriesItems.reversed) {
+    for (var item in seriesData.data.reversed) {
       String dateDay = DateTimeUtils.formateDate(item.dateTime);
       if (actItem == null || actItem.date != dateDay) {
         if (actItem != null) {

@@ -20,9 +20,9 @@ class SeriesDataBloodPressureDotsView extends StatelessWidget {
     final Map<String, _BloodPressureDayItem> data = _buildDataProvider(seriesData);
     DateTime minDateTime = DateTime.now();
     DateTime maxDateTime = DateTime.now();
-    if (seriesData.seriesItems.isNotEmpty) {
-      minDateTime = seriesData.seriesItems.first.dateTime;
-      maxDateTime = seriesData.seriesItems.last.dateTime;
+    if (seriesData.data.isNotEmpty) {
+      minDateTime = seriesData.data.first.dateTime;
+      maxDateTime = seriesData.data.last.dateTime;
     }
 
     painterFnc(_BloodPressureDayItem dataItem, Canvas canvas, Offset topLeft, Offset bottomRight) {
@@ -42,7 +42,7 @@ class SeriesDataBloodPressureDotsView extends StatelessWidget {
   Map<String, _BloodPressureDayItem> _buildDataProvider(SeriesData<BloodPressureValue> seriesData) {
     Map<String, _BloodPressureDayItem> map = {};
 
-    for (var item in seriesData.seriesItems) {
+    for (var item in seriesData.data) {
       String dateDay = DateTimeUtils.formateDate(item.dateTime);
       _BloodPressureDayItem? actItem = map[dateDay];
       if (actItem == null) {

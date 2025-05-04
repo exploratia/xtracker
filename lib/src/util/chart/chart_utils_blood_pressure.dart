@@ -25,7 +25,7 @@ class ChartUtilsBloodPressure {
     int lowMin = 200;
     int lowMax = 0;
 
-    for (var item in seriesData.seriesItems) {
+    for (var item in seriesData.data) {
       var lowVal = item.low;
       var highVal = item.high;
       var t = item.dateTime.millisecondsSinceEpoch;

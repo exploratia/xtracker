@@ -46,4 +46,10 @@ class BloodPressureValue extends SeriesDataValue {
   static Color colorLowOf(BloodPressureValue bloodPressureValue) {
     return colorLow(bloodPressureValue.low);
   }
+
+  static BloodPressureValue checkOnBloodPressureValue(value) {
+    if (value is BloodPressureValue) return value;
+    var errMsg = 'Failure for series value: Type mismatch! Expected: "$BloodPressureValue", got: "${value.runtimeType}"';
+    throw Exception(errMsg);
+  }
 }

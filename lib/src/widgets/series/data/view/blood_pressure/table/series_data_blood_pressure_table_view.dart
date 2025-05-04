@@ -74,7 +74,7 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
     List<_BloodPressureDayItem> list = [];
     _BloodPressureDayItem? actItem;
 
-    for (var item in seriesData.seriesItems.reversed) {
+    for (var item in seriesData.data.reversed) {
       String dateDay = DateTimeUtils.formateDate(item.dateTime);
       if (actItem == null || actItem.date != dateDay) {
         if (actItem != null) {

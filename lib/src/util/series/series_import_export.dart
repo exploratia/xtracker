@@ -7,12 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../generated/locale_keys.g.dart';
+import '../../model/series/data/series_data.dart';
 import '../../model/series/series_def.dart';
+import '../../model/series/series_type.dart';
 import '../../providers/series_data_provider.dart';
 import '../../providers/series_provider.dart';
 import '../../widgets/layout/single_child_scroll_view_with_scrollbar.dart';
 import '../date_time_utils.dart';
 import '../dialogs.dart';
+import '../logging/flutter_simple_logging.dart';
 
 class SeriesImportExport {
   static Future<Map<String, dynamic>> _buildSeriesExportJson(SeriesDef seriesDef, BuildContext context) async {
@@ -81,6 +84,83 @@ class SeriesImportExport {
     if (context.mounted) Navigator.of(context).pop();
   }
 
+  /// import series with data from json
+  static Future<void> _importSeries(Map<String, dynamic> json, BuildContext context) async {
+    if (json["type"] as String == "seriesExport") {
+      var seriesProvider = context.read<SeriesProvider>();
+      var seriesDataProvider = context.read<SeriesDataProvider>();
+      // check version...
+      var seriesDef = SeriesDef.fromJson(json["seriesDef"] as Map<String, dynamic>);
+      SeriesData seriesData;
+      switch (seriesDef.seriesType) {
+        case SeriesType.bloodPressure:
+          seriesData = SeriesData.fromJsonBloodPressureData(json["seriesData"] as Map<String, dynamic>);
+        case SeriesType.dailyCheck:
+          seriesData = SeriesData.fromJsonDailyCheckData(json["seriesData"] as Map<String, dynamic>);
+        case SeriesType.monthly:
+          // TODO: Handle this case.
+          throw UnimplementedError();
+        case SeriesType.free:
+          // TODO: Handle this case.
+          throw UnimplementedError();
+      }
+      await seriesProvider.delete(seriesDef, context);
+      await seriesProvider.save(seriesDef);
+      if (context.mounted) await seriesDataProvider.addValues(seriesDef, seriesData.data, context);
+    } else {
+      throw Exception(LocaleKeys.series_management_importExport_dialog_msg_error_unexpectedFileOrDataStructure.tr());
+    }
+  }
+
+  /// import series with data
+  static Future<void> _importJsonFile(BuildContext context) async {
+    try {
+      // https://pub.dev/packages/file_picker
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        allowMultiple: true,
+        type: FileType.custom,
+        allowedExtensions: ['json'],
+      );
+      if (result != null) {
+        // PlatformFile file = result.files.first;
+        // print(file.name);
+        // print(file.bytes);
+        // print(file.size); // check file size?
+        // print(file.extension);
+        // print(file.path);
+
+        for (var file in result.xFiles) {
+          var fileContent = await file.readAsString(); // utf8
+          var json = jsonDecode(fileContent) as Map<String, dynamic>;
+
+          if (json["type"] as String == "multiSeriesExport") {
+            // check version...
+            List<dynamic> seriesList = json["series"] as List<dynamic>;
+            for (var seriesJson in seriesList) {
+              if (seriesJson is Map<String, dynamic>) {
+                if (context.mounted) await _importSeries(seriesJson, context);
+              } else {
+                throw Exception(LocaleKeys.series_management_importExport_dialog_msg_error_unexpectedDataStructure.tr());
+              }
+            }
+          } else if (json["type"] as String == "seriesExport") {
+            if (context.mounted) await _importSeries(json, context);
+          } else {
+            throw Exception(LocaleKeys.series_management_importExport_dialog_msg_error_unexpectedFileOrDataStructure.tr());
+          }
+        }
+
+        if (context.mounted) Dialogs.showSnackBar(LocaleKeys.series_management_importExport_dialog_msg_importSuccessful.tr(), context);
+      } else {
+        // User canceled the picker
+      }
+    } catch (ex, st) {
+      SimpleLogging.w(ex.toString(), stackTrace: st);
+      if (context.mounted) Dialogs.showSnackBar(ex.toString(), context);
+    }
+    if (context.mounted) Navigator.of(context).pop();
+  }
+
   static Future<void> showImportExportDlg(BuildContext context) async {
     final themeData = Theme.of(context);
     Widget dialogContent = SingleChildScrollViewWithScrollbar(
@@ -98,7 +178,11 @@ class SeriesImportExport {
           Text(style: themeData.textTheme.labelMedium, LocaleKeys.series_management_importExport_dialog_label_exportSeries.tr()),
           Text(style: themeData.textTheme.labelMedium, LocaleKeys.series_management_importExport_dialog_label_exportSeriesTip.tr()),
           const Divider(),
-          ElevatedButton(onPressed: () {}, child: Text(LocaleKeys.series_management_importExport_dialog_btn_importSeries.tr())),
+          ElevatedButton(
+              onPressed: () async {
+                await _importJsonFile(context);
+              },
+              child: Text(LocaleKeys.series_management_importExport_dialog_btn_importSeries.tr())),
           Text(style: themeData.textTheme.labelMedium, LocaleKeys.series_management_importExport_dialog_label_importSeries.tr()),
           Text(style: themeData.textTheme.labelMedium, LocaleKeys.series_management_importExport_dialog_label_importSeriesTip.tr()),
         ],
