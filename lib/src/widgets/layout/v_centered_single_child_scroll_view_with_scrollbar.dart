@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import '../navigation/hide_bottom_navigation_bar.dart';
@@ -23,7 +25,7 @@ class VCenteredSingleChildScrollViewWithScrollbar extends StatelessWidget {
               scrollPositionHandler: HideBottomNavigationBar.setScrollPosition,
               onRefreshCallback: onRefreshCallback,
               child: Container(
-                constraints: BoxConstraints(minHeight: constraints.maxHeight - 32) /*-padding*/,
+                constraints: BoxConstraints(minHeight: math.max(20, constraints.maxHeight - 32)) /*-padding*/,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
