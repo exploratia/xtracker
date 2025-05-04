@@ -25,6 +25,18 @@ class SeriesDef {
     return 'SeriesDef{uuid: $uuid, seriesType: $seriesType, name: $name, color: $color, iconName: $iconName}';
   }
 
+  /// returns act/expected json version per series type (to be able to handle different parsings depending on version)
+  ///
+  /// 1: initial (all)
+  static int seriesDefVersionByType(SeriesDef seriesDef) {
+    return switch (seriesDef.seriesType) {
+      SeriesType.bloodPressure => 1,
+      SeriesType.dailyCheck => 1,
+      SeriesType.monthly => 1,
+      SeriesType.free => 1,
+    };
+  }
+
   Icon icon() {
     return Icon(iconData(), color: color);
   }
@@ -49,6 +61,9 @@ class SeriesDef {
         'name': name,
         'color': ColorUtils.toHex(color),
         'iconName': iconName,
+        // type & version - could be used for parsing
+        'type': 'seriesDef',
+        'version': seriesDefVersionByType(this),
       };
 
   static Future<SeriesDef?> addNewSeries(BuildContext context) async {
