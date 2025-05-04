@@ -9,7 +9,13 @@ class StoresUtils {
   static Future<void> initDb() async {
     if (kIsWeb) {
       DatabaseFactory dbFactory = databaseFactoryWeb;
-      db = await dbFactory.openDatabase('app_store', version: 1);
+      db = await dbFactory.openDatabase(
+        'app_store',
+        version: 1,
+        onVersionChanged: (db, oldVersion, newVersion) {
+          // implement migration if necessary
+        },
+      );
     } else {
       final appDir = await getApplicationDocumentsDirectory();
       final dbPath = '${appDir.path}/app_store.db';
