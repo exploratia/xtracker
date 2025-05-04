@@ -177,6 +177,7 @@ class _SeriesEditor extends StatelessWidget {
           decoration: InputDecoration(labelText: LocaleKeys.series_edit_labels_seriesName.tr()),
           textInputAction: TextInputAction.next,
           initialValue: seriesDef.name,
+          // unicode is possible - e.g. from https://www.compart.com/de/unicode/block/U+1F600
           validator: (value) {
             if (value == null || value.isEmpty) {
               return LocaleKeys.commons_validator_msg_emptyValue.tr();
