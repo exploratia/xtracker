@@ -119,14 +119,12 @@ class _ExportSeriesDataBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     handler() async {
-      var seriesDataProvider = context.read<SeriesDataProvider>();
-      await seriesDataProvider.fetchDataIfNotYetLoaded(seriesDef);
-      var seriesData = seriesDataProvider.seriesData(seriesDef);
-      if (seriesData == null) {
-        if (context.mounted) Dialogs.showSnackBar("Failed to export series - no series data found!", context); // should never happen
-        return;
+      try {
+        await SeriesImportExport.exportSeriesDef(seriesDef, context);
+        if (context.mounted) Dialogs.showSnackBar(LocaleKeys.series_management_importExport_dialog_msg_exportSuccessful.tr(), context);
+      } catch (ex) {
+        if (context.mounted) Dialogs.showSnackBar(ex.toString(), context);
       }
-      await SeriesImportExport.exportSeries(seriesDef, seriesData);
     }
 
     return IconButton(onPressed: handler, icon: const Icon(Icons.download_outlined));
