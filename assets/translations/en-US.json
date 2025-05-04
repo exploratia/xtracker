@@ -120,7 +120,14 @@
           }
         }
       },
-      "noData": "This series contains no data yet..."
+      "noData": "This series contains no data yet...",
+      "dialog": {
+        "msg": {
+          "query": {
+            "deleteSeriesData": "Do you really want to delete the series '{}' data?"
+          }
+        }
+      }
     },
     "dialog": {
       "msg": {

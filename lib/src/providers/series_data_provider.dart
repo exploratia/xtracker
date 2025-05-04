@@ -109,8 +109,13 @@ class SeriesDataProvider with ChangeNotifier {
     }
   }
 
-  Future<void> delete(SeriesDef seriesDef) async {
+  Future<void> delete(SeriesDef seriesDef, BuildContext context) async {
+    SeriesCurrentValueProvider seriesCurrentValueProvider = context.read<SeriesCurrentValueProvider>();
+
+    // delete current value
+    await seriesCurrentValueProvider.delete(seriesDef);
     //  await Future.delayed(const Duration(seconds: 10)); // for testing
+
     await Stores.dropSeriesDataStore(seriesDef);
     _uuid2seriesDataBloodPressure.remove(seriesDef.uuid);
     _uuid2seriesDataDailyCheck.remove(seriesDef.uuid);

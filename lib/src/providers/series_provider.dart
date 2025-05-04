@@ -89,7 +89,9 @@ class SeriesProvider with ChangeNotifier {
     await seriesCurrentValueProvider.delete(seriesDef);
 
     // delete series data
-    await seriesDataProvider.delete(seriesDef);
+    if (context.mounted) {
+      await seriesDataProvider.delete(seriesDef, context);
+    }
 
     await _storeSeriesDef.delete(seriesDef);
     await fetchData();

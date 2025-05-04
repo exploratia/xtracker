@@ -53,6 +53,7 @@ abstract class  LocaleKeys {
   static const series_data_title = 'series.data.title';
   static const series_data_input_dialog_msg_query_deleteValue = 'series.data.input.dialog.msg.query.deleteValue';
   static const series_data_noData = 'series.data.noData';
+  static const series_data_dialog_msg_query_deleteSeriesData = 'series.data.dialog.msg.query.deleteSeriesData';
   static const series_dialog_msg_query_deleteSeries = 'series.dialog.msg.query.deleteSeries';
   static const series_edit_title = 'series.edit.title';
   static const series_edit_labels_seriesName = 'series.edit.labels.seriesName';

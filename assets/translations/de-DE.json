@@ -120,7 +120,14 @@
           }
         }
       },
-      "noData": "Diese Messreihe enthält noch keine Daten..."
+      "noData": "Diese Messreihe enthält noch keine Daten...",
+      "dialog": {
+        "msg": {
+          "query": {
+            "deleteSeriesData": "Die Daten der Messreihe '{}' wirklich löschen?"
+          }
+        }
+      }
     },
     "dialog": {
       "msg": {
