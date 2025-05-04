@@ -11,14 +11,17 @@ class SeriesActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      spacing: 8,
-      children: [
-        Container(color: seriesDef.color, width: 2, height: 40),
-        _ShowSeriesDataBtn(seriesDef: seriesDef),
-        _ShowSeriesDataInputDlgBtn(seriesDef: seriesDef),
-      ],
+    return Material(
+      color: Colors.transparent,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        spacing: 8,
+        children: [
+          Container(color: seriesDef.color, width: 2, height: 40),
+          _ShowSeriesDataBtn(seriesDef: seriesDef),
+          _ShowSeriesDataInputDlgBtn(seriesDef: seriesDef),
+        ],
+      ),
     );
   }
 }

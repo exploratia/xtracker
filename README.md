@@ -146,6 +146,14 @@ https://pub.dev/packages/sembast_web
 (for desktop
 https://pub.dev/packages/sembast_sqflite)
 
+### File Picker
+
+https://pub.dev/packages/file_picker
+
+#### Setup
+
+https://github.com/miguelpruivo/flutter_file_picker/wiki/Setup
+
 ### Launcher icon (dev)
 
 https://pub.dev/packages/flutter_launcher_icons

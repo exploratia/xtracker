@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:easy_localization/easy_localization.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,20 +19,24 @@ class SeriesManagementActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Container(color: seriesDef.color, width: 2, height: 40),
-        _EditSeriesBtn(seriesDef: seriesDef),
-        _ClearSeriesDataBtn(seriesDef: seriesDef),
-        _DeleteSeriesBtn(seriesDef: seriesDef),
-        if (!kIsWeb)
-          const Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Icon(Icons.drag_handle_outlined),
-          ),
-        if (kIsWeb) const SizedBox(width: 16),
-      ],
+    return Material(
+      color: Colors.transparent,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Container(color: seriesDef.color, width: 2, height: 40),
+          _EditSeriesBtn(seriesDef: seriesDef),
+          _ExportSeriesDataBtn(seriesDef: seriesDef),
+          _ClearSeriesDataBtn(seriesDef: seriesDef),
+          _DeleteSeriesBtn(seriesDef: seriesDef),
+          if (!kIsWeb)
+            const Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Icon(Icons.drag_handle_outlined),
+            ),
+          if (kIsWeb) const SizedBox(width: 16),
+        ],
+      ),
     );
   }
 }
@@ -94,12 +101,39 @@ class _ClearSeriesDataBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     handler() async {
-      var result = await Dialogs.simpleYesNoDialog(LocaleKeys.series_data_dialog_msg_query_deleteSeriesData, context);
+      var result = await Dialogs.simpleYesNoDialog(LocaleKeys.series_data_dialog_msg_query_deleteSeriesData.tr(args: [seriesDef.name]), context);
       if (result != null && result && context.mounted) {
         await context.read<SeriesDataProvider>().delete(seriesDef, context);
       }
     }
 
     return IconButton(onPressed: handler, icon: const Icon(Icons.highlight_remove_outlined));
+  }
+}
+
+class _ExportSeriesDataBtn extends StatelessWidget {
+  const _ExportSeriesDataBtn({
+    required this.seriesDef,
+  });
+
+  final SeriesDef seriesDef;
+
+  @override
+  Widget build(BuildContext context) {
+    handler() async {
+      var enc = const Utf8Encoder();
+      // TODO build json string from series + data / json encode?
+      Uint8List bytes = enc.convert('{"a":1"}');
+
+      // https://pub.dev/packages/file_picker
+      String? outputFile = await FilePicker.platform.saveFile(
+          dialogTitle: 'Please select an output file:', fileName: 'output-file.json', type: FileType.custom, allowedExtensions: ["json"], bytes: bytes);
+
+      if (outputFile == null) {
+        // User canceled the picker
+      }
+    }
+
+    return IconButton(onPressed: handler, icon: const Icon(Icons.download_outlined));
   }
 }

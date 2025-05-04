@@ -55,6 +55,9 @@ dependencies:
   sembast: ^3.8.3
   sembast_web: ^2.4.0+4
 
+  # file picker
+  file_picker: ^10.1.2
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
