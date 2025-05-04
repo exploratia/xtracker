@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:easy_localization/easy_localization.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +8,7 @@ import '../../../model/series/series_def.dart';
 import '../../../providers/series_data_provider.dart';
 import '../../../providers/series_provider.dart';
 import '../../../util/dialogs.dart';
+import '../../../util/series/series_import_export.dart';
 
 class SeriesManagementActions extends StatelessWidget {
   const SeriesManagementActions({super.key, required this.seriesDef});
@@ -121,17 +119,14 @@ class _ExportSeriesDataBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     handler() async {
-      var enc = const Utf8Encoder();
-      // TODO build json string from series + data / json encode?
-      Uint8List bytes = enc.convert('{"a":1"}');
-
-      // https://pub.dev/packages/file_picker
-      String? outputFile = await FilePicker.platform.saveFile(
-          dialogTitle: 'Please select an output file:', fileName: 'output-file.json', type: FileType.custom, allowedExtensions: ["json"], bytes: bytes);
-
-      if (outputFile == null) {
-        // User canceled the picker
+      var seriesDataProvider = context.read<SeriesDataProvider>();
+      await seriesDataProvider.fetchDataIfNotYetLoaded(seriesDef);
+      var seriesData = seriesDataProvider.seriesData(seriesDef);
+      if (seriesData == null) {
+        if (context.mounted) Dialogs.showSnackBar("Failed to export series - no series data found!", context); // should never happen
+        return;
       }
+      await SeriesImportExport.exportSeries(seriesDef, seriesData);
     }
 
     return IconButton(onPressed: handler, icon: const Icon(Icons.download_outlined));

@@ -123,6 +123,17 @@ class SeriesDataProvider with ChangeNotifier {
     notifyListeners();
   }
 
+  SeriesData? seriesData(SeriesDef seriesDef) {
+    return switch (seriesDef.seriesType) {
+      SeriesType.bloodPressure => bloodPressureData(seriesDef),
+      SeriesType.dailyCheck => dailyCheckData(seriesDef),
+      // TODO: Handle this case.
+      SeriesType.monthly => throw UnimplementedError(),
+      // TODO: Handle this case.
+      SeriesType.free => throw UnimplementedError(),
+    };
+  }
+
   SeriesData<BloodPressureValue>? bloodPressureData(SeriesDef seriesDef) {
     var seriesData = _uuid2seriesDataBloodPressure[seriesDef.uuid];
     return seriesData;
