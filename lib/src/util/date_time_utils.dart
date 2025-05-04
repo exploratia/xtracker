@@ -35,6 +35,10 @@ class DateTimeUtils {
     return thisOrLastMonth;
   }
 
+  static String formateExportDateTime() {
+    return DateFormat('yyyyMMdd_HHmmss').format(DateTime.now());
+  }
+
   static String formateDate(DateTime dateTime) {
     return DateFormat.yMd().format(dateTime);
   }
