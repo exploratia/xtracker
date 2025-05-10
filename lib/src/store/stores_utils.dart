@@ -4,23 +4,28 @@ import 'package:sembast/sembast_io.dart'; // Nur für mobile Plattformen
 import 'package:sembast_web/sembast_web.dart';
 
 class StoresUtils {
-  static late Database db;
+  static late final Database db;
 
   static Future<void> initDb() async {
+    DatabaseFactory dbFactory;
+    String dbPath;
     if (kIsWeb) {
-      DatabaseFactory dbFactory = databaseFactoryWeb;
-      db = await dbFactory.openDatabase(
-        'app_store',
-        version: 1,
-        onVersionChanged: (db, oldVersion, newVersion) async {
-          // implement migration if necessary
-        },
-      );
+      dbFactory = databaseFactoryWeb;
+      dbPath = 'app_store';
     } else {
+      dbFactory = databaseFactoryIo;
       final appDir = await getApplicationDocumentsDirectory();
-      final dbPath = '${appDir.path}/app_store.db';
-      DatabaseFactory dbFactory = databaseFactoryIo;
-      db = await dbFactory.openDatabase(dbPath);
+      dbPath = '${appDir.path}/app_store.db';
     }
+    db = await dbFactory.openDatabase(
+      dbPath,
+      version: 1,
+      onVersionChanged: (db, oldVersion, newVersion) async {
+        // implement migration if necessary
+        if (kDebugMode) {
+          print("DB Version old: $oldVersion, new: $newVersion");
+        }
+      },
+    );
   }
 }
