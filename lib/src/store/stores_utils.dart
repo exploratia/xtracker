@@ -12,7 +12,7 @@ class StoresUtils {
       db = await dbFactory.openDatabase(
         'app_store',
         version: 1,
-        onVersionChanged: (db, oldVersion, newVersion) {
+        onVersionChanged: (db, oldVersion, newVersion) async {
           // implement migration if necessary
         },
       );
