@@ -25,6 +25,15 @@ class SeriesManagementView extends StatelessWidget {
           IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.edit_off_outlined)),
         ],
       ),
+      // appBar: GradientAppBar.build(
+      //   context,
+      //   addLeadingBackBtn: true,
+      //   title: Text(LocaleKeys.series_management_title.tr()),
+      //   actions: [
+      //     IconButton(onPressed: () async => SeriesImportExport.showImportExportDlg(context), icon: const Icon(Icons.import_export_outlined)),
+      //     IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.edit_off_outlined)),
+      //   ],
+      // ),
       body: const Center(child: DeviceDependentWidthConstrainedBox(child: _SeriesList())),
     );
   }

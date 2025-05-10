@@ -52,9 +52,13 @@ class ThemeUtils {
           ),
       appBarTheme: AppBarTheme(
         elevation: 8,
-        backgroundColor: backgroundColor,
-        foregroundColor: dark ? Colors.white : Colors.black,
-        actionsIconTheme: IconThemeData(color: dark ? Colors.white : Colors.black),
+        backgroundColor: secondary,
+        // backgroundColor,
+        foregroundColor: onPrimary,
+        // dark ? Colors.white : Colors.black,
+        actionsIconTheme: const IconThemeData(
+          color: onPrimary, // dark ? Colors.white : Colors.black,
+        ),
         systemOverlayStyle: dark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
         shadowColor: shadowColor,
       ),
