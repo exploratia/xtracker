@@ -6,6 +6,8 @@ import 'package:sembast_web/sembast_web.dart';
 class StoresUtils {
   static late final Database db;
 
+  static const int _dbVersionInitial = 1;
+
   static Future<void> initDb() async {
     DatabaseFactory dbFactory;
     String dbPath;
@@ -19,7 +21,7 @@ class StoresUtils {
     }
     db = await dbFactory.openDatabase(
       dbPath,
-      version: 1,
+      version: _dbVersionInitial,
       onVersionChanged: (db, oldVersion, newVersion) async {
         // implement migration if necessary
         if (kDebugMode) {
