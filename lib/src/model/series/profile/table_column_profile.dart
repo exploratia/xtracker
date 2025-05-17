@@ -1,6 +1,6 @@
-import 'dart:ui';
+import 'package:flutter/material.dart';
 
-import '../../../util/i18n.dart';
+import '../../../widgets/text/overflow_text.dart';
 
 class TableColumnProfile {
   final List<TableColumn> columns;
@@ -46,8 +46,7 @@ class TableColumnProfile {
       widthFactor = 2;
       addMargin = true;
     }
-    List<TableColumn> adjustedColumns =
-        columns.map((e) => TableColumn(minWidth: (e.minWidth * widthFactor), title: e.title, msgId: e.msgId, textAlign: e.textAlign)).toList();
+    List<TableColumn> adjustedColumns = columns.map((e) => e.copyWithWidthFactor(widthFactor)).toList();
 
     if (addMargin) {
       var adjustedWidth = adjustedColumns.fold(0.toDouble(), (previousValue, element) => previousValue + element.minWidth);
@@ -71,18 +70,34 @@ class TableColumnProfile {
 class TableColumn {
   final bool isMarginColumn;
   final double minWidth;
-  final String title;
-  final String? msgId;
+  final String? title;
   final TextAlign? textAlign;
+  final Widget? titleWidget;
 
-  TableColumn({required this.minWidth, this.isMarginColumn = false, required this.title, this.msgId, this.textAlign});
+  TableColumn({required this.minWidth, this.isMarginColumn = false, this.title, this.textAlign, this.titleWidget});
+
+  TableColumn copyWithWidthFactor(double widthFactor) {
+    return TableColumn(minWidth: (minWidth * widthFactor), title: title, textAlign: textAlign, titleWidget: titleWidget);
+  }
 
   @override
   String toString() {
     return 'TableColumn{minWidth: $minWidth}';
   }
 
-  String getTitle() {
-    return I18N.compose(msgId) ?? title;
+  Widget getTableColumnHeadItemWidget() {
+    if (titleWidget != null) {
+      return titleWidget!;
+    }
+
+    var txt = title ?? "?";
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4),
+      child: OverflowText(
+        txt,
+        expanded: false,
+        textAlign: textAlign ?? TextAlign.center,
+      ),
+    );
   }
 }

@@ -4,7 +4,6 @@ import 'package:uuid/v4.dart';
 
 import '../../model/series/profile/table_column_profile.dart';
 import '../navigation/hide_bottom_navigation_bar.dart';
-import '../text/overflow_text.dart';
 import 'two_dimensional_grid_view_with_scrollbar.dart';
 
 class TwoDimensionalScrollableTable extends StatelessWidget {
@@ -12,6 +11,7 @@ class TwoDimensionalScrollableTable extends StatelessWidget {
     super.key,
     required this.tableColumnProfile,
     required this.gridCellBuilder,
+    this.tableHeadHeight = 40,
     required this.lineHeight,
     required this.lineCount,
     this.useFixedFirstColumn = true,
@@ -19,6 +19,7 @@ class TwoDimensionalScrollableTable extends StatelessWidget {
 
   final TableColumnProfile tableColumnProfile;
   final GridCell Function(BuildContext context, int yIndex, int xIndex) gridCellBuilder;
+  final double tableHeadHeight;
   final int lineHeight;
   final int lineCount;
   final bool useFixedFirstColumn;
@@ -80,6 +81,7 @@ class TwoDimensionalScrollableTable extends StatelessWidget {
           viewportSizeKey: viewportSizeKey,
           twoDimensionalChildBuilderDelegate: twoDimensionalChildBuilderDelegate,
           gridCellBuilder: gridCellBuilder,
+          tableHeadHeight: tableHeadHeight,
         );
       }),
     );
@@ -94,6 +96,7 @@ class GridCell {
 }
 
 class _ScrollableGrid extends StatefulWidget {
+  /// [tableHeadHeight] could be set other then default if the header in column profile is not text but custom widgets
   const _ScrollableGrid({
     required this.lineHeight,
     required this.lineCount,
@@ -102,6 +105,7 @@ class _ScrollableGrid extends StatefulWidget {
     required this.viewportSizeKey,
     required this.twoDimensionalChildBuilderDelegate,
     required this.gridCellBuilder,
+    this.tableHeadHeight = 40,
   });
 
   final int lineHeight;
@@ -110,7 +114,7 @@ class _ScrollableGrid extends StatefulWidget {
   final TableColumnProfile tableColumnProfile;
   final TableColumn? fixedFirstColumnTableColumn;
 
-  final double tableHeadHeight = 40;
+  final double tableHeadHeight;
 
   final ValueKey<String> viewportSizeKey;
   final TwoDimensionalChildBuilderDelegate twoDimensionalChildBuilderDelegate;
@@ -161,7 +165,7 @@ class _ScrollableGridState extends State<_ScrollableGrid> {
       } else {
         Widget tableHeaderItemWidget = SizedBox(
           width: tableColumn.minWidth.toDouble(),
-          child: _getTableHeadItemWidget(tableColumn),
+          child: tableColumn.getTableColumnHeadItemWidget(),
         );
         tableHeader.add(tableHeaderItemWidget);
       }
@@ -178,7 +182,7 @@ class _ScrollableGridState extends State<_ScrollableGrid> {
             SizedBox(
               height: widget.tableHeadHeight,
               width: firstColumnWidth,
-              child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [_getTableHeadItemWidget(fixedFirstColumnTableColumn)]),
+              child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [fixedFirstColumnTableColumn.getTableColumnHeadItemWidget()]),
             ),
             const _TextColoredDivider(),
             Expanded(
@@ -241,17 +245,6 @@ class _ScrollableGridState extends State<_ScrollableGrid> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _getTableHeadItemWidget(TableColumn tableColumn) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
-      child: OverflowText(
-        expanded: false,
-        tableColumn.getTitle(),
-        textAlign: tableColumn.textAlign ?? TextAlign.center,
-      ),
     );
   }
 }
