@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../util/i18n.dart';
 import '../../../widgets/text/overflow_text.dart';
 
 class TableColumnProfile {
@@ -71,13 +72,14 @@ class TableColumn {
   final bool isMarginColumn;
   final double minWidth;
   final String? title;
+  final String? msgId;
   final TextAlign? textAlign;
   final Widget? titleWidget;
 
-  TableColumn({required this.minWidth, this.isMarginColumn = false, this.title, this.textAlign, this.titleWidget});
+  TableColumn({required this.minWidth, this.isMarginColumn = false, this.title, this.msgId, this.textAlign, this.titleWidget});
 
   TableColumn copyWithWidthFactor(double widthFactor) {
-    return TableColumn(minWidth: (minWidth * widthFactor), title: title, textAlign: textAlign, titleWidget: titleWidget);
+    return TableColumn(minWidth: (minWidth * widthFactor), title: title, msgId: msgId, textAlign: textAlign, titleWidget: titleWidget);
   }
 
   @override
@@ -90,7 +92,7 @@ class TableColumn {
       return titleWidget!;
     }
 
-    var txt = title ?? "?";
+    var txt = I18N.compose(msgId) ?? title ?? "?";
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: OverflowText(
