@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../model/series/profile/table_column_profile.dart';
+import '../../model/column_profile/column_profile.dart';
 import 'two_dimensional_grid_view.dart';
 
 class TwoDimensionalGridViewWithScrollbar extends StatefulWidget {
@@ -17,7 +17,7 @@ class TwoDimensionalGridViewWithScrollbar extends StatefulWidget {
   });
 
   final int lineHeight;
-  final TableColumnProfile tableColumnProfile;
+  final ColumnProfile tableColumnProfile;
   final ValueKey<String> viewportSizeKey;
   final TwoDimensionalChildBuilderDelegate twoDimensionalChildBuilderDelegate;
   final void Function(ScrollPosition value)? verticalScrollPositionHandler;

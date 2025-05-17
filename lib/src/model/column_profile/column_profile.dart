@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-import '../../../util/i18n.dart';
-import '../../../widgets/text/overflow_text.dart';
+import '../../util/i18n.dart';
+import '../../widgets/text/overflow_text.dart';
 
-class TableColumnProfile {
-  final List<TableColumn> columns;
+class ColumnProfile {
+  final List<ColumnDef> columns;
   final bool hasHorizontalMarginColumns;
 
-  TableColumnProfile({
+  ColumnProfile({
     required this.columns,
     this.hasHorizontalMarginColumns = false,
   });
@@ -20,21 +20,21 @@ class TableColumnProfile {
     return columns.length;
   }
 
-  TableColumn getColumnAt(int index) {
+  ColumnDef getColumnAt(int index) {
     if (index >= 0 && index < columns.length) {
       return columns[index];
     }
 
     // fallback - should never happen
-    return TableColumn(minWidth: 200, title: '-?-');
+    return ColumnDef(minWidth: 200, title: '-?-');
   }
 
   /// stretch to given width
-  TableColumnProfile adjustToWidth(double width) {
+  ColumnProfile adjustToWidth(double width) {
     double minW = minWidth().toDouble();
     // is column profile wider then available width - return clone
     if (minW >= width) {
-      return TableColumnProfile(columns: [...columns]);
+      return ColumnProfile(columns: [...columns]);
     }
 
     // otherwise adjust
@@ -47,19 +47,19 @@ class TableColumnProfile {
       widthFactor = 2;
       addMargin = true;
     }
-    List<TableColumn> adjustedColumns = columns.map((e) => e.copyWithWidthFactor(widthFactor)).toList();
+    List<ColumnDef> adjustedColumns = columns.map((e) => e.copyWithWidthFactor(widthFactor)).toList();
 
     if (addMargin) {
       var adjustedWidth = adjustedColumns.fold(0.toDouble(), (previousValue, element) => previousValue + element.minWidth);
       horizontalMargin = (width - adjustedWidth) / 2;
       adjustedColumns = [
-        TableColumn(minWidth: horizontalMargin, isMarginColumn: true, title: ''),
+        ColumnDef(minWidth: horizontalMargin, isMarginColumn: true, title: ''),
         ...adjustedColumns,
-        TableColumn(minWidth: horizontalMargin, isMarginColumn: true, title: ''),
+        ColumnDef(minWidth: horizontalMargin, isMarginColumn: true, title: ''),
       ];
     }
 
-    return TableColumnProfile(columns: adjustedColumns, hasHorizontalMarginColumns: horizontalMargin >= 0);
+    return ColumnProfile(columns: adjustedColumns, hasHorizontalMarginColumns: horizontalMargin >= 0);
   }
 
   @override
@@ -68,7 +68,7 @@ class TableColumnProfile {
   }
 }
 
-class TableColumn {
+class ColumnDef {
   final bool isMarginColumn;
   final double minWidth;
   final String? title;
@@ -76,10 +76,10 @@ class TableColumn {
   final TextAlign? textAlign;
   final Widget? titleWidget;
 
-  TableColumn({required this.minWidth, this.isMarginColumn = false, this.title, this.msgId, this.textAlign, this.titleWidget});
+  ColumnDef({required this.minWidth, this.isMarginColumn = false, this.title, this.msgId, this.textAlign, this.titleWidget});
 
-  TableColumn copyWithWidthFactor(double widthFactor) {
-    return TableColumn(minWidth: (minWidth * widthFactor), title: title, msgId: msgId, textAlign: textAlign, titleWidget: titleWidget);
+  ColumnDef copyWithWidthFactor(double widthFactor) {
+    return ColumnDef(minWidth: (minWidth * widthFactor), title: title, msgId: msgId, textAlign: textAlign, titleWidget: titleWidget);
   }
 
   @override

@@ -5,12 +5,12 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
-import '../../model/series/profile/table_column_profile.dart';
+import '../../model/column_profile/column_profile.dart';
 
 // adjusted from https://dartpad.dev/?id=4424936c57ed13093eb389123383e894
 class TwoDimensionalGridView extends TwoDimensionalScrollView {
   final int lineHeight;
-  final TableColumnProfile tableColumnProfile;
+  final ColumnProfile tableColumnProfile;
   final Key viewportSizeKey;
 
   TwoDimensionalGridView(
@@ -58,7 +58,7 @@ class TwoDimensionalGridView extends TwoDimensionalScrollView {
 
 class TwoDimensionalGridViewport extends TwoDimensionalViewport {
   final int lineHeight;
-  final TableColumnProfile tableColumnProfile;
+  final ColumnProfile tableColumnProfile;
 
   const TwoDimensionalGridViewport(
     this.lineHeight,
@@ -110,7 +110,7 @@ class TwoDimensionalGridViewport extends TwoDimensionalViewport {
 
 class RenderTwoDimensionalGridViewport extends RenderTwoDimensionalViewport {
   final int lineHeight;
-  final TableColumnProfile tableColumnProfile;
+  final ColumnProfile tableColumnProfile;
 
   RenderTwoDimensionalGridViewport(
     this.lineHeight,

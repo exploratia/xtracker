@@ -2,9 +2,9 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../../../../../../model/column_profile/fix_column_profiles.dart';
 import '../../../../../../model/series/data/blood_pressure/blood_pressure_value.dart';
 import '../../../../../../model/series/data/series_data.dart';
-import '../../../../../../model/series/profile/fix_table_column_profiles.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
 import '../../../../../../util/date_time_utils.dart';
 import '../../../../../../util/globals.dart';
@@ -61,7 +61,7 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: ThemeUtils.seriesDataViewTopPadding),
       child: TwoDimensionalScrollableTable(
-        tableColumnProfile: FixTableColumnProfiles.tableColumnProfileDateMorningMiddayEvening,
+        tableColumnProfile: FixColumnProfiles.columnProfileDateMorningMiddayEvening,
         lineCount: data.length,
         gridCellBuilder: gridCellBuilder,
         lineHeight: lineHeight,

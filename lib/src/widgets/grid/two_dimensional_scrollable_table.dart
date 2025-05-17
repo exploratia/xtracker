@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:uuid/v4.dart';
 
-import '../../model/series/profile/table_column_profile.dart';
+import '../../model/column_profile/column_profile.dart';
 import '../navigation/hide_bottom_navigation_bar.dart';
 import 'two_dimensional_grid_view_with_scrollbar.dart';
 
@@ -17,7 +17,7 @@ class TwoDimensionalScrollableTable extends StatelessWidget {
     this.useFixedFirstColumn = true,
   });
 
-  final TableColumnProfile tableColumnProfile;
+  final ColumnProfile tableColumnProfile;
   final GridCell Function(BuildContext context, int yIndex, int xIndex) gridCellBuilder;
   final double tableHeadHeight;
   final int lineHeight;
@@ -31,9 +31,9 @@ class TwoDimensionalScrollableTable extends StatelessWidget {
 
     return HideBottomNavigationBar(
       child: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
-        final TableColumnProfile adjustedTableColumnProfile = tableColumnProfile.adjustToWidth(constraints.maxWidth);
+        final ColumnProfile adjustedTableColumnProfile = tableColumnProfile.adjustToWidth(constraints.maxWidth);
 
-        TableColumn? fixedFirstColumnTableColumn;
+        ColumnDef? fixedFirstColumnTableColumn;
         final bool showFixedFirstColumn = useFixedFirstColumn && adjustedTableColumnProfile.minWidth() > constraints.maxWidth;
         if (showFixedFirstColumn) {
           fixedFirstColumnTableColumn = adjustedTableColumnProfile.columns.removeAt(0);
@@ -47,7 +47,7 @@ class TwoDimensionalScrollableTable extends StatelessWidget {
             builder: (BuildContext context, ChildVicinity vicinity) {
               // print('$vicinity');
               int yIndex = vicinity.yIndex;
-              TableColumn tableColumn = adjustedTableColumnProfile.getColumnAt(vicinity.xIndex);
+              ColumnDef tableColumn = adjustedTableColumnProfile.getColumnAt(vicinity.xIndex);
               final columnWidth = tableColumn.minWidth;
 
               if (tableColumn.isMarginColumn) {
@@ -111,8 +111,8 @@ class _ScrollableGrid extends StatefulWidget {
   final int lineHeight;
   final int lineCount;
 
-  final TableColumnProfile tableColumnProfile;
-  final TableColumn? fixedFirstColumnTableColumn;
+  final ColumnProfile tableColumnProfile;
+  final ColumnDef? fixedFirstColumnTableColumn;
 
   final double tableHeadHeight;
 
