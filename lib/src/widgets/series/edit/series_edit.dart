@@ -13,6 +13,7 @@ import '../../layout/v_centered_single_child_scroll_view_with_scrollbar.dart';
 import '../../select/color_picker.dart';
 import '../../select/icon_map.dart';
 import '../../select/icon_picker.dart';
+import 'blood_pressure/blood_pressure_series_edit.dart';
 
 class SeriesEdit extends StatefulWidget {
   const SeriesEdit({super.key, required this.seriesDef});
@@ -31,13 +32,17 @@ class _SeriesEditState extends State<SeriesEdit> {
 
   @override
   void initState() {
-    _seriesDef = widget.seriesDef;
+    _seriesDef = widget.seriesDef?.clone();
     _isNew = _seriesDef == null;
     super.initState();
   }
 
   void _resetSeriesDef() {
     _seriesDef = null;
+    setState(() {});
+  }
+
+  void _updateState() {
     setState(() {});
   }
 
@@ -108,6 +113,7 @@ class _SeriesEditState extends State<SeriesEdit> {
         form: _form,
         seriesDef: _seriesDef!,
         goBack: _isNew ? _resetSeriesDef : null,
+        updateState: _updateState,
       );
     }
 
@@ -142,11 +148,12 @@ class _SeriesTypeInfoBtn extends StatelessWidget {
 }
 
 class _SeriesEditor extends StatelessWidget {
-  const _SeriesEditor({required this.form, required this.seriesDef, required this.goBack});
+  const _SeriesEditor({required this.form, required this.seriesDef, required this.goBack, required this.updateState});
 
   final GlobalKey<FormState> form;
   final SeriesDef seriesDef;
   final Function()? goBack;
+  final Function() updateState;
 
   @override
   Widget build(BuildContext context) {
@@ -210,9 +217,17 @@ class _SeriesEditor extends StatelessWidget {
                   colorSelected: (color) => seriesDef.color = color,
                 ),
               ],
-            )
+            ),
           ],
         ),
+        switch (seriesDef.seriesType) {
+          SeriesType.bloodPressure => BloodPressureSeriesEdit(seriesDef, updateState),
+          SeriesType.dailyCheck => Container(),
+          // TODO: Handle this case.
+          SeriesType.monthly => throw UnimplementedError(),
+          // TODO: Handle this case.
+          SeriesType.free => throw UnimplementedError(),
+        }
       ],
     );
   }

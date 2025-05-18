@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import '../../util/color_utils.dart';
@@ -6,6 +8,7 @@ import '../../widgets/navigation/hide_bottom_navigation_bar.dart';
 import '../../widgets/select/icon_map.dart';
 import '../../widgets/series/edit/series_edit.dart';
 import 'series_type.dart';
+import 'settings/blood_pressure_settings.dart';
 
 class SeriesDef {
   final String uuid;
@@ -15,14 +18,30 @@ class SeriesDef {
   String name = "";
   Color color = Colors.red;
   String iconName = "";
+  final Map<String, dynamic> _settings;
 
-  SeriesDef({required this.uuid, required this.seriesType, this.name = "", Color? color, String? iconName, required this.seriesItems})
-      : color = color ?? seriesType.color,
-        iconName = iconName ?? seriesType.iconName;
+  SeriesDef({
+    required this.uuid,
+    required this.seriesType,
+    this.name = "",
+    Color? color,
+    String? iconName,
+    required this.seriesItems,
+    Map<String, dynamic>? settings,
+  })  : color = color ?? seriesType.color,
+        iconName = iconName ?? seriesType.iconName,
+        _settings = settings ?? {};
+
+  BloodPressureSettings bloodPressureSettings(Function() updateState) => BloodPressureSettings(_settings, updateState);
 
   @override
   String toString() {
     return 'SeriesDef{uuid: $uuid, seriesType: $seriesType, name: $name, color: $color, iconName: $iconName}';
+  }
+
+  /// deep copy / clone by transforming to json string and back
+  SeriesDef clone() {
+    return SeriesDef.fromJson(jsonDecode(jsonEncode(toJson())));
   }
 
   /// returns act/expected json version per series type (to be able to handle different parsings depending on version)
@@ -52,6 +71,7 @@ class SeriesDef {
         name: json['name'] as String,
         color: ColorUtils.fromHex(json['color'] as String),
         iconName: json['iconName'] as String,
+        settings: json['settings'] as Map<String, dynamic>?,
       );
 
   Map<String, dynamic> toJson() => {
@@ -61,6 +81,7 @@ class SeriesDef {
         'name': name,
         'color': ColorUtils.toHex(color),
         'iconName': iconName,
+        'settings': _settings,
         // type & version - could be used for parsing
         'type': 'seriesDef',
         'version': seriesDefVersionByType(this),

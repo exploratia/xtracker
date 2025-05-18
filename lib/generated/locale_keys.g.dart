@@ -60,6 +60,7 @@ abstract class  LocaleKeys {
   static const series_edit_labels_seriesIcon = 'series.edit.labels.seriesIcon';
   static const series_edit_labels_seriesColor = 'series.edit.labels.seriesColor';
   static const series_edit_labels_selectSeriesType = 'series.edit.labels.selectSeriesType';
+  static const series_edit_bloodPressure_labels_hideTabletInput = 'series.edit.bloodPressure.labels.hideTabletInput';
   static const series_management_title = 'series.management.title';
   static const series_management_importExport_dialog_tile = 'series.management.importExport.dialog.tile';
   static const series_management_importExport_dialog_btn_exportSeries = 'series.management.importExport.dialog.btn.exportSeries';

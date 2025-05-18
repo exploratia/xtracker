@@ -143,6 +143,11 @@
         "seriesIcon": "Symbol",
         "seriesColor": "Farbe",
         "selectSeriesType": "Wähle den Messreihen-Typ"
+      },
+      "bloodPressure": {
+        "labels": {
+          "hideTabletInput": "Tabletteneinnahme im Eingabedialog ausblenden:"
+        }
       }
     },
     "management": {

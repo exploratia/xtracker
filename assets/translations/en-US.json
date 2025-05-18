@@ -143,6 +143,11 @@
         "seriesName": "Name",
         "seriesIcon": "Icon",
         "seriesColor": "Color"
+      },
+      "bloodPressure": {
+        "labels": {
+          "hideTabletInput": "Hide tablet input in dialog:"
+        }
       }
     },
     "management": {
