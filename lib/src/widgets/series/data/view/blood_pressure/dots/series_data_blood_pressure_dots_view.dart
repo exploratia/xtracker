@@ -17,6 +17,7 @@ class SeriesDataBloodPressureDotsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
     final Map<String, _BloodPressureDayItem> data = _buildDataProvider(seriesData);
     DateTime minDateTime = DateTime.now();
     DateTime maxDateTime = DateTime.now();
@@ -29,6 +30,11 @@ class SeriesDataBloodPressureDotsView extends StatelessWidget {
       List<Color> colors = [BloodPressureValue.colorHigh(dataItem.high), BloodPressureValue.colorLow(dataItem.low)];
       final rect = Rect.fromPoints(topLeft, bottomRight);
       CustomPaintUtils.paintGradientFilledRect(canvas, rect, 2, colors, Alignment.topCenter, Alignment.bottomCenter);
+      // draw a small cross as medication indicator
+      var medicationPaint = Paint()..color = themeData.textTheme.labelMedium?.color ?? Colors.white;
+      var crossCenter = bottomRight.translate(-3, -3);
+      canvas.drawRect(Rect.fromCenter(center: crossCenter, width: 5, height: 1), medicationPaint);
+      canvas.drawRect(Rect.fromCenter(center: crossCenter, width: 1, height: 5), medicationPaint);
     }
 
     return ResponsiveDotsView(
