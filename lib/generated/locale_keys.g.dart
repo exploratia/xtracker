@@ -6,10 +6,10 @@ abstract class  LocaleKeys {
   static const administration_navTitle = 'administration.navTitle';
   static const administration_title = 'administration.title';
   static const appTitle = 'appTitle';
-  static const bloodPressure_input_diastolic_roughTitle = 'bloodPressure.input.diastolic.roughTitle';
-  static const bloodPressure_input_diastolic_fineTitle = 'bloodPressure.input.diastolic.fineTitle';
-  static const bloodPressure_input_systolic_roughTitle = 'bloodPressure.input.systolic.roughTitle';
-  static const bloodPressure_input_systolic_fineTitle = 'bloodPressure.input.systolic.fineTitle';
+  static const bloodPressure_input_labels_diastolic = 'bloodPressure.input.labels.diastolic';
+  static const bloodPressure_input_labels_systolic = 'bloodPressure.input.labels.systolic';
+  static const bloodPressure_input_labels_medication = 'bloodPressure.input.labels.medication';
+  static const bloodPressure_input_validator_msg_invalidNumber = 'bloodPressure.input.validator.msg.invalidNumber';
   static const bloodPressure_seriesItem_title_diastolic = 'bloodPressure.seriesItem.title.diastolic';
   static const bloodPressure_seriesItem_title_systolic = 'bloodPressure.seriesItem.title.systolic';
   static const commons_date_shortWeekday_monday = 'commons.date.shortWeekday.monday';
@@ -60,7 +60,7 @@ abstract class  LocaleKeys {
   static const series_edit_labels_seriesIcon = 'series.edit.labels.seriesIcon';
   static const series_edit_labels_seriesColor = 'series.edit.labels.seriesColor';
   static const series_edit_labels_selectSeriesType = 'series.edit.labels.selectSeriesType';
-  static const series_edit_bloodPressure_labels_hideTabletInput = 'series.edit.bloodPressure.labels.hideTabletInput';
+  static const series_edit_bloodPressure_labels_hideMedicationInput = 'series.edit.bloodPressure.labels.hideMedicationInput';
   static const series_management_title = 'series.management.title';
   static const series_management_importExport_dialog_tile = 'series.management.importExport.dialog.tile';
   static const series_management_importExport_dialog_btn_exportSeries = 'series.management.importExport.dialog.btn.exportSeries';

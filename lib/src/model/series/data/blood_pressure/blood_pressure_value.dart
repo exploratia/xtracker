@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
@@ -7,18 +9,16 @@ import '../series_data_value.dart';
 class BloodPressureValue extends SeriesDataValue {
   final int high;
   final int low;
+  final bool medication;
 
-  BloodPressureValue(super.uuid, super.dateTime, this.high, this.low);
-
-  BloodPressureValue cloneWith(DateTime dateTime, int high, int low) {
-    return BloodPressureValue(uuid, dateTime, high, low);
-  }
+  BloodPressureValue(super.uuid, super.dateTime, this.high, this.low, this.medication);
 
   factory BloodPressureValue.fromJson(Map<String, dynamic> json) => BloodPressureValue(
         json['uuid'] as String? ?? const Uuid().v4().toString(),
         DateTime.fromMillisecondsSinceEpoch(json['utcMs'] as int),
         json['high'] as int,
         json['low'] as int,
+        json['medication'] as bool? ?? false,
       );
 
   @override
@@ -27,12 +27,14 @@ class BloodPressureValue extends SeriesDataValue {
         'utcMs': dateTime.millisecondsSinceEpoch,
         'high': high,
         'low': low,
+        if (medication) 'medication': medication, // only save if true
       };
 
   static Color bestPossibleValueColor = const Color.fromRGBO(0, 160, 0, 1);
 
   static Color colorHigh(int value) {
-    return ColorUtils.hue(bestPossibleValueColor, (120.0 - value) * 3);
+    int val = max(min(value, 160), 80);
+    return ColorUtils.hue(bestPossibleValueColor, (120.0 - val) * 3);
   }
 
   static Color colorHighOf(BloodPressureValue bloodPressureValue) {
@@ -40,7 +42,8 @@ class BloodPressureValue extends SeriesDataValue {
   }
 
   static Color colorLow(int value) {
-    return ColorUtils.hue(bestPossibleValueColor, (80.0 - value) * 3);
+    int val = max(min(value, 120), 40);
+    return ColorUtils.hue(bestPossibleValueColor, (80.0 - val) * 3);
   }
 
   static Color colorLowOf(BloodPressureValue bloodPressureValue) {

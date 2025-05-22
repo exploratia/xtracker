@@ -6,13 +6,15 @@
   "appTitle": "xTracker",
   "bloodPressure": {
     "input": {
-      "diastolic": {
-        "roughTitle": "▽... diastolic [mmHg]",
-        "fineTitle": "...▽ diastolic [mmHg]"
+      "labels": {
+        "diastolic": "▽ diastolic [mmHg]",
+        "systolic": "△ systolic [mmHg]",
+        "medication": "Medikament"
       },
-      "systolic": {
-        "roughTitle": "△... systolic [mmHg]",
-        "fineTitle": "...△ systolic [mmHg]"
+      "validator": {
+        "msg": {
+          "invalidNumber": "Invalid number (valid: 0 - 200)"
+        }
       }
     },
     "seriesItem": {
@@ -146,7 +148,7 @@
       },
       "bloodPressure": {
         "labels": {
-          "hideTabletInput": "Hide tablet input in dialog:"
+          "hideMedicationInput": "Hide medication input in dialog:"
         }
       }
     },

@@ -16,14 +16,14 @@ class BloodPressureSeriesEdit extends StatelessWidget {
     return Column(
       children: [
         const Divider(height: 24),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(LocaleKeys.series_edit_bloodPressure_labels_hideTabletInput.tr()),
-            Switch(value: settings.hideTabletInput, onChanged: (value) => settings.hideTabletInput = value),
-          ],
-        )
+        SwitchListTile(
+          title: Text(
+            LocaleKeys.series_edit_bloodPressure_labels_hideMedicationInput.tr(),
+          ),
+          value: settings.hideTabletInput,
+          onChanged: (value) => settings.hideTabletInput = value,
+          secondary: const Icon(Icons.medication_outlined),
+        ),
       ],
     );
   }
