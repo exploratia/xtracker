@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../providers/series_data_provider.dart';
 import '../../../util/dialogs.dart';
-import '../../../widgets/series/data/input/blood_pressure/blood_pressure_quick_input.dart';
+import '../../../widgets/series/data/input/blood_pressure/blood_pressure_input.dart';
 import '../../../widgets/series/data/input/daily_check/daily_check_input.dart';
 import '../series_def.dart';
 import '../series_type.dart';
