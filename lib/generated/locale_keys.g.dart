@@ -29,6 +29,7 @@ abstract class  LocaleKeys {
   static const commons_dialog_btn_no = 'commons.dialog.btn.no';
   static const commons_dialog_btn_okay = 'commons.dialog.btn.okay';
   static const commons_dialog_btn_save = 'commons.dialog.btn.save';
+  static const commons_dialog_btn_delete = 'commons.dialog.btn.delete';
   static const commons_dialog_btn_yes = 'commons.dialog.btn.yes';
   static const commons_msg_error_failedToLoadData = 'commons.msg.error.failedToLoadData';
   static const commons_msg_error_failedToSaveData = 'commons.msg.error.failedToSaveData';

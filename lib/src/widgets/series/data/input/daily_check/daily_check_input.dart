@@ -9,7 +9,7 @@ import '../../../../../model/series/series_def.dart';
 import '../../../../../model/series/series_type.dart';
 import '../../../../../providers/series_data_provider.dart';
 import '../../../../../util/dialogs.dart';
-import '../../view/daily_check/table/daily_check_value_renderer.dart';
+import '../../../../layout/single_child_scroll_view_with_scrollbar.dart';
 import '../input_header.dart';
 
 class DailyCheckInput extends StatefulWidget {
@@ -19,55 +19,11 @@ class DailyCheckInput extends StatefulWidget {
   final DailyCheckValue? dailyCheckValue;
 
   static Future<DailyCheckValue?> showInputDlg(BuildContext context, SeriesDef seriesDef, {DailyCheckValue? dailyCheckValue}) async {
-    final themeData = Theme.of(context);
-
-    deleteHandler() async {
-      bool? res = await Dialogs.simpleYesNoDialog(
-        LocaleKeys.series_data_input_dialog_msg_query_deleteValue.tr(),
-        context,
-        title: LocaleKeys.commons_dialog_title_areYouSure.tr(),
-      );
-      if (res == true) {
-        try {
-          if (context.mounted) {
-            await context.read<SeriesDataProvider>().deleteValue(seriesDef, dailyCheckValue, context);
-            if (context.mounted) Navigator.pop(context, null);
-          }
-        } catch (err) {
-          if (context.mounted) {
-            Dialogs.simpleErrOkDialog('$err', context);
-          }
-        }
-      }
-    }
-
     return await showDialog<DailyCheckValue>(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Row(
-              children: [
-                if (dailyCheckValue != null) const Icon(Icons.edit_outlined),
-                if (dailyCheckValue == null) const Icon(Icons.add_circle_outline),
-                const SizedBox(width: 10),
-                Text(SeriesType.displayNameOf(seriesDef.seriesType)),
-              ],
-            ),
-            if (dailyCheckValue != null) IconButton(onPressed: deleteHandler, color: themeData.colorScheme.primary, icon: const Icon(Icons.delete_outlined)),
-          ],
-        ),
-        content: DailyCheckInput(dailyCheckValue: dailyCheckValue, seriesDef: seriesDef),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.pop(ctx, null);
-            },
-            child: Text(LocaleKeys.commons_dialog_btn_cancel.tr()),
-          ),
-        ],
+      builder: (ctx) => DailyCheckInput(
+        seriesDef: seriesDef,
+        dailyCheckValue: dailyCheckValue,
       ),
     );
   }
@@ -77,11 +33,17 @@ class DailyCheckInput extends StatefulWidget {
 }
 
 class _DailyCheckInputState extends State<DailyCheckInput> {
+  bool _isValid = true;
+
+  late final String _uuid;
   late DateTime _dateTime;
 
   @override
   initState() {
-    _dateTime = widget.dailyCheckValue?.dateTime ?? DateTime.now();
+    var source = widget.dailyCheckValue;
+    _uuid = source?.uuid ?? const Uuid().v4();
+    _dateTime = source?.dateTime ?? DateTime.now();
+
     super.initState();
   }
 
@@ -91,30 +53,102 @@ class _DailyCheckInputState extends State<DailyCheckInput> {
     });
   }
 
+  _toggleChecked() {
+    setState(() {
+      _isValid = !_isValid;
+    });
+  }
+
+  void _saveHandler() {
+    if (!_isValid) {
+      // not valid means delete
+      if (widget.dailyCheckValue != null) {
+        _deleteHandler();
+      } else {
+        Navigator.pop(context, null);
+      }
+      return;
+    }
+    var val = DailyCheckValue(_uuid, _dateTime);
+    Navigator.pop(context, val);
+  }
+
+  _deleteHandler() async {
+    bool? res = await Dialogs.simpleYesNoDialog(
+      LocaleKeys.series_data_input_dialog_msg_query_deleteValue.tr(),
+      context,
+      title: LocaleKeys.commons_dialog_title_areYouSure.tr(),
+    );
+    if (res == true) {
+      try {
+        if (mounted) {
+          await context.read<SeriesDataProvider>().deleteValue(widget.seriesDef, widget.dailyCheckValue, context);
+          if (mounted) Navigator.pop(context, null);
+        }
+      } catch (err) {
+        if (mounted) {
+          Dialogs.simpleErrOkDialog('$err', context);
+        }
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    Widget? headerValueWidget =
-        (widget.dailyCheckValue != null) ? DailyCheckValueRenderer(dailyCheckValue: widget.dailyCheckValue!, seriesDef: widget.seriesDef) : null;
-    var header = InputHeader(dateTime: _dateTime, valueWidget: headerValueWidget, seriesDef: widget.seriesDef, setDateTime: _setDateTime);
-    return Column(
+    final themeData = Theme.of(context);
+
+    var edit = Column(
       mainAxisSize: MainAxisSize.min,
       spacing: 10,
       children: [
-        header,
+        InputHeader(dateTime: _dateTime, seriesDef: widget.seriesDef, setDateTime: _setDateTime),
         const Divider(height: 1),
         const SizedBox(height: 3),
         IconButton(
           iconSize: 40,
-          icon: const Icon(Icons.check_box_outlined),
+          icon: Icon(_isValid ? Icons.check_box_outlined : Icons.check_box_outline_blank),
+          onPressed: _toggleChecked,
+        ),
+      ],
+    );
+
+    return AlertDialog(
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Row(
+            children: [
+              if (widget.dailyCheckValue != null) const Icon(Icons.edit_outlined),
+              if (widget.dailyCheckValue == null) const Icon(Icons.add_circle_outline),
+              const SizedBox(width: 10),
+              Text(SeriesType.displayNameOf(widget.seriesDef.seriesType)),
+            ],
+          ),
+          if (widget.dailyCheckValue != null)
+            IconButton(onPressed: _deleteHandler, color: themeData.colorScheme.secondary, icon: const Icon(Icons.delete_outlined)),
+        ],
+      ),
+      content: SingleChildScrollViewWithScrollbar(
+        useScreenPadding: false,
+        child: IntrinsicHeight(child: edit),
+      ),
+      actions: [
+        if (_isValid)
+          TextButton(
+            onPressed: _saveHandler,
+            child: Text(LocaleKeys.commons_dialog_btn_save.tr()),
+          ),
+        if (!_isValid && widget.dailyCheckValue != null)
+          TextButton(
+            onPressed: _deleteHandler,
+            child: Text(LocaleKeys.commons_dialog_btn_delete.tr()),
+          ),
+        TextButton(
           onPressed: () {
-            DailyCheckValue val;
-            if (widget.dailyCheckValue != null) {
-              val = widget.dailyCheckValue!.cloneWith(_dateTime);
-            } else {
-              val = DailyCheckValue(const Uuid().v4(), _dateTime);
-            }
-            Navigator.pop(context, val);
+            Navigator.pop(context, null);
           },
+          child: Text(LocaleKeys.commons_dialog_btn_cancel.tr()),
         ),
       ],
     );

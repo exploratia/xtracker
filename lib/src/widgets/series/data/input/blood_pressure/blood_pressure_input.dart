@@ -126,7 +126,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
     Navigator.pop(context, val);
   }
 
-  void deleteHandler() async {
+  void _deleteHandler() async {
     bool? res = await Dialogs.simpleYesNoDialog(
       LocaleKeys.series_data_input_dialog_msg_query_deleteValue.tr(),
       context,
@@ -261,7 +261,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
             ],
           ),
           if (widget.bloodPressureValue != null)
-            IconButton(onPressed: deleteHandler, color: themeData.colorScheme.secondary, icon: const Icon(Icons.delete_outlined)),
+            IconButton(onPressed: _deleteHandler, color: themeData.colorScheme.secondary, icon: const Icon(Icons.delete_outlined)),
         ],
       ),
       content: SingleChildScrollViewWithScrollbar(
