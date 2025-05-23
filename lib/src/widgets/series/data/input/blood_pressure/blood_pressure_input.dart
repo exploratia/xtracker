@@ -154,6 +154,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
       key: _formKey,
       autovalidateMode: _autoValidate ? AutovalidateMode.always : AutovalidateMode.disabled,
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         spacing: 10,
         children: [
           InputHeader(dateTime: _dateTime, seriesDef: widget.seriesDef, setDateTime: _setDateTime),
@@ -266,7 +267,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
       ),
       content: SingleChildScrollViewWithScrollbar(
         useScreenPadding: false,
-        child: IntrinsicHeight(child: edit),
+        child: edit,
       ),
       actions: [
         TextButton(

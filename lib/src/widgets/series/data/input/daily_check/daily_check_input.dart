@@ -131,7 +131,7 @@ class _DailyCheckInputState extends State<DailyCheckInput> {
       ),
       content: SingleChildScrollViewWithScrollbar(
         useScreenPadding: false,
-        child: IntrinsicHeight(child: edit),
+        child: edit,
       ),
       actions: [
         if (_isValid)
