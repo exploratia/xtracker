@@ -9,7 +9,7 @@
       "labels": {
         "diastolic": "▽ diastolic [mmHg]",
         "systolic": "△ systolic [mmHg]",
-        "medication": "Medikament"
+        "medication": "Medication"
       },
       "validator": {
         "msg": {

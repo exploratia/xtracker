@@ -261,7 +261,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
             ],
           ),
           if (widget.bloodPressureValue != null)
-            IconButton(onPressed: deleteHandler, color: themeData.colorScheme.primary, icon: const Icon(Icons.delete_outlined)),
+            IconButton(onPressed: deleteHandler, color: themeData.colorScheme.secondary, icon: const Icon(Icons.delete_outlined)),
         ],
       ),
       content: SingleChildScrollViewWithScrollbar(
