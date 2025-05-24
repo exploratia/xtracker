@@ -25,15 +25,23 @@ class SeriesEdit extends StatefulWidget {
 }
 
 class _SeriesEditState extends State<SeriesEdit> {
-  final _form = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   var _isLoading = false;
   late SeriesDef? _seriesDef;
   late final bool _isNew;
+
+  // auto validate after first call of save
+  bool _autoValidate = false;
+  bool _isValid = false;
 
   @override
   void initState() {
     _seriesDef = widget.seriesDef?.clone();
     _isNew = _seriesDef == null;
+    if (!_isNew) {
+      _isValid = true;
+      _autoValidate = true;
+    }
     super.initState();
   }
 
@@ -55,11 +63,24 @@ class _SeriesEditState extends State<SeriesEdit> {
     setState(() {});
   }
 
+  void _validate() {
+    if (!_autoValidate) return;
+    bool valid = _formKey.currentState?.validate() ?? false;
+    if (valid) _formKey.currentState?.save();
+    if (valid != _isValid) {
+      setState(() {
+        _isValid = valid;
+      });
+    }
+  }
+
   Future<void> _saveHandler() async {
     if (_seriesDef == null) return;
-    var currentState = _form.currentState;
-    if (currentState == null || !currentState.validate()) return;
-    currentState.save();
+    setState(() {
+      _autoValidate = true;
+    });
+    _validate();
+    if (!_isValid) return;
 
     setState(() => _isLoading = true);
 
@@ -110,10 +131,12 @@ class _SeriesEditState extends State<SeriesEdit> {
       ));
     } else {
       body = _SeriesEditor(
-        form: _form,
+        formKey: _formKey,
+        autovalidateMode: _autoValidate ? AutovalidateMode.always : AutovalidateMode.disabled,
         seriesDef: _seriesDef!,
         goBack: _isNew ? _resetSeriesDef : null,
         updateState: _updateState,
+        validate: _validate,
       );
     }
 
@@ -147,43 +170,72 @@ class _SeriesTypeInfoBtn extends StatelessWidget {
   }
 }
 
-class _SeriesEditor extends StatelessWidget {
-  const _SeriesEditor({required this.form, required this.seriesDef, required this.goBack, required this.updateState});
+class _SeriesEditor extends StatefulWidget {
+  const _SeriesEditor(
+      {required this.formKey,
+      required this.seriesDef,
+      required this.goBack,
+      required this.updateState,
+      required this.autovalidateMode,
+      required this.validate});
 
-  final GlobalKey<FormState> form;
+  final GlobalKey<FormState> formKey;
   final SeriesDef seriesDef;
   final Function()? goBack;
   final Function() updateState;
+  final Function() validate;
+  final AutovalidateMode autovalidateMode;
+
+  @override
+  State<_SeriesEditor> createState() => _SeriesEditorState();
+}
+
+class _SeriesEditorState extends State<_SeriesEditor> {
+  final _nameController = TextEditingController();
+
+  @override
+  initState() {
+    _nameController.addListener(widget.validate);
+    _nameController.text = widget.seriesDef.name.toString();
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     return ScrollableCenteredFormWrapper(
-      formKey: form,
+      formKey: widget.formKey,
+      autovalidateMode: widget.autovalidateMode,
       children: [
         // is new - then go back is allowed
-        if (goBack != null)
+        if (widget.goBack != null)
           Row(
-            children: [IconButton(onPressed: goBack, icon: const Icon(Icons.arrow_back_outlined))],
+            children: [IconButton(onPressed: widget.goBack, icon: const Icon(Icons.arrow_back_outlined))],
           ),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            IconMap.icon(seriesDef.iconName),
+            IconMap.icon(widget.seriesDef.iconName),
             const SizedBox(width: 10),
             Text(
-              SeriesType.displayNameOf(seriesDef.seriesType),
+              SeriesType.displayNameOf(widget.seriesDef.seriesType),
               style: themeData.textTheme.headlineSmall,
             ),
           ],
         ),
         const Divider(),
-        Text(seriesDef.name),
         TextFormField(
           autofocus: true,
+          controller: _nameController,
           decoration: InputDecoration(labelText: LocaleKeys.series_edit_labels_seriesName.tr()),
           textInputAction: TextInputAction.next,
-          initialValue: seriesDef.name,
           // unicode is possible - e.g. from https://www.compart.com/de/unicode/block/U+1F600
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -191,7 +243,6 @@ class _SeriesEditor extends StatelessWidget {
             }
             return null;
           },
-          onSaved: (value) => seriesDef.name = value!,
         ),
         const SizedBox(height: 10),
         Row(
@@ -203,8 +254,8 @@ class _SeriesEditor extends StatelessWidget {
               children: [
                 Text(LocaleKeys.series_edit_labels_seriesIcon.tr()),
                 IconPicker(
-                  icoName: seriesDef.iconName,
-                  icoSelected: (icoName) => seriesDef.iconName = icoName,
+                  icoName: widget.seriesDef.iconName,
+                  icoSelected: (icoName) => widget.seriesDef.iconName = icoName,
                 ),
               ],
             ),
@@ -213,15 +264,15 @@ class _SeriesEditor extends StatelessWidget {
               children: [
                 Text(LocaleKeys.series_edit_labels_seriesColor.tr()),
                 ColorPicker(
-                  color: seriesDef.color,
-                  colorSelected: (color) => seriesDef.color = color,
+                  color: widget.seriesDef.color,
+                  colorSelected: (color) => widget.seriesDef.color = color,
                 ),
               ],
             ),
           ],
         ),
-        switch (seriesDef.seriesType) {
-          SeriesType.bloodPressure => BloodPressureSeriesEdit(seriesDef, updateState),
+        switch (widget.seriesDef.seriesType) {
+          SeriesType.bloodPressure => BloodPressureSeriesEdit(widget.seriesDef, widget.updateState),
           SeriesType.dailyCheck => Container(),
           // TODO: Handle this case.
           SeriesType.monthly => throw UnimplementedError(),
