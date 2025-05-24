@@ -30,11 +30,13 @@ class SeriesDataBloodPressureDotsView extends StatelessWidget {
       List<Color> colors = [BloodPressureValue.colorHigh(dataItem.high), BloodPressureValue.colorLow(dataItem.low)];
       final rect = Rect.fromPoints(topLeft, bottomRight);
       CustomPaintUtils.paintGradientFilledRect(canvas, rect, 2, colors, Alignment.topCenter, Alignment.bottomCenter);
-      // draw a small cross as medication indicator
-      var medicationPaint = Paint()..color = themeData.textTheme.labelMedium?.color ?? Colors.white;
-      var crossCenter = bottomRight.translate(-3, -3);
-      canvas.drawRect(Rect.fromCenter(center: crossCenter, width: 5, height: 1), medicationPaint);
-      canvas.drawRect(Rect.fromCenter(center: crossCenter, width: 1, height: 5), medicationPaint);
+      if (dataItem.medication) {
+        // draw a small cross as medication indicator
+        var medicationPaint = Paint()..color = themeData.textTheme.labelMedium?.color ?? Colors.white;
+        var crossCenter = bottomRight.translate(-3, -3);
+        canvas.drawRect(Rect.fromCenter(center: crossCenter, width: 5, height: 1), medicationPaint);
+        canvas.drawRect(Rect.fromCenter(center: crossCenter, width: 1, height: 5), medicationPaint);
+      }
     }
 
     return ResponsiveDotsView(
@@ -55,7 +57,7 @@ class SeriesDataBloodPressureDotsView extends StatelessWidget {
         actItem = _BloodPressureDayItem(dateTime: item.dateTime);
         map[dateDay] = actItem;
       }
-      actItem.updateHighLow(item.high, item.low);
+      actItem.updateHighLow(item.high, item.low, item.medication);
     }
 
     return map;
@@ -65,12 +67,14 @@ class SeriesDataBloodPressureDotsView extends StatelessWidget {
 class _BloodPressureDayItem extends DayItem {
   int high = -1000;
   int low = 1000;
+  bool medication = false;
 
   _BloodPressureDayItem({required super.dateTime});
 
-  updateHighLow(int valH, int valL) {
+  updateHighLow(int valH, int valL, bool med) {
     high = max(high, valH);
     low = min(low, valL);
+    medication |= med;
   }
 
   @override
