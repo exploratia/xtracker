@@ -16,7 +16,7 @@ class AppBottomNavigationBar extends StatelessWidget {
         valueListenable: HideBottomNavigationBar.visible,
         builder: (BuildContext ctx1, isVisible, _) => AnimatedContainer(
           duration: const Duration(milliseconds: 300),
-          height: isVisible ? MediaQuery.of(context).padding.bottom + (40 + (navLabelsVisible ? 16 : 0)) : 0,
+          height: isVisible ? MediaQuery.of(context).padding.bottom + (40 + 16) : 0,
           child: OverflowBox(
             maxHeight: double.infinity,
             minHeight: 0,
