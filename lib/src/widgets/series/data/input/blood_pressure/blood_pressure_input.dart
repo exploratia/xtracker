@@ -198,6 +198,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
                       ),
                       // Only numbers can be entered:
                       inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
+                      keyboardType: const TextInputType.numberWithOptions(signed: false, decimal: false),
                       textInputAction: TextInputAction.done,
                       // unicode is possible - e.g. from https://www.compart.com/de/unicode/block/U+1F600
                       validator: (value) {
