@@ -46,12 +46,12 @@
         "errorOccurred": "An Error Occurred"
       },
       "btn": {
-        "cancel": "Cancel",
-        "no": "No",
-        "okay": "Ok",
-        "save": "Save",
-        "delete": "Delete",
-        "yes": "Yes"
+        "cancel": "CANCEL",
+        "no": "NO",
+        "okay": "OK",
+        "save": "SAVE",
+        "delete": "DELETE",
+        "yes": "YES"
       }
     },
     "msg": {

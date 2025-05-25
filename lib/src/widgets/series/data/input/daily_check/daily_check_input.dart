@@ -134,22 +134,22 @@ class _DailyCheckInputState extends State<DailyCheckInput> {
         child: edit,
       ),
       actions: [
-        if (_isValid)
-          TextButton(
-            onPressed: _saveHandler,
-            child: Text(LocaleKeys.commons_dialog_btn_save.tr()),
-          ),
-        if (!_isValid && widget.dailyCheckValue != null)
-          TextButton(
-            onPressed: _deleteHandler,
-            child: Text(LocaleKeys.commons_dialog_btn_delete.tr()),
-          ),
         TextButton(
           onPressed: () {
             Navigator.pop(context, null);
           },
           child: Text(LocaleKeys.commons_dialog_btn_cancel.tr()),
         ),
+        if (_isValid)
+          TextButton(
+            onPressed: _saveHandler,
+            child: Text(LocaleKeys.commons_dialog_btn_okay.tr()),
+          ),
+        if (!_isValid && widget.dailyCheckValue != null)
+          TextButton(
+            onPressed: _deleteHandler,
+            child: Text(LocaleKeys.commons_dialog_btn_delete.tr()),
+          ),
       ],
     );
   }

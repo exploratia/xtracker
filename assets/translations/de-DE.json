@@ -46,12 +46,12 @@
         "errorOccurred": "Fehler"
       },
       "btn": {
-        "cancel": "Abbrechen",
-        "no": "Nein",
-        "okay": "Ok",
-        "save": "Speichern",
-        "delete": "Löschen",
-        "yes": "Ja"
+        "cancel": "ABBRECHEN",
+        "no": "NEIN",
+        "okay": "OK",
+        "save": "SPEICHERN",
+        "delete": "LÖSCHEN",
+        "yes": "JA"
       }
     },
     "msg": {

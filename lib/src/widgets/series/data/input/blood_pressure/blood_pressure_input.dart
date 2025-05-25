@@ -250,18 +250,16 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
     );
 
     return AlertDialog(
+      // contentPadding: EdgeInsets.all(0),
       title: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Row(
-            children: [
-              if (widget.bloodPressureValue != null) const Icon(Icons.edit_outlined),
-              if (widget.bloodPressureValue == null) const Icon(Icons.add_circle_outline),
-              const SizedBox(width: 10),
-              Text(SeriesType.displayNameOf(widget.seriesDef.seriesType)),
-            ],
-          ),
+          if (widget.bloodPressureValue != null) const Icon(Icons.edit_outlined),
+          if (widget.bloodPressureValue == null) const Icon(Icons.add_circle_outline),
+          const SizedBox(width: 10),
+          Text(SeriesType.displayNameOf(widget.seriesDef.seriesType)),
+          Flexible(child: Container()),
           if (widget.bloodPressureValue != null)
             IconButton(onPressed: _deleteHandler, color: themeData.colorScheme.secondary, icon: const Icon(Icons.delete_outlined)),
         ],
@@ -272,14 +270,14 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
       ),
       actions: [
         TextButton(
-          onPressed: _saveHandler,
-          child: Text(LocaleKeys.commons_dialog_btn_save.tr()),
-        ),
-        TextButton(
           onPressed: () {
             Navigator.pop(context, null);
           },
           child: Text(LocaleKeys.commons_dialog_btn_cancel.tr()),
+        ),
+        TextButton(
+          onPressed: _saveHandler,
+          child: Text(LocaleKeys.commons_dialog_btn_okay.tr()),
         ),
       ],
     );
