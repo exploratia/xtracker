@@ -93,7 +93,7 @@ class ThemeUtils {
             ),
           ),
       chipTheme: ChipThemeData(backgroundColor: chipBackgroundColor),
-      dialogTheme: DialogTheme(
+      dialogTheme: DialogThemeData(
         // for fullscreen background has to be set manually
         backgroundColor: chipBackgroundColor,
         shape: const RoundedRectangleBorder(
