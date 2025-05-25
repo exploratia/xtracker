@@ -18,6 +18,10 @@ enum ViewType {
 
   const ViewType(this.iconData);
 
+  String displayName() {
+    return displayNameOf(this);
+  }
+
   static String displayNameOf(ViewType seriesType) {
     return switch (seriesType) {
       ViewType.lineChart => LocaleKeys.series_viewType_seriesChart.tr(),
