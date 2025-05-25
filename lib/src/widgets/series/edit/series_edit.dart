@@ -25,32 +25,18 @@ class SeriesEdit extends StatefulWidget {
 }
 
 class _SeriesEditState extends State<SeriesEdit> {
-  final _formKey = GlobalKey<FormState>();
-  var _isLoading = false;
   late SeriesDef? _seriesDef;
   late final bool _isNew;
-
-  // auto validate after first call of save
-  bool _autoValidate = false;
-  bool _isValid = false;
 
   @override
   void initState() {
     _seriesDef = widget.seriesDef?.clone();
     _isNew = _seriesDef == null;
-    if (!_isNew) {
-      _isValid = true;
-      _autoValidate = true;
-    }
     super.initState();
   }
 
   void _resetSeriesDef() {
     _seriesDef = null;
-    setState(() {});
-  }
-
-  void _updateState() {
     setState(() {});
   }
 
@@ -63,53 +49,36 @@ class _SeriesEditState extends State<SeriesEdit> {
     setState(() {});
   }
 
-  void _validate() {
-    if (!_autoValidate) return;
-    bool valid = _formKey.currentState?.validate() ?? false;
-    if (valid) _formKey.currentState?.save();
-    if (valid != _isValid) {
-      setState(() {
-        _isValid = valid;
-      });
-    }
-  }
-
-  Future<void> _saveHandler() async {
-    if (_seriesDef == null) return;
-    setState(() {
-      _autoValidate = true;
-    });
-    _validate();
-    if (!_isValid) return;
-
-    setState(() => _isLoading = true);
-
-    try {
-      var seriesProvider = context.read<SeriesProvider>();
-      await seriesProvider.save(_seriesDef!);
-      if (mounted) Dialogs.showSnackBar(LocaleKeys.commons_msg_saved.tr(), context);
-    } catch (err) {
-      if (mounted) {
-        await Dialogs.simpleErrOkDialog(err.toString(), context);
-      }
-    }
-
-    setState(() => _isLoading = false);
-
-    if (mounted) Navigator.of(context).pop(_seriesDef);
-  }
-
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
 
-    Widget body;
+    if (_seriesDef == null) {
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: themeData.colorScheme.secondary,
+          title: Text(LocaleKeys.series_edit_title.tr()),
+          leading: IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.close_outlined)),
+        ),
+        body: _SeriesTypeSelector(createSeriesDef: _createSeriesDef),
+      );
+    }
+    return _SeriesEditor(
+      seriesDef: _seriesDef!,
+      goBack: _isNew ? _resetSeriesDef : null,
+    );
+  }
+}
 
-    if (_isLoading) {
-      body = const LinearProgressIndicator();
-    } else if (_seriesDef == null) {
-      body = VCenteredSingleChildScrollViewWithScrollbar(
-          child: Column(
+class _SeriesTypeSelector extends StatelessWidget {
+  const _SeriesTypeSelector({required this.createSeriesDef});
+
+  final Function(SeriesType seriesType) createSeriesDef;
+
+  @override
+  Widget build(BuildContext context) {
+    return VCenteredSingleChildScrollViewWithScrollbar(
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Text(LocaleKeys.series_edit_labels_selectSeriesType.tr()),
@@ -122,33 +91,13 @@ class _SeriesEditState extends State<SeriesEdit> {
                     ElevatedButton.icon(
                       icon: IconMap.icon(st.iconName),
                       label: Text(SeriesType.displayNameOf(st)),
-                      onPressed: () => _createSeriesDef(st),
+                      onPressed: () => createSeriesDef(st),
                     )
                   ])),
             ],
           )
         ],
-      ));
-    } else {
-      body = _SeriesEditor(
-        formKey: _formKey,
-        autovalidateMode: _autoValidate ? AutovalidateMode.always : AutovalidateMode.disabled,
-        seriesDef: _seriesDef!,
-        goBack: _isNew ? _resetSeriesDef : null,
-        updateState: _updateState,
-        validate: _validate,
-      );
-    }
-
-    return Scaffold(
-      appBar: AppBar(
-          backgroundColor: themeData.colorScheme.secondary,
-          title: Text(LocaleKeys.series_edit_title.tr()),
-          leading: IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.close_outlined)),
-          actions: [
-            if (_seriesDef != null) IconButton(onPressed: _saveHandler, icon: const Icon(Icons.save_outlined)),
-          ]),
-      body: body,
+      ),
     );
   }
 }
@@ -171,33 +120,37 @@ class _SeriesTypeInfoBtn extends StatelessWidget {
 }
 
 class _SeriesEditor extends StatefulWidget {
-  const _SeriesEditor(
-      {required this.formKey,
-      required this.seriesDef,
-      required this.goBack,
-      required this.updateState,
-      required this.autovalidateMode,
-      required this.validate});
+  const _SeriesEditor({required this.seriesDef, required this.goBack});
 
-  final GlobalKey<FormState> formKey;
   final SeriesDef seriesDef;
   final Function()? goBack;
-  final Function() updateState;
-  final Function() validate;
-  final AutovalidateMode autovalidateMode;
 
   @override
   State<_SeriesEditor> createState() => _SeriesEditorState();
 }
 
 class _SeriesEditorState extends State<_SeriesEditor> {
+  late SeriesDef _seriesDef;
+  var _isLoading = false;
+
+  final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
 
-  @override
-  initState() {
-    _nameController.addListener(widget.validate);
-    _nameController.text = widget.seriesDef.name.toString();
+  // auto validate after first call of save
+  bool _autoValidate = false;
+  bool _isValid = false;
 
+  @override
+  void initState() {
+    _seriesDef = widget.seriesDef.clone();
+
+    _nameController.addListener(_validate);
+    _nameController.text = _seriesDef.name.toString();
+
+    if (widget.goBack == null) {
+      _isValid = true;
+      _autoValidate = true;
+    }
     super.initState();
   }
 
@@ -207,12 +160,68 @@ class _SeriesEditorState extends State<_SeriesEditor> {
     super.dispose();
   }
 
+  void _setLoading(bool value) {
+    setState(() {
+      _isLoading = value;
+    });
+  }
+
+  void _updateState() {
+    setState(() {});
+  }
+
+  void _validate() {
+    if (!_autoValidate) return;
+    bool valid = _formKey.currentState?.validate() ?? false;
+    if (valid) _formKey.currentState?.save();
+    if (valid != _isValid) {
+      setState(() {
+        _isValid = valid;
+      });
+    }
+  }
+
+  Future<void> _saveHandler() async {
+    setState(() {
+      _autoValidate = true;
+    });
+    _validate();
+    if (!_isValid) return;
+
+    _setLoading(true);
+
+    try {
+      var seriesProvider = context.read<SeriesProvider>();
+      await seriesProvider.save(_seriesDef);
+      if (mounted) Dialogs.showSnackBar(LocaleKeys.commons_msg_saved.tr(), context);
+    } catch (err) {
+      if (mounted) {
+        await Dialogs.simpleErrOkDialog(err.toString(), context);
+      }
+    }
+
+    _setLoading(false);
+
+    if (mounted) Navigator.of(context).pop(_seriesDef);
+  }
+
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    return ScrollableCenteredFormWrapper(
-      formKey: widget.formKey,
-      autovalidateMode: widget.autovalidateMode,
+
+    if (_isLoading) {
+      return Scaffold(
+        appBar: AppBar(
+          backgroundColor: themeData.colorScheme.secondary,
+          title: Text(LocaleKeys.series_edit_title.tr()),
+        ),
+        body: const LinearProgressIndicator(),
+      );
+    }
+
+    var formWrapper = ScrollableCenteredFormWrapper(
+      formKey: _formKey,
+      autovalidateMode: _autoValidate ? AutovalidateMode.always : AutovalidateMode.disabled,
       children: [
         // is new - then go back is allowed
         if (widget.goBack != null)
@@ -222,10 +231,10 @@ class _SeriesEditorState extends State<_SeriesEditor> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            IconMap.icon(widget.seriesDef.iconName),
+            IconMap.icon(_seriesDef.iconName),
             const SizedBox(width: 10),
             Text(
-              SeriesType.displayNameOf(widget.seriesDef.seriesType),
+              SeriesType.displayNameOf(_seriesDef.seriesType),
               style: themeData.textTheme.headlineSmall,
             ),
           ],
@@ -234,7 +243,10 @@ class _SeriesEditorState extends State<_SeriesEditor> {
         TextFormField(
           autofocus: true,
           controller: _nameController,
-          decoration: InputDecoration(labelText: LocaleKeys.series_edit_labels_seriesName.tr()),
+          decoration: InputDecoration(
+            labelText: LocaleKeys.series_edit_labels_seriesName.tr(),
+            hintText: SeriesType.displayNameOf(_seriesDef.seriesType),
+          ),
           textInputAction: TextInputAction.next,
           // unicode is possible - e.g. from https://www.compart.com/de/unicode/block/U+1F600
           validator: (value) {
@@ -242,6 +254,9 @@ class _SeriesEditorState extends State<_SeriesEditor> {
               return LocaleKeys.commons_validator_msg_emptyValue.tr();
             }
             return null;
+          },
+          onChanged: (value) {
+            _seriesDef.name = value;
           },
         ),
         const SizedBox(height: 10),
@@ -254,8 +269,8 @@ class _SeriesEditorState extends State<_SeriesEditor> {
               children: [
                 Text(LocaleKeys.series_edit_labels_seriesIcon.tr()),
                 IconPicker(
-                  icoName: widget.seriesDef.iconName,
-                  icoSelected: (icoName) => widget.seriesDef.iconName = icoName,
+                  icoName: _seriesDef.iconName,
+                  icoSelected: (icoName) => _seriesDef.iconName = icoName,
                 ),
               ],
             ),
@@ -264,15 +279,15 @@ class _SeriesEditorState extends State<_SeriesEditor> {
               children: [
                 Text(LocaleKeys.series_edit_labels_seriesColor.tr()),
                 ColorPicker(
-                  color: widget.seriesDef.color,
-                  colorSelected: (color) => widget.seriesDef.color = color,
+                  color: _seriesDef.color,
+                  colorSelected: (color) => _seriesDef.color = color,
                 ),
               ],
             ),
           ],
         ),
-        switch (widget.seriesDef.seriesType) {
-          SeriesType.bloodPressure => BloodPressureSeriesEdit(widget.seriesDef, widget.updateState),
+        switch (_seriesDef.seriesType) {
+          SeriesType.bloodPressure => BloodPressureSeriesEdit(_seriesDef, _updateState),
           SeriesType.dailyCheck => Container(),
           // TODO: Handle this case.
           SeriesType.monthly => throw UnimplementedError(),
@@ -280,6 +295,18 @@ class _SeriesEditorState extends State<_SeriesEditor> {
           SeriesType.free => throw UnimplementedError(),
         }
       ],
+    );
+
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: themeData.colorScheme.secondary,
+        title: Text(LocaleKeys.series_edit_title.tr()),
+        leading: IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.close_outlined)),
+        actions: [
+          IconButton(onPressed: _saveHandler, icon: const Icon(Icons.save_outlined)),
+        ],
+      ),
+      body: formWrapper,
     );
   }
 }
