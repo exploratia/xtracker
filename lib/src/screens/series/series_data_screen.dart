@@ -16,6 +16,7 @@ import '../../util/globals.dart';
 import '../../widgets/layout/app_bar_actions_divider.dart';
 import '../../widgets/layout/centered_message.dart';
 import '../../widgets/layout/gradient_app_bar.dart';
+import '../../widgets/popupmenu/icon_popup_menu.dart';
 import '../../widgets/provider/data_provider_loader.dart';
 import '../../widgets/responsive/screen_builder.dart';
 import '../../widgets/series/data/view/series_data_view.dart';
@@ -158,12 +159,6 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
     List<Widget> actions = [];
 
     if (_seriesDef != null) {
-      List<Widget> editActions = [];
-      if (_viewType == ViewType.table) {
-        editActions.add(IconButton(onPressed: () => _toggleEditMode(), icon: Icon(_editMode ? Icons.edit_off_outlined : Icons.edit_outlined)));
-        editActions.add(const AppBarActionsDivider());
-      }
-
       List<Widget> chartActions = [];
       var seriesType = _seriesDef!.seriesType;
       if (_viewType == ViewType.lineChart) {
@@ -182,19 +177,27 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
         if (chartActions.isNotEmpty) chartActions.add(const AppBarActionsDivider());
       }
       List<Widget> viewActions = [
-        ...seriesType.viewTypes.where((vt) => vt != _viewType).map((vt) => IconButton(onPressed: () => _setViewType(vt), icon: Icon(vt.iconData))),
-        const AppBarActionsDivider(),
+        Padding(
+          padding: const EdgeInsets.only(right: 8),
+          child: IconPopupMenu(
+            icon: const Icon(Icons.remove_red_eye_outlined),
+            menuItems: [...seriesType.viewTypes.where((vt) => vt != _viewType).map((vt) => IconPopupMenuEntry(Icon(vt.iconData), () => _setViewType(vt)))],
+          ),
+        ),
       ];
       List<Widget> dataActions = [
         // add value btn
         IconButton(onPressed: () => _addSeriesValueHandler(context), icon: const Icon(Icons.add)),
+        const AppBarActionsDivider(),
       ];
+      if (_viewType == ViewType.table) {
+        dataActions.insert(0, IconButton(onPressed: () => _toggleEditMode(), icon: Icon(_editMode ? Icons.edit_off_outlined : Icons.edit_outlined)));
+      }
 
       actions = [
-        ...editActions,
+        ...dataActions,
         ...chartActions,
         ...viewActions,
-        ...dataActions,
       ];
     }
 
