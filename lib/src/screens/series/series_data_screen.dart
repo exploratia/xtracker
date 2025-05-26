@@ -181,7 +181,7 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
           padding: const EdgeInsets.only(right: 8),
           child: IconPopupMenu(
             icon: const Icon(Icons.remove_red_eye_outlined),
-            menuItems: [...seriesType.viewTypes.where((vt) => vt != _viewType).map((vt) => IconPopupMenuEntry(Icon(vt.iconData), () => _setViewType(vt)))],
+            menuEntries: [...seriesType.viewTypes.where((vt) => vt != _viewType).map((vt) => IconPopupMenuEntry(Icon(vt.iconData), () => _setViewType(vt)))],
           ),
         ),
       ];
