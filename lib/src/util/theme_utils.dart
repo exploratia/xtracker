@@ -7,8 +7,9 @@ import 'navigation/fade_transition_builder.dart';
 class ThemeUtils {
   static final MaterialColor primary = ColorUtils.customMaterialColor(const Color(0xffde0b30));
   static const Color onPrimary = Colors.white;
-  static final MaterialColor secondary = // e.g. when pulling down | toggle switch
-      ColorUtils.customMaterialColor(const Color(0xff911d31));
+
+  // e.g. when pulling down | toggle switch:
+  static final MaterialColor secondary = ColorUtils.customMaterialColor(const Color(0xff911d31));
   static final MaterialColor tertiary = ColorUtils.customMaterialColor(const Color(0xffbfff00));
 
   static const screenPadding = EdgeInsets.symmetric(horizontal: 16, vertical: 16); // .all(16);
@@ -84,7 +85,7 @@ class ThemeUtils {
             // trackBorderColor: const MaterialStatePropertyAll(Colors.purpleAccent),
           ),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(backgroundColor: backgroundColor, selectedItemColor: primary),
-      snackBarTheme: SnackBarThemeData(backgroundColor: cardBackgroundColor, contentTextStyle: const TextStyle(color: onPrimary)),
+      snackBarTheme: SnackBarThemeData(backgroundColor: cardBackgroundColor, contentTextStyle: TextStyle(color: dark ? Colors.white : Colors.black)),
       // Card (e.g. in Settings)
       cardTheme: Theme.of(context).cardTheme.copyWith(
             color: cardBackgroundColor,
