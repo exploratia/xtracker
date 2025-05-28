@@ -14,6 +14,10 @@ class Navigation {
 
     currentMainNavigationIdx.value = value;
     var currentItem = mainNavigationItems[value];
+
+    while (Navigator.canPop(context)) {
+      Navigator.pop(context);
+    }
     Navigator.pushReplacementNamed(context, currentItem.routeName);
   }
 
