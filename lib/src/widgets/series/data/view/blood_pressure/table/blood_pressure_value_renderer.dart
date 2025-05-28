@@ -5,20 +5,21 @@ import '../../../../../../model/series/data/series_data.dart';
 import '../../../../../../model/series/series_def.dart';
 
 class BloodPressureValueRenderer extends StatelessWidget {
-  const BloodPressureValueRenderer({super.key, required this.bloodPressureValue, this.editMode, required this.seriesDef});
+  const BloodPressureValueRenderer({super.key, required this.bloodPressureValue, this.editMode = false, required this.seriesDef});
 
   final BloodPressureValue bloodPressureValue;
-  final bool? editMode;
+  final bool editMode;
   final SeriesDef seriesDef;
 
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
     var container = Container(
       margin: const EdgeInsets.all(2),
       padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 3),
       decoration: BoxDecoration(
-        // border: Border.all(width: 1, color: Theme.of(context).cardColor),
-        // borderRadius: const BorderRadius.all(Radius.circular(4)),
+        border: Border.all(width: 1, color: editMode ? themeData.colorScheme.secondary : themeData.cardColor),
+        borderRadius: const BorderRadius.all(Radius.circular(4)),
         gradient: LinearGradient(
           colors: [
             BloodPressureValue.colorHighOf(bloodPressureValue),
@@ -44,8 +45,9 @@ class BloodPressureValueRenderer extends StatelessWidget {
       ),
     );
 
-    if (editMode != null && editMode!) {
+    if (editMode) {
       return InkWell(
+        borderRadius: const BorderRadius.all(Radius.circular(4)),
         onTap: () => SeriesData.showSeriesDataInputDlg(context, seriesDef, value: bloodPressureValue),
         child: container,
       );

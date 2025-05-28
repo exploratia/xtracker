@@ -31,7 +31,7 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
         return math.max(previousValue, maxItems);
       },
     );
-    int lineHeight = 26 * maxItemsPerDayPart;
+    int lineHeight = 30 * maxItemsPerDayPart;
 
     gridCellBuilder(BuildContext context, int yIndex, int xIndex) {
       _BloodPressureDayItem bloodPressureDayItem = data[yIndex];
