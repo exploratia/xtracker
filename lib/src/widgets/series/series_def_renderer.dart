@@ -28,7 +28,6 @@ class SeriesDefRenderer extends StatelessWidget {
       content = LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
         var twoRows = (constraints.maxWidth < 500);
         return IntrinsicHeight(
-          // height: twoRows ? 82 : 42,
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -38,7 +37,7 @@ class SeriesDefRenderer extends StatelessWidget {
                     if (twoRows) {
                       return Column(
                         children: [
-                          _SeriesIconAndName(seriesDef: seriesDef),
+                          _SeriesIconAndName(seriesDef: seriesDef, verticalPadding: 10),
                           Divider(
                             height: 2,
                             thickness: 2,
@@ -72,7 +71,6 @@ class SeriesDefRenderer extends StatelessWidget {
       });
     } else {
       content = IntrinsicHeight(
-        // height: 82,
         child: Column(
           children: [
             Row(
@@ -119,9 +117,11 @@ class _HDivider extends StatelessWidget {
 class _SeriesIconAndName extends StatelessWidget {
   const _SeriesIconAndName({
     required this.seriesDef,
+    this.verticalPadding = 0,
   });
 
   final SeriesDef seriesDef;
+  final double verticalPadding;
 
   @override
   Widget build(BuildContext context) {
@@ -130,7 +130,7 @@ class _SeriesIconAndName extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+            padding: EdgeInsets.symmetric(horizontal: 8, vertical: verticalPadding),
             child: Hero(
               tag: 'seriesDef_${seriesDef.uuid}',
               child: Icon(
