@@ -58,26 +58,28 @@ class SeriesImportExport {
     return json;
   }
 
-  static Future<void> _exportJsonFile(Map<String, dynamic> json, String fileName) async {
+  static Future<bool> _exportJsonFile(Map<String, dynamic> json, String fileName) async {
     var enc = const Utf8Encoder();
     Uint8List bytes = enc.convert(jsonEncode(json));
 
     // https://pub.dev/packages/file_picker
-    await FilePicker.platform
+    var selectedFile = await FilePicker.platform
         .saveFile(dialogTitle: 'Please select an output file:', fileName: fileName, type: FileType.custom, allowedExtensions: ["json"], bytes: bytes);
+    return selectedFile != null;
   }
 
   static Future<void> exportSeriesDef(SeriesDef seriesDef, BuildContext context) async {
     Map<String, dynamic>? json = await _buildSeriesExportJson(seriesDef, context);
-    await _exportJsonFile(json, 'xtracker_series_${seriesDef.uuid}_${DateTimeUtils.formateExportDateTime()}.json');
+    bool exported = await _exportJsonFile(json, 'xtracker_series_${seriesDef.uuid}_${DateTimeUtils.formateExportDateTime()}.json');
+    if (exported && context.mounted) Dialogs.showSnackBar(LocaleKeys.series_management_importExport_dialog_msg_exportSuccessful.tr(), context);
   }
 
   /// export all series with data
   static Future<void> _exportSeries(BuildContext context) async {
     try {
       Map<String, dynamic> json = await _buildAllSeriesExportJson(context);
-      await _exportJsonFile(json, 'xtracker_multi_series_export_${DateTimeUtils.formateExportDateTime()}.json');
-      if (context.mounted) Dialogs.showSnackBar(LocaleKeys.series_management_importExport_dialog_msg_exportSuccessful.tr(), context);
+      bool exported = await _exportJsonFile(json, 'xtracker_multi_series_export_${DateTimeUtils.formateExportDateTime()}.json');
+      if (exported && context.mounted) Dialogs.showSnackBar(LocaleKeys.series_management_importExport_dialog_msg_exportSuccessful.tr(), context);
     } catch (ex) {
       if (context.mounted) Dialogs.showSnackBar(ex.toString(), context);
     }

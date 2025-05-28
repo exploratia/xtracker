@@ -116,7 +116,6 @@ class _ExportSeriesDataBtn extends StatelessWidget {
     handler() async {
       try {
         await SeriesImportExport.exportSeriesDef(seriesDef, context);
-        if (context.mounted) Dialogs.showSnackBar(LocaleKeys.series_management_importExport_dialog_msg_exportSuccessful.tr(), context);
       } catch (ex) {
         if (context.mounted) Dialogs.showSnackBar(ex.toString(), context);
       }
