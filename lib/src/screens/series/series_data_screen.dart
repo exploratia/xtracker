@@ -159,23 +159,13 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
     List<Widget> actions = [];
 
     if (_seriesDef != null) {
-      List<Widget> chartActions = [];
       var seriesType = _seriesDef!.seriesType;
-      if (_viewType == ViewType.lineChart) {
-        // Je nach Typ Umschalter erstellen : Monat/Jahr ...
-        if (seriesType == SeriesType.monthly) {
-          chartActions.add(
-              IconButton(onPressed: () => _toggleMonthlyYearlyMode(), icon: Icon(_showYearly ? Icons.calendar_month_outlined : Icons.calendar_today_outlined)));
-        }
-        if (chartActions.isNotEmpty) chartActions.add(const AppBarActionsDivider());
-      } else if (_viewType == ViewType.barChart) {
-        // Je nach Typ Umschalter erstellen : Monat/Jahr ...
-        if (seriesType == SeriesType.dailyCheck) {
-          chartActions.add(
-              IconButton(onPressed: () => _toggleMonthlyYearlyMode(), icon: Icon(_showYearly ? Icons.calendar_month_outlined : Icons.calendar_today_outlined)));
-        }
-        if (chartActions.isNotEmpty) chartActions.add(const AppBarActionsDivider());
-      }
+
+      List<Widget> dataActions = [
+        // add value btn
+        IconButton(onPressed: () => _addSeriesValueHandler(context), icon: const Icon(Icons.add)),
+      ];
+
       List<Widget> viewActions = [
         Padding(
           padding: const EdgeInsets.only(right: 8),
@@ -185,18 +175,25 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
           ),
         ),
       ];
-      List<Widget> dataActions = [
-        // add value btn
-        IconButton(onPressed: () => _addSeriesValueHandler(context), icon: const Icon(Icons.add)),
-        const AppBarActionsDivider(),
-      ];
+
+      // in table add edit-mode
       if (_viewType == ViewType.table) {
         dataActions.insert(0, IconButton(onPressed: () => _toggleEditMode(), icon: Icon(_editMode ? Icons.edit_off_outlined : Icons.edit_outlined)));
       }
 
+      // in charts add depending on series type switch interval (month/year) btn
+      if (_viewType == ViewType.lineChart || _viewType == ViewType.barChart) {
+        if (seriesType == SeriesType.monthly || seriesType == SeriesType.dailyCheck) {
+          viewActions.insert(0,
+              IconButton(onPressed: () => _toggleMonthlyYearlyMode(), icon: Icon(_showYearly ? Icons.calendar_month_outlined : Icons.calendar_today_outlined)));
+        }
+      }
+
+      // Divider necessary?
+      if (viewActions.isNotEmpty && dataActions.isNotEmpty) dataActions.add(const AppBarActionsDivider());
+
       actions = [
         ...dataActions,
-        ...chartActions,
         ...viewActions,
       ];
     }
