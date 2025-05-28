@@ -1,5 +1,4 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -19,21 +18,17 @@ class SeriesManagementActions extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(color: seriesDef.color, width: 2, height: 40),
-          _EditSeriesBtn(seriesDef: seriesDef),
-          _ExportSeriesDataBtn(seriesDef: seriesDef),
-          _ClearSeriesDataBtn(seriesDef: seriesDef),
-          _DeleteSeriesBtn(seriesDef: seriesDef),
-          if (!kIsWeb)
-            const Padding(
-              padding: EdgeInsets.all(8.0),
-              child: Icon(Icons.drag_handle_outlined),
-            ),
-          if (kIsWeb) const SizedBox(width: 16),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            _EditSeriesBtn(seriesDef: seriesDef),
+            _ExportSeriesDataBtn(seriesDef: seriesDef),
+            _ClearSeriesDataBtn(seriesDef: seriesDef),
+            _DeleteSeriesBtn(seriesDef: seriesDef),
+          ],
+        ),
       ),
     );
   }

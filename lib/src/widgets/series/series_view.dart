@@ -53,7 +53,7 @@ class _SeriesList extends StatelessWidget {
     List<Widget> children = [];
     var idx = 0;
     for (var s in series) {
-      children.add(FadeIn(durationMS: 200 + idx * 400, child: SeriesDefRenderer(seriesDef: s)));
+      children.add(FadeIn(durationMS: 200 + idx * 400, child: SeriesDefRenderer(seriesDef: s, index: idx)));
       idx++;
     }
 

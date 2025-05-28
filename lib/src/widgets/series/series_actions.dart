@@ -17,9 +17,8 @@ class SeriesActions extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         spacing: 8,
         children: [
-          Container(color: seriesDef.color, width: 2, height: 40),
-          _ShowSeriesDataBtn(seriesDef: seriesDef),
           _ShowSeriesDataInputDlgBtn(seriesDef: seriesDef),
+          _ShowSeriesDataBtn(seriesDef: seriesDef),
         ],
       ),
     );

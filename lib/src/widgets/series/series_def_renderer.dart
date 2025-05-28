@@ -4,8 +4,9 @@ import '../../model/series/series_def.dart';
 import '../card/glowing_border_container.dart';
 import '../select/icon_map.dart';
 import '../text/overflow_text.dart';
-import 'data/input/series_latest_value.dart';
+import 'data/view/series_latest_value_renderer.dart';
 import 'management/series_management_actions.dart';
+import 'management/series_management_drag_handle.dart';
 import 'series_actions.dart';
 
 class SeriesDefRenderer extends StatelessWidget {
@@ -13,46 +14,159 @@ class SeriesDefRenderer extends StatelessWidget {
     super.key,
     required this.seriesDef,
     this.managementMode = false,
+    required this.index,
   });
 
   final SeriesDef seriesDef;
   final bool managementMode;
+  final int index;
 
   @override
   Widget build(BuildContext context) {
+    Widget content;
+    if (managementMode) {
+      content = LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
+        var twoRows = (constraints.maxWidth < 500);
+        return IntrinsicHeight(
+          // height: twoRows ? 82 : 42,
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Expanded(
+                child: Builder(
+                  builder: (BuildContext context) {
+                    if (twoRows) {
+                      return Column(
+                        children: [
+                          _SeriesIconAndName(seriesDef: seriesDef),
+                          Divider(
+                            height: 2,
+                            thickness: 2,
+                            color: seriesDef.color,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              SeriesManagementActions(seriesDef: seriesDef),
+                            ],
+                          ),
+                        ],
+                      );
+                    } else {
+                      return Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          _SeriesIconAndName(seriesDef: seriesDef),
+                          _LeftBorder(color: seriesDef.color, child: SeriesManagementActions(seriesDef: seriesDef)),
+                        ],
+                      );
+                    }
+                  },
+                ),
+              ),
+              _LeftBorder(color: seriesDef.color, child: SeriesManagementDragHandle(index: index)),
+            ],
+          ),
+        );
+      });
+    } else {
+      content = IntrinsicHeight(
+        // height: 82,
+        child: Column(
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                _SeriesIconAndName(seriesDef: seriesDef),
+                _LeftBorder(color: seriesDef.color, child: SeriesActions(seriesDef: seriesDef)),
+              ],
+            ),
+            _HDivider(seriesDef: seriesDef),
+            Expanded(
+                child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              child: SeriesLatestValueRenderer(seriesDef: seriesDef),
+            )),
+          ],
+        ),
+      );
+    }
+
     return GlowingBorderContainer(
       borderWidth: 2,
       glowColor: seriesDef.color,
-      child: Column(
+      child: content,
+    );
+  }
+}
+
+class _HDivider extends StatelessWidget {
+  const _HDivider({required this.seriesDef});
+
+  final SeriesDef seriesDef;
+
+  @override
+  Widget build(BuildContext context) {
+    return Divider(
+      height: 2,
+      thickness: 2,
+      color: seriesDef.color,
+    );
+  }
+}
+
+class _SeriesIconAndName extends StatelessWidget {
+  const _SeriesIconAndName({
+    required this.seriesDef,
+  });
+
+  final SeriesDef seriesDef;
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Hero(
-                  tag: 'seriesDef_${seriesDef.uuid}',
-                  child: Icon(
-                    IconMap.iconData(seriesDef.iconName),
-                    color: seriesDef.color,
-                  ),
-                ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+            child: Hero(
+              tag: 'seriesDef_${seriesDef.uuid}',
+              child: Icon(
+                IconMap.iconData(seriesDef.iconName),
+                color: seriesDef.color,
               ),
-              OverflowText(seriesDef.name),
-              if (managementMode) SeriesManagementActions(seriesDef: seriesDef),
-              if (!managementMode) SeriesActions(seriesDef: seriesDef),
-            ],
-          ),
-          if (!managementMode)
-            Divider(
-              height: 0,
-              thickness: 2,
-              color: seriesDef.color,
             ),
-          if (!managementMode) SeriesLatestValue(seriesDef: seriesDef),
+          ),
+          OverflowText(seriesDef.name),
         ],
       ),
+    );
+  }
+}
+
+class _LeftBorder extends StatelessWidget {
+  const _LeftBorder({
+    required this.color,
+    required this.child,
+  });
+
+  final Color color;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        border: Border(
+          left: BorderSide(
+            color: color,
+            width: 2.0,
+          ),
+        ),
+      ),
+      child: child,
     );
   }
 }

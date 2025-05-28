@@ -49,12 +49,19 @@ class _SeriesList extends StatelessWidget {
     List<Widget> children = [];
     var idx = 0;
     for (var s in series) {
-      children.add(FadeIn(key: Key(s.uuid), durationMS: 200 + idx * 400, child: SeriesDefRenderer(managementMode: true, seriesDef: s)));
+      children.add(FadeIn(
+          key: Key(s.uuid),
+          durationMS: 200 + idx * 400,
+          child: SeriesDefRenderer(
+            managementMode: true,
+            seriesDef: s,
+            index: idx,
+          )));
       idx++;
     }
 
     return ReorderableListView(
-      buildDefaultDragHandles: true,
+      buildDefaultDragHandles: false,
       proxyDecorator: (Widget child, int index, Animation<double> animation) {
         return Opacity(
           opacity: 0.6,
