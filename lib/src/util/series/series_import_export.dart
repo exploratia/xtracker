@@ -118,8 +118,8 @@ class SeriesImportExport {
       // https://pub.dev/packages/file_picker
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         allowMultiple: true,
-        type: FileType.custom,
-        allowedExtensions: ['json'],
+        type: FileType.any,
+        // allowedExtensions: ['json'], // not possible // https://github.com/miguelpruivo/flutter_file_picker/issues/1717
       );
       if (result != null) {
         // PlatformFile file = result.files.first;
@@ -130,6 +130,7 @@ class SeriesImportExport {
         // print(file.path);
 
         for (var file in result.xFiles) {
+          if (!file.name.endsWith(".json")) continue;
           var fileContent = await file.readAsString(); // utf8
           var json = jsonDecode(fileContent) as Map<String, dynamic>;
 
