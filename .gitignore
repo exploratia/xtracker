@@ -60,3 +60,6 @@ app.*.map.json
 
 # untranslated I10n
 untranslated.txt
+
+# own build bat
+build.bat
