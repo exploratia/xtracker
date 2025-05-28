@@ -14,9 +14,23 @@ class BloodPressureValueRenderer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    var container = Container(
+
+    Widget value;
+    if (editMode) {
+      value = Material(
+        color: Colors.transparent,
+        child: InkWell(
+          borderRadius: const BorderRadius.all(Radius.circular(4)),
+          onTap: () => SeriesData.showSeriesDataInputDlg(context, seriesDef, value: bloodPressureValue),
+          child: _Value(bloodPressureValue: bloodPressureValue),
+        ),
+      );
+    } else {
+      value = _Value(bloodPressureValue: bloodPressureValue);
+    }
+
+    return Container(
       margin: const EdgeInsets.all(2),
-      padding: const EdgeInsets.symmetric(vertical: 3, horizontal: 3),
       decoration: BoxDecoration(
         border: Border.all(width: 1, color: editMode ? themeData.colorScheme.secondary : themeData.cardColor),
         borderRadius: const BorderRadius.all(Radius.circular(4)),
@@ -26,8 +40,23 @@ class BloodPressureValueRenderer extends StatelessWidget {
             BloodPressureValue.colorLowOf(bloodPressureValue),
           ],
         ),
-        // borderRadius: const BorderRadius.all(Radius.circular(5)),
       ),
+      child: value,
+    );
+  }
+}
+
+class _Value extends StatelessWidget {
+  const _Value({
+    required this.bloodPressureValue,
+  });
+
+  final BloodPressureValue bloodPressureValue;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(3.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -44,14 +73,5 @@ class BloodPressureValueRenderer extends StatelessWidget {
         ],
       ),
     );
-
-    if (editMode) {
-      return InkWell(
-        borderRadius: const BorderRadius.all(Radius.circular(4)),
-        onTap: () => SeriesData.showSeriesDataInputDlg(context, seriesDef, value: bloodPressureValue),
-        child: container,
-      );
-    }
-    return container;
   }
 }
