@@ -87,7 +87,7 @@ class SeriesImportExport {
   }
 
   /// import series with data from json
-  static Future<void> _importSeries(Map<String, dynamic> json, BuildContext context) async {
+  static Future<bool> _importSeries(Map<String, dynamic> json, BuildContext context) async {
     if (json["type"] as String == "seriesExport") {
       var seriesProvider = context.read<SeriesProvider>();
       var seriesDataProvider = context.read<SeriesDataProvider>();
@@ -109,6 +109,7 @@ class SeriesImportExport {
       await seriesProvider.delete(seriesDef, context);
       await seriesProvider.save(seriesDef);
       if (context.mounted) await seriesDataProvider.addValues(seriesDef, seriesData.data, context);
+      return true;
     } else {
       throw Exception(LocaleKeys.series_management_importExport_dialog_msg_error_unexpectedFileOrDataStructure.tr());
     }
@@ -116,51 +117,78 @@ class SeriesImportExport {
 
   /// import series with data
   static Future<void> _importJsonFile(BuildContext context) async {
+    FilePickerResult? result;
     try {
       // https://pub.dev/packages/file_picker
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
+      result = await FilePicker.platform.pickFiles(
         allowMultiple: true,
         type: FileType.any,
         // allowedExtensions: ['json'], // not possible // https://github.com/miguelpruivo/flutter_file_picker/issues/1717
       );
-      if (result != null) {
-        // PlatformFile file = result.files.first;
-        // print(file.name);
-        // print(file.bytes);
-        // print(file.size); // check file size?
-        // print(file.extension);
-        // print(file.path);
-
-        for (var file in result.xFiles) {
-          if (!file.name.endsWith(".json")) continue;
-          var fileContent = await file.readAsString(); // utf8
-          var json = jsonDecode(fileContent) as Map<String, dynamic>;
-
-          if (json["type"] as String == "multiSeriesExport") {
-            // check version...
-            List<dynamic> seriesList = json["series"] as List<dynamic>;
-            for (var seriesJson in seriesList) {
-              if (seriesJson is Map<String, dynamic>) {
-                if (context.mounted) await _importSeries(seriesJson, context);
-              } else {
-                throw Exception(LocaleKeys.series_management_importExport_dialog_msg_error_unexpectedDataStructure.tr());
-              }
-            }
-          } else if (json["type"] as String == "seriesExport") {
-            if (context.mounted) await _importSeries(json, context);
-          } else {
-            throw Exception(LocaleKeys.series_management_importExport_dialog_msg_error_unexpectedFileOrDataStructure.tr());
-          }
-        }
-
-        if (context.mounted) Dialogs.showSnackBar(LocaleKeys.series_management_importExport_dialog_msg_importSuccessful.tr(), context);
-      } else {
-        // User canceled the picker
-      }
     } catch (ex, st) {
       SimpleLogging.w(ex.toString(), stackTrace: st);
       if (context.mounted) Dialogs.showSnackBar(ex.toString(), context);
     }
+    if (result == null) return; // User canceled the picker
+
+    // PlatformFile file = result.files.first;
+    // print(file.name);
+    // print(file.bytes);
+    // print(file.size); // check file size?
+    // print(file.extension);
+    // print(file.path);
+
+    int successfulImports = 0;
+    int numSelectedFiles = result.xFiles.length;
+
+    for (var file in result.xFiles) {
+      if (!file.name.endsWith(".json")) continue;
+
+      try {
+        var fileContent = await file.readAsString(); // utf8
+        var json = jsonDecode(fileContent) as Map<String, dynamic>;
+
+        if (json["type"] as String == "multiSeriesExport") {
+          // check version...
+          List<dynamic> seriesList = json["series"] as List<dynamic>;
+          for (var seriesJson in seriesList) {
+            if (seriesJson is Map<String, dynamic>) {
+              if (context.mounted) {
+                if (await _importSeries(seriesJson, context)) {
+                  successfulImports++;
+                }
+              }
+            } else {
+              throw Exception(LocaleKeys.series_management_importExport_dialog_msg_error_unexpectedDataStructure.tr());
+            }
+          }
+        } else if (json["type"] as String == "seriesExport") {
+          if (context.mounted) {
+            if (await _importSeries(json, context)) {
+              successfulImports++;
+            }
+          }
+        } else {
+          throw Exception(LocaleKeys.series_management_importExport_dialog_msg_error_unexpectedFileOrDataStructure.tr());
+        }
+      } catch (ex, st) {
+        SimpleLogging.w(ex.toString(), stackTrace: st);
+        if (context.mounted) {
+          await Dialogs.simpleOkDialog(ex.toString(), context);
+        }
+      }
+    }
+
+    if (context.mounted) {
+      if (successfulImports == numSelectedFiles) {
+        Dialogs.showSnackBar(LocaleKeys.series_management_importExport_dialog_msg_importSuccessful.tr(), context);
+      } else {
+        Dialogs.showSnackBar(
+            LocaleKeys.series_management_importExport_dialog_msg_importSuccessfulXofY.tr(args: [successfulImports.toString(), numSelectedFiles.toString()]),
+            context);
+      }
+    }
+
     if (context.mounted) Navigator.of(context).pop();
   }
 

@@ -171,6 +171,7 @@
           "msg": {
             "exportSuccessful": "Export successful...",
             "importSuccessful": "Import successful...",
+            "importSuccessfulXofY": "{}/{} imports successful...",
             "error": {
               "unexpectedFileOrDataStructure": "Unexpected file or file structure.",
               "unexpectedDataStructure": "Unexpected file structure."
