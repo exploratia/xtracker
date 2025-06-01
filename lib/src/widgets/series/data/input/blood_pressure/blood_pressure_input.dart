@@ -7,10 +7,11 @@ import 'package:uuid/uuid.dart';
 import '../../../../../../generated/locale_keys.g.dart';
 import '../../../../../model/series/data/blood_pressure/blood_pressure_value.dart';
 import '../../../../../model/series/series_def.dart';
-import '../../../../../model/series/series_type.dart';
 import '../../../../../providers/series_data_provider.dart';
 import '../../../../../util/dialogs.dart';
+import '../../../../../util/theme_utils.dart';
 import '../../../../layout/single_child_scroll_view_with_scrollbar.dart';
+import '../../../../text/overflow_text.dart';
 import '../input_header.dart';
 
 class BloodPressureQuickInput extends StatefulWidget {
@@ -252,18 +253,21 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
 
     return AlertDialog(
       // contentPadding: EdgeInsets.all(0),
-      title: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          if (widget.bloodPressureValue != null) const Icon(Icons.edit_outlined),
-          if (widget.bloodPressureValue == null) const Icon(Icons.add_circle_outline),
-          const SizedBox(width: 10),
-          Text(SeriesType.displayNameOf(widget.seriesDef.seriesType)),
-          Flexible(child: Container()),
-          if (widget.bloodPressureValue != null)
-            IconButton(onPressed: _deleteHandler, color: themeData.colorScheme.secondary, icon: const Icon(Icons.delete_outlined)),
-        ],
+      title: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: ThemeUtils.seriesDataInputDlgMaxWidth),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            widget.bloodPressureValue == null ? const Icon(Icons.add_outlined) : const Icon(Icons.edit_outlined),
+            const SizedBox(width: 10),
+            OverflowText(widget.seriesDef.name),
+            // Text(SeriesType.displayNameOf(widget.seriesDef.seriesType)),
+            // Flexible(child: Container()),
+            if (widget.bloodPressureValue != null)
+              IconButton(onPressed: _deleteHandler, color: themeData.colorScheme.secondary, icon: const Icon(Icons.delete_outlined)),
+          ],
+        ),
       ),
       content: SingleChildScrollViewWithScrollbar(
         useScreenPadding: false,
