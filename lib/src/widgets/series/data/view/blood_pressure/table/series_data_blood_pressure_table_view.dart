@@ -53,6 +53,7 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
         child: BloodPressureValuesRenderer(
           bloodPressureValues: bloodPressureValues,
           seriesViewMetaData: seriesViewMetaData,
+          showBorder: true,
         ),
       );
     }

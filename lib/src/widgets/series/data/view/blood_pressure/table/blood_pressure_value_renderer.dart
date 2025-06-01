@@ -5,10 +5,12 @@ import '../../../../../../model/series/data/series_data.dart';
 import '../../../../../../model/series/series_def.dart';
 
 class BloodPressureValueRenderer extends StatelessWidget {
-  const BloodPressureValueRenderer({super.key, required this.bloodPressureValue, this.editMode = false, required this.seriesDef});
+  /// [showBorder] show a border around the value - fix true if [editMode] is set
+  const BloodPressureValueRenderer({super.key, required this.bloodPressureValue, required this.seriesDef, this.editMode = false, this.showBorder = false});
 
   final BloodPressureValue bloodPressureValue;
   final bool editMode;
+  final bool showBorder;
   final SeriesDef seriesDef;
 
   @override
@@ -32,7 +34,7 @@ class BloodPressureValueRenderer extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.all(2),
       decoration: BoxDecoration(
-        border: Border.all(width: 1, color: editMode ? themeData.colorScheme.secondary : themeData.cardColor),
+        border: (showBorder || editMode) ? Border.all(width: 1, color: editMode ? themeData.colorScheme.secondary : themeData.cardColor) : null,
         borderRadius: const BorderRadius.all(Radius.circular(4)),
         gradient: LinearGradient(
           colors: [
