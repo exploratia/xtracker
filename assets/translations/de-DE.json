@@ -170,11 +170,10 @@
           },
           "msg": {
             "exportSuccessful": "Export erfolgreich...",
-            "importSuccessful": "Import erfolgreich...",
-            "importSuccessfulXofY": "{}/{} Imports erfolgreich...",
+            "importSuccessfulXofY": "{} Messreihen aus {} Dateien erfolgreich importiert.",
             "error": {
-              "unexpectedFileOrDataStructure": "Unerwartete Datei oder Dateistruktur.",
-              "unexpectedDataStructure": "Unerwartete Dateistruktur."
+              "unexpectedDataStructure": "Unerwarteter Dateiinhalt (Datei: '{}').",
+              "unexpectedFile": "Nicht unterstütztes Dateiformat (Datei: '{}')."
             }
           }
         }

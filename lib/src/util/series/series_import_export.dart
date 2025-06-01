@@ -15,6 +15,7 @@ import '../../providers/series_provider.dart';
 import '../../widgets/layout/single_child_scroll_view_with_scrollbar.dart';
 import '../date_time_utils.dart';
 import '../dialogs.dart';
+import '../ex.dart';
 import '../logging/flutter_simple_logging.dart';
 
 class SeriesImportExport {
@@ -87,7 +88,7 @@ class SeriesImportExport {
   }
 
   /// import series with data from json
-  static Future<bool> _importSeries(Map<String, dynamic> json, BuildContext context) async {
+  static Future<bool> _importSeries(Map<String, dynamic> json, String fileName, BuildContext context) async {
     if (json["type"] as String == "seriesExport") {
       var seriesProvider = context.read<SeriesProvider>();
       var seriesDataProvider = context.read<SeriesDataProvider>();
@@ -111,7 +112,7 @@ class SeriesImportExport {
       if (context.mounted) await seriesDataProvider.addValues(seriesDef, seriesData.data, context);
       return true;
     } else {
-      throw Exception(LocaleKeys.series_management_importExport_dialog_msg_error_unexpectedFileOrDataStructure.tr());
+      throw Ex(LocaleKeys.series_management_importExport_dialog_msg_error_unexpectedDataStructure.tr(args: [fileName]));
     }
   }
 
@@ -142,9 +143,11 @@ class SeriesImportExport {
     int numSelectedFiles = result.xFiles.length;
 
     for (var file in result.xFiles) {
-      if (!file.name.endsWith(".json")) continue;
-
       try {
+        if (!file.name.endsWith(".json")) {
+          throw Ex(LocaleKeys.series_management_importExport_dialog_msg_error_unexpectedFile.tr(args: [file.name]));
+        }
+
         var fileContent = await file.readAsString(); // utf8
         var json = jsonDecode(fileContent) as Map<String, dynamic>;
 
@@ -154,39 +157,39 @@ class SeriesImportExport {
           for (var seriesJson in seriesList) {
             if (seriesJson is Map<String, dynamic>) {
               if (context.mounted) {
-                if (await _importSeries(seriesJson, context)) {
+                if (await _importSeries(seriesJson, file.name, context)) {
                   successfulImports++;
                 }
               }
             } else {
-              throw Exception(LocaleKeys.series_management_importExport_dialog_msg_error_unexpectedDataStructure.tr());
+              throw Ex(LocaleKeys.series_management_importExport_dialog_msg_error_unexpectedDataStructure.tr(args: [file.name]));
             }
           }
         } else if (json["type"] as String == "seriesExport") {
           if (context.mounted) {
-            if (await _importSeries(json, context)) {
+            if (await _importSeries(json, file.name, context)) {
               successfulImports++;
             }
           }
         } else {
-          throw Exception(LocaleKeys.series_management_importExport_dialog_msg_error_unexpectedFileOrDataStructure.tr());
+          throw Ex(LocaleKeys.series_management_importExport_dialog_msg_error_unexpectedDataStructure.tr(args: [file.name]));
         }
       } catch (ex, st) {
         SimpleLogging.w(ex.toString(), stackTrace: st);
         if (context.mounted) {
-          await Dialogs.simpleOkDialog(ex.toString(), context);
+          if (ex is Ex) {
+            await Dialogs.simpleOkDialog(ex.toString(), context);
+          } else {
+            await Dialogs.simpleOkDialog(LocaleKeys.series_management_importExport_dialog_msg_error_unexpectedDataStructure.tr(args: [file.name]), context);
+          }
         }
       }
     }
 
-    if (context.mounted) {
-      if (successfulImports == numSelectedFiles) {
-        Dialogs.showSnackBar(LocaleKeys.series_management_importExport_dialog_msg_importSuccessful.tr(), context);
-      } else {
-        Dialogs.showSnackBar(
-            LocaleKeys.series_management_importExport_dialog_msg_importSuccessfulXofY.tr(args: [successfulImports.toString(), numSelectedFiles.toString()]),
-            context);
-      }
+    if (context.mounted && successfulImports > 0) {
+      Dialogs.showSnackBar(
+          LocaleKeys.series_management_importExport_dialog_msg_importSuccessfulXofY.tr(args: [successfulImports.toString(), numSelectedFiles.toString()]),
+          context);
     }
 
     if (context.mounted) Navigator.of(context).pop();
@@ -194,6 +197,9 @@ class SeriesImportExport {
 
   static Future<void> showImportExportDlg(BuildContext context) async {
     final themeData = Theme.of(context);
+
+    bool exportPossible = context.read<SeriesProvider>().series.isNotEmpty;
+
     Widget dialogContent = SingleChildScrollViewWithScrollbar(
       useScreenPadding: false,
       child: Column(
@@ -202,9 +208,11 @@ class SeriesImportExport {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ElevatedButton(
-              onPressed: () async {
-                await _exportSeries(context);
-              },
+              onPressed: exportPossible
+                  ? () async {
+                      await _exportSeries(context);
+                    }
+                  : null,
               child: Text(LocaleKeys.series_management_importExport_dialog_btn_exportSeries.tr())),
           Text(style: themeData.textTheme.labelMedium, LocaleKeys.series_management_importExport_dialog_label_exportSeries.tr()),
           Text(style: themeData.textTheme.labelMedium, LocaleKeys.series_management_importExport_dialog_label_exportSeriesTip.tr()),

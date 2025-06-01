@@ -170,11 +170,10 @@
           },
           "msg": {
             "exportSuccessful": "Export successful...",
-            "importSuccessful": "Import successful...",
-            "importSuccessfulXofY": "{}/{} imports successful...",
+            "importSuccessfulXofY": "Imported {} series from {} files successfully.",
             "error": {
-              "unexpectedFileOrDataStructure": "Unexpected file or file structure.",
-              "unexpectedDataStructure": "Unexpected file structure."
+              "unexpectedDataStructure": "Unexpected file content (file: '{}').",
+              "unexpectedFile": "Unsupported file format (file: '{}')."
             }
           }
         }

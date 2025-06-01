@@ -71,10 +71,9 @@ abstract class  LocaleKeys {
   static const series_management_importExport_dialog_label_importSeries = 'series.management.importExport.dialog.label.importSeries';
   static const series_management_importExport_dialog_label_importSeriesTip = 'series.management.importExport.dialog.label.importSeriesTip';
   static const series_management_importExport_dialog_msg_exportSuccessful = 'series.management.importExport.dialog.msg.exportSuccessful';
-  static const series_management_importExport_dialog_msg_importSuccessful = 'series.management.importExport.dialog.msg.importSuccessful';
   static const series_management_importExport_dialog_msg_importSuccessfulXofY = 'series.management.importExport.dialog.msg.importSuccessfulXofY';
-  static const series_management_importExport_dialog_msg_error_unexpectedFileOrDataStructure = 'series.management.importExport.dialog.msg.error.unexpectedFileOrDataStructure';
   static const series_management_importExport_dialog_msg_error_unexpectedDataStructure = 'series.management.importExport.dialog.msg.error.unexpectedDataStructure';
+  static const series_management_importExport_dialog_msg_error_unexpectedFile = 'series.management.importExport.dialog.msg.error.unexpectedFile';
   static const series_seriesType_bloodPressure_title = 'series.seriesType.bloodPressure.title';
   static const series_seriesType_bloodPressure_info = 'series.seriesType.bloodPressure.info';
   static const series_seriesType_dailyCheck_title = 'series.seriesType.dailyCheck.title';
