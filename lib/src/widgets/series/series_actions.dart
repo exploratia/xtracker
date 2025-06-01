@@ -1,7 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
+import '../../model/series/data/daily_check/daily_check_value.dart';
 import '../../model/series/data/series_data.dart';
 import '../../model/series/series_def.dart';
+import '../../model/series/series_type.dart';
+import '../../providers/series_data_provider.dart';
 import '../../screens/series/series_data_screen.dart';
 
 class SeriesActions extends StatelessWidget {
@@ -17,7 +22,7 @@ class SeriesActions extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         spacing: 8,
         children: [
-          _ShowSeriesDataInputDlgBtn(seriesDef: seriesDef),
+          seriesDef.seriesType == SeriesType.dailyCheck ? _DailyCheckBtn(seriesDef: seriesDef) : _ShowSeriesDataInputDlgBtn(seriesDef: seriesDef),
           _ShowSeriesDataBtn(seriesDef: seriesDef),
         ],
       ),
@@ -52,5 +57,22 @@ class _ShowSeriesDataInputDlgBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(onPressed: () => SeriesData.showSeriesDataInputDlg(context, seriesDef), icon: const Icon(Icons.add));
+  }
+}
+
+class _DailyCheckBtn extends StatelessWidget {
+  const _DailyCheckBtn({
+    required this.seriesDef,
+  });
+
+  final SeriesDef seriesDef;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+        onPressed: () {
+          context.read<SeriesDataProvider>().addValue(seriesDef, DailyCheckValue(const Uuid().v4(), DateTime.now()), context);
+        },
+        icon: const Icon(Icons.check_outlined));
   }
 }
