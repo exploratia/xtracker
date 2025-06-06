@@ -61,7 +61,8 @@ class ThemeUtils {
         actionsIconTheme: const IconThemeData(
           color: onPrimary, // dark ? Colors.white : Colors.black,
         ),
-        systemOverlayStyle: dark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
+        systemOverlayStyle: SystemUiOverlayStyle.light,
+        // dark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
         shadowColor: shadowColor,
       ),
       tabBarTheme: TabBarThemeData(indicatorColor: dark ? Colors.white : Colors.black),
