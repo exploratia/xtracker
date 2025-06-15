@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../generated/assets.gen.dart';
 import '../../../generated/locale_keys.g.dart';
+import '../../screens/administration/info_screen.dart';
 import '../../screens/administration/logs_screen.dart';
 import '../../screens/administration/settings_screen.dart';
 import '../../util/about_dlg.dart';
@@ -109,10 +110,25 @@ class _AppInfoCard extends StatelessWidget {
         }
 
         return SettingsCard(
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            title: Wrap(
+              spacing: 8,
+              runSpacing: 4,
+              alignment: WrapAlignment.spaceBetween,
+              crossAxisAlignment: WrapCrossAlignment.center,
               children: [
+                SizedBox(
+                  height: 24,
+                  width: 24,
+                  child: Center(
+                    child: Assets.images.logos.appLogo.image(fit: BoxFit.cover),
+                  ),
+                ),
                 Text(AppInfo.appName, style: Theme.of(context).textTheme.titleLarge),
+                OutlinedButton.icon(
+                  onPressed: () => Navigator.restorablePushNamed(context, InfoScreen.navItem.routeName),
+                  icon: InfoScreen.navItem.icon,
+                  label: const Text("Info"),
+                ),
                 OutlinedButton.icon(
                   onPressed: () => AboutDlg.showAboutDlg(context),
                   icon: const Icon(Icons.info_outline),
