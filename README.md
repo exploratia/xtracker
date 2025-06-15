@@ -20,20 +20,6 @@ https://pub.dev/packages/intl
 
 https://pub.dev/documentation/intl/latest/intl/DateFormat-class.html
 
-[//]: # (This project generates localized messages based on arb files found in)
-
-[//]: # (the `lib/src/localization` directory.)
-
-[//]: # ()
-
-[//]: # (To support additional languages, please visit the tutorial on)
-
-[//]: # ([Internationalizing Flutter apps]&#40;https://flutter.dev/to/internationalization&#41;.)
-
-[//]: # (TODO for iOS:)
-
-[//]: # (https://docs.flutter.dev/ui/accessibility-and-internationalization/internationalization#localizing-for-ios-updating-the-ios-app-bundle)
-
 ### easy localization
 
 #### generate keys
@@ -153,6 +139,10 @@ https://pub.dev/packages/file_picker
 #### Setup
 
 https://github.com/miguelpruivo/flutter_file_picker/wiki/Setup
+
+### URL Launcher
+
+https://pub.dev/packages/url_launcher
 
 ### Launcher icon (dev)
 

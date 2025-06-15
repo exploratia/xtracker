@@ -58,6 +58,9 @@ dependencies:
   # file picker
   file_picker: ^10.1.2
 
+  # url launcher
+  url_launcher: ^6.3.1
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -80,6 +83,7 @@ flutter:
   assets:
     # Add assets from the images directory to the application.
     - assets/images/
+    - assets/images/bmc/
     - assets/images/logos/
     - assets/translations/
 

@@ -12,6 +12,9 @@ import 'package:flutter/widgets.dart';
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// Directory path: assets/images/bmc
+  $AssetsImagesBmcGen get bmc => const $AssetsImagesBmcGen();
+
   /// File path: assets/images/flutter_logo.png
   AssetGenImage get flutterLogo => const AssetGenImage('assets/images/flutter_logo.png');
 
@@ -20,6 +23,16 @@ class $AssetsImagesGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [flutterLogo];
+}
+
+class $AssetsImagesBmcGen {
+  const $AssetsImagesBmcGen();
+
+  /// File path: assets/images/bmc/bmc-button.png
+  AssetGenImage get bmcButton => const AssetGenImage('assets/images/bmc/bmc-button.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [bmcButton];
 }
 
 class $AssetsImagesLogosGen {
@@ -40,8 +53,11 @@ class $AssetsImagesLogosGen {
   /// File path: assets/images/logos/exploratia_logo.png
   AssetGenImage get exploratiaLogo => const AssetGenImage('assets/images/logos/exploratia_logo.png');
 
+  /// File path: assets/images/logos/exploratia_logo_wide.png
+  AssetGenImage get exploratiaLogoWide => const AssetGenImage('assets/images/logos/exploratia_logo_wide.png');
+
   /// List of all assets
-  List<AssetGenImage> get values => [appLogo, appLogoWhite, caLogo, eagleLogo, exploratiaLogo];
+  List<AssetGenImage> get values => [appLogo, appLogoWhite, caLogo, eagleLogo, exploratiaLogo, exploratiaLogoWide];
 }
 
 class Assets {

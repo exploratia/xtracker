@@ -4,7 +4,8 @@
 
 abstract class  LocaleKeys {
   static const administration_navTitle = 'administration.navTitle';
-  static const administration_title = 'administration.title';
+  static const administration_supportApp_title = 'administration.supportApp.title';
+  static const administration_supportApp_labels_buyMeACoffee = 'administration.supportApp.labels.buyMeACoffee';
   static const appTitle = 'appTitle';
   static const bloodPressure_input_labels_diastolic = 'bloodPressure.input.labels.diastolic';
   static const bloodPressure_input_labels_systolic = 'bloodPressure.input.labels.systolic';

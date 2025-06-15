@@ -1,7 +1,12 @@
 {
   "administration": {
     "navTitle": "More",
-    "title": "Service & Contact"
+    "supportApp": {
+      "title": "Support the App",
+      "labels": {
+        "buyMeACoffee": "Building, maintaining and improving the app requires a lot of my free time. If you want to support, you could..."
+      }
+    }
   },
   "appTitle": "xTracker",
   "bloodPressure": {

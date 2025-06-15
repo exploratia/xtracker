@@ -1,12 +1,21 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-import '../../screens/administration/info_screen.dart';
+import '../../../generated/assets.gen.dart';
+import '../../../generated/locale_keys.g.dart';
 import '../../screens/administration/logs_screen.dart';
 import '../../screens/administration/settings_screen.dart';
 import '../../util/about_dlg.dart';
+import '../../util/app_info.dart';
+import '../../util/globals.dart';
 import '../card/settings_card.dart';
+import '../controls/img_lnk.dart';
 import '../layout/single_child_scroll_view_with_scrollbar.dart';
+import '../logos/ca_logo.dart';
+import '../logos/exploratia_logo.dart';
 import '../navigation/hide_bottom_navigation_bar.dart';
+import '../text/overflow_text.dart';
 
 class AdministrationView extends StatelessWidget {
   const AdministrationView({super.key});
@@ -15,7 +24,7 @@ class AdministrationView extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
 
-    final links = [SettingsScreen.navItem, LogsScreen.navItem, InfoScreen.navItem].map((navItem) => {
+    final links = [SettingsScreen.navItem, LogsScreen.navItem].map((navItem) => {
           'ico': navItem.icon,
           'title': navItem.titleBuilder(),
           'routeName': navItem.routeName,
@@ -23,26 +32,116 @@ class AdministrationView extends StatelessWidget {
 
     return SingleChildScrollViewWithScrollbar(
       scrollPositionHandler: HideBottomNavigationBar.setScrollPosition,
-      child: SettingsCard(
-        spacing: 10,
-        showDivider: false,
+      child: Column(
+        spacing: 16,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          ...links.map((lnk) => ListTile(
-                leading: lnk['ico'] as Widget,
-                title: Text(lnk['title'] as String),
-                trailing: Icon(
-                  Icons.navigate_next,
-                  color: themeData.colorScheme.primary,
-                ),
-                onTap: () => Navigator.restorablePushNamed(context, lnk['routeName'] as String),
-              )),
-          OutlinedButton.icon(
-            onPressed: () => AboutDlg.showAboutDlg(context),
-            icon: const Icon(Icons.info_outline),
-            label: const Text("Version"),
+          SettingsCard(
+            spacing: 10,
+            showDivider: false,
+            children: [
+              ...links.map((lnk) => ListTile(
+                    leading: lnk['ico'] as Widget,
+                    title: Text(lnk['title'] as String),
+                    trailing: Icon(
+                      Icons.navigate_next,
+                      color: themeData.colorScheme.primary,
+                    ),
+                    onTap: () => Navigator.restorablePushNamed(context, lnk['routeName'] as String),
+                  )),
+            ],
           ),
+          const _AppInfoCard(),
+          const _SupportTheApp()
         ],
       ),
     );
+  }
+}
+
+class _AppInfoCard extends StatelessWidget {
+  const _AppInfoCard();
+
+  Future<void> _launchUrl() async {
+    if (!await launchUrl(Globals.urlExploratia)) {
+      throw Exception('Could not launch ${Globals.urlExploratia}');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
+
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        var maxWidth = constraints.maxWidth;
+
+        List<List<Widget>> rows = [
+          [
+            CaLogo(radius: 16, backgroundColor: themeData.scaffoldBackgroundColor),
+            OverflowText('${DateFormat('yyyy').format(DateTime.now())} \u00a9 Christian Adler'),
+          ],
+        ];
+
+        var exploratiaLaunchUrl = TextButton(onPressed: _launchUrl, child: const Text('https://www.exploratia.de'));
+        var exploratiaLogoWide = Container(
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+          clipBehavior: Clip.antiAlias,
+          child: ImgLnk(url: Globals.urlExploratia, imageProvider: Assets.images.logos.exploratiaLogoWide.provider(), height: 32, width: 138, darkHover: false),
+        );
+        if (maxWidth > 400) {
+          rows.add([
+            ExploratiaLogo(radius: 16, backgroundColor: themeData.scaffoldBackgroundColor),
+            exploratiaLaunchUrl,
+            Expanded(child: Container()),
+            exploratiaLogoWide,
+          ]);
+        } else if (maxWidth < 330) {
+          rows.add([
+            ExploratiaLogo(radius: 16, backgroundColor: themeData.scaffoldBackgroundColor),
+            exploratiaLaunchUrl,
+          ]);
+        } else {
+          rows.add([
+            exploratiaLogoWide,
+            exploratiaLaunchUrl,
+          ]);
+        }
+
+        return SettingsCard(
+            title: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(AppInfo.appName, style: Theme.of(context).textTheme.titleLarge),
+                OutlinedButton.icon(
+                  onPressed: () => AboutDlg.showAboutDlg(context),
+                  icon: const Icon(Icons.info_outline),
+                  label: const Text("Version"),
+                ),
+              ],
+            ),
+            spacing: 10,
+            children: [
+              ...rows.map((r) => Row(
+                    spacing: 10,
+                    children: [...r],
+                  )),
+            ]);
+      },
+    );
+  }
+}
+
+class _SupportTheApp extends StatelessWidget {
+  const _SupportTheApp();
+
+  @override
+  Widget build(BuildContext context) {
+    return SettingsCard(spacing: 10, title: LocaleKeys.administration_supportApp_title.tr(), showDivider: true, children: [
+      Text(LocaleKeys.administration_supportApp_labels_buyMeACoffee.tr()),
+      ImgLnk(url: Globals.urlCoffeeExploratia, imageProvider: Assets.images.bmc.bmcButton.provider(), height: 48, width: 171),
+      // TODO contribute translation
+      // Text("TODO help translating"),
+    ]);
   }
 }
