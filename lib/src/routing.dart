@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import 'model/navigation/navigation_item.dart';
 import 'screens/administration/administration_screen.dart';
 import 'screens/administration/info_screen.dart';
 import 'screens/administration/log_screen.dart';
@@ -19,17 +18,13 @@ import 'widgets/playground/sample_feature/sample_item_list_view.dart';
 class Routing {
   final SettingsController settingsController;
 
-  final Map<String, Widget> _mainNavigationRouteMapping = {};
-
-  void _addMapping(Widget widget, NavigationItem navItem) {
-    _mainNavigationRouteMapping[navItem.routeName] = widget;
-  }
-
   Routing(this.settingsController) {
-    // this order (order of instantiation) is also used in Nav
-    _addMapping(const HomeScreen(), HomeScreen.navItem);
-    _addMapping(const PlaygroundScreen(), PlaygroundScreen.navItem);
-    _addMapping(const AdministrationScreen(), AdministrationScreen.navItem);
+    // this order (order of instantiation of MainNavigationItem) is used in Nav
+    [
+      HomeScreen.navItem,
+      AdministrationScreen.navItem,
+      PlaygroundScreen.navItem,
+    ];
   }
 
   Route<dynamic>? generateRoute(RouteSettings routeSettings) {
@@ -48,9 +43,6 @@ class Routing {
           } catch (err) {
             SimpleLogging.w('Failed to parse route uri!', error: err);
           }
-          // main navigation?
-          var widget = _mainNavigationRouteMapping[routeName];
-          if (widget != null) return widget;
         }
 
         if (routeSettings.arguments is Map<String, dynamic>) {
