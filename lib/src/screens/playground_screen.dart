@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../model/navigation/main_navigation_item.dart';
+import '../model/navigation/navigation_item.dart';
 import '../util/dialogs.dart';
 import '../widgets/animation/fade_in.dart';
 import '../widgets/card/glowing_border_container.dart';
@@ -17,7 +17,8 @@ import '../widgets/select/icon_picker.dart';
 import 'administration/settings_screen.dart';
 
 class PlaygroundScreen extends StatelessWidget {
-  static MainNavigationItem navItem = MainNavigationItem(
+  // static MainNavigationItem navItem = MainNavigationItem(
+  static NavigationItem navItem = NavigationItem(
     icon: const Icon(Icons.adb_outlined),
     routeName: '/playground',
     titleBuilder: () => "Playground",
