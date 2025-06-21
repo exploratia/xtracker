@@ -1,6 +1,6 @@
 {
   "name": "xTracker",
-  "short_name": "xtracker",
+  "short_name": "xTracker",
   "start_url": ".",
   "display": "standalone",
   "background_color": "#0175C2",

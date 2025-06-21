@@ -1,3 +1,3 @@
-# x-Tracker
+# xTracker
 
 Generic tracker app
