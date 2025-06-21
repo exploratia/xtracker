@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
 
 import '../model/series/series_def.dart';
-import '../model/series/series_type.dart';
 import '../store/stores.dart';
 import 'series_current_value_provider.dart';
 import 'series_data_provider.dart';
@@ -25,32 +23,32 @@ class SeriesProvider with ChangeNotifier {
 
     _series = await _storeSeriesDef.getAllSeries();
 
-    // TODO only for testing - remove it
-    if (_series.isEmpty) {
-      await _storeSeriesDef.save(SeriesDef(
-        uuid: const Uuid().v4().toString(),
-        seriesType: SeriesType.bloodPressure,
-        color: Colors.green,
-        name: "1 mit sehr sehr sehr sehr sehr sehr viel sehr sehr sehr sehr sehr sehr und noch Mehr sehr sehr sehr sehr sehr sehr viel Text",
-        seriesItems: SeriesItem.bloodPressureSeriesItems(),
-      ));
-
-      await _storeSeriesDef.save(SeriesDef(
-        uuid: const Uuid().v4().toString(),
-        seriesType: SeriesType.bloodPressure,
-        name: '2',
-        seriesItems: SeriesItem.bloodPressureSeriesItems(),
-      ));
-
-      await _storeSeriesDef.save(SeriesDef(
-        uuid: const Uuid().v4().toString(),
-        seriesType: SeriesType.dailyCheck,
-        name: '3',
-        seriesItems: [],
-      ));
-
-      _series = await _storeSeriesDef.getAllSeries();
-    }
+    // // TODO only for testing - remove it
+    // if (_series.isEmpty) {
+    //   await _storeSeriesDef.save(SeriesDef(
+    //     uuid: const Uuid().v4().toString(),
+    //     seriesType: SeriesType.bloodPressure,
+    //     color: Colors.green,
+    //     name: "1 mit sehr sehr sehr sehr sehr sehr viel sehr sehr sehr sehr sehr sehr und noch Mehr sehr sehr sehr sehr sehr sehr viel Text",
+    //     seriesItems: SeriesItem.bloodPressureSeriesItems(),
+    //   ));
+    //
+    //   await _storeSeriesDef.save(SeriesDef(
+    //     uuid: const Uuid().v4().toString(),
+    //     seriesType: SeriesType.bloodPressure,
+    //     name: '2',
+    //     seriesItems: SeriesItem.bloodPressureSeriesItems(),
+    //   ));
+    //
+    //   await _storeSeriesDef.save(SeriesDef(
+    //     uuid: const Uuid().v4().toString(),
+    //     seriesType: SeriesType.dailyCheck,
+    //     name: '3',
+    //     seriesItems: [],
+    //   ));
+    //
+    //   _series = await _storeSeriesDef.getAllSeries();
+    // }
 
     List<String> orderedSeriesUuids = await _storeMain.loadSeriesOrder();
 

@@ -2,7 +2,6 @@ import 'dart:collection';
 
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/v4.dart';
 
 import '../model/series/data/blood_pressure/blood_pressure_value.dart';
 import '../model/series/data/daily_check/daily_check_value.dart';
@@ -53,23 +52,23 @@ class SeriesDataProvider with ChangeNotifier {
         if (seriesData == null) {
           var store = Stores.getOrCreateSeriesDataStore(seriesDef);
           var list = await store.getAllSeriesDataValuesAsBloodPressureValue();
-          // TODO only for dev - remove!
-          if (list.isEmpty) {
-            list = [
-              BloodPressureValue(const UuidV4().generate().toString(), DateTime.now(), 120, 80, false),
-              BloodPressureValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(days: 28)), 140, 80, false),
-              BloodPressureValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(hours: 25)), 140, 80, false),
-              BloodPressureValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(hours: 28)), 130, 97, false),
-              BloodPressureValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(hours: 30)), 120, 75, false),
-              BloodPressureValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(hours: 40)), 155, 110, false),
-              // ...List.generate(
-              //     10040,
-              //     (index) => BloodPressureValue(const UuidV4().generate().toString(), DateTime.now().subtract(Duration(hours: 40 + index * 25)),
-              //         (155 - 5 * sin(index * 0.01)).truncate(), (80 - 10 * sin(index * 0.01 + 1)).truncate())),
-            ];
-            await store.saveAll(list);
-            list = await store.getAllSeriesDataValuesAsBloodPressureValue();
-          }
+          // // TODO only for dev - remove!
+          // if (list.isEmpty) {
+          //   list = [
+          //     BloodPressureValue(const UuidV4().generate().toString(), DateTime.now(), 120, 80, false),
+          //     BloodPressureValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(days: 28)), 140, 80, false),
+          //     BloodPressureValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(hours: 25)), 140, 80, false),
+          //     BloodPressureValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(hours: 28)), 130, 97, false),
+          //     BloodPressureValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(hours: 30)), 120, 75, false),
+          //     BloodPressureValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(hours: 40)), 155, 110, false),
+          //     // ...List.generate(
+          //     //     10040,
+          //     //     (index) => BloodPressureValue(const UuidV4().generate().toString(), DateTime.now().subtract(Duration(hours: 40 + index * 25)),
+          //     //         (155 - 5 * sin(index * 0.01)).truncate(), (80 - 10 * sin(index * 0.01 + 1)).truncate())),
+          //   ];
+          //   await store.saveAll(list);
+          //   list = await store.getAllSeriesDataValuesAsBloodPressureValue();
+          // }
 
           seriesData = SeriesData<BloodPressureValue>(seriesDef.uuid, list);
           seriesData.sort();
@@ -80,21 +79,21 @@ class SeriesDataProvider with ChangeNotifier {
         if (seriesData == null) {
           var store = Stores.getOrCreateSeriesDataStore(seriesDef);
           var list = await store.getAllSeriesDataValuesAsDailyCheckValue();
-          // TODO only for dev - remove!
-          if (list.isEmpty) {
-            list = [
-              DailyCheckValue(const UuidV4().generate().toString(), DateTime.now()),
-              DailyCheckValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(days: 28))),
-              DailyCheckValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(hours: 25))),
-              DailyCheckValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(hours: 28))),
-              DailyCheckValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(hours: 30))),
-              DailyCheckValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(hours: 40))),
-              // ...List.generate(
-              //     10040, (index) => DailyCheckValue(const UuidV4().generate().toString(), DateTime.now().subtract(Duration(hours: 40 + index * 25)))),
-            ];
-            await store.saveAll(list);
-            list = await store.getAllSeriesDataValuesAsDailyCheckValue();
-          }
+          // // TODO only for dev - remove!
+          // if (list.isEmpty) {
+          //   list = [
+          //     DailyCheckValue(const UuidV4().generate().toString(), DateTime.now()),
+          //     DailyCheckValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(days: 28))),
+          //     DailyCheckValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(hours: 25))),
+          //     DailyCheckValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(hours: 28))),
+          //     DailyCheckValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(hours: 30))),
+          //     DailyCheckValue(const UuidV4().generate().toString(), DateTime.now().subtract(const Duration(hours: 40))),
+          //     // ...List.generate(
+          //     //     10040, (index) => DailyCheckValue(const UuidV4().generate().toString(), DateTime.now().subtract(Duration(hours: 40 + index * 25)))),
+          //   ];
+          //   await store.saveAll(list);
+          //   list = await store.getAllSeriesDataValuesAsDailyCheckValue();
+          // }
 
           seriesData = SeriesData<DailyCheckValue>(seriesDef.uuid, list);
           seriesData.sort();
