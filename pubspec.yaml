@@ -98,7 +98,7 @@ flutter_launcher_icons:
   adaptive_icon_foreground: "resources/app_icon_source.png"
 
 
-# assets constants generation
+# asset constants generation
 flutter_gen:
   line_length: 160
   output: lib/generated/
