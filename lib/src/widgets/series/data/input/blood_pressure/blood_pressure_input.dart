@@ -236,16 +236,20 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
             ],
           ),
           SwitchListTile(
-            title: SizedBox(
-              width: 100,
-              child: Text(
-                LocaleKeys.bloodPressure_input_labels_medication.tr(),
-                softWrap: false,
-              ),
+            contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 4),
+            title: Row(
+              spacing: 4,
+              children: [
+                const Icon(Icons.medication_outlined),
+                Expanded(
+                  child: OverflowText(
+                    LocaleKeys.bloodPressure_input_labels_medication.tr(),
+                  ),
+                ),
+              ],
             ),
             value: _tablet,
             onChanged: _setTablet,
-            secondary: const Icon(Icons.medication_outlined),
           ),
         ],
       ),
