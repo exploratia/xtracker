@@ -8,7 +8,6 @@ import '../../screens/administration/info_screen.dart';
 import '../../screens/administration/logs_screen.dart';
 import '../../screens/administration/settings_screen.dart';
 import '../../util/about_dlg.dart';
-import '../../util/app_info.dart';
 import '../../util/globals.dart';
 import '../card/settings_card.dart';
 import '../controls/img_lnk.dart';
@@ -123,7 +122,7 @@ class _AppInfoCard extends StatelessWidget {
                     child: Assets.images.logos.appLogo.image(fit: BoxFit.cover),
                   ),
                 ),
-                Text(AppInfo.appName, style: Theme.of(context).textTheme.titleLarge),
+                Text(/*AppInfo.appName*/ LocaleKeys.appTitle.tr(), style: Theme.of(context).textTheme.titleLarge),
                 OutlinedButton.icon(
                   onPressed: () => Navigator.restorablePushNamed(context, InfoScreen.navItem.routeName),
                   icon: InfoScreen.navItem.icon,

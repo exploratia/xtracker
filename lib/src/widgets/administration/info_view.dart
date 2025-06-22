@@ -1,8 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../../../generated/assets.gen.dart';
-import '../../util/app_info.dart';
+import '../../../generated/locale_keys.g.dart';
 import '../card/settings_card.dart';
 import '../layout/single_child_scroll_view_with_scrollbar.dart';
 import '../logos/ca_logo.dart';
@@ -67,7 +67,7 @@ class _AppInfoCard extends StatelessWidget {
               child: Assets.images.logos.appLogo.image(fit: BoxFit.cover),
             ),
           ),
-          Text(AppInfo.appName, style: Theme.of(context).textTheme.titleLarge),
+          Text(/*AppInfo.appName*/ LocaleKeys.appTitle.tr(), style: Theme.of(context).textTheme.titleLarge),
         ],
       ),
       spacing: 10,

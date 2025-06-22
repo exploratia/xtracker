@@ -1,7 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 import '../../generated/assets.gen.dart';
+import '../../generated/locale_keys.g.dart';
 import 'app_info.dart';
 
 class AboutDlg {
@@ -14,7 +15,7 @@ class AboutDlg {
           width: 40,
           child: Assets.images.logos.appLogo.image(fit: BoxFit.cover),
         ),
-        applicationName: AppInfo.appName,
+        applicationName: /*AppInfo.appName*/ LocaleKeys.appTitle.tr(),
         applicationLegalese: '${DateFormat('yyyy').format(DateTime.now())} \u00a9 Christian Adler');
   }
 }

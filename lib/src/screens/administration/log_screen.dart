@@ -4,7 +4,6 @@ import 'package:share_plus/share_plus.dart';
 
 import '../../../generated/locale_keys.g.dart';
 import '../../model/navigation/navigation_item.dart';
-import '../../util/app_info.dart';
 import '../../util/dialogs.dart';
 import '../../util/logging/daily_files.dart';
 import '../../widgets/administration/logging/log_view.dart';
@@ -37,7 +36,7 @@ class LogScreen extends StatelessWidget {
           IconButton(
             onPressed: () async {
               try {
-                await Share.shareXFiles([XFile(DailyFiles.getFullLogPath(logFileN))], text: '${AppInfo.appName} Log $logFileName');
+                await Share.shareXFiles([XFile(DailyFiles.getFullLogPath(logFileN))], text: '${/*AppInfo.appName*/ LocaleKeys.appTitle.tr()} Log $logFileName');
               } catch (err) {
                 if (context.mounted) {
                   Dialogs.simpleErrOkDialog('${LocaleKeys.commons_msg_error_failedToShareData.tr()}\n\n$err', context);
