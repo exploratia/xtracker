@@ -16,6 +16,9 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
   final SeriesData<BloodPressureValue> seriesData;
   final SeriesViewMetaData seriesViewMetaData;
 
+  /// Rows are always equal sized. But if set to false, multi line rows are inflated to multiple single line rows
+  final bool _useEqualSizedRows = false;
+
   const SeriesDataBloodPressureTableView({super.key, required this.seriesViewMetaData, required this.seriesData});
 
   @override
@@ -23,15 +26,18 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
     // for blood pressure we need a special TableColumnProfile
 
     List<_BloodPressureDayItem> data = _buildTableDataProvider(seriesData);
-    // calc line height = single line height * max lines per day of all items
-    var maxItemsPerDayPart = data.fold(
-      1,
-      (previousValue, item) {
-        var maxItems = math.max(math.max(item.morning.length, item.midday.length), item.evening.length);
-        return math.max(previousValue, maxItems);
-      },
-    );
-    int lineHeight = 30 * maxItemsPerDayPart;
+    int lineHeight = 30;
+    if (_useEqualSizedRows) {
+      // calc line height = single line height * max lines per day of all items
+      var maxItemsPerDayPart = data.fold(
+        1,
+        (previousValue, item) {
+          var maxItems = math.max(math.max(item.morning.length, item.midday.length), item.evening.length);
+          return math.max(previousValue, maxItems);
+        },
+      );
+      lineHeight *= maxItemsPerDayPart;
+    }
 
     gridCellBuilder(BuildContext context, int yIndex, int xIndex) {
       _BloodPressureDayItem bloodPressureDayItem = data[yIndex];
@@ -73,13 +79,47 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
 
   List<_BloodPressureDayItem> _buildTableDataProvider(SeriesData<BloodPressureValue> seriesData) {
     List<_BloodPressureDayItem> list = [];
+
+    var emptyDate = '';
+    add2List(List<_BloodPressureDayItem> list, _BloodPressureDayItem item) {
+      if (_useEqualSizedRows) {
+        list.add(item);
+        return;
+      }
+
+      // use multiple rows for a single day if more than 1 element in one of the lists
+      var maxItems = math.max(math.max(item.morning.length, item.midday.length), item.evening.length);
+      if (maxItems == 1) {
+        list.add(item);
+        return;
+      }
+
+      List<_BloodPressureDayItem> inflated = [];
+      for (var i = 0; i < maxItems; ++i) {
+        // show date only on the first row
+        var date = i == 0 ? item.date : emptyDate;
+        inflated.add(_BloodPressureDayItem(date, item.backgroundColor));
+      }
+      for (var i = 0; i < item.morning.length; ++i) {
+        inflated[i].morning.add(item.morning[i]);
+      }
+      for (var i = 0; i < item.midday.length; ++i) {
+        inflated[i].midday.add(item.midday[i]);
+      }
+      for (var i = 0; i < item.evening.length; ++i) {
+        inflated[i].evening.add(item.evening[i]);
+      }
+
+      list.addAll(inflated);
+    }
+
     _BloodPressureDayItem? actItem;
 
     for (var item in seriesData.data.reversed) {
       String dateDay = DateTimeUtils.formateDate(item.dateTime);
       if (actItem == null || actItem.date != dateDay) {
         if (actItem != null) {
-          list.add(actItem);
+          add2List(list, actItem);
         }
         Color? backgroundColor;
         if (item.dateTime.weekday == DateTime.sunday) {
@@ -101,7 +141,7 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
 
     // add last item to list
     if (actItem != null) {
-      list.add(actItem);
+      add2List(list, actItem);
     }
 
     return list;
