@@ -144,6 +144,10 @@ https://github.com/miguelpruivo/flutter_file_picker/wiki/Setup
 
 https://pub.dev/packages/url_launcher
 
+### Rich Text (for legal notice)
+
+https://pub.dev/packages/simple_html_css
+
 ### Launcher icon (dev)
 
 https://pub.dev/packages/flutter_launcher_icons

@@ -9,8 +9,10 @@ import '../../screens/administration/logs_screen.dart';
 import '../../screens/administration/settings_screen.dart';
 import '../../util/about_dlg.dart';
 import '../../util/globals.dart';
+import '../../util/infoType.dart';
 import '../card/settings_card.dart';
 import '../controls/img_lnk.dart';
+import '../layout/scroll_footer.dart';
 import '../layout/single_child_scroll_view_with_scrollbar.dart';
 import '../logos/ca_logo.dart';
 import '../logos/exploratia_logo.dart';
@@ -51,8 +53,9 @@ class AdministrationView extends StatelessWidget {
                   )),
             ],
           ),
+          const _SupportTheApp(),
           const _AppInfoCard(),
-          const _SupportTheApp()
+          const ScrollFooter(marginTop: 20),
         ],
       ),
     );
@@ -124,7 +127,7 @@ class _AppInfoCard extends StatelessWidget {
                 ),
                 Text(/*AppInfo.appName*/ LocaleKeys.appTitle.tr(), style: Theme.of(context).textTheme.titleLarge),
                 OutlinedButton.icon(
-                  onPressed: () => Navigator.restorablePushNamed(context, InfoScreen.navItem.routeName),
+                  onPressed: () => Navigator.restorablePushNamed(context, InfoScreen.navItem.routeName, arguments: {'infoType': InfoType.legalNotice.typeName}),
                   icon: InfoScreen.navItem.icon,
                   label: const Text("Info"),
                 ),

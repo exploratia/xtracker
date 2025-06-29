@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../generated/locale_keys.g.dart';
 import '../../model/navigation/navigation_item.dart';
+import '../../util/infoType.dart';
 import '../../widgets/administration/info_view.dart';
 import '../../widgets/layout/gradient_app_bar.dart';
 import '../../widgets/responsive/screen_builder.dart';
@@ -14,14 +15,18 @@ class InfoScreen extends StatelessWidget {
     titleBuilder: () => LocaleKeys.info_title.tr(),
   );
 
-  const InfoScreen({super.key});
+  const InfoScreen({super.key, required this.args});
+
+  final Map<String, dynamic> args;
 
   @override
   Widget build(BuildContext context) {
+    var infoType = InfoType.byTypeName(args['infoType']);
+
     return ScreenBuilder.withStandardNavBuilders(
       navItem: navItem,
-      appBarBuilder: (context) => GradientAppBar.build(context, addLeadingBackBtn: true, title: Text(navItem.titleBuilder())),
-      bodyBuilder: (context) => const InfoView(),
+      appBarBuilder: (context) => GradientAppBar.build(context, addLeadingBackBtn: true, title: Text(infoType.title() /*navItem.titleBuilder()*/)),
+      bodyBuilder: (context) => InfoView(infoType: infoType),
     );
   }
 }

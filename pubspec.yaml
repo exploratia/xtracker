@@ -60,6 +60,7 @@ dependencies:
 
   # url launcher
   url_launcher: ^6.3.1
+  simple_html_css: ^5.0.0
 
 dev_dependencies:
   flutter_test:

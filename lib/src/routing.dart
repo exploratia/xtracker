@@ -60,7 +60,7 @@ class Routing {
         if (routeName == LogsScreen.navItem.routeName) return const LogsScreen();
         if (routeName == LogScreen.navItem.routeName) return const LogScreen();
         if (routeName == LogSettingsScreen.navItem.routeName) return const LogSettingsScreen();
-        if (routeName == InfoScreen.navItem.routeName) return const InfoScreen();
+        if (routeName == InfoScreen.navItem.routeName) return InfoScreen(args: args);
         if (routeName == SettingsScreen.navItem.routeName) return SettingsScreen(controller: settingsController);
         // << administration
         // series >>
