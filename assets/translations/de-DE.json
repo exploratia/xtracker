@@ -6,6 +6,11 @@
       "labels": {
         "buyMeACoffee": "Die App zu warten / erweitern kostet viel Freizeit. Für Unterstützung wäre ich sehr dankbar..."
       }
+    },
+    "app": {
+      "btn": {
+        "version": "Version"
+      }
     }
   },
   "appTitle": "xTracker",

@@ -25,6 +25,25 @@ class $AssetsImagesGen {
   List<AssetGenImage> get values => [flutterLogo];
 }
 
+class $AssetsInfosGen {
+  const $AssetsInfosGen();
+
+  /// File path: assets/infos/disclaimer.html
+  String get disclaimer => 'assets/infos/disclaimer.html';
+
+  /// File path: assets/infos/eula.html
+  String get eula => 'assets/infos/eula.html';
+
+  /// File path: assets/infos/legal_notice.html
+  String get legalNotice => 'assets/infos/legal_notice.html';
+
+  /// File path: assets/infos/privacy_policy.html
+  String get privacyPolicy => 'assets/infos/privacy_policy.html';
+
+  /// List of all assets
+  List<String> get values => [disclaimer, eula, legalNotice, privacyPolicy];
+}
+
 class $AssetsImagesBmcGen {
   const $AssetsImagesBmcGen();
 
@@ -47,9 +66,6 @@ class $AssetsImagesLogosGen {
   /// File path: assets/images/logos/ca_logo.png
   AssetGenImage get caLogo => const AssetGenImage('assets/images/logos/ca_logo.png');
 
-  /// File path: assets/images/logos/eagle_logo.png
-  AssetGenImage get eagleLogo => const AssetGenImage('assets/images/logos/eagle_logo.png');
-
   /// File path: assets/images/logos/exploratia_logo.png
   AssetGenImage get exploratiaLogo => const AssetGenImage('assets/images/logos/exploratia_logo.png');
 
@@ -57,13 +73,14 @@ class $AssetsImagesLogosGen {
   AssetGenImage get exploratiaLogoWide => const AssetGenImage('assets/images/logos/exploratia_logo_wide.png');
 
   /// List of all assets
-  List<AssetGenImage> get values => [appLogo, appLogoWhite, caLogo, eagleLogo, exploratiaLogo, exploratiaLogoWide];
+  List<AssetGenImage> get values => [appLogo, appLogoWhite, caLogo, exploratiaLogo, exploratiaLogoWide];
 }
 
 class Assets {
   const Assets._();
 
   static const $AssetsImagesGen images = $AssetsImagesGen();
+  static const $AssetsInfosGen infos = $AssetsInfosGen();
 }
 
 class AssetGenImage {

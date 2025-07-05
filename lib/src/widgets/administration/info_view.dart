@@ -33,13 +33,24 @@ class InfoView extends StatelessWidget {
     Map<String, TextStyle> overrideStyle = {
       "a": TextStyle(color: themeData.colorScheme.primary, fontWeight: themeData.textTheme.bodyMedium?.fontWeight),
     };
-    var richText = HTML.toRichText(context, infoType.infoHTML, defaultTextStyle: defaultTextStyle, overrideStyle: overrideStyle, linksCallback: (link) {
-      _launchUrl(link);
-    });
 
     return SingleChildScrollViewWithScrollbar(
       scrollPositionHandler: HideBottomNavigationBar.setScrollPosition,
-      child: richText,
+      child: FutureBuilder(
+          future: infoType.html(context),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return HTML.toRichText(context, snapshot.data ?? "", defaultTextStyle: defaultTextStyle, overrideStyle: overrideStyle, linksCallback: (link) {
+                _launchUrl(link);
+              });
+            }
+            var errMsg = "Missing the requested info :(";
+            if (snapshot.hasError) {
+              SimpleLogging.w("Failed to load info html for ${infoType.typeName}!", error: snapshot.error);
+              errMsg = "Failed to load requested info.";
+            }
+            return Text(errMsg);
+          }),
     );
   }
 }

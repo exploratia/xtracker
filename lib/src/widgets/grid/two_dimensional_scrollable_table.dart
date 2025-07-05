@@ -27,7 +27,10 @@ class TwoDimensionalScrollableTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (lineCount < 1) return const Text("At least on line is required!");
+    if (lineCount < 1) {
+      const errMsg = "At least on line is required!";
+      return const Text(errMsg);
+    }
 
     return HideBottomNavigationBar(
       child: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {

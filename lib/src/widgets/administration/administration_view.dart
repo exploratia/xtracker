@@ -127,19 +127,36 @@ class _AppInfoCard extends StatelessWidget {
                 ),
                 Text(/*AppInfo.appName*/ LocaleKeys.appTitle.tr(), style: Theme.of(context).textTheme.titleLarge),
                 OutlinedButton.icon(
-                  onPressed: () => Navigator.restorablePushNamed(context, InfoScreen.navItem.routeName, arguments: {'infoType': InfoType.legalNotice.typeName}),
-                  icon: InfoScreen.navItem.icon,
-                  label: const Text("Info"),
-                ),
-                OutlinedButton.icon(
                   onPressed: () => AboutDlg.showAboutDlg(context),
                   icon: const Icon(Icons.info_outline),
-                  label: const Text("Version"),
+                  label: const Text(LocaleKeys.administration_app_btn_version),
                 ),
               ],
             ),
             spacing: 10,
             children: [
+              // legals buttons
+              OutlinedButton.icon(
+                onPressed: () => Navigator.restorablePushNamed(context, InfoScreen.navItem.routeName, arguments: {'infoType': InfoType.legalNotice.typeName}),
+                icon: InfoScreen.navItem.icon,
+                label: Text(InfoType.legalNotice.title()),
+              ),
+              OutlinedButton.icon(
+                onPressed: () => Navigator.restorablePushNamed(context, InfoScreen.navItem.routeName, arguments: {'infoType': InfoType.privacyPolicy.typeName}),
+                icon: InfoScreen.navItem.icon,
+                label: Text(InfoType.privacyPolicy.title()),
+              ),
+              OutlinedButton.icon(
+                onPressed: () => Navigator.restorablePushNamed(context, InfoScreen.navItem.routeName, arguments: {'infoType': InfoType.disclaimer.typeName}),
+                icon: InfoScreen.navItem.icon,
+                label: Text(InfoType.disclaimer.title()),
+              ),
+              OutlinedButton.icon(
+                onPressed: () => Navigator.restorablePushNamed(context, InfoScreen.navItem.routeName, arguments: {'infoType': InfoType.eula.typeName}),
+                icon: InfoScreen.navItem.icon,
+                label: Text(InfoType.eula.title()),
+              ),
+              const Divider(height: 20),
               ...rows.map((r) => Row(
                     spacing: 10,
                     children: [...r],

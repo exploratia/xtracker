@@ -6,23 +6,23 @@ Skeleton by flutter create --org com.yourdomain -t skeleton your_app_name
 
 ## Assets
 
-The `assets` directory houses images, fonts, and any other files you want to
+The `assets` directory houses images, translations, fonts, and any other files you want to
 include with your application.
 
 The `assets/images` directory contains [resolution-aware
 images](https://flutter.dev/to/resolution-aware-images).
 
-## Localization
+### Localization
 
-### Intl -> Date/Time
+#### Intl -> Date/Time
 
 https://pub.dev/packages/intl
 
 https://pub.dev/documentation/intl/latest/intl/DateFormat-class.html
 
-### easy localization
+#### easy localization
 
-#### generate keys
+##### Generate keys
 
 see: https://github.com/aissat/easy_localization/blob/develop/README.md#-code-generation
 
@@ -30,7 +30,7 @@ see: https://github.com/aissat/easy_localization/blob/develop/README.md#-code-ge
 dart run easy_localization:generate -f keys -S assets/translations -o locale_keys.g.dart -u true
 ```
 
-#### Auto generate keys when saving translation files with file watcher
+##### Auto generate keys when saving translation files with file watcher
 
 ![auto_generate_locale_keys_with_file_watcher.png](auto_generate_locale_keys_with_file_watcher.png)
 ![auto_generate_locale_keys_with_file_watcher_scope.png](auto_generate_locale_keys_with_file_watcher_scope.png)
@@ -40,7 +40,7 @@ scope-pattern:
 file[xtracker]:assets/translations//*
 ```
 
-## Assets
+### Generate assets
 
 Generate assets to use them in code with code completion/compiler warning:
 

@@ -87,6 +87,7 @@ flutter:
     - assets/images/bmc/
     - assets/images/logos/
     - assets/translations/
+    - assets/infos/
 
 # launcher icon
 flutter_launcher_icons:
