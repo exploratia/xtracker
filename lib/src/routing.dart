@@ -7,13 +7,9 @@ import 'screens/administration/log_settings_screen.dart';
 import 'screens/administration/logs_screen.dart';
 import 'screens/administration/settings_screen.dart';
 import 'screens/home_screen.dart';
-import 'screens/playground_screen.dart';
 import 'screens/series/series_data_screen.dart';
 import 'util/logging/flutter_simple_logging.dart';
 import 'widgets/administration/settings/settings_controller.dart';
-import 'widgets/playground/hero/hero_view.dart';
-import 'widgets/playground/sample_feature/sample_item_details_view.dart';
-import 'widgets/playground/sample_feature/sample_item_list_view.dart';
 
 class Routing {
   final SettingsController settingsController;
@@ -23,7 +19,6 @@ class Routing {
     [
       HomeScreen.navItem,
       AdministrationScreen.navItem,
-      PlaygroundScreen.navItem,
     ];
   }
 
@@ -49,12 +44,6 @@ class Routing {
           args = routeSettings.arguments as Map<String, dynamic>;
         }
 
-        // playground >>
-        if (routeName == PlaygroundScreen.navItem.routeName) return const PlaygroundScreen();
-        if (routeName == SampleItemDetailsView.routeName) return const SampleItemDetailsView();
-        if (routeName == SampleItemListView.routeName) return const SampleItemListView();
-        if (routeName == HeroView.routeName) return const HeroView();
-        // << playground
         // administration >>
         if (routeName == AdministrationScreen.navItem.routeName) return const AdministrationScreen();
         if (routeName == LogsScreen.navItem.routeName) return const LogsScreen();
