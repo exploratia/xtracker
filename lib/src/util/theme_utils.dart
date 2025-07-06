@@ -23,9 +23,9 @@ class ThemeUtils {
   static ThemeData? _dark;
 
   static ThemeData buildThemeData(BuildContext context, bool dark) {
-    // already stored? Return instantly... TODO uncomment after theme is ready
-    // if (dark && _dark != null) return _dark!;
-    // if (!dark && _light != null) return _light!;
+    // already stored? Return instantly...
+    if (dark && _dark != null) return _dark!;
+    if (!dark && _light != null) return _light!;
 
     final brightness = dark ? Brightness.dark : Brightness.light;
     final backgroundColor = dark ? const Color(0xff06041f) : const Color.fromRGBO(255, 255, 255, 1);
