@@ -59,10 +59,10 @@ class ScreenBuilder extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mediaQueryInfo = MediaQueryUtils(MediaQuery.of(context));
-    final buildDrawer = (/*!mediaQueryInfo.isTablet &&*/
-        mediaQueryInfo.isLandscape && drawerBuilder != null);
-    final buildBottomNavigationBar = (mediaQueryInfo.isPortrait && bottomNavigationBarBuilder != null);
-    final buildNavigationRail = ((mediaQueryInfo.isLandscape || mediaQueryInfo.isTablet) && navigationRailBuilder != null);
+    final buildBottomNavigationBar = bottomNavigationBarBuilder != null && mediaQueryInfo.isPortrait;
+    final buildNavigationRail =
+        !buildBottomNavigationBar && navigationRailBuilder != null && (mediaQueryInfo.isLandscape && mediaQueryInfo.mediaQueryData.size.width > 600);
+    final buildDrawer = !buildBottomNavigationBar && !buildNavigationRail && drawerBuilder != null;
 
     Widget bodySafeArea = SafeArea(
         child: Row(
