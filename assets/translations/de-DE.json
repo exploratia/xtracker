@@ -163,7 +163,7 @@
         }
       }
     },
-    "management": {
+    "mgmt": {
       "title": "Messreihen verwalten",
       "importExport": {
         "dialog": {

@@ -72,7 +72,7 @@ class SeriesImportExport {
   static Future<void> exportSeriesDef(SeriesDef seriesDef, BuildContext context) async {
     Map<String, dynamic>? json = await _buildSeriesExportJson(seriesDef, context);
     bool exported = await _exportJsonFile(json, 'xtracker_series_${seriesDef.uuid}_${DateTimeUtils.formateExportDateTime()}.json');
-    if (exported && context.mounted) Dialogs.showSnackBar(LocaleKeys.series_management_importExport_dialog_msg_exportSuccessful.tr(), context);
+    if (exported && context.mounted) Dialogs.showSnackBar(LocaleKeys.series_mgmt_importExport_dialog_msg_exportSuccessful.tr(), context);
   }
 
   /// export all series with data
@@ -80,7 +80,7 @@ class SeriesImportExport {
     try {
       Map<String, dynamic> json = await _buildAllSeriesExportJson(context);
       bool exported = await _exportJsonFile(json, 'xtracker_multi_series_export_${DateTimeUtils.formateExportDateTime()}.json');
-      if (exported && context.mounted) Dialogs.showSnackBar(LocaleKeys.series_management_importExport_dialog_msg_exportSuccessful.tr(), context);
+      if (exported && context.mounted) Dialogs.showSnackBar(LocaleKeys.series_mgmt_importExport_dialog_msg_exportSuccessful.tr(), context);
     } catch (ex) {
       if (context.mounted) Dialogs.showSnackBar(ex.toString(), context);
     }
@@ -112,7 +112,7 @@ class SeriesImportExport {
       if (context.mounted) await seriesDataProvider.addValues(seriesDef, seriesData.data, context);
       return true;
     } else {
-      throw Ex(LocaleKeys.series_management_importExport_dialog_msg_error_unexpectedDataStructure.tr(args: [fileName]));
+      throw Ex(LocaleKeys.series_mgmt_importExport_dialog_msg_error_unexpectedDataStructure.tr(args: [fileName]));
     }
   }
 
@@ -145,7 +145,7 @@ class SeriesImportExport {
     for (var file in result.xFiles) {
       try {
         if (!file.name.endsWith(".json")) {
-          throw Ex(LocaleKeys.series_management_importExport_dialog_msg_error_unexpectedFile.tr(args: [file.name]));
+          throw Ex(LocaleKeys.series_mgmt_importExport_dialog_msg_error_unexpectedFile.tr(args: [file.name]));
         }
 
         var fileContent = await file.readAsString(); // utf8
@@ -162,7 +162,7 @@ class SeriesImportExport {
                 }
               }
             } else {
-              throw Ex(LocaleKeys.series_management_importExport_dialog_msg_error_unexpectedDataStructure.tr(args: [file.name]));
+              throw Ex(LocaleKeys.series_mgmt_importExport_dialog_msg_error_unexpectedDataStructure.tr(args: [file.name]));
             }
           }
         } else if (json["type"] as String == "seriesExport") {
@@ -172,7 +172,7 @@ class SeriesImportExport {
             }
           }
         } else {
-          throw Ex(LocaleKeys.series_management_importExport_dialog_msg_error_unexpectedDataStructure.tr(args: [file.name]));
+          throw Ex(LocaleKeys.series_mgmt_importExport_dialog_msg_error_unexpectedDataStructure.tr(args: [file.name]));
         }
       } catch (ex, st) {
         SimpleLogging.w(ex.toString(), stackTrace: st);
@@ -180,7 +180,7 @@ class SeriesImportExport {
           if (ex is Ex) {
             await Dialogs.simpleOkDialog(ex.toString(), context);
           } else {
-            await Dialogs.simpleOkDialog(LocaleKeys.series_management_importExport_dialog_msg_error_unexpectedDataStructure.tr(args: [file.name]), context);
+            await Dialogs.simpleOkDialog(LocaleKeys.series_mgmt_importExport_dialog_msg_error_unexpectedDataStructure.tr(args: [file.name]), context);
           }
         }
       }
@@ -188,8 +188,7 @@ class SeriesImportExport {
 
     if (context.mounted && successfulImports > 0) {
       Dialogs.showSnackBar(
-          LocaleKeys.series_management_importExport_dialog_msg_importSuccessfulXofY.tr(args: [successfulImports.toString(), numSelectedFiles.toString()]),
-          context);
+          LocaleKeys.series_mgmt_importExport_dialog_msg_importSuccessfulXofY.tr(args: [successfulImports.toString(), numSelectedFiles.toString()]), context);
     }
 
     if (context.mounted) Navigator.of(context).pop();
@@ -213,21 +212,21 @@ class SeriesImportExport {
                       await _exportSeries(context);
                     }
                   : null,
-              child: Text(LocaleKeys.series_management_importExport_dialog_btn_exportSeries.tr())),
-          Text(style: themeData.textTheme.labelMedium, LocaleKeys.series_management_importExport_dialog_label_exportSeries.tr()),
-          Text(style: themeData.textTheme.labelMedium, LocaleKeys.series_management_importExport_dialog_label_exportSeriesTip.tr()),
+              child: Text(LocaleKeys.series_mgmt_importExport_dialog_btn_exportSeries.tr())),
+          Text(style: themeData.textTheme.labelMedium, LocaleKeys.series_mgmt_importExport_dialog_label_exportSeries.tr()),
+          Text(style: themeData.textTheme.labelMedium, LocaleKeys.series_mgmt_importExport_dialog_label_exportSeriesTip.tr()),
           const Divider(),
           ElevatedButton(
               onPressed: () async {
                 await _importJsonFile(context);
               },
-              child: Text(LocaleKeys.series_management_importExport_dialog_btn_importSeries.tr())),
-          Text(style: themeData.textTheme.labelMedium, LocaleKeys.series_management_importExport_dialog_label_importSeries.tr()),
-          Text(style: themeData.textTheme.labelMedium, LocaleKeys.series_management_importExport_dialog_label_importSeriesTip.tr()),
+              child: Text(LocaleKeys.series_mgmt_importExport_dialog_btn_importSeries.tr())),
+          Text(style: themeData.textTheme.labelMedium, LocaleKeys.series_mgmt_importExport_dialog_label_importSeries.tr()),
+          Text(style: themeData.textTheme.labelMedium, LocaleKeys.series_mgmt_importExport_dialog_label_importSeriesTip.tr()),
         ],
       ),
     );
     await Dialogs.simpleOkDialog(dialogContent, context,
-        title: LocaleKeys.series_management_importExport_dialog_tile.tr(), buttonText: LocaleKeys.commons_dialog_btn_cancel.tr());
+        title: LocaleKeys.series_mgmt_importExport_dialog_tile.tr(), buttonText: LocaleKeys.commons_dialog_btn_cancel.tr());
   }
 }
