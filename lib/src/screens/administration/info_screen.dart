@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../generated/locale_keys.g.dart';
 import '../../model/navigation/navigation_item.dart';
-import '../../util/infoType.dart';
+import '../../util/info_type.dart';
 import '../../widgets/administration/info_view.dart';
 import '../../widgets/layout/gradient_app_bar.dart';
 import '../../widgets/responsive/screen_builder.dart';

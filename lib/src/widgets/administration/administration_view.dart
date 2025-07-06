@@ -9,7 +9,7 @@ import '../../screens/administration/logs_screen.dart';
 import '../../screens/administration/settings_screen.dart';
 import '../../util/about_dlg.dart';
 import '../../util/globals.dart';
-import '../../util/infoType.dart';
+import '../../util/info_type.dart';
 import '../card/settings_card.dart';
 import '../controls/img_lnk.dart';
 import '../layout/scroll_footer.dart';

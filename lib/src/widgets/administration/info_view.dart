@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:simple_html_css/simple_html_css.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../util/infoType.dart';
+import '../../util/info_type.dart';
 import '../../util/logging/flutter_simple_logging.dart';
 import '../layout/single_child_scroll_view_with_scrollbar.dart';
 import '../navigation/hide_bottom_navigation_bar.dart';
