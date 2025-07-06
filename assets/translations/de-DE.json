@@ -4,7 +4,8 @@
     "supportApp": {
       "title": "Unterstütze die App",
       "labels": {
-        "buyMeACoffee": "Die App zu warten / erweitern kostet viel Freizeit. Für Unterstützung wäre ich sehr dankbar..."
+        "buyMeACoffee": "Die App zu warten / erweitern kostet viel Freizeit. Für Unterstützung wäre ich sehr dankbar...",
+        "reportABug": "Fehler gefunden? Erstelle einen Bug-Report auf GitHub:"
       }
     },
     "app": {
