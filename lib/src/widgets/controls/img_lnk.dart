@@ -1,21 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+
+import '../../util/launch_uri.dart';
 
 class ImgLnk extends StatelessWidget {
-  const ImgLnk({super.key, required this.url, required this.imageProvider, required this.height, required this.width, this.darkHover = true});
+  const ImgLnk({super.key, required this.uri, required this.imageProvider, required this.height, required this.width, this.darkHover = true});
 
-  final Uri url;
+  final Uri uri;
   final ImageProvider<Object> imageProvider;
   final double height;
 
   final double width;
   final bool darkHover;
-
-  Future<void> _launchUrl() async {
-    if (!await launchUrl(url)) {
-      throw Exception('Could not launch $url');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +18,7 @@ class ImgLnk extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         borderRadius: BorderRadius.circular(8),
-        onTap: _launchUrl,
+        onTap: () => LaunchUri.launchUri(uri),
         splashColor: darkHover ? Colors.black12 : Colors.white30,
         hoverColor: darkHover ? Colors.black12 : Colors.white10,
         child: Ink(
