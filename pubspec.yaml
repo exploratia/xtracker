@@ -36,7 +36,7 @@ dependencies:
   flutter_archive: ^6.0.3
   logger: ^2.5.0
   # call native share dialog
-  share_plus: ^10.0.0
+  share_plus: ^11.0.0
 
   #
   flutter_colorpicker: ^1.1.0
