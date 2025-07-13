@@ -62,6 +62,9 @@ class MyApp extends StatelessWidget {
               return LocaleKeys.appTitle.tr();
             },
 
+            // Set the (transparent app logo) icon background color in the android app switcher (worked in emulator - not on real phone :/ )
+            // https://stackoverflow.com/questions/75703449/changing-a-flutter-apps-icon-background-color-in-the-android-app-switcher-not/76386962#76386962
+            color: const Color(0xff06041f),
             // Define a light and dark color theme. Then, read the user's
             // preferred ThemeMode (light, dark, or system default) from the
             // SettingsController to display the correct theme.
