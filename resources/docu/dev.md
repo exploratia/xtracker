@@ -148,14 +148,9 @@ https://pub.dev/packages/url_launcher
 
 https://pub.dev/packages/simple_html_css
 
-### Launcher icon (dev)
-
-https://pub.dev/packages/flutter_launcher_icons
-
 ## App Icon
 
-resources/`app_icon_source.png`
-Save origin img as 192px and then increase (not resize) image to 432px
+Export app_logo.svg to android\app\src\main subfolders matching the sizes.
 
 ## Create Launcher Icons
 
