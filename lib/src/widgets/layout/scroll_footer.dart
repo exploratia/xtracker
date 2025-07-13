@@ -21,8 +21,7 @@ class ScrollFooter extends StatelessWidget {
           height: marginTop,
         ),
         SizedBox(
-          height: 40,
-          width: 40,
+          height: 64,
           child: Assets.images.logos.appLogo.image(fit: BoxFit.cover),
         ),
         SizedBox(
