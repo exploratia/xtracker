@@ -12,6 +12,8 @@ include with your application.
 The `assets/images` directory contains [resolution-aware
 images](https://flutter.dev/to/resolution-aware-images).
 
+To compress png files use https://compresspng.com/
+
 ### Localization
 
 #### Intl -> Date/Time
@@ -148,13 +150,17 @@ https://pub.dev/packages/url_launcher
 
 https://pub.dev/packages/simple_html_css
 
-## App Icon
+## App/Launcher Icon
 
 Export app_logo.svg to android\app\src\main subfolders matching the sizes.
 
-## Create Launcher Icons
+## Splashscreen
 
-- run `dart run flutter_launcher_icons`
+To modify the splashscreen install https://pub.dev/packages/flutter_native_splash
+
+```shell
+dart run flutter_native_splash:create
+```
 
 ## Build apk (Android)
 

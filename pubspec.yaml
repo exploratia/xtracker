@@ -35,14 +35,17 @@ dependencies:
   # zip files
   flutter_archive: ^6.0.3
   logger: ^2.5.0
+
   # call native share dialog
   share_plus: ^10.0.0
 
-  #
+  # color picker
   flutter_colorpicker: ^1.1.0
 
   # UUID generation (ids for model)
   uuid: ^4.5.1
+
+  # provider
   provider: ^6.1.2
 
   # 2d grid
@@ -60,6 +63,8 @@ dependencies:
 
   # url launcher
   url_launcher: ^6.3.1
+
+  # display HTML in flutter
   simple_html_css: ^5.0.0
 
 dev_dependencies:
