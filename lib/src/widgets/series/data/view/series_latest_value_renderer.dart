@@ -22,14 +22,21 @@ class SeriesLatestValueRenderer extends StatelessWidget {
         {
           var bloodPressureValue = context.read<SeriesCurrentValueProvider>().bloodPressureCurrentValue(seriesDef);
           if (bloodPressureValue != null) {
-            return Row(
+            return Wrap(
               spacing: 10,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
+              runSpacing: 4,
+              alignment: WrapAlignment.center,
+              runAlignment: WrapAlignment.center,
+              crossAxisAlignment: WrapCrossAlignment.center,
               children: [
                 Text(DateTimeUtils.formateDate(bloodPressureValue.dateTime)),
                 Text(DateTimeUtils.formateTime(bloodPressureValue.dateTime)),
-                BloodPressureValueRenderer(bloodPressureValue: bloodPressureValue, seriesDef: seriesDef),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    BloodPressureValueRenderer(bloodPressureValue: bloodPressureValue, seriesDef: seriesDef),
+                  ],
+                ),
               ],
             );
           }
