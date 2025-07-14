@@ -5,22 +5,14 @@ import '../../../../util/date_time_utils.dart';
 
 class InputHeader extends StatelessWidget {
   final DateTime dateTime;
-  final Widget? valueWidget;
   final SeriesDef seriesDef;
   final Function(DateTime value) setDateTime;
 
-  const InputHeader({super.key, required this.dateTime, this.valueWidget, required this.seriesDef, required this.setDateTime});
+  const InputHeader({super.key, required this.dateTime, required this.seriesDef, required this.setDateTime});
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      spacing: 20,
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        _DateTimeHeader(dateTime: dateTime, setDateTime: setDateTime),
-        if (valueWidget != null) valueWidget!,
-      ],
-    );
+    return _DateTimeHeader(dateTime: dateTime, setDateTime: setDateTime);
   }
 }
 
@@ -55,8 +47,8 @@ class _DateTimeHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    return Wrap(
+      runAlignment: WrapAlignment.center,
       spacing: 20,
       children: [
         InkWell(
