@@ -47,17 +47,32 @@ class _DateTimeHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
     return Wrap(
       runAlignment: WrapAlignment.center,
       spacing: 20,
       children: [
         InkWell(
+          borderRadius: BorderRadius.circular(4),
           onTap: () => _selectDate(context, dateTime),
-          child: Text(DateTimeUtils.formateDate(dateTime)),
+          child: Padding(
+            padding: const EdgeInsets.all(2.0),
+            child: Text(
+              DateTimeUtils.formateDate(dateTime),
+              style: TextStyle(inherit: true, color: themeData.colorScheme.primary),
+            ),
+          ),
         ),
         InkWell(
+          borderRadius: BorderRadius.circular(4),
           onTap: () => _selectTime(context, dateTime),
-          child: Text(DateTimeUtils.formateTime(dateTime)),
+          child: Padding(
+            padding: const EdgeInsets.all(2.0),
+            child: Text(
+              DateTimeUtils.formateTime(dateTime),
+              style: TextStyle(inherit: true, color: themeData.colorScheme.primary),
+            ),
+          ),
         ),
       ],
     );
