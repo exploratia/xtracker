@@ -52,7 +52,7 @@ dependencies:
   linked_scroll_controller: ^0.2.0
 
   # chart
-  fl_chart: ^0.70.2
+  fl_chart: ^1.0.0
 
   # data storage
   sembast: ^3.8.3
