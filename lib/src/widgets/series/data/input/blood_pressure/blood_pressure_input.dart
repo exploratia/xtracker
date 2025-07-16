@@ -83,25 +83,25 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
     super.dispose();
   }
 
-  _setDateTime(DateTime value) {
+  void _setDateTime(DateTime value) {
     setState(() {
       _dateTime = value;
     });
   }
 
-  _setHigh(int value) {
+  void _setHigh(int value) {
     setState(() {
       _high = value;
     });
   }
 
-  _setLow(int value) {
+  void _setLow(int value) {
     setState(() {
       _low = value;
     });
   }
 
-  _setTablet(bool value) {
+  void _setTablet(bool value) {
     setState(() {
       _tablet = value;
     });
@@ -241,10 +241,8 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
               spacing: 4,
               children: [
                 const Icon(Icons.medication_outlined),
-                Expanded(
-                  child: OverflowText(
-                    LocaleKeys.bloodPressure_input_labels_medication.tr(),
-                  ),
+                OverflowText(
+                  LocaleKeys.bloodPressure_input_labels_medication.tr(),
                 ),
               ],
             ),

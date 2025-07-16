@@ -118,7 +118,7 @@ class _SeriesEditorState extends State<SeriesEditor> {
           autofocus: true,
           controller: _nameController,
           decoration: InputDecoration(
-            labelText: LocaleKeys.series_edit_labels_seriesName.tr(),
+            labelText: LocaleKeys.series_edit_common_labels_seriesName.tr(),
             hintText: SeriesType.displayNameOf(_seriesDef.seriesType),
           ),
           textInputAction: TextInputAction.next,
@@ -138,10 +138,6 @@ class _SeriesEditorState extends State<SeriesEditor> {
         switch (_seriesDef.seriesType) {
           SeriesType.bloodPressure => BloodPressureSeriesEdit(_seriesDef, _updateState),
           SeriesType.dailyCheck => Container(),
-          // TODO: Handle this case.
-          SeriesType.monthly => throw UnimplementedError(),
-          // TODO: Handle this case.
-          SeriesType.free => throw UnimplementedError(),
         }
       ],
     );
@@ -212,7 +208,7 @@ class _SeriesSymbolAndColor extends StatelessWidget {
         Row(
           spacing: 10,
           children: [
-            Text(LocaleKeys.series_edit_labels_seriesIcon.tr()),
+            Text(LocaleKeys.series_edit_common_labels_seriesIcon.tr()),
             IconPicker(
               icoName: seriesDef.iconName,
               icoSelected: (icoName) => seriesDef.iconName = icoName,
@@ -222,7 +218,7 @@ class _SeriesSymbolAndColor extends StatelessWidget {
         Row(
           spacing: 10,
           children: [
-            Text(LocaleKeys.series_edit_labels_seriesColor.tr()),
+            Text(LocaleKeys.series_edit_common_labels_seriesColor.tr()),
             ColorPicker(
               color: seriesDef.color,
               colorSelected: (color) => seriesDef.color = color,

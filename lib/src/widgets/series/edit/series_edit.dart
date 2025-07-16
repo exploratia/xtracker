@@ -91,7 +91,9 @@ class _SeriesTypeSelector extends StatelessWidget {
                     )
                   ])),
             ],
-          )
+          ),
+          const SizedBox(height: 20),
+          Text(LocaleKeys.series_edit_labels_moreSeriesToCome.tr()),
         ],
       ),
     );

@@ -5,22 +5,14 @@ import '../../../../util/date_time_utils.dart';
 
 class InputHeader extends StatelessWidget {
   final DateTime dateTime;
-  final Widget? valueWidget;
   final SeriesDef seriesDef;
   final Function(DateTime value) setDateTime;
 
-  const InputHeader({super.key, required this.dateTime, this.valueWidget, required this.seriesDef, required this.setDateTime});
+  const InputHeader({super.key, required this.dateTime, required this.seriesDef, required this.setDateTime});
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      spacing: 20,
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        _DateTimeHeader(dateTime: dateTime, setDateTime: setDateTime),
-        if (valueWidget != null) valueWidget!,
-      ],
-    );
+    return _DateTimeHeader(dateTime: dateTime, setDateTime: setDateTime);
   }
 }
 
@@ -33,7 +25,7 @@ class _DateTimeHeader extends StatelessWidget {
   final DateTime dateTime;
   final Function(DateTime value) setDateTime;
 
-  Future<void> _selectDate(context, DateTime dateTime) async {
+  Future<void> _selectDate(BuildContext context, DateTime dateTime) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: dateTime,
@@ -44,7 +36,7 @@ class _DateTimeHeader extends StatelessWidget {
     if (pickedDate != null) setDateTime(pickedDate.copyWith(hour: dateTime.hour, minute: dateTime.minute));
   }
 
-  Future<void> _selectTime(context, DateTime dateTime) async {
+  Future<void> _selectTime(BuildContext context, DateTime dateTime) async {
     final TimeOfDay? pickedTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.fromDateTime(dateTime),
@@ -55,17 +47,32 @@ class _DateTimeHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.center,
+    final themeData = Theme.of(context);
+    return Wrap(
+      runAlignment: WrapAlignment.center,
       spacing: 20,
       children: [
         InkWell(
+          borderRadius: BorderRadius.circular(4),
           onTap: () => _selectDate(context, dateTime),
-          child: Text(DateTimeUtils.formateDate(dateTime)),
+          child: Padding(
+            padding: const EdgeInsets.all(2.0),
+            child: Text(
+              DateTimeUtils.formateDate(dateTime),
+              style: TextStyle(inherit: true, color: themeData.colorScheme.primary),
+            ),
+          ),
         ),
         InkWell(
+          borderRadius: BorderRadius.circular(4),
           onTap: () => _selectTime(context, dateTime),
-          child: Text(DateTimeUtils.formateTime(dateTime)),
+          child: Padding(
+            padding: const EdgeInsets.all(2.0),
+            child: Text(
+              DateTimeUtils.formateTime(dateTime),
+              style: TextStyle(inherit: true, color: themeData.colorScheme.primary),
+            ),
+          ),
         ),
       ],
     );

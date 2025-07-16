@@ -104,7 +104,7 @@ class ChartUtils {
     );
   }
 
-  static List<TouchedSpotIndicatorData?> _createTouchedSpotIndicators(barData, spotIndexes) {
+  static List<TouchedSpotIndicatorData?> _createTouchedSpotIndicators(LineChartBarData barData, List<int> spotIndexes) {
     var flLine = const FlLine(
       color: Colors.grey,
       strokeWidth: 2,
@@ -131,7 +131,7 @@ class ChartUtils {
     return result;
   }
 
-  static List<TouchedSpotIndicatorData?> _createTouchedSpotIndicatorsWithoutLine(barData, spotIndexes) {
+  static List<TouchedSpotIndicatorData?> _createTouchedSpotIndicatorsWithoutLine(LineChartBarData barData, List<int> spotIndexes) {
     var flLine = const FlLine(
       color: Colors.transparent,
       strokeWidth: 0,

@@ -156,7 +156,7 @@ Export app_logo.svg to android\app\src\main subfolders matching the sizes.
 
 ## Splashscreen
 
-To modify the splashscreen install https://pub.dev/packages/flutter_native_splash
+https://pub.dev/packages/flutter_native_splash
 
 ```shell
 dart run flutter_native_splash:create
