@@ -24,6 +24,7 @@ class _AppNavigationRailState extends State<AppNavigationRail> {
                 selectedIndex: currentIdx + 1,
                 destinations: _buildDestinations(ctx2),
                 extended: Navigation.navRailExpanded,
+                minExtendedWidth: Navigation.getDrawerTextWidth(context) + 120,
                 onDestinationSelected: (int index) {
                   if (index == 0) {
                     Navigation.navRailExpanded = !Navigation.navRailExpanded;
