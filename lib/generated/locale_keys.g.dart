@@ -49,10 +49,12 @@ abstract class  LocaleKeys {
   static const log_settings_labels_logFullStack = 'log.settings.labels.logFullStack';
   static const log_settings_labels_logLevel = 'log.settings.labels.logLevel';
   static const log_settings_labels_writeTestLogMessages = 'log.settings.labels.writeTestLogMessages';
+  static const log_msg_shareSuccess = 'log.msg.shareSuccess';
   static const logs_title = 'logs.title';
   static const logs_dialog_msg_error_deleteAllLogsFailed = 'logs.dialog.msg.error.deleteAllLogsFailed';
   static const logs_dialog_msg_error_failedToZipLogs = 'logs.dialog.msg.error.failedToZipLogs';
   static const logs_dialog_msg_query_deleteAllLogs = 'logs.dialog.msg.query.deleteAllLogs';
+  static const logs_msg_shareSuccess = 'logs.msg.shareSuccess';
   static const series_addFirstSeries = 'series.addFirstSeries';
   static const series_data_title = 'series.data.title';
   static const series_data_input_dialog_msg_query_deleteValue = 'series.data.input.dialog.msg.query.deleteValue';

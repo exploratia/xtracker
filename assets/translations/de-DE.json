@@ -105,6 +105,9 @@
         "logLevel": "Log Level:",
         "writeTestLogMessages": "Test Log-Einträge schreiben:"
       }
+    },
+    "msg": {
+      "shareSuccess": "Log wurde erfolgreich geteilt."
     }
   },
   "logs": {
@@ -119,6 +122,9 @@
           "deleteAllLogs": "Wirklich alle Log-Dateien löschen?"
         }
       }
+    },
+    "msg": {
+      "shareSuccess": "Logs wurde erfolgreich geteilt."
     }
   },
   "series": {

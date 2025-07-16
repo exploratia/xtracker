@@ -36,7 +36,11 @@ class LogScreen extends StatelessWidget {
           IconButton(
             onPressed: () async {
               try {
-                await Share.shareXFiles([XFile(DailyFiles.getFullLogPath(logFileN))], text: '${/*AppInfo.appName*/ LocaleKeys.appTitle.tr()} Log $logFileName');
+                final result = await SharePlus.instance.share(
+                    ShareParams(files: [XFile(DailyFiles.getFullLogPath(logFileN))], text: '${/*AppInfo.appName*/ LocaleKeys.appTitle.tr()} Log $logFileName'));
+                if (result.status == ShareResultStatus.success && context.mounted) {
+                  Dialogs.showSnackBar(LocaleKeys.log_msg_shareSuccess.tr(), context);
+                }
               } catch (err) {
                 if (context.mounted) {
                   Dialogs.simpleErrOkDialog('${LocaleKeys.commons_msg_error_failedToShareData.tr()}\n\n$err', context);

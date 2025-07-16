@@ -54,7 +54,10 @@ class _LogsScreenState extends State<LogsScreen> {
               try {
                 final zipAllLogs = await DailyFiles.zipAllLogs();
                 try {
-                  await Share.shareXFiles([XFile(zipAllLogs)], text: 'App Logs');
+                  final result = await SharePlus.instance.share(ShareParams(files: [XFile(zipAllLogs)], text: 'App Logs'));
+                  if (result.status == ShareResultStatus.success && context.mounted) {
+                    Dialogs.showSnackBar(LocaleKeys.logs_msg_shareSuccess.tr(), context);
+                  }
                 } catch (err) {
                   if (context.mounted) {
                     Dialogs.simpleErrOkDialog('${LocaleKeys.commons_msg_error_failedToShareData.tr()}\n\n$err', context);
