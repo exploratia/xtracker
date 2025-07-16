@@ -20,7 +20,7 @@ class SeriesDataView extends StatelessWidget {
   Widget build(BuildContext context) {
     return HideBottomNavigationBar(
       child: Stack(
-        fit: StackFit.loose,
+        fit: StackFit.expand,
         children: [
           _SeriesDataView(seriesViewMetaData: seriesViewMetaData),
           _Title(seriesViewMetaData: seriesViewMetaData),
