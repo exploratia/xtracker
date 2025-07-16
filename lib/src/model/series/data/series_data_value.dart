@@ -14,10 +14,6 @@ abstract class SeriesDataValue {
     return switch (seriesType) {
       SeriesType.bloodPressure => BloodPressureValue.fromJson(json),
       SeriesType.dailyCheck => DailyCheckValue.fromJson(json),
-      // TODO: Handle this case.
-      SeriesType.monthly => throw UnimplementedError(),
-      // TODO: Handle this case.
-      SeriesType.free => throw UnimplementedError(),
     };
   }
 }

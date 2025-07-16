@@ -153,10 +153,15 @@
     "edit": {
       "title": "Messreihe",
       "labels": {
+        "selectSeriesType": "Wähle den Messreihen-Typ",
+        "moreSeriesToCome": "Weitere in Arbeit ..."
+      },
+      "common": {
+        "labels": {
         "seriesName": "Name",
         "seriesIcon": "Symbol",
-        "seriesColor": "Farbe",
-        "selectSeriesType": "Wähle den Messreihen-Typ"
+        "seriesColor": "Farbe"
+        }
       },
       "bloodPressure": {
         "labels": {

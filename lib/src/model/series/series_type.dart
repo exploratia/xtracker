@@ -6,9 +6,9 @@ import 'view_type.dart';
 
 enum SeriesType {
   bloodPressure('bloodPressure', 'monitor_heart_outlined', Colors.red, [ViewType.dots, ViewType.lineChart, ViewType.table]),
-  dailyCheck("dailyCheck", 'check_box_outlined', Colors.blue, [ViewType.barChart, ViewType.table, ViewType.dots]),
-  monthly("monthly", 'calendar_month_outlined', Colors.deepPurple, [ViewType.table, ViewType.lineChart]),
-  free("free", 'calendar_today_outlined', Colors.green, [ViewType.lineChart, ViewType.table]);
+  dailyCheck("dailyCheck", 'check_box_outlined', Colors.blue, [ViewType.barChart, ViewType.table, ViewType.dots]);
+  // monthly("monthly", 'calendar_month_outlined', Colors.deepPurple, [ViewType.table, ViewType.lineChart]),
+  // free("free", 'calendar_today_outlined', Colors.green, [ViewType.lineChart, ViewType.table]);
   // TODO TimeTracker
 
   final String typeName;
@@ -28,8 +28,8 @@ enum SeriesType {
     return switch (seriesType) {
       SeriesType.bloodPressure => LocaleKeys.series_seriesType_bloodPressure_title.tr(),
       SeriesType.dailyCheck => LocaleKeys.series_seriesType_dailyCheck_title.tr(),
-      SeriesType.monthly => LocaleKeys.series_seriesType_monthly_title.tr(),
-      SeriesType.free => LocaleKeys.series_seriesType_free_title.tr(),
+      // SeriesType.monthly => LocaleKeys.series_seriesType_monthly_title.tr(),
+      // SeriesType.free => LocaleKeys.series_seriesType_free_title.tr(),
     };
   }
 
@@ -37,8 +37,8 @@ enum SeriesType {
     return switch (seriesType) {
       SeriesType.bloodPressure => LocaleKeys.series_seriesType_bloodPressure_info.tr(),
       SeriesType.dailyCheck => LocaleKeys.series_seriesType_dailyCheck_info.tr(),
-      SeriesType.monthly => LocaleKeys.series_seriesType_monthly_info.tr(),
-      SeriesType.free => LocaleKeys.series_seriesType_free_info.tr(),
+      // SeriesType.monthly => LocaleKeys.series_seriesType_monthly_info.tr(),
+      // SeriesType.free => LocaleKeys.series_seriesType_free_info.tr(),
     };
   }
 }
