@@ -75,7 +75,7 @@ class SeriesData<T extends SeriesDataValue> {
     return SeriesData(seriesDefUuid, reducedSeriesItems);
   }
 
-  static showSeriesDataInputDlg(BuildContext context, SeriesDef seriesDef, {dynamic value}) async {
+  static Future<void> showSeriesDataInputDlg(BuildContext context, SeriesDef seriesDef, {dynamic value}) async {
     switch (seriesDef.seriesType) {
       case SeriesType.bloodPressure:
         {

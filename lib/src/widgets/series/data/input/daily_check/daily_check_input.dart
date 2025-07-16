@@ -48,13 +48,13 @@ class _DailyCheckInputState extends State<DailyCheckInput> {
     super.initState();
   }
 
-  _setDateTime(DateTime value) {
+  void _setDateTime(DateTime value) {
     setState(() {
       _dateTime = value;
     });
   }
 
-  _toggleChecked() {
+  void _toggleChecked() {
     setState(() {
       _isValid = !_isValid;
     });
@@ -74,7 +74,7 @@ class _DailyCheckInputState extends State<DailyCheckInput> {
     Navigator.pop(context, val);
   }
 
-  _deleteHandler() async {
+  void _deleteHandler() async {
     bool? res = await Dialogs.simpleYesNoDialog(
       LocaleKeys.series_data_input_dialog_msg_query_deleteValue.tr(),
       context,

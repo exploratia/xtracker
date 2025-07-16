@@ -71,7 +71,7 @@ class _BloodPressureDayItem extends DayItem {
 
   _BloodPressureDayItem({required super.dateTime});
 
-  updateHighLow(int valH, int valL, bool med) {
+  void updateHighLow(int valH, int valL, bool med) {
     high = max(high, valH);
     low = min(low, valL);
     medication |= med;

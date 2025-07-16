@@ -25,7 +25,7 @@ class _DateTimeHeader extends StatelessWidget {
   final DateTime dateTime;
   final Function(DateTime value) setDateTime;
 
-  Future<void> _selectDate(context, DateTime dateTime) async {
+  Future<void> _selectDate(BuildContext context, DateTime dateTime) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: dateTime,
@@ -36,7 +36,7 @@ class _DateTimeHeader extends StatelessWidget {
     if (pickedDate != null) setDateTime(pickedDate.copyWith(hour: dateTime.hour, minute: dateTime.minute));
   }
 
-  Future<void> _selectTime(context, DateTime dateTime) async {
+  Future<void> _selectTime(BuildContext context, DateTime dateTime) async {
     final TimeOfDay? pickedTime = await showTimePicker(
       context: context,
       initialTime: TimeOfDay.fromDateTime(dateTime),
