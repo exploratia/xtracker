@@ -57,16 +57,10 @@ class _SingleChildScrollViewWithScrollbarState extends State<SingleChildScrollVi
       child = widget.child;
     }
 
-    if (widget.useScreenPadding) {
-      child = Padding(
-        padding: ThemeUtils.screenPadding,
-        child: child,
-      );
-    }
-
     final scrollbar = Scrollbar(
       controller: _scrollController,
       child: SingleChildScrollView(
+        padding: widget.useScreenPadding ? ThemeUtils.screenPadding : const EdgeInsets.all(0),
         physics: scrollPhysics,
         controller: _scrollController,
         scrollDirection: widget.scrollDirection,

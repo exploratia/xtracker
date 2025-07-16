@@ -98,7 +98,7 @@ class Dialogs {
     );
   }
 
-  static Widget? _contentWidget(content) {
+  static Widget? _contentWidget(dynamic content) {
     Widget? contentWidget;
     if (content != null) {
       if (content is String) {
@@ -112,7 +112,7 @@ class Dialogs {
     return contentWidget;
   }
 
-  static Widget? _titleWidget(title) {
+  static Widget? _titleWidget(dynamic title) {
     Widget? titleWidget;
     if (title != null) {
       if (title is String) {

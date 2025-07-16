@@ -15,14 +15,8 @@ class $AssetsImagesGen {
   /// Directory path: assets/images/bmc
   $AssetsImagesBmcGen get bmc => const $AssetsImagesBmcGen();
 
-  /// File path: assets/images/flutter_logo.png
-  AssetGenImage get flutterLogo => const AssetGenImage('assets/images/flutter_logo.png');
-
   /// Directory path: assets/images/logos
   $AssetsImagesLogosGen get logos => const $AssetsImagesLogosGen();
-
-  /// List of all assets
-  List<AssetGenImage> get values => [flutterLogo];
 }
 
 class $AssetsInfosGen {

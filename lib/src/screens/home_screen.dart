@@ -41,7 +41,7 @@ class HomeScreen extends StatelessWidget {
             title: Row(
               children: [
                 SizedBox(
-                  width: 30,
+                  width: 40,
                   child: Assets.images.logos.appLogoWhite.image(fit: BoxFit.cover),
                 ),
               ],

@@ -49,10 +49,12 @@ abstract class  LocaleKeys {
   static const log_settings_labels_logFullStack = 'log.settings.labels.logFullStack';
   static const log_settings_labels_logLevel = 'log.settings.labels.logLevel';
   static const log_settings_labels_writeTestLogMessages = 'log.settings.labels.writeTestLogMessages';
+  static const log_msg_shareSuccess = 'log.msg.shareSuccess';
   static const logs_title = 'logs.title';
   static const logs_dialog_msg_error_deleteAllLogsFailed = 'logs.dialog.msg.error.deleteAllLogsFailed';
   static const logs_dialog_msg_error_failedToZipLogs = 'logs.dialog.msg.error.failedToZipLogs';
   static const logs_dialog_msg_query_deleteAllLogs = 'logs.dialog.msg.query.deleteAllLogs';
+  static const logs_msg_shareSuccess = 'logs.msg.shareSuccess';
   static const series_addFirstSeries = 'series.addFirstSeries';
   static const series_data_title = 'series.data.title';
   static const series_data_input_dialog_msg_query_deleteValue = 'series.data.input.dialog.msg.query.deleteValue';
@@ -60,10 +62,11 @@ abstract class  LocaleKeys {
   static const series_data_dialog_msg_query_deleteSeriesData = 'series.data.dialog.msg.query.deleteSeriesData';
   static const series_dialog_msg_query_deleteSeries = 'series.dialog.msg.query.deleteSeries';
   static const series_edit_title = 'series.edit.title';
-  static const series_edit_labels_seriesName = 'series.edit.labels.seriesName';
-  static const series_edit_labels_seriesIcon = 'series.edit.labels.seriesIcon';
-  static const series_edit_labels_seriesColor = 'series.edit.labels.seriesColor';
   static const series_edit_labels_selectSeriesType = 'series.edit.labels.selectSeriesType';
+  static const series_edit_labels_moreSeriesToCome = 'series.edit.labels.moreSeriesToCome';
+  static const series_edit_common_labels_seriesName = 'series.edit.common.labels.seriesName';
+  static const series_edit_common_labels_seriesIcon = 'series.edit.common.labels.seriesIcon';
+  static const series_edit_common_labels_seriesColor = 'series.edit.common.labels.seriesColor';
   static const series_edit_bloodPressure_labels_hideMedicationInput = 'series.edit.bloodPressure.labels.hideMedicationInput';
   static const series_mgmt_title = 'series.mgmt.title';
   static const series_mgmt_importExport_dialog_tile = 'series.mgmt.importExport.dialog.tile';

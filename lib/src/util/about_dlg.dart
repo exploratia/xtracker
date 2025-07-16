@@ -11,8 +11,8 @@ class AboutDlg {
         context: context,
         applicationVersion: AppInfo.version,
         applicationIcon: SizedBox(
-          height: 40,
-          width: 40,
+          height: 64,
+          width: 64,
           child: Assets.images.logos.appLogo.image(fit: BoxFit.cover),
         ),
         applicationName: /*AppInfo.appName*/ LocaleKeys.appTitle.tr(),

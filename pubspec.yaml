@@ -35,14 +35,17 @@ dependencies:
   # zip files
   flutter_archive: ^6.0.3
   logger: ^2.5.0
-  # call native share dialog
-  share_plus: ^10.0.0
 
-  #
+  # call native share dialog
+  share_plus: ^11.0.0
+
+  # color picker
   flutter_colorpicker: ^1.1.0
 
   # UUID generation (ids for model)
   uuid: ^4.5.1
+
+  # provider
   provider: ^6.1.2
 
   # 2d grid
@@ -60,26 +63,25 @@ dependencies:
 
   # url launcher
   url_launcher: ^6.3.1
+
+  # display HTML in flutter
   simple_html_css: ^5.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^5.0.0
-
-  # launcher icon
-  flutter_launcher_icons: "^0.14.3"
+  flutter_lints: ^6.0.0
 
   # build assets
   flutter_gen_runner: any
   build_runner: any
 
+  # splash
+  flutter_native_splash: ^2.4.6
+
 flutter:
   uses-material-design: true
-
-  # Enable generation of localized Strings from arb files.
-  generate: true
 
   assets:
     # Add assets from the images directory to the application.
@@ -89,17 +91,6 @@ flutter:
     - assets/translations/
     - assets/infos/
 
-# launcher icon
-flutter_launcher_icons:
-  android: "launcher_icon"
-  ios: true
-  remove_alpha_ios: true
-  image_path: "resources/app_icon_source.png"
-  min_sdk_android: 21 # android min sdk min:16, default 21
-  adaptive_icon_background: "#f0f0f0"
-  adaptive_icon_foreground: "resources/app_icon_source.png"
-
-
 # asset constants generation
 flutter_gen:
   line_length: 160
@@ -108,3 +99,15 @@ flutter_gen:
   assets:
     exclude:
       - assets/translations/**
+
+flutter_native_splash:
+  android: true
+  ios: false
+
+  color: "#06041f"
+  image: assets/images/logos/app_logo.png
+  android_12:
+    color: "#06041f"
+    color_dark: "#06041f"
+    icon_background_color: "#06041f"
+    image: resources/android12splash.png

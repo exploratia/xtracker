@@ -111,14 +111,12 @@ class _AppInfoCard extends StatelessWidget {
               alignment: WrapAlignment.spaceBetween,
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
-                SizedBox(
-                  height: 24,
-                  width: 24,
-                  child: Center(
-                    child: Assets.images.logos.appLogo.image(fit: BoxFit.cover),
-                  ),
-                ),
                 Text(/*AppInfo.appName*/ LocaleKeys.appTitle.tr(), style: Theme.of(context).textTheme.titleLarge),
+                SizedBox(
+                  height: 32,
+                  width: 32,
+                  child: Assets.images.logos.appLogo.image(fit: BoxFit.cover),
+                ),
               ],
             ),
             spacing: 10,
