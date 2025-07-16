@@ -241,10 +241,8 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
               spacing: 4,
               children: [
                 const Icon(Icons.medication_outlined),
-                Expanded(
-                  child: OverflowText(
-                    LocaleKeys.bloodPressure_input_labels_medication.tr(),
-                  ),
+                OverflowText(
+                  LocaleKeys.bloodPressure_input_labels_medication.tr(),
                 ),
               ],
             ),

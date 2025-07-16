@@ -20,12 +20,6 @@ class SeriesDataProvider with ChangeNotifier {
     var seriesData = switch (seriesDef.seriesType) {
       SeriesType.bloodPressure => _uuid2seriesDataBloodPressure[seriesDef.uuid],
       SeriesType.dailyCheck => _uuid2seriesDataDailyCheck[seriesDef.uuid],
-      SeriesType.monthly =>
-        // TODO: Handle this case.
-        throw UnimplementedError(),
-      SeriesType.free =>
-        // TODO: Handle this case.
-        throw UnimplementedError()
     };
 
     if (seriesData == null) {
@@ -99,12 +93,6 @@ class SeriesDataProvider with ChangeNotifier {
           seriesData.sort();
           _uuid2seriesDataDailyCheck[seriesDef.uuid] = seriesData;
         }
-      case SeriesType.monthly:
-        // TODO: Handle this case.
-        throw UnimplementedError();
-      case SeriesType.free:
-        // TODO: Handle this case.
-        throw UnimplementedError();
     }
   }
 
@@ -126,10 +114,6 @@ class SeriesDataProvider with ChangeNotifier {
     return switch (seriesDef.seriesType) {
       SeriesType.bloodPressure => bloodPressureData(seriesDef),
       SeriesType.dailyCheck => dailyCheckData(seriesDef),
-      // TODO: Handle this case.
-      SeriesType.monthly => throw UnimplementedError(),
-      // TODO: Handle this case.
-      SeriesType.free => throw UnimplementedError(),
     };
   }
 
@@ -182,12 +166,6 @@ class SeriesDataProvider with ChangeNotifier {
       case SeriesType.dailyCheck:
         DailyCheckValue.checkOnDailyCheckValue(value);
         seriesData = requireDailyCheckData(seriesDef);
-      case SeriesType.monthly:
-        // TODO: Handle this case.
-        throw UnimplementedError();
-      case SeriesType.free:
-        // TODO: Handle this case.
-        throw UnimplementedError();
     }
 
     if (action == _Action.insert) {
@@ -229,12 +207,6 @@ class SeriesDataProvider with ChangeNotifier {
         await store.saveAll(seriesData.data);
         var latest = seriesData.data.lastOrNull;
         if (latest != null) await seriesCurrentValueProvider.save(seriesDef, latest);
-      case SeriesType.monthly:
-        // TODO: Handle this case.
-        throw UnimplementedError();
-      case SeriesType.free:
-        // TODO: Handle this case.
-        throw UnimplementedError();
     }
 
     notifyListeners();

@@ -1,38 +1,57 @@
+import 'dart:math' as math;
+
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 import '../../util/date_time_utils.dart';
+import '../../util/media_query_utils.dart';
+import '../../util/theme_utils.dart';
 
 class ChartContainer extends StatelessWidget {
-  const ChartContainer({super.key, this.title, this.showDateTooltip = false, required this.chartWidgetBuilder, this.dateFormatter});
+  ChartContainer({super.key, this.title, this.showDateTooltip = false, required this.chartWidgetBuilder, this.dateFormatter});
 
   final Widget? title;
   final bool showDateTooltip;
   final Widget Function(int maxWidth, Function(FlTouchEvent, LineTouchResponse?)? touchCallback) chartWidgetBuilder;
   final String Function(DateTime dateTime)? dateFormatter;
 
+  final double _maxChartHeight = 300;
+  final double _minChartHeight = 100;
+  final double _appbarHeight = 56;
+  final double _screenPadding = ThemeUtils.screenPadding.vertical.toDouble() / 2;
+  final double _bottomLabelsHeight = 20;
+
   @override
   Widget build(BuildContext context) {
+    final mediaQueryInfo = MediaQueryUtils(MediaQuery.of(context));
+
+    var screenHeight = mediaQueryInfo.mediaQueryData.size.height;
+    var possibleChartHeight = screenHeight - _appbarHeight - _screenPadding - ThemeUtils.seriesDataViewTopPadding;
+    if (showDateTooltip) {
+      possibleChartHeight -= _bottomLabelsHeight;
+    }
+    double chartContainerHeight = math.min(math.max(possibleChartHeight, _minChartHeight), _maxChartHeight);
+
     return Column(
       children: [
         if (title != null) title!,
         LayoutBuilder(
           builder: (context, constraints) {
-            // bool isPortrait = constraints.maxHeight > constraints.maxWidth;
             var maxWidth = constraints.maxWidth.truncate();
-            Widget? chart;
+            Widget chart;
             if (!showDateTooltip) {
               chart = chartWidgetBuilder(maxWidth, null);
+            } else {
+              chart = _ChartContainerWithDateTooltip(
+                maxWidth: maxWidth,
+                chartWidgetBuilder: chartWidgetBuilder,
+                dateFormatter: dateFormatter ?? DateTimeUtils.formateDate,
+              );
             }
             return SizedBox(
               width: double.infinity,
-              height: 300,
-              child: chart ??
-                  _ChartContainerWithDateTooltip(
-                    maxWidth: maxWidth,
-                    chartWidgetBuilder: chartWidgetBuilder,
-                    dateFormatter: dateFormatter ?? DateTimeUtils.formateDate,
-                  ),
+              height: chartContainerHeight,
+              child: chart,
               // child: AspectRatio(
               //   aspectRatio: isPortrait ? 3 / 2 : 3 / 1,
               //   child: child,

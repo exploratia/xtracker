@@ -154,9 +154,14 @@
       "title": "Series",
       "labels": {
         "selectSeriesType": "Select series type:",
-        "seriesName": "Name",
-        "seriesIcon": "Icon",
-        "seriesColor": "Color"
+        "moreSeriesToCome": "More to come ..."
+      },
+      "common": {
+        "labels": {
+          "seriesName": "Name",
+          "seriesIcon": "Icon",
+          "seriesColor": "Color"
+        }
       },
       "bloodPressure": {
         "labels": {
