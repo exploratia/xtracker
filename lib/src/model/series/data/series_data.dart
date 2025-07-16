@@ -34,8 +34,6 @@ class SeriesData<T extends SeriesDataValue> {
         [...(json['data'] as List<dynamic>).map((e) => DailyCheckValue.fromJson(e))],
       );
 
-  // TODO implement other series
-
   bool isEmpty() {
     return data.isEmpty;
   }
@@ -123,12 +121,6 @@ class SeriesData<T extends SeriesDataValue> {
             }
           }
         }
-      case SeriesType.monthly:
-        // TODO: Handle this case.
-        throw UnimplementedError();
-      case SeriesType.free:
-        // TODO: Handle this case.
-        throw UnimplementedError();
     }
   }
 }

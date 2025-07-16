@@ -40,8 +40,6 @@ class _SeriesDataView extends StatelessWidget {
     Widget view = switch (seriesViewMetaData.seriesDef.seriesType) {
       SeriesType.bloodPressure => SeriesDataBloodPressureView(seriesViewMetaData: seriesViewMetaData),
       SeriesType.dailyCheck => SeriesDataDailyCheckView(seriesViewMetaData: seriesViewMetaData),
-      SeriesType.monthly => throw UnimplementedError(),
-      SeriesType.free => throw UnimplementedError(),
     };
 
     return DataProviderLoader(

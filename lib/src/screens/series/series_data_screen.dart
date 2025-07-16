@@ -183,7 +183,7 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
 
       // in charts add depending on series type switch interval (month/year) btn
       if (_viewType == ViewType.lineChart || _viewType == ViewType.barChart) {
-        if (seriesType == SeriesType.monthly || seriesType == SeriesType.dailyCheck) {
+        if (/*seriesType == SeriesType.monthly ||*/ seriesType == SeriesType.dailyCheck) {
           viewActions.insert(0,
               IconButton(onPressed: () => _toggleMonthlyYearlyMode(), icon: Icon(_showYearly ? Icons.calendar_month_outlined : Icons.calendar_today_outlined)));
         }

@@ -100,12 +100,6 @@ class SeriesImportExport {
           seriesData = SeriesData.fromJsonBloodPressureData(json["seriesData"] as Map<String, dynamic>);
         case SeriesType.dailyCheck:
           seriesData = SeriesData.fromJsonDailyCheckData(json["seriesData"] as Map<String, dynamic>);
-        case SeriesType.monthly:
-          // TODO: Handle this case.
-          throw UnimplementedError();
-        case SeriesType.free:
-          // TODO: Handle this case.
-          throw UnimplementedError();
       }
       await seriesProvider.delete(seriesDef, context);
       await seriesProvider.save(seriesDef);

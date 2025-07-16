@@ -60,12 +60,6 @@ class SeriesLatestValueRenderer extends StatelessWidget {
                 return Center(child: Text(LocaleKeys.series_data_noData.tr()));
               });
         }
-      case SeriesType.monthly:
-        // TODO: Handle this case.
-        throw UnimplementedError();
-      case SeriesType.free:
-        // TODO: Handle this case.
-        throw UnimplementedError();
     }
   }
 }

@@ -60,10 +60,11 @@ abstract class  LocaleKeys {
   static const series_data_dialog_msg_query_deleteSeriesData = 'series.data.dialog.msg.query.deleteSeriesData';
   static const series_dialog_msg_query_deleteSeries = 'series.dialog.msg.query.deleteSeries';
   static const series_edit_title = 'series.edit.title';
-  static const series_edit_labels_seriesName = 'series.edit.labels.seriesName';
-  static const series_edit_labels_seriesIcon = 'series.edit.labels.seriesIcon';
-  static const series_edit_labels_seriesColor = 'series.edit.labels.seriesColor';
   static const series_edit_labels_selectSeriesType = 'series.edit.labels.selectSeriesType';
+  static const series_edit_labels_moreSeriesToCome = 'series.edit.labels.moreSeriesToCome';
+  static const series_edit_common_labels_seriesName = 'series.edit.common.labels.seriesName';
+  static const series_edit_common_labels_seriesIcon = 'series.edit.common.labels.seriesIcon';
+  static const series_edit_common_labels_seriesColor = 'series.edit.common.labels.seriesColor';
   static const series_edit_bloodPressure_labels_hideMedicationInput = 'series.edit.bloodPressure.labels.hideMedicationInput';
   static const series_mgmt_title = 'series.mgmt.title';
   static const series_mgmt_importExport_dialog_tile = 'series.mgmt.importExport.dialog.tile';
