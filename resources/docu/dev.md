@@ -4,6 +4,19 @@ Generic tracker app
 
 Skeleton by flutter create --org com.yourdomain -t skeleton your_app_name
 
+## Commits
+
+Certain commit messages could be automated added to changelog.md grouped by features and bugs.
+
+commit schema:
+
+- ```feat #<optional-issue-no> (optional-scope): message```
+- ```fix #<optional-issue-no> (optional-scope): message```
+
+```shell
+node update_changelog.js
+```
+
 ## Assets
 
 The `assets` directory houses images, translations, fonts, and any other files you want to
