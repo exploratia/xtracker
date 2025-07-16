@@ -24,32 +24,33 @@ class ChartContainer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final mediaQueryInfo = MediaQueryUtils(MediaQuery.of(context));
+
     var screenHeight = mediaQueryInfo.mediaQueryData.size.height;
+    var possibleChartHeight = screenHeight - _appbarHeight - _screenPadding - ThemeUtils.seriesDataViewTopPadding;
+    if (showDateTooltip) {
+      possibleChartHeight -= _bottomLabelsHeight;
+    }
+    double chartContainerHeight = math.min(math.max(possibleChartHeight, _minChartHeight), _maxChartHeight);
+
     return Column(
       children: [
         if (title != null) title!,
         LayoutBuilder(
           builder: (context, constraints) {
             var maxWidth = constraints.maxWidth.truncate();
-            double height = _maxChartHeight;
             Widget chart;
             if (!showDateTooltip) {
               chart = chartWidgetBuilder(maxWidth, null);
-              height =
-                  math.min(math.max(screenHeight - _appbarHeight - _screenPadding - ThemeUtils.seriesDataViewTopPadding, _minChartHeight), _maxChartHeight);
             } else {
               chart = _ChartContainerWithDateTooltip(
                 maxWidth: maxWidth,
                 chartWidgetBuilder: chartWidgetBuilder,
                 dateFormatter: dateFormatter ?? DateTimeUtils.formateDate,
               );
-              height = math.min(
-                  math.max(screenHeight - _appbarHeight - _screenPadding - ThemeUtils.seriesDataViewTopPadding - _bottomLabelsHeight, _minChartHeight),
-                  _maxChartHeight);
             }
             return SizedBox(
               width: double.infinity,
-              height: height,
+              height: chartContainerHeight,
               child: chart,
               // child: AspectRatio(
               //   aspectRatio: isPortrait ? 3 / 2 : 3 / 1,
