@@ -39,6 +39,10 @@ class SeriesDef {
     return 'SeriesDef{uuid: $uuid, seriesType: $seriesType, name: $name, color: $color, iconName: $iconName}';
   }
 
+  String toLogString() {
+    return "Series {name: '$name', uuid: '$uuid', seriesType: '$seriesType'}";
+  }
+
   /// deep copy / clone by transforming to json string and back
   SeriesDef clone() {
     return SeriesDef.fromJson(jsonDecode(jsonEncode(toJson())));

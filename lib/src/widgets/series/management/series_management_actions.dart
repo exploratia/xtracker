@@ -7,6 +7,7 @@ import '../../../model/series/series_def.dart';
 import '../../../providers/series_data_provider.dart';
 import '../../../providers/series_provider.dart';
 import '../../../util/dialogs.dart';
+import '../../../util/logging/flutter_simple_logging.dart';
 import '../../../util/series/series_import_export.dart';
 
 class SeriesManagementActions extends StatelessWidget {
@@ -55,6 +56,7 @@ class _DeleteSeriesBtn extends StatelessWidget {
             await context.read<SeriesProvider>().delete(seriesDef, context);
           }
         } catch (err) {
+          SimpleLogging.w("Failed to delete ${seriesDef.toLogString()}.", error: err);
           if (context.mounted) {
             Dialogs.simpleErrOkDialog('$err', context);
           }
@@ -117,6 +119,7 @@ class _ExportSeriesDataBtn extends StatelessWidget {
       try {
         await SeriesImportExport.exportSeriesDef(seriesDef, context);
       } catch (ex) {
+        SimpleLogging.w("Failed to export ${seriesDef.toLogString()}.", error: ex);
         if (context.mounted) Dialogs.showSnackBar(ex.toString(), context);
       }
     }

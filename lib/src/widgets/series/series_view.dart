@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../providers/series_current_value_provider.dart';
 import '../../providers/series_provider.dart';
 import '../../util/dialogs.dart';
+import '../../util/logging/flutter_simple_logging.dart';
 import '../animation/fade_in.dart';
 import '../layout/v_centered_single_child_scroll_view_with_scrollbar.dart';
 import '../provider/data_provider_loader.dart';
@@ -18,6 +19,7 @@ class SeriesView extends StatelessWidget {
     try {
       await context.read<SeriesProvider>().fetchData();
     } catch (e) {
+      SimpleLogging.w('Failure on refresh view.', error: e);
       if (context.mounted) {
         await Dialogs.simpleErrOkDialog(e.toString(), context);
       }

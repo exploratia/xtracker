@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../app_info.dart';
+import 'flutter_simple_logging.dart';
 
 /// Logging is not working in web!
 class DailyFiles {
@@ -15,6 +16,8 @@ class DailyFiles {
   static Directory? _tmpDir;
   static Directory? _logsDir;
   static String _todayLog = '';
+  static const String _separator = SimpleLogging.separator;
+  static const String _nl = SimpleLogging.nl;
 
   /// Keep logs for 32 days. Afterwards delete them.
   static const _keepLogsForDays = 32;
@@ -62,8 +65,8 @@ class DailyFiles {
   }
 
   static Future<void> _writeLogStart() async {
-    // LogStart direkt schreiben, damit das File sofort angelegt wird.
-    final messageItem = _createMessageQueueItem('START\n-------------------------\n ${AppInfo.appName} (v ${AppInfo.version})\n-------------------------');
+    // Instantly write LogStart to force creation of the file
+    final messageItem = _createMessageQueueItem('START$_nl$_separator$_nl ${AppInfo.appName} (v ${AppInfo.version})$_nl$_separator');
 
     try {
       await _writeToTodayFile([messageItem]);

@@ -9,6 +9,8 @@ import 'daily_files.dart';
 
 class SimpleLogging {
   static const String _deviceStorageKey = 'logging';
+  static const String separator = '--------------------------------------------------';
+  static const String nl = '\n';
 
   static Level _logLevel = Level.info;
   static bool _useFullStack = false;
