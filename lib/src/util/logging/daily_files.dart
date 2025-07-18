@@ -83,7 +83,9 @@ class DailyFiles {
       // result.add(element.path);
       result.add(element.path.split(Platform.pathSeparator).last);
     });
-    return result.reversed.toList();
+    // sort files desc
+    result.sort((a, b) => b.compareTo(a));
+    return result;
   }
 
   static Future<List<String>> listTmpFileNames() async {
