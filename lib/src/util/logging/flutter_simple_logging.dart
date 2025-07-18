@@ -10,7 +10,7 @@ import 'daily_files.dart';
 class SimpleLogging {
   static const String _deviceStorageKey = 'logging';
 
-  static Level _logLevel = Level.warning;
+  static Level _logLevel = Level.info;
   static bool _useFullStack = false;
 
   static Level get logLevel {
