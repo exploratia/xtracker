@@ -7,6 +7,7 @@ import '../../../model/series/series_def.dart';
 import '../../../model/series/series_type.dart';
 import '../../../providers/series_provider.dart';
 import '../../../util/dialogs.dart';
+import '../../../util/logging/flutter_simple_logging.dart';
 import '../../layout/scrollable_centered_form_wrapper.dart';
 import '../../select/color_picker.dart';
 import '../../select/icon_map.dart';
@@ -89,6 +90,7 @@ class _SeriesEditorState extends State<SeriesEditor> {
       await seriesProvider.save(_seriesDef);
       if (mounted) Dialogs.showSnackBar(LocaleKeys.commons_msg_saved.tr(), context);
     } catch (err) {
+      SimpleLogging.w('Failed to store series.', error: err);
       if (mounted) {
         await Dialogs.simpleErrOkDialog(err.toString(), context);
       }

@@ -6,7 +6,7 @@ Skeleton by flutter create --org com.yourdomain -t skeleton your_app_name
 
 ## Commits
 
-Certain commit messages could be automated added to changelog.md grouped by features and bugs.
+Certain commit messages could be automatically added to changelog.md grouped by features and bugs.
 
 commit schema:
 
@@ -16,6 +16,17 @@ commit schema:
 ```shell
 node update_changelog.js
 ```
+
+### Other commit prefixes could be
+
+refactor:
+style:
+test:
+doc:
+build:
+
+see
+https://gist.github.com/qoomon/5dfcdf8eec66a051ecd85625518cfd13
 
 ## Assets
 

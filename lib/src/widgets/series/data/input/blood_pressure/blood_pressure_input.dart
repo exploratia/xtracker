@@ -9,6 +9,7 @@ import '../../../../../model/series/data/blood_pressure/blood_pressure_value.dar
 import '../../../../../model/series/series_def.dart';
 import '../../../../../providers/series_data_provider.dart';
 import '../../../../../util/dialogs.dart';
+import '../../../../../util/logging/flutter_simple_logging.dart';
 import '../../../../../util/theme_utils.dart';
 import '../../../../layout/single_child_scroll_view_with_scrollbar.dart';
 import '../../../../text/overflow_text.dart';
@@ -140,6 +141,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
           if (mounted) Navigator.pop(context, null);
         }
       } catch (err) {
+        SimpleLogging.w('Failed to delete blood pressure value.', error: err);
         if (mounted) {
           Dialogs.simpleErrOkDialog('$err', context);
         }

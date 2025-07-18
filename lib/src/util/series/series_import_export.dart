@@ -72,7 +72,10 @@ class SeriesImportExport {
   static Future<void> exportSeriesDef(SeriesDef seriesDef, BuildContext context) async {
     Map<String, dynamic>? json = await _buildSeriesExportJson(seriesDef, context);
     bool exported = await _exportJsonFile(json, 'xtracker_series_${seriesDef.uuid}_${DateTimeUtils.formateExportDateTime()}.json');
-    if (exported && context.mounted) Dialogs.showSnackBar(LocaleKeys.series_mgmt_importExport_dialog_msg_exportSuccessful.tr(), context);
+    if (exported) {
+      SimpleLogging.i('Successfully exported ${seriesDef.toLogString()}');
+      if (context.mounted) Dialogs.showSnackBar(LocaleKeys.series_mgmt_importExport_dialog_msg_exportSuccessful.tr(), context);
+    }
   }
 
   /// export all series with data
@@ -80,8 +83,12 @@ class SeriesImportExport {
     try {
       Map<String, dynamic> json = await _buildAllSeriesExportJson(context);
       bool exported = await _exportJsonFile(json, 'xtracker_multi_series_export_${DateTimeUtils.formateExportDateTime()}.json');
-      if (exported && context.mounted) Dialogs.showSnackBar(LocaleKeys.series_mgmt_importExport_dialog_msg_exportSuccessful.tr(), context);
+      if (exported) {
+        SimpleLogging.i('Successfully exported all series.');
+        if (context.mounted) Dialogs.showSnackBar(LocaleKeys.series_mgmt_importExport_dialog_msg_exportSuccessful.tr(), context);
+      }
     } catch (ex) {
+      SimpleLogging.w('Failed to exported all series!', error: ex);
       if (context.mounted) Dialogs.showSnackBar(ex.toString(), context);
     }
     if (context.mounted) Navigator.of(context).pop();
@@ -181,6 +188,7 @@ class SeriesImportExport {
     }
 
     if (context.mounted && successfulImports > 0) {
+      SimpleLogging.i('Successfully imported $successfulImports series.');
       Dialogs.showSnackBar(
           LocaleKeys.series_mgmt_importExport_dialog_msg_importSuccessfulXofY.tr(args: [successfulImports.toString(), numSelectedFiles.toString()]), context);
     }

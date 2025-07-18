@@ -6,6 +6,7 @@ import '../../../generated/locale_keys.g.dart';
 import '../../model/navigation/navigation_item.dart';
 import '../../util/dialogs.dart';
 import '../../util/logging/daily_files.dart';
+import '../../util/logging/flutter_simple_logging.dart';
 import '../../widgets/administration/logging/log_view.dart';
 import '../../widgets/layout/gradient_app_bar.dart';
 import '../../widgets/responsive/screen_builder.dart';
@@ -38,10 +39,14 @@ class LogScreen extends StatelessWidget {
               try {
                 final result = await SharePlus.instance.share(
                     ShareParams(files: [XFile(DailyFiles.getFullLogPath(logFileN))], text: '${/*AppInfo.appName*/ LocaleKeys.appTitle.tr()} Log $logFileName'));
-                if (result.status == ShareResultStatus.success && context.mounted) {
-                  Dialogs.showSnackBar(LocaleKeys.log_msg_shareSuccess.tr(), context);
+                if (result.status == ShareResultStatus.success) {
+                  SimpleLogging.i("Successfully shared log '$logFileName'.");
+                  if (context.mounted) {
+                    Dialogs.showSnackBar(LocaleKeys.log_msg_shareSuccess.tr(), context);
+                  }
                 }
               } catch (err) {
+                SimpleLogging.w('Failed to share log.', error: err);
                 if (context.mounted) {
                   Dialogs.simpleErrOkDialog('${LocaleKeys.commons_msg_error_failedToShareData.tr()}\n\n$err', context);
                 }
@@ -61,7 +66,9 @@ class LogScreen extends StatelessWidget {
                   await DailyFiles.deleteLog(logFileN);
                   // 1s warten, damit im Fall von heutigem Log das heutige File dann schon wieder erstellt wurde.
                   await Future.delayed(const Duration(seconds: 1), () {});
+                  SimpleLogging.i('Successfully deleted log.');
                 } catch (err) {
+                  SimpleLogging.w('Failed to delete log.', error: err);
                   if (context.mounted) {
                     Dialogs.simpleErrOkDialog('${LocaleKeys.log_dialog_msg_error_deleteLogFailed.tr()}\n\n$err', context);
                   }

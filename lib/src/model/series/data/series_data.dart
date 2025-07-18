@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../providers/series_data_provider.dart';
 import '../../../util/dialogs.dart';
+import '../../../util/logging/flutter_simple_logging.dart';
 import '../../../widgets/series/data/input/blood_pressure/blood_pressure_input.dart';
 import '../../../widgets/series/data/input/daily_check/daily_check_input.dart';
 import '../series_def.dart';
@@ -93,6 +94,7 @@ class SeriesData<T extends SeriesDataValue> {
                 await seriesDataProvider.updateValue(seriesDef, val, context); // update
               }
             } catch (ex) {
+              SimpleLogging.w('Failed to store blood pressure value.', error: ex);
               if (context.mounted) {
                 Dialogs.simpleErrOkDialog(ex.toString(), context);
               }
@@ -115,6 +117,7 @@ class SeriesData<T extends SeriesDataValue> {
                 await seriesDataProvider.updateValue(seriesDef, val, context); // update
               }
             } catch (ex) {
+              SimpleLogging.w('Failed to store daily check value.', error: ex);
               if (context.mounted) {
                 Dialogs.simpleErrOkDialog(ex.toString(), context);
               }

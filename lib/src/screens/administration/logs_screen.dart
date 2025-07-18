@@ -55,21 +55,26 @@ class _LogsScreenState extends State<LogsScreen> {
                 final zipAllLogs = await DailyFiles.zipAllLogs();
                 try {
                   final result = await SharePlus.instance.share(ShareParams(files: [XFile(zipAllLogs)], text: 'App Logs'));
-                  if (result.status == ShareResultStatus.success && context.mounted) {
-                    Dialogs.showSnackBar(LocaleKeys.logs_msg_shareSuccess.tr(), context);
+                  if (result.status == ShareResultStatus.success) {
+                    SimpleLogging.i('Successfully shared logs.');
+                    if (context.mounted) {
+                      Dialogs.showSnackBar(LocaleKeys.logs_msg_shareSuccess.tr(), context);
+                    }
                   }
                 } catch (err) {
                   if (context.mounted) {
+                    SimpleLogging.w('Failed to share logs.', error: err);
                     Dialogs.simpleErrOkDialog('${LocaleKeys.commons_msg_error_failedToShareData.tr()}\n\n$err', context);
                   }
                 } finally {
                   try {
                     await File(zipAllLogs).delete();
                   } catch (err2) {
-                    SimpleLogging.w('Failed to delete zipped logs "$zipAllLogs" after sharing!');
+                    SimpleLogging.w('Failed to delete zipped logs "$zipAllLogs" after sharing!', error: err2);
                   }
                 }
               } catch (err) {
+                SimpleLogging.w('Failed to zip logs.', error: err);
                 if (context.mounted) {
                   Dialogs.simpleErrOkDialog('${LocaleKeys.logs_dialog_msg_error_failedToZipLogs.tr()}\n\n$err', context);
                 }
@@ -88,6 +93,7 @@ class _LogsScreenState extends State<LogsScreen> {
                 try {
                   await DailyFiles.deleteAllLogs();
                 } catch (err) {
+                  SimpleLogging.w('Failed to delete all logs.', error: err);
                   if (context.mounted) {
                     Dialogs.simpleErrOkDialog('${LocaleKeys.logs_dialog_msg_error_deleteAllLogsFailed.tr()}\n\n$err', context);
                   }
