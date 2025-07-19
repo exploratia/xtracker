@@ -26,6 +26,7 @@ class SeriesManagementActions extends StatelessWidget {
           children: [
             _EditSeriesBtn(seriesDef: seriesDef),
             _ExportSeriesDataBtn(seriesDef: seriesDef),
+            _ShareSeriesDataBtn(seriesDef: seriesDef),
             _ClearSeriesDataBtn(seriesDef: seriesDef),
             _DeleteSeriesBtn(seriesDef: seriesDef),
           ],
@@ -125,5 +126,27 @@ class _ExportSeriesDataBtn extends StatelessWidget {
     }
 
     return IconButton(onPressed: handler, icon: const Icon(Icons.download_outlined));
+  }
+}
+
+class _ShareSeriesDataBtn extends StatelessWidget {
+  const _ShareSeriesDataBtn({
+    required this.seriesDef,
+  });
+
+  final SeriesDef seriesDef;
+
+  @override
+  Widget build(BuildContext context) {
+    handler() async {
+      try {
+        await SeriesImportExport.shareSeriesDef(seriesDef, context);
+      } catch (ex) {
+        SimpleLogging.w("Failed to share ${seriesDef.toLogString()}.", error: ex);
+        if (context.mounted) Dialogs.showSnackBar(ex.toString(), context);
+      }
+    }
+
+    return IconButton(onPressed: handler, icon: const Icon(Icons.share_outlined));
   }
 }

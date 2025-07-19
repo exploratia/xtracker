@@ -182,13 +182,15 @@
           "tile": "Messreihen importieren / exportieren",
           "btn": {
             "exportSeries": "Alle Messreihen exportieren",
-            "importSeries": "Messreihen importieren"
+            "importSeries": "Messreihen importieren",
+            "shareSeries": "Alle Messreihen teilen"
           },
           "label": {
             "exportSeries": "Alle Messreihen als eine JSON-Dateien speichern.",
             "exportSeriesTip": "Tipp: Um separate Messreihen zu speichern, verwende das Export-Icon der jeweiligen Messreihe.",
             "importSeries": "Wähle JSON-Dateien für Messreihen zum Import aus.\nVorhandene Serien (und deren Daten) werden überschrieben (identifiziert anhand ihrer eindeutigen ID). Nicht vorhandene Messreihen werden neu erstellt.",
-            "importSeriesTip": "Tipp: Um Daten aus externen Quellen zu importieren, erstelle zunächst eine passende eigene Messreihe und exportiere sie.\nFüge dann Daten in diese exportierte Datei ein und importiere sie wieder. So wird sicher gestellt, dass das Format korrekt ist."
+            "importSeriesTip": "Tipp: Um Daten aus externen Quellen zu importieren, erstelle zunächst eine passende eigene Messreihe und exportiere sie.\nFüge dann Daten in diese exportierte Datei ein und importiere sie wieder. So wird sicher gestellt, dass das Format korrekt ist.",
+            "shareSeries": "Alle Messreihen als eine JSON-Dateien teilen."
           },
           "msg": {
             "exportSuccessful": "Export erfolgreich...",
