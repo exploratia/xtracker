@@ -72,10 +72,12 @@ abstract class  LocaleKeys {
   static const series_mgmt_importExport_dialog_tile = 'series.mgmt.importExport.dialog.tile';
   static const series_mgmt_importExport_dialog_btn_exportSeries = 'series.mgmt.importExport.dialog.btn.exportSeries';
   static const series_mgmt_importExport_dialog_btn_importSeries = 'series.mgmt.importExport.dialog.btn.importSeries';
+  static const series_mgmt_importExport_dialog_btn_shareSeries = 'series.mgmt.importExport.dialog.btn.shareSeries';
   static const series_mgmt_importExport_dialog_label_exportSeries = 'series.mgmt.importExport.dialog.label.exportSeries';
   static const series_mgmt_importExport_dialog_label_exportSeriesTip = 'series.mgmt.importExport.dialog.label.exportSeriesTip';
   static const series_mgmt_importExport_dialog_label_importSeries = 'series.mgmt.importExport.dialog.label.importSeries';
   static const series_mgmt_importExport_dialog_label_importSeriesTip = 'series.mgmt.importExport.dialog.label.importSeriesTip';
+  static const series_mgmt_importExport_dialog_label_shareSeries = 'series.mgmt.importExport.dialog.label.shareSeries';
   static const series_mgmt_importExport_dialog_msg_exportSuccessful = 'series.mgmt.importExport.dialog.msg.exportSuccessful';
   static const series_mgmt_importExport_dialog_msg_importSuccessfulXofY = 'series.mgmt.importExport.dialog.msg.importSuccessfulXofY';
   static const series_mgmt_importExport_dialog_msg_error_unexpectedDataStructure = 'series.mgmt.importExport.dialog.msg.error.unexpectedDataStructure';

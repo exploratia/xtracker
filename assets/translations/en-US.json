@@ -182,13 +182,15 @@
           "tile": "Import / Export series data",
           "btn": {
             "exportSeries": "Export all series",
-            "importSeries": "Import series"
+            "importSeries": "Import series",
+            "shareSeries": "Share all series"
           },
           "label": {
             "exportSeries": "Export all series in one json file.",
             "exportSeriesTip": "Tip: To save separate measurement series, use the export icon of the respective series.",
             "importSeries": "Select series JSON files to import.\nExisting series (and their data) will be overwritten (identified by their unique id). New series will be created if they don't already exist.",
-            "importSeriesTip": "Tip: To import data from external sources, first create a matching series yourself and export it.\nThen, add your own data to this exported file and import it again. This ensures the correct format is used."
+            "importSeriesTip": "Tip: To import data from external sources, first create a matching series yourself and export it.\nThen, add your own data to this exported file and import it again. This ensures the correct format is used.",
+            "shareSeries": "Share all series in one json file."
           },
           "msg": {
             "exportSuccessful": "Export successful...",
