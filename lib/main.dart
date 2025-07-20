@@ -7,6 +7,7 @@ import 'src/store/stores_utils.dart';
 import 'src/util/app_info.dart';
 import 'src/util/date_time_utils.dart';
 import 'src/util/logging/daily_files.dart';
+import 'src/util/stack/stack_utils.dart';
 import 'src/util/tmp_clean.dart';
 import 'src/widgets/administration/settings/settings_controller.dart';
 import 'src/widgets/administration/settings/settings_service.dart';
@@ -33,6 +34,9 @@ void main() async {
 
   // Load app info
   await AppInfo.init();
+
+  // init stack utils with determined project name
+  StackUtils.init(AppInfo.projectName);
 
   await DailyFiles.init();
 
