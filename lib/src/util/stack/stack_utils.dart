@@ -7,7 +7,7 @@ class StackUtils {
    * examples:
    * package:xtracker/src/widgets/administration/logging/log_settings_view.dart:58:41  (Android emulator)
    * package:xtracker/src/widgets/administration/logging/log_settings_view.dart 58:41  (Chrome)
-   * package:xtracker/src/widgets/administration/logging/log_settings_1view.dart:58    (real device)
+   * package:xtracker/src/widgets/administration/logging/log_settings_view.dart:58    (real device)
   */
 
   static final regexBetweenBrackets = RegExp(r'\((.*?)\)');
