@@ -11,7 +11,7 @@ class AppInfo {
     // prevent multi init
     if (_buildNumber != '-1') return;
 
-    // Ueber den Stack den project name ermitteln
+    // determine project name by stack
     final stackMain = StackTrace.current
         .toString()
         .split('\n')

@@ -5,6 +5,8 @@ import 'package:logger/logger.dart';
 
 import '../app_info.dart';
 import '../device_storage/device_storage.dart';
+import '../stack/file_line_stack.dart';
+import '../stack/stack_utils.dart';
 import 'daily_files.dart';
 
 class SimpleLogging {
@@ -144,7 +146,7 @@ class _Filter extends LogFilter {
 class _LogOutput extends LogOutput {
   @override
   void output(OutputEvent event) {
-    final fileLine = _StackUtils.determineFileLine();
+    final fileLine = StackUtils.determineFileLine();
     var error = event.origin.error;
 
     // FileOutput
@@ -155,7 +157,7 @@ class _LogOutput extends LogOutput {
 class _LogOutputWithConsole extends LogOutput {
   @override
   void output(OutputEvent event) {
-    final fileLineAndStack = _StackUtils.determineFileLine();
+    final fileLineAndStack = StackUtils.determineFileLine();
     var error = event.origin.error;
 
     _Outputs.outCons(event, fileLineAndStack, error);
@@ -174,7 +176,7 @@ class _Outputs {
     // Level.wtf: 'WTF  ',
   };
 
-  static void outFile(OutputEvent event, _FileLineAndStack fileLineAndStack, dynamic error) {
+  static void outFile(OutputEvent event, FileLineStack fileLineAndStack, dynamic error) {
     String logMsg = '';
     for (var line in event.lines) {
       if (logMsg.isNotEmpty) logMsg += '\n';
@@ -186,14 +188,14 @@ class _Outputs {
       logMsg += '\n  Error:\n$error';
     }
 
-    if (fileLineAndStack.stack != null && event.level.index >= Level.warning.index) {
+    if (SimpleLogging.useFullStack && fileLineAndStack.stack != null && event.level.index >= Level.warning.index) {
       logMsg += '\n  Stack:\n${fileLineAndStack.stack}';
     }
 
     DailyFiles.writeToFile(logMsg, dateTime: event.origin.time);
   }
 
-  static void outCons(OutputEvent event, _FileLineAndStack fileLineAndStack, dynamic error) {
+  static void outCons(OutputEvent event, FileLineStack fileLineAndStack, dynamic error) {
     bool first = true;
     for (var line in event.lines) {
       if (kDebugMode) {
@@ -212,7 +214,7 @@ class _Outputs {
       }
     }
 
-    if (fileLineAndStack.stack != null && event.level.index >= Level.warning.index) {
+    if (SimpleLogging.useFullStack && fileLineAndStack.stack != null && event.level.index >= Level.warning.index) {
       if (kDebugMode) {
         print('  Stack:');
         print(fileLineAndStack.stack);
@@ -222,76 +224,5 @@ class _Outputs {
 
   static String _normalizedLevel(Level level) {
     return _levelMapping[level] ?? 'UNKNOWN';
-  }
-}
-
-class _StackUtils {
-  static final packageName = AppInfo.projectName;
-  static final regexBetweenBrackets = RegExp(r'\((.*?)\)');
-  static final regexFile = RegExp(r'(package:(.+\.dart))');
-  static final regexLineColumn = RegExp(r'(\d+):(\d+)');
-
-  static _FileLineAndStack determineFileLine() {
-    // print(StackTrace.current);
-    var currentStackTrace = StackTrace.current.toString();
-    var currentStackTraceLines = currentStackTrace.replaceAll('<anonymous closure>', '').replaceAll('<asynchronous suspension>', '').split('\n');
-    var filteredStackTraceLines = currentStackTraceLines
-        .where((line) => !line.contains('package:logger') && !line.contains('flutter_simple_logging.dart') && line.trim().isNotEmpty)
-        .where((line) {
-      // FullStack? Dann immer True
-      if (SimpleLogging.useFullStack) return true;
-      // Sonst nur packageName erlauben
-      return line.contains('package:$packageName/') || line.contains('package:flutter_simple_logging/widgets/logs_view');
-    }); // ist das gut? wg. Fremdpaketen evtl.?
-
-    final stack = filteredStackTraceLines.toList(); // .map((line) => line.substring(0, line.indexOf(' ')).trim()).toList();
-
-    final String? s = stack.length > 1 ? stack.join('\n') : null;
-
-    String fileName = '-?-';
-    String fileFullName = '-?-';
-    String lineNo = '-?-';
-
-    if (stack.isNotEmpty) {
-      String firstStackLine = stack.first;
-      final matchBetweenBrackets = regexBetweenBrackets.firstMatch(firstStackLine);
-      if (matchBetweenBrackets != null) {
-        firstStackLine = matchBetweenBrackets.group(1)!;
-      }
-      final matchFile = regexFile.firstMatch(firstStackLine);
-      if (matchFile != null) {
-        String? str = matchFile.group(1); // Path to file
-        if (str != null) {
-          fileFullName = str;
-          fileName = str.split('/').last;
-        }
-      }
-      final matchLine = regexLineColumn.firstMatch(firstStackLine);
-      if (matchLine != null) {
-        String? str = matchLine.group(1);
-        if (str != null) {
-          lineNo = str;
-        }
-      }
-    }
-
-    return _FileLineAndStack(fileName, fileFullName, lineNo, s);
-  }
-}
-
-class _FileLineAndStack {
-  final String fileName;
-  final String fileFullName;
-  final String lineNo;
-  final String? stack;
-
-  _FileLineAndStack(this.fileName, this.fileFullName, this.lineNo, this.stack);
-
-  String toConsoleFileLine() {
-    return '$fileFullName:$lineNo';
-  }
-
-  String toLogFileLine() {
-    return '$fileName:$lineNo';
   }
 }
