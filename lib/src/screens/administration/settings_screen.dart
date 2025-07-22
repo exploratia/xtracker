@@ -5,8 +5,8 @@ import '../../../generated/locale_keys.g.dart';
 import '../../model/navigation/navigation_item.dart';
 import '../../widgets/administration/settings/settings_controller.dart';
 import '../../widgets/administration/settings/settings_view.dart';
-import '../../widgets/layout/gradient_app_bar.dart';
-import '../../widgets/responsive/screen_builder.dart';
+import '../../widgets/controls/layout/gradient_app_bar.dart';
+import '../../widgets/controls/responsive/screen_builder.dart';
 
 class SettingsScreen extends StatelessWidget {
   static NavigationItem navItem = NavigationItem(

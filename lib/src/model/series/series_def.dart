@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../../util/color_utils.dart';
 import '../../util/i18n.dart';
-import '../../widgets/navigation/hide_bottom_navigation_bar.dart';
-import '../../widgets/select/icon_map.dart';
+import '../../widgets/controls/navigation/hide_bottom_navigation_bar.dart';
+import '../../widgets/controls/select/icon_map.dart';
 import '../../widgets/series/edit/series_edit.dart';
 import 'series_type.dart';
 import 'settings/blood_pressure_settings.dart';

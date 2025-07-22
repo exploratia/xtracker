@@ -8,10 +8,10 @@ import '../../../model/series/series_type.dart';
 import '../../../providers/series_provider.dart';
 import '../../../util/dialogs.dart';
 import '../../../util/logging/flutter_simple_logging.dart';
-import '../../layout/scrollable_centered_form_wrapper.dart';
-import '../../select/color_picker.dart';
-import '../../select/icon_map.dart';
-import '../../select/icon_picker.dart';
+import '../../controls/layout/scrollable_centered_form_wrapper.dart';
+import '../../controls/select/color_picker.dart';
+import '../../controls/select/icon_map.dart';
+import '../../controls/select/icon_picker.dart';
 import 'blood_pressure/blood_pressure_series_edit.dart';
 
 class SeriesEditor extends StatefulWidget {

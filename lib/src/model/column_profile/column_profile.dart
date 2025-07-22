@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../util/i18n.dart';
-import '../../widgets/text/overflow_text.dart';
+import '../../widgets/controls/text/overflow_text.dart';
 
 class ColumnProfile {
   final List<ColumnDef> columns;

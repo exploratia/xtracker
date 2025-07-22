@@ -7,8 +7,8 @@ import '../../../../../../model/series/series_view_meta_data.dart';
 import '../../../../../../util/chart/chart_utils_daily_check.dart';
 import '../../../../../../util/date_time_utils.dart';
 import '../../../../../../util/theme_utils.dart';
-import '../../../../../chart/chart_container.dart';
-import '../../../../../layout/single_child_scroll_view_with_scrollbar.dart';
+import '../../../../../controls/chart/chart_container.dart';
+import '../../../../../controls/layout/single_child_scroll_view_with_scrollbar.dart';
 
 class SeriesDataDailyCheckChartView extends StatelessWidget {
   const SeriesDataDailyCheckChartView({super.key, required this.seriesViewMetaData, required this.seriesData});

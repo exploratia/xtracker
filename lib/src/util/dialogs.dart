@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../generated/locale_keys.g.dart';
-import '../widgets/responsive/device_dependent_constrained_box.dart';
+import '../widgets/controls/responsive/device_dependent_constrained_box.dart';
 
 class Dialogs {
   /// Dismiss | hide | remove OnScreenKeyboard

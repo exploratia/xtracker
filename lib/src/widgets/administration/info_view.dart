@@ -4,8 +4,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../util/info_type.dart';
 import '../../util/logging/flutter_simple_logging.dart';
-import '../layout/single_child_scroll_view_with_scrollbar.dart';
-import '../navigation/hide_bottom_navigation_bar.dart';
+import '../controls/layout/single_child_scroll_view_with_scrollbar.dart';
+import '../controls/navigation/hide_bottom_navigation_bar.dart';
 
 class InfoView extends StatelessWidget {
   const InfoView({super.key, required this.infoType});
