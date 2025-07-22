@@ -25,6 +25,7 @@ class _ExpandableSettingsCardState extends State<ExpandableSettingsCard> {
   @override
   Widget build(BuildContext context) {
     return SettingsCard(
+        spacing: 10,
         showDivider: false,
         title: InkWell(
           onTap: () => _toggleExpanded(),

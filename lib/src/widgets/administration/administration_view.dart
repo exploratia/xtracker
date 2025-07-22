@@ -55,7 +55,7 @@ class AdministrationView extends StatelessWidget {
           ),
           const _SupportTheApp(),
           const _AppInfoCard(),
-          const ScrollFooter(marginTop: 20),
+          const ScrollFooter(),
         ],
       ),
     );

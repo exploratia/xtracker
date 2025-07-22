@@ -4,6 +4,7 @@ import '../../../screens/administration/log_screen.dart';
 import '../../../util/logging/daily_files.dart';
 import '../../card/settings_card.dart';
 import '../../future/future_builder_with_progress_indicator.dart';
+import '../../layout/scroll_footer.dart';
 import '../../layout/single_child_scroll_view_with_scrollbar.dart';
 import '../../navigation/hide_bottom_navigation_bar.dart';
 
@@ -53,6 +54,7 @@ class _LogsViewState extends State<LogsView> {
               ),
             ],
           ),
+          const Center(child: ScrollFooter()),
         ],
       ),
     );

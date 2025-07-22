@@ -25,6 +25,7 @@ class SettingsView extends StatelessWidget {
     return SingleChildScrollViewWithScrollbar(
       scrollPositionHandler: HideBottomNavigationBar.setScrollPosition,
       child: Column(
+        spacing: 16,
         children: [
           ExpandableSettingsCard(
               title: OverflowText(LocaleKeys.settings_general_title.tr(), style: Theme.of(context).textTheme.titleLarge),
@@ -34,7 +35,7 @@ class SettingsView extends StatelessWidget {
               content: DeviceStorageView(
                 controller: controller,
               )),
-          const ScrollFooter(marginTop: 20),
+          const ScrollFooter(),
         ],
       ),
     );
