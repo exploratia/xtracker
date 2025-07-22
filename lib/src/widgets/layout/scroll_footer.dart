@@ -9,8 +9,8 @@ class ScrollFooter extends StatelessWidget {
 
   const ScrollFooter({
     super.key,
-    this.marginTop = 0,
-    this.marginBottom = 0,
+    this.marginTop = 20,
+    this.marginBottom = 20,
   });
 
   @override

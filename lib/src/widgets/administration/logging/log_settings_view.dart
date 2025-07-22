@@ -7,6 +7,7 @@ import '../../../util/logging/flutter_simple_logging.dart';
 import '../../../util/table_utils.dart';
 import '../../card/settings_card.dart';
 import '../../layout/drop_down_menu_item_child.dart';
+import '../../layout/scroll_footer.dart';
 import '../../layout/single_child_scroll_view_with_scrollbar.dart';
 import '../../navigation/hide_bottom_navigation_bar.dart';
 
@@ -18,7 +19,7 @@ class LogSettingsView extends StatelessWidget {
     return SingleChildScrollViewWithScrollbar(
       scrollPositionHandler: HideBottomNavigationBar.setScrollPosition,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SettingsCard(
             showDivider: false,
@@ -67,6 +68,7 @@ class LogSettingsView extends StatelessWidget {
               ),
             ],
           ),
+          const ScrollFooter(),
         ],
       ),
     );

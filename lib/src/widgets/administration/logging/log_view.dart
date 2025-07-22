@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../util/logging/daily_files.dart';
 import '../../../util/media_query_utils.dart';
 import '../../future/future_builder_with_progress_indicator.dart';
+import '../../layout/scroll_footer.dart';
 import '../../navigation/hide_bottom_navigation_bar.dart';
 
 class LogView extends StatefulWidget {
@@ -74,9 +75,16 @@ class _LogLines extends StatelessWidget {
               );
             }
             if (index == logLines.length - 1) {
-              return Padding(
-                padding: const EdgeInsets.only(left: outerPad, right: outerPad, top: linePad, bottom: outerPad),
-                child: logLine,
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: outerPad, right: outerPad, top: linePad),
+                    child: logLine,
+                  ),
+                  const Center(child: ScrollFooter()),
+                ],
               );
             }
             return Padding(
