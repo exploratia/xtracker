@@ -5,7 +5,7 @@ class MediaQueryUtils {
 
   /// usage:
   ///
-  /// final mediaQueryInfo = MediaQueryUtils(MediaQuery.of(context));
+  /// final mediaQueryInfo = MediaQueryUtils(context);
   MediaQueryUtils(this.mediaQueryData);
 
   MediaQueryUtils.of(BuildContext context) {
