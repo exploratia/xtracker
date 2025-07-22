@@ -6,7 +6,7 @@ import '../../../../../../model/series/series_view_meta_data.dart';
 import '../../../../../../util/color_utils.dart';
 import '../../../../../../util/custom_paint_utils.dart';
 import '../../../../../../util/date_time_utils.dart';
-import '../../../../../dots/responsive_dots_view.dart';
+import '../../../../../controls/dots/responsive_dots_view.dart';
 
 class SeriesDataDailyCheckDotsView extends StatelessWidget {
   const SeriesDataDailyCheckDotsView({super.key, required this.seriesViewMetaData, required this.seriesData});

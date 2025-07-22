@@ -9,7 +9,7 @@ import '../../../../../../model/series/series_view_meta_data.dart';
 import '../../../../../../util/date_time_utils.dart';
 import '../../../../../../util/globals.dart';
 import '../../../../../../util/theme_utils.dart';
-import '../../../../../grid/two_dimensional_scrollable_table.dart';
+import '../../../../../controls/grid/two_dimensional_scrollable_table.dart';
 import 'blood_pressure_values_renderer.dart';
 
 class SeriesDataBloodPressureTableView extends StatelessWidget {

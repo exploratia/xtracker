@@ -7,7 +7,7 @@ import '../../../../../model/series/series_view_meta_data.dart';
 import '../../../../../model/series/view_type.dart';
 import '../../../../../providers/series_data_provider.dart';
 import '../../../../../util/date_time_utils.dart';
-import '../../../../layout/centered_message.dart';
+import '../../../../controls/layout/centered_message.dart';
 import 'chart/series_data_daily_check_chart_view.dart';
 import 'dots/series_data_daily_check_dots_view.dart';
 import 'table/series_data_daily_check_table_view.dart';

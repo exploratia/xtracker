@@ -5,7 +5,7 @@ import '../../../../generated/locale_keys.g.dart';
 import '../../../util/navigation/hide_navigation_labels.dart';
 import '../../../util/table_utils.dart';
 import '../../../util/theme_utils.dart';
-import '../../layout/drop_down_menu_item_child.dart';
+import '../../controls/layout/drop_down_menu_item_child.dart';
 import './settings_controller.dart';
 import 'settings_service.dart';
 

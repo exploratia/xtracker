@@ -13,7 +13,7 @@ import '../../model/series/series_def.dart';
 import '../../model/series/series_type.dart';
 import '../../providers/series_data_provider.dart';
 import '../../providers/series_provider.dart';
-import '../../widgets/layout/single_child_scroll_view_with_scrollbar.dart';
+import '../../widgets/controls/layout/single_child_scroll_view_with_scrollbar.dart';
 import '../date_time_utils.dart';
 import '../dialogs.dart';
 import '../ex.dart';

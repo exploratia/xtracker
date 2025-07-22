@@ -5,7 +5,7 @@ import '../../../../generated/locale_keys.g.dart';
 import '../../../util/device_storage/device_storage.dart';
 import '../../../util/dialogs.dart';
 import '../../../util/table_utils.dart';
-import '../../future/future_builder_with_progress_indicator.dart';
+import '../../controls/future/future_builder_with_progress_indicator.dart';
 import 'settings_controller.dart';
 
 class DeviceStorageView extends StatelessWidget {

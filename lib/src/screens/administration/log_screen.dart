@@ -8,8 +8,8 @@ import '../../util/dialogs.dart';
 import '../../util/logging/daily_files.dart';
 import '../../util/logging/flutter_simple_logging.dart';
 import '../../widgets/administration/logging/log_view.dart';
-import '../../widgets/layout/gradient_app_bar.dart';
-import '../../widgets/responsive/screen_builder.dart';
+import '../../widgets/controls/layout/gradient_app_bar.dart';
+import '../../widgets/controls/responsive/screen_builder.dart';
 
 class LogScreen extends StatelessWidget {
   static NavigationItem navItem = NavigationItem(

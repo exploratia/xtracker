@@ -10,14 +10,14 @@ import '../../util/about_dlg.dart';
 import '../../util/globals.dart';
 import '../../util/info_type.dart';
 import '../../util/launch_uri.dart';
-import '../card/settings_card.dart';
-import '../controls/btn_lnk.dart';
-import '../controls/img_lnk.dart';
-import '../layout/scroll_footer.dart';
-import '../layout/single_child_scroll_view_with_scrollbar.dart';
-import '../logos/ca_logo.dart';
-import '../logos/exploratia_logo.dart';
-import '../navigation/hide_bottom_navigation_bar.dart';
+import '../controls/card/settings_card.dart';
+import '../controls/layout/scroll_footer.dart';
+import '../controls/layout/single_child_scroll_view_with_scrollbar.dart';
+import '../controls/lnk/btn_lnk.dart';
+import '../controls/lnk/img_lnk.dart';
+import '../controls/logos/ca_logo.dart';
+import '../controls/logos/exploratia_logo.dart';
+import '../controls/navigation/hide_bottom_navigation_bar.dart';
 
 class AdministrationView extends StatelessWidget {
   const AdministrationView({super.key});

@@ -7,7 +7,7 @@ import '../../../../../../model/series/data/series_data.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
 import '../../../../../../util/custom_paint_utils.dart';
 import '../../../../../../util/date_time_utils.dart';
-import '../../../../../dots/responsive_dots_view.dart';
+import '../../../../../controls/dots/responsive_dots_view.dart';
 
 class SeriesDataBloodPressureDotsView extends StatelessWidget {
   const SeriesDataBloodPressureDotsView({super.key, required this.seriesViewMetaData, required this.seriesData});

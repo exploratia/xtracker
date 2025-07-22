@@ -2,11 +2,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../generated/locale_keys.g.dart';
-import '../../card/expandable_settings_card.dart';
-import '../../layout/scroll_footer.dart';
-import '../../layout/single_child_scroll_view_with_scrollbar.dart';
-import '../../navigation/hide_bottom_navigation_bar.dart';
-import '../../text/overflow_text.dart';
+import '../../controls/card/expandable_settings_card.dart';
+import '../../controls/layout/scroll_footer.dart';
+import '../../controls/layout/single_child_scroll_view_with_scrollbar.dart';
+import '../../controls/navigation/hide_bottom_navigation_bar.dart';
+import '../../controls/text/overflow_text.dart';
 import './settings_controller.dart';
 import 'device_storage_view.dart';
 import 'general_settings_view.dart';

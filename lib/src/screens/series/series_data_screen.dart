@@ -13,14 +13,14 @@ import '../../model/series/series_view_meta_data.dart';
 import '../../model/series/view_type.dart';
 import '../../providers/series_provider.dart';
 import '../../util/globals.dart';
-import '../../widgets/layout/app_bar_actions_divider.dart';
-import '../../widgets/layout/centered_message.dart';
-import '../../widgets/layout/gradient_app_bar.dart';
-import '../../widgets/popupmenu/icon_popup_menu.dart';
-import '../../widgets/provider/data_provider_loader.dart';
-import '../../widgets/responsive/screen_builder.dart';
+import '../../widgets/controls/layout/app_bar_actions_divider.dart';
+import '../../widgets/controls/layout/centered_message.dart';
+import '../../widgets/controls/layout/gradient_app_bar.dart';
+import '../../widgets/controls/popupmenu/icon_popup_menu.dart';
+import '../../widgets/controls/provider/data_provider_loader.dart';
+import '../../widgets/controls/responsive/screen_builder.dart';
 import '../../widgets/series/data/view/series_data_view.dart';
-import '../../widgets/text/overflow_text.dart';
+import '../../widgets/controls/text/overflow_text.dart';
 
 class SeriesDataScreen extends StatelessWidget {
   static NavigationItem navItem = NavigationItem(

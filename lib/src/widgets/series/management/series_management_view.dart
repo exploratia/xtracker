@@ -5,8 +5,8 @@ import 'package:provider/provider.dart';
 import '../../../../generated/locale_keys.g.dart';
 import '../../../providers/series_provider.dart';
 import '../../../util/series/series_import_export.dart';
-import '../../animation/fade_in.dart';
-import '../../responsive/device_dependent_constrained_box.dart';
+import '../../controls/animation/fade_in.dart';
+import '../../controls/responsive/device_dependent_constrained_box.dart';
 import '../series_def_renderer.dart';
 
 class SeriesManagementView extends StatelessWidget {

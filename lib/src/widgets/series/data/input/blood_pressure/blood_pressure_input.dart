@@ -11,8 +11,8 @@ import '../../../../../providers/series_data_provider.dart';
 import '../../../../../util/dialogs.dart';
 import '../../../../../util/logging/flutter_simple_logging.dart';
 import '../../../../../util/theme_utils.dart';
-import '../../../../layout/single_child_scroll_view_with_scrollbar.dart';
-import '../../../../text/overflow_text.dart';
+import '../../../../controls/layout/single_child_scroll_view_with_scrollbar.dart';
+import '../../../../controls/text/overflow_text.dart';
 import '../input_header.dart';
 
 class BloodPressureQuickInput extends StatefulWidget {

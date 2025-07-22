@@ -5,9 +5,9 @@ import '../../../../model/series/series_type.dart';
 import '../../../../model/series/series_view_meta_data.dart';
 import '../../../../providers/series_data_provider.dart';
 import '../../../../util/theme_utils.dart';
-import '../../../navigation/hide_bottom_navigation_bar.dart';
-import '../../../provider/data_provider_loader.dart';
-import '../../../text/overflow_text.dart';
+import '../../../controls/navigation/hide_bottom_navigation_bar.dart';
+import '../../../controls/provider/data_provider_loader.dart';
+import '../../../controls/text/overflow_text.dart';
 import 'blood_pressure/series_data_blood_pressure_view.dart';
 import 'daily_check/series_data_daily_check_view.dart';
 

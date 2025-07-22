@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../model/series/series_def.dart';
-import '../card/glowing_border_container.dart';
-import '../select/icon_map.dart';
-import '../text/overflow_text.dart';
+import '../controls/card/glowing_border_container.dart';
+import '../controls/select/icon_map.dart';
+import '../controls/text/overflow_text.dart';
 import 'data/view/series_latest_value_renderer.dart';
 import 'management/series_management_actions.dart';
 import 'management/series_management_drag_handle.dart';

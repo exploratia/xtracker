@@ -9,7 +9,7 @@ import '../../../../model/series/series_def.dart';
 import '../../../../model/series/series_type.dart';
 import '../../../../providers/series_current_value_provider.dart';
 import '../../../../util/date_time_utils.dart';
-import '../../../animation/animated_highlight_container.dart';
+import '../../../controls/animation/animated_highlight_container.dart';
 import 'blood_pressure/table/blood_pressure_value_renderer.dart';
 import 'daily_check/table/daily_check_value_renderer.dart';
 
