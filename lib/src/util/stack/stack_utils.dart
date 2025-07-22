@@ -27,7 +27,8 @@ class StackUtils {
   static FileLineStack determineFileLineAndStack(String stackTrace) {
     var currentStackTraceLines = stackTrace.replaceAll('<anonymous closure>', '').replaceAll('<asynchronous suspension>', '').split('\n');
     var cleanedStackTraceLines = currentStackTraceLines
-        .where((line) => !line.contains('package:logger') && !line.contains('flutter_simple_logging.dart') && line.trim().isNotEmpty)
+        .where((line) =>
+            !line.contains('package:logger') && !line.contains('flutter_simple_logging.dart') && !line.contains('stack_utils.dart') && line.trim().isNotEmpty)
         .toList();
 
     // remove ' <fn>' ?: .map((line) => line.substring(0, line.indexOf(' ')).trim()).toList();
