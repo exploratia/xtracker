@@ -91,6 +91,12 @@ Direct as Img-Widget:
 Assets.images.logos.appLogo.image(fit: BoxFit.cover)
 ```
 
+## Dev
+
+### Responsiveness
+
+Test every view with Browser 250x300 px.
+
 ## Dependencies
 
 ### AppInfo
