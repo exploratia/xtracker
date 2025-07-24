@@ -12,6 +12,7 @@ import '../../controls/layout/scrollable_centered_form_wrapper.dart';
 import '../../controls/select/color_picker.dart';
 import '../../controls/select/icon_map.dart';
 import '../../controls/select/icon_picker.dart';
+import '../../controls/text/overflow_text.dart';
 import 'blood_pressure/blood_pressure_series_edit.dart';
 
 class SeriesEditor extends StatefulWidget {
@@ -183,11 +184,12 @@ class _SeriesTypeHeadline extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     return Row(
+      mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         IconMap.icon(seriesDef.iconName),
         const SizedBox(width: 10),
-        Text(
+        OverflowText(
           SeriesType.displayNameOf(seriesDef.seriesType),
           style: themeData.textTheme.headlineSmall,
         ),
@@ -203,11 +205,13 @@ class _SeriesSymbolAndColor extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      spacing: 20,
+    return Wrap(
+      crossAxisAlignment: WrapCrossAlignment.center,
+      runAlignment: WrapAlignment.spaceAround,
+      spacing: 40,
       children: [
         Row(
+          mainAxisSize: MainAxisSize.min,
           spacing: 10,
           children: [
             Text(LocaleKeys.series_edit_common_labels_seriesIcon.tr()),
@@ -218,6 +222,7 @@ class _SeriesSymbolAndColor extends StatelessWidget {
           ],
         ),
         Row(
+          mainAxisSize: MainAxisSize.min,
           spacing: 10,
           children: [
             Text(LocaleKeys.series_edit_common_labels_seriesColor.tr()),
