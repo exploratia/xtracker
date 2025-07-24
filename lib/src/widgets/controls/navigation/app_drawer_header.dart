@@ -11,16 +11,14 @@ class AppDrawerHeader extends StatelessWidget {
     final themeData = Theme.of(context);
 
     List<Color> gradientColors = [
-      themeData.scaffoldBackgroundColor,
+      if (themeData.brightness == Brightness.dark) themeData.scaffoldBackgroundColor,
       themeData.colorScheme.secondary,
       themeData.colorScheme.primary,
     ];
 
     return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(colors: gradientColors),
-      ),
-      height: 56, // AppBar height -> same optical line
+      decoration: BoxDecoration(gradient: LinearGradient(colors: gradientColors)),
+      height: kToolbarHeight, // AppBar height -> same optical line
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -28,7 +26,10 @@ class AppDrawerHeader extends StatelessWidget {
               onPressed: () {
                 NavigationUtils.closeDrawerIfOpen(context);
               },
-              icon: const Icon(Icons.arrow_left)),
+              icon: Icon(
+                Icons.arrow_left,
+                color: themeData.colorScheme.onPrimary,
+              )),
           Padding(
             padding: const EdgeInsets.only(right: 20),
             child: SizedBox(
