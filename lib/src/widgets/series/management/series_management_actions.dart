@@ -99,7 +99,11 @@ class _ClearSeriesDataBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     handler() async {
-      var result = await Dialogs.simpleYesNoDialog(LocaleKeys.series_data_dialog_msg_query_deleteSeriesData.tr(args: [seriesDef.name]), context);
+      var result = await Dialogs.simpleYesNoDialog(
+        LocaleKeys.series_data_dialog_msg_query_deleteSeriesData.tr(args: [seriesDef.name]),
+        context,
+        title: LocaleKeys.commons_dialog_title_areYouSure.tr(),
+      );
       if (result != null && result && context.mounted) {
         await context.read<SeriesDataProvider>().delete(seriesDef, context);
       }
