@@ -69,10 +69,11 @@ class ThemeUtils {
       drawerTheme: DrawerThemeData(
         backgroundColor: backgroundColor,
         shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-          topRight: Radius.circular(20),
-          // bottomRight: Radius.circular(2),
-        )),
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(20),
+            bottomRight: Radius.circular(5), // 2 if scrollable
+          ),
+        ),
       ),
       // dividerColor: dividerColor, // Trenner bei MenuItems-Gruppierung
       scaffoldBackgroundColor: backgroundColor /* otherwise white|black */,
