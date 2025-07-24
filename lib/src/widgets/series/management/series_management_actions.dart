@@ -21,8 +21,10 @@ class SeriesManagementActions extends StatelessWidget {
       color: Colors.transparent,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
+        child: Wrap(
+          runAlignment: WrapAlignment.center,
+          alignment: WrapAlignment.center,
+          crossAxisAlignment: WrapCrossAlignment.center,
           children: [
             _EditSeriesBtn(seriesDef: seriesDef),
             _ExportSeriesDataBtn(seriesDef: seriesDef),

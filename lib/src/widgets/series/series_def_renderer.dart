@@ -43,13 +43,7 @@ class SeriesDefRenderer extends StatelessWidget {
                             thickness: 2,
                             color: seriesDef.color,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.max,
-                            children: [
-                              SeriesManagementActions(seriesDef: seriesDef),
-                            ],
-                          ),
+                          SeriesManagementActions(seriesDef: seriesDef),
                         ],
                       );
                     } else {
