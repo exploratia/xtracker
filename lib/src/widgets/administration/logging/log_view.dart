@@ -30,7 +30,7 @@ class _LogViewState extends State<LogView> {
       child: FutureBuilderWithProgressIndicator(
         future: DailyFiles.readLogLines(widget.logFileName, context, !MediaQueryUtils.of(context).isTablet),
         errorBuilder: (error) => 'Failed to load log!',
-        widgetBuilder: (logFileContent) {
+        widgetBuilder: (logFileContent, _) {
           if (logFileContent == null) {
             return Center(child: Text('Log file "${widget.logFileName}" not found!'));
           }

@@ -7,7 +7,7 @@ class FutureBuilderWithProgressIndicator<T> extends StatelessWidget {
 
   final Future<T> future;
   final dynamic Function(Object error)? errorBuilder;
-  final Widget Function(T? data) widgetBuilder;
+  final Widget Function(T? data, BuildContext context) widgetBuilder;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class FutureBuilderWithProgressIndicator<T> extends StatelessWidget {
             return _ErrMsg(msg: snapshot.error!.toString());
           }
         } else {
-          return widgetBuilder(snapshot.data);
+          return widgetBuilder(snapshot.data, context);
         }
       },
     );

@@ -27,7 +27,7 @@ class _DataProviderLoaderState extends State<DataProviderLoader> {
     return FutureBuilderWithProgressIndicator(
       future: _dataProviderFuture,
       errorBuilder: (error) => 'Failed to load data...',
-      widgetBuilder: (_) => widget.child,
+      widgetBuilder: (_, __) => widget.child,
     );
   }
 }
