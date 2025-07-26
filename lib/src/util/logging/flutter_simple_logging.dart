@@ -31,7 +31,7 @@ class SimpleLogging {
   static set useFullStack(bool useFullStack) {
     _useFullStack = useFullStack;
 
-    _store(DeviceStorageKeys.logStack, _useFullStack ? DeviceStorage.symbolChecked : null);
+    _storeBool(DeviceStorageKeys.logStack, _useFullStack);
   }
 
   static final logger = Logger(
@@ -101,6 +101,14 @@ class SimpleLogging {
   static void _store(String key, String? value) async {
     try {
       await DeviceStorage.write(key, value);
+    } catch (err) {
+      // await Dialogs.simpleOkDialog(err.toString(), context, title: 'Fehler');
+    }
+  }
+
+  static void _storeBool(String key, bool value) async {
+    try {
+      await DeviceStorage.writeBool(key, value);
     } catch (err) {
       // await Dialogs.simpleOkDialog(err.toString(), context, title: 'Fehler');
     }

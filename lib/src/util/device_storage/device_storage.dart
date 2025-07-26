@@ -1,7 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class DeviceStorage {
-  static const String symbolChecked = '✓';
+  static const String _symbolChecked = '✓';
 
   static const storage = FlutterSecureStorage(
     aOptions: AndroidOptions(
@@ -32,5 +32,10 @@ class DeviceStorage {
   // Write value
   static Future<void> write(String key, String? value) async {
     return storage.write(key: key, value: value);
+  }
+
+  /// Write bool value (stores a value if true - otherwise set to null)
+  static Future<void> writeBool(String key, bool value) async {
+    return storage.write(key: key, value: value ? _symbolChecked : null);
   }
 }

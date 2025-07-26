@@ -51,6 +51,6 @@ class SettingsService {
 
   /// Persists the user's preferred setting
   Future<void> updateHideNavigationLabels(bool value) async {
-    await DeviceStorage.write(DeviceStorageKeys.layoutHideNavLabels, value ? DeviceStorage.symbolChecked : null);
+    await DeviceStorage.writeBool(DeviceStorageKeys.layoutHideNavLabels, value);
   }
 }
