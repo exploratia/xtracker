@@ -4,7 +4,7 @@
     "supportApp": {
       "title": "Unterstütze die App",
       "labels": {
-        "buyMeACoffee": "Die App zu warten / erweitern kostet viel Freizeit. Für Unterstützung wäre ich sehr dankbar...",
+        "buyMeACoffee": "Wartung und Weiterentwicklung kosten viel Freizeit. Über Unterstützung würde ich mich sehr freuen.",
         "reportABug": "Fehler gefunden? Erstelle einen Bug-Report auf GitHub:"
       }
     },
@@ -69,7 +69,7 @@
       "error": {
         "failedToLoadData": "Fehler beim Laden der Daten...",
         "failedToSaveData": "Fehler beim Speichern der Daten...",
-        "failedToShareData": "Fehler beim Teilen..."
+        "failedToShareData": "Teilen fehlgeschlagen..."
       },
       "pressBackAgainToExit": "Zum Beenden nochmal drücken...",
       "saved": "Gespeichert..."
@@ -124,11 +124,11 @@
       }
     },
     "msg": {
-      "shareSuccess": "Logs wurde erfolgreich geteilt."
+      "shareSuccess": "Logs wurden erfolgreich geteilt."
     }
   },
   "series": {
-    "addFirstSeries": "Erste Messreihe erstellen...",
+    "addFirstSeries": "Messreihe hinzufügen...",
     "data": {
       "title": "Messreihe",
       "input": {
@@ -164,9 +164,9 @@
       },
       "common": {
         "labels": {
-        "seriesName": "Name",
-        "seriesIcon": "Symbol",
-        "seriesColor": "Farbe"
+          "seriesName": "Name",
+          "seriesIcon": "Symbol",
+          "seriesColor": "Farbe"
         }
       },
       "bloodPressure": {
@@ -186,11 +186,11 @@
             "shareSeries": "Alle Messreihen teilen"
           },
           "label": {
-            "exportSeries": "Alle Messreihen als eine JSON-Dateien speichern.",
+            "exportSeries": "Alle Messreihen als eine JSON-Datei speichern.",
             "exportSeriesTip": "Tipp: Um separate Messreihen zu speichern, verwende das Export-Icon der jeweiligen Messreihe.",
-            "importSeries": "Wähle JSON-Dateien für Messreihen zum Import aus.\nVorhandene Serien (und deren Daten) werden überschrieben (identifiziert anhand ihrer eindeutigen ID). Nicht vorhandene Messreihen werden neu erstellt.",
-            "importSeriesTip": "Tipp: Um Daten aus externen Quellen zu importieren, erstelle zunächst eine passende eigene Messreihe und exportiere sie.\nFüge dann Daten in diese exportierte Datei ein und importiere sie wieder. So wird sicher gestellt, dass das Format korrekt ist.",
-            "shareSeries": "Alle Messreihen als eine JSON-Dateien teilen."
+            "importSeries": "JSON-Dateien mit Messreihen zum Import auswählen.\nVorhandene Serien (inkl. Daten) werden anhand ihrer ID überschrieben. Neue Messreihen werden automatisch erstellt.",
+            "importSeriesTip": "Tipp: Zuerst eine passende Messreihe erstellen und exportieren. Danach Daten in die Datei einfügen und erneut importieren – so passt das Format sicher.",
+            "shareSeries": "Alle Messreihen als eine JSON-Datei teilen."
           },
           "msg": {
             "exportSuccessful": "Export erfolgreich...",
