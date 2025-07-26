@@ -13,7 +13,7 @@ class SettingsService {
 
   /// Loads the User's preferred ThemeMode from local or remote storage.
   Future<ThemeMode> themeMode() async {
-    var value = await DeviceStorage.read(DeviceStorageKeys.keyAppTheme);
+    var value = await DeviceStorage.read(DeviceStorageKeys.theme);
     if (value == 'dark') return ThemeMode.dark;
     if (value == 'light') return ThemeMode.light;
     return ThemeMode.system;
@@ -22,12 +22,12 @@ class SettingsService {
   /// Persists the user's preferred ThemeMode to local or remote storage.
   Future<void> updateThemeMode(ThemeMode theme) async {
     var value = theme.name;
-    await DeviceStorage.write(DeviceStorageKeys.keyAppTheme, value);
+    await DeviceStorage.write(DeviceStorageKeys.theme, value);
   }
 
   /// Loads the User's preferred Locale
   Future<Locale?> locale() async {
-    var value = await DeviceStorage.read(DeviceStorageKeys.keyAppLocale);
+    var value = await DeviceStorage.read(DeviceStorageKeys.language);
     if (value == null) return null;
     // if language code is not enough add country code as well
     var localeIdx = supportedLocales.indexWhere((element) => element.languageCode == value);
@@ -40,17 +40,17 @@ class SettingsService {
   /// Persists the user's preferred Locale to local or remote storage.
   Future<void> updateLocale(Locale? locale) async {
     var value = locale == null ? null : (locale.languageCode);
-    await DeviceStorage.write(DeviceStorageKeys.keyAppLocale, value);
+    await DeviceStorage.write(DeviceStorageKeys.language, value);
   }
 
   /// Loads the User's preferred nav label settings
   Future<bool> hideNavigationLabels() async {
-    var value = await DeviceStorage.read(DeviceStorageKeys.keyAppHideNavLabels);
+    var value = await DeviceStorage.read(DeviceStorageKeys.layoutHideNavLabels);
     return (value == null ? false : true);
   }
 
   /// Persists the user's preferred setting
   Future<void> updateHideNavigationLabels(bool value) async {
-    await DeviceStorage.write(DeviceStorageKeys.keyAppHideNavLabels, value ? 'true' : null);
+    await DeviceStorage.write(DeviceStorageKeys.layoutHideNavLabels, value ? DeviceStorage.symbolChecked : null);
   }
 }

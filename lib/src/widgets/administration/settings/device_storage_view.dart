@@ -21,7 +21,7 @@ class DeviceStorageView extends StatelessWidget {
         FutureBuilderWithProgressIndicator(
           future: DeviceStorage.readAll(),
           errorBuilder: (error) => 'Failed to storage data!',
-          widgetBuilder: (storageData) {
+          widgetBuilder: (storageData, BuildContext ctx) {
             if (storageData == null) {
               return Text(LocaleKeys.settings_deviceStorage_noData.tr());
             }
@@ -39,17 +39,19 @@ class DeviceStorageView extends StatelessWidget {
               rows.add(TableUtils.tableRow([key, value ?? '-']));
             }
 
-            return Table(
-              // https://api.flutter.dev/flutter/widgets/Table-class.html
-              columnWidths: const <int, TableColumnWidth>{
-                0: FixedColumnWidth(128), // IntrinsicColumnWidth(),
-                1: FlexColumnWidth(),
-              },
-              border: const TableBorder.symmetric(
-                inside: BorderSide(width: 1, color: Colors.black12),
-              ),
-              children: rows,
-            );
+            return LayoutBuilder(builder: (BuildContext _, BoxConstraints constraints) {
+              return Table(
+                // https://api.flutter.dev/flutter/widgets/Table-class.html
+                columnWidths: <int, TableColumnWidth>{
+                  0: constraints.maxWidth < 200 ? FixedColumnWidth(constraints.maxWidth / 2) : const IntrinsicColumnWidth(),
+                  1: const FlexColumnWidth(),
+                },
+                border: const TableBorder.symmetric(
+                  inside: BorderSide(width: 1, color: Colors.black12),
+                ),
+                children: rows,
+              );
+            });
           },
         ),
         const Divider(),

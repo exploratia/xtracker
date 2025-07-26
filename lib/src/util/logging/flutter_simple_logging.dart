@@ -1,16 +1,14 @@
-import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
 
 import '../app_info.dart';
 import '../device_storage/device_storage.dart';
+import '../device_storage/device_storage_keys.dart';
 import '../stack/file_line_stack.dart';
 import '../stack/stack_utils.dart';
 import 'daily_files.dart';
 
 class SimpleLogging {
-  static const String _deviceStorageKey = 'logging';
   static const String separator = '--------------------------------------------------';
   static const String nl = '\n';
 
@@ -23,7 +21,7 @@ class SimpleLogging {
 
   static set logLevel(Level logLevel) {
     _logLevel = logLevel;
-    _store();
+    _store(DeviceStorageKeys.logLevel, _logLevel.name);
   }
 
   static bool get useFullStack {
@@ -32,7 +30,8 @@ class SimpleLogging {
 
   static set useFullStack(bool useFullStack) {
     _useFullStack = useFullStack;
-    _store();
+
+    _store(DeviceStorageKeys.logStack, _useFullStack ? DeviceStorage.symbolChecked : null);
   }
 
   static final logger = Logger(
@@ -99,13 +98,9 @@ class SimpleLogging {
     return [Level.debug, Level.info, Level.warning, Level.error];
   }
 
-  static void _store() async {
+  static void _store(String key, String? value) async {
     try {
-      final loggingData = {
-        'logLevel': _logLevel.name,
-        'fullStack': _useFullStack,
-      };
-      await DeviceStorage.write(_deviceStorageKey, jsonEncode(loggingData));
+      await DeviceStorage.write(key, value);
     } catch (err) {
       // await Dialogs.simpleOkDialog(err.toString(), context, title: 'Fehler');
     }
@@ -115,17 +110,10 @@ class SimpleLogging {
     await AppInfo.init();
     await DailyFiles.init();
 
-    final dataStr = await DeviceStorage.read(_deviceStorageKey);
-    if (dataStr != null) {
-      final data = jsonDecode(dataStr) as Map<String, dynamic>;
-      if (data.containsKey('logLevel')) {
-        final level = data['logLevel'] as String;
-        _logLevel = getKnownLevels().firstWhere((element) => element.name == level, orElse: () => Level.warning);
-      }
-      if (data.containsKey('fullStack')) {
-        _useFullStack = data['fullStack'] as bool;
-      }
-    }
+    var dataStr = await DeviceStorage.read(DeviceStorageKeys.logLevel);
+    _logLevel = getKnownLevels().firstWhere((element) => element.name == dataStr, orElse: () => Level.info);
+    dataStr = await DeviceStorage.read(DeviceStorageKeys.logStack);
+    _useFullStack = dataStr == null ? false : true;
   }
 }
 
