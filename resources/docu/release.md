@@ -33,6 +33,14 @@ Adjust version in `changelog.md` and `pubspec.yaml`.
 
 Merge the release branch to main.
 
+As a commit message use:
+
+```
+release <version>
+
+<changelog since the last release>
+```
+
 ## Tag
 
 Tag the main branch with the adjusted version.
