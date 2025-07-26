@@ -4,7 +4,7 @@
     "supportApp": {
       "title": "Support the App",
       "labels": {
-        "buyMeACoffee": "Building, maintaining and improving the app requires a lot of my free time. If you want to support, you could...",
+        "buyMeACoffee": "Maintaining and improving this app takes a lot of free time. Any support is greatly appreciated.",
         "reportABug": "Found a bug? Report it on GitHub:"
       }
     },
@@ -124,11 +124,11 @@
       }
     },
     "msg": {
-      "shareSuccess": "Logs successfully shared."
+      "shareSuccess": "Logs shared successfully."
     }
   },
   "series": {
-    "addFirstSeries": "Add first series...",
+    "addFirstSeries": "Add a series...",
     "data": {
       "title": "Series",
       "input": {
@@ -144,7 +144,7 @@
       "dialog": {
         "msg": {
           "query": {
-            "deleteSeriesData": "Do you really want to delete the series '{}' data?"
+            "deleteSeriesData": "Do you really want to delete the data of series '{}'?"
           }
         }
       }
@@ -189,7 +189,7 @@
             "exportSeries": "Export all series in one json file.",
             "exportSeriesTip": "Tip: To save separate measurement series, use the export icon of the respective series.",
             "importSeries": "Select series JSON files to import.\nExisting series (and their data) will be overwritten (identified by their unique id). New series will be created if they don't already exist.",
-            "importSeriesTip": "Tip: To import data from external sources, first create a matching series yourself and export it.\nThen, add your own data to this exported file and import it again. This ensures the correct format is used.",
+            "importSeriesTip": "Tip: Create and export a matching series first. Then insert your data into the exported file and re-import it. That way the format will be correct.",
             "shareSeries": "Share all series in one json file."
           },
           "msg": {

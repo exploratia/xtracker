@@ -2,11 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
-## [Unreleased] - 2025-07-16
+## 1.0.0 - 2025-07-26
 
-### Fixes
+First published version
 
-- update Share to SharePlus 11.0.0
-- add missing type annotations
-- use calculated navigation items width for extended navigation rail
-  width ([#4](https://github.com/exploratia/xtracker/issues/4))
+### Features
+
+- Daily check series
+- Blood pressure series
+- Import / Export / Share series in JSON format
+- Series views: table, chart, dots
+- Dark / Light theme
+
