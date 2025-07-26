@@ -45,8 +45,7 @@ class SettingsService {
 
   /// Loads the User's preferred nav label settings
   Future<bool> hideNavigationLabels() async {
-    var value = await DeviceStorage.read(DeviceStorageKeys.layoutHideNavLabels);
-    return (value == null ? false : true);
+    return await DeviceStorage.readBool(DeviceStorageKeys.layoutHideNavLabels);
   }
 
   /// Persists the user's preferred setting

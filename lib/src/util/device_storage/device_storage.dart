@@ -14,6 +14,12 @@ class DeviceStorage {
     return storage.read(key: key);
   }
 
+  /// Read bool value
+  static Future<bool> readBool(String key) async {
+    var data = await storage.read(key: key);
+    return data == null ? false : true;
+  }
+
   // Read all values
   static Future<Map<String, String>> readAll() async {
     return storage.readAll();

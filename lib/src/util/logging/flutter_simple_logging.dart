@@ -120,8 +120,7 @@ class SimpleLogging {
 
     var dataStr = await DeviceStorage.read(DeviceStorageKeys.logLevel);
     _logLevel = getKnownLevels().firstWhere((element) => element.name == dataStr, orElse: () => Level.info);
-    dataStr = await DeviceStorage.read(DeviceStorageKeys.logStack);
-    _useFullStack = dataStr == null ? false : true;
+    _useFullStack = await DeviceStorage.readBool(DeviceStorageKeys.logStack);
   }
 }
 
