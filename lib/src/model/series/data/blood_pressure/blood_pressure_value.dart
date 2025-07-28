@@ -7,6 +7,8 @@ import '../../../../util/color_utils.dart';
 import '../series_data_value.dart';
 
 class BloodPressureValue extends SeriesDataValue {
+  static const int maxValue = 999;
+  static const int minValue = 0;
   final int high;
   final int low;
   final bool medication;
@@ -33,7 +35,7 @@ class BloodPressureValue extends SeriesDataValue {
   static Color bestPossibleValueColor = const Color.fromRGBO(0, 160, 0, 1);
 
   static Color colorHigh(int value) {
-    int val = max(min(value, 160), 80);
+    int val = max(min(value, 160), 80); // 120 +- 40
     return ColorUtils.hue(bestPossibleValueColor, (120.0 - val) * 3);
   }
 
@@ -42,7 +44,7 @@ class BloodPressureValue extends SeriesDataValue {
   }
 
   static Color colorLow(int value) {
-    int val = max(min(value, 120), 40);
+    int val = max(min(value, 120), 40); // 80 +- 40
     return ColorUtils.hue(bestPossibleValueColor, (80.0 - val) * 3);
   }
 

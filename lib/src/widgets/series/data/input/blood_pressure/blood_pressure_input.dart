@@ -186,8 +186,11 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
                           return LocaleKeys.commons_validator_msg_emptyValue.tr();
                         }
                         var val = int.tryParse(value);
-                        if (val == null || val < 0 || val > 200) {
+                        if (val == null || val < BloodPressureValue.minValue || val > BloodPressureValue.maxValue) {
                           return LocaleKeys.bloodPressure_input_validator_msg_invalidNumber.tr();
+                        }
+                        if (val < _low) {
+                          return LocaleKeys.bloodPressure_input_validator_msg_systolicTooLow.tr();
                         }
                         return null;
                       },
@@ -210,8 +213,11 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
                           return LocaleKeys.commons_validator_msg_emptyValue.tr();
                         }
                         var val = int.tryParse(value);
-                        if (val == null || val < 0 || val > 200) {
+                        if (val == null || val < BloodPressureValue.minValue || val > BloodPressureValue.maxValue) {
                           return LocaleKeys.bloodPressure_input_validator_msg_invalidNumber.tr();
+                        }
+                        if (val > _high) {
+                          return LocaleKeys.bloodPressure_input_validator_msg_diastolicTooHigh.tr();
                         }
                         return null;
                       },

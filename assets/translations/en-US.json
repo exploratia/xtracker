@@ -24,7 +24,9 @@
       },
       "validator": {
         "msg": {
-          "invalidNumber": "Invalid number (valid: 0 - 200)"
+          "invalidNumber": "Invalid number (valid: 0 - 999)",
+          "diastolicTooHigh": "Systolic value to high.",
+          "systolicTooLow": "Diastolic value to low."
         }
       }
     },

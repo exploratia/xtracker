@@ -13,6 +13,8 @@ abstract class  LocaleKeys {
   static const bloodPressure_input_labels_systolic = 'bloodPressure.input.labels.systolic';
   static const bloodPressure_input_labels_medication = 'bloodPressure.input.labels.medication';
   static const bloodPressure_input_validator_msg_invalidNumber = 'bloodPressure.input.validator.msg.invalidNumber';
+  static const bloodPressure_input_validator_msg_diastolicTooHigh = 'bloodPressure.input.validator.msg.diastolicTooHigh';
+  static const bloodPressure_input_validator_msg_systolicTooLow = 'bloodPressure.input.validator.msg.systolicTooLow';
   static const bloodPressure_seriesItem_title_diastolic = 'bloodPressure.seriesItem.title.diastolic';
   static const bloodPressure_seriesItem_title_systolic = 'bloodPressure.seriesItem.title.systolic';
   static const commons_date_shortWeekday_monday = 'commons.date.shortWeekday.monday';

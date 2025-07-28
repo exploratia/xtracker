@@ -24,7 +24,9 @@
       },
       "validator": {
         "msg": {
-          "invalidNumber": "Ungültige Zahl (gültig: 0 - 200)"
+          "invalidNumber": "Ungültige Zahl (gültig: 0 - 999)",
+          "diastolicTooHigh": "Diastolischer Wert zu hoch.",
+          "systolicTooLow": "Systolischer Wert zu niedrig."
         }
       }
     },
