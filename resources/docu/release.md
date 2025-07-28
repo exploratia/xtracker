@@ -85,13 +85,13 @@ storeFile=/path/to/my-release-key.jks
 Remember, replace the placeholders `<password from previous step>` with your actual passwords,
 and `/path/to/my-release-key.jks` with the actual path where your key is stored.
 
-⚠⚠⚠ This file should NOT be check-in into your source version control. ⚠⚠⚠
+⚠⚠⚠ This file should NOT be checked in into your source version control. ⚠⚠⚠
 
 Configure signing in gradle in android/app/build.gradle.kts
 
 ````kotlin
-import java.io.FileInputStream
-import java.util.Properties
+// import java.io.FileInputStream
+// import java.util.Properties
 
 plugins {
     id("com.android.application")
@@ -161,7 +161,17 @@ android {
 flutter {
     source = "../.."
 }
+````
 
+#### Symbolic link
+
+Because of a flutter build bug, pub cache and project have to be on the same disc for building.
+See https://stackoverflow.com/questions/69663243/could-not-create-task-this-and-base-files-have-different-roots
+
+Therefore, create a symlink on c:
+
+````shell
+mklink /J C:\dev\xtracker D:\git\xtracker
 ````
 
 ### Building the App for Release
@@ -169,6 +179,9 @@ flutter {
 To construct an app bundle, use:
 
 ````shell
+c:
+cd \
+cd dev/xtracker
 flutter clean
 flutter build appbundle --release
 ````
