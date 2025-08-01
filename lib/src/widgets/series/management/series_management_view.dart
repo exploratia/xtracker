@@ -6,6 +6,7 @@ import '../../../../generated/locale_keys.g.dart';
 import '../../../providers/series_provider.dart';
 import '../../../util/series/series_import_export.dart';
 import '../../controls/animation/fade_in.dart';
+import '../../controls/layout/centered_message.dart';
 import '../../controls/responsive/device_dependent_constrained_box.dart';
 import '../series_def_renderer.dart';
 
@@ -53,6 +54,10 @@ class _SeriesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var series = context.watch<SeriesProvider>().series;
+
+    if (series.isEmpty) {
+      return CenteredMessage(message: LocaleKeys.seriesManagement_label_noSeries.tr());
+    }
 
     List<Widget> children = [];
     var idx = 0;

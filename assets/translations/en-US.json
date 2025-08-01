@@ -247,8 +247,8 @@
     "label": {
       "noData": "This series contains no data yet..."
     },  "query": {
-      "deleteSeriesData": "Die Daten der Messreihe '{}' wirklich löschen?",
-      "deleteSeries": "Die Messreihe '{}' wirklich löschen?"
+      "deleteSeriesData": "Do you really want to delete the data of series '{}'?",
+      "deleteSeries": "Do you really want to delete the series '{}'?"
     }
   },
   "seriesEdit": {
@@ -291,6 +291,9 @@
       "closeSeriesManagement": {
         "tooltip": "Close series management"
       }
+    },
+    "label": {
+      "noSeries": "No series created yet..."
     },
     "importExport": {
       "title": "Import / Export series data",

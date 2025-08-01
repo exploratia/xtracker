@@ -114,6 +114,7 @@ abstract class  LocaleKeys {
   static const seriesManagement_title = 'seriesManagement.title';
   static const seriesManagement_action_importExport_tooltip = 'seriesManagement.action.importExport.tooltip';
   static const seriesManagement_action_closeSeriesManagement_tooltip = 'seriesManagement.action.closeSeriesManagement.tooltip';
+  static const seriesManagement_label_noSeries = 'seriesManagement.label.noSeries';
   static const seriesManagement_importExport_title = 'seriesManagement.importExport.title';
   static const seriesManagement_importExport_btn_exportSeries = 'seriesManagement.importExport.btn.exportSeries';
   static const seriesManagement_importExport_btn_importSeries = 'seriesManagement.importExport.btn.importSeries';
