@@ -5,7 +5,7 @@ import '../../generated/assets.gen.dart';
 import '../../generated/locale_keys.g.dart';
 import '../model/navigation/main_navigation_item.dart';
 import '../model/series/series_def.dart';
-import '../widgets/controls/layout/gradient_app_bar.dart';
+import '../widgets/controls/appbar/gradient_app_bar.dart';
 import '../widgets/controls/navigation/hide_bottom_navigation_bar.dart';
 import '../widgets/controls/responsive/screen_builder.dart';
 import '../widgets/series/management/series_management_view.dart';

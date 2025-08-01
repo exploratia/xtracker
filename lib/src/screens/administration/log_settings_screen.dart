@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../generated/locale_keys.g.dart';
 import '../../model/navigation/navigation_item.dart';
 import '../../widgets/administration/logging/log_settings_view.dart';
-import '../../widgets/controls/layout/gradient_app_bar.dart';
+import '../../widgets/controls/appbar/gradient_app_bar.dart';
 import '../../widgets/controls/responsive/screen_builder.dart';
 
 class LogSettingsScreen extends StatelessWidget {

@@ -5,7 +5,7 @@ import '../../../generated/locale_keys.g.dart';
 import '../../model/navigation/navigation_item.dart';
 import '../../util/info_type.dart';
 import '../../widgets/administration/info_view.dart';
-import '../../widgets/controls/layout/gradient_app_bar.dart';
+import '../../widgets/controls/appbar/gradient_app_bar.dart';
 import '../../widgets/controls/responsive/screen_builder.dart';
 
 class InfoScreen extends StatelessWidget {

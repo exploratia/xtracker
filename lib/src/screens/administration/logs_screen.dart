@@ -11,7 +11,7 @@ import '../../util/logging/daily_files.dart';
 import '../../util/logging/flutter_simple_logging.dart';
 import '../../util/navigation/generic_route.dart';
 import '../../widgets/administration/logging/logs_view.dart';
-import '../../widgets/controls/layout/gradient_app_bar.dart';
+import '../../widgets/controls/appbar/gradient_app_bar.dart';
 import '../../widgets/controls/responsive/screen_builder.dart';
 import 'log_screen.dart';
 import 'log_settings_screen.dart';
