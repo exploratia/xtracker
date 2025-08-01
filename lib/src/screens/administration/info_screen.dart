@@ -12,7 +12,7 @@ class InfoScreen extends StatelessWidget {
   static NavigationItem navItem = NavigationItem(
     icon: const Icon(Icons.info_outline),
     routeName: '/info',
-    titleBuilder: () => LocaleKeys.info_title.tr(),
+    titleBuilder: () => LocaleKeys.appTitle.tr(), // title is overridden in appBarBuilder
   );
 
   const InfoScreen({super.key, required this.args});

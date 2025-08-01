@@ -1,6 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../generated/assets.gen.dart';
+import '../../../../generated/locale_keys.g.dart';
 import '../../../util/navigation/navigation_utils.dart';
 
 class AppDrawerHeader extends StatelessWidget {
@@ -23,6 +25,7 @@ class AppDrawerHeader extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           IconButton(
+              tooltip: LocaleKeys.commons_nav_hideMenu.tr(),
               onPressed: () {
                 NavigationUtils.closeDrawerIfOpen(context);
               },

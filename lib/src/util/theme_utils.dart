@@ -58,11 +58,11 @@ class ThemeUtils {
         textStyle: TextStyle(inherit: true, color: dark ? Colors.white : Colors.black),
         // decoration: GlowingBorderContainer.createGlowingBoxDecoration(secondary, secondary),
         decoration: GlowingBorderContainer.createGlowingBoxDecoration(secondary, backgroundColor),
-        // waitDuration: Duration(milliseconds: 500),
+        waitDuration: const Duration(milliseconds: 500),
         // showDuration: Duration(seconds: 2),
         preferBelow: false,
         constraints: const BoxConstraints(
-          maxWidth: 250,
+          maxWidth: 300,
         ),
       ),
       appBarTheme: AppBarTheme(

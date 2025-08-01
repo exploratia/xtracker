@@ -130,7 +130,7 @@ class _AppInfoCard extends StatelessWidget {
                   OutlinedButton.icon(
                     onPressed: () => AboutDlg.showAboutDlg(context),
                     icon: const Icon(Icons.info_outline),
-                    label: Text(LocaleKeys.administration_app_btn_version.tr()),
+                    label: Text(LocaleKeys.administration_infoAndLegals_btn_version.tr()),
                   ),
                   OutlinedButton.icon(
                     onPressed: () =>
@@ -175,13 +175,13 @@ class _SupportTheApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SettingsCard(spacing: 10, title: LocaleKeys.administration_supportApp_title.tr(), showDivider: true, children: [
-      Text(LocaleKeys.administration_supportApp_labels_buyMeACoffee.tr()),
+      Text(LocaleKeys.administration_supportApp_label_buyMeACoffee.tr()),
       ImgLnk(uri: Globals.urlCoffeeExploratia, imageProvider: Assets.images.bmc.bmcButton.provider(), height: 48, width: 171),
       const SizedBox(height: 16),
       Wrap(
         crossAxisAlignment: WrapCrossAlignment.center,
         children: [
-          Text(LocaleKeys.administration_supportApp_labels_reportABug.tr()),
+          Text(LocaleKeys.administration_supportApp_label_reportABug.tr()),
           TextButton(onPressed: () => LaunchUri.launchUri(Globals.uriGithubXtrackerIssues), child: Text("${Globals.uriGithubXtrackerIssues}")),
         ],
       )

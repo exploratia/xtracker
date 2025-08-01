@@ -44,12 +44,14 @@ class _LogsScreenState extends State<LogsScreen> {
         title: Text(LogsScreen.navItem.titleBuilder()),
         actions: [
           IconButton(
+            tooltip: LocaleKeys.logs_action_logSettings_tooltip.tr(),
             onPressed: () async {
               Navigator.restorablePushNamed(context, LogSettingsScreen.navItem.routeName);
             },
             icon: LogSettingsScreen.navItem.icon,
           ),
           IconButton(
+            tooltip: LocaleKeys.logs_action_shareLogs_tooltip.tr(),
             onPressed: () async {
               try {
                 final zipAllLogs = await DailyFiles.zipAllLogs();
@@ -58,13 +60,13 @@ class _LogsScreenState extends State<LogsScreen> {
                   if (result.status == ShareResultStatus.success) {
                     SimpleLogging.i('Successfully shared logs.');
                     if (context.mounted) {
-                      Dialogs.showSnackBar(LocaleKeys.logs_msg_shareSuccess.tr(), context);
+                      Dialogs.showSnackBar(LocaleKeys.logs_snackbar_shareSuccess.tr(), context);
                     }
                   }
                 } catch (err) {
                   if (context.mounted) {
                     SimpleLogging.w('Failed to share logs.', error: err);
-                    Dialogs.simpleErrOkDialog('${LocaleKeys.commons_msg_error_failedToShareData.tr()}\n\n$err', context);
+                    Dialogs.simpleErrOkDialog('${LocaleKeys.commons_alert_failedToShareData.tr()}\n\n$err', context);
                   }
                 } finally {
                   try {
@@ -76,16 +78,17 @@ class _LogsScreenState extends State<LogsScreen> {
               } catch (err) {
                 SimpleLogging.w('Failed to zip logs.', error: err);
                 if (context.mounted) {
-                  Dialogs.simpleErrOkDialog('${LocaleKeys.logs_dialog_msg_error_failedToZipLogs.tr()}\n\n$err', context);
+                  Dialogs.simpleErrOkDialog('${LocaleKeys.logs_alert_failedToZipLogs.tr()}\n\n$err', context);
                 }
               }
             },
             icon: const Icon(Icons.share_outlined),
           ),
           IconButton(
+            tooltip: LocaleKeys.logs_action_deleteLogs_tooltip.tr(),
             onPressed: () async {
               bool? res = await Dialogs.simpleYesNoDialog(
-                LocaleKeys.logs_dialog_msg_query_deleteAllLogs.tr(),
+                LocaleKeys.logs_query_deleteAllLogs.tr(),
                 context,
                 title: LocaleKeys.commons_dialog_title_areYouSure.tr(),
               );
@@ -95,7 +98,7 @@ class _LogsScreenState extends State<LogsScreen> {
                 } catch (err) {
                   SimpleLogging.w('Failed to delete all logs.', error: err);
                   if (context.mounted) {
-                    Dialogs.simpleErrOkDialog('${LocaleKeys.logs_dialog_msg_error_deleteAllLogsFailed.tr()}\n\n$err', context);
+                    Dialogs.simpleErrOkDialog('${LocaleKeys.logs_alert_deleteAllLogsFailed.tr()}\n\n$err', context);
                   }
                 }
                 _rebuild();

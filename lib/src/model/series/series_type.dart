@@ -26,8 +26,8 @@ enum SeriesType {
 
   static String displayNameOf(SeriesType seriesType) {
     return switch (seriesType) {
-      SeriesType.bloodPressure => LocaleKeys.series_seriesType_bloodPressure_title.tr(),
-      SeriesType.dailyCheck => LocaleKeys.series_seriesType_dailyCheck_title.tr(),
+      SeriesType.bloodPressure => LocaleKeys.enum_seriesType_bloodPressure_title.tr(),
+      SeriesType.dailyCheck => LocaleKeys.enum_seriesType_dailyCheck_title.tr(),
       // SeriesType.monthly => LocaleKeys.series_seriesType_monthly_title.tr(),
       // SeriesType.free => LocaleKeys.series_seriesType_free_title.tr(),
     };
@@ -35,8 +35,8 @@ enum SeriesType {
 
   static String infoOf(SeriesType seriesType) {
     return switch (seriesType) {
-      SeriesType.bloodPressure => LocaleKeys.series_seriesType_bloodPressure_info.tr(),
-      SeriesType.dailyCheck => LocaleKeys.series_seriesType_dailyCheck_info.tr(),
+      SeriesType.bloodPressure => LocaleKeys.enum_seriesType_bloodPressure_info.tr(),
+      SeriesType.dailyCheck => LocaleKeys.enum_seriesType_dailyCheck_info.tr(),
       // SeriesType.monthly => LocaleKeys.series_seriesType_monthly_info.tr(),
       // SeriesType.free => LocaleKeys.series_seriesType_free_info.tr(),
     };

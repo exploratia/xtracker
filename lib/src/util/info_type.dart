@@ -5,15 +5,16 @@ import '../../generated/assets.gen.dart';
 import '../../generated/locale_keys.g.dart';
 
 enum InfoType {
-  legalNotice('legalNotice'),
-  eula('eula'),
-  privacyPolicy('privacyPolicy'),
-  disclaimer('disclaimer'),
-  unknown("unknown");
+  legalNotice('legalNotice', LocaleKeys.enum_infoType_legalNotice_title),
+  eula('eula', LocaleKeys.enum_infoType_eula_title),
+  privacyPolicy('privacyPolicy', LocaleKeys.enum_infoType_privacyPolicy_title),
+  disclaimer('disclaimer', LocaleKeys.enum_infoType_disclaimer_title),
+  unknown("unknown", LocaleKeys.appTitle);
 
   final String typeName;
+  final String _titleKey;
 
-  const InfoType(this.typeName);
+  const InfoType(this.typeName, this._titleKey);
 
   String title() {
     return titleOf(this);
@@ -24,13 +25,7 @@ enum InfoType {
   }
 
   static String titleOf(InfoType seriesType) {
-    return switch (seriesType) {
-      InfoType.legalNotice => "Impressum / Legal Notice",
-      InfoType.eula => 'EULA',
-      InfoType.privacyPolicy => 'Privacy Policy',
-      InfoType.disclaimer => 'Disclaimer',
-      InfoType.unknown => LocaleKeys.appTitle.tr(),
-    };
+    return seriesType._titleKey.tr();
   }
 
   static Future<String> htmlOf(InfoType seriesType, BuildContext context) {

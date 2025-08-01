@@ -19,10 +19,18 @@ class SeriesManagementView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: themeData.colorScheme.secondary,
-        title: Text(LocaleKeys.series_mgmt_title.tr()),
+        title: Text(LocaleKeys.seriesManagement_title.tr()),
         actions: [
-          IconButton(onPressed: () async => SeriesImportExport.showImportExportDlg(context), icon: const Icon(Icons.import_export_outlined)),
-          IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.edit_off_outlined)),
+          IconButton(
+            tooltip: LocaleKeys.seriesManagement_action_importExport_tooltip.tr(),
+            onPressed: () async => SeriesImportExport.showImportExportDlg(context),
+            icon: const Icon(Icons.import_export_outlined),
+          ),
+          IconButton(
+            tooltip: LocaleKeys.seriesManagement_action_closeSeriesManagement_tooltip.tr(),
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(Icons.edit_off_outlined),
+          ),
         ],
       ),
       // appBar: GradientAppBar.build(

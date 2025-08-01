@@ -24,10 +24,10 @@ enum ViewType {
 
   static String displayNameOf(ViewType seriesType) {
     return switch (seriesType) {
-      ViewType.lineChart => LocaleKeys.series_viewType_seriesChart.tr(),
-      ViewType.barChart => LocaleKeys.series_viewType_barChart.tr(),
-      ViewType.table => LocaleKeys.series_viewType_table.tr(),
-      ViewType.dots => LocaleKeys.series_viewType_dots.tr(),
+      ViewType.lineChart => LocaleKeys.enum_viewType_lineChart_title.tr(),
+      ViewType.barChart => LocaleKeys.enum_viewType_barChart_title.tr(),
+      ViewType.table => LocaleKeys.enum_viewType_table_title.tr(),
+      ViewType.dots => LocaleKeys.enum_viewType_dots_title.tr(),
     };
   }
 }

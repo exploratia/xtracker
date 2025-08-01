@@ -163,6 +163,7 @@ class _MenuItemIconButton extends StatelessWidget {
       color: themeData.colorScheme.secondary,
       elevation: 4.0,
       child: IconButton(
+        tooltip: menuEntry.tooltip,
         hoverColor: themeData.colorScheme.primary,
         onPressed: () {
           Navigator.of(context).pop();
@@ -178,6 +179,7 @@ class _MenuItemIconButton extends StatelessWidget {
 class IconPopupMenuEntry {
   final Icon icon;
   final void Function() fn;
+  final String tooltip;
 
-  IconPopupMenuEntry(this.icon, this.fn);
+  IconPopupMenuEntry(this.icon, this.fn, this.tooltip);
 }

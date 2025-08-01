@@ -22,16 +22,16 @@ class GeneralSettingsView extends StatelessWidget {
   Widget build(BuildContext context) {
     var actTheme = controller.themeMode;
     var themeItems = [
-      {'v': ThemeMode.system, 'text': LocaleKeys.settings_general_themes_system.tr()},
-      {'v': ThemeMode.light, 'text': LocaleKeys.settings_general_themes_light.tr()},
-      {'v': ThemeMode.dark, 'text': LocaleKeys.settings_general_themes_dark.tr()},
+      {'v': ThemeMode.system, 'text': LocaleKeys.settings_general_theme_system.tr()},
+      {'v': ThemeMode.light, 'text': LocaleKeys.settings_general_theme_light.tr()},
+      {'v': ThemeMode.dark, 'text': LocaleKeys.settings_general_theme_dark.tr()},
     ];
 
     var actLocale = controller.locale;
     var localeItems = [
-      {'v': null, 'text': LocaleKeys.settings_general_languages_system.tr()},
-      {'v': SettingsService.supportedLocales[1], 'text': LocaleKeys.settings_general_languages_german.tr()},
-      {'v': SettingsService.supportedLocales[0], 'text': LocaleKeys.settings_general_languages_english.tr()},
+      {'v': null, 'text': LocaleKeys.settings_general_language_system.tr()},
+      {'v': SettingsService.supportedLocales[1], 'text': LocaleKeys.settings_general_language_german.tr()},
+      {'v': SettingsService.supportedLocales[0], 'text': LocaleKeys.settings_general_language_english.tr()},
     ];
     if (actLocale != null) {
       // check
@@ -56,7 +56,7 @@ class GeneralSettingsView extends StatelessWidget {
           // ),
           children: [
             TableUtils.tableRow([
-              Text(LocaleKeys.settings_general_labels_theme.tr()),
+              Text(LocaleKeys.settings_general_label_theme.tr()),
               DropdownButton<ThemeMode>(
                 key: const Key('settingsThemeSelect'),
                 borderRadius: ThemeUtils.cardBorderRadius,
@@ -74,7 +74,7 @@ class GeneralSettingsView extends StatelessWidget {
               )
             ]),
             TableUtils.tableRow([
-              Text(LocaleKeys.settings_general_labels_lang.tr()),
+              Text(LocaleKeys.settings_general_label_lang.tr()),
               DropdownButton<Locale?>(
                 key: const Key('settingsLocaleSelect'),
                 borderRadius: ThemeUtils.cardBorderRadius,
@@ -101,7 +101,7 @@ class GeneralSettingsView extends StatelessWidget {
             onChanged: (bool value) {
               controller.updateHideNavigationLabels(value);
             },
-            title: Text(LocaleKeys.settings_general_labels_hideNavigationLabels.tr()),
+            title: Text(LocaleKeys.settings_general_label_hideNavigationLabels.tr()),
           ),
         ),
       ],

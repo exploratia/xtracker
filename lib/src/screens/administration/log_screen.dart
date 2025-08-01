@@ -35,6 +35,7 @@ class LogScreen extends StatelessWidget {
         title: Text("${navItem.titleBuilder()} ${logFileN.replaceAll('.txt', '')}"),
         actions: [
           IconButton(
+            tooltip: LocaleKeys.log_action_shareLog_tooltip.tr(),
             onPressed: () async {
               try {
                 final result = await SharePlus.instance.share(
@@ -42,22 +43,23 @@ class LogScreen extends StatelessWidget {
                 if (result.status == ShareResultStatus.success) {
                   SimpleLogging.i("Successfully shared log '$logFileName'.");
                   if (context.mounted) {
-                    Dialogs.showSnackBar(LocaleKeys.log_msg_shareSuccess.tr(), context);
+                    Dialogs.showSnackBar(LocaleKeys.log_snackbar_shareSuccess.tr(), context);
                   }
                 }
               } catch (err) {
                 SimpleLogging.w('Failed to share log.', error: err);
                 if (context.mounted) {
-                  Dialogs.simpleErrOkDialog('${LocaleKeys.commons_msg_error_failedToShareData.tr()}\n\n$err', context);
+                  Dialogs.simpleErrOkDialog('${LocaleKeys.commons_alert_failedToShareData.tr()}\n\n$err', context);
                 }
               }
             },
             icon: const Icon(Icons.share_outlined),
           ),
           IconButton(
+            tooltip: LocaleKeys.log_action_deleteLog_tooltip.tr(),
             onPressed: () async {
               bool? res = await Dialogs.simpleYesNoDialog(
-                LocaleKeys.log_dialog_msg_query_deleteLog.tr(),
+                LocaleKeys.log_query_deleteLog.tr(),
                 context,
                 title: LocaleKeys.commons_dialog_title_areYouSure.tr(),
               );
@@ -70,7 +72,7 @@ class LogScreen extends StatelessWidget {
                 } catch (err) {
                   SimpleLogging.w('Failed to delete log.', error: err);
                   if (context.mounted) {
-                    Dialogs.simpleErrOkDialog('${LocaleKeys.log_dialog_msg_error_deleteLogFailed.tr()}\n\n$err', context);
+                    Dialogs.simpleErrOkDialog('${LocaleKeys.log_alert_deleteLogFailed.tr()}\n\n$err', context);
                   }
                 }
                 final rebuildLogs = rebuildLogsView;

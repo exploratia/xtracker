@@ -77,7 +77,7 @@ class _DailyCheckInputState extends State<DailyCheckInput> {
 
   void _deleteHandler() async {
     bool? res = await Dialogs.simpleYesNoDialog(
-      LocaleKeys.series_data_input_dialog_msg_query_deleteValue.tr(),
+      LocaleKeys.seriesValue_query_deleteValue.tr(),
       context,
       title: LocaleKeys.commons_dialog_title_areYouSure.tr(),
     );
@@ -108,6 +108,7 @@ class _DailyCheckInputState extends State<DailyCheckInput> {
         const Divider(height: 1),
         const SizedBox(height: 3),
         IconButton(
+          tooltip: LocaleKeys.seriesValue_dailyCheck_btn_toggleCheck_tooltip.tr(),
           iconSize: 40,
           icon: Icon(_isValid ? Icons.check_box_outlined : Icons.check_box_outline_blank),
           onPressed: _toggleChecked,
@@ -127,7 +128,12 @@ class _DailyCheckInputState extends State<DailyCheckInput> {
             OverflowText(widget.seriesDef.name),
             // Text(SeriesType.displayNameOf(widget.seriesDef.seriesType)),
             if (widget.dailyCheckValue != null)
-              IconButton(onPressed: _deleteHandler, color: themeData.colorScheme.secondary, icon: const Icon(Icons.delete_outlined)),
+              IconButton(
+                tooltip: LocaleKeys.seriesValue_action_deleteValue_tooltip.tr(),
+                onPressed: _deleteHandler,
+                color: themeData.colorScheme.secondary,
+                icon: const Icon(Icons.delete_outlined),
+              ),
           ],
         ),
       ),

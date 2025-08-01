@@ -1,5 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../generated/locale_keys.g.dart';
 import '../../../model/navigation/navigation.dart';
 
 class AppNavigationRail extends StatefulWidget {
@@ -46,13 +48,15 @@ class _AppNavigationRailState extends State<AppNavigationRail> {
 
     // special expand item
     result.add(NavigationRailDestination(
-      icon: Icon(Navigation.navRailExpanded ? Icons.arrow_left : Icons.arrow_right),
+      icon: Tooltip(
+          message: Navigation.navRailExpanded ? LocaleKeys.commons_nav_hideMenu.tr() : LocaleKeys.commons_nav_openMenu.tr(),
+          child: Icon(Navigation.navRailExpanded ? Icons.arrow_left : Icons.arrow_right)),
       label: const SizedBox(width: 0, height: 0),
     ));
 
     for (var navItem in Navigation.mainNavigationItems) {
       result.add(NavigationRailDestination(
-        icon: navItem.icon,
+        icon: Tooltip(message: navItem.tooltipBuilder(), child: navItem.icon),
         label: Text(navItem.titleBuilder()),
       ));
     }

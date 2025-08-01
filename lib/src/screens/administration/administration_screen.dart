@@ -11,7 +11,8 @@ class AdministrationScreen extends StatelessWidget {
   static MainNavigationItem navItem = MainNavigationItem(
     icon: const Icon(Icons.more_horiz),
     routeName: '/administration_screen',
-    titleBuilder: () => LocaleKeys.administration_navTitle.tr(),
+    titleBuilder: () => LocaleKeys.administration_nav_title.tr(),
+    tooltipBuilder: () => LocaleKeys.administration_nav_tooltip.tr(),
   );
 
   const AdministrationScreen({super.key});

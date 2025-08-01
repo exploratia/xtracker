@@ -11,7 +11,7 @@ class LogSettingsScreen extends StatelessWidget {
   static NavigationItem navItem = NavigationItem(
     icon: const Icon(Icons.settings_outlined),
     routeName: '/log_settings_screen',
-    titleBuilder: () => LocaleKeys.log_settings_title.tr(),
+    titleBuilder: () => LocaleKeys.logSettings_title.tr(),
   );
 
   const LogSettingsScreen({super.key});
