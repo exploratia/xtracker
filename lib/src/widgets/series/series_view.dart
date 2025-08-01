@@ -49,7 +49,7 @@ class _SeriesList extends StatelessWidget {
     context.watch<SeriesCurrentValueProvider>();
     var series = context.watch<SeriesProvider>().series;
     if (series.isEmpty) {
-      return const AddFirstSeries();
+      return const FadeIn(child: AddFirstSeries());
     }
 
     List<Widget> children = [];

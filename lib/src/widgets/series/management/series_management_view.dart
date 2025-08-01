@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../../generated/locale_keys.g.dart';
 import '../../../providers/series_provider.dart';
 import '../../../util/series/series_import_export.dart';
+import '../../controls/animation/animate_in.dart';
 import '../../controls/animation/fade_in.dart';
 import '../../controls/layout/centered_message.dart';
 import '../../controls/responsive/device_dependent_constrained_box.dart';
@@ -56,7 +57,11 @@ class _SeriesList extends StatelessWidget {
     var series = context.watch<SeriesProvider>().series;
 
     if (series.isEmpty) {
-      return CenteredMessage(message: LocaleKeys.seriesManagement_label_noSeries.tr());
+      return AnimateIn(
+        fade: true,
+        slideOffset: const Offset(0, -0.2),
+        child: CenteredMessage(message: LocaleKeys.seriesManagement_label_noSeries.tr()),
+      );
     }
 
     List<Widget> children = [];
