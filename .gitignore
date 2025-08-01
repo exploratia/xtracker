@@ -63,3 +63,7 @@ untranslated.txt
 
 # own build bat
 build.bat
+
+# android release key
+*.jks
+key.properties
