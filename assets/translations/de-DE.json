@@ -1,41 +1,28 @@
 {
   "administration": {
-    "navTitle": "Mehr",
+    "nav": {
+      "title": "Mehr",
+      "tooltip": "Einstellungen, App-Info & rechtliches"
+    },
     "supportApp": {
       "title": "Unterstütze die App",
-      "labels": {
+      "label": {
         "buyMeACoffee": "Wartung und Weiterentwicklung kosten viel Freizeit. Über Unterstützung würde ich mich sehr freuen.",
         "reportABug": "Fehler gefunden? Erstelle einen Bug-Report auf GitHub:"
       }
     },
-    "app": {
+    "infoAndLegals": {
       "btn": {
         "version": "Version"
       }
     }
   },
   "appTitle": "xTracker",
-  "bloodPressure": {
-    "input": {
-      "labels": {
-        "diastolic": "▽ diastolisch [mmHg]",
-        "systolic": "△ systolisch [mmHg]",
-        "medication": "Medikament"
-      },
-      "validator": {
-        "msg": {
-          "invalidNumber": "Ungültige Zahl (gültig: 0 - 200)"
-        }
-      }
-    },
-    "seriesItem": {
-      "title": {
-        "diastolic": "Diastolisch",
-        "systolic": "Systolisch"
-      }
-    }
-  },
   "commons": {
+    "nav": {
+      "hideMenu": "Navigationsmenü schließen",
+      "openMenu": "Navigationsmenü öffnen"
+    },
     "date": {
       "shortWeekday": {
         "monday": "Mo",
@@ -65,148 +52,24 @@
         "yes": "JA"
       }
     },
-    "msg": {
-      "error": {
-        "failedToLoadData": "Fehler beim Laden der Daten...",
-        "failedToSaveData": "Fehler beim Speichern der Daten...",
-        "failedToShareData": "Teilen fehlgeschlagen..."
-      },
+    "alert": {
+      "failedToLoadData": "Laden der Daten fehlgeschlagen...",
+      "failedToSaveData": "Speichern fehlgeschlagen...",
+      "failedToShareData": "Teilen fehlgeschlagen..."
+    },
+    "snackbar": {
       "pressBackAgainToExit": "Zum Beenden nochmal drücken...",
       "saved": "Gespeichert..."
     },
     "validator": {
-      "msg": {
-        "emptyValue": "Ungültiger Wert"
-      }
+      "emptyValue": "Ungültiger Wert"
     }
   },
-  "home": {
-    "title": "Start"
-  },
-  "info": {
-    "title": "Info"
-  },
-  "log": {
-    "title": "Log",
-    "dialog": {
-      "msg": {
-        "error": {
-          "deleteLogFailed": "Fehler beim Löschen der Log-Datei!"
-        },
-        "query": {
-          "deleteLog": "Log-Datei wirklich löschen?"
-        }
-      }
-    },
-    "settings": {
-      "title": "Log Einstellungen",
-      "labels": {
-        "logFullStack": "Vollständigen Stack schreiben:",
-        "logLevel": "Log Level:",
-        "writeTestLogMessages": "Test Log-Einträge schreiben:"
-      }
-    },
-    "msg": {
-      "shareSuccess": "Log wurde erfolgreich geteilt."
-    }
-  },
-  "logs": {
-    "title": "Logs",
-    "dialog": {
-      "msg": {
-        "error": {
-          "deleteAllLogsFailed": "Fehler beim Löschen der Log-Dateien!",
-          "failedToZipLogs": "Fehler beim Zippen der Log-Dateien!"
-        },
-        "query": {
-          "deleteAllLogs": "Wirklich alle Log-Dateien löschen?"
-        }
-      }
-    },
-    "msg": {
-      "shareSuccess": "Logs wurden erfolgreich geteilt."
-    }
-  },
-  "series": {
-    "addFirstSeries": "Messreihe hinzufügen...",
-    "data": {
-      "title": "Messreihe",
-      "input": {
-        "dialog": {
-          "msg": {
-            "query": {
-              "deleteValue": "Diesen Messwert wirklich löschen?"
-            }
-          }
-        }
-      },
-      "noData": "Diese Messreihe enthält noch keine Daten...",
-      "dialog": {
-        "msg": {
-          "query": {
-            "deleteSeriesData": "Die Daten der Messreihe '{}' wirklich löschen?"
-          }
-        }
-      }
-    },
-    "dialog": {
-      "msg": {
-        "query": {
-          "deleteSeries": "Die Messreihe '{}' wirklich löschen?"
-        }
-      }
-    },
-    "edit": {
-      "title": "Messreihe",
-      "labels": {
-        "selectSeriesType": "Wähle den Messreihen-Typ",
-        "moreSeriesToCome": "Weitere in Arbeit ..."
-      },
-      "common": {
-        "labels": {
-          "seriesName": "Name",
-          "seriesIcon": "Symbol",
-          "seriesColor": "Farbe"
-        }
-      },
-      "bloodPressure": {
-        "labels": {
-          "hideMedicationInput": "Medikamenteneinnahme im Eingabedialog ausblenden:"
-        }
-      }
-    },
-    "mgmt": {
-      "title": "Messreihen verwalten",
-      "importExport": {
-        "dialog": {
-          "tile": "Messreihen importieren / exportieren",
-          "btn": {
-            "exportSeries": "Alle Messreihen exportieren",
-            "importSeries": "Messreihen importieren",
-            "shareSeries": "Alle Messreihen teilen"
-          },
-          "label": {
-            "exportSeries": "Alle Messreihen als eine JSON-Datei speichern.",
-            "exportSeriesTip": "Tipp: Um separate Messreihen zu speichern, verwende das Export-Icon der jeweiligen Messreihe.",
-            "importSeries": "JSON-Dateien mit Messreihen zum Import auswählen.\nVorhandene Serien (inkl. Daten) werden anhand ihrer ID überschrieben. Neue Messreihen werden automatisch erstellt.",
-            "importSeriesTip": "Tipp: Zuerst eine passende Messreihe erstellen und exportieren. Danach Daten in die Datei einfügen und erneut importieren – so passt das Format sicher.",
-            "shareSeries": "Alle Messreihen als eine JSON-Datei teilen."
-          },
-          "msg": {
-            "exportSuccessful": "Export erfolgreich...",
-            "importSuccessfulXofY": "{} Messreihen aus {} Dateien erfolgreich importiert.",
-            "error": {
-              "unexpectedDataStructure": "Unerwarteter Dateiinhalt (Datei: '{}').",
-              "unexpectedFile": "Nicht unterstütztes Dateiformat (Datei: '{}')."
-            }
-          }
-        }
-      }
-    },
+  "enum": {
     "seriesType": {
       "bloodPressure": {
         "title": "Blutdruck",
-        "info": "Blutdruck-Messung 3x am Tag (Morgens - Mittags - Abends)"
+        "info": "Blutdruck-Messung 3x am Tag (Morgens - Mittags - Abends)."
       },
       "dailyCheck": {
         "title": "Täglicher Check",
@@ -222,10 +85,273 @@
       }
     },
     "viewType": {
-      "seriesChart": "Diagramm",
-      "barChart": "Diagramm",
-      "dots": "Übersicht",
-      "table": "Tabelle"
+      "lineChart": {
+        "title": "Diagramm",
+        "tooltip": "Anzeige als Liniendiagramm"
+      },
+      "barChart": {
+        "title": "Diagramm",
+        "tooltip": "Anzeige als Balkendiagramm"
+      },
+      "dots": {
+        "title": "Übersicht",
+        "tooltip": "Anzeige als Punkt-Kalender-Übersicht"
+      },
+      "table": {
+        "title": "Tabelle",
+        "tooltip": "Anzeige als Tabelle"
+      }
+    },
+    "infoType": {
+      "legalNotice": {
+        "title": "Impressum / Legal Notice"
+      },
+      "privacyPolicy": {
+        "title": "Datenschutz / Privacy Policy"
+      },
+      "disclaimer": {
+        "title": "Haftungsausschluss / Disclaimer"
+      },
+      "eula": {
+        "title": "EULA"
+      }
+    }
+  },
+  "log": {
+    "title": "Log",
+    "action": {
+      "shareLog": {
+        "tooltip": "Log teilen"
+      },
+      "deleteLog": {
+        "tooltip": "Log löschen"
+      }
+    },
+    "alert": {
+      "deleteLogFailed": "Fehler beim Löschen der Log-Datei!"
+    },
+    "query": {
+      "deleteLog": "Log-Datei wirklich löschen?"
+    },
+    "snackbar": {
+      "shareSuccess": "Log wurde erfolgreich geteilt."
+    }
+  },
+  "logs": {
+    "title": "Logs",
+    "action": {
+      "logSettings": {
+        "tooltip": "Log Einstellungen"
+      },
+      "shareLogs": {
+        "tooltip": "Logs teilen"
+      },
+      "deleteLogs": {
+        "tooltip": "Logs löschen"
+      }
+    },
+    "alert": {
+      "deleteAllLogsFailed": "Fehler beim Löschen der Log-Dateien!",
+      "failedToZipLogs": "Fehler beim Zippen der Log-Dateien!"
+    },
+    "query": {
+      "deleteAllLogs": "Wirklich alle Log-Dateien löschen?"
+    },
+    "snackbar": {
+      "shareSuccess": "Logs wurden erfolgreich geteilt."
+    }
+  },
+  "logSettings": {
+    "title": "Log Einstellungen",
+    "label": {
+      "logFullStack": "Vollständigen Stack schreiben:",
+      "logLevel": "Log Level:",
+      "writeTestLogMessages": "Test Log-Einträge schreiben:"
+    },
+    "btn": {
+      "writeTestLogMessages": {
+        "tooltip": "Erzeuge Test Log-Einträge je Log Level."
+      }
+    }
+  },
+  "seriesDashboard": {
+    "nav": {
+      "title": "Home",
+      "tooltip": "Messreihen-Übersicht"
+    },
+    "action": {
+      "addSeries": {
+        "tooltip": "Messreihe hinzufügen..."
+      },
+      "manageSeries": {
+        "tooltip": "Messreihenverwaltung"
+      }
+    },
+    "btn": {
+      "addSeries": {
+        "label": "Messreihe hinzufügen...",
+        "tooltip": "Messreihe hinzufügen..."
+      }
+    }
+  },
+  "seriesData": {
+    "title": "Messreihe",
+    "action": {
+      "enableEditMode": {
+        "tooltip": "Bearbeitungsmodus"
+      },
+      "disableEditMode": {
+        "tooltip": "Ansichtsmodus"
+      },
+      "addValue": {
+        "tooltip": "Neuen Wert erfassen"
+      },
+      "viewTypeMenu": {
+        "tooltip": "Weitere verfügbare Anzeige-Modi"
+      },
+      "yearlyView": {
+        "tooltip": "Jahresanzeige"
+      },
+      "monthlyView": {
+        "tooltip": "Monatliche Anzeige"
+      }
+    }
+  },
+  "seriesDefRenderer": {
+    "action": {
+      "addValue": {
+        "tooltip": "Wert eintragen"
+      },
+      "showSeriesValues": {
+        "tooltip": "Messreihe anzeigen"
+      },
+      "editSeries": {
+        "tooltip": "Messreihe konfigurieren"
+      },
+      "saveSeries": {
+        "tooltip": "Konfiguration und Werte der Messreihe als JSON-Datei speichern"
+      },
+      "shareSeries": {
+        "tooltip": "Konfiguration und Werte der Messreihe als JSON-Datei teilen"
+      },
+      "deleteSeriesValues": {
+        "tooltip": "Werte der Messreihe löschen"
+      },
+      "deleteSeries": {
+        "tooltip": "Messreihe löschen"
+      },
+      "dragSeries": {
+        "tooltip": "Position der Messreihe anpassen"
+      }
+    },
+    "label": {
+      "noData": "Noch keine Daten vorhanden."
+    },
+    "query": {
+      "deleteSeriesData": "Die Daten der Messreihe '{}' wirklich löschen?",
+      "deleteSeries": "Die Messreihe '{}' wirklich löschen?"
+    }
+  },
+  "seriesEdit": {
+    "title": "Messreihe",
+    "action": {
+      "abort": {
+        "tooltip": "Abbrechen"
+      },
+      "save": {
+        "tooltip": "Speichern"
+      }
+    },
+    "label": {
+      "selectSeriesType": "Wähle den Messreihen-Typ",
+      "moreSeriesToCome": "Weitere folgen bald..."
+    },
+    "btn": {
+      "showSeriesTypeInfo": "Messreihen-Typ Info",
+      "backToSeriesTypeSelection": "Zurück zur Messreihen-Typ Auswahl"
+    },
+    "common": {
+      "label": {
+        "seriesName": "Name",
+        "seriesIcon": "Symbol",
+        "seriesColor": "Farbe"
+      }
+    },
+    "bloodPressure": {
+      "label": {
+        "hideMedicationInput": "Medikamenteneinnahme im Eingabedialog ausblenden:"
+      }
+    }
+  },
+  "seriesManagement": {
+    "title": "Messreihen verwalten",
+    "action": {
+      "importExport": {
+        "tooltip": "Messreihen importieren / exportieren"
+      },
+      "closeSeriesManagement": {
+        "tooltip": "Messreihenverwaltung schließen"
+      }
+    },
+    "label": {
+      "noSeries": "Noch keine Messreihen vorhanden."
+    },
+    "importExport": {
+      "title": "Messreihen importieren / exportieren",
+      "btn": {
+        "exportSeries": "Alle Messreihen exportieren",
+        "importSeries": "Messreihen importieren",
+        "shareSeries": "Alle Messreihen teilen"
+      },
+      "label": {
+        "exportSeries": "Alle Messreihen als eine JSON-Datei speichern.",
+        "exportSeriesTip": "Tipp: Einzelne Messreihen über das Export-Symbol speichern.",
+        "importSeries": "JSON-Dateien mit Messreihen zum Import auswählen.\nVorhandene Serien (inklusive Daten) werden anhand ihrer ID überschrieben. Neue Messreihen werden automatisch erstellt.",
+        "importSeriesTip": "Tipp: Zuerst eine passende Messreihe erstellen und exportieren. Danach Daten in die Datei einfügen und erneut importieren – so passt das Format sicher.",
+        "shareSeries": "Alle Messreihen als eine JSON-Datei teilen."
+      },
+      "snackbar": {
+        "exportSuccessful": "Export erfolgreich...",
+        "importSuccessfulXofY": "{} Messreihen aus {} Dateien erfolgreich importiert."
+      },
+      "alert": {
+        "unexpectedDataStructure": "Unerwarteter Dateiinhalt (Datei: '{}').",
+        "unexpectedFile": "Nicht unterstütztes Dateiformat (Datei: '{}')."
+      }
+    }
+  },
+  "seriesValue": {
+    "action": {
+      "deleteValue": {
+        "tooltip": "Wert löschen"
+      }
+    },
+    "query": {
+      "deleteValue": "Diesen Messwert wirklich löschen?"
+    },
+    "bloodPressure": {
+      "label": {
+        "diastolic": "▽ diastolisch [mmHg]",
+        "systolic": "△ systolisch [mmHg]"
+      },
+      "switch": {
+        "medication": {
+          "tooltip": "Medikament eingenommen",
+          "label": "Medikament"
+        }
+      },
+      "validation": {
+        "invalidNumber": "Ungültige Zahl (gültig: 0 - 999)",
+        "diastolicTooHigh": "Diastolischer Wert zu hoch.",
+        "systolicTooLow": "Systolischer Wert zu niedrig."
+      }
+    },
+    "dailyCheck": {
+      "btn": {
+        "toggleCheck": {
+          "tooltip": "Wert wechseln"
+        }
+      }
     }
   },
   "settings": {
@@ -235,16 +361,11 @@
       "btn": {
         "clearStorage": "Gespeicherte App-Daten löschen..."
       },
-      "dialog": {
-        "msg": {
-          "query": {
-            "removeAllData": "Wirklich alle App-Daten löschen?"
-          }
-        }
+      "query": {
+        "removeAllData": "Wirklich alle App-Daten löschen?"
       },
-      "noData": "Keine App-Daten gespeichert",
       "table": {
-        "columns": {
+        "column": {
           "key": "Schlüssel",
           "value": "Wert"
         }
@@ -252,17 +373,17 @@
     },
     "general": {
       "title": "Allgemeine Einstellungen",
-      "labels": {
+      "label": {
         "hideNavigationLabels": "Navigationslabels verstecken (Menü & Navigationsleiste):",
         "lang": "Sprache:",
         "theme": "Theme:"
       },
-      "languages": {
+      "language": {
         "system": "Systemeinstellung",
         "english": "English",
         "german": "Deutsch"
       },
-      "themes": {
+      "theme": {
         "system": "Systemeinstellung",
         "dark": "Dunkel",
         "light": "Hell"

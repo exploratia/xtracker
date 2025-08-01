@@ -26,7 +26,7 @@ class LogSettingsView extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Text(LocaleKeys.log_settings_labels_logLevel.tr()),
+                  Text(LocaleKeys.logSettings_label_logLevel.tr()),
                   const _LogLevelSelector(),
                 ],
               ),
@@ -45,13 +45,13 @@ class LogSettingsView extends StatelessWidget {
                 // ),
                 children: [
                   TableUtils.tableRow([
-                    Text(LocaleKeys.log_settings_labels_logFullStack.tr()),
+                    Text(LocaleKeys.logSettings_label_logFullStack.tr()),
                     const _FullStackSwitch(),
                   ]),
                   TableUtils.tableRow([
-                    Text(LocaleKeys.log_settings_labels_writeTestLogMessages.tr()),
-                    MaterialButton(
-                        height: 50,
+                    Text(LocaleKeys.logSettings_label_writeTestLogMessages.tr()),
+                    IconButton(
+                        tooltip: LocaleKeys.logSettings_btn_writeTestLogMessages_tooltip.tr(),
                         onPressed: () {
                           SimpleLogging.d('Debug Message');
                           SimpleLogging.i('Info Message');
@@ -59,8 +59,7 @@ class LogSettingsView extends StatelessWidget {
                           SimpleLogging.e('Error Message');
                           // logger.wtf('WTF Message');
                         },
-                        shape: const CircleBorder(),
-                        child: const Icon(
+                        icon: const Icon(
                           Icons.short_text_rounded,
                         )),
                   ]),

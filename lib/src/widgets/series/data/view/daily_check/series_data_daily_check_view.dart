@@ -29,7 +29,7 @@ class SeriesDataDailyCheckView extends StatelessWidget {
           child: Column(
             children: [
               Icon(seriesDef.iconData(), color: seriesDef.color, size: 40),
-              Text(LocaleKeys.series_data_noData.tr()),
+              Text(LocaleKeys.seriesDefRenderer_label_noData.tr()),
             ],
           ),
         ),

@@ -39,10 +39,11 @@ class AppDrawer extends StatelessWidget {
     int actIdx = -1;
     for (var navItem in Navigation.mainNavigationItems) {
       int itemIdx = ++actIdx;
+      var icon = Tooltip(message: navItem.tooltipBuilder(), child: navItem.icon);
       result.add(ListTile(
         selected: actIdx == currentIdx,
-        leading: navLabelsVisible ? navItem.icon : null,
-        title: navLabelsVisible ? Text(navItem.titleBuilder()) : navItem.icon,
+        leading: navLabelsVisible ? icon : null,
+        title: navLabelsVisible ? Text(navItem.titleBuilder()) : icon,
         onTap: () {
           NavigationUtils.closeDrawerIfOpen(context);
           Navigation.setCurrentMainNavigationRouteIdx(itemIdx, context);

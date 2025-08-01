@@ -29,6 +29,12 @@ Check the latest changelog entries.
 
 Adjust version in `changelog.md` and `pubspec.yaml`.
 
+Commit
+
+````
+update version and changelog
+````
+
 ## Merge
 
 Merge the release branch to main.

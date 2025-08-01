@@ -20,10 +20,10 @@ class ChartUtilsBloodPressure {
     List<FlSpot> lowValues = [];
     List<FlSpot> highValues = [];
 
-    int highMin = 200;
-    int highMax = 0;
-    int lowMin = 200;
-    int lowMax = 0;
+    int highMin = BloodPressureValue.maxValue;
+    int highMax = BloodPressureValue.minValue;
+    int lowMin = BloodPressureValue.maxValue;
+    int lowMax = BloodPressureValue.minValue;
 
     for (var item in seriesData.data) {
       var lowVal = item.low;

@@ -4,14 +4,15 @@ import 'package:flutter/material.dart';
 import '../../../generated/locale_keys.g.dart';
 import '../../model/navigation/main_navigation_item.dart';
 import '../../widgets/administration/administration_view.dart';
-import '../../widgets/controls/layout/gradient_app_bar.dart';
+import '../../widgets/controls/appbar/gradient_app_bar.dart';
 import '../../widgets/controls/responsive/screen_builder.dart';
 
 class AdministrationScreen extends StatelessWidget {
   static MainNavigationItem navItem = MainNavigationItem(
     icon: const Icon(Icons.more_horiz),
     routeName: '/administration_screen',
-    titleBuilder: () => LocaleKeys.administration_navTitle.tr(),
+    titleBuilder: () => LocaleKeys.administration_nav_title.tr(),
+    tooltipBuilder: () => LocaleKeys.administration_nav_tooltip.tr(),
   );
 
   const AdministrationScreen({super.key});

@@ -14,7 +14,7 @@ class GlowingBorderContainer extends StatelessWidget {
     // this.width = 200,
     // this.height = 100,
     this.glowColor = Colors.blue,
-    this.borderWidth = 1.0,
+    this.borderWidth = 2.0,
     this.blurRadius = 10.0,
   });
 
@@ -25,19 +25,23 @@ class GlowingBorderContainer extends StatelessWidget {
       // width: width,
       // height: height,
       margin: EdgeInsets.all(blurRadius),
-      decoration: BoxDecoration(
-        color: themeData.scaffoldBackgroundColor, // Inner background color
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: glowColor, width: borderWidth),
-        boxShadow: [
-          BoxShadow(
-            color: glowColor.withValues(alpha: 0.8), // Glow effect
-            blurRadius: blurRadius,
-            spreadRadius: borderWidth, // Intensity of the glow
-          ),
-        ],
-      ),
+      decoration: createGlowingBoxDecoration(glowColor, themeData.scaffoldBackgroundColor, borderWidth: borderWidth, blurRadius: blurRadius),
       child: Center(child: child),
+    );
+  }
+
+  static BoxDecoration createGlowingBoxDecoration(Color glowColor, Color backgroundColor, {double borderWidth = 2, double blurRadius = 10}) {
+    return BoxDecoration(
+      color: backgroundColor, // Inner background color
+      borderRadius: BorderRadius.circular(12),
+      border: Border.all(color: glowColor, width: borderWidth),
+      boxShadow: [
+        BoxShadow(
+          color: glowColor.withValues(alpha: 0.8), // Glow effect
+          blurRadius: blurRadius,
+          spreadRadius: borderWidth, // Intensity of the glow
+        ),
+      ],
     );
   }
 }

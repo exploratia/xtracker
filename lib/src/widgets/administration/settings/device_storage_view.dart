@@ -23,12 +23,12 @@ class DeviceStorageView extends StatelessWidget {
           errorBuilder: (error) => 'Failed to storage data!',
           widgetBuilder: (storageData, BuildContext ctx) {
             if (storageData == null) {
-              return Text(LocaleKeys.settings_deviceStorage_noData.tr());
+              return Container();
             }
             List<TableRow> rows = [
               TableUtils.tableHeadline([
-                LocaleKeys.settings_deviceStorage_table_columns_key.tr(),
-                LocaleKeys.settings_deviceStorage_table_columns_value.tr(),
+                LocaleKeys.settings_deviceStorage_table_column_key.tr(),
+                LocaleKeys.settings_deviceStorage_table_column_value.tr(),
               ])
             ];
 
@@ -76,7 +76,7 @@ class _ClearDeviceStorage extends StatelessWidget {
     return OutlinedButton.icon(
       onPressed: () async {
         bool? res = await Dialogs.simpleYesNoDialog(
-          LocaleKeys.settings_deviceStorage_dialog_msg_query_removeAllData.tr(),
+          LocaleKeys.settings_deviceStorage_query_removeAllData.tr(),
           context,
           title: LocaleKeys.commons_dialog_title_areYouSure.tr(),
         );

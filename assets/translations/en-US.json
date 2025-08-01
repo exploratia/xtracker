@@ -1,41 +1,28 @@
 {
   "administration": {
-    "navTitle": "More",
+    "nav": {
+      "title": "More",
+      "tooltip": "Settings, App info & legals"
+    },
     "supportApp": {
       "title": "Support the App",
-      "labels": {
+      "label": {
         "buyMeACoffee": "Maintaining and improving this app takes a lot of free time. Any support is greatly appreciated.",
         "reportABug": "Found a bug? Report it on GitHub:"
       }
     },
-    "app": {
+    "infoAndLegals": {
       "btn": {
         "version": "Version"
       }
     }
   },
   "appTitle": "xTracker",
-  "bloodPressure": {
-    "input": {
-      "labels": {
-        "diastolic": "▽ diastolic [mmHg]",
-        "systolic": "△ systolic [mmHg]",
-        "medication": "Medication"
-      },
-      "validator": {
-        "msg": {
-          "invalidNumber": "Invalid number (valid: 0 - 200)"
-        }
-      }
-    },
-    "seriesItem": {
-      "title": {
-        "diastolic": "Diastolic",
-        "systolic": "Systolic"
-      }
-    }
-  },
   "commons": {
+    "nav": {
+      "hideMenu": "Close navigation menu",
+      "openMenu": "Open navigation menu"
+    },
     "date": {
       "shortWeekday": {
         "monday": "Mon",
@@ -65,144 +52,20 @@
         "yes": "YES"
       }
     },
-    "msg": {
-      "error": {
-        "failedToLoadData": "Failed to load data...",
-        "failedToSaveData": "Failed to save data...",
-        "failedToShareData": "Failed to share..."
-      },
+    "alert": {
+      "failedToLoadData": "Failed to load data...",
+      "failedToSaveData": "Failed to save data...",
+      "failedToShareData": "Failed to share..."
+    },
+    "snackbar": {
       "pressBackAgainToExit": "Press BACK again to exit...",
       "saved": "Saved..."
     },
     "validator": {
-      "msg": {
-        "emptyValue": "Please enter a value"
-      }
+      "emptyValue": "Please enter a value"
     }
   },
-  "home": {
-    "title": "Home"
-  },
-  "info": {
-    "title": "Info"
-  },
-  "log": {
-    "title": "Log",
-    "dialog": {
-      "msg": {
-        "error": {
-          "deleteLogFailed": "Failed to delete log file!"
-        },
-        "query": {
-          "deleteLog": "Do you really want to delete the log file?"
-        }
-      }
-    },
-    "settings": {
-      "title": "Log Settings",
-      "labels": {
-        "logFullStack": "Log full stack:",
-        "logLevel": "Log level:",
-        "writeTestLogMessages": "Write some test log messages:"
-      }
-    },
-    "msg": {
-      "shareSuccess": "Log successfully shared."
-    }
-  },
-  "logs": {
-    "title": "Logs",
-    "dialog": {
-      "msg": {
-        "error": {
-          "deleteAllLogsFailed": "Failed to delete all log files!",
-          "failedToZipLogs": "Failed to zip logs!"
-        },
-        "query": {
-          "deleteAllLogs": "Do you really want to delete all log files?"
-        }
-      }
-    },
-    "msg": {
-      "shareSuccess": "Logs shared successfully."
-    }
-  },
-  "series": {
-    "addFirstSeries": "Add a series...",
-    "data": {
-      "title": "Series",
-      "input": {
-        "dialog": {
-          "msg": {
-            "query": {
-              "deleteValue": "Do you really want to delete this value?"
-            }
-          }
-        }
-      },
-      "noData": "This series contains no data yet...",
-      "dialog": {
-        "msg": {
-          "query": {
-            "deleteSeriesData": "Do you really want to delete the data of series '{}'?"
-          }
-        }
-      }
-    },
-    "dialog": {
-      "msg": {
-        "query": {
-          "deleteSeries": "Do you really want to delete the series '{}'?"
-        }
-      }
-    },
-    "edit": {
-      "title": "Series",
-      "labels": {
-        "selectSeriesType": "Select series type:",
-        "moreSeriesToCome": "More to come ..."
-      },
-      "common": {
-        "labels": {
-          "seriesName": "Name",
-          "seriesIcon": "Icon",
-          "seriesColor": "Color"
-        }
-      },
-      "bloodPressure": {
-        "labels": {
-          "hideMedicationInput": "Hide medication input in dialog:"
-        }
-      }
-    },
-    "mgmt": {
-      "title": "Series Management",
-      "importExport": {
-        "dialog": {
-          "tile": "Import / Export series data",
-          "btn": {
-            "exportSeries": "Export all series",
-            "importSeries": "Import series",
-            "shareSeries": "Share all series"
-          },
-          "label": {
-            "exportSeries": "Export all series in one json file.",
-            "exportSeriesTip": "Tip: To save separate measurement series, use the export icon of the respective series.",
-            "importSeries": "Select series JSON files to import.\nExisting series (and their data) will be overwritten (identified by their unique id). New series will be created if they don't already exist.",
-            "importSeriesTip": "Tip: Create and export a matching series first. Then insert your data into the exported file and re-import it. That way the format will be correct.",
-            "shareSeries": "Share all series in one json file."
-          },
-          "msg": {
-            "exportSuccessful": "Export successful...",
-            "importSuccessfulXofY": "Imported {} series from {} files successfully.",
-            "error": {
-              "unexpectedDataStructure": "Unexpected file content (file: '{}').",
-              "unexpectedFile": "Unsupported file format (file: '{}')."
-            }
-          }
-        }
-      }
-    },
+  "enum": {
     "seriesType": {
       "bloodPressure": {
         "title": "Blood pressure",
@@ -210,7 +73,7 @@
       },
       "dailyCheck": {
         "title": "Daily check",
-        "info": "Check something daily - e.g. sports or a pause or stand up instead of sitting."
+        "info": "Track daily habits – e.g. exercise, taking breaks, or standing up."
       },
       "free": {
         "title": "Free",
@@ -222,10 +85,272 @@
       }
     },
     "viewType": {
-      "seriesChart": "Chart",
-      "barChart": "Chart",
-      "dots": "Overview",
-      "table": "Table"
+      "lineChart": {
+        "title": "Chart",
+        "tooltip": "View as line chart"
+      },
+      "barChart": {
+        "title": "Chart",
+        "tooltip": "View as bar chart"
+      },
+      "dots": {
+        "title": "Overview",
+        "tooltip": "View as daily dots overview"
+      },
+      "table": {
+        "title": "Table",
+        "tooltip": "View as table"
+      }
+    },
+    "infoType": {
+      "legalNotice": {
+        "title": "Legal Notice"
+      },
+      "privacyPolicy": {
+        "title": "Privacy Policy"
+      },
+      "disclaimer": {
+        "title": "Disclaimer"
+      },
+      "eula": {
+        "title": "EULA"
+      }
+    }
+  },
+  "log": {
+    "title": "Log",
+    "action": {
+      "shareLog": {
+        "tooltip": "Share log"
+      },
+      "deleteLog": {
+        "tooltip": "Delete log"
+      }
+    },
+    "alert": {
+      "deleteLogFailed": "Failed to delete log file!"
+    },
+    "query": {
+      "deleteLog": "Do you really want to delete the log file?"
+    },
+    "snackbar": {
+      "shareSuccess": "Log successfully shared."
+    }
+  },
+  "logs": {
+    "title": "Logs",
+    "action": {
+      "logSettings": {
+        "tooltip": "Log settings"
+      },
+      "shareLogs": {
+        "tooltip": "Share logs"
+      },
+      "deleteLogs": {
+        "tooltip": "Delete logs"
+      }
+    },
+    "alert": {
+      "deleteAllLogsFailed": "Failed to delete all log files!",
+      "failedToZipLogs": "Failed to zip logs!"
+    },
+    "query": {
+      "deleteAllLogs": "Do you really want to delete all log files?"
+    },
+    "snackbar": {
+      "shareSuccess": "Logs shared successfully."
+    }
+  },
+  "logSettings": {
+    "title": "Log Settings",
+    "label": {
+      "logFullStack": "Log full stack:",
+      "logLevel": "Log level:",
+      "writeTestLogMessages": "Write some test log messages:"
+    },
+    "btn": {
+      "writeTestLogMessages": {
+        "tooltip": "Write some test log messages"
+      }
+    }
+  },
+  "seriesDashboard": {
+    "nav": {
+      "title": "Home",
+      "tooltip": "Home / series overview"
+    },
+    "action": {
+      "addSeries": {
+        "tooltip": "Add a new series"
+      },
+      "manageSeries": {
+        "tooltip": "Manage series"
+      }
+    },
+    "btn": {
+      "addSeries": {
+        "label": "Add series...",
+        "tooltip": "Add a new series"
+      }
+    }
+  },
+  "seriesData": {
+    "title": "Series",
+    "action": {
+      "enableEditMode": {
+        "tooltip": "Edit mode"
+      },
+      "disableEditMode": {
+        "tooltip": "View mode"
+      },
+      "addValue": {
+        "tooltip": "Add new value"
+      },
+      "viewTypeMenu": {
+        "tooltip": "Available view types"
+      },
+      "yearlyView": {
+        "tooltip": "Yearly view"
+      },
+      "monthlyView": {
+        "tooltip": "Monthly view"
+      }
+    }
+  },
+  "seriesDefRenderer": {
+    "action": {
+      "addValue": {
+        "tooltip": "Add value"
+      },
+      "showSeriesValues": {
+        "tooltip": "Show series values"
+      },
+      "editSeries": {
+        "tooltip": "Edit series"
+      },
+      "saveSeries": {
+        "tooltip": "Save series definition and values as json file"
+      },
+      "shareSeries": {
+        "tooltip": "Share series definition and values as json file"
+      },
+      "deleteSeriesValues": {
+        "tooltip": "Delete series values"
+      },
+      "deleteSeries": {
+        "tooltip": "Delete series"
+      },
+      "dragSeries": {
+        "tooltip": "Reorder series position"
+      }
+    },
+    "label": {
+      "noData": "This series contains no data yet..."
+    },  "query": {
+      "deleteSeriesData": "Do you really want to delete the data of series '{}'?",
+      "deleteSeries": "Do you really want to delete the series '{}'?"
+    }
+  },
+  "seriesEdit": {
+    "title": "Series",
+    "action": {
+      "abort": {
+        "tooltip": "Abort"
+      },
+      "save": {
+        "tooltip": "Save"
+      }
+    },
+    "label": {
+      "selectSeriesType": "Select series type:",
+      "moreSeriesToCome": "More to come ..."
+    },
+    "btn": {
+      "showSeriesTypeInfo": "Show series type info",
+      "backToSeriesTypeSelection": "Back to select series type"
+    },
+    "common": {
+      "label": {
+        "seriesName": "Name",
+        "seriesIcon": "Icon",
+        "seriesColor": "Color"
+      }
+    },
+    "bloodPressure": {
+      "label": {
+        "hideMedicationInput": "Hide medication input in dialog:"
+      }
+    }
+  },
+  "seriesManagement": {
+    "title": "Series Management",
+    "action": {
+      "importExport": {
+        "tooltip": "Import / export series"
+      },
+      "closeSeriesManagement": {
+        "tooltip": "Close series management"
+      }
+    },
+    "label": {
+      "noSeries": "No series created yet..."
+    },
+    "importExport": {
+      "title": "Import / Export series data",
+      "btn": {
+        "exportSeries": "Export all series",
+        "importSeries": "Import series",
+        "shareSeries": "Share all series"
+      },
+      "label": {
+        "exportSeries": "Export all series as one JSON file.",
+        "exportSeriesTip": "Tip: To save separate measurement series, use the export icon of the respective series.",
+        "importSeries": "Select series JSON files to import.\nExisting series (and their data) will be overwritten (identified by their unique id). New series will be created if they don't already exist.",
+        "importSeriesTip": "Tip: Create and export a matching series first. Then insert your data into the exported file and re-import it. That way the format will be correct.",
+        "shareSeries": "Share all series as one JSON file."
+      },
+      "snackbar": {
+        "exportSuccessful": "Export successful...",
+        "importSuccessfulXofY": "Imported {} series from {} files successfully."
+      },
+      "alert": {
+        "unexpectedDataStructure": "Unexpected file content (file: '{}').",
+        "unexpectedFile": "Unsupported file format (file: '{}')."
+      }
+    }
+  },
+  "seriesValue": {
+    "action": {
+      "deleteValue": {
+        "tooltip": "Delete value"
+      }
+    },
+    "query": {
+      "deleteValue": "Do you really want to delete this value?"
+    },
+    "bloodPressure": {
+      "label": {
+        "diastolic": "▽ diastolic [mmHg]",
+        "systolic": "△ systolic [mmHg]"
+      },
+      "switch": {
+        "medication": {
+          "tooltip": "Took medication",
+          "label": "Medication"
+        }
+      },
+      "validation": {
+        "invalidNumber": "Invalid number (valid: 0 - 999)",
+        "diastolicTooHigh": "Systolic value too high.",
+        "systolicTooLow": "Diastolic value too low."
+      }
+    },
+    "dailyCheck": {
+      "btn": {
+        "toggleCheck": {
+          "tooltip": "Toggle value"
+        }
+      }
     }
   },
   "settings": {
@@ -235,16 +360,11 @@
       "btn": {
         "clearStorage": "Clear device storage..."
       },
-      "dialog": {
-        "msg": {
-          "query": {
-            "removeAllData": "Do you really want to remove all app data from your device?"
-          }
-        }
+      "query": {
+        "removeAllData": "Do you really want to remove all app data from your device?"
       },
-      "noData": "No data stored",
       "table": {
-        "columns": {
+        "column": {
           "key": "Key",
           "value": "Value"
         }
@@ -252,17 +372,17 @@
     },
     "general": {
       "title": "General settings",
-      "labels": {
+      "label": {
         "hideNavigationLabels": "Hide navigation labels (menu & bottom navigation):",
         "lang": "Language:",
         "theme": "Theme:"
       },
-      "languages": {
+      "language": {
         "system": "System",
         "english": "English",
         "german": "Deutsch"
       },
-      "themes": {
+      "theme": {
         "system": "System",
         "dark": "Dark",
         "light": "Light"

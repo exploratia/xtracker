@@ -49,7 +49,7 @@ class _DeleteSeriesBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     deleteHandler() async {
       bool? res = await Dialogs.simpleYesNoDialog(
-        LocaleKeys.series_dialog_msg_query_deleteSeries.tr(args: [seriesDef.name]),
+        LocaleKeys.seriesDefRenderer_query_deleteSeries.tr(args: [seriesDef.name]),
         context,
         title: LocaleKeys.commons_dialog_title_areYouSure.tr(),
       );
@@ -67,7 +67,11 @@ class _DeleteSeriesBtn extends StatelessWidget {
       }
     }
 
-    return IconButton(onPressed: deleteHandler, icon: const Icon(Icons.close_outlined));
+    return IconButton(
+      tooltip: LocaleKeys.seriesDefRenderer_action_deleteSeries_tooltip.tr(),
+      onPressed: deleteHandler,
+      icon: const Icon(Icons.close_outlined),
+    );
   }
 }
 
@@ -85,7 +89,11 @@ class _EditSeriesBtn extends StatelessWidget {
       await SeriesDef.editSeries(seriesDef, context);
     }
 
-    return IconButton(onPressed: editHandler, icon: const Icon(Icons.edit_outlined));
+    return IconButton(
+      tooltip: LocaleKeys.seriesDefRenderer_action_editSeries_tooltip.tr(),
+      onPressed: editHandler,
+      icon: const Icon(Icons.edit_outlined),
+    );
   }
 }
 
@@ -100,7 +108,7 @@ class _ClearSeriesDataBtn extends StatelessWidget {
   Widget build(BuildContext context) {
     handler() async {
       var result = await Dialogs.simpleYesNoDialog(
-        LocaleKeys.series_data_dialog_msg_query_deleteSeriesData.tr(args: [seriesDef.name]),
+        LocaleKeys.seriesDefRenderer_query_deleteSeriesData.tr(args: [seriesDef.name]),
         context,
         title: LocaleKeys.commons_dialog_title_areYouSure.tr(),
       );
@@ -109,7 +117,11 @@ class _ClearSeriesDataBtn extends StatelessWidget {
       }
     }
 
-    return IconButton(onPressed: handler, icon: const Icon(Icons.highlight_remove_outlined));
+    return IconButton(
+      tooltip: LocaleKeys.seriesDefRenderer_action_deleteSeriesValues_tooltip.tr(),
+      onPressed: handler,
+      icon: const Icon(Icons.highlight_remove_outlined),
+    );
   }
 }
 
@@ -131,7 +143,11 @@ class _ExportSeriesDataBtn extends StatelessWidget {
       }
     }
 
-    return IconButton(onPressed: handler, icon: const Icon(Icons.download_outlined));
+    return IconButton(
+      tooltip: LocaleKeys.seriesDefRenderer_action_saveSeries_tooltip.tr(),
+      onPressed: handler,
+      icon: const Icon(Icons.download_outlined),
+    );
   }
 }
 
@@ -153,6 +169,10 @@ class _ShareSeriesDataBtn extends StatelessWidget {
       }
     }
 
-    return IconButton(onPressed: handler, icon: const Icon(Icons.share_outlined));
+    return IconButton(
+      tooltip: LocaleKeys.seriesDefRenderer_action_shareSeries_tooltip.tr(),
+      onPressed: handler,
+      icon: const Icon(Icons.share_outlined),
+    );
   }
 }

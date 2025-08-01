@@ -18,7 +18,7 @@ class BloodPressureSeriesEdit extends StatelessWidget {
         const Divider(height: 24),
         SwitchListTile(
           title: Text(
-            LocaleKeys.series_edit_bloodPressure_labels_hideMedicationInput.tr(),
+            LocaleKeys.seriesEdit_bloodPressure_label_hideMedicationInput.tr(),
           ),
           value: settings.hideTabletInput,
           onChanged: (value) => settings.hideTabletInput = value,

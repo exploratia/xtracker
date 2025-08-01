@@ -52,8 +52,12 @@ class _SeriesEditState extends State<SeriesEdit> {
       return Scaffold(
         appBar: AppBar(
           backgroundColor: themeData.colorScheme.secondary,
-          title: Text(LocaleKeys.series_edit_title.tr()),
-          leading: IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.close_outlined)),
+          title: Text(LocaleKeys.seriesEdit_title.tr()),
+          leading: IconButton(
+            tooltip: LocaleKeys.seriesEdit_action_abort_tooltip.tr(),
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(Icons.close_outlined),
+          ),
         ),
         body: _SeriesTypeSelector(createSeriesDef: _createSeriesDef),
       );
@@ -77,7 +81,7 @@ class _SeriesTypeSelector extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(LocaleKeys.series_edit_labels_selectSeriesType.tr()),
+          Text(LocaleKeys.seriesEdit_label_selectSeriesType.tr()),
           const Divider(),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,7 +97,7 @@ class _SeriesTypeSelector extends StatelessWidget {
             ],
           ),
           const SizedBox(height: 20),
-          Text(LocaleKeys.series_edit_labels_moreSeriesToCome.tr()),
+          Text(LocaleKeys.seriesEdit_label_moreSeriesToCome.tr()),
         ],
       ),
     );
@@ -108,6 +112,7 @@ class _SeriesTypeInfoBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
+        tooltip: LocaleKeys.seriesEdit_btn_showSeriesTypeInfo.tr(),
         onPressed: () => Dialogs.simpleOkDialog(
               SeriesType.infoOf(st),
               context,

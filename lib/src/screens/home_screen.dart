@@ -5,7 +5,7 @@ import '../../generated/assets.gen.dart';
 import '../../generated/locale_keys.g.dart';
 import '../model/navigation/main_navigation_item.dart';
 import '../model/series/series_def.dart';
-import '../widgets/controls/layout/gradient_app_bar.dart';
+import '../widgets/controls/appbar/gradient_app_bar.dart';
 import '../widgets/controls/navigation/hide_bottom_navigation_bar.dart';
 import '../widgets/controls/responsive/screen_builder.dart';
 import '../widgets/series/management/series_management_view.dart';
@@ -15,7 +15,8 @@ class HomeScreen extends StatelessWidget {
   static MainNavigationItem navItem = MainNavigationItem(
     icon: const Icon(Icons.home_outlined),
     routeName: '/',
-    titleBuilder: () => LocaleKeys.home_title.tr(),
+    titleBuilder: () => LocaleKeys.seriesDashboard_nav_title.tr(),
+    tooltipBuilder: () => LocaleKeys.seriesDashboard_nav_tooltip.tr(),
   );
 
   const HomeScreen({super.key});
@@ -48,11 +49,16 @@ class HomeScreen extends StatelessWidget {
             ),
             actions: [
               IconButton(
+                  tooltip: LocaleKeys.seriesDashboard_action_addSeries_tooltip.tr(),
                   onPressed: () async {
                     /*SeriesDef? s=*/ await SeriesDef.addNewSeries(context);
                   },
                   icon: const Icon(Icons.add_chart_outlined)),
-              IconButton(onPressed: () => _showSeriesManagement(context), icon: const Icon(Icons.edit_outlined)),
+              IconButton(
+                tooltip: LocaleKeys.seriesDashboard_action_manageSeries_tooltip.tr(),
+                onPressed: () => _showSeriesManagement(context),
+                icon: const Icon(Icons.edit_outlined),
+              ),
             ]);
       },
       bodyBuilder: (context) => const SeriesView(),

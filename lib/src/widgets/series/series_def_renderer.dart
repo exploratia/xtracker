@@ -86,7 +86,6 @@ class SeriesDefRenderer extends StatelessWidget {
     }
 
     return GlowingBorderContainer(
-      borderWidth: 2,
       glowColor: seriesDef.color,
       child: content,
     );

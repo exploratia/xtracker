@@ -13,20 +13,20 @@ import '../../model/series/series_view_meta_data.dart';
 import '../../model/series/view_type.dart';
 import '../../providers/series_provider.dart';
 import '../../util/globals.dart';
-import '../../widgets/controls/layout/app_bar_actions_divider.dart';
+import '../../widgets/controls/appbar/app_bar_actions_divider.dart';
+import '../../widgets/controls/appbar/gradient_app_bar.dart';
 import '../../widgets/controls/layout/centered_message.dart';
-import '../../widgets/controls/layout/gradient_app_bar.dart';
 import '../../widgets/controls/popupmenu/icon_popup_menu.dart';
 import '../../widgets/controls/provider/data_provider_loader.dart';
 import '../../widgets/controls/responsive/screen_builder.dart';
-import '../../widgets/series/data/view/series_data_view.dart';
 import '../../widgets/controls/text/overflow_text.dart';
+import '../../widgets/series/data/view/series_data_view.dart';
 
 class SeriesDataScreen extends StatelessWidget {
   static NavigationItem navItem = NavigationItem(
     icon: const Icon(Icons.settings_outlined),
     routeName: '/series_data',
-    titleBuilder: () => LocaleKeys.series_data_title.tr(),
+    titleBuilder: () => LocaleKeys.seriesData_title.tr(),
   );
 
   /// args(series) = seriesDef | seriesDefUuid
@@ -163,29 +163,53 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
 
       List<Widget> dataActions = [
         // add value btn
-        IconButton(onPressed: () => _addSeriesValueHandler(context), icon: const Icon(Icons.add)),
+        IconButton(
+          tooltip: LocaleKeys.seriesData_action_addValue_tooltip.tr(),
+          onPressed: () => _addSeriesValueHandler(context),
+          icon: const Icon(Icons.add),
+        ),
       ];
 
       List<Widget> viewActions = [
         Padding(
           padding: const EdgeInsets.only(right: 8),
-          child: IconPopupMenu(
-            icon: const Icon(Icons.remove_red_eye_outlined),
-            menuEntries: [...seriesType.viewTypes.where((vt) => vt != _viewType).map((vt) => IconPopupMenuEntry(Icon(vt.iconData), () => _setViewType(vt)))],
+          child: Tooltip(
+            message: LocaleKeys.seriesData_action_viewTypeMenu_tooltip.tr(),
+            child: IconPopupMenu(
+              icon: const Icon(Icons.remove_red_eye_outlined),
+              menuEntries: [
+                ...seriesType.viewTypes.where((vt) => vt != _viewType).map(
+                      (vt) => IconPopupMenuEntry(Icon(vt.iconData), () => _setViewType(vt), vt.displayName()),
+                    ),
+              ],
+            ),
           ),
         ),
       ];
 
       // in table add edit-mode
       if (_viewType == ViewType.table) {
-        dataActions.insert(0, IconButton(onPressed: () => _toggleEditMode(), icon: Icon(_editMode ? Icons.edit_off_outlined : Icons.edit_outlined)));
+        dataActions.insert(
+          0,
+          IconButton(
+            tooltip: _editMode ? LocaleKeys.seriesData_action_disableEditMode_tooltip.tr() : LocaleKeys.seriesData_action_enableEditMode_tooltip.tr(),
+            onPressed: () => _toggleEditMode(),
+            icon: Icon(_editMode ? Icons.edit_off_outlined : Icons.edit_outlined),
+          ),
+        );
       }
 
       // in charts add depending on series type switch interval (month/year) btn
       if (_viewType == ViewType.lineChart || _viewType == ViewType.barChart) {
         if (/*seriesType == SeriesType.monthly ||*/ seriesType == SeriesType.dailyCheck) {
-          viewActions.insert(0,
-              IconButton(onPressed: () => _toggleMonthlyYearlyMode(), icon: Icon(_showYearly ? Icons.calendar_month_outlined : Icons.calendar_today_outlined)));
+          viewActions.insert(
+            0,
+            IconButton(
+              tooltip: _showYearly ? LocaleKeys.seriesData_action_monthlyView_tooltip.tr() : LocaleKeys.seriesData_action_yearlyView_tooltip.tr(),
+              onPressed: () => _toggleMonthlyYearlyMode(),
+              icon: Icon(_showYearly ? Icons.calendar_month_outlined : Icons.calendar_today_outlined),
+            ),
+          );
         }
       }
 

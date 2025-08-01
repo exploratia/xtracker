@@ -5,7 +5,9 @@ import 'package:provider/provider.dart';
 import '../../../../generated/locale_keys.g.dart';
 import '../../../providers/series_provider.dart';
 import '../../../util/series/series_import_export.dart';
+import '../../controls/animation/animate_in.dart';
 import '../../controls/animation/fade_in.dart';
+import '../../controls/layout/centered_message.dart';
 import '../../controls/responsive/device_dependent_constrained_box.dart';
 import '../series_def_renderer.dart';
 
@@ -19,10 +21,18 @@ class SeriesManagementView extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: themeData.colorScheme.secondary,
-        title: Text(LocaleKeys.series_mgmt_title.tr()),
+        title: Text(LocaleKeys.seriesManagement_title.tr()),
         actions: [
-          IconButton(onPressed: () async => SeriesImportExport.showImportExportDlg(context), icon: const Icon(Icons.import_export_outlined)),
-          IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.edit_off_outlined)),
+          IconButton(
+            tooltip: LocaleKeys.seriesManagement_action_importExport_tooltip.tr(),
+            onPressed: () async => SeriesImportExport.showImportExportDlg(context),
+            icon: const Icon(Icons.import_export_outlined),
+          ),
+          IconButton(
+            tooltip: LocaleKeys.seriesManagement_action_closeSeriesManagement_tooltip.tr(),
+            onPressed: () => Navigator.pop(context),
+            icon: const Icon(Icons.edit_off_outlined),
+          ),
         ],
       ),
       // appBar: GradientAppBar.build(
@@ -45,6 +55,14 @@ class _SeriesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var series = context.watch<SeriesProvider>().series;
+
+    if (series.isEmpty) {
+      return AnimateIn(
+        fade: true,
+        slideOffset: const Offset(0, -0.2),
+        child: CenteredMessage(message: LocaleKeys.seriesManagement_label_noSeries.tr()),
+      );
+    }
 
     List<Widget> children = [];
     var idx = 0;

@@ -130,7 +130,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
 
   void _deleteHandler() async {
     bool? res = await Dialogs.simpleYesNoDialog(
-      LocaleKeys.series_data_input_dialog_msg_query_deleteValue.tr(),
+      LocaleKeys.seriesValue_query_deleteValue.tr(),
       context,
       title: LocaleKeys.commons_dialog_title_areYouSure.tr(),
     );
@@ -173,7 +173,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
                       autofocus: true,
                       controller: _highController,
                       decoration: InputDecoration(
-                        labelText: LocaleKeys.bloodPressure_input_labels_systolic.tr(),
+                        labelText: LocaleKeys.seriesValue_bloodPressure_label_systolic.tr(),
                         // hintText: "hint text",
                       ),
                       // Only numbers can be entered:
@@ -183,11 +183,14 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
                       // unicode is possible - e.g. from https://www.compart.com/de/unicode/block/U+1F600
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return LocaleKeys.commons_validator_msg_emptyValue.tr();
+                          return LocaleKeys.commons_validator_emptyValue.tr();
                         }
                         var val = int.tryParse(value);
-                        if (val == null || val < 0 || val > 200) {
-                          return LocaleKeys.bloodPressure_input_validator_msg_invalidNumber.tr();
+                        if (val == null || val < BloodPressureValue.minValue || val > BloodPressureValue.maxValue) {
+                          return LocaleKeys.seriesValue_bloodPressure_validation_invalidNumber.tr();
+                        }
+                        if (val < _low) {
+                          return LocaleKeys.seriesValue_bloodPressure_validation_systolicTooLow.tr();
                         }
                         return null;
                       },
@@ -197,7 +200,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
                     TextFormField(
                       controller: _lowController,
                       decoration: InputDecoration(
-                        labelText: LocaleKeys.bloodPressure_input_labels_diastolic.tr(),
+                        labelText: LocaleKeys.seriesValue_bloodPressure_label_diastolic.tr(),
                         // hintText: "hint text",
                       ),
                       // Only numbers can be entered:
@@ -207,11 +210,14 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
                       // unicode is possible - e.g. from https://www.compart.com/de/unicode/block/U+1F600
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return LocaleKeys.commons_validator_msg_emptyValue.tr();
+                          return LocaleKeys.commons_validator_emptyValue.tr();
                         }
                         var val = int.tryParse(value);
-                        if (val == null || val < 0 || val > 200) {
-                          return LocaleKeys.bloodPressure_input_validator_msg_invalidNumber.tr();
+                        if (val == null || val < BloodPressureValue.minValue || val > BloodPressureValue.maxValue) {
+                          return LocaleKeys.seriesValue_bloodPressure_validation_invalidNumber.tr();
+                        }
+                        if (val > _high) {
+                          return LocaleKeys.seriesValue_bloodPressure_validation_diastolicTooHigh.tr();
                         }
                         return null;
                       },
@@ -239,14 +245,17 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
           ),
           SwitchListTile(
             contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 4),
-            title: Row(
-              spacing: 4,
-              children: [
-                const Icon(Icons.medication_outlined),
-                OverflowText(
-                  LocaleKeys.bloodPressure_input_labels_medication.tr(),
-                ),
-              ],
+            title: Tooltip(
+              message: LocaleKeys.seriesValue_bloodPressure_switch_medication_tooltip.tr(),
+              child: Row(
+                spacing: 4,
+                children: [
+                  const Icon(Icons.medication_outlined),
+                  OverflowText(
+                    LocaleKeys.seriesValue_bloodPressure_switch_medication_label.tr(),
+                  ),
+                ],
+              ),
             ),
             value: _tablet,
             onChanged: _setTablet,
@@ -269,7 +278,12 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
             // Text(SeriesType.displayNameOf(widget.seriesDef.seriesType)),
             // Flexible(child: Container()),
             if (widget.bloodPressureValue != null)
-              IconButton(onPressed: _deleteHandler, color: themeData.colorScheme.secondary, icon: const Icon(Icons.delete_outlined)),
+              IconButton(
+                tooltip: LocaleKeys.seriesValue_action_deleteValue_tooltip.tr(),
+                onPressed: _deleteHandler,
+                color: themeData.colorScheme.secondary,
+                icon: const Icon(Icons.delete_outlined),
+              ),
           ],
         ),
       ),

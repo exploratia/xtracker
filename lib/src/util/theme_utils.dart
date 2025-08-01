@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../widgets/controls/card/glowing_border_container.dart';
 import 'color_utils.dart';
 import 'navigation/fade_transition_builder.dart';
 
@@ -52,6 +53,18 @@ class ThemeUtils {
           // titleMedium: TextStyle(fontWeight: FontWeight.bold),
           // titleSmall: TextStyle(color: dynamicThemeData.getPrimaryColor(dark)),
           ),
+      tooltipTheme: TooltipThemeData(
+        padding: const EdgeInsets.all(8),
+        textStyle: TextStyle(inherit: true, color: dark ? Colors.white : Colors.black),
+        // decoration: GlowingBorderContainer.createGlowingBoxDecoration(secondary, secondary),
+        decoration: GlowingBorderContainer.createGlowingBoxDecoration(secondary, backgroundColor),
+        waitDuration: const Duration(milliseconds: 500),
+        // showDuration: Duration(seconds: 2),
+        preferBelow: false,
+        constraints: const BoxConstraints(
+          maxWidth: 300,
+        ),
+      ),
       appBarTheme: AppBarTheme(
         elevation: 8,
         backgroundColor: secondary,

@@ -21,8 +21,8 @@ class I18N {
   static String? compose(String? msgId) {
     return switch (msgId) {
       // blood pressure
-      bloodPressureSeriesItemTitleDiastolic => LocaleKeys.bloodPressure_seriesItem_title_diastolic.tr(),
-      bloodPressureSeriesItemTitleSystolic => LocaleKeys.bloodPressure_seriesItem_title_systolic.tr(),
+      bloodPressureSeriesItemTitleDiastolic => LocaleKeys.seriesValue_bloodPressure_label_diastolic.tr(),
+      bloodPressureSeriesItemTitleSystolic => LocaleKeys.seriesValue_bloodPressure_label_systolic.tr(),
       // date
       commonsDateDate => LocaleKeys.commons_date_date.tr(),
       commonsDateMorning => LocaleKeys.commons_date_morning.tr(),

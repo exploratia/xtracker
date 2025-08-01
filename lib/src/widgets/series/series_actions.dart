@@ -1,7 +1,9 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../generated/locale_keys.g.dart';
 import '../../model/series/data/daily_check/daily_check_value.dart';
 import '../../model/series/data/series_data.dart';
 import '../../model/series/series_def.dart';
@@ -43,7 +45,11 @@ class _ShowSeriesDataBtn extends StatelessWidget {
       await Navigator.pushNamed(context, SeriesDataScreen.navItem.routeName, arguments: {'series': seriesDef});
     }
 
-    return IconButton(onPressed: showDataHandler, icon: const Icon(Icons.remove_red_eye_outlined));
+    return IconButton(
+      tooltip: LocaleKeys.seriesDefRenderer_action_showSeriesValues_tooltip.tr(),
+      onPressed: showDataHandler,
+      icon: const Icon(Icons.remove_red_eye_outlined),
+    );
   }
 }
 
@@ -56,7 +62,11 @@ class _ShowSeriesDataInputDlgBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(onPressed: () => SeriesData.showSeriesDataInputDlg(context, seriesDef), icon: const Icon(Icons.add));
+    return IconButton(
+      tooltip: LocaleKeys.seriesDefRenderer_action_addValue_tooltip.tr(),
+      onPressed: () => SeriesData.showSeriesDataInputDlg(context, seriesDef),
+      icon: const Icon(Icons.add),
+    );
   }
 }
 
@@ -70,6 +80,7 @@ class _DailyCheckBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
+        tooltip: LocaleKeys.seriesDefRenderer_action_addValue_tooltip.tr(),
         onPressed: () {
           context.read<SeriesDataProvider>().addValue(seriesDef, DailyCheckValue(const Uuid().v4(), DateTime.now()), context);
         },

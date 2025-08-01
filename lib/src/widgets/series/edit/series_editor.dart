@@ -89,7 +89,7 @@ class _SeriesEditorState extends State<SeriesEditor> {
     try {
       var seriesProvider = context.read<SeriesProvider>();
       await seriesProvider.save(_seriesDef);
-      if (mounted) Dialogs.showSnackBar(LocaleKeys.commons_msg_saved.tr(), context);
+      if (mounted) Dialogs.showSnackBar(LocaleKeys.commons_snackbar_saved.tr(), context);
     } catch (err) {
       SimpleLogging.w('Failed to store series.', error: err);
       if (mounted) {
@@ -113,7 +113,14 @@ class _SeriesEditorState extends State<SeriesEditor> {
       autovalidateMode: _autoValidate ? AutovalidateMode.always : AutovalidateMode.disabled,
       children: [
         // is new - then go back is allowed
-        if (widget.goBack != null) Row(children: [IconButton(onPressed: widget.goBack, icon: const Icon(Icons.arrow_back_outlined))]),
+        if (widget.goBack != null)
+          Row(children: [
+            IconButton(
+              tooltip: LocaleKeys.seriesEdit_btn_backToSeriesTypeSelection.tr(),
+              onPressed: widget.goBack,
+              icon: const Icon(Icons.arrow_back_outlined),
+            ),
+          ]),
         _SeriesTypeHeadline(seriesDef: _seriesDef),
         const Divider(),
         // series name:
@@ -121,14 +128,14 @@ class _SeriesEditorState extends State<SeriesEditor> {
           autofocus: true,
           controller: _nameController,
           decoration: InputDecoration(
-            labelText: LocaleKeys.series_edit_common_labels_seriesName.tr(),
+            labelText: LocaleKeys.seriesEdit_common_label_seriesName.tr(),
             hintText: SeriesType.displayNameOf(_seriesDef.seriesType),
           ),
           textInputAction: TextInputAction.next,
           // unicode is possible - e.g. from https://www.compart.com/de/unicode/block/U+1F600
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return LocaleKeys.commons_validator_msg_emptyValue.tr();
+              return LocaleKeys.commons_validator_emptyValue.tr();
             }
             return null;
           },
@@ -148,10 +155,18 @@ class _SeriesEditorState extends State<SeriesEditor> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: themeData.colorScheme.secondary,
-        title: Text(LocaleKeys.series_edit_title.tr()),
-        leading: IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.close_outlined)),
+        title: Text(LocaleKeys.seriesEdit_title.tr()),
+        leading: IconButton(
+          tooltip: LocaleKeys.seriesEdit_action_abort_tooltip.tr(),
+          onPressed: () => Navigator.pop(context),
+          icon: const Icon(Icons.close_outlined),
+        ),
         actions: [
-          IconButton(onPressed: _saveHandler, icon: const Icon(Icons.save_outlined)),
+          IconButton(
+            tooltip: LocaleKeys.seriesEdit_action_save_tooltip.tr(),
+            onPressed: _saveHandler,
+            icon: const Icon(Icons.save_outlined),
+          ),
         ],
       ),
       body: formWrapper,
@@ -168,7 +183,7 @@ class _Loading extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: themeData.colorScheme.secondary,
-        title: Text(LocaleKeys.series_edit_title.tr()),
+        title: Text(LocaleKeys.seriesEdit_title.tr()),
       ),
       body: const LinearProgressIndicator(),
     );
@@ -214,7 +229,7 @@ class _SeriesSymbolAndColor extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           spacing: 10,
           children: [
-            Text(LocaleKeys.series_edit_common_labels_seriesIcon.tr()),
+            Text(LocaleKeys.seriesEdit_common_label_seriesIcon.tr()),
             IconPicker(
               icoName: seriesDef.iconName,
               icoSelected: (icoName) => seriesDef.iconName = icoName,
@@ -225,7 +240,7 @@ class _SeriesSymbolAndColor extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           spacing: 10,
           children: [
-            Text(LocaleKeys.series_edit_common_labels_seriesColor.tr()),
+            Text(LocaleKeys.seriesEdit_common_label_seriesColor.tr()),
             ColorPicker(
               color: seriesDef.color,
               colorSelected: (color) => seriesDef.color = color,

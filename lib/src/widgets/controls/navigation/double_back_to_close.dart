@@ -63,7 +63,7 @@ class _DoubleBackToCloseState extends State<DoubleBackToClose> {
           }
 
           if (!_canPop()) {
-            Dialogs.showSnackBar(LocaleKeys.commons_msg_pressBackAgainToExit.tr(), context);
+            Dialogs.showSnackBar(LocaleKeys.commons_snackbar_pressBackAgainToExit.tr(), context);
             _setLastTapped();
             Future.delayed(_exitTimeInMillis, () => _resetCanPop());
           }

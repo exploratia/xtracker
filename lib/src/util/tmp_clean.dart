@@ -7,6 +7,9 @@ import 'logging/flutter_simple_logging.dart';
 
 class TmpClean {
   static Future<void> clearTmpDirectory() async {
+    // in web there is no temp folder
+    if (kIsWeb) return;
+
     try {
       final tempDir = await getTemporaryDirectory();
       if (tempDir.existsSync()) {
