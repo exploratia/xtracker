@@ -1,25 +1,17 @@
-class BloodPressureSettings {
-  final String _prefix = 'bloodPressure';
+import 'series_settings.dart';
+
+class BloodPressureSettings extends SeriesSettings {
+  static const String _prefix = 'bloodPressure';
   final String _hideMedicationInput = 'HideMedicationInput';
 
-  /// call rebuild in the editor
-  final Function() updateState;
-  final Map<String, dynamic> settings;
-
-  BloodPressureSettings(this.settings, this.updateState);
-
-  String _key(String suffix) => _prefix + suffix;
-
-  void _set(String key, dynamic value) {
-    settings[_key(key)] = value;
-    updateState();
-  }
+  /// [updateStateCB] optional callback which is called when the settings map is changed. If not set readonly.
+  BloodPressureSettings(Map<String, dynamic> settings, Function()? updateStateCB) : super(_prefix, settings, updateStateCB);
 
   bool get hideMedicationInput {
-    return settings[_key(_hideMedicationInput)] as bool? ?? false;
+    return getBool(_hideMedicationInput);
   }
 
   set hideMedicationInput(bool value) {
-    _set(_hideMedicationInput, value);
+    set(_hideMedicationInput, value);
   }
 }

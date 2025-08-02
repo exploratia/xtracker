@@ -31,7 +31,11 @@ class SeriesDef {
         iconName = iconName ?? seriesType.iconName,
         _settings = settings ?? {};
 
-  BloodPressureSettings bloodPressureSettings(Function() updateState) => BloodPressureSettings(_settings, updateState);
+  /// return BloodPressureSettings in edit mode (setters active)
+  BloodPressureSettings bloodPressureSettingsEditable(Function() updateStateCB) => BloodPressureSettings(_settings, updateStateCB);
+
+  /// return BloodPressureSettings read only mode
+  BloodPressureSettings bloodPressureSettingsReadonly() => BloodPressureSettings(_settings, null);
 
   @override
   String toString() {
