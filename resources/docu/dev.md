@@ -6,7 +6,7 @@ Skeleton by flutter create --org com.yourdomain -t skeleton your_app_name
 
 ## Commits
 
-Certain commit messages could be automatically added to changelog.md grouped by features and bugs.
+Certain commit messages could be automatically added to `changelog.md` grouped by features and bugs.
 
 commit schema:
 
@@ -19,10 +19,10 @@ node update_changelog.js
 
 ### Other commit prefixes could be
 
-refactor:
-style:
-test:
-doc:
+refactor:  
+style:  
+test:  
+doc:  
 build:
 
 see
@@ -42,8 +42,7 @@ To compress png files use https://compresspng.com/
 
 #### Intl -> Date/Time
 
-https://pub.dev/packages/intl
-
+https://pub.dev/packages/intl  
 https://pub.dev/documentation/intl/latest/intl/DateFormat-class.html
 
 #### easy localization
@@ -59,7 +58,7 @@ dart run easy_localization:generate -f keys -S assets/translations -o locale_key
 ##### Auto generate keys when saving translation files with file watcher
 
 ![auto_generate_locale_keys_with_file_watcher.png](auto_generate_locale_keys_with_file_watcher.png)
-![auto_generate_locale_keys_with_file_watcher_scope.png](auto_generate_locale_keys_with_file_watcher_scope.png)
+![auto_generate_locale_keys_with_file_watcher_scope.png](auto_generate_locale_keys_with_file_watcher_scope.png)  
 scope-pattern:
 
 ```text
@@ -76,7 +75,7 @@ dart run build_runner build
 
 #### Auto generate assets.gen when saving pubspec.yaml
 
-![auto_generate_assets_with_file_watcher.png](auto_generate_assets_with_file_watcher.png)
+![auto_generate_assets_with_file_watcher.png](auto_generate_assets_with_file_watcher.png)  
 scope-pattern:
 
 ```text
@@ -132,9 +131,9 @@ https://pub.dev/packages/easy_localization
 
 ### SimpleLogging
 
-https://pub.dev/packages/path_provider
-https://pub.dev/packages/flutter_archive
-https://pub.dev/packages/logger
+https://pub.dev/packages/path_provider  
+https://pub.dev/packages/flutter_archive  
+https://pub.dev/packages/logger  
 https://pub.dev/packages/share_plus
 
 ### UUId
