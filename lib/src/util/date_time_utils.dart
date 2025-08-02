@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 
 import 'globals.dart';
 
-/// Date format pattern see: https://api.flutter.dev/flutter/intl/DateFormat-class.html
+/// Date format pattern see: https://pub.dev/documentation/intl/latest/intl/DateFormat-class.html
 class DateTimeUtils {
   static Map<int, String> _month2ShortName = _createMonth2ShortNameMapping();
 
