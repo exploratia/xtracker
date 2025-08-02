@@ -3,7 +3,6 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import '../../util/color_utils.dart';
-import '../../util/i18n.dart';
 import '../../widgets/controls/navigation/hide_bottom_navigation_bar.dart';
 import '../../widgets/controls/select/icon_map.dart';
 import '../../widgets/series/edit/series_edit.dart';
@@ -117,21 +116,21 @@ class SeriesItem {
   final String uuid;
   final String title;
   final String unit;
-  final String? msgId;
   final double tableColumnMinWidth;
 
-  SeriesItem({required this.uuid, required this.title, this.msgId, required this.unit, required this.tableColumnMinWidth});
+  SeriesItem({required this.uuid, required this.title, required this.unit, required this.tableColumnMinWidth});
 
   String getTitle() {
-    var titleStr = msgId != null ? (I18N.compose(msgId) ?? title) : title;
-    return titleStr;
+    // if special case blood pressure is necessary:
+    // if(uuid=='00000000-0000-0000-0000-000000000001') return I18N.bloodPressureSeriesItemTitleDiastolic.tr();
+    // if(uuid=='00000000-0000-0000-0000-000000000002') return I18N.bloodPressureSeriesItemTitleSystolic.tr();
+    return title;
   }
 
   factory SeriesItem.fromJson(Map<String, dynamic> json) => SeriesItem(
         uuid: json['uuid'] as String,
         title: json['title'] as String,
         unit: json['unit'] as String,
-        msgId: json['msgId'] == null ? null : json['msgId'] as String,
         tableColumnMinWidth: json['tableColumnMinWidth'] as double,
       );
 
@@ -139,7 +138,6 @@ class SeriesItem {
         'uuid': uuid,
         'title': title,
         'unit': unit,
-        'msgId': msgId,
         'tableColumnMinWidth': tableColumnMinWidth,
       };
 
@@ -147,15 +145,13 @@ class SeriesItem {
     return [
       SeriesItem(
         uuid: '00000000-0000-0000-0000-000000000001',
-        title: '',
-        msgId: I18N.bloodPressureSeriesItemTitleDiastolic,
+        title: 'Diastolic',
         unit: 'mmHg',
         tableColumnMinWidth: 80,
       ),
       SeriesItem(
         uuid: '00000000-0000-0000-0000-000000000002',
-        title: '',
-        msgId: I18N.bloodPressureSeriesItemTitleSystolic,
+        title: 'Systolic',
         unit: 'mmHg',
         tableColumnMinWidth: 80,
       )

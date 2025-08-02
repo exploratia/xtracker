@@ -20,8 +20,8 @@ class BloodPressureSeriesEdit extends StatelessWidget {
           title: Text(
             LocaleKeys.seriesEdit_bloodPressure_label_hideMedicationInput.tr(),
           ),
-          value: settings.hideTabletInput,
-          onChanged: (value) => settings.hideTabletInput = value,
+          value: settings.hideMedicationInput,
+          onChanged: (value) => settings.hideMedicationInput = value,
           secondary: const Icon(Icons.medication_outlined),
         ),
       ],

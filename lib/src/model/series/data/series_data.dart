@@ -22,17 +22,20 @@ class SeriesData<T extends SeriesDataValue> {
 
   Map<String, dynamic> toJson({bool exportUuid = true}) => {
         'uuid': seriesDefUuid,
+        'version': 1,
         'data': [...data.map((e) => e.toJson(exportUuid: exportUuid))],
       };
 
   static SeriesData<BloodPressureValue> fromJsonBloodPressureData(Map<String, dynamic> json) => SeriesData(
         json['uuid'] as String,
         [...(json['data'] as List<dynamic>).map((e) => BloodPressureValue.fromJson(e))],
+        // if version is required: json['version'] as int? ?? 1
       );
 
   static SeriesData<DailyCheckValue> fromJsonDailyCheckData(Map<String, dynamic> json) => SeriesData(
         json['uuid'] as String,
         [...(json['data'] as List<dynamic>).map((e) => DailyCheckValue.fromJson(e))],
+        // if version is required: json['version'] as int? ?? 1
       );
 
   bool isEmpty() {

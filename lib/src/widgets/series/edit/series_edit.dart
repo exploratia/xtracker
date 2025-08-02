@@ -25,7 +25,7 @@ class _SeriesEditState extends State<SeriesEdit> {
 
   @override
   void initState() {
-    _seriesDef = widget.seriesDef?.clone();
+    _seriesDef = widget.seriesDef;
     _isNew = _seriesDef == null;
     super.initState();
   }

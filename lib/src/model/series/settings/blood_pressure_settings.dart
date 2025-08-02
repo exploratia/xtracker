@@ -1,6 +1,6 @@
 class BloodPressureSettings {
   final String _prefix = 'bloodPressure';
-  final String _hideTabletInput = 'HideTabletInput';
+  final String _hideMedicationInput = 'HideMedicationInput';
 
   /// call rebuild in the editor
   final Function() updateState;
@@ -15,11 +15,11 @@ class BloodPressureSettings {
     updateState();
   }
 
-  bool get hideTabletInput {
-    return settings[_key(_hideTabletInput)] as bool? ?? false;
+  bool get hideMedicationInput {
+    return settings[_key(_hideMedicationInput)] as bool? ?? false;
   }
 
-  set hideTabletInput(bool value) {
-    _set(_hideTabletInput, value);
+  set hideMedicationInput(bool value) {
+    _set(_hideMedicationInput, value);
   }
 }
