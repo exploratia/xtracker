@@ -27,7 +27,8 @@ Check the latest changelog entries.
 
 ## Version
 
-Adjust version in `changelog.md` and `pubspec.yaml`.
+Adjust version in `changelog.md` and `pubspec.yaml`.  
+In `pubspec.yaml` also increase the build number (after +) by one.
 
 Commit
 
@@ -37,8 +38,7 @@ update version and changelog
 
 ## Merge
 
-Merge the release branch to main.
-
+Merge the release branch to main.  
 As a commit message use:
 
 ```
@@ -77,7 +77,7 @@ keytool -genkey -v -keystore xtracker-release-key.jks -keyalg RSA -keysize 2048 
 
 #### Referencing the Keystore in Your App
 
-After creating the keystore, reference it in your app.
+After creating the keystore, reference it in your app.  
 In the `android/` directory, create a file named `key.properties` that contains a reference to the keystore using the
 following format:
 
@@ -171,7 +171,7 @@ flutter {
 
 #### Symbolic link
 
-Because of a flutter build bug, pub cache and project have to be on the same disc for building.
+Because of a flutter build bug, pub cache and project have to be on the same disc for building.  
 See https://stackoverflow.com/questions/69663243/could-not-create-task-this-and-base-files-have-different-roots
 
 Therefore, create a symlink on c:
@@ -192,9 +192,8 @@ flutter clean
 flutter build appbundle --release
 ````
 
-After building, the app bundle should reside in the `/build/app/outputs/bundle/release` directory.
-
-In the Google Play Console upload the aab file.
+After building, the app bundle should reside in the `/build/app/outputs/bundle/release` directory.  
+In the Google Play Console create a new release and upload the aab file.
 
 #### Troubleshooting
 
