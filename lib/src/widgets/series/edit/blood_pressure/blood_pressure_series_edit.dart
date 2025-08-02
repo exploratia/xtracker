@@ -12,7 +12,7 @@ class BloodPressureSeriesEdit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var settings = seriesDef.bloodPressureSettings(updateState);
+    var settings = seriesDef.bloodPressureSettingsEditable(updateState);
     return Column(
       children: [
         const Divider(height: 24),

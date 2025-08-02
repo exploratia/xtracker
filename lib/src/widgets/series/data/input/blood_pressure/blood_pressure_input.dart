@@ -152,6 +152,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
+    final showMedicationInput = !widget.seriesDef.bloodPressureSettingsReadonly().hideMedicationInput;
 
     var edit = Form(
       key: _formKey,
@@ -243,23 +244,24 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
               ),
             ],
           ),
-          SwitchListTile(
-            contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 4),
-            title: Tooltip(
-              message: LocaleKeys.seriesValue_bloodPressure_switch_medication_tooltip.tr(),
-              child: Row(
-                spacing: 4,
-                children: [
-                  const Icon(Icons.medication_outlined),
-                  OverflowText(
-                    LocaleKeys.seriesValue_bloodPressure_switch_medication_label.tr(),
-                  ),
-                ],
+          if (showMedicationInput)
+            SwitchListTile(
+              contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 4),
+              title: Tooltip(
+                message: LocaleKeys.seriesValue_bloodPressure_switch_medication_tooltip.tr(),
+                child: Row(
+                  spacing: 4,
+                  children: [
+                    const Icon(Icons.medication_outlined),
+                    OverflowText(
+                      LocaleKeys.seriesValue_bloodPressure_switch_medication_label.tr(),
+                    ),
+                  ],
+                ),
               ),
+              value: _tablet,
+              onChanged: _setTablet,
             ),
-            value: _tablet,
-            onChanged: _setTablet,
-          ),
         ],
       ),
     );
