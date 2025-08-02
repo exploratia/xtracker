@@ -6,12 +6,16 @@ class HideBottomNavigationBar extends StatefulWidget {
   static final ValueNotifier<bool> visible = ValueNotifier<bool>(true);
   static int _forceHide = 0;
 
-  static void setScrollPosition(ScrollPosition scrollPos) {
+  static void setScrollPosition(ScrollPosition? scrollPos) {
     if (_forceHide > 0) return;
     // Scroller ganz oben? Dann auf jeden Fall wieder anzeigen
-    if (scrollPos.pixels == 0) {
+    if (scrollPos == null || scrollPos.pixels == 0) {
       visible.value = true;
-    } else if (scrollPos.userScrollDirection == ScrollDirection.reverse && visible.value) {
+    } else if (visible.value &&
+        scrollPos.userScrollDirection == ScrollDirection.reverse
+        // only allow hide if scroll area is higher then bottom nav bar (to be able to get navbar back)
+        &&
+        scrollPos.pixels > kBottomNavigationBarHeight) {
       visible.value = false;
     } else if (scrollPos.userScrollDirection == ScrollDirection.forward && !visible.value) {
       visible.value = true;
