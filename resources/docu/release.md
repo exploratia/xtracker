@@ -56,33 +56,9 @@ Tag the main branch with the adjusted version.
 To construct an app bundle, use:
 
 ````shell
-c:
-cd \
-cd dev/xtracker
 flutter clean
 flutter build appbundle --release
 ````
 
 After building, the app bundle should reside in the `/build/app/outputs/bundle/release` directory.  
 In the Google Play Console create a new release and upload the aab file.
-
-### Troubleshooting
-
-- Java-version warnings:
-
-Check Version in `android/app/build.gradle.kts` (actual: `VERSION_17`).
-At the moment (July 2025) build has to be done with java17 (java21 delivers warnings).
-
-Check the flutter jdk-dir:
-
-````shell
-flutter config --list
-````
-
-In case it is not set or points to other java than 17 use the following command to set the correct jdk for flutter:
-
-````shell
-flutter config --jdk-dir=<path to jdk>
-````
-
-Restart all tools after that.
