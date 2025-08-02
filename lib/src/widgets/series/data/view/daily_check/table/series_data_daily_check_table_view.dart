@@ -16,22 +16,28 @@ class SeriesDataDailyCheckTableView extends StatelessWidget {
   final SeriesData<DailyCheckValue> seriesData;
   final SeriesViewMetaData seriesViewMetaData;
 
+  /// Rows are always equal sized. But if set to false, multi line rows are inflated to multiple single line rows
+  final bool _useEqualSizedRows = false;
+
   const SeriesDataDailyCheckTableView({super.key, required this.seriesViewMetaData, required this.seriesData});
 
   @override
   Widget build(BuildContext context) {
-    // for blood pressure we need a special TableColumnProfile
+    // for daily check we need a special TableColumnProfile
 
     List<_DailyCheckDayItem> data = _buildTableDataProvider(seriesData);
-    // calc line height = single line height * max lines per day of all items
-    var maxItemsPerDayPart = data.fold(
-      1,
-      (previousValue, item) {
-        var maxItems = math.max(math.max(item.morning.length, item.midday.length), item.evening.length);
-        return math.max(previousValue, maxItems);
-      },
-    );
-    int lineHeight = 28 * maxItemsPerDayPart;
+    int lineHeight = 28;
+    if (_useEqualSizedRows) {
+      // calc line height = single line height * max lines per day of all items
+      var maxItemsPerDayPart = data.fold(
+        1,
+        (previousValue, item) {
+          var maxItems = math.max(math.max(item.morning.length, item.midday.length), item.evening.length);
+          return math.max(previousValue, maxItems);
+        },
+      );
+      lineHeight *= maxItemsPerDayPart;
+    }
 
     gridCellBuilder(BuildContext context, int yIndex, int xIndex) {
       _DailyCheckDayItem dailyCheckDayItem = data[yIndex];
@@ -72,13 +78,47 @@ class SeriesDataDailyCheckTableView extends StatelessWidget {
 
   List<_DailyCheckDayItem> _buildTableDataProvider(SeriesData<DailyCheckValue> seriesData) {
     List<_DailyCheckDayItem> list = [];
+
+    var emptyDate = '';
+    add2List(List<_DailyCheckDayItem> list, _DailyCheckDayItem item) {
+      if (_useEqualSizedRows) {
+        list.add(item);
+        return;
+      }
+
+      // use multiple rows for a single day if more than 1 element in one of the lists
+      var maxItems = math.max(math.max(item.morning.length, item.midday.length), item.evening.length);
+      if (maxItems == 1) {
+        list.add(item);
+        return;
+      }
+
+      List<_DailyCheckDayItem> inflated = [];
+      for (var i = 0; i < maxItems; ++i) {
+        // show date only on the first row
+        var date = i == 0 ? item.date : emptyDate;
+        inflated.add(_DailyCheckDayItem(date, item.backgroundColor));
+      }
+      for (var i = 0; i < item.morning.length; ++i) {
+        inflated[i].morning.add(item.morning[i]);
+      }
+      for (var i = 0; i < item.midday.length; ++i) {
+        inflated[i].midday.add(item.midday[i]);
+      }
+      for (var i = 0; i < item.evening.length; ++i) {
+        inflated[i].evening.add(item.evening[i]);
+      }
+
+      list.addAll(inflated);
+    }
+
     _DailyCheckDayItem? actItem;
 
     for (var item in seriesData.data.reversed) {
       String dateDay = DateTimeUtils.formateDate(item.dateTime);
       if (actItem == null || actItem.date != dateDay) {
         if (actItem != null) {
-          list.add(actItem);
+          add2List(list, actItem);
         }
         Color? backgroundColor;
         if (item.dateTime.weekday == DateTime.sunday) {
@@ -100,7 +140,7 @@ class SeriesDataDailyCheckTableView extends StatelessWidget {
 
     // add last item to list
     if (actItem != null) {
-      list.add(actItem);
+      add2List(list, actItem);
     }
 
     return list;
