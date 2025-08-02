@@ -32,7 +32,7 @@ class SeriesDef {
         _settings = settings ?? {};
 
   /// return BloodPressureSettings in edit mode (setters active)
-  BloodPressureSettings bloodPressureSettingsEditable(Function() updateState) => BloodPressureSettings(_settings, updateState);
+  BloodPressureSettings bloodPressureSettingsEditable(Function() updateStateCB) => BloodPressureSettings(_settings, updateStateCB);
 
   /// return BloodPressureSettings read only mode
   BloodPressureSettings bloodPressureSettingsReadonly() => BloodPressureSettings(_settings, null);

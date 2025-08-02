@@ -6,13 +6,13 @@ import '../../../../model/series/series_def.dart';
 
 class BloodPressureSeriesEdit extends StatelessWidget {
   final SeriesDef seriesDef;
-  final Function() updateState;
+  final Function() updateStateCB;
 
-  const BloodPressureSeriesEdit(this.seriesDef, this.updateState, {super.key});
+  const BloodPressureSeriesEdit(this.seriesDef, this.updateStateCB, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    var settings = seriesDef.bloodPressureSettingsEditable(updateState);
+    var settings = seriesDef.bloodPressureSettingsEditable(updateStateCB);
     return Column(
       children: [
         const Divider(height: 24),
