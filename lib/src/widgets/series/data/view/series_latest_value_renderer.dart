@@ -41,7 +41,7 @@ class SeriesLatestValueRenderer extends StatelessWidget {
                     ],
                   );
                 }
-                return Center(child: Text(LocaleKeys.seriesDefRenderer_label_noData.tr()));
+                return Center(child: Text(LocaleKeys.seriesDefRenderer_label_noValue.tr()));
               });
         }
       case SeriesType.dailyCheck:
@@ -57,7 +57,7 @@ class SeriesLatestValueRenderer extends StatelessWidget {
                     DailyCheckValueRenderer(dailyCheckValue: currentValue, seriesDef: seriesDef),
                   ]);
                 }
-                return Center(child: Text(LocaleKeys.seriesDefRenderer_label_noData.tr()));
+                return Center(child: Text(LocaleKeys.seriesDefRenderer_label_noValue.tr()));
               });
         }
     }

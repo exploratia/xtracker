@@ -7,6 +7,7 @@ import '../../../../../model/series/series_view_meta_data.dart';
 import '../../../../../model/series/view_type.dart';
 import '../../../../../providers/series_data_provider.dart';
 import '../../../../../util/date_time_utils.dart';
+import '../../../../controls/animation/fade_in.dart';
 import '../../../../controls/layout/centered_message.dart';
 import 'chart/series_data_daily_check_chart_view.dart';
 import 'dots/series_data_daily_check_dots_view.dart';
@@ -26,11 +27,13 @@ class SeriesDataDailyCheckView extends StatelessWidget {
     if (dailyCheckSeriesData == null || dailyCheckSeriesData.isEmpty()) {
       return CenteredMessage(
         message: IntrinsicHeight(
-          child: Column(
-            children: [
-              Icon(seriesDef.iconData(), color: seriesDef.color, size: 40),
-              Text(LocaleKeys.seriesDefRenderer_label_noData.tr()),
-            ],
+          child: FadeIn(
+            child: Column(
+              children: [
+                Icon(seriesDef.iconData(), color: seriesDef.color, size: 40),
+                Text(LocaleKeys.seriesData_label_noData.tr()),
+              ],
+            ),
           ),
         ),
       );
