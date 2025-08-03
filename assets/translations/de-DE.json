@@ -215,6 +215,9 @@
       "monthlyView": {
         "tooltip": "Monatliche Anzeige"
       }
+    },
+    "label": {
+      "noData": "Keine Daten vorhanden..."
     }
   },
   "seriesDefRenderer": {
@@ -245,7 +248,7 @@
       }
     },
     "label": {
-      "noData": "Noch keine Daten vorhanden."
+      "noValue": "Kein aktueller Wert vorhanden."
     },
     "query": {
       "deleteSeriesData": "Die Daten der Messreihe '{}' wirklich löschen?",

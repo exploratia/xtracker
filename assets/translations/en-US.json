@@ -215,6 +215,9 @@
       "monthlyView": {
         "tooltip": "Monthly view"
       }
+    },
+    "label": {
+      "noData": "No data available..."
     }
   },
   "seriesDefRenderer": {
@@ -245,9 +248,10 @@
       }
     },
     "label": {
-      "noData": "This series contains no data yet..."
-    },  "query": {
-      "deleteSeriesData": "Do you really want to delete the data of series '{}'?",
+      "noValue": "No current value available."
+    },
+    "query": {
+      "deleteSeriesData": "Do you really want to delete the values of series '{}'?",
       "deleteSeries": "Do you really want to delete the series '{}'?"
     }
   },
