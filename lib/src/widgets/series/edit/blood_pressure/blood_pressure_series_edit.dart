@@ -15,10 +15,9 @@ class BloodPressureSeriesEdit extends StatelessWidget {
     var settings = seriesDef.bloodPressureSettingsEditable(updateStateCB);
     return Column(
       children: [
-        const Divider(height: 24),
         SwitchListTile(
           title: Text(
-            LocaleKeys.seriesEdit_bloodPressure_label_hideMedicationInput.tr(),
+            LocaleKeys.seriesEdit_bloodPressure_switch_hideMedicationInput_label.tr(),
           ),
           value: settings.hideMedicationInput,
           onChanged: (value) => settings.hideMedicationInput = value,

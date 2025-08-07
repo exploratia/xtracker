@@ -2,7 +2,7 @@ import 'series_settings.dart';
 
 class BloodPressureSettings extends SeriesSettings {
   static const String _prefix = 'bloodPressure';
-  final String _hideMedicationInput = 'HideMedicationInput';
+  final String _hideMedicationInput = 'hideMedicationInput';
 
   /// [updateStateCB] optional callback which is called when the settings map is changed. If not set readonly.
   BloodPressureSettings(Map<String, dynamic> settings, Function()? updateStateCB) : super(_prefix, settings, updateStateCB);

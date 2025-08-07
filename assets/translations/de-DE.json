@@ -278,11 +278,23 @@
         "seriesName": "Name",
         "seriesIcon": "Symbol",
         "seriesColor": "Farbe"
+      },
+      "displaySettings": {
+        "title": "Anzeigeeinstellungen",
+        "switch": {
+          "dotsViewShowCount": {
+            "tooltip": "Achtung: Bei großen Datenmengen kann es beim Scrollen zu Performance-Problemen (Rucklern) kommen.",
+            "label": "In der Übersicht Anzahl an Datenpunkten anzeigen, wenn diese mehrere Werte repräsentieren."
+          }
+        }
       }
     },
     "bloodPressure": {
-      "label": {
-        "hideMedicationInput": "Medikamenteneinnahme im Eingabedialog ausblenden:"
+      "title": "Blutdruckeinstellungen",
+      "switch": {
+        "hideMedicationInput": {
+          "label": "Medikamenteneinnahme im Eingabedialog ausblenden:"
+        }
       }
     }
   },

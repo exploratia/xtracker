@@ -14,12 +14,14 @@ class ResponsiveDotsView<T extends DayItem> extends StatelessWidget {
     required this.minDateTime,
     required this.maxDateTime,
     required this.data,
+    required this.showCount,
     required this.painterFnc,
   });
 
   final DateTime minDateTime;
   final DateTime maxDateTime;
   final Map<String, T> data;
+  final bool showCount;
   final Function(T dataItem, Canvas canvas, Offset topLeft, Offset bottomRight) painterFnc;
 
   @override
@@ -35,7 +37,7 @@ class ResponsiveDotsView<T extends DayItem> extends StatelessWidget {
               minDT = DateTimeUtils.firstDayOfMonth(minDT);
               maxDT = DateTimeUtils.lastDayOfMonth(maxDT);
 
-              final dots = _DotsMonthly<T>(data: data, maxDateTime: maxDT, minDateTime: minDT, painterFnc: painterFnc);
+              final dots = _DotsMonthly<T>(data: data, showCount: showCount, maxDateTime: maxDT, minDateTime: minDT, painterFnc: painterFnc);
               if (constraints.maxWidth > 1200) {
                 return SizedBox(width: 1200, child: dots);
               }
@@ -50,7 +52,7 @@ class ResponsiveDotsView<T extends DayItem> extends StatelessWidget {
               }
               maxDT = DateTimeUtils.truncateToDay(maxDT);
 
-              return _DotsWeekly<T>(data: data, maxDateTime: maxDT, minDateTime: minDT, painterFnc: painterFnc);
+              return _DotsWeekly<T>(data: data, showCount: showCount, maxDateTime: maxDT, minDateTime: minDT, painterFnc: painterFnc);
             }
           },
         ),
@@ -75,12 +77,14 @@ class DayItem {
 class _DotsWeekly<T extends DayItem> extends StatelessWidget {
   const _DotsWeekly({
     required this.data,
+    required this.showCount,
     required this.painterFnc,
     required this.minDateTime,
     required this.maxDateTime,
   });
 
   final Map<String, T> data;
+  final bool showCount;
   final Function(T dataItem, Canvas canvas, Offset topLeft, Offset bottomRight) painterFnc;
 
   final DateTime minDateTime;
@@ -99,6 +103,7 @@ class _DotsWeekly<T extends DayItem> extends StatelessWidget {
       size: Size(double.infinity, height),
       painter: _DotViewPainterWeeklyRows(
           data: data,
+          showCount: showCount,
           painterFnc: painterFnc,
           minDateTime: minDateTime,
           maxDateTime: maxDateTime,
@@ -113,12 +118,14 @@ class _DotsWeekly<T extends DayItem> extends StatelessWidget {
 class _DotsMonthly<T extends DayItem> extends StatelessWidget {
   const _DotsMonthly({
     required this.data,
+    required this.showCount,
     required this.painterFnc,
     required this.minDateTime,
     required this.maxDateTime,
   });
 
   final Map<String, T> data;
+  final bool showCount;
   final Function(T dataItem, Canvas canvas, Offset topLeft, Offset bottomRight) painterFnc;
 
   final DateTime minDateTime;
@@ -135,6 +142,7 @@ class _DotsMonthly<T extends DayItem> extends StatelessWidget {
       size: Size(double.infinity, height),
       painter: _DotViewPainterMonthlyRows(
           data: data,
+          showCount: showCount,
           painterFnc: painterFnc,
           minDateTime: minDateTime,
           maxDateTime: maxDateTime,
@@ -153,6 +161,7 @@ abstract class _DotViewPainter<T extends DayItem> extends CustomPainter {
   final TextStyle textStyle;
   late final TextStyle textStyleSmall;
   final Map<String, T> data;
+  final bool showCount;
   final DateTime minDateTime;
   final DateTime maxDateTime;
   final double lineHeight;
@@ -164,6 +173,7 @@ abstract class _DotViewPainter<T extends DayItem> extends CustomPainter {
       {super.repaint,
       required this.textStyle,
       required this.data,
+      required this.showCount,
       required this.minDateTime,
       required this.maxDateTime,
       required this.lineHeight,
@@ -218,6 +228,7 @@ class _DotViewPainterWeeklyRows<T extends DayItem> extends _DotViewPainter<T> {
       { // super.repaint,
       required super.textStyle,
       required super.data,
+      required super.showCount,
       required super.minDateTime,
       required super.maxDateTime,
       required super.lineHeight,
@@ -280,9 +291,9 @@ class _DotViewPainterWeeklyRows<T extends DayItem> extends _DotViewPainter<T> {
         final br = Offset(center.dx + paddingX, center.dy + paddingY);
         painterFnc(dataItem, canvas, tl, br);
 
-        // show count?
-        // TODO layout settings in series: show count
-        _paintCount(dataItem.count, center.dx, bottomRight.dy, canvas, context);
+        if (showCount) {
+          _paintCount(dataItem.count, center.dx, bottomRight.dy, canvas, context);
+        }
       } else {
         final Rect rect = Rect.fromCenter(center: center, width: paddingX * 2, height: paddingY * 2);
         // canvas.drawRect(rect, noDataPaint);
@@ -310,6 +321,7 @@ class _DotViewPainterMonthlyRows<T extends DayItem> extends _DotViewPainter<T> {
     // super.repaint,
     required super.textStyle,
     required super.data,
+    required super.showCount,
     required super.minDateTime,
     required super.maxDateTime,
     required super.lineHeight,
@@ -375,9 +387,9 @@ class _DotViewPainterMonthlyRows<T extends DayItem> extends _DotViewPainter<T> {
         final br = Offset(center.dx + paddingX, center.dy + paddingY);
         painterFnc(dataItem, canvas, tl, br);
 
-        // show count?
-        // TODO layout settings in series: show count
-        _paintCount(dataItem.count, center.dx, bottomRight.dy, canvas, context);
+        if (showCount) {
+          _paintCount(dataItem.count, center.dx, bottomRight.dy, canvas, context);
+        }
       } else {
         final Rect rect = Rect.fromCenter(center: center, width: paddingX * 2, height: paddingY * 2);
         // canvas.drawRect(rect, noDataPaint);

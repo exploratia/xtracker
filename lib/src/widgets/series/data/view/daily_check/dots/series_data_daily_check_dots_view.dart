@@ -37,6 +37,7 @@ class SeriesDataDailyCheckDotsView extends StatelessWidget {
       minDateTime: minDateTime,
       maxDateTime: maxDateTime,
       data: data,
+      showCount: seriesViewMetaData.seriesDef.displaySettingsReadonly().dotsViewShowCount,
       painterFnc: painterFnc,
     );
   }
