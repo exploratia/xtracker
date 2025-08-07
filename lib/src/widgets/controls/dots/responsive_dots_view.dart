@@ -60,9 +60,16 @@ class ResponsiveDotsView<T extends DayItem> extends StatelessWidget {
 }
 
 class DayItem {
-  final DateTime dateTime;
+  int count = 1;
 
-  DayItem({required this.dateTime});
+  void increaseCount() {
+    count++;
+  }
+
+  @override
+  String toString() {
+    return 'DayItem{count: $count}';
+  }
 }
 
 class _DotsWeekly<T extends DayItem> extends StatelessWidget {
@@ -144,11 +151,13 @@ class _DotsMonthly<T extends DayItem> extends StatelessWidget {
 
 abstract class _DotViewPainter<T extends DayItem> extends CustomPainter {
   final TextStyle textStyle;
+  late final TextStyle textStyleSmall;
   final Map<String, T> data;
   final DateTime minDateTime;
   final DateTime maxDateTime;
   final double lineHeight;
   final BuildContext context;
+  late final Paint numberPaint;
 
   _DotViewPainter(
       {super.repaint,
@@ -157,7 +166,12 @@ abstract class _DotViewPainter<T extends DayItem> extends CustomPainter {
       required this.minDateTime,
       required this.maxDateTime,
       required this.lineHeight,
-      required this.context});
+      required this.context}) {
+    textStyleSmall = textStyle.copyWith(fontSize: 7);
+    numberPaint = Paint()
+      ..color = textStyle.color ?? Colors.white
+      ..strokeWidth = 1;
+  }
 
   void _paintDate(DateTime dateTime, double yPos, double lineHeight, double firstColWidth, Canvas canvas, BuildContext context) {
     final TextPainter textPainter = CustomPaintUtils.textPainter();
@@ -165,6 +179,17 @@ abstract class _DotViewPainter<T extends DayItem> extends CustomPainter {
     textPainter.text = TextSpan(text: dateString, style: textStyle);
     textPainter.layout();
     textPainter.paint(canvas, Offset(firstColWidth - 10 - textPainter.width, yPos + lineHeight / 2 - textPainter.height / 2));
+  }
+
+  void _paintCount(int count, double xPos, double yPos, Canvas canvas, BuildContext context) {
+    if (count <= 1) return;
+    var txt = count > 999 ? "+++" : "$count";
+    // TODO check: performance improvement could be to prepare all necessary textPainters in a map...
+    // don't call layout for same text multiple times...
+    final TextPainter textPainter = CustomPaintUtils.textPainter();
+    textPainter.text = TextSpan(text: txt, style: textStyleSmall);
+    textPainter.layout();
+    textPainter.paint(canvas, Offset(xPos - textPainter.width / 2 - 2, yPos - textPainter.height - 0));
   }
 
   @override
@@ -242,6 +267,10 @@ class _DotViewPainterWeeklyRows<T extends DayItem> extends _DotViewPainter<T> {
         final tl = Offset(center.dx - paddingX, center.dy - paddingY);
         final br = Offset(center.dx + paddingX, center.dy + paddingY);
         painterFnc(dataItem, canvas, tl, br);
+
+        // show count?
+        // TODO layout settings in series: show count
+        _paintCount(dataItem.count, center.dx, bottomRight.dy, canvas, context);
       } else {
         final Rect rect = Rect.fromCenter(center: center, width: paddingX * 2, height: paddingY * 2);
         // canvas.drawRect(rect, noDataPaint);
@@ -333,6 +362,10 @@ class _DotViewPainterMonthlyRows<T extends DayItem> extends _DotViewPainter<T> {
         final tl = Offset(center.dx - paddingX, center.dy - paddingY);
         final br = Offset(center.dx + paddingX, center.dy + paddingY);
         painterFnc(dataItem, canvas, tl, br);
+
+        // show count?
+        // TODO layout settings in series: show count
+        _paintCount(dataItem.count, center.dx, bottomRight.dy, canvas, context);
       } else {
         final Rect rect = Rect.fromCenter(center: center, width: paddingX * 2, height: paddingY * 2);
         // canvas.drawRect(rect, noDataPaint);

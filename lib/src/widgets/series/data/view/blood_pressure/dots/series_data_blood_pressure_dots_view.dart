@@ -33,7 +33,7 @@ class SeriesDataBloodPressureDotsView extends StatelessWidget {
       if (dataItem.medication) {
         // draw a small cross as medication indicator
         var medicationPaint = Paint()..color = themeData.textTheme.labelMedium?.color ?? Colors.white;
-        var crossCenter = bottomRight.translate(-3, -3);
+        var crossCenter = rect.topRight.translate(-3.5, 3.5);
         canvas.drawRect(Rect.fromCenter(center: crossCenter, width: 5, height: 1), medicationPaint);
         canvas.drawRect(Rect.fromCenter(center: crossCenter, width: 1, height: 5), medicationPaint);
       }
@@ -54,8 +54,10 @@ class SeriesDataBloodPressureDotsView extends StatelessWidget {
       String dateDay = DateTimeUtils.formateDate(item.dateTime);
       _BloodPressureDayItem? actItem = map[dateDay];
       if (actItem == null) {
-        actItem = _BloodPressureDayItem(dateTime: item.dateTime);
+        actItem = _BloodPressureDayItem();
         map[dateDay] = actItem;
+      } else {
+        actItem.increaseCount();
       }
       actItem.updateHighLow(item.high, item.low, item.medication);
     }
@@ -69,7 +71,7 @@ class _BloodPressureDayItem extends DayItem {
   int low = 1000;
   bool medication = false;
 
-  _BloodPressureDayItem({required super.dateTime});
+  _BloodPressureDayItem();
 
   void updateHighLow(int valH, int valL, bool med) {
     high = max(high, valH);
@@ -79,6 +81,6 @@ class _BloodPressureDayItem extends DayItem {
 
   @override
   String toString() {
-    return '_BloodPressureDayItem{high: $high, low: $low}';
+    return '_BloodPressureDayItem{high: $high, low: $low, count: $count}';
   }
 }

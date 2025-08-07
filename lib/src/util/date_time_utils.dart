@@ -39,6 +39,7 @@ class DateTimeUtils {
     return DateFormat('yyyyMMdd_HHmmss').format(DateTime.now());
   }
 
+  /// format date yMd
   static String formateDate(DateTime dateTime) {
     return DateFormat.yMd().format(dateTime);
   }

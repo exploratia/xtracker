@@ -46,7 +46,13 @@ class SeriesDataDailyCheckDotsView extends StatelessWidget {
 
     for (var item in seriesData.data) {
       String dateDay = DateTimeUtils.formateDate(item.dateTime);
-      map[dateDay] = _DailyCheckDayItem(dateTime: item.dateTime);
+      _DailyCheckDayItem? actItem = map[dateDay];
+      if (actItem == null) {
+        actItem = _DailyCheckDayItem();
+        map[dateDay] = actItem;
+      } else {
+        actItem.increaseCount();
+      }
     }
 
     return map;
@@ -54,5 +60,5 @@ class SeriesDataDailyCheckDotsView extends StatelessWidget {
 }
 
 class _DailyCheckDayItem extends DayItem {
-  _DailyCheckDayItem({required super.dateTime});
+  _DailyCheckDayItem();
 }
