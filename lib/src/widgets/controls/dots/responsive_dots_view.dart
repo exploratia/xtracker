@@ -158,6 +158,7 @@ abstract class _DotViewPainter<T extends DayItem> extends CustomPainter {
   final double lineHeight;
   final BuildContext context;
   late final Paint numberPaint;
+  final Map<int, TextPainter> _countTextPainter = {};
 
   _DotViewPainter(
       {super.repaint,
@@ -171,6 +172,21 @@ abstract class _DotViewPainter<T extends DayItem> extends CustomPainter {
     numberPaint = Paint()
       ..color = textStyle.color ?? Colors.white
       ..strokeWidth = 1;
+    // prepare reusable text painter for each count
+    {
+      // one painter for all counts >=1000
+      final TextPainter textPainter = CustomPaintUtils.textPainter();
+      textPainter.text = TextSpan(text: '+++', style: textStyleSmall);
+      textPainter.layout();
+      _countTextPainter[1000] = textPainter;
+    }
+    data.values.map((dayItem) => dayItem.count).toSet().forEach((count) {
+      if (count <= 1 || count > 999) return;
+      final TextPainter textPainter = CustomPaintUtils.textPainter();
+      textPainter.text = TextSpan(text: "$count", style: textStyleSmall);
+      textPainter.layout();
+      _countTextPainter[count] = textPainter;
+    });
   }
 
   void _paintDate(DateTime dateTime, double yPos, double lineHeight, double firstColWidth, Canvas canvas, BuildContext context) {
@@ -183,12 +199,8 @@ abstract class _DotViewPainter<T extends DayItem> extends CustomPainter {
 
   void _paintCount(int count, double xPos, double yPos, Canvas canvas, BuildContext context) {
     if (count <= 1) return;
-    var txt = count > 999 ? "+++" : "$count";
-    // TODO check: performance improvement could be to prepare all necessary textPainters in a map...
-    // don't call layout for same text multiple times...
-    final TextPainter textPainter = CustomPaintUtils.textPainter();
-    textPainter.text = TextSpan(text: txt, style: textStyleSmall);
-    textPainter.layout();
+    int c = count > 999 ? 1000 : count;
+    final TextPainter textPainter = _countTextPainter[c]!;
     textPainter.paint(canvas, Offset(xPos - textPainter.width / 2 - 2, yPos - textPainter.height - 0));
   }
 
