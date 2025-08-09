@@ -283,7 +283,6 @@
         "title": "Display settings",
          "switch": {
           "dotsViewShowCount": {
-            "tooltip": "Note: Enabling this may impact performance when scrolling through large data sets.",
             "label": "In dots view, show count if a data point represents multiple values:"
           }
         }

@@ -112,7 +112,6 @@ abstract class  LocaleKeys {
   static const seriesEdit_common_label_seriesIcon = 'seriesEdit.common.label.seriesIcon';
   static const seriesEdit_common_label_seriesColor = 'seriesEdit.common.label.seriesColor';
   static const seriesEdit_common_displaySettings_title = 'seriesEdit.common.displaySettings.title';
-  static const seriesEdit_common_displaySettings_switch_dotsViewShowCount_tooltip = 'seriesEdit.common.displaySettings.switch.dotsViewShowCount.tooltip';
   static const seriesEdit_common_displaySettings_switch_dotsViewShowCount_label = 'seriesEdit.common.displaySettings.switch.dotsViewShowCount.label';
   static const seriesEdit_bloodPressure_title = 'seriesEdit.bloodPressure.title';
   static const seriesEdit_bloodPressure_switch_hideMedicationInput_label = 'seriesEdit.bloodPressure.switch.hideMedicationInput.label';

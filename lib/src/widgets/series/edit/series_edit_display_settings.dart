@@ -21,11 +21,8 @@ class SeriesEditDisplaySettings extends StatelessWidget {
       child: Column(
         children: [
           SwitchListTile(
-            title: Tooltip(
-              message: LocaleKeys.seriesEdit_common_displaySettings_switch_dotsViewShowCount_tooltip.tr(),
-              child: Text(
-                LocaleKeys.seriesEdit_common_displaySettings_switch_dotsViewShowCount_label.tr(),
-              ),
+            title: Text(
+              LocaleKeys.seriesEdit_common_displaySettings_switch_dotsViewShowCount_label.tr(),
             ),
             value: settings.dotsViewShowCount,
             onChanged: (value) => settings.dotsViewShowCount = value,

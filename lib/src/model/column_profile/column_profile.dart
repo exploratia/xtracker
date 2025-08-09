@@ -74,12 +74,27 @@ class ColumnDef {
   final String? title;
   final String? msgId;
   final TextAlign? textAlign;
+  final bool disablePadding;
   final Widget? titleWidget;
 
-  ColumnDef({required this.minWidth, this.isMarginColumn = false, this.title, this.msgId, this.textAlign, this.titleWidget});
+  /// [disablePadding] could be set, if every second column has an empty title or column width is big enough.
+  ColumnDef({required this.minWidth, this.isMarginColumn = false, this.title, this.msgId, this.textAlign, this.disablePadding = false, this.titleWidget});
 
   ColumnDef copyWithWidthFactor(double widthFactor) {
-    return ColumnDef(minWidth: (minWidth * widthFactor), title: title, msgId: msgId, textAlign: textAlign, titleWidget: titleWidget);
+    return ColumnDef(
+        minWidth: (minWidth * widthFactor), title: title, msgId: msgId, textAlign: textAlign, titleWidget: titleWidget, disablePadding: disablePadding);
+  }
+
+  MainAxisAlignment determineMainAxisAlignmentFromTextAlign() {
+    var mainAxisAlignment = MainAxisAlignment.center;
+    if (textAlign != null) {
+      if (textAlign == TextAlign.left || textAlign == TextAlign.start) {
+        mainAxisAlignment = MainAxisAlignment.start;
+      } else if (textAlign == TextAlign.right || textAlign == TextAlign.end) {
+        mainAxisAlignment = MainAxisAlignment.end;
+      }
+    }
+    return mainAxisAlignment;
   }
 
   @override
@@ -91,8 +106,18 @@ class ColumnDef {
     if (titleWidget != null) {
       return titleWidget!;
     }
+    var txt = I18N.compose(msgId) ?? title ?? "";
+    if (txt.isEmpty) return Container();
 
-    var txt = I18N.compose(msgId) ?? title ?? "?";
+    if (disablePadding) {
+      return Text(
+        txt,
+        overflow: TextOverflow.visible,
+        softWrap: false,
+        textAlign: textAlign ?? TextAlign.center,
+      );
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 4),
       child: OverflowText(

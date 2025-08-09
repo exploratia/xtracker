@@ -9,7 +9,7 @@ abstract class SeriesSettings {
 
   SeriesSettings(this._prefix, this._settings, this._updateStateCB);
 
-  String _key(String suffix) => "${_prefix}_$suffix";
+  String _key(String suffix) => "$_prefix$suffix";
 
   void set(String key, dynamic value) {
     // update callback available?

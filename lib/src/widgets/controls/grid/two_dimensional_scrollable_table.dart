@@ -185,7 +185,12 @@ class _ScrollableGridState extends State<_ScrollableGrid> {
             SizedBox(
               height: widget.tableHeadHeight,
               width: firstColumnWidth,
-              child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: [fixedFirstColumnTableColumn.getTableColumnHeadItemWidget()]),
+              child: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: fixedFirstColumnTableColumn.determineMainAxisAlignmentFromTextAlign(),
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [fixedFirstColumnTableColumn.getTableColumnHeadItemWidget()],
+              ),
             ),
             const _TextColoredDivider(),
             Expanded(

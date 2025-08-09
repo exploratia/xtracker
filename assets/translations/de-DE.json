@@ -283,7 +283,6 @@
         "title": "Anzeigeeinstellungen",
         "switch": {
           "dotsViewShowCount": {
-            "tooltip": "Achtung: Bei großen Datenmengen kann es beim Scrollen zu Performance-Problemen (Rucklern) kommen.",
             "label": "In der Übersicht Anzahl an Datenpunkten anzeigen, wenn diese mehrere Werte repräsentieren."
           }
         }
