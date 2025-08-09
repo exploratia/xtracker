@@ -19,7 +19,7 @@ class BloodPressureDayItem extends DayItem {
     _showCount = seriesDef.displaySettingsReadonly().dotsViewShowCount;
   }
 
-  BloodPressureDayItem(super.dateTime);
+  BloodPressureDayItem(super.dateTimeDayStart);
 
   void updateHighLow(int valH, int valL, bool med) {
     high = max(high, valH);
@@ -35,14 +35,15 @@ class BloodPressureDayItem extends DayItem {
       dotColor1: BloodPressureValue.colorHigh(high),
       dotColor2: BloodPressureValue.colorLow(low),
       dotText: medication ? '+' : null,
-      count: _showCount && count > 1 ? count : null,
-      isStartMarker: monthly ? false : dateTime.day == 1,
+      showCount: _showCount,
+      isStartMarker: monthly ? false : dateTimeDayStart.day == 1,
+      seriesValues: seriesValues,
     );
   }
 
   @override
   String toString() {
-    return 'BloodPressureDayItem{date: $dateTime, high: $high, low: $low, medication: $medication, count: $count}';
+    return 'BloodPressureDayItem{date: $dateTimeDayStart, high: $high, low: $low, medication: $medication, count: $count}';
   }
 
   static List<BloodPressureDayItem> buildDayItems(SeriesData<BloodPressureValue> seriesData) {
@@ -51,8 +52,8 @@ class BloodPressureDayItem extends DayItem {
     BloodPressureDayItem? actItem;
     DateTime? actDay;
 
-    BloodPressureDayItem createDayItem(DateTime dateTimeDay) {
-      BloodPressureDayItem rowItem = BloodPressureDayItem(dateTimeDay);
+    BloodPressureDayItem createDayItem(DateTime dateTimeDayStart) {
+      BloodPressureDayItem rowItem = BloodPressureDayItem(dateTimeDayStart);
       list.add(rowItem);
       return rowItem;
     }
@@ -69,7 +70,7 @@ class BloodPressureDayItem extends DayItem {
         actItem = createDayItem(actDay);
       }
 
-      actItem!.increaseCount();
+      actItem!.addValue(item);
       actItem.updateHighLow(item.high, item.low, item.medication);
     }
 

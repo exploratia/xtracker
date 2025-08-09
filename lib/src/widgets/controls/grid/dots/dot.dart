@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 
-class Dot extends StatelessWidget {
-  const Dot({super.key, required this.dotColor1, this.dotColor2, this.count, this.dotText, this.isStartMarker = false});
+import '../../../../model/series/data/series_data_value.dart';
+import '../../../../util/date_time_utils.dart';
 
-  final int? count;
+class Dot extends StatelessWidget {
+  const Dot({super.key, required this.dotColor1, this.dotColor2, this.dotText, this.isStartMarker = false, required this.seriesValues, this.showCount = false});
+
   final Color dotColor1;
   final Color? dotColor2;
   final String? dotText;
   final bool isStartMarker;
+  final bool showCount;
+  final List<SeriesDataValue> seriesValues;
 
   static const int dotHeight = 24;
 
@@ -26,11 +30,12 @@ class Dot extends StatelessWidget {
     Widget? dotTextChild = dotText != null ? Text(dotText!, textAlign: TextAlign.right, style: _dotTextStyle) : null;
 
     Text? countText;
-    if (count != null) {
+    int count = seriesValues.length;
+    if (showCount && count > 1) {
       String cTxt = '$count';
-      if (count! < 100) {
+      if (count < 100) {
         cTxt = '$count⠀'; // Braille Pattern Blank https://www.compart.com/en/unicode/U+2800
-      } else if (count! >= 1000) {
+      } else if (count >= 1000) {
         cTxt = '+++';
       }
       countText = Text(
@@ -56,7 +61,7 @@ class Dot extends StatelessWidget {
       );
     }
 
-    return Column(
+    var dotRender = Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -79,5 +84,17 @@ class Dot extends StatelessWidget {
         ),
       ],
     );
+
+    if (count > 0) {
+      var tooltipText = '▹ ${DateTimeUtils.formateDate(seriesValues.first.dateTime)}';
+      for (var value in seriesValues) {
+        tooltipText += '\n- ${DateTimeUtils.formateTime(value.dateTime)}    ${value.toTooltip()}';
+      }
+      return Tooltip(
+        message: tooltipText,
+        child: dotRender,
+      );
+    }
+    return dotRender;
   }
 }

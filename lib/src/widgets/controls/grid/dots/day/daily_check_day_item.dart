@@ -9,7 +9,7 @@ import '../dot.dart';
 import './day_item.dart';
 
 class DailyCheckDayItem extends DayItem {
-  DailyCheckDayItem(super.dateTime);
+  DailyCheckDayItem(super.dateTimeDayStart);
 
   static Color _color1 = Colors.blue;
   static Color _color2 = Colors.blue;
@@ -29,14 +29,15 @@ class DailyCheckDayItem extends DayItem {
     return Dot(
       dotColor1: _color1,
       dotColor2: _color2,
-      count: _showCount && count > 1 ? count : null,
-      isStartMarker: monthly ? false : dateTime.day == 1,
+      showCount: _showCount,
+      isStartMarker: monthly ? false : dateTimeDayStart.day == 1,
+      seriesValues: seriesValues,
     );
   }
 
   @override
   String toString() {
-    return 'DailyCheckDayItem{date: $dateTime, count: $count}';
+    return 'DailyCheckDayItem{date: $dateTimeDayStart, count: $count}';
   }
 
   static List<DailyCheckDayItem> buildDayItems(SeriesData<DailyCheckValue> seriesData) {
@@ -45,8 +46,8 @@ class DailyCheckDayItem extends DayItem {
     DailyCheckDayItem? actItem;
     DateTime? actDay;
 
-    DailyCheckDayItem createDayItem(DateTime dateTimeDay) {
-      DailyCheckDayItem rowItem = DailyCheckDayItem(dateTimeDay);
+    DailyCheckDayItem createDayItem(DateTime dateTimeDayStart) {
+      DailyCheckDayItem rowItem = DailyCheckDayItem(dateTimeDayStart);
       list.add(rowItem);
       return rowItem;
     }
@@ -63,7 +64,7 @@ class DailyCheckDayItem extends DayItem {
         actItem = createDayItem(actDay);
       }
 
-      actItem!.increaseCount();
+      actItem!.addValue(item);
     }
 
     return list;

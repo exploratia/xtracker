@@ -22,6 +22,11 @@ class DailyCheckValue extends SeriesDataValue {
         'utcMs': dateTime.millisecondsSinceEpoch,
       };
 
+  @override
+  String toTooltip() {
+    return '🗸';
+  }
+
   static DailyCheckValue checkOnDailyCheckValue(dynamic value) {
     if (value is DailyCheckValue) return value;
     var errMsg = 'Failure for series value: Type mismatch! Expected: "$DailyCheckValue", got: "${value.runtimeType}"';

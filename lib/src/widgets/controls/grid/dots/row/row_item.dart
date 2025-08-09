@@ -35,7 +35,7 @@ abstract class RowItem<T extends DayItem> {
     }
 
     for (var dayItem in dayItemsDescending) {
-      var firstOfMonth = DateTimeUtils.firstDayOfMonth(dayItem.dateTime);
+      var firstOfMonth = DateTimeUtils.firstDayOfMonth(dayItem.dateTimeDayStart);
       actFirstOfMonth ??= firstOfMonth;
 
       // no act row yet - create the first row
@@ -48,7 +48,7 @@ abstract class RowItem<T extends DayItem> {
       }
 
       // set dayItem at day position in dayItems
-      actRowItem!.dayItems[dayItem.dateTime.day - 1] = dayItem;
+      actRowItem!.dayItems[dayItem.dateTimeDayStart.day - 1] = dayItem;
     }
 
     checkAtLeastOneDisplayDate(list);
@@ -76,7 +76,7 @@ abstract class RowItem<T extends DayItem> {
     }
 
     for (var dayItem in dayItemsDescending) {
-      var firstOfWeek = DateTimeUtils.mondayOfSameWeek(dayItem.dateTime);
+      var firstOfWeek = DateTimeUtils.mondayOfSameWeek(dayItem.dateTimeDayStart);
       actFirstOfWeek ??= firstOfWeek;
 
       // no act row yet - create the first row
@@ -89,7 +89,7 @@ abstract class RowItem<T extends DayItem> {
       }
 
       // set dayItem at day position in dayItems
-      actRowItem.dayItems[dayItem.dateTime.weekday - 1] = dayItem;
+      actRowItem.dayItems[dayItem.dateTimeDayStart.weekday - 1] = dayItem;
     }
 
     checkAtLeastOneDisplayDate(list);
