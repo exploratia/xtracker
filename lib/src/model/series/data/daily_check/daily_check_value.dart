@@ -24,7 +24,7 @@ class DailyCheckValue extends SeriesDataValue {
 
   @override
   String toTooltip() {
-    return '🗸';
+    return '✓';
   }
 
   static DailyCheckValue checkOnDailyCheckValue(dynamic value) {
