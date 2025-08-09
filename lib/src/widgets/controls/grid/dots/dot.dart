@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../../model/series/data/series_data_value.dart';
 import '../../../../util/date_time_utils.dart';
+import '../../../../util/pair.dart';
+import '../../../../util/tooltip_utils.dart';
 
 class Dot extends StatelessWidget {
   const Dot({super.key, required this.dotColor1, this.dotColor2, this.dotText, this.isStartMarker = false, required this.seriesValues, this.showCount = false});
@@ -87,11 +89,22 @@ class Dot extends StatelessWidget {
 
     if (count > 0) {
       var tooltipText = '▹ ${DateTimeUtils.formateDate(seriesValues.first.dateTime)}';
+
+      // bring all times to same length for showing a nice table like tooltip
+      List<Pair<String, String>> timeValuePairs = [];
+
       for (var value in seriesValues) {
-        tooltipText += '\n- ${DateTimeUtils.formateTime(value.dateTime)}    ${value.toTooltip()}';
+        timeValuePairs.add(Pair(DateTimeUtils.formateTime(value.dateTime), value.toTooltip()));
       }
+
+      final maxLength = timeValuePairs.map((p) => p.k.length).reduce((a, b) => a > b ? a : b);
+      for (var timeValuePair in timeValuePairs) {
+        tooltipText += '\n- ${timeValuePair.k.padLeft(maxLength)}   ${timeValuePair.v}';
+      }
+
       return Tooltip(
         message: tooltipText,
+        textStyle: TooltipUtils.tooltipMonospaceStyle,
         child: dotRender,
       );
     }

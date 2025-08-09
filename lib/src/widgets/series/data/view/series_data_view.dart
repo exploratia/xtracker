@@ -5,6 +5,7 @@ import '../../../../model/series/series_type.dart';
 import '../../../../model/series/series_view_meta_data.dart';
 import '../../../../providers/series_data_provider.dart';
 import '../../../../util/theme_utils.dart';
+import '../../../../util/tooltip_utils.dart';
 import '../../../controls/navigation/hide_bottom_navigation_bar.dart';
 import '../../../controls/provider/data_provider_loader.dart';
 import '../../../controls/text/overflow_text.dart';
@@ -18,6 +19,8 @@ class SeriesDataView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TooltipUtils.updateTooltipMonospaceStyle(context);
+
     return HideBottomNavigationBar(
       child: Stack(
         fit: StackFit.expand,
