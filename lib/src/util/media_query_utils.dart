@@ -28,6 +28,10 @@ class MediaQueryUtils {
     return mediaIsTablet(mediaQueryData);
   }
 
+  bool get isSmallScreen {
+    return mediaQueryData.size.width < 250 || mediaQueryData.size.height < 300;
+  }
+
   static Orientation mediaOrientation(MediaQueryData mediaQueryData) {
     return mediaQueryData.orientation;
   }

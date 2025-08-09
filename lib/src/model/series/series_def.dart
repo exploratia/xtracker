@@ -8,6 +8,7 @@ import '../../widgets/controls/select/icon_map.dart';
 import '../../widgets/series/edit/series_edit.dart';
 import 'series_type.dart';
 import 'settings/blood_pressure_settings.dart';
+import 'settings/display_settings.dart';
 
 class SeriesDef {
   final String uuid;
@@ -36,6 +37,12 @@ class SeriesDef {
 
   /// return BloodPressureSettings read only mode
   BloodPressureSettings bloodPressureSettingsReadonly() => BloodPressureSettings(_settings, null);
+
+  /// return BloodPressureSettings in edit mode (setters active)
+  DisplaySettings displaySettingsEditable(Function() updateStateCB) => DisplaySettings(_settings, updateStateCB);
+
+  /// return BloodPressureSettings read only mode
+  DisplaySettings displaySettingsReadonly() => DisplaySettings(_settings, null);
 
   @override
   String toString() {

@@ -278,11 +278,22 @@
         "seriesName": "Name",
         "seriesIcon": "Symbol",
         "seriesColor": "Farbe"
+      },
+      "displaySettings": {
+        "title": "Anzeigeeinstellungen",
+        "switch": {
+          "dotsViewShowCount": {
+            "label": "In der Übersicht Anzahl an Datenpunkten anzeigen, wenn diese mehrere Werte repräsentieren."
+          }
+        }
       }
     },
     "bloodPressure": {
-      "label": {
-        "hideMedicationInput": "Medikamenteneinnahme im Eingabedialog ausblenden:"
+      "title": "Blutdruckeinstellungen",
+      "switch": {
+        "hideMedicationInput": {
+          "label": "Medikamenteneinnahme im Eingabedialog ausblenden:"
+        }
       }
     }
   },

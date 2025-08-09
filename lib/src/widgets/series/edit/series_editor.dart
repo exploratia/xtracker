@@ -8,12 +8,14 @@ import '../../../model/series/series_type.dart';
 import '../../../providers/series_provider.dart';
 import '../../../util/dialogs.dart';
 import '../../../util/logging/flutter_simple_logging.dart';
+import '../../controls/card/expandable.dart';
 import '../../controls/layout/scrollable_centered_form_wrapper.dart';
 import '../../controls/select/color_picker.dart';
 import '../../controls/select/icon_map.dart';
 import '../../controls/select/icon_picker.dart';
 import '../../controls/text/overflow_text.dart';
 import 'blood_pressure/blood_pressure_series_edit.dart';
+import 'series_edit_display_settings.dart';
 
 class SeriesEditor extends StatefulWidget {
   const SeriesEditor({super.key, required this.seriesDef, required this.goBack});
@@ -145,10 +147,18 @@ class _SeriesEditorState extends State<SeriesEditor> {
         ),
         const SizedBox(height: 10),
         _SeriesSymbolAndColor(seriesDef: _seriesDef),
+
         switch (_seriesDef.seriesType) {
-          SeriesType.bloodPressure => BloodPressureSeriesEdit(_seriesDef, _updateState),
+          SeriesType.bloodPressure => Expandable(
+              initialExpanded: true,
+              icon: const Icon(Icons.monitor_heart_outlined),
+              title: LocaleKeys.seriesEdit_bloodPressure_title.tr(),
+              child: BloodPressureSeriesEdit(_seriesDef, _updateState),
+            ),
           SeriesType.dailyCheck => Container(),
-        }
+        },
+
+        SeriesEditDisplaySettings(_seriesDef, _updateState),
       ],
     );
 
@@ -206,7 +216,7 @@ class _SeriesTypeHeadline extends StatelessWidget {
         const SizedBox(width: 10),
         OverflowText(
           SeriesType.displayNameOf(seriesDef.seriesType),
-          style: themeData.textTheme.headlineSmall,
+          style: themeData.textTheme.titleLarge,
         ),
       ],
     );

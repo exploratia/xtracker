@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../../../../model/series/data/blood_pressure/blood_pressure_value.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
+import '../../../../../../util/date_time_utils.dart';
+import '../../../../../../util/tooltip_utils.dart';
 import 'blood_pressure_value_renderer.dart';
 
 class BloodPressureValuesRenderer extends StatelessWidget {
@@ -19,12 +21,16 @@ class BloodPressureValuesRenderer extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ...bloodPressureValues.map(
-          (bpv) => BloodPressureValueRenderer(
-            key: Key('bloodPressureValue_${bpv.uuid}'),
-            bloodPressureValue: bpv,
-            seriesDef: seriesViewMetaData.seriesDef,
-            editMode: seriesViewMetaData.editMode,
-            showBorder: showBorder,
+          (bpv) => Tooltip(
+            message: '${DateTimeUtils.formateDate(bpv.dateTime)}   ${DateTimeUtils.formateTime(bpv.dateTime)}',
+            textStyle: TooltipUtils.tooltipMonospaceStyle,
+            child: BloodPressureValueRenderer(
+              key: Key('bloodPressureValue_${bpv.uuid}'),
+              bloodPressureValue: bpv,
+              seriesDef: seriesViewMetaData.seriesDef,
+              editMode: seriesViewMetaData.editMode,
+              showBorder: showBorder,
+            ),
           ),
         ),
       ],

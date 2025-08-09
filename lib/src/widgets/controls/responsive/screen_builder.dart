@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../generated/assets.gen.dart';
 import '../../../model/navigation/navigation.dart';
 import '../../../model/navigation/navigation_item.dart';
 import '../../../util/media_query_utils.dart';
@@ -58,7 +59,12 @@ class ScreenBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mediaQueryInfo = MediaQueryUtils(MediaQuery.of(context));
+    final mediaQueryInfo = MediaQueryUtils.of(context);
+
+    if (mediaQueryInfo.isSmallScreen) {
+      return const _TooSmallScreen();
+    }
+
     final buildBottomNavigationBar = bottomNavigationBarBuilder != null && mediaQueryInfo.isPortrait;
     final buildNavigationRail =
         !buildBottomNavigationBar && navigationRailBuilder != null && (mediaQueryInfo.isLandscape && mediaQueryInfo.mediaQueryData.size.width > 600);
@@ -90,6 +96,37 @@ class ScreenBuilder extends StatelessWidget {
       bottomNavigationBar: buildBottomNavigationBar ? bottomNavigationBarBuilder!(context) : null,
       body: bodyPopScope,
       floatingActionButton: floatingActionButtonBuilder != null ? floatingActionButtonBuilder!(context) : null,
+    );
+  }
+}
+
+class _TooSmallScreen extends StatelessWidget {
+  const _TooSmallScreen();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              spacing: 10,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const SizedBox(height: 10),
+                SizedBox(
+                  height: 32,
+                  width: 32,
+                  child: Assets.images.logos.appLogo.image(fit: BoxFit.cover),
+                ),
+                const Text("App is not designed for screens < 250x300."),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

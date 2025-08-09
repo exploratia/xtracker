@@ -39,6 +39,7 @@ class DateTimeUtils {
     return DateFormat('yyyyMMdd_HHmmss').format(DateTime.now());
   }
 
+  /// format date yMd
   static String formateDate(DateTime dateTime) {
     return DateFormat.yMd().format(dateTime);
   }
@@ -63,23 +64,46 @@ class DateTimeUtils {
     return dateTime.day == lastDayOfMonth(dateTime).day;
   }
 
+  static DateTime mondayOfSameWeek(DateTime date) {
+    int daysToSubtract = date.weekday - DateTime.monday;
+    DateTime monday = date.subtract(Duration(days: daysToSubtract));
+
+    if (date.isUtc) {
+      // Monday in UTC
+      return DateTime.utc(monday.year, monday.month, monday.day);
+    } else {
+      // Monday in local time
+      return DateTime(monday.year, monday.month, monday.day);
+    }
+  }
+
   static DateTime lastDayOfMonth(DateTime date) {
     return firstDayOfMonth(firstDayOfMonth(date).add(const Duration(days: 40))).subtract(const Duration(days: 1));
     // was not always correct: missing april - probably because of the 29th
     // return DateTime(date.year, date.month + 1, 0);
   }
 
+  static DateTime firstDayOfNextMonth(DateTime date) {
+    return firstDayOfMonth(firstDayOfMonth(date).add(const Duration(days: 40)));
+  }
+
+  static DateTime firstDayOfPreviousMonth(DateTime date) {
+    return firstDayOfMonth(firstDayOfMonth(date).subtract(const Duration(days: 10)));
+  }
+
+  /// first day of month 00:00:00.000
   static DateTime firstDayOfMonth(DateTime date) {
     return DateTime(date.year, date.month, 1);
   }
 
+  /// yyyy-01-01 00:00:00.000
   static DateTime firstDayOfYear(DateTime date) {
     return DateTime(date.year, 1, 1);
   }
 
   static DateTime dayBefore(DateTime date) {
     // Because of time change (de:Zeitumstellung) subtract only half a day and then truncate to day start
-    return DateTimeUtils.truncateToDay(date.subtract(Duration(hours: date.hour + 12)));
+    return truncateToDay(date.subtract(Duration(hours: date.hour + 12)));
   }
 
   static DateTime truncateToDay(DateTime date) {

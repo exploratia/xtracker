@@ -278,11 +278,22 @@
         "seriesName": "Name",
         "seriesIcon": "Icon",
         "seriesColor": "Color"
+      },
+      "displaySettings": {
+        "title": "Display settings",
+         "switch": {
+          "dotsViewShowCount": {
+            "label": "In dots view, show count if a data point represents multiple values:"
+          }
+        }
       }
     },
     "bloodPressure": {
-      "label": {
-        "hideMedicationInput": "Hide medication input in dialog:"
+      "title": "Blood pressure settings",
+      "switch": {
+        "hideMedicationInput": {
+          "label": "Hide medication input in dialog:"
+        }
       }
     }
   },

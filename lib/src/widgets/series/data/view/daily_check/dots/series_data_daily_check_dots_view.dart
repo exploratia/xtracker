@@ -1,58 +1,66 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../../model/column_profile/fix_column_profiles.dart';
 import '../../../../../../model/series/data/daily_check/daily_check_value.dart';
 import '../../../../../../model/series/data/series_data.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
-import '../../../../../../util/color_utils.dart';
-import '../../../../../../util/custom_paint_utils.dart';
-import '../../../../../../util/date_time_utils.dart';
-import '../../../../../controls/dots/responsive_dots_view.dart';
+import '../../../../../../util/theme_utils.dart';
+import '../../../../../controls/grid/dots/day/daily_check_day_item.dart';
+import '../../../../../controls/grid/dots/dot.dart';
+import '../../../../../controls/grid/dots/row/row_item.dart';
+import '../../../../../controls/grid/two_dimensional_scrollable_table.dart';
 
 class SeriesDataDailyCheckDotsView extends StatelessWidget {
-  const SeriesDataDailyCheckDotsView({super.key, required this.seriesViewMetaData, required this.seriesData});
-
-  final SeriesViewMetaData seriesViewMetaData;
   final SeriesData<DailyCheckValue> seriesData;
+  final SeriesViewMetaData seriesViewMetaData;
+
+  const SeriesDataDailyCheckDotsView({super.key, required this.seriesViewMetaData, required this.seriesData});
 
   @override
   Widget build(BuildContext context) {
-    final Map<String, _DailyCheckDayItem> data = _buildDataProvider(seriesData);
-    DateTime minDateTime = DateTime.now();
-    DateTime maxDateTime = DateTime.now();
-    if (seriesData.data.isNotEmpty) {
-      minDateTime = seriesData.data.first.dateTime;
-      maxDateTime = seriesData.data.last.dateTime;
-    }
+    Dot.updateDotTextStyles(context);
+    DailyCheckDayItem.updateValuesFromSeries(seriesViewMetaData.seriesDef);
+    var dayItems = DailyCheckDayItem.buildDayItems(seriesData);
 
-    var color1 = seriesViewMetaData.seriesDef.color;
-    var color2 = ColorUtils.hue(color1, 30);
+    // padding because of headline in stack
+    return Padding(
+      padding: const EdgeInsets.only(top: ThemeUtils.seriesDataViewTopPadding),
+      child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          bool monthly = constraints.maxWidth > FixColumnProfiles.columnProfileDateMonthDays.minWidth();
 
-    painterFnc(_DailyCheckDayItem dataItem, Canvas canvas, Offset topLeft, Offset bottomRight) {
-      List<Color> colors = [color1, color2];
-      final rect = Rect.fromPoints(topLeft, bottomRight);
-      CustomPaintUtils.paintGradientFilledRect(canvas, rect, 2, colors, Alignment.topCenter, Alignment.bottomCenter);
-    }
+          List<RowItem<DailyCheckDayItem>> data = monthly ? RowItem.buildMonthRowItems(dayItems) : RowItem.buildWeekRowItems(dayItems);
 
-    return ResponsiveDotsView(
-      minDateTime: minDateTime,
-      maxDateTime: maxDateTime,
-      data: data,
-      painterFnc: painterFnc,
+          gridCellBuilder(BuildContext context, int yIndex, int xIndex) {
+            var rowItem = data[yIndex];
+
+            if (xIndex == 0) {
+              if (rowItem.displayDate != null) {
+                return GridCell(child: Center(child: Text(rowItem.displayDate!)));
+              }
+              return GridCell(child: Container());
+            }
+
+            var dayItem = rowItem.getDayItem(xIndex - 1);
+            if (dayItem == null) {
+              return GridCell(child: Container());
+            }
+
+            return GridCell(
+              backgroundColor: dayItem.backgroundColor,
+              child: dayItem.toDot(monthly),
+            );
+          }
+
+          return TwoDimensionalScrollableTable(
+            tableColumnProfile: monthly ? FixColumnProfiles.columnProfileDateMonthDays : FixColumnProfiles.columnProfileDateWeekdays,
+            lineCount: data.length,
+            gridCellBuilder: gridCellBuilder,
+            lineHeight: Dot.dotHeight,
+            useFixedFirstColumn: true,
+          );
+        },
+      ),
     );
   }
-
-  Map<String, _DailyCheckDayItem> _buildDataProvider(SeriesData<DailyCheckValue> seriesData) {
-    Map<String, _DailyCheckDayItem> map = {};
-
-    for (var item in seriesData.data) {
-      String dateDay = DateTimeUtils.formateDate(item.dateTime);
-      map[dateDay] = _DailyCheckDayItem(dateTime: item.dateTime);
-    }
-
-    return map;
-  }
-}
-
-class _DailyCheckDayItem extends DayItem {
-  _DailyCheckDayItem({required super.dateTime});
 }
