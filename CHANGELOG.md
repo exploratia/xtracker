@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.0.4] - 2025-08-10
+
+### Other
+
+- set minimum SDK to 21 (Android 5) to support older devices.
+-
+
 ## [1.0.3] - 2025-08-09
 
 ### Features
