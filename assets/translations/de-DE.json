@@ -79,6 +79,10 @@
         "title": "Frei",
         "info": "Etwas ohne regelmäßiges Intervall aufzeichnen. Z.B. Auto betanken (Kosten und gefahrene Distanz)."
       },
+      "habit": {
+        "title": "Gewohnheit",
+        "info": "Mehrfach täglich wiederkehrende Gewohnheiten erfassen. Z.B. Kaffeekonsum oder genug Wasser trinken."
+      },
       "monthly": {
         "title": "Monatlich",
         "info": "Monatliche Werte aufzeichnen um diese über das Jahr oder Jahre zu verfolgen. Z.B. Wasser- oder Stromverbrauch."
@@ -364,6 +368,13 @@
       "btn": {
         "toggleCheck": {
           "tooltip": "Wert wechseln"
+        }
+      }
+    },
+    "habit": {
+      "btn": {
+        "toggleValue": {
+          "tooltip": "Wert value"
         }
       }
     }

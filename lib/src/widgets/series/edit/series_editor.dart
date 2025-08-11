@@ -156,9 +156,11 @@ class _SeriesEditorState extends State<SeriesEditor> {
               child: BloodPressureSeriesEdit(_seriesDef, _updateState),
             ),
           SeriesType.dailyCheck => Container(),
+          SeriesType.habit => Container(),
         },
 
-        SeriesEditDisplaySettings(_seriesDef, _updateState),
+        // only show DisplaySettings if there is something for that series type
+        if (SeriesEditDisplaySettings.applicableOn(_seriesDef)) SeriesEditDisplaySettings(_seriesDef, _updateState),
       ],
     );
 
@@ -246,16 +248,11 @@ class _SeriesSymbolAndColor extends StatelessWidget {
             ),
           ],
         ),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          spacing: 10,
-          children: [
-            Text(LocaleKeys.seriesEdit_common_label_seriesColor.tr()),
-            ColorPicker(
-              color: seriesDef.color,
-              colorSelected: (color) => seriesDef.color = color,
-            ),
-          ],
+        ColorPicker(
+          color: seriesDef.color,
+          colorSelected: (color) => seriesDef.color = color,
+          showColorLabel: true,
+          // showPixelPreview: PixelViewPreview.applicableOn(seriesDef),
         ),
       ],
     );

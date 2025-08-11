@@ -1,11 +1,17 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
+import '../../../../generated/locale_keys.g.dart';
+import '../../../util/color_utils.dart';
+
 class ColorPicker extends StatefulWidget {
-  const ColorPicker({super.key, this.color = const Color(0xffde0b30), required this.colorSelected});
+  const ColorPicker({super.key, this.color = const Color(0xffde0b30), required this.colorSelected, this.showColorLabel = true, this.showPixelPreview = false});
 
   final Color color;
   final void Function(Color) colorSelected;
+  final bool showColorLabel;
+  final bool showPixelPreview;
 
   @override
   State<ColorPicker> createState() => _ColorPickerState();
@@ -27,8 +33,8 @@ class _ColorPickerState extends State<ColorPicker> {
 
   @override
   Widget build(BuildContext context) {
-    final contrastColor = useWhiteForeground(currentColor) ? Colors.white : Colors.black;
-    return ElevatedButton(
+    final contrastColor = ColorUtils.getContrastingTextColor(currentColor); // useWhiteForeground(currentColor) ? Colors.white : Colors.black;
+    var pickerBtn = ElevatedButton(
       onPressed: () {
         showDialog(
           context: context,
@@ -63,6 +69,19 @@ class _ColorPickerState extends State<ColorPicker> {
         Icons.palette_outlined,
         color: contrastColor,
       ),
+    );
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      spacing: 10,
+      children: [
+        if (widget.showColorLabel) Text(LocaleKeys.seriesEdit_common_label_seriesColor.tr()),
+        pickerBtn,
+        // if (widget.showPixelPreview) ...[
+        //   Text("Pixel preview"),
+        //   PixelViewPreview(color: currentColor),
+        // ]
+      ],
     );
   }
 }

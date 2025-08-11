@@ -64,4 +64,9 @@ class ColorUtils {
     // Combine the components into a single int using bit shifting
     return (alpha << 24) | (red << 16) | (green << 8) | blue;
   }
+
+  static Color getContrastingTextColor(Color background) {
+    final brightness = ThemeData.estimateBrightnessForColor(background);
+    return brightness == Brightness.dark ? Colors.white : Colors.black;
+  }
 }

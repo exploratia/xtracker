@@ -1,6 +1,7 @@
 import '../series_type.dart';
 import 'blood_pressure/blood_pressure_value.dart';
 import 'daily_check/daily_check_value.dart';
+import 'habit/habit_value.dart';
 
 abstract class SeriesDataValue {
   final String uuid;
@@ -17,6 +18,7 @@ abstract class SeriesDataValue {
     return switch (seriesType) {
       SeriesType.bloodPressure => BloodPressureValue.fromJson(json),
       SeriesType.dailyCheck => DailyCheckValue.fromJson(json),
+      SeriesType.habit => HabitValue.fromJson(json),
     };
   }
 }

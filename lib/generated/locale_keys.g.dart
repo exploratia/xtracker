@@ -43,6 +43,8 @@ abstract class  LocaleKeys {
   static const enum_seriesType_dailyCheck_info = 'enum.seriesType.dailyCheck.info';
   static const enum_seriesType_free_title = 'enum.seriesType.free.title';
   static const enum_seriesType_free_info = 'enum.seriesType.free.info';
+  static const enum_seriesType_habit_title = 'enum.seriesType.habit.title';
+  static const enum_seriesType_habit_info = 'enum.seriesType.habit.info';
   static const enum_seriesType_monthly_title = 'enum.seriesType.monthly.title';
   static const enum_seriesType_monthly_info = 'enum.seriesType.monthly.info';
   static const enum_viewType_lineChart_title = 'enum.viewType.lineChart.title';
@@ -142,6 +144,7 @@ abstract class  LocaleKeys {
   static const seriesValue_bloodPressure_validation_diastolicTooHigh = 'seriesValue.bloodPressure.validation.diastolicTooHigh';
   static const seriesValue_bloodPressure_validation_systolicTooLow = 'seriesValue.bloodPressure.validation.systolicTooLow';
   static const seriesValue_dailyCheck_btn_toggleCheck_tooltip = 'seriesValue.dailyCheck.btn.toggleCheck.tooltip';
+  static const seriesValue_habit_btn_toggleValue_tooltip = 'seriesValue.habit.btn.toggleValue.tooltip';
   static const settings_title = 'settings.title';
   static const settings_deviceStorage_title = 'settings.deviceStorage.title';
   static const settings_deviceStorage_btn_clearStorage = 'settings.deviceStorage.btn.clearStorage';

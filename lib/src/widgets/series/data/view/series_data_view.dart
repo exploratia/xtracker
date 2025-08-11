@@ -11,6 +11,7 @@ import '../../../controls/provider/data_provider_loader.dart';
 import '../../../controls/text/overflow_text.dart';
 import 'blood_pressure/series_data_blood_pressure_view.dart';
 import 'daily_check/series_data_daily_check_view.dart';
+import 'habit/series_data_habit_view.dart';
 
 class SeriesDataView extends StatelessWidget {
   const SeriesDataView({super.key, required this.seriesViewMetaData});
@@ -43,6 +44,7 @@ class _SeriesDataView extends StatelessWidget {
     Widget view = switch (seriesViewMetaData.seriesDef.seriesType) {
       SeriesType.bloodPressure => SeriesDataBloodPressureView(seriesViewMetaData: seriesViewMetaData),
       SeriesType.dailyCheck => SeriesDataDailyCheckView(seriesViewMetaData: seriesViewMetaData),
+      SeriesType.habit => SeriesDataHabitView(seriesViewMetaData: seriesViewMetaData),
     };
 
     return DataProviderLoader(

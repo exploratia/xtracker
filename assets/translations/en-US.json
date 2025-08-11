@@ -79,6 +79,10 @@
         "title": "Free",
         "info": "Measure something with no repeating interval. E.g. car refuel distance and costs."
       },
+      "habit": {
+        "title": "Habit",
+        "info": "Track habits multiple times a day. E.g. coffee consumption or drinking enough water."
+      },
       "monthly": {
         "title": "Monthly",
         "info": "Track monthly values - e.g. water or current consumption to see the yearly progress."
@@ -281,7 +285,7 @@
       },
       "displaySettings": {
         "title": "Display settings",
-         "switch": {
+        "switch": {
           "dotsViewShowCount": {
             "label": "In dots view, show count if a data point represents multiple values:"
           }
@@ -363,6 +367,13 @@
     "dailyCheck": {
       "btn": {
         "toggleCheck": {
+          "tooltip": "Toggle value"
+        }
+      }
+    },
+    "habit": {
+      "btn": {
+        "toggleValue": {
           "tooltip": "Toggle value"
         }
       }

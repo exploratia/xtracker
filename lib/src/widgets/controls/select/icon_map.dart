@@ -119,12 +119,14 @@ class IconMap {
 
     map["home_outlined"] = Icons.home_outlined;
     map["coffee_outlined"] = Icons.coffee_outlined;
+    map["water_drop_outlined"] = Icons.water_drop_outlined;
     map["local_gas_station_outlined"] = Icons.local_gas_station_outlined;
     map["local_grocery_store_outlined"] = Icons.local_grocery_store_outlined;
     map["local_restaurant_outlined"] = Icons.local_restaurant_outlined;
     map["music_note_outlined"] = Icons.music_note_outlined;
     map["pets_outlined"] = Icons.pets_outlined;
     map["savings_outlined"] = Icons.savings_outlined;
+    map["repeat_outlined"] = Icons.repeat_outlined;
 
     map["check_box_outlined"] = Icons.check_box_outlined;
     map["check_circle_outline"] = Icons.check_circle_outline;
