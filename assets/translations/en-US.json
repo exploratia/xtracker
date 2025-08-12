@@ -284,19 +284,45 @@
         "seriesColor": "Color"
       },
       "displaySettings": {
-        "title": "Display settings",
+        "title": "Display settings"
+      }
+    },
+    "displaySettings": {
+      "dotsView": {
         "switch": {
           "dotsViewShowCount": {
             "label": "In dots view, show count if a data point represents multiple values:"
           }
         }
+      },
+      "pixelsView": {
+        "preview": {
+          "title": "Pixel preview",
+          "pixelViewSettingsInfo": {
+            "tooltip": "Pixel view settings",
+            "title": "Adjust pixel view",
+            "text": "Configure the pixel view coloring here – depending on whether 'more' of the habit is positive or negative for you.\nValue 1 uses the series color."
+          }
+        },
+        "switch": {
+          "invertHueDirection": {
+            "label": "Reverse hue wheel direction"
+          }
+        },
+        "slider": {
+          "hueFactor": {
+            "label": "Set color for highest value"
+          }
+        }
       }
     },
-    "bloodPressure": {
-      "title": "Blood pressure settings",
-      "switch": {
-        "hideMedicationInput": {
-          "label": "Hide medication input in dialog:"
+    "seriesSettings": {
+      "bloodPressure": {
+        "title": "Blood pressure settings",
+        "switch": {
+          "hideMedicationInput": {
+            "label": "Hide medication input in dialog:"
+          }
         }
       }
     }

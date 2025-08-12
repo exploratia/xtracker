@@ -284,19 +284,45 @@
         "seriesColor": "Farbe"
       },
       "displaySettings": {
-        "title": "Anzeigeeinstellungen",
+        "title": "Anzeigeeinstellungen"
+      }
+    },
+    "displaySettings": {
+      "dotsView": {
         "switch": {
           "dotsViewShowCount": {
             "label": "In der Übersicht Anzahl an Datenpunkten anzeigen, wenn diese mehrere Werte repräsentieren."
           }
         }
+      },
+      "pixelsView": {
+        "preview": {
+          "title": "Pixel-Vorschau",
+          "pixelViewSettingsInfo": {
+            "tooltip": "Info zu Pixelanzeige-Einstellungen",
+            "title": "Pixelanzeige anpassen",
+            "text": "Hier lässt sich die Farbgebung der Pixelanzeige konfigurieren – je nachdem, ob ein „Mehr“ bei der Gewohnheit positiv oder eher negativ bewertet wird.\nDer Wert 1 verwendet die Farbe der Messreihe."
+          }
+        },
+        "switch": {
+          "invertHueDirection": {
+            "label": "Richtung des Farbrads umkehren"
+          }
+        },
+        "slider": {
+          "hueFactor": {
+            "label": "Farbe für den Höchstwert festlegen"
+          }
+        }
       }
     },
-    "bloodPressure": {
-      "title": "Blutdruckeinstellungen",
-      "switch": {
-        "hideMedicationInput": {
-          "label": "Medikamenteneinnahme im Eingabedialog ausblenden:"
+    "seriesSettings": {
+      "bloodPressure": {
+        "title": "Blutdruckeinstellungen",
+        "switch": {
+          "hideMedicationInput": {
+            "label": "Medikamenteneinnahme im Eingabedialog ausblenden:"
+          }
         }
       }
     }
@@ -374,7 +400,7 @@
     "habit": {
       "btn": {
         "toggleValue": {
-          "tooltip": "Wert value"
+          "tooltip": "Wert wechseln"
         }
       }
     }

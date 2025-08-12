@@ -1,3 +1,5 @@
+
+
 abstract class SeriesSettings {
   final String _prefix;
 
@@ -21,5 +23,9 @@ abstract class SeriesSettings {
 
   bool getBool(String key) {
     return _settings[_key(key)] as bool? ?? false;
+  }
+
+  double getDouble(String key, {double defaultValue = 0}) {
+    return _settings[_key(key)] as double? ?? defaultValue;
   }
 }

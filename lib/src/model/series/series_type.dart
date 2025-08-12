@@ -8,7 +8,7 @@ import 'view_type.dart';
 enum SeriesType {
   bloodPressure('bloodPressure', 'monitor_heart_outlined', Colors.red, [ViewType.dots, ViewType.lineChart, ViewType.table]),
   dailyCheck("dailyCheck", 'check_box_outlined', Colors.blue, [ViewType.barChart, ViewType.table, ViewType.dots]),
-  habit("habit", 'repeat_outlined', Colors.amber, [
+  habit("habit", 'repeat_outlined', Color.fromRGBO(13, 133, 0, 1), [
     ViewType.barChart,
     ViewType.table /*, ViewType.dots*/
   ]);
