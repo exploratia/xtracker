@@ -69,4 +69,9 @@ class ColorUtils {
     final brightness = ThemeData.estimateBrightnessForColor(background);
     return brightness == Brightness.dark ? Colors.white : Colors.black;
   }
+
+  static bool isContrastingColorDark(Color background) {
+    final brightness = ThemeData.estimateBrightnessForColor(background);
+    return brightness != Brightness.dark;
+  }
 }
