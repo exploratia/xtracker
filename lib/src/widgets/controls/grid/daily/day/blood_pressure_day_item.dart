@@ -1,25 +1,30 @@
-import 'package:flutter/material.dart';
+import 'dart:math';
 
-import '../../../../../model/series/data/daily_check/daily_check_value.dart';
+import '../../../../../model/series/data/blood_pressure/blood_pressure_value.dart';
 import '../../../../../model/series/data/series_data.dart';
 import '../../../../../model/series/series_def.dart';
-import '../../../../../util/color_utils.dart';
 import '../../../../../util/date_time_utils.dart';
 import '../dot.dart';
 import './day_item.dart';
 
-class DailyCheckDayItem extends DayItem {
-  DailyCheckDayItem(super.dateTimeDayStart);
+class BloodPressureDayItem extends DayItem {
+  int high = -1000;
+  int low = 1000;
+  bool medication = false;
 
-  static Color _color1 = Colors.blue;
-  static Color _color2 = Colors.blue;
   static bool _showCount = false;
 
   /// set statics (colors,...) for Dot
   static void updateValuesFromSeries(SeriesDef seriesDef) {
-    _color1 = seriesDef.color;
-    _color2 = ColorUtils.hue(_color1, 30);
     _showCount = seriesDef.displaySettingsReadonly().dotsViewShowCount;
+  }
+
+  BloodPressureDayItem(super.dateTimeDayStart);
+
+  void updateHighLow(int valH, int valL, bool med) {
+    high = max(high, valH);
+    low = min(low, valL);
+    medication |= med;
   }
 
   @override
@@ -27,8 +32,9 @@ class DailyCheckDayItem extends DayItem {
     if (count < 1) return noValueDot(monthly);
 
     return Dot(
-      dotColor1: _color1,
-      dotColor2: _color2,
+      dotColor1: BloodPressureValue.colorHigh(high),
+      dotColor2: BloodPressureValue.colorLow(low),
+      dotText: medication ? '+' : null,
       showCount: _showCount,
       isStartMarker: monthly ? false : dateTimeDayStart.day == 1,
       seriesValues: seriesValues,
@@ -37,19 +43,19 @@ class DailyCheckDayItem extends DayItem {
 
   @override
   String toString() {
-    return 'DailyCheckDayItem{date: $dateTimeDayStart, count: $count}';
+    return 'BloodPressureDayItem{date: $dateTimeDayStart, high: $high, low: $low, medication: $medication, count: $count}';
   }
 
-  static List<DailyCheckDayItem> buildDayItems(SeriesData<DailyCheckValue> seriesData) {
-    List<DailyCheckDayItem> list = [];
+  static List<BloodPressureDayItem> buildDayItems(SeriesData<BloodPressureValue> seriesData) {
+    List<BloodPressureDayItem> list = [];
 
-    DailyCheckDayItem? actItem;
+    BloodPressureDayItem? actItem;
     DateTime? actDay;
 
-    DailyCheckDayItem createDayItem(DateTime dateTimeDayStart) {
-      DailyCheckDayItem rowItem = DailyCheckDayItem(dateTimeDayStart);
-      list.add(rowItem);
-      return rowItem;
+    BloodPressureDayItem createDayItem(DateTime dateTimeDayStart) {
+      BloodPressureDayItem dayItem = BloodPressureDayItem(dateTimeDayStart);
+      list.add(dayItem);
+      return dayItem;
     }
 
     for (var item in seriesData.data.reversed) {
@@ -65,6 +71,7 @@ class DailyCheckDayItem extends DayItem {
       }
 
       actItem!.addValue(item);
+      actItem.updateHighLow(item.high, item.low, item.medication);
     }
 
     return list;

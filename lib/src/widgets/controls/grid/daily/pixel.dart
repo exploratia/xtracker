@@ -8,29 +8,33 @@ import '../../../../util/pair.dart';
 import '../../../../util/tooltip_utils.dart';
 
 class Pixel extends StatelessWidget {
-  const Pixel({super.key, required this.colors, this.pixelText, this.seriesValues});
+  const Pixel({super.key, required this.colors, this.pixelText, this.seriesValues, this.isStartMarker = false, this.backgroundColor});
 
   final List<Color> colors;
   final String? pixelText;
   final List<SeriesDataValue>? seriesValues;
+  final bool isStartMarker;
+  final Color? backgroundColor;
 
   static const int pixelHeight = 24;
 
   static TextStyle _darkTextStyle = const TextStyle(inherit: true);
   static TextStyle _lightTextStyle = const TextStyle(inherit: true);
+  static Color _themeTextColor = Colors.grey;
   static Color _borderColor = Colors.grey;
 
-  static void updatePixelTextStyles(BuildContext context) {
+  static void updatePixelStyles(BuildContext context) {
     final themeData = Theme.of(context);
     _borderColor = themeData.scaffoldBackgroundColor;
     final baseTextStyle = themeData.textTheme.bodyMedium ?? const TextStyle(inherit: true);
+    _themeTextColor = baseTextStyle.color ?? Colors.grey;
     _darkTextStyle = baseTextStyle.copyWith(
       color: Colors.white,
-      // fontSize: 5,
+      fontSize: 10,
     );
     _lightTextStyle = baseTextStyle.copyWith(
       color: Colors.black,
-      // fontSize: 9,
+      fontSize: 10,
     );
   }
 
@@ -50,10 +54,35 @@ class Pixel extends StatelessWidget {
           )
         : null;
 
+    Color bottomLeftBorderColor = _borderColor;
+    if (isStartMarker) {
+      bottomLeftBorderColor = _themeTextColor; // black | white
+    }
+    Color topRightBorderColor = _borderColor;
+    // if (backgroundColor != null) {
+    //   topRightBorderColor = backgroundColor!; // to mark weekends
+    // }
+
+    Color? singleColorBackground;
+    if (colors.isEmpty) {
+      if (backgroundColor != null) {
+        singleColorBackground = backgroundColor!.withAlpha(32);
+      } else {
+        singleColorBackground = Colors.grey.withAlpha(8);
+      }
+    } else if (colors.length == 1) {
+      singleColorBackground = colors.first;
+    }
+
     var pixelBoxDecoration = BoxDecoration(
-      color: colors.length == 1 ? colors.first : null,
+      color: singleColorBackground,
       gradient: colors.length > 1 ? LinearGradient(colors: colors) : null,
-      border: Border(bottom: BorderSide(color: _borderColor, width: 1), left: BorderSide(color: _borderColor, width: 1)),
+      border: Border(
+        bottom: BorderSide(color: bottomLeftBorderColor, width: 1),
+        left: BorderSide(color: bottomLeftBorderColor, width: 1),
+        top: BorderSide(color: topRightBorderColor, width: 1),
+        right: BorderSide(color: topRightBorderColor, width: 1),
+      ),
     );
 
     var pixelRender = Container(
@@ -73,8 +102,14 @@ class Pixel extends StatelessWidget {
       }
 
       final maxLength = timeValuePairs.map((p) => p.k.length).reduce((a, b) => a > b ? a : b);
+      int c = 0;
       for (var timeValuePair in timeValuePairs) {
+        if (c >= 9) {
+          tooltipText += '\n- ...';
+          break;
+        }
         tooltipText += '\n- ${timeValuePair.k.padLeft(maxLength)}   ${timeValuePair.v}';
+        c++;
       }
 
       return Tooltip(

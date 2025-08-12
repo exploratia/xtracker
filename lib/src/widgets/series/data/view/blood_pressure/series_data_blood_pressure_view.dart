@@ -44,13 +44,15 @@ class SeriesDataBloodPressureView extends StatelessWidget {
         return SeriesDataBloodPressureTableView(seriesViewMetaData: seriesViewMetaData, seriesData: bloodPressureSeriesData);
       case ViewType.lineChart:
         return SeriesDataBloodPressureChartView(seriesViewMetaData: seriesViewMetaData, seriesData: bloodPressureSeriesData);
+      case ViewType.barChart:
+        throw UnimplementedError();
       case ViewType.dots:
         {
           DateTime reduceToNewerThen = DateTimeUtils.firstDayOfYear(DateTimeUtils.truncateToDay(DateTime.timestamp().subtract(const Duration(days: 365 * 5))));
           return SeriesDataBloodPressureDotsView(
               seriesViewMetaData: seriesViewMetaData, seriesData: bloodPressureSeriesData.reduceToNewerThen(reduceToNewerThen));
         }
-      case ViewType.barChart:
+      case ViewType.pixels:
         throw UnimplementedError();
     }
   }

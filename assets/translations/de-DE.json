@@ -101,6 +101,10 @@
         "title": "Übersicht",
         "tooltip": "Anzeige als Punkt-Kalender-Übersicht"
       },
+      "pixels": {
+        "title": "Pixels",
+        "tooltip": "Anzeige als Pixel-Kalender"
+      },
       "table": {
         "title": "Tabelle",
         "tooltip": "Anzeige als Tabelle"

@@ -5,9 +5,9 @@ import '../../../../../../model/series/data/daily_check/daily_check_value.dart';
 import '../../../../../../model/series/data/series_data.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
 import '../../../../../../util/theme_utils.dart';
-import '../../../../../controls/grid/dots/day/daily_check_day_item.dart';
-import '../../../../../controls/grid/dots/dot.dart';
-import '../../../../../controls/grid/dots/row/row_item.dart';
+import '../../../../../controls/grid/daily/day/daily_check_day_item.dart';
+import '../../../../../controls/grid/daily/dot.dart';
+import '../../../../../controls/grid/daily/row/row_item.dart';
 import '../../../../../controls/grid/two_dimensional_scrollable_table.dart';
 
 class SeriesDataDailyCheckDotsView extends StatelessWidget {
@@ -18,7 +18,7 @@ class SeriesDataDailyCheckDotsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Dot.updateDotTextStyles(context);
+    Dot.updateDotStyles(context);
     DailyCheckDayItem.updateValuesFromSeries(seriesViewMetaData.seriesDef);
     var dayItems = DailyCheckDayItem.buildDayItems(seriesData);
 

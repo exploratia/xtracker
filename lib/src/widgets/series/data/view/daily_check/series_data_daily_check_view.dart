@@ -40,17 +40,19 @@ class SeriesDataDailyCheckView extends StatelessWidget {
     }
 
     switch (seriesViewMetaData.viewType) {
-      case ViewType.dots:
-        {
-          DateTime reduceToNewerThen = DateTimeUtils.firstDayOfYear(DateTimeUtils.truncateToDay(DateTime.timestamp().subtract(const Duration(days: 365 * 5))));
-          return SeriesDataDailyCheckDotsView(seriesViewMetaData: seriesViewMetaData, seriesData: dailyCheckSeriesData.reduceToNewerThen(reduceToNewerThen));
-        }
       case ViewType.table:
         return SeriesDataDailyCheckTableView(seriesViewMetaData: seriesViewMetaData, seriesData: dailyCheckSeriesData);
       case ViewType.lineChart:
         throw UnimplementedError();
       case ViewType.barChart:
         return SeriesDataDailyCheckChartView(seriesViewMetaData: seriesViewMetaData, seriesData: dailyCheckSeriesData);
+      case ViewType.dots:
+        {
+          DateTime reduceToNewerThen = DateTimeUtils.firstDayOfYear(DateTimeUtils.truncateToDay(DateTime.timestamp().subtract(const Duration(days: 365 * 5))));
+          return SeriesDataDailyCheckDotsView(seriesViewMetaData: seriesViewMetaData, seriesData: dailyCheckSeriesData.reduceToNewerThen(reduceToNewerThen));
+        }
+      case ViewType.pixels:
+        throw UnimplementedError();
     }
   }
 }

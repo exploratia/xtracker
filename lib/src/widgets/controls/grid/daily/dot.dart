@@ -20,7 +20,7 @@ class Dot extends StatelessWidget {
   static TextStyle _countTextStyle = const TextStyle(inherit: true);
   static TextStyle _dotTextStyle = const TextStyle(inherit: true);
 
-  static void updateDotTextStyles(BuildContext context) {
+  static void updateDotStyles(BuildContext context) {
     final themeData = Theme.of(context);
     final baseTextStyle = themeData.textTheme.bodyMedium ?? const TextStyle(inherit: true);
     _countTextStyle = baseTextStyle.copyWith(fontSize: 5);
@@ -98,8 +98,14 @@ class Dot extends StatelessWidget {
       }
 
       final maxLength = timeValuePairs.map((p) => p.k.length).reduce((a, b) => a > b ? a : b);
+      int c = 0;
       for (var timeValuePair in timeValuePairs) {
+        if (c >= 9) {
+          tooltipText += '\n- ...';
+          break;
+        }
         tooltipText += '\n- ${timeValuePair.k.padLeft(maxLength)}   ${timeValuePair.v}';
+        c++;
       }
 
       return Tooltip(

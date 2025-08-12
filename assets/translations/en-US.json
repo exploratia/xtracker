@@ -101,6 +101,10 @@
         "title": "Overview",
         "tooltip": "View as daily dots overview"
       },
+      "pixels": {
+        "title": "Pixels",
+        "tooltip": "View as daily pixels"
+      },
       "table": {
         "title": "Table",
         "tooltip": "View as table"

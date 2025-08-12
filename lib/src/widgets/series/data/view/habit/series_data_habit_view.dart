@@ -9,6 +9,7 @@ import '../../../../../providers/series_data_provider.dart';
 import '../../../../controls/animation/fade_in.dart';
 import '../../../../controls/layout/centered_message.dart';
 import 'chart/series_data_habit_chart_view.dart';
+import 'pixels/series_data_habit_pixels_view.dart';
 import 'table/series_data_habit_table_view.dart';
 
 class SeriesDataHabitView extends StatelessWidget {
@@ -38,14 +39,16 @@ class SeriesDataHabitView extends StatelessWidget {
     }
 
     switch (seriesViewMetaData.viewType) {
-      case ViewType.dots:
-        throw UnimplementedError();
       case ViewType.table:
         return SeriesDataHabitTableView(seriesViewMetaData: seriesViewMetaData, seriesData: habitSeriesData);
       case ViewType.lineChart:
         throw UnimplementedError();
       case ViewType.barChart:
         return SeriesDataHabitChartView(seriesViewMetaData: seriesViewMetaData, seriesData: habitSeriesData);
+      case ViewType.dots:
+        throw UnimplementedError();
+      case ViewType.pixels:
+        return SeriesDataHabitPixelsView(seriesViewMetaData: seriesViewMetaData, seriesData: habitSeriesData);
     }
   }
 }

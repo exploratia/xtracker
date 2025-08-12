@@ -53,6 +53,8 @@ abstract class  LocaleKeys {
   static const enum_viewType_barChart_tooltip = 'enum.viewType.barChart.tooltip';
   static const enum_viewType_dots_title = 'enum.viewType.dots.title';
   static const enum_viewType_dots_tooltip = 'enum.viewType.dots.tooltip';
+  static const enum_viewType_pixels_title = 'enum.viewType.pixels.title';
+  static const enum_viewType_pixels_tooltip = 'enum.viewType.pixels.tooltip';
   static const enum_viewType_table_title = 'enum.viewType.table.title';
   static const enum_viewType_table_tooltip = 'enum.viewType.table.tooltip';
   static const enum_infoType_legalNotice_title = 'enum.infoType.legalNotice.title';

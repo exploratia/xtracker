@@ -11,7 +11,7 @@ enum ViewType {
   // dots(Icons.margin_outlined);
   // dots(Icons.drag_indicator_outlined);
   // dots(Icons.dataset_outlined);
-  // dots(Icons.blur_linear_outlined);
+  pixels(Icons.blur_linear_outlined),
   dots(Icons.apps_rounded);
 
   final IconData iconData;
@@ -28,6 +28,7 @@ enum ViewType {
       ViewType.barChart => LocaleKeys.enum_viewType_barChart_title.tr(),
       ViewType.table => LocaleKeys.enum_viewType_table_title.tr(),
       ViewType.dots => LocaleKeys.enum_viewType_dots_title.tr(),
+      ViewType.pixels => LocaleKeys.enum_viewType_pixels_title.tr(),
     };
   }
 }

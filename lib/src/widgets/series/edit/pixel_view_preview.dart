@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../model/series/series_def.dart';
 import '../../../model/series/series_type.dart';
-import '../../controls/grid/pixels/pixel.dart';
+import '../../controls/grid/daily/pixel.dart';
 
 class PixelViewPreview extends StatelessWidget {
   static final List<SeriesType> _allowedSeriesTypes = [SeriesType.habit];
@@ -20,7 +20,7 @@ class PixelViewPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Pixel.updatePixelTextStyles(context);
+    Pixel.updatePixelStyles(context);
 
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {

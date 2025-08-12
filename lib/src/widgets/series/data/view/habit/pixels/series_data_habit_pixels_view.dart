@@ -1,26 +1,35 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../../../../../../model/column_profile/fix_column_profiles.dart';
-import '../../../../../../model/series/data/blood_pressure/blood_pressure_value.dart';
+import '../../../../../../model/series/data/habit/habit_value.dart';
 import '../../../../../../model/series/data/series_data.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
 import '../../../../../../util/theme_utils.dart';
-import '../../../../../controls/grid/daily/day/blood_pressure_day_item.dart';
-import '../../../../../controls/grid/daily/dot.dart';
+import '../../../../../controls/grid/daily/day/habit_day_item.dart';
+import '../../../../../controls/grid/daily/pixel.dart';
 import '../../../../../controls/grid/daily/row/row_item.dart';
 import '../../../../../controls/grid/two_dimensional_scrollable_table.dart';
 
-class SeriesDataBloodPressureDotsView extends StatelessWidget {
-  final SeriesData<BloodPressureValue> seriesData;
+class SeriesDataHabitPixelsView extends StatelessWidget {
+  final SeriesData<HabitValue> seriesData;
   final SeriesViewMetaData seriesViewMetaData;
 
-  const SeriesDataBloodPressureDotsView({super.key, required this.seriesViewMetaData, required this.seriesData});
+  const SeriesDataHabitPixelsView({super.key, required this.seriesViewMetaData, required this.seriesData});
 
   @override
   Widget build(BuildContext context) {
-    Dot.updateDotStyles(context);
-    BloodPressureDayItem.updateValuesFromSeries(seriesViewMetaData.seriesDef);
-    var dayItems = BloodPressureDayItem.buildDayItems(seriesData);
+    Pixel.updatePixelStyles(context);
+    var dayItems = HabitDayItem.buildDayItems(seriesData);
+
+    // determine max (min always 1)
+    const minVal = 1;
+    int maxVal = dayItems.map((e) => e.count).reduce((soFarMax, count) => max(soFarMax, count));
+    Color baseColor = seriesViewMetaData.seriesDef.color;
+    var displaySettings = seriesViewMetaData.seriesDef.displaySettingsReadonly();
+    bool pixelsViewInvertHueDirection = displaySettings.pixelsViewInvertHueDirection;
+    double pixelsViewHueFactor = displaySettings.pixelsViewHueFactor;
 
     // padding because of headline in stack
     return Padding(
@@ -29,7 +38,7 @@ class SeriesDataBloodPressureDotsView extends StatelessWidget {
         builder: (BuildContext context, BoxConstraints constraints) {
           bool monthly = constraints.maxWidth > FixColumnProfiles.columnProfileDateMonthDays.minWidth();
 
-          List<RowItem<BloodPressureDayItem>> data = monthly ? RowItem.buildMonthRowItems(dayItems) : RowItem.buildWeekRowItems(dayItems);
+          List<RowItem<HabitDayItem>> data = monthly ? RowItem.buildMonthRowItems(dayItems) : RowItem.buildWeekRowItems(dayItems);
 
           gridCellBuilder(BuildContext context, int yIndex, int xIndex) {
             var rowItem = data[yIndex];
@@ -47,8 +56,14 @@ class SeriesDataBloodPressureDotsView extends StatelessWidget {
             }
 
             return GridCell(
-              backgroundColor: dayItem.backgroundColor,
-              child: dayItem.toDot(monthly),
+              child: dayItem.toPixel(
+                monthly,
+                [
+                  if (dayItem.count > 0)
+                    Pixel.pixelColor(baseColor, dayItem.count, minVal, maxVal,
+                        invertHueDirection: pixelsViewInvertHueDirection, hueFactor: pixelsViewHueFactor),
+                ],
+              ),
             );
           }
 
@@ -56,7 +71,7 @@ class SeriesDataBloodPressureDotsView extends StatelessWidget {
             tableColumnProfile: monthly ? FixColumnProfiles.columnProfileDateMonthDays : FixColumnProfiles.columnProfileDateWeekdays,
             lineCount: data.length,
             gridCellBuilder: gridCellBuilder,
-            lineHeight: Dot.dotHeight,
+            lineHeight: Pixel.pixelHeight,
             useFixedFirstColumn: true,
           );
         },
