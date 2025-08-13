@@ -11,9 +11,6 @@ abstract class SeriesDataValue {
 
   Map<String, dynamic> toJson({bool exportUuid = true});
 
-  /// returns tooltip string (only value - no date/time)
-  String toTooltip();
-
   static SeriesDataValue fromJson(Map<String, dynamic> json, SeriesType seriesType) {
     return switch (seriesType) {
       SeriesType.bloodPressure => BloodPressureValue.fromJson(json),

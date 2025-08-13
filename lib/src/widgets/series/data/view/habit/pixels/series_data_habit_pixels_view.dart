@@ -21,7 +21,7 @@ class SeriesDataHabitPixelsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Pixel.updatePixelStyles(context);
-    var dayItems = HabitDayItem.buildDayItems(seriesData);
+    var dayItems = HabitDayItem.buildDayItems(seriesData, seriesViewMetaData.seriesDef);
 
     // determine max (min always 1)
     const minVal = 1;

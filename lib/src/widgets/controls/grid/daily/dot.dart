@@ -5,15 +5,24 @@ import '../../../../util/date_time_utils.dart';
 import '../../../../util/pair.dart';
 import '../../../../util/tooltip_utils.dart';
 
-class Dot extends StatelessWidget {
-  const Dot({super.key, required this.dotColor1, this.dotColor2, this.dotText, this.isStartMarker = false, required this.seriesValues, this.showCount = false});
+class Dot<T extends SeriesDataValue> extends StatelessWidget {
+  const Dot(
+      {super.key,
+      required this.dotColor1,
+      this.dotColor2,
+      this.dotText,
+      this.isStartMarker = false,
+      required this.seriesValues,
+      this.showCount = false,
+      this.tooltipValueBuilder});
 
   final Color dotColor1;
   final Color? dotColor2;
   final String? dotText;
   final bool isStartMarker;
   final bool showCount;
-  final List<SeriesDataValue> seriesValues;
+  final List<T> seriesValues;
+  final Widget Function(T dataValue)? tooltipValueBuilder;
 
   static const int dotHeight = 24;
 
@@ -87,33 +96,70 @@ class Dot extends StatelessWidget {
       ],
     );
 
-    if (count > 0) {
-      var tooltipText = '▹ ${DateTimeUtils.formateDate(seriesValues.first.dateTime)}';
-
-      // bring all times to same length for showing a nice table like tooltip
-      List<Pair<String, String>> timeValuePairs = [];
-
-      for (var value in seriesValues) {
-        timeValuePairs.add(Pair(DateTimeUtils.formateTime(value.dateTime), value.toTooltip()));
-      }
-
-      final maxLength = timeValuePairs.map((p) => p.k.length).reduce((a, b) => a > b ? a : b);
-      int c = 0;
-      for (var timeValuePair in timeValuePairs) {
-        if (c >= 9) {
-          tooltipText += '\n- ...';
-          break;
-        }
-        tooltipText += '\n- ${timeValuePair.k.padLeft(maxLength)}   ${timeValuePair.v}';
-        c++;
-      }
+    if (count > 0 && tooltipValueBuilder != null) {
+      TextSpan richMessage = buildSeriesValueTooltip(seriesValues, tooltipValueBuilder!);
 
       return Tooltip(
-        message: tooltipText,
+        richMessage: richMessage,
         textStyle: TooltipUtils.tooltipMonospaceStyle,
         child: dotRender,
       );
     }
     return dotRender;
+  }
+
+  static TextSpan buildSeriesValueTooltip<T extends SeriesDataValue>(List<T> seriesValues, Widget Function(T dataValue) tooltipValueBuilder) {
+    List<InlineSpan>? richMessageChildren = [
+      TextSpan(
+        children: [
+          const WidgetSpan(
+            alignment: PlaceholderAlignment.middle,
+            child: Icon(Icons.calendar_today_outlined, size: 12),
+          ),
+          const WidgetSpan(child: SizedBox(width: 5)),
+          TextSpan(text: DateTimeUtils.formateDate(seriesValues.first.dateTime), style: TooltipUtils.tooltipMonospaceStyle),
+        ],
+      )
+    ];
+
+    // bring all times to same length for showing a nice table like tooltip
+    List<Pair<String, Widget>> timeValuePairs = [];
+
+    for (var value in seriesValues) {
+      timeValuePairs.add(Pair(DateTimeUtils.formateTime(value.dateTime), tooltipValueBuilder(value)));
+    }
+
+    final maxLength = timeValuePairs.map((p) => p.k.length).reduce((a, b) => a > b ? a : b);
+    int c = 0;
+    for (var timeValuePair in timeValuePairs) {
+      if (c >= 9) {
+        richMessageChildren.add(TextSpan(text: '\n- ...', style: TooltipUtils.tooltipMonospaceStyle));
+        break;
+      }
+      richMessageChildren.add(tooltipValueLine(timeValuePair.k.padLeft(maxLength), timeValuePair.v));
+      c++;
+    }
+
+    final richMessage = TextSpan(children: richMessageChildren);
+    return richMessage;
+  }
+
+  static TextSpan tooltipValueLine(String time, Widget value) {
+    return TextSpan(
+      children: [
+        TextSpan(text: "\n", style: TooltipUtils.tooltipMonospaceStyle),
+        const WidgetSpan(
+          alignment: PlaceholderAlignment.middle,
+          child: Icon(Icons.access_time_outlined, size: 12),
+        ),
+        const WidgetSpan(child: SizedBox(width: 5)),
+        TextSpan(text: time, style: TooltipUtils.tooltipMonospaceStyle),
+        const WidgetSpan(child: SizedBox(width: 15)),
+        WidgetSpan(
+          alignment: PlaceholderAlignment.middle,
+          child: value,
+        ),
+      ],
+    );
   }
 }

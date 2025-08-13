@@ -20,7 +20,7 @@ class SeriesDataDailyCheckDotsView extends StatelessWidget {
   Widget build(BuildContext context) {
     Dot.updateDotStyles(context);
     DailyCheckDayItem.updateValuesFromSeries(seriesViewMetaData.seriesDef);
-    var dayItems = DailyCheckDayItem.buildDayItems(seriesData);
+    var dayItems = DailyCheckDayItem.buildDayItems(seriesData, seriesViewMetaData.seriesDef);
 
     // padding because of headline in stack
     return Padding(

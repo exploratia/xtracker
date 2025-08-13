@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 
 import '../../../../../model/series/data/habit/habit_value.dart';
 import '../../../../../model/series/data/series_data.dart';
+import '../../../../../model/series/series_def.dart';
 import '../../../../../util/date_time_utils.dart';
+import '../../../../series/data/view/habit/table/habit_value_renderer.dart';
 import '../dot.dart';
 import '../pixel.dart';
 import './day_item.dart';
 
-class HabitDayItem extends DayItem {
-  HabitDayItem(super.dateTimeDayStart);
+class HabitDayItem extends DayItem<HabitValue> {
+  HabitDayItem(super.dateTimeDayStart, super.seriesDef);
 
   @override
   Dot toDot(bool monthly) {
@@ -31,6 +33,7 @@ class HabitDayItem extends DayItem {
       pixelText: count > 0 ? '$count' : null,
       isStartMarker: monthly ? false : dateTimeDayStart.day == 1,
       seriesValues: seriesValues,
+      tooltipValueBuilder: (dataValue) => HabitValueRenderer(habitValue: dataValue, seriesDef: seriesDef),
     );
   }
 
@@ -39,14 +42,14 @@ class HabitDayItem extends DayItem {
     return 'HabitDayItem{date: $dateTimeDayStart, count: $count}';
   }
 
-  static List<HabitDayItem> buildDayItems(SeriesData<HabitValue> seriesData) {
+  static List<HabitDayItem> buildDayItems(SeriesData<HabitValue> seriesData, SeriesDef seriesDef) {
     List<HabitDayItem> list = [];
 
     HabitDayItem? actItem;
     DateTime? actDay;
 
     HabitDayItem createDayItem(DateTime dateTimeDayStart) {
-      HabitDayItem dayItem = HabitDayItem(dateTimeDayStart);
+      HabitDayItem dayItem = HabitDayItem(dateTimeDayStart, seriesDef);
       list.add(dayItem);
       return dayItem;
     }

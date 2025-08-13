@@ -2,17 +2,17 @@ import 'package:flutter/material.dart';
 
 import '../../../../model/series/data/series_data_value.dart';
 import '../../../../util/color_utils.dart';
-import '../../../../util/date_time_utils.dart';
 import '../../../../util/math_utils.dart';
-import '../../../../util/pair.dart';
 import '../../../../util/tooltip_utils.dart';
+import 'dot.dart';
 
-class Pixel extends StatelessWidget {
-  const Pixel({super.key, required this.colors, this.pixelText, this.seriesValues, this.isStartMarker = false, this.backgroundColor});
+class Pixel<T extends SeriesDataValue> extends StatelessWidget {
+  const Pixel({super.key, required this.colors, this.pixelText, this.seriesValues, this.isStartMarker = false, this.backgroundColor, this.tooltipValueBuilder});
 
   final List<Color> colors;
   final String? pixelText;
-  final List<SeriesDataValue>? seriesValues;
+  final List<T>? seriesValues;
+  final Widget Function(T dataValue)? tooltipValueBuilder;
   final bool isStartMarker;
   final Color? backgroundColor;
 
@@ -91,29 +91,11 @@ class Pixel extends StatelessWidget {
       child: pixelTextChild,
     );
 
-    if (seriesValues != null && seriesValues!.isNotEmpty) {
-      var tooltipText = '▹ ${DateTimeUtils.formateDate(seriesValues!.first.dateTime)}';
-
-      // bring all times to same length for showing a nice table like tooltip
-      List<Pair<String, String>> timeValuePairs = [];
-
-      for (var value in seriesValues!) {
-        timeValuePairs.add(Pair(DateTimeUtils.formateTime(value.dateTime), value.toTooltip()));
-      }
-
-      final maxLength = timeValuePairs.map((p) => p.k.length).reduce((a, b) => a > b ? a : b);
-      int c = 0;
-      for (var timeValuePair in timeValuePairs) {
-        if (c >= 9) {
-          tooltipText += '\n- ...';
-          break;
-        }
-        tooltipText += '\n- ${timeValuePair.k.padLeft(maxLength)}   ${timeValuePair.v}';
-        c++;
-      }
+    if (seriesValues != null && seriesValues!.isNotEmpty && tooltipValueBuilder != null) {
+      TextSpan richMessage = Dot.buildSeriesValueTooltip(seriesValues!, tooltipValueBuilder!);
 
       return Tooltip(
-        message: tooltipText,
+        richMessage: richMessage,
         textStyle: TooltipUtils.tooltipMonospaceStyle,
         child: pixelRender,
       );

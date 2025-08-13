@@ -22,11 +22,6 @@ class HabitValue extends SeriesDataValue {
         'utcMs': dateTime.millisecondsSinceEpoch,
       };
 
-  @override
-  String toTooltip() {
-    return '⬤';
-  }
-
   static HabitValue checkOnHabitValue(dynamic value) {
     if (value is HabitValue) return value;
     var errMsg = 'Failure for series value: Type mismatch! Expected: "$HabitValue", got: "${value.runtimeType}"';

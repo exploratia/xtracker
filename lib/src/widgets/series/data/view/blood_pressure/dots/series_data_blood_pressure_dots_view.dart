@@ -20,7 +20,7 @@ class SeriesDataBloodPressureDotsView extends StatelessWidget {
   Widget build(BuildContext context) {
     Dot.updateDotStyles(context);
     BloodPressureDayItem.updateValuesFromSeries(seriesViewMetaData.seriesDef);
-    var dayItems = BloodPressureDayItem.buildDayItems(seriesData);
+    var dayItems = BloodPressureDayItem.buildDayItems(seriesData, seriesViewMetaData.seriesDef);
 
     // padding because of headline in stack
     return Padding(
