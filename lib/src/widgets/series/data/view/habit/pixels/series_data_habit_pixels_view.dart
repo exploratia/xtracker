@@ -8,6 +8,7 @@ import '../../../../../../model/series/data/series_data.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
 import '../../../../../../util/theme_utils.dart';
 import '../../../../../controls/grid/daily/day/habit_day_item.dart';
+import '../../../../../controls/grid/daily/day_range_slider.dart';
 import '../../../../../controls/grid/daily/pixel.dart';
 import '../../../../../controls/grid/daily/row/row_item.dart';
 import '../../../../../controls/grid/two_dimensional_scrollable_table.dart';
@@ -67,12 +68,29 @@ class SeriesDataHabitPixelsView extends StatelessWidget {
             );
           }
 
-          return TwoDimensionalScrollableTable(
-            tableColumnProfile: monthly ? FixColumnProfiles.columnProfileDateMonthDays : FixColumnProfiles.columnProfileDateWeekdays,
-            lineCount: data.length,
-            gridCellBuilder: gridCellBuilder,
-            lineHeight: Pixel.pixelHeight,
-            useFixedFirstColumn: true,
+          return Column(
+            mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: constraints.maxHeight - 48,
+                width: constraints.maxWidth,
+                child: TwoDimensionalScrollableTable(
+                  tableColumnProfile: monthly ? FixColumnProfiles.columnProfileDateMonthDays : FixColumnProfiles.columnProfileDateWeekdays,
+                  lineCount: data.length,
+                  gridCellBuilder: gridCellBuilder,
+                  lineHeight: Pixel.pixelHeight,
+                  useFixedFirstColumn: true,
+                ),
+              ),
+              DayRangeSlider(
+                dateItems: [dayItems.first.dateTimeDayStart, dayItems.last.dateTimeDayStart],
+                pageCallback: (p0) {
+                  print(p0);
+                },
+              ),
+            ],
           );
         },
       ),
