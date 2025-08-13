@@ -65,6 +65,10 @@ class ThemeUtils {
           maxWidth: 300,
         ),
       ),
+      sliderTheme: SliderThemeData(
+        valueIndicatorColor: cardBackgroundColor,
+        valueIndicatorTextStyle: TextStyle(color: dark ? Colors.white : Colors.black),
+      ),
       appBarTheme: AppBarTheme(
         elevation: 8,
         backgroundColor: secondary,
