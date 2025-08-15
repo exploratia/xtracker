@@ -46,7 +46,7 @@ class _LazyTooltipState extends State<LazyTooltip> with SingleTickerProviderStat
     );
   }
 
-  void _showTooltip(BuildContext context) {
+  void _showTooltip(BuildContext context, {bool isTouch = false}) {
     _hideTimer?.cancel();
     _showTimer = Timer(widget.showDelay, () {
       final overlay = Overlay.of(context);
@@ -105,6 +105,7 @@ class _LazyTooltipState extends State<LazyTooltip> with SingleTickerProviderStat
           targetPosition,
           targetSize,
           tooltipSize,
+          isTouch,
         );
 
         _overlayEntry = OverlayEntry(
@@ -148,15 +149,18 @@ class _LazyTooltipState extends State<LazyTooltip> with SingleTickerProviderStat
     Offset targetPos,
     Size targetSize,
     Size tooltipSize,
+    bool isTouch,
   ) {
     final mediaQuery = MediaQuery.of(context);
     final screenWidth = mediaQuery.size.width;
     final screenHeight = mediaQuery.size.height;
 
+    final touchMargin = isTouch ? 24 : 0;
+
     final safeLeft = mediaQuery.padding.left + 8;
     final safeRight = screenWidth - mediaQuery.padding.right - 8;
-    final safeTop = mediaQuery.padding.top + 8;
-    final safeBottom = screenHeight - mediaQuery.padding.bottom - 8;
+    final safeTop = mediaQuery.padding.top + 8 + touchMargin;
+    final safeBottom = screenHeight - mediaQuery.padding.bottom - 8 - touchMargin;
 
     // Horizontal position
     double left = targetPos.dx + targetSize.width / 2 - tooltipSize.width / 2;
@@ -170,9 +174,9 @@ class _LazyTooltipState extends State<LazyTooltip> with SingleTickerProviderStat
     final spaceBelow = safeBottom - (targetPos.dy + targetSize.height);
     double top;
     if (tooltipSize.height <= spaceAbove) {
-      top = targetPos.dy - tooltipSize.height - 8;
+      top = targetPos.dy - tooltipSize.height - 8 - touchMargin;
     } else if (tooltipSize.height <= spaceBelow) {
-      top = targetPos.dy + targetSize.height + 8;
+      top = targetPos.dy + targetSize.height + 8 + touchMargin;
     } else {
       if (spaceAbove > spaceBelow) {
         top = safeTop;
@@ -190,7 +194,7 @@ class _LazyTooltipState extends State<LazyTooltip> with SingleTickerProviderStat
       onEnter: (_) => _showTooltip(context),
       onExit: (_) => _hideTooltip(),
       child: GestureDetector(
-        onLongPressStart: (_) => _showTooltip(context),
+        onLongPressStart: (_) => _showTooltip(context, isTouch: true),
         onLongPressEnd: (_) => _hideTooltip(),
         child: widget.child,
       ),
