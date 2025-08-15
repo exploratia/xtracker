@@ -105,14 +105,14 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
               children: [
                 Container(
                   decoration: BoxDecoration(
-                    // color: themeData.colorScheme.secondary,
+                    color: themeData.scaffoldBackgroundColor,
                     border: Border.all(color: themeData.colorScheme.secondary, width: 1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Padding(
                     padding: const EdgeInsets.only(left: 8, right: 8, top: 1),
                     child: Text(
-                      '${DateTimeUtils.formateYYYMMDD(_firstDayStart.add(Duration(days: _values.start.toInt())))} -- ${DateTimeUtils.formateYYYMMDD(_firstDayStart.add(Duration(days: _values.end.toInt())))}',
+                      '${DateTimeUtils.formateYYYMMDD(_firstDayStart.add(Duration(days: _values.start.toInt())))} - ${DateTimeUtils.formateYYYMMDD(_firstDayStart.add(Duration(days: _values.end.toInt())))}',
                       style: TooltipUtils.tooltipMonospaceStyle,
                     ),
                   ),
