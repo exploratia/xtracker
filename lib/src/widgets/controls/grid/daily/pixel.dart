@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../../model/series/data/series_data_value.dart';
 import '../../../../util/color_utils.dart';
 import '../../../../util/math_utils.dart';
-import '../../../../util/tooltip_utils.dart';
-import 'dot.dart';
+import '../../../series/data/view/series_data_tooltip_content.dart';
+import '../../tooltip/lazy_tooltip.dart';
 
 class Pixel<T extends SeriesDataValue> extends StatelessWidget {
   const Pixel({super.key, required this.colors, this.pixelText, this.seriesValues, this.isStartMarker = false, this.backgroundColor, this.tooltipValueBuilder});
@@ -92,13 +92,8 @@ class Pixel<T extends SeriesDataValue> extends StatelessWidget {
     );
 
     if (seriesValues != null && seriesValues!.isNotEmpty && tooltipValueBuilder != null) {
-      TextSpan richMessage = Dot.buildSeriesValueTooltip(seriesValues!, tooltipValueBuilder!);
-
-      return Tooltip(
-        richMessage: richMessage,
-        textStyle: TooltipUtils.tooltipMonospaceStyle,
-        child: pixelRender,
-      );
+      return LazyTooltip(
+          child: pixelRender, tooltipBuilder: (_) => SeriesDataTooltipContent.buildSeriesValueTooltipWidget(seriesValues!, tooltipValueBuilder!));
     }
     return pixelRender;
   }

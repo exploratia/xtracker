@@ -136,7 +136,7 @@ class Dot<T extends SeriesDataValue> extends StatelessWidget {
         richMessageChildren.add(TextSpan(text: '\n- ...', style: TooltipUtils.tooltipMonospaceStyle));
         break;
       }
-      richMessageChildren.add(tooltipValueLine(timeValuePair.k.padLeft(maxLength), timeValuePair.v));
+      richMessageChildren.add(_tooltipValueLine(timeValuePair.k.padLeft(maxLength), timeValuePair.v));
       c++;
     }
 
@@ -144,7 +144,7 @@ class Dot<T extends SeriesDataValue> extends StatelessWidget {
     return richMessage;
   }
 
-  static TextSpan tooltipValueLine(String time, Widget value) {
+  static TextSpan _tooltipValueLine(String time, Widget value) {
     return TextSpan(
       children: [
         TextSpan(text: "\n", style: TooltipUtils.tooltipMonospaceStyle),
