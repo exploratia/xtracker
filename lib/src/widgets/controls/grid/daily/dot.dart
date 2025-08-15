@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../../model/series/data/series_data_value.dart';
-import '../../../../util/date_time_utils.dart';
-import '../../../../util/pair.dart';
-import '../../../../util/tooltip_utils.dart';
+import '../../../series/data/view/series_data_tooltip_content.dart';
+import '../../tooltip/lazy_tooltip.dart';
 
 class Dot<T extends SeriesDataValue> extends StatelessWidget {
   const Dot(
@@ -97,69 +96,8 @@ class Dot<T extends SeriesDataValue> extends StatelessWidget {
     );
 
     if (count > 0 && tooltipValueBuilder != null) {
-      TextSpan richMessage = buildSeriesValueTooltip(seriesValues, tooltipValueBuilder!);
-
-      return Tooltip(
-        richMessage: richMessage,
-        textStyle: TooltipUtils.tooltipMonospaceStyle,
-        child: dotRender,
-      );
+      return LazyTooltip(child: dotRender, tooltipBuilder: (_) => SeriesDataTooltipContent.buildSeriesValueTooltipWidget(seriesValues, tooltipValueBuilder!));
     }
     return dotRender;
-  }
-
-  static TextSpan buildSeriesValueTooltip<T extends SeriesDataValue>(List<T> seriesValues, Widget Function(T dataValue) tooltipValueBuilder) {
-    List<InlineSpan>? richMessageChildren = [
-      TextSpan(
-        children: [
-          const WidgetSpan(
-            alignment: PlaceholderAlignment.middle,
-            child: Icon(Icons.calendar_today_outlined, size: 12),
-          ),
-          const WidgetSpan(child: SizedBox(width: 5)),
-          TextSpan(text: DateTimeUtils.formateDate(seriesValues.first.dateTime), style: TooltipUtils.tooltipMonospaceStyle),
-        ],
-      )
-    ];
-
-    // bring all times to same length for showing a nice table like tooltip
-    List<Pair<String, Widget>> timeValuePairs = [];
-
-    for (var value in seriesValues) {
-      timeValuePairs.add(Pair(DateTimeUtils.formateTime(value.dateTime), tooltipValueBuilder(value)));
-    }
-
-    final maxLength = timeValuePairs.map((p) => p.k.length).reduce((a, b) => a > b ? a : b);
-    int c = 0;
-    for (var timeValuePair in timeValuePairs) {
-      if (c >= 9) {
-        richMessageChildren.add(TextSpan(text: '\n- ...', style: TooltipUtils.tooltipMonospaceStyle));
-        break;
-      }
-      richMessageChildren.add(_tooltipValueLine(timeValuePair.k.padLeft(maxLength), timeValuePair.v));
-      c++;
-    }
-
-    final richMessage = TextSpan(children: richMessageChildren);
-    return richMessage;
-  }
-
-  static TextSpan _tooltipValueLine(String time, Widget value) {
-    return TextSpan(
-      children: [
-        TextSpan(text: "\n", style: TooltipUtils.tooltipMonospaceStyle),
-        const WidgetSpan(
-          alignment: PlaceholderAlignment.middle,
-          child: Icon(Icons.access_time_outlined, size: 12),
-        ),
-        const WidgetSpan(child: SizedBox(width: 5)),
-        TextSpan(text: time, style: TooltipUtils.tooltipMonospaceStyle),
-        const WidgetSpan(child: SizedBox(width: 15)),
-        WidgetSpan(
-          alignment: PlaceholderAlignment.middle,
-          child: value,
-        ),
-      ],
-    );
   }
 }
