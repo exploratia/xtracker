@@ -121,6 +121,7 @@ class _SeriesDataHabitPixelsViewState extends State<SeriesDataHabitPixelsView> {
               DayRangeSlider(
                 date1: _allDayItems.first.dateTimeDayStart,
                 date2: _allDayItems.last.dateTimeDayStart,
+                maxSpan: 366 * 2,
                 pageCallback: (daysRange) {
                   _setFilter(daysRange);
                 },
