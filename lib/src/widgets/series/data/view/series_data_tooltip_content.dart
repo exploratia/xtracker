@@ -17,7 +17,8 @@ class SeriesDataTooltipContent {
           const SizedBox(width: 5),
           Text(DateTimeUtils.formateDate(seriesValues.first.dateTime), style: TooltipUtils.tooltipMonospaceStyle),
         ],
-      )
+      ),
+      const SizedBox(height: 5),
     ];
 
     // bring all times to same length for showing a nice table like tooltip
@@ -50,7 +51,7 @@ class SeriesDataTooltipContent {
         const SizedBox(width: 5),
         Text(time, style: TooltipUtils.tooltipMonospaceStyle),
         const SizedBox(width: 15),
-        value,
+        Transform.scale(scale: 0.7, child: value),
       ],
     );
   }
