@@ -7,6 +7,7 @@ class LazyTooltip extends StatefulWidget {
   final Widget Function(BuildContext) tooltipBuilder;
   final Duration showDelay;
   final Duration hideDelay;
+  final Duration animationDuration;
 
   const LazyTooltip({
     super.key,
@@ -14,16 +15,36 @@ class LazyTooltip extends StatefulWidget {
     required this.tooltipBuilder,
     this.showDelay = const Duration(milliseconds: 300),
     this.hideDelay = Duration.zero,
+    this.animationDuration = const Duration(milliseconds: 150),
   });
 
   @override
   State<LazyTooltip> createState() => _LazyTooltipState();
 }
 
-class _LazyTooltipState extends State<LazyTooltip> {
+class _LazyTooltipState extends State<LazyTooltip> with SingleTickerProviderStateMixin {
   OverlayEntry? _overlayEntry;
   Timer? _showTimer;
   Timer? _hideTimer;
+  late AnimationController _animController;
+  late Animation<double> _fadeAnimation;
+  late Animation<double> _scaleAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _animController = AnimationController(
+      vsync: this,
+      duration: widget.animationDuration,
+    );
+    _fadeAnimation = CurvedAnimation(
+      parent: _animController,
+      curve: Curves.easeInOut,
+    );
+    _scaleAnimation = Tween<double>(begin: 0.95, end: 1.0).animate(
+      CurvedAnimation(parent: _animController, curve: Curves.easeOutBack),
+    );
+  }
 
   void _showTooltip(BuildContext context) {
     _hideTimer?.cancel();
@@ -32,7 +53,7 @@ class _LazyTooltipState extends State<LazyTooltip> {
 
       final theme = TooltipTheme.of(context);
 
-      // Get position and size of the triggering widget
+      // Measure the target widget position
       final renderBox = context.findRenderObject() as RenderBox?;
       if (renderBox == null || !renderBox.hasSize) return;
       final targetSize = renderBox.size;
@@ -41,7 +62,7 @@ class _LazyTooltipState extends State<LazyTooltip> {
         ancestor: overlay.context.findRenderObject(),
       );
 
-      // Create tooltip content for measurement
+      // Prepare tooltip content for measurement
       final tooltipKey = GlobalKey();
       final tooltipContent = Material(
         color: Colors.transparent,
@@ -60,7 +81,7 @@ class _LazyTooltipState extends State<LazyTooltip> {
         ),
       );
 
-      // Step 1: Insert off-screen for measurement
+      // Step 1: measure off-screen
       final measureEntry = OverlayEntry(
         builder: (_) => Align(
           alignment: Alignment.topLeft,
@@ -69,7 +90,6 @@ class _LazyTooltipState extends State<LazyTooltip> {
       );
       overlay.insert(measureEntry);
 
-      // Step 2: Measure after the frame
       WidgetsBinding.instance.addPostFrameCallback((_) {
         final tooltipBox = tooltipKey.currentContext?.findRenderObject() as RenderBox?;
         if (tooltipBox == null || !tooltipBox.hasSize) {
@@ -79,7 +99,7 @@ class _LazyTooltipState extends State<LazyTooltip> {
         final tooltipSize = tooltipBox.size;
         measureEntry.remove();
 
-        // Step 3: Calculate final position
+        // Calculate position with smart edge handling
         final pos = _calculateSmartPosition(
           context,
           targetPosition,
@@ -87,7 +107,6 @@ class _LazyTooltipState extends State<LazyTooltip> {
           tooltipSize,
         );
 
-        // Step 4: Insert actual tooltip
         _overlayEntry = OverlayEntry(
           builder: (_) => SafeArea(
             child: Stack(
@@ -95,26 +114,35 @@ class _LazyTooltipState extends State<LazyTooltip> {
                 Positioned(
                   left: pos.dx,
                   top: pos.dy,
-                  child: tooltipContent,
+                  child: FadeTransition(
+                    opacity: _fadeAnimation,
+                    child: ScaleTransition(
+                      scale: _scaleAnimation,
+                      child: tooltipContent,
+                    ),
+                  ),
                 ),
               ],
             ),
           ),
         );
         overlay.insert(_overlayEntry!);
+
+        // Start animation
+        _animController.forward(from: 0);
       });
     });
   }
 
   void _hideTooltip() {
     _showTimer?.cancel();
-    _hideTimer = Timer(widget.hideDelay, () {
+    _hideTimer = Timer(widget.hideDelay, () async {
+      await _animController.reverse();
       _overlayEntry?.remove();
       _overlayEntry = null;
     });
   }
 
-  /// Smart positioning with SafeArea and edge detection
   Offset _calculateSmartPosition(
     BuildContext context,
     Offset targetPos,
@@ -130,26 +158,22 @@ class _LazyTooltipState extends State<LazyTooltip> {
     final safeTop = mediaQuery.padding.top + 8;
     final safeBottom = screenHeight - mediaQuery.padding.bottom - 8;
 
-    // Horizontal centering with clamp
+    // Horizontal position
     double left = targetPos.dx + targetSize.width / 2 - tooltipSize.width / 2;
     if (left < safeLeft) left = safeLeft;
     if (left + tooltipSize.width > safeRight) {
       left = safeRight - tooltipSize.width;
     }
 
-    // Decide top/bottom
+    // Vertical position (prefer above)
     final spaceAbove = targetPos.dy - safeTop;
     final spaceBelow = safeBottom - (targetPos.dy + targetSize.height);
-
     double top;
     if (tooltipSize.height <= spaceAbove) {
-      // Above
       top = targetPos.dy - tooltipSize.height - 8;
     } else if (tooltipSize.height <= spaceBelow) {
-      // Below
       top = targetPos.dy + targetSize.height + 8;
     } else {
-      // Not enough space → choose larger side
       if (spaceAbove > spaceBelow) {
         top = safeTop;
       } else {
@@ -178,6 +202,7 @@ class _LazyTooltipState extends State<LazyTooltip> {
     _showTimer?.cancel();
     _hideTimer?.cancel();
     _overlayEntry?.remove();
+    _animController.dispose();
     super.dispose();
   }
 }
