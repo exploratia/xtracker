@@ -13,11 +13,11 @@ import '../../../../util/tooltip_utils.dart';
 import '../../../controls/navigation/hide_bottom_navigation_bar.dart';
 import '../../../controls/provider/data_provider_loader.dart';
 import '../../../controls/select/day_range_slider.dart';
-import '../../../controls/text/overflow_text.dart';
 import 'blood_pressure/series_data_blood_pressure_view.dart';
 import 'daily_check/series_data_daily_check_view.dart';
 import 'habit/series_data_habit_view.dart';
 import 'series_data_no_data.dart';
+import 'series_title.dart';
 
 class SeriesDataView extends StatelessWidget {
   const SeriesDataView({super.key, required this.seriesViewMetaData});
@@ -34,7 +34,7 @@ class SeriesDataView extends StatelessWidget {
         mainAxisSize: MainAxisSize.max,
         spacing: 0,
         children: [
-          _Title(seriesViewMetaData: seriesViewMetaData),
+          SeriesTitle(seriesViewMetaData: seriesViewMetaData),
           Expanded(
             child: DataProviderLoader(
               obtainDataProviderFuture: context.read<SeriesDataProvider>().fetchDataIfNotYetLoaded(seriesViewMetaData.seriesDef),
@@ -183,73 +183,6 @@ class _StackedRangeSliderViewState<T extends SeriesDataValue> extends State<_Sta
           ),
         )
       ],
-    );
-  }
-}
-
-class _Title extends StatelessWidget {
-  const _Title({
-    required this.seriesViewMetaData,
-  });
-
-  final SeriesViewMetaData seriesViewMetaData;
-
-  @override
-  Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
-    return SizedBox(
-      height: 48,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: const AlignmentDirectional(0, -1),
-                end: const AlignmentDirectional(0, 1),
-                colors: [
-                  themeData.colorScheme.primary,
-                  seriesViewMetaData.seriesDef.color,
-                ],
-              ),
-              borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-              boxShadow: [
-                BoxShadow(
-                  color: seriesViewMetaData.seriesDef.color.withValues(alpha: 0.8), // Glow effect
-                  blurRadius: 10,
-                  spreadRadius: 1, // Intensity of the glow
-                ),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.only(left: 2, right: 2, bottom: 1, top: 0),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: themeData.scaffoldBackgroundColor, // Inner background color
-                  borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: IntrinsicWidth(
-                    child: Row(
-                      spacing: 8,
-                      children: [
-                        Hero(tag: 'seriesDef_${seriesViewMetaData.seriesDef.uuid}', child: seriesViewMetaData.seriesDef.icon()),
-                        OverflowText(
-                          seriesViewMetaData.seriesDef.name,
-                          expanded: true,
-                          style: themeData.textTheme.titleLarge,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
     );
   }
 }
