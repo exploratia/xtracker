@@ -145,7 +145,11 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
     final themeData = Theme.of(context);
     bool isDarkMode = ThemeUtils.isDarkMode(context);
     var btnBorderColor = isDarkMode ? Colors.white12 : Colors.black12;
-    var btnBoxDecoration = BoxDecoration(border: Border.all(color: btnBorderColor, width: 0.5), borderRadius: BorderRadius.circular(16));
+    var btnBoxDecoration = BoxDecoration(
+      color: themeData.scaffoldBackgroundColor.withAlpha(192),
+      border: Border.all(color: btnBorderColor, width: 0.5),
+      borderRadius: BorderRadius.circular(16),
+    );
     var btnTextStyle = TooltipUtils.tooltipMonospaceStyle.copyWith(color: themeData.colorScheme.primary);
 
     return Stack(
