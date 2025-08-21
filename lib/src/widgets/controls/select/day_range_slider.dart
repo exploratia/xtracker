@@ -52,18 +52,37 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
   @override
   void initState() {
     _sliderVisible = widget.sliderInitialVisible;
-    var dates = [widget.date1, widget.date2];
-    dates.sort((a, b) => a.compareTo(b));
-    _firstDayStart = DateTimeUtils.truncateToDay(dates.first);
-    _maxDays = DateTimeUtils.truncateToDay(dates.last).add(const Duration(hours: 12)).difference(_firstDayStart).inDays.abs();
-    // start range at the end (the newest date) if maxSpan < maxDays
-    _values = RangeValues(_maxDays.toDouble() - min(widget.maxSpan, _maxDays), _maxDays.toDouble());
+    _calcVars();
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       var rangeValues = RangeValues(_values.start.roundToDouble(), _values.end.roundToDouble());
       widget.pageCallback(rangeValues);
     });
+  }
+
+  void _calcVars() {
+    var dates = [widget.date1, widget.date2];
+    dates.sort((a, b) => a.compareTo(b));
+    _firstDayStart = DateTimeUtils.truncateToDay(dates.first);
+    _maxDays = DateTimeUtils.truncateToDay(dates.last).add(const Duration(hours: 12)).difference(_firstDayStart).inDays.abs();
+    // start range at the end (the newest date) if maxSpan < maxDays
+    _values = RangeValues(_maxDays.toDouble() - min(widget.maxSpan, _maxDays), _maxDays.toDouble());
+  }
+
+  @override
+  void didUpdateWidget(covariant DayRangeSlider oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.date1 != widget.date1 || oldWidget.date2 != widget.date2) {
+      setState(() {
+        _calcVars();
+      });
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        var rangeValues = RangeValues(_values.start.roundToDouble(), _values.end.roundToDouble());
+        widget.pageCallback(rangeValues);
+      });
+    }
   }
 
   @override
