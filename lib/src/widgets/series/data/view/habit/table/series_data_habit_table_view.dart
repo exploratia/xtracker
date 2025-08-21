@@ -4,16 +4,14 @@ import 'package:flutter/material.dart';
 
 import '../../../../../../model/column_profile/fix_column_profiles.dart';
 import '../../../../../../model/series/data/habit/habit_value.dart';
-import '../../../../../../model/series/data/series_data.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
 import '../../../../../../util/date_time_utils.dart';
 import '../../../../../../util/globals.dart';
-import '../../../../../../util/theme_utils.dart';
 import '../../../../../controls/grid/two_dimensional_scrollable_table.dart';
 import 'habit_values_renderer.dart';
 
 class SeriesDataHabitTableView extends StatelessWidget {
-  final SeriesData<HabitValue> seriesData;
+  final List<HabitValue> seriesData;
   final SeriesViewMetaData seriesViewMetaData;
 
   /// Rows are always equal sized. But if set to false, multi line rows are inflated to multiple single line rows
@@ -63,20 +61,16 @@ class SeriesDataHabitTableView extends StatelessWidget {
       );
     }
 
-    // padding because of headline in stack
-    return Padding(
-      padding: const EdgeInsets.only(top: ThemeUtils.seriesDataViewTopPadding),
-      child: TwoDimensionalScrollableTable(
-        tableColumnProfile: FixColumnProfiles.columnProfileDateMorningMiddayEvening,
-        lineCount: data.length,
-        gridCellBuilder: gridCellBuilder,
-        lineHeight: lineHeight,
-        useFixedFirstColumn: true,
-      ),
+    return TwoDimensionalScrollableTable(
+      tableColumnProfile: FixColumnProfiles.columnProfileDateMorningMiddayEvening,
+      lineCount: data.length,
+      gridCellBuilder: gridCellBuilder,
+      lineHeight: lineHeight,
+      useFixedFirstColumn: true,
     );
   }
 
-  List<_HabitDayItem> _buildTableDataProvider(SeriesData<HabitValue> seriesData) {
+  List<_HabitDayItem> _buildTableDataProvider(List<HabitValue> seriesData) {
     List<_HabitDayItem> list = [];
 
     var emptyDate = '';
@@ -114,7 +108,7 @@ class SeriesDataHabitTableView extends StatelessWidget {
 
     _HabitDayItem? actItem;
 
-    for (var item in seriesData.data.reversed) {
+    for (var item in seriesData.reversed) {
       String dateDay = DateTimeUtils.formateDate(item.dateTime);
       if (actItem == null || actItem.date != dateDay) {
         if (actItem != null) {

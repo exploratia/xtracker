@@ -1,54 +1,33 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
-import '../../../../../../generated/locale_keys.g.dart';
+import '../../../../../model/series/data/habit/habit_value.dart';
+import '../../../../../model/series/data/series_data_filter.dart';
 import '../../../../../model/series/series_view_meta_data.dart';
 import '../../../../../model/series/view_type.dart';
-import '../../../../../providers/series_data_provider.dart';
-import '../../../../controls/animation/fade_in.dart';
-import '../../../../controls/layout/centered_message.dart';
 import 'chart/series_data_habit_chart_view.dart';
 import 'pixels/series_data_habit_pixels_view.dart';
 import 'table/series_data_habit_table_view.dart';
 
 class SeriesDataHabitView extends StatelessWidget {
-  const SeriesDataHabitView({super.key, required this.seriesViewMetaData});
+  const SeriesDataHabitView({super.key, required this.seriesViewMetaData, required this.seriesData, required this.seriesDataFilter});
 
   final SeriesViewMetaData seriesViewMetaData;
+  final List<HabitValue> seriesData;
+  final SeriesDataFilter seriesDataFilter;
 
   @override
   Widget build(BuildContext context) {
-    final seriesDef = seriesViewMetaData.seriesDef;
-
-    var seriesDataProvider = context.watch<SeriesDataProvider>();
-    var habitSeriesData = seriesDataProvider.habitData(seriesDef);
-    if (habitSeriesData == null || habitSeriesData.isEmpty()) {
-      return CenteredMessage(
-        message: IntrinsicHeight(
-          child: FadeIn(
-            child: Column(
-              children: [
-                Icon(seriesDef.iconData(), color: seriesDef.color, size: 40),
-                Text(LocaleKeys.seriesData_label_noData.tr()),
-              ],
-            ),
-          ),
-        ),
-      );
-    }
-
     switch (seriesViewMetaData.viewType) {
       case ViewType.table:
-        return SeriesDataHabitTableView(seriesViewMetaData: seriesViewMetaData, seriesData: habitSeriesData);
+        return SeriesDataHabitTableView(seriesViewMetaData: seriesViewMetaData, seriesData: seriesData);
       case ViewType.lineChart:
         throw UnimplementedError();
       case ViewType.barChart:
-        return SeriesDataHabitChartView(seriesViewMetaData: seriesViewMetaData, seriesData: habitSeriesData);
+        return SeriesDataHabitChartView(seriesViewMetaData: seriesViewMetaData, seriesData: seriesData);
       case ViewType.dots:
         throw UnimplementedError();
       case ViewType.pixels:
-        return SeriesDataHabitPixelsView(seriesViewMetaData: seriesViewMetaData, seriesData: habitSeriesData);
+        return SeriesDataHabitPixelsView(seriesViewMetaData: seriesViewMetaData, seriesData: seriesData, seriesDataFilter: seriesDataFilter);
     }
   }
 }

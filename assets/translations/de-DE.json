@@ -65,6 +65,16 @@
       "emptyValue": "Ungültiger Wert"
     }
   },
+  "controls": {
+    "select": {
+      "dayRangeSlider": {
+        "btn": {
+          "showSlider": "Datumswahl anzeigen",
+          "hideSlider": "Datumswahl ausblenden"
+        }
+      }
+    }
+  },
   "enum": {
     "seriesType": {
       "bloodPressure": {

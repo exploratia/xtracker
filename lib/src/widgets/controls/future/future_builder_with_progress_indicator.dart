@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 import '../../../util/logging/flutter_simple_logging.dart';
 
 class FutureBuilderWithProgressIndicator<T> extends StatelessWidget {
-  const FutureBuilderWithProgressIndicator({super.key, required this.future, this.errorBuilder, required this.widgetBuilder});
+  const FutureBuilderWithProgressIndicator({super.key, required this.future, this.errorBuilder, required this.widgetBuilder, this.marginTop = 0});
 
   final Future<T> future;
   final dynamic Function(Object error)? errorBuilder;
   final Widget Function(T? data, BuildContext context) widgetBuilder;
+  final double marginTop;
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +16,12 @@ class FutureBuilderWithProgressIndicator<T> extends StatelessWidget {
       future: future,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Column(children: [LinearProgressIndicator()]);
+          return Column(
+            children: [
+              if (marginTop > 0) SizedBox(height: marginTop),
+              const LinearProgressIndicator(),
+            ],
+          );
         } else if (snapshot.hasError) {
           SimpleLogging.w('Err result in future: ${snapshot.error}');
           if (errorBuilder != null) {

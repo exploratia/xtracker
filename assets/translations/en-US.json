@@ -65,6 +65,16 @@
       "emptyValue": "Please enter a value"
     }
   },
+  "controls": {
+    "select": {
+      "dayRangeSlider": {
+        "btn": {
+          "showSlider": "Show date selection",
+          "hideSlider": "Hide date selection"
+        }
+      }
+    }
+  },
   "enum": {
     "seriesType": {
       "bloodPressure": {

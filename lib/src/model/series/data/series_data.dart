@@ -87,6 +87,11 @@ class SeriesData<T extends SeriesDataValue> {
     return SeriesData(seriesDefUuid, reducedSeriesItems);
   }
 
+  static List<U> reduceDataToNewerThen<U extends SeriesDataValue>(List<U> data, DateTime dateTime) {
+    var reduced = data.where((item) => item.dateTime.isAfter(dateTime)).toList();
+    return reduced;
+  }
+
   static Future<void> showSeriesDataInputDlg(BuildContext context, SeriesDef seriesDef, {dynamic value}) async {
     switch (seriesDef.seriesType) {
       case SeriesType.bloodPressure:

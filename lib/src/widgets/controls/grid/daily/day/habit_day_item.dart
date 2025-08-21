@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../model/series/data/habit/habit_value.dart';
-import '../../../../../model/series/data/series_data.dart';
 import '../../../../../model/series/series_def.dart';
 import '../../../../../util/date_time_utils.dart';
 import '../../../../series/data/view/habit/table/habit_value_renderer.dart';
@@ -42,7 +41,7 @@ class HabitDayItem extends DayItem<HabitValue> {
     return 'HabitDayItem{date: $dateTimeDayStart, count: $count}';
   }
 
-  static List<HabitDayItem> buildDayItems(SeriesData<HabitValue> seriesData, SeriesDef seriesDef) {
+  static List<HabitDayItem> buildDayItems(List<HabitValue> seriesData, SeriesDef seriesDef) {
     List<HabitDayItem> list = [];
 
     HabitDayItem? actItem;
@@ -54,7 +53,7 @@ class HabitDayItem extends DayItem<HabitValue> {
       return dayItem;
     }
 
-    for (var item in seriesData.data.reversed) {
+    for (var item in seriesData.reversed) {
       DateTime dateDay = DateTimeUtils.truncateToDay(item.dateTime);
       actDay ??= dateDay;
 

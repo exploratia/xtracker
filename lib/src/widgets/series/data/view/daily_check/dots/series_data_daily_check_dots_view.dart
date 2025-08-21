@@ -4,7 +4,6 @@ import '../../../../../../model/column_profile/fix_column_profiles.dart';
 import '../../../../../../model/series/data/daily_check/daily_check_value.dart';
 import '../../../../../../model/series/data/series_data.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
-import '../../../../../../util/theme_utils.dart';
 import '../../../../../controls/grid/daily/day/daily_check_day_item.dart';
 import '../../../../../controls/grid/daily/dot.dart';
 import '../../../../../controls/grid/daily/row/row_item.dart';
@@ -22,45 +21,41 @@ class SeriesDataDailyCheckDotsView extends StatelessWidget {
     DailyCheckDayItem.updateValuesFromSeries(seriesViewMetaData.seriesDef);
     var dayItems = DailyCheckDayItem.buildDayItems(seriesData, seriesViewMetaData.seriesDef);
 
-    // padding because of headline in stack
-    return Padding(
-      padding: const EdgeInsets.only(top: ThemeUtils.seriesDataViewTopPadding),
-      child: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          bool monthly = constraints.maxWidth > FixColumnProfiles.columnProfileDateMonthDays.minWidth();
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        bool monthly = constraints.maxWidth > FixColumnProfiles.columnProfileDateMonthDays.minWidth();
 
-          List<RowItem<DailyCheckDayItem>> data = monthly ? RowItem.buildMonthRowItems(dayItems) : RowItem.buildWeekRowItems(dayItems);
+        List<RowItem<DailyCheckDayItem>> data = monthly ? RowItem.buildMonthRowItems(dayItems) : RowItem.buildWeekRowItems(dayItems);
 
-          gridCellBuilder(BuildContext context, int yIndex, int xIndex) {
-            var rowItem = data[yIndex];
+        gridCellBuilder(BuildContext context, int yIndex, int xIndex) {
+          var rowItem = data[yIndex];
 
-            if (xIndex == 0) {
-              if (rowItem.displayDate != null) {
-                return GridCell(child: Center(child: Text(rowItem.displayDate!)));
-              }
-              return GridCell(child: Container());
+          if (xIndex == 0) {
+            if (rowItem.displayDate != null) {
+              return GridCell(child: Center(child: Text(rowItem.displayDate!)));
             }
-
-            var dayItem = rowItem.getDayItem(xIndex - 1);
-            if (dayItem == null) {
-              return GridCell(child: Container());
-            }
-
-            return GridCell(
-              backgroundColor: dayItem.backgroundColor,
-              child: dayItem.toDot(monthly),
-            );
+            return GridCell(child: Container());
           }
 
-          return TwoDimensionalScrollableTable(
-            tableColumnProfile: monthly ? FixColumnProfiles.columnProfileDateMonthDays : FixColumnProfiles.columnProfileDateWeekdays,
-            lineCount: data.length,
-            gridCellBuilder: gridCellBuilder,
-            lineHeight: Dot.dotHeight,
-            useFixedFirstColumn: true,
+          var dayItem = rowItem.getDayItem(xIndex - 1);
+          if (dayItem == null) {
+            return GridCell(child: Container());
+          }
+
+          return GridCell(
+            backgroundColor: dayItem.backgroundColor,
+            child: dayItem.toDot(monthly),
           );
-        },
-      ),
+        }
+
+        return TwoDimensionalScrollableTable(
+          tableColumnProfile: monthly ? FixColumnProfiles.columnProfileDateMonthDays : FixColumnProfiles.columnProfileDateWeekdays,
+          lineCount: data.length,
+          gridCellBuilder: gridCellBuilder,
+          lineHeight: Dot.dotHeight,
+          useFixedFirstColumn: true,
+        );
+      },
     );
   }
 }

@@ -37,6 +37,8 @@ abstract class  LocaleKeys {
   static const commons_snackbar_pressBackAgainToExit = 'commons.snackbar.pressBackAgainToExit';
   static const commons_snackbar_saved = 'commons.snackbar.saved';
   static const commons_validator_emptyValue = 'commons.validator.emptyValue';
+  static const controls_select_dayRangeSlider_btn_showSlider = 'controls.select.dayRangeSlider.btn.showSlider';
+  static const controls_select_dayRangeSlider_btn_hideSlider = 'controls.select.dayRangeSlider.btn.hideSlider';
   static const enum_seriesType_bloodPressure_title = 'enum.seriesType.bloodPressure.title';
   static const enum_seriesType_bloodPressure_info = 'enum.seriesType.bloodPressure.info';
   static const enum_seriesType_dailyCheck_title = 'enum.seriesType.dailyCheck.title';
