@@ -191,17 +191,26 @@ class _StackedRangeSliderViewState<T extends SeriesDataValue> extends State<_Sta
           right: 0,
           bottom: 0,
           duration: const Duration(milliseconds: 300),
-          child: Container(
-            color: themeData.scaffoldBackgroundColor.withAlpha(128),
-            child: DayRangeSlider(
-                pageCallback: _setFilter,
-                maxSpan: 366 * 2,
-                sliderInitialVisible: false,
-                sliderVisibleCallback: _setSliderVisible,
-                date1: widget.seriesData.first.dateTime,
-                date2: widget.seriesData.last.dateTime),
+          child: IgnorePointer(
+            child: Container(
+              color: themeData.scaffoldBackgroundColor.withAlpha(128),
+            ),
           ),
-        )
+        ),
+        AnimatedPositioned(
+          height: _sliderVisible ? 78 : ThemeUtils.seriesDataBottomFilterViewHeight,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          duration: const Duration(milliseconds: 300),
+          child: DayRangeSlider(
+              pageCallback: _setFilter,
+              maxSpan: 366 * 2,
+              sliderInitialVisible: false,
+              sliderVisibleCallback: _setSliderVisible,
+              date1: widget.seriesData.first.dateTime,
+              date2: widget.seriesData.last.dateTime),
+        ),
       ],
     );
   }
