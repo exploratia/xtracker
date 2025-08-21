@@ -278,100 +278,114 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
           ),
         ),
 
-        // drag area
-        Positioned(
-          left: 0,
-          right: 0,
-          bottom: 0,
-          height: 48,
-          child: IgnorePointer(
-            ignoring: !_sliderVisible,
-            child: AnimatedOpacity(
-              opacity: _sliderVisible ? 1 : 0,
-              duration: const Duration(milliseconds: 300),
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  double sliderWidth = constraints.maxWidth - 48; // 48 padding
-                  double totalRange = _maxDays.toDouble();
+        // drag area (only if slider is not on min & max)
+        if (_values.start > 0 || _values.end < _maxDays)
+          Positioned(
+            left: 0,
+            right: 0,
+            bottom: 0,
+            height: 48,
+            child: IgnorePointer(
+              ignoring: !_sliderVisible,
+              child: AnimatedOpacity(
+                opacity: _sliderVisible ? 1 : 0,
+                duration: const Duration(milliseconds: 300),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    double sliderWidth = constraints.maxWidth - 48; // 48 padding
+                    double totalRange = _maxDays.toDouble();
 
-                  double left = _values.start / totalRange * sliderWidth + 24;
-                  double right = _values.end / totalRange * sliderWidth + 24;
-                  double blockWidth = right - left;
+                    double left = _values.start / totalRange * sliderWidth + 24;
+                    double right = _values.end / totalRange * sliderWidth + 24;
+                    double blockWidth = right - left;
 
-                  double handleWidth = 32; // blockWidth * 0.3;// limit to middle 30 %
-                  if (blockWidth < 64) return Container();
-                  double handleLeft = left + (blockWidth - handleWidth) / 2;
+                    double handleWidth = 32; // blockWidth * 0.3;// limit to middle 30 %
 
-                  return Stack(
-                    children: [
-                      // for debug to visualize block
-                      // Positioned(
-                      //     left: left,
-                      //     width: blockWidth,
-                      //     top: 0,
-                      //     bottom: 0,
-                      //     child: Container(
-                      //       color: Colors.green.withAlpha(128),
-                      //     )),
-                      // Drag handle
-                      Positioned(
-                        left: handleLeft,
-                        width: handleWidth,
-                        top: 0,
-                        bottom: 0,
-                        child: GestureDetector(
-                          behavior: HitTestBehavior.translucent,
-                          onHorizontalDragStart: (details) {
-                            _isDraggingBlock = true;
-                            _lastDragDx = details.localPosition.dx;
-                          },
-                          onHorizontalDragUpdate: (details) {
-                            double dx = details.localPosition.dx;
-                            double deltaPx = dx - (_lastDragDx ?? dx);
-                            _lastDragDx = dx;
+                    // calc handle position
+                    // if space between slider handles is to small go to left/right depending on position
+                    // otherwise draw drag handle in the middle
+                    double handleLeft = 0;
+                    if (blockWidth < 64) {
+                      var middle = sliderWidth / 2 + 24;
+                      if (left > middle) {
+                        handleLeft = left - handleWidth * 2;
+                      } else {
+                        handleLeft = right + handleWidth;
+                      }
+                    } else {
+                      handleLeft = left + (blockWidth - handleWidth) / 2;
+                    }
 
-                            double deltaDays = deltaPx / sliderWidth * totalRange;
+                    return Stack(
+                      children: [
+                        // for debug to visualize block
+                        // Positioned(
+                        //     left: left,
+                        //     width: blockWidth,
+                        //     top: 0,
+                        //     bottom: 0,
+                        //     child: Container(
+                        //       color: Colors.green.withAlpha(128),
+                        //     )),
+                        // Drag handle
+                        Positioned(
+                          left: handleLeft,
+                          width: handleWidth,
+                          top: 0,
+                          bottom: 0,
+                          child: GestureDetector(
+                            behavior: HitTestBehavior.translucent,
+                            onHorizontalDragStart: (details) {
+                              _isDraggingBlock = true;
+                              _lastDragDx = details.localPosition.dx;
+                            },
+                            onHorizontalDragUpdate: (details) {
+                              double dx = details.localPosition.dx;
+                              double deltaPx = dx - (_lastDragDx ?? dx);
+                              _lastDragDx = dx;
 
-                            double newStart = _values.start + deltaDays;
-                            double newEnd = _values.end + deltaDays;
+                              double deltaDays = deltaPx / sliderWidth * totalRange;
 
-                            // Clamp at min/max
-                            if (newStart < 0) {
-                              newEnd += -newStart;
-                              newStart = 0;
-                            }
-                            if (newEnd > _maxDays) {
-                              newStart -= newEnd - _maxDays;
-                              newEnd = _maxDays.toDouble();
-                            }
+                              double newStart = _values.start + deltaDays;
+                              double newEnd = _values.end + deltaDays;
 
-                            _updateValues(RangeValues(newStart, newEnd));
-                          },
-                          onHorizontalDragEnd: (_) {
-                            _isDraggingBlock = false;
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(vertical: 14),
-                            decoration: BoxDecoration(
-                              color: themeData.colorScheme.primary,
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Center(
-                              child: Text(
-                                "|||",
-                                style: themeData.textTheme.bodyMedium?.copyWith(color: themeData.colorScheme.onPrimary),
+                              // Clamp at min/max
+                              if (newStart < 0) {
+                                newEnd += -newStart;
+                                newStart = 0;
+                              }
+                              if (newEnd > _maxDays) {
+                                newStart -= newEnd - _maxDays;
+                                newEnd = _maxDays.toDouble();
+                              }
+
+                              _updateValues(RangeValues(newStart, newEnd));
+                            },
+                            onHorizontalDragEnd: (_) {
+                              _isDraggingBlock = false;
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.symmetric(vertical: 14),
+                              decoration: BoxDecoration(
+                                color: themeData.colorScheme.primary,
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "|||",
+                                  style: themeData.textTheme.bodyMedium?.copyWith(color: themeData.colorScheme.onPrimary),
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  );
-                },
+                      ],
+                    );
+                  },
+                ),
               ),
             ),
           ),
-        ),
       ],
     );
   }
