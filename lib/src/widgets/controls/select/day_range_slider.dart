@@ -49,8 +49,6 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
 
   late bool _sliderVisible;
 
-  final Defer _defer = Defer();
-
   @override
   void initState() {
     _sliderVisible = widget.sliderInitialVisible;
@@ -88,12 +86,6 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
     }
   }
 
-  @override
-  void dispose() {
-    _defer.cancel();
-    super.dispose();
-  }
-
   void _toggleSliderVisible() {
     setState(() {
       _sliderVisible = !_sliderVisible;
@@ -106,7 +98,6 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
       // check if callback is required?
       if (_values.start.roundToDouble() != rangeValues.start.roundToDouble() || _values.end.roundToDouble() != rangeValues.end.roundToDouble()) {
         _reverseProgressKey.currentState?.restart();
-        // defer.call(() => widget.pageCallback(RangeValues(rangeValues.start.roundToDouble(), rangeValues.end.roundToDouble())));
       }
       _values = rangeValues;
     });
