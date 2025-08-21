@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../model/series/data/daily_check/daily_check_value.dart';
-import '../../../../../model/series/data/series_data.dart';
 import '../../../../../model/series/series_def.dart';
 import '../../../../../util/color_utils.dart';
 import '../../../../../util/date_time_utils.dart';
@@ -42,7 +41,7 @@ class DailyCheckDayItem extends DayItem<DailyCheckValue> {
     return 'DailyCheckDayItem{date: $dateTimeDayStart, count: $count}';
   }
 
-  static List<DailyCheckDayItem> buildDayItems(SeriesData<DailyCheckValue> seriesData, SeriesDef seriesDef) {
+  static List<DailyCheckDayItem> buildDayItems(List<DailyCheckValue> seriesData, SeriesDef seriesDef) {
     List<DailyCheckDayItem> list = [];
 
     DailyCheckDayItem? actItem;
@@ -54,7 +53,7 @@ class DailyCheckDayItem extends DayItem<DailyCheckValue> {
       return dayItem;
     }
 
-    for (var item in seriesData.data.reversed) {
+    for (var item in seriesData.reversed) {
       DateTime dateDay = DateTimeUtils.truncateToDay(item.dateTime);
       actDay ??= dateDay;
 

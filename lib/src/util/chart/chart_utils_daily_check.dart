@@ -5,14 +5,13 @@ import 'package:flutter/material.dart';
 
 import '../../model/chart/chart_meta_data.dart';
 import '../../model/series/data/daily_check/daily_check_value.dart';
-import '../../model/series/data/series_data.dart';
 import '../../model/series/series_view_meta_data.dart';
 import '../color_utils.dart';
 import '../date_time_utils.dart';
 import 'chart_utils.dart';
 
 class ChartUtilsDailyCheck {
-  static LineChartData buildLineChartData(SeriesViewMetaData seriesViewMetaData, SeriesData<DailyCheckValue> seriesData, List<CombinedValue> combinedSeriesData,
+  static LineChartData buildLineChartData(SeriesViewMetaData seriesViewMetaData, List<DailyCheckValue> seriesData, List<CombinedValue> combinedSeriesData,
       ThemeData themeData, Function(FlTouchEvent, LineTouchResponse?)? touchCallback) {
     List<LineChartBarData> lineBarsData = [];
 

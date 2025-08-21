@@ -3,7 +3,6 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 
 import '../../../../../model/series/data/blood_pressure/blood_pressure_value.dart';
-import '../../../../../model/series/data/series_data.dart';
 import '../../../../../model/series/series_def.dart';
 import '../../../../../util/date_time_utils.dart';
 import '../../../../series/data/view/blood_pressure/table/blood_pressure_value_renderer.dart';
@@ -51,7 +50,7 @@ class BloodPressureDayItem extends DayItem<BloodPressureValue> {
     return 'BloodPressureDayItem{date: $dateTimeDayStart, high: $high, low: $low, medication: $medication, count: $count}';
   }
 
-  static List<BloodPressureDayItem> buildDayItems(SeriesData<BloodPressureValue> seriesData, SeriesDef seriesDef) {
+  static List<BloodPressureDayItem> buildDayItems(List<BloodPressureValue> seriesData, SeriesDef seriesDef) {
     List<BloodPressureDayItem> list = [];
 
     BloodPressureDayItem? actItem;
@@ -63,7 +62,7 @@ class BloodPressureDayItem extends DayItem<BloodPressureValue> {
       return dayItem;
     }
 
-    for (var item in seriesData.data.reversed) {
+    for (var item in seriesData.reversed) {
       DateTime dateDay = DateTimeUtils.truncateToDay(item.dateTime);
       actDay ??= dateDay;
 

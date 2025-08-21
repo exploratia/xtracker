@@ -13,7 +13,7 @@ class SeriesDataDailyCheckChartView extends StatelessWidget {
   const SeriesDataDailyCheckChartView({super.key, required this.seriesViewMetaData, required this.seriesData});
 
   final SeriesViewMetaData seriesViewMetaData;
-  final SeriesData<DailyCheckValue> seriesData;
+  final List<DailyCheckValue> seriesData;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class SeriesDataDailyCheckChartView extends StatelessWidget {
 
     List<CombinedValue> combinedSeriesData = [];
     CombinedValue? actCombinedValue;
-    for (var seriesItem in seriesData.data) {
+    for (var seriesItem in seriesData) {
       var dateTime = seriesViewMetaData.showYearly ? DateTimeUtils.firstDayOfYear(seriesItem.dateTime) : DateTimeUtils.firstDayOfMonth(seriesItem.dateTime);
       if (actCombinedValue == null || actCombinedValue.dateTime != dateTime) {
         actCombinedValue = CombinedValue(dateTime);
@@ -49,7 +49,7 @@ class SeriesDataDailyCheckChartView extends StatelessWidget {
 
               return LineChart(
                 ChartUtilsDailyCheck.buildLineChartData(
-                    seriesViewMetaData, seriesData.reduceToNewerThen(reduceToNewerThenMax), combinedSeriesData, themeData, touchCallback),
+                    seriesViewMetaData, SeriesData.reduceDataToNewerThen(seriesData, reduceToNewerThenMax), combinedSeriesData, themeData, touchCallback),
               );
             },
           ),

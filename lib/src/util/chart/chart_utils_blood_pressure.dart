@@ -5,13 +5,11 @@ import 'package:flutter/material.dart';
 
 import '../../model/chart/chart_meta_data.dart';
 import '../../model/series/data/blood_pressure/blood_pressure_value.dart';
-import '../../model/series/data/series_data.dart';
 import '../date_time_utils.dart';
 import 'chart_utils.dart';
 
 class ChartUtilsBloodPressure {
-  static LineChartData buildLineChartData(
-      SeriesData<BloodPressureValue> seriesData, ThemeData themeData, Function(FlTouchEvent, LineTouchResponse?)? touchCallback) {
+  static LineChartData buildLineChartData(List<BloodPressureValue> seriesData, ThemeData themeData, Function(FlTouchEvent, LineTouchResponse?)? touchCallback) {
     List<LineChartBarData> lineBarsData = [];
 
     ChartMetaData chartMetaData = ChartMetaData();
@@ -25,7 +23,7 @@ class ChartUtilsBloodPressure {
     int lowMin = BloodPressureValue.maxValue;
     int lowMax = BloodPressureValue.minValue;
 
-    for (var item in seriesData.data) {
+    for (var item in seriesData) {
       var lowVal = item.low;
       var highVal = item.high;
       var t = item.dateTime.millisecondsSinceEpoch;

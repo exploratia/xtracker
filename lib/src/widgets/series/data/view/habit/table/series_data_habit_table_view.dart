@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../../model/column_profile/fix_column_profiles.dart';
 import '../../../../../../model/series/data/habit/habit_value.dart';
+import '../../../../../../model/series/data/series_data_filter.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
 import '../../../../../../util/date_time_utils.dart';
 import '../../../../../../util/globals.dart';
@@ -13,17 +14,18 @@ import 'habit_values_renderer.dart';
 class SeriesDataHabitTableView extends StatelessWidget {
   final List<HabitValue> seriesData;
   final SeriesViewMetaData seriesViewMetaData;
+  final SeriesDataFilter seriesDataFilter;
 
   /// Rows are always equal sized. But if set to false, multi line rows are inflated to multiple single line rows
   final bool _useEqualSizedRows = false;
 
-  const SeriesDataHabitTableView({super.key, required this.seriesViewMetaData, required this.seriesData});
+  const SeriesDataHabitTableView({super.key, required this.seriesViewMetaData, required this.seriesData, required this.seriesDataFilter});
 
   @override
   Widget build(BuildContext context) {
     // for daily check we need a special TableColumnProfile
 
-    List<_HabitDayItem> data = _buildTableDataProvider(seriesData);
+    List<_HabitDayItem> data = _buildTableDataProvider(seriesData.where((value) => seriesDataFilter.filter(value)).toList());
     int lineHeight = 28;
     if (_useEqualSizedRows) {
       // calc line height = single line height * max lines per day of all items

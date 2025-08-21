@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../../model/column_profile/fix_column_profiles.dart';
 import '../../../../../../model/series/data/daily_check/daily_check_value.dart';
-import '../../../../../../model/series/data/series_data.dart';
+import '../../../../../../model/series/data/series_data_filter.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
 import '../../../../../controls/grid/daily/day/daily_check_day_item.dart';
 import '../../../../../controls/grid/daily/dot.dart';
@@ -10,16 +10,17 @@ import '../../../../../controls/grid/daily/row/row_item.dart';
 import '../../../../../controls/grid/two_dimensional_scrollable_table.dart';
 
 class SeriesDataDailyCheckDotsView extends StatelessWidget {
-  final SeriesData<DailyCheckValue> seriesData;
+  final List<DailyCheckValue> seriesData;
   final SeriesViewMetaData seriesViewMetaData;
+  final SeriesDataFilter seriesDataFilter;
 
-  const SeriesDataDailyCheckDotsView({super.key, required this.seriesViewMetaData, required this.seriesData});
+  const SeriesDataDailyCheckDotsView({super.key, required this.seriesViewMetaData, required this.seriesData, required this.seriesDataFilter});
 
   @override
   Widget build(BuildContext context) {
     Dot.updateDotStyles(context);
     DailyCheckDayItem.updateValuesFromSeries(seriesViewMetaData.seriesDef);
-    var dayItems = DailyCheckDayItem.buildDayItems(seriesData, seriesViewMetaData.seriesDef);
+    var dayItems = DailyCheckDayItem.buildDayItems(seriesData.where((value) => seriesDataFilter.filter(value)).toList(), seriesViewMetaData.seriesDef);
 
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {

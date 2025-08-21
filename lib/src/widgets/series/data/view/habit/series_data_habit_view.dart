@@ -19,7 +19,7 @@ class SeriesDataHabitView extends StatelessWidget {
   Widget build(BuildContext context) {
     switch (seriesViewMetaData.viewType) {
       case ViewType.table:
-        return SeriesDataHabitTableView(seriesViewMetaData: seriesViewMetaData, seriesData: seriesData);
+        return SeriesDataHabitTableView(seriesViewMetaData: seriesViewMetaData, seriesData: seriesData, seriesDataFilter: seriesDataFilter);
       case ViewType.lineChart:
         throw UnimplementedError();
       case ViewType.barChart:

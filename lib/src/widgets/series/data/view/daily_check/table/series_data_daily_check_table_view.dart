@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../../model/column_profile/fix_column_profiles.dart';
 import '../../../../../../model/series/data/daily_check/daily_check_value.dart';
-import '../../../../../../model/series/data/series_data.dart';
+import '../../../../../../model/series/data/series_data_filter.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
 import '../../../../../../util/date_time_utils.dart';
 import '../../../../../../util/globals.dart';
@@ -12,19 +12,20 @@ import '../../../../../controls/grid/two_dimensional_scrollable_table.dart';
 import 'daily_check_values_renderer.dart';
 
 class SeriesDataDailyCheckTableView extends StatelessWidget {
-  final SeriesData<DailyCheckValue> seriesData;
+  final List<DailyCheckValue> seriesData;
   final SeriesViewMetaData seriesViewMetaData;
+  final SeriesDataFilter seriesDataFilter;
 
   /// Rows are always equal sized. But if set to false, multi line rows are inflated to multiple single line rows
   final bool _useEqualSizedRows = false;
 
-  const SeriesDataDailyCheckTableView({super.key, required this.seriesViewMetaData, required this.seriesData});
+  const SeriesDataDailyCheckTableView({super.key, required this.seriesViewMetaData, required this.seriesData, required this.seriesDataFilter});
 
   @override
   Widget build(BuildContext context) {
     // for daily check we need a special TableColumnProfile
 
-    List<_DailyCheckDayItem> data = _buildTableDataProvider(seriesData);
+    List<_DailyCheckDayItem> data = _buildTableDataProvider(seriesData.where((value) => seriesDataFilter.filter(value)).toList());
     int lineHeight = 28;
     if (_useEqualSizedRows) {
       // calc line height = single line height * max lines per day of all items
@@ -71,7 +72,7 @@ class SeriesDataDailyCheckTableView extends StatelessWidget {
     );
   }
 
-  List<_DailyCheckDayItem> _buildTableDataProvider(SeriesData<DailyCheckValue> seriesData) {
+  List<_DailyCheckDayItem> _buildTableDataProvider(List<DailyCheckValue> seriesData) {
     List<_DailyCheckDayItem> list = [];
 
     var emptyDate = '';
@@ -109,7 +110,7 @@ class SeriesDataDailyCheckTableView extends StatelessWidget {
 
     _DailyCheckDayItem? actItem;
 
-    for (var item in seriesData.data.reversed) {
+    for (var item in seriesData.reversed) {
       String dateDay = DateTimeUtils.formateDate(item.dateTime);
       if (actItem == null || actItem.date != dateDay) {
         if (actItem != null) {

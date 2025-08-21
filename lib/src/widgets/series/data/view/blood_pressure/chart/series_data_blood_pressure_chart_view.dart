@@ -13,7 +13,7 @@ class SeriesDataBloodPressureChartView extends StatelessWidget {
   const SeriesDataBloodPressureChartView({super.key, required this.seriesViewMetaData, required this.seriesData});
 
   final SeriesViewMetaData seriesViewMetaData;
-  final SeriesData<BloodPressureValue> seriesData;
+  final List<BloodPressureValue> seriesData;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +32,7 @@ class SeriesDataBloodPressureChartView extends StatelessWidget {
               DateTime reduceToNewerThenMax = reduceToNewerThenPxWidth.isAfter(reduceToNewerThen) ? reduceToNewerThenPxWidth : reduceToNewerThen;
 
               return LineChart(
-                ChartUtilsBloodPressure.buildLineChartData(seriesData.reduceToNewerThen(reduceToNewerThenMax), themeData, touchCallback),
+                ChartUtilsBloodPressure.buildLineChartData(SeriesData.reduceDataToNewerThen(seriesData, reduceToNewerThenMax), themeData, touchCallback),
               );
             },
           ),

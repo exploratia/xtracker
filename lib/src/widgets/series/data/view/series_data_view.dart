@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../model/series/data/blood_pressure/blood_pressure_value.dart';
+import '../../../../model/series/data/daily_check/daily_check_value.dart';
 import '../../../../model/series/data/habit/habit_value.dart';
 import '../../../../model/series/data/series_data_filter.dart';
 import '../../../../model/series/data/series_data_value.dart';
@@ -63,11 +65,27 @@ class _SeriesDataView extends StatelessWidget {
       case SeriesType.bloodPressure:
         var seriesData = seriesDataProvider.bloodPressureData(seriesDef);
         if (SeriesDataNoData.isNoData(seriesData)) return SeriesDataNoData(seriesViewMetaData: seriesViewMetaData);
-        return SeriesDataBloodPressureView(seriesViewMetaData: seriesViewMetaData);
+        return _SeriesDataFilterView<BloodPressureValue>(
+          seriesViewMetaData: seriesViewMetaData,
+          seriesData: seriesData!.data,
+          seriesDataViewBuilder: (SeriesDataFilter filter) => SeriesDataBloodPressureView(
+            seriesViewMetaData: seriesViewMetaData,
+            seriesData: seriesData.data,
+            seriesDataFilter: filter,
+          ),
+        );
       case SeriesType.dailyCheck:
         var seriesData = seriesDataProvider.dailyCheckData(seriesDef);
         if (SeriesDataNoData.isNoData(seriesData)) return SeriesDataNoData(seriesViewMetaData: seriesViewMetaData);
-        return SeriesDataDailyCheckView(seriesViewMetaData: seriesViewMetaData);
+        return _SeriesDataFilterView<DailyCheckValue>(
+          seriesViewMetaData: seriesViewMetaData,
+          seriesData: seriesData!.data,
+          seriesDataViewBuilder: (SeriesDataFilter filter) => SeriesDataDailyCheckView(
+            seriesViewMetaData: seriesViewMetaData,
+            seriesData: seriesData.data,
+            seriesDataFilter: filter,
+          ),
+        );
       case SeriesType.habit:
         var seriesData = seriesDataProvider.habitData(seriesDef);
         if (SeriesDataNoData.isNoData(seriesData)) return SeriesDataNoData(seriesViewMetaData: seriesViewMetaData);
@@ -93,7 +111,7 @@ class _SeriesDataFilterView<T extends SeriesDataValue> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (seriesViewMetaData.seriesDef.seriesType == SeriesType.habit && seriesViewMetaData.viewType == ViewType.pixels) {
+    if (seriesViewMetaData.viewType == ViewType.dots || seriesViewMetaData.viewType == ViewType.pixels || seriesViewMetaData.viewType == ViewType.table) {
       return _StackedRangeSliderView(
         seriesData: seriesData,
         seriesViewMetaData: seriesViewMetaData,
