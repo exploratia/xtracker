@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../util/defer.dart';
+
 class ReverseProgress extends StatefulWidget {
   final double maxWidth;
   final double height;
@@ -21,15 +23,23 @@ class ReverseProgress extends StatefulWidget {
 }
 
 class ReverseProgressState extends State<ReverseProgress> {
+  late final Defer _defer;
   double _progress = 0.0; // 1.0 = full width, 0.0 = empty
 
+  @override
+  void initState() {
+    _defer = Defer(delay: widget.duration);
+    super.initState();
+  }
+
   void restart() {
+    _defer.cancel();
     setState(() {
       _progress = 1.0;
     });
 
     // back to 0 in order to start animation
-    Future.delayed(widget.duration, () {
+    _defer.call(() {
       if (mounted) {
         setState(() {
           _progress = 0.0;
@@ -42,6 +52,12 @@ class ReverseProgressState extends State<ReverseProgress> {
     if (_progress == 0 && widget.onEndCallback != null) {
       widget.onEndCallback!();
     }
+  }
+
+  @override
+  void dispose() {
+    _defer.cancel();
+    super.dispose();
   }
 
   @override
