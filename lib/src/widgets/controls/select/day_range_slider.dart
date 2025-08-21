@@ -109,8 +109,7 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
   }
 
   Future<void> _selectDate(BuildContext context, bool isStartDate) async {
-    var initialDate = DateTimeUtils.truncateToDay(_firstDayStart.add(Duration(days: (isStartDate ? _values.start : _values.end).toInt())));
-
+    var initialDate = DateTimeUtils.truncateToDay(_firstDayStart.add(Duration(days: (isStartDate ? _values.start : _values.end).toInt(), hours: 12)));
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: initialDate,
@@ -119,7 +118,7 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
     );
 
     if (pickedDate != null) {
-      var diff = pickedDate.difference(_firstDayStart).inDays.toDouble();
+      var diff = (pickedDate.difference(_firstDayStart).inHours / 24).round().toDouble(); // hours and round instead of days because of daylight saving
       if (diff < 0) return;
       double start = (isStartDate ? diff : _values.start);
       double end = (isStartDate ? _values.end : diff);
@@ -186,7 +185,7 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
                       child: TextButton(
                         onPressed: () => _selectDate(context, true),
                         child: Text(
-                          DateTimeUtils.formateYYYMMDD(_firstDayStart.add(Duration(days: _values.start.toInt()))),
+                          DateTimeUtils.formateYYYMMDD(_firstDayStart.add(Duration(days: _values.start.toInt(), hours: 12))),
                           style: btnTextStyle,
                         ),
                       ),
@@ -200,7 +199,7 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
                       child: TextButton(
                         onPressed: () => _selectDate(context, false),
                         child: Text(
-                          DateTimeUtils.formateYYYMMDD(_firstDayStart.add(Duration(days: _values.end.toInt()))),
+                          DateTimeUtils.formateYYYMMDD(_firstDayStart.add(Duration(days: _values.end.toInt(), hours: 12))),
                           style: btnTextStyle,
                         ),
                       ),
