@@ -153,13 +153,13 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
       children: [
         // progress
         Positioned(
-          left: 24,
-          right: 0,
-          top: 10,
+          left: 10,
+          right: 10,
+          top: 28 + (_sliderVisible ? 6 : 10),
           height: 1,
           child: ReverseProgress(
             key: _reverseProgressKey,
-            maxWidth: 50,
+            maxWidth: 230,
             height: 1,
             color: themeData.colorScheme.secondary,
             duration: Defer.defaultDuration,
@@ -171,7 +171,6 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
           left: 0,
           right: 0,
           top: _sliderVisible ? 1 : 3,
-          bottom: _sliderVisible ? 48 : 0,
           duration: const Duration(milliseconds: 300),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,

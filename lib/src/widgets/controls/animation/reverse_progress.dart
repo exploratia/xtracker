@@ -67,6 +67,7 @@ class ReverseProgressState extends State<ReverseProgress> {
   @override
   Widget build(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         AnimatedContainer(
           onEnd: _onEnd,
