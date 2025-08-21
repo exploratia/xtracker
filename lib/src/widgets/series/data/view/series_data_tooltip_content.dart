@@ -32,7 +32,7 @@ class SeriesDataTooltipContent {
     int c = 0;
     for (var timeValuePair in timeValuePairs) {
       if (c >= 9) {
-        columnChildren.add(Text('\n- ...', style: TooltipUtils.tooltipMonospaceStyle));
+        columnChildren.add(Text('...', style: TooltipUtils.tooltipMonospaceStyle));
         break;
       }
       columnChildren.add(_tooltipValueLineWidget(timeValuePair.k.padLeft(maxLength), timeValuePair.v));
