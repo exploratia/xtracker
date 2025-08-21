@@ -19,6 +19,9 @@ class ThemeUtils {
   static final btnShape = RoundedRectangleBorder(borderRadius: BorderRadius.circular(24));
   static const double seriesDataInputDlgMaxWidth = 300;
 
+  /// [seriesDataBottomFilterViewHeight] = 48 (e.g. Slider height)
+  static const double seriesDataBottomFilterViewHeight = 48;
+
   static ThemeData? _light;
   static ThemeData? _dark;
 

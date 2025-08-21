@@ -15,6 +15,7 @@ class TwoDimensionalScrollableTable extends StatelessWidget {
     required this.lineHeight,
     required this.lineCount,
     this.useFixedFirstColumn = true,
+    this.bottomScrollExtend = 0,
   });
 
   final ColumnProfile tableColumnProfile;
@@ -23,6 +24,7 @@ class TwoDimensionalScrollableTable extends StatelessWidget {
   final int lineHeight;
   final int lineCount;
   final bool useFixedFirstColumn;
+  final double bottomScrollExtend;
   final String uniqueViewportSizeKeyId = const UuidV4().generate().toString();
 
   @override
@@ -85,6 +87,7 @@ class TwoDimensionalScrollableTable extends StatelessWidget {
           twoDimensionalChildBuilderDelegate: twoDimensionalChildBuilderDelegate,
           gridCellBuilder: gridCellBuilder,
           tableHeadHeight: tableHeadHeight,
+          bottomScrollExtend: bottomScrollExtend,
         );
       }),
     );
@@ -109,6 +112,7 @@ class _ScrollableGrid extends StatefulWidget {
     required this.twoDimensionalChildBuilderDelegate,
     required this.gridCellBuilder,
     this.tableHeadHeight = 40,
+    this.bottomScrollExtend = 0,
   });
 
   final int lineHeight;
@@ -118,6 +122,7 @@ class _ScrollableGrid extends StatefulWidget {
   final ColumnDef? fixedFirstColumnTableColumn;
 
   final double tableHeadHeight;
+  final double bottomScrollExtend;
 
   final ValueKey<String> viewportSizeKey;
   final TwoDimensionalChildBuilderDelegate twoDimensionalChildBuilderDelegate;
@@ -237,6 +242,7 @@ class _ScrollableGridState extends State<_ScrollableGrid> {
               Expanded(
                 child: TwoDimensionalGridViewWithScrollbar(
                   lineHeight: widget.lineHeight,
+                  bottomScrollExtend: widget.bottomScrollExtend,
                   tableColumnProfile: columnProfile,
                   viewportSizeKey: widget.viewportSizeKey,
                   twoDimensionalChildBuilderDelegate: widget.twoDimensionalChildBuilderDelegate,

@@ -6,6 +6,7 @@ import '../../../../../../model/column_profile/fix_column_profiles.dart';
 import '../../../../../../model/series/data/habit/habit_value.dart';
 import '../../../../../../model/series/data/series_data_filter.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
+import '../../../../../../util/theme_utils.dart';
 import '../../../../../controls/grid/daily/day/habit_day_item.dart';
 import '../../../../../controls/grid/daily/pixel.dart';
 import '../../../../../controls/grid/daily/row/row_item.dart';
@@ -72,6 +73,7 @@ class SeriesDataHabitPixelsView extends StatelessWidget {
           gridCellBuilder: gridCellBuilder,
           lineHeight: Pixel.pixelHeight,
           useFixedFirstColumn: true,
+          bottomScrollExtend: ThemeUtils.seriesDataBottomFilterViewHeight,
         );
       },
     );

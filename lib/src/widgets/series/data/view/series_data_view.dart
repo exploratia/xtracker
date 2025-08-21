@@ -11,6 +11,7 @@ import '../../../../model/series/series_view_meta_data.dart';
 import '../../../../model/series/view_type.dart';
 import '../../../../providers/series_data_provider.dart';
 import '../../../../util/date_time_utils.dart';
+import '../../../../util/theme_utils.dart';
 import '../../../../util/tooltip_utils.dart';
 import '../../../controls/navigation/hide_bottom_navigation_bar.dart';
 import '../../../controls/provider/data_provider_loader.dart';
@@ -185,7 +186,7 @@ class _StackedRangeSliderViewState<T extends SeriesDataValue> extends State<_Sta
           child: widget.seriesDataViewBuilder(filter),
         ),
         AnimatedPositioned(
-          height: _sliderVisible ? 78 : 48,
+          height: _sliderVisible ? 78 : ThemeUtils.seriesDataBottomFilterViewHeight,
           left: 0,
           right: 0,
           bottom: 0,

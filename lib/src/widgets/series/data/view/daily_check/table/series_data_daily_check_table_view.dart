@@ -8,6 +8,7 @@ import '../../../../../../model/series/data/series_data_filter.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
 import '../../../../../../util/date_time_utils.dart';
 import '../../../../../../util/globals.dart';
+import '../../../../../../util/theme_utils.dart';
 import '../../../../../controls/grid/two_dimensional_scrollable_table.dart';
 import 'daily_check_values_renderer.dart';
 
@@ -69,6 +70,7 @@ class SeriesDataDailyCheckTableView extends StatelessWidget {
       gridCellBuilder: gridCellBuilder,
       lineHeight: lineHeight,
       useFixedFirstColumn: true,
+      bottomScrollExtend: ThemeUtils.seriesDataBottomFilterViewHeight,
     );
   }
 

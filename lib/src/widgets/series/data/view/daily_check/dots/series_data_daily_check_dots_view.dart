@@ -4,6 +4,7 @@ import '../../../../../../model/column_profile/fix_column_profiles.dart';
 import '../../../../../../model/series/data/daily_check/daily_check_value.dart';
 import '../../../../../../model/series/data/series_data_filter.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
+import '../../../../../../util/theme_utils.dart';
 import '../../../../../controls/grid/daily/day/daily_check_day_item.dart';
 import '../../../../../controls/grid/daily/dot.dart';
 import '../../../../../controls/grid/daily/row/row_item.dart';
@@ -55,6 +56,7 @@ class SeriesDataDailyCheckDotsView extends StatelessWidget {
           gridCellBuilder: gridCellBuilder,
           lineHeight: Dot.dotHeight,
           useFixedFirstColumn: true,
+          bottomScrollExtend: ThemeUtils.seriesDataBottomFilterViewHeight,
         );
       },
     );
