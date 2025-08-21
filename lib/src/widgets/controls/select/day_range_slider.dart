@@ -158,7 +158,7 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
         Positioned(
           left: 10,
           right: 10,
-          top: 28 + (_sliderVisible ? 6 : 10),
+          top: 28 + (_sliderVisible ? 6 : 14),
           height: 1,
           child: ReverseProgress(
             key: _reverseProgressKey,
@@ -173,7 +173,7 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
         AnimatedPositioned(
           left: 0,
           right: 0,
-          top: _sliderVisible ? 1 : 3,
+          top: _sliderVisible ? 1 : 10,
           duration: const Duration(milliseconds: 300),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
