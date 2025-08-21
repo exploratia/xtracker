@@ -38,6 +38,11 @@
       "midday": "Mittags",
       "evening": "Abends"
     },
+    "btn": {
+      "selectDate": {
+        "tooltip": "Datum auswählen"
+      }
+    },
     "dialog": {
       "title": {
         "areYouSure": "Sicher?",

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../../../../generated/locale_keys.g.dart';
 import '../../../util/date_time_utils.dart';
 import '../../../util/defer.dart';
+import '../../../util/theme_utils.dart';
 import '../../../util/tooltip_utils.dart';
 import '../animation/reverse_progress.dart';
 
@@ -39,6 +40,7 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
 
   late int _maxDays;
   late DateTime _firstDayStart;
+  late DateTime _lastDayStart;
 
   late RangeValues _values;
 
@@ -65,6 +67,7 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
     var dates = [widget.date1, widget.date2];
     dates.sort((a, b) => a.compareTo(b));
     _firstDayStart = DateTimeUtils.truncateToDay(dates.first);
+    _lastDayStart = DateTimeUtils.truncateToDay(dates.last);
     _maxDays = DateTimeUtils.truncateToDay(dates.last).add(const Duration(hours: 12)).difference(_firstDayStart).inDays.abs();
     // start range at the end (the newest date) if maxSpan < maxDays
     _values = RangeValues(_maxDays.toDouble() - min(widget.maxSpan, _maxDays), _maxDays.toDouble());
@@ -114,12 +117,46 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
     widget.pageCallback(rangeValues);
   }
 
+  Future<void> _selectDate(BuildContext context, bool isStartDate) async {
+    var initialDate = DateTimeUtils.truncateToDay(_firstDayStart.add(Duration(days: (isStartDate ? _values.start : _values.end).toInt())));
+
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: initialDate,
+      firstDate: _firstDayStart,
+      lastDate: _lastDayStart,
+    );
+
+    if (pickedDate != null) {
+      var diff = pickedDate.difference(_firstDayStart).inDays.toDouble();
+      if (diff < 0) return;
+      double start = (isStartDate ? diff : _values.start);
+      double end = (isStartDate ? _values.end : diff);
+
+      //correct if span > maxSpan
+      if ((end - start) > widget.maxSpan) {
+        if (start != _values.start) {
+          end = start + widget.maxSpan; // Start was moved → adjust end
+        } else {
+          start = end - widget.maxSpan; // End was moved → adjust start
+        }
+      }
+
+      _updateValues(RangeValues(start, end));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
     if (_maxDays <= 0) {
       return Container();
     }
+
+    final themeData = Theme.of(context);
+    bool isDarkMode = ThemeUtils.isDarkMode(context);
+    var btnBorderColor = isDarkMode ? Colors.white12 : Colors.black12;
+    var btnBoxDecoration = BoxDecoration(border: Border.all(color: btnBorderColor, width: 0.5), borderRadius: BorderRadius.circular(16));
+    var btnTextStyle = TooltipUtils.tooltipMonospaceStyle.copyWith(color: themeData.colorScheme.primary);
 
     return Stack(
       children: [
@@ -142,22 +179,56 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
         AnimatedPositioned(
           left: 0,
           right: 0,
-          top: _sliderVisible ? 1 : 10,
-          bottom: 0,
+          top: _sliderVisible ? 1 : 3,
+          bottom: _sliderVisible ? 48 : 0,
           duration: const Duration(milliseconds: 300),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            spacing: 10,
             children: [
-              Tooltip(
-                message: _sliderVisible
-                    ? LocaleKeys.controls_select_dayRangeSlider_btn_hideSlider.tr()
-                    : LocaleKeys.controls_select_dayRangeSlider_btn_showSlider.tr(),
-                child: OutlinedButton(
-                  onPressed: _toggleSliderVisible,
-                  child: Text(
-                    '${DateTimeUtils.formateYYYMMDD(_firstDayStart.add(Duration(days: _values.start.toInt())))} - ${DateTimeUtils.formateYYYMMDD(_firstDayStart.add(Duration(days: _values.end.toInt())))}',
-                    style: TooltipUtils.tooltipMonospaceStyle.copyWith(color: themeData.colorScheme.primary),
+              Container(
+                decoration: btnBoxDecoration,
+                child: Row(
+                  children: [
+                    Tooltip(
+                      message: LocaleKeys.commons_btn_selectDate_tooltip.tr(),
+                      child: TextButton(
+                        onPressed: () => _selectDate(context, true),
+                        child: Text(
+                          DateTimeUtils.formateYYYMMDD(_firstDayStart.add(Duration(days: _values.start.toInt()))),
+                          style: btnTextStyle,
+                        ),
+                      ),
+                    ),
+                    Text(
+                      "-",
+                      style: btnTextStyle,
+                    ),
+                    Tooltip(
+                      message: LocaleKeys.commons_btn_selectDate_tooltip.tr(),
+                      child: TextButton(
+                        onPressed: () => _selectDate(context, false),
+                        child: Text(
+                          DateTimeUtils.formateYYYMMDD(_firstDayStart.add(Duration(days: _values.end.toInt()))),
+                          style: btnTextStyle,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                decoration: btnBoxDecoration,
+                child: Tooltip(
+                  message: _sliderVisible
+                      ? LocaleKeys.controls_select_dayRangeSlider_btn_hideSlider.tr()
+                      : LocaleKeys.controls_select_dayRangeSlider_btn_showSlider.tr(),
+                  child: TextButton(
+                    onPressed: _toggleSliderVisible,
+                    child: Text(
+                      _sliderVisible ? '▼' : '▲',
+                    ),
                   ),
                 ),
               ),

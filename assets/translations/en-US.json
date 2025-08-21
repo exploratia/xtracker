@@ -38,6 +38,11 @@
       "midday": "Midday",
       "evening": "Evening"
     },
+    "btn": {
+      "selectDate": {
+        "tooltip": "Select date"
+      }
+    },
     "dialog": {
       "title": {
         "areYouSure": "Are you sure?",

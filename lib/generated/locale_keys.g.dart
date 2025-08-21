@@ -23,6 +23,7 @@ abstract class  LocaleKeys {
   static const commons_date_morning = 'commons.date.morning';
   static const commons_date_midday = 'commons.date.midday';
   static const commons_date_evening = 'commons.date.evening';
+  static const commons_btn_selectDate_tooltip = 'commons.btn.selectDate.tooltip';
   static const commons_dialog_title_areYouSure = 'commons.dialog.title.areYouSure';
   static const commons_dialog_title_errorOccurred = 'commons.dialog.title.errorOccurred';
   static const commons_dialog_btn_cancel = 'commons.dialog.btn.cancel';
