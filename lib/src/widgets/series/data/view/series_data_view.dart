@@ -159,9 +159,10 @@ class _StackedRangeSliderViewState<T extends SeriesDataValue> extends State<_Sta
 
   void _setFilter(RangeValues daysRange) {
     setState(() {
-      _filterStartDate = DateTimeUtils.truncateToDay(_firstDate.add(Duration(days: daysRange.start.toInt(), hours: 12)));
-      _filterEndDate = DateTimeUtils.truncateToDay(_firstDate.add(Duration(days: daysRange.end.toInt() + 1, hours: 12)));
-      // print("set dayRange: $daysRange -> $_filterStartDate $_filterEndDate');
+      var firstDateDayStart = DateTimeUtils.truncateToDay(_firstDate);
+      _filterStartDate = DateTimeUtils.truncateToDay(firstDateDayStart.add(Duration(days: daysRange.start.toInt(), hours: 12)));
+      _filterEndDate = DateTimeUtils.truncateToDay(firstDateDayStart.add(Duration(days: daysRange.end.toInt() + 1, hours: 12))); // next day start
+      // print("set dayRange: $daysRange -> $_filterStartDate $_filterEndDate");
 
       filter.start = _filterStartDate;
       filter.end = _filterEndDate;

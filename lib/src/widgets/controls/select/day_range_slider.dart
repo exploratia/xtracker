@@ -55,12 +55,15 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
     var dates = [widget.date1, widget.date2];
     dates.sort((a, b) => a.compareTo(b));
     _firstDayStart = DateTimeUtils.truncateToDay(dates.first);
-    _maxDays = dates.last.difference(dates.first).inDays.abs();
+    _maxDays = DateTimeUtils.truncateToDay(dates.last).add(const Duration(hours: 12)).difference(_firstDayStart).inDays.abs();
     // start range at the end (the newest date) if maxSpan < maxDays
     _values = RangeValues(_maxDays.toDouble() - min(widget.maxSpan, _maxDays), _maxDays.toDouble());
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) => widget.pageCallback(RangeValues(_values.start.truncateToDouble(), _values.end.truncateToDouble())));
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      var rangeValues = RangeValues(_values.start.roundToDouble(), _values.end.roundToDouble());
+      widget.pageCallback(rangeValues);
+    });
   }
 
   @override
@@ -88,7 +91,8 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
   }
 
   void _onProgressEnd() {
-    widget.pageCallback(RangeValues(_values.start.roundToDouble(), _values.end.roundToDouble()));
+    var rangeValues = RangeValues(_values.start.roundToDouble(), _values.end.roundToDouble());
+    widget.pageCallback(rangeValues);
   }
 
   @override
