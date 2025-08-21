@@ -1,10 +1,7 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../../generated/locale_keys.g.dart';
 import '../../../../model/series/data/habit/habit_value.dart';
-import '../../../../model/series/data/series_data.dart';
 import '../../../../model/series/data/series_data_filter.dart';
 import '../../../../model/series/data/series_data_value.dart';
 import '../../../../model/series/series_type.dart';
@@ -13,8 +10,6 @@ import '../../../../model/series/view_type.dart';
 import '../../../../providers/series_data_provider.dart';
 import '../../../../util/date_time_utils.dart';
 import '../../../../util/tooltip_utils.dart';
-import '../../../controls/animation/fade_in.dart';
-import '../../../controls/layout/centered_message.dart';
 import '../../../controls/navigation/hide_bottom_navigation_bar.dart';
 import '../../../controls/provider/data_provider_loader.dart';
 import '../../../controls/select/day_range_slider.dart';
@@ -22,6 +17,7 @@ import '../../../controls/text/overflow_text.dart';
 import 'blood_pressure/series_data_blood_pressure_view.dart';
 import 'daily_check/series_data_daily_check_view.dart';
 import 'habit/series_data_habit_view.dart';
+import 'series_data_no_data.dart';
 
 class SeriesDataView extends StatelessWidget {
   const SeriesDataView({super.key, required this.seriesViewMetaData});
@@ -66,15 +62,15 @@ class _SeriesDataView extends StatelessWidget {
     switch (seriesDef.seriesType) {
       case SeriesType.bloodPressure:
         var seriesData = seriesDataProvider.bloodPressureData(seriesDef);
-        if (_NoDataMsg.isNoData(seriesData)) return _NoDataMsg(seriesViewMetaData: seriesViewMetaData);
+        if (SeriesDataNoData.isNoData(seriesData)) return SeriesDataNoData(seriesViewMetaData: seriesViewMetaData);
         return SeriesDataBloodPressureView(seriesViewMetaData: seriesViewMetaData);
       case SeriesType.dailyCheck:
         var seriesData = seriesDataProvider.dailyCheckData(seriesDef);
-        if (_NoDataMsg.isNoData(seriesData)) return _NoDataMsg(seriesViewMetaData: seriesViewMetaData);
+        if (SeriesDataNoData.isNoData(seriesData)) return SeriesDataNoData(seriesViewMetaData: seriesViewMetaData);
         return SeriesDataDailyCheckView(seriesViewMetaData: seriesViewMetaData);
       case SeriesType.habit:
         var seriesData = seriesDataProvider.habitData(seriesDef);
-        if (_NoDataMsg.isNoData(seriesData)) return _NoDataMsg(seriesViewMetaData: seriesViewMetaData);
+        if (SeriesDataNoData.isNoData(seriesData)) return SeriesDataNoData(seriesViewMetaData: seriesViewMetaData);
         return _SeriesDataFilterView<HabitValue>(
           seriesViewMetaData: seriesViewMetaData,
           seriesData: seriesData!.data,
@@ -188,34 +184,6 @@ class _StackedRangeSliderViewState<T extends SeriesDataValue> extends State<_Sta
         )
       ],
     );
-  }
-}
-
-class _NoDataMsg extends StatelessWidget {
-  const _NoDataMsg({
-    required this.seriesViewMetaData,
-  });
-
-  final SeriesViewMetaData seriesViewMetaData;
-
-  @override
-  Widget build(BuildContext context) {
-    return CenteredMessage(
-      message: IntrinsicHeight(
-        child: FadeIn(
-          child: Column(
-            children: [
-              Icon(seriesViewMetaData.seriesDef.iconData(), color: seriesViewMetaData.seriesDef.color, size: 40),
-              Text(LocaleKeys.seriesData_label_noData.tr()),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  static bool isNoData(SeriesData<dynamic>? seriesData) {
-    return (seriesData == null || seriesData.isEmpty());
   }
 }
 
