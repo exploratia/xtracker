@@ -74,8 +74,8 @@
     "select": {
       "dayRangeSlider": {
         "btn": {
-          "showSlider": "Show date selection",
-          "hideSlider": "Hide date selection"
+          "showSlider": "Show date slider",
+          "hideSlider": "Hide date slider"
         }
       }
     }
