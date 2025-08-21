@@ -23,23 +23,26 @@ class ReverseProgress extends StatefulWidget {
 }
 
 class ReverseProgressState extends State<ReverseProgress> {
-  late final Defer _defer;
+  late final Defer _deferAnimation;
+  late final Defer _deferCallEnd;
   double _progress = 0.0; // 1.0 = full width, 0.0 = empty
 
   @override
   void initState() {
-    _defer = Defer(delay: widget.duration);
+    _deferAnimation = Defer(delay: widget.duration);
+    _deferCallEnd = Defer(delay: const Duration(milliseconds: 20));
     super.initState();
   }
 
   void restart() {
-    _defer.cancel();
+    _deferAnimation.cancel();
+    _deferCallEnd.cancel();
     setState(() {
       _progress = 1.0;
     });
 
     // back to 0 in order to start animation
-    _defer.call(() {
+    _deferAnimation.call(() {
       if (mounted) {
         setState(() {
           _progress = 0.0;
@@ -50,13 +53,14 @@ class ReverseProgressState extends State<ReverseProgress> {
 
   void _onEnd() {
     if (_progress == 0 && widget.onEndCallback != null) {
-      widget.onEndCallback!();
+      _deferCallEnd.call(() => widget.onEndCallback!());
     }
   }
 
   @override
   void dispose() {
-    _defer.cancel();
+    _deferAnimation.cancel();
+    _deferCallEnd.cancel();
     super.dispose();
   }
 
