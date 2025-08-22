@@ -111,7 +111,7 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
     var initialDate = DateTimeUtils.truncateToDay(_firstDayStart.add(Duration(days: (isStartDate ? _values.start : _values.end).toInt(), hours: 12)));
     // calc min max allowed dates
     var firstDate = isStartDate ? _firstDayStart : DateTimeUtils.truncateToDay(_firstDayStart.add(Duration(days: _values.start.toInt(), hours: 12)));
-    var lastDate = isStartDate ? _lastDayStart : DateTimeUtils.truncateToDay(_firstDayStart.add(Duration(days: _values.end.toInt(), hours: 12)));
+    var lastDate = isStartDate ? DateTimeUtils.truncateToDay(_firstDayStart.add(Duration(days: _values.end.toInt(), hours: 12))) : _lastDayStart;
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: initialDate,
