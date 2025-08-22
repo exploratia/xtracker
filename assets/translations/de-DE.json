@@ -240,7 +240,8 @@
       }
     },
     "label": {
-      "noData": "Keine Daten vorhanden..."
+      "noData": "Keine Daten vorhanden...",
+      "noDataBecauseOfFilter": "Keine Daten aufgrund der Filtereinstellungen"
     }
   },
   "seriesDefRenderer": {

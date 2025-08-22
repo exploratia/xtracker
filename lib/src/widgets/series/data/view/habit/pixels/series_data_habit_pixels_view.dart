@@ -11,6 +11,7 @@ import '../../../../../controls/grid/daily/day/habit_day_item.dart';
 import '../../../../../controls/grid/daily/pixel.dart';
 import '../../../../../controls/grid/daily/row/row_item.dart';
 import '../../../../../controls/grid/two_dimensional_scrollable_table.dart';
+import '../../series_data_no_data.dart';
 
 class SeriesDataHabitPixelsView extends StatelessWidget {
   final List<HabitValue> seriesData;
@@ -27,9 +28,17 @@ class SeriesDataHabitPixelsView extends StatelessWidget {
     List<HabitDayItem> allDayItems = HabitDayItem.buildDayItems(seriesData, seriesViewMetaData.seriesDef);
     var dayItems = allDayItems.where((dayItem) => seriesDataFilter.filterDate(dayItem.dateTimeDayStart)).toList();
 
+    if (dayItems.isEmpty || dayItems.where((i) => i.count > 0).isEmpty) {
+      return SeriesDataNoData(
+        seriesViewMetaData: seriesViewMetaData,
+        noDataBecauseOfFilter: true,
+      );
+    }
+
     // determine max (min always 1)
     const minVal = 1;
     int maxVal = allDayItems.map((e) => e.count).reduce((soFarMax, count) => max(soFarMax, count));
+
     Color baseColor = seriesViewMetaData.seriesDef.color;
     var displaySettings = seriesViewMetaData.seriesDef.displaySettingsReadonly();
     bool pixelsViewInvertHueDirection = displaySettings.pixelsViewInvertHueDirection;

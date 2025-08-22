@@ -9,6 +9,7 @@ import '../../../../../controls/grid/daily/day/blood_pressure_day_item.dart';
 import '../../../../../controls/grid/daily/dot.dart';
 import '../../../../../controls/grid/daily/row/row_item.dart';
 import '../../../../../controls/grid/two_dimensional_scrollable_table.dart';
+import '../../series_data_no_data.dart';
 
 class SeriesDataBloodPressureDotsView extends StatelessWidget {
   final List<BloodPressureValue> seriesData;
@@ -21,7 +22,16 @@ class SeriesDataBloodPressureDotsView extends StatelessWidget {
   Widget build(BuildContext context) {
     Dot.updateDotStyles(context);
     BloodPressureDayItem.updateValuesFromSeries(seriesViewMetaData.seriesDef);
-    var dayItems = BloodPressureDayItem.buildDayItems(seriesData.where((value) => seriesDataFilter.filter(value)).toList(), seriesViewMetaData.seriesDef);
+
+    var filteredSeriesData = seriesData.where((value) => seriesDataFilter.filter(value)).toList();
+    if (filteredSeriesData.isEmpty) {
+      return SeriesDataNoData(
+        seriesViewMetaData: seriesViewMetaData,
+        noDataBecauseOfFilter: true,
+      );
+    }
+
+    var dayItems = BloodPressureDayItem.buildDayItems(filteredSeriesData, seriesViewMetaData.seriesDef);
 
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {

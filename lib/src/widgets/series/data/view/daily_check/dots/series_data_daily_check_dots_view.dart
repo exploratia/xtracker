@@ -9,6 +9,7 @@ import '../../../../../controls/grid/daily/day/daily_check_day_item.dart';
 import '../../../../../controls/grid/daily/dot.dart';
 import '../../../../../controls/grid/daily/row/row_item.dart';
 import '../../../../../controls/grid/two_dimensional_scrollable_table.dart';
+import '../../series_data_no_data.dart';
 
 class SeriesDataDailyCheckDotsView extends StatelessWidget {
   final List<DailyCheckValue> seriesData;
@@ -21,7 +22,16 @@ class SeriesDataDailyCheckDotsView extends StatelessWidget {
   Widget build(BuildContext context) {
     Dot.updateDotStyles(context);
     DailyCheckDayItem.updateValuesFromSeries(seriesViewMetaData.seriesDef);
-    var dayItems = DailyCheckDayItem.buildDayItems(seriesData.where((value) => seriesDataFilter.filter(value)).toList(), seriesViewMetaData.seriesDef);
+
+    var filteredSeriesData = seriesData.where((value) => seriesDataFilter.filter(value)).toList();
+    if (filteredSeriesData.isEmpty) {
+      return SeriesDataNoData(
+        seriesViewMetaData: seriesViewMetaData,
+        noDataBecauseOfFilter: true,
+      );
+    }
+
+    var dayItems = DailyCheckDayItem.buildDayItems(filteredSeriesData, seriesViewMetaData.seriesDef);
 
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {

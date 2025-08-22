@@ -10,6 +10,7 @@ import '../../../../../../util/date_time_utils.dart';
 import '../../../../../../util/globals.dart';
 import '../../../../../../util/theme_utils.dart';
 import '../../../../../controls/grid/two_dimensional_scrollable_table.dart';
+import '../../series_data_no_data.dart';
 import 'blood_pressure_values_renderer.dart';
 
 class SeriesDataBloodPressureTableView extends StatelessWidget {
@@ -26,7 +27,15 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
   Widget build(BuildContext context) {
     // for blood pressure we need a special TableColumnProfile
 
-    List<_BloodPressureDayItem> data = _buildTableDataProvider(seriesData.where((value) => seriesDataFilter.filter(value)).toList());
+    var filteredSeriesData = seriesData.where((value) => seriesDataFilter.filter(value)).toList();
+    if (filteredSeriesData.isEmpty) {
+      return SeriesDataNoData(
+        seriesViewMetaData: seriesViewMetaData,
+        noDataBecauseOfFilter: true,
+      );
+    }
+
+    List<_BloodPressureDayItem> data = _buildTableDataProvider(filteredSeriesData);
     int lineHeight = 30;
     if (_useEqualSizedRows) {
       // calc line height = single line height * max lines per day of all items

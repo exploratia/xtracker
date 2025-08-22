@@ -8,9 +8,10 @@ import '../../../controls/animation/fade_in.dart';
 import '../../../controls/layout/centered_message.dart';
 
 class SeriesDataNoData extends StatelessWidget {
-  const SeriesDataNoData({super.key, required this.seriesViewMetaData});
+  const SeriesDataNoData({super.key, required this.seriesViewMetaData, this.noDataBecauseOfFilter = false});
 
   final SeriesViewMetaData seriesViewMetaData;
+  final bool noDataBecauseOfFilter;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,8 @@ class SeriesDataNoData extends StatelessWidget {
           child: Column(
             children: [
               Icon(seriesViewMetaData.seriesDef.iconData(), color: seriesViewMetaData.seriesDef.color, size: 40),
-              Text(LocaleKeys.seriesData_label_noData.tr()),
+              if (!noDataBecauseOfFilter) Text(LocaleKeys.seriesData_label_noData.tr()),
+              if (noDataBecauseOfFilter) Text(LocaleKeys.seriesData_label_noDataBecauseOfFilter.tr()),
             ],
           ),
         ),

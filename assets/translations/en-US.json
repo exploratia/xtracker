@@ -240,7 +240,8 @@
       }
     },
     "label": {
-      "noData": "No data available..."
+      "noData": "No data available...",
+      "noDataBecauseOfFilter": "No data due to filter settings"
     }
   },
   "seriesDefRenderer": {
