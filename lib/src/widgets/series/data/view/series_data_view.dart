@@ -150,7 +150,7 @@ class _StackedRangeSliderViewState<T extends SeriesDataValue> extends State<_Sta
     _firstDate = widget.seriesData.first.dateTime;
 
     _filterEndDate = DateTimeUtils.truncateToDay(DateTimeUtils.truncateToDay(widget.seriesData.last.dateTime).add(const Duration(hours: 36)));
-    _filterStartDate = _filterEndDate.subtract(const Duration(hours: 12));
+    _filterStartDate = _filterEndDate;
 
     filter.start = _filterStartDate;
     filter.end = _filterEndDate;
