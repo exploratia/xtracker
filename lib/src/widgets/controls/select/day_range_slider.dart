@@ -109,11 +109,14 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
 
   Future<void> _selectDate(BuildContext context, bool isStartDate) async {
     var initialDate = DateTimeUtils.truncateToDay(_firstDayStart.add(Duration(days: (isStartDate ? _values.start : _values.end).toInt(), hours: 12)));
+    // calc min max allowed dates
+    var firstDate = isStartDate ? _firstDayStart : DateTimeUtils.truncateToDay(_firstDayStart.add(Duration(days: _values.start.toInt(), hours: 12)));
+    var lastDate = isStartDate ? _lastDayStart : DateTimeUtils.truncateToDay(_firstDayStart.add(Duration(days: _values.end.toInt(), hours: 12)));
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: initialDate,
-      firstDate: _firstDayStart,
-      lastDate: _lastDayStart,
+      firstDate: firstDate,
+      lastDate: lastDate,
     );
 
     if (pickedDate != null) {
