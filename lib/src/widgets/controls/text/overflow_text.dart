@@ -10,6 +10,7 @@ class OverflowText extends StatelessWidget {
     this.style,
     this.textAlign,
     this.expanded = true,
+    this.flexible = false,
   });
 
   final String text;
@@ -18,10 +19,11 @@ class OverflowText extends StatelessWidget {
   final int maxLines;
   final TextAlign? textAlign;
   final bool expanded;
+  final bool flexible;
 
   @override
   Widget build(BuildContext context) {
-    var textWidget = Text(
+    Widget result = Text(
       text,
       textAlign: textAlign ?? TextAlign.start,
       overflow: textOverflow,
@@ -30,8 +32,9 @@ class OverflowText extends StatelessWidget {
       style: style,
     );
 
-    if (!expanded) return textWidget;
+    if (expanded) result = Expanded(child: result);
+    if (flexible) result = Flexible(child: result);
 
-    return Expanded(child: textWidget);
+    return result;
   }
 }
