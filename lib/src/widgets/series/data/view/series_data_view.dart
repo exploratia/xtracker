@@ -158,6 +158,16 @@ class _StackedRangeSliderViewState<T extends SeriesDataValue> extends State<_Sta
     super.initState();
   }
 
+  @override
+  void didUpdateWidget(covariant _StackedRangeSliderView<T> oldWidget) {
+    if (_firstDate != widget.seriesData.first.dateTime) {
+      setState(() {
+        _firstDate = widget.seriesData.first.dateTime;
+      });
+    }
+    super.didUpdateWidget(oldWidget);
+  }
+
   void _setFilter(RangeValues daysRange) {
     setState(() {
       var firstDateDayStart = DateTimeUtils.truncateToDay(_firstDate);

@@ -80,8 +80,7 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
       });
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        var rangeValues = RangeValues(_values.start.roundToDouble(), _values.end.roundToDouble());
-        widget.pageCallback(rangeValues);
+        _onProgressEnd();
       });
     }
   }
