@@ -149,7 +149,7 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
     var btnBorderColor = isDarkMode ? Colors.white12 : Colors.black12;
     var btnBoxDecoration = BoxDecoration(
       color: themeData.scaffoldBackgroundColor.withAlpha(192),
-      border: Border.all(color: btnBorderColor, width: 0.5),
+      border: Border.all(color: btnBorderColor, width: 1),
       borderRadius: BorderRadius.circular(16),
     );
     var btnTextStyle = TooltipUtils.tooltipMonospaceStyle.copyWith(color: themeData.colorScheme.primary);
@@ -160,7 +160,7 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
         Positioned(
           left: 10,
           right: 10,
-          top: 28 + (_sliderVisible ? 6 : 14),
+          top: _sliderVisible ? 58 : 55,
           height: 1,
           child: ReverseProgress(
             key: _reverseProgressKey,
@@ -175,7 +175,7 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
         AnimatedPositioned(
           left: 0,
           right: 0,
-          top: _sliderVisible ? 1 : 10,
+          top: 2,
           duration: const Duration(milliseconds: 300),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -234,7 +234,7 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
         Positioned(
           left: 0,
           right: 0,
-          bottom: 0,
+          bottom: 2,
           height: 48,
           child: IgnorePointer(
             ignoring: !_sliderVisible,
@@ -278,7 +278,7 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
           Positioned(
             left: 0,
             right: 0,
-            bottom: 0,
+            bottom: 2,
             height: 48,
             child: IgnorePointer(
               ignoring: !_sliderVisible,

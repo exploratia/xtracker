@@ -196,7 +196,7 @@ class _StackedRangeSliderViewState<T extends SeriesDataValue> extends State<_Sta
           child: widget.seriesDataViewBuilder(filter),
         ),
         AnimatedPositioned(
-          height: _sliderVisible ? 78 : ThemeUtils.seriesDataBottomFilterViewHeight,
+          height: ThemeUtils.seriesDataBottomFilterViewHeight * (_sliderVisible ? 2 : 1),
           left: 0,
           right: 0,
           bottom: 0,
@@ -208,7 +208,7 @@ class _StackedRangeSliderViewState<T extends SeriesDataValue> extends State<_Sta
           ),
         ),
         AnimatedPositioned(
-          height: _sliderVisible ? 78 : ThemeUtils.seriesDataBottomFilterViewHeight,
+          height: ThemeUtils.seriesDataBottomFilterViewHeight * (_sliderVisible ? 2 : 1),
           left: 0,
           right: 0,
           bottom: 0,
