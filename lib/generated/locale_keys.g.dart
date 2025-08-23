@@ -20,6 +20,7 @@ abstract class  LocaleKeys {
   static const commons_date_shortWeekday_saturday = 'commons.date.shortWeekday.saturday';
   static const commons_date_shortWeekday_sunday = 'commons.date.shortWeekday.sunday';
   static const commons_date_date = 'commons.date.date';
+  static const commons_date_time = 'commons.date.time';
   static const commons_date_morning = 'commons.date.morning';
   static const commons_date_midday = 'commons.date.midday';
   static const commons_date_evening = 'commons.date.evening';
@@ -35,6 +36,7 @@ abstract class  LocaleKeys {
   static const commons_alert_failedToLoadData = 'commons.alert.failedToLoadData';
   static const commons_alert_failedToSaveData = 'commons.alert.failedToSaveData';
   static const commons_alert_failedToShareData = 'commons.alert.failedToShareData';
+  static const commons_label_value = 'commons.label.value';
   static const commons_snackbar_pressBackAgainToExit = 'commons.snackbar.pressBackAgainToExit';
   static const commons_snackbar_saved = 'commons.snackbar.saved';
   static const commons_validator_emptyValue = 'commons.validator.emptyValue';
@@ -127,6 +129,7 @@ abstract class  LocaleKeys {
   static const seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_text = 'seriesEdit.displaySettings.pixelsView.preview.pixelViewSettingsInfo.text';
   static const seriesEdit_displaySettings_pixelsView_switch_invertHueDirection_label = 'seriesEdit.displaySettings.pixelsView.switch.invertHueDirection.label';
   static const seriesEdit_displaySettings_pixelsView_slider_hueFactor_label = 'seriesEdit.displaySettings.pixelsView.slider.hueFactor.label';
+  static const seriesEdit_displaySettings_tableView_switch_useColumnProfileDateTimeValue_label = 'seriesEdit.displaySettings.tableView.switch.useColumnProfileDateTimeValue.label';
   static const seriesEdit_seriesSettings_bloodPressure_title = 'seriesEdit.seriesSettings.bloodPressure.title';
   static const seriesEdit_seriesSettings_bloodPressure_switch_hideMedicationInput_label = 'seriesEdit.seriesSettings.bloodPressure.switch.hideMedicationInput.label';
   static const seriesManagement_title = 'seriesManagement.title';

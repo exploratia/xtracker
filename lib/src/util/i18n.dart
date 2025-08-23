@@ -7,6 +7,7 @@ class I18N {
   static const String bloodPressureSeriesItemTitleSystolic = 'bloodPressureSeriesItemTitleSystolic';
 
   static const String commonsDateDate = 'commonsDateDate';
+  static const String commonsDateTime = 'commonsDateTime';
   static const String commonsDateMorning = 'commonsDateMorning';
   static const String commonsDateMidday = 'commonsDateMidday';
   static const String commonsDateEvening = 'commonsDateEvening';
@@ -18,6 +19,8 @@ class I18N {
   static const String commonsDateShortWeekdaySaturday = 'commonsDateShortWeekdaySaturday';
   static const String commonsDateShortWeekdaySunday = 'commonsDateShortWeekdaySunday';
 
+  static const String commonsLabelValue = 'commonsLabelValue';
+
   static String? compose(String? msgId) {
     return switch (msgId) {
       // blood pressure
@@ -25,6 +28,7 @@ class I18N {
       bloodPressureSeriesItemTitleSystolic => LocaleKeys.seriesValue_bloodPressure_label_systolic.tr(),
       // date
       commonsDateDate => LocaleKeys.commons_date_date.tr(),
+      commonsDateTime => LocaleKeys.commons_date_time.tr(),
       commonsDateMorning => LocaleKeys.commons_date_morning.tr(),
       commonsDateMidday => LocaleKeys.commons_date_midday.tr(),
       commonsDateEvening => LocaleKeys.commons_date_evening.tr(),
@@ -35,6 +39,7 @@ class I18N {
       commonsDateShortWeekdayFriday => LocaleKeys.commons_date_shortWeekday_friday.tr(),
       commonsDateShortWeekdaySaturday => LocaleKeys.commons_date_shortWeekday_saturday.tr(),
       commonsDateShortWeekdaySunday => LocaleKeys.commons_date_shortWeekday_sunday.tr(),
+      commonsLabelValue => LocaleKeys.commons_label_value.tr(),
       _ => null, // default
     };
   }
