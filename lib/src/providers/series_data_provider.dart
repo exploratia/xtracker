@@ -101,6 +101,23 @@ class SeriesDataProvider with ChangeNotifier {
         if (seriesData == null) {
           var store = Stores.getOrCreateSeriesDataStore(seriesDef);
           var list = await store.getAllSeriesDataValuesAsHabitValue();
+
+          // // TODO only for dev - remove!
+          // if (list.isEmpty) {
+          //   Random random = Random();
+          //
+          //   // for (var i = 0; i < 365 * 5; ++i) {
+          //   for (var i = 0; i < 365 * 1; i += 100) {
+          //     // for (var i = 0; i < 20; ++i) {
+          //     int randomNumber = random.nextInt(10);
+          //     for (var j = 0; j < randomNumber; ++j) {
+          //       list.add(HabitValue(const UuidV4().generate().toString(), DateTime.now().subtract(Duration(days: i, hours: j * 2))));
+          //     }
+          //   }
+          //   await store.saveAll(list);
+          //   list = await store.getAllSeriesDataValuesAsHabitValue();
+          // }
+
           seriesData = SeriesData<HabitValue>(seriesDef.uuid, list);
           seriesData.sort();
           _uuid2seriesDataHabit[seriesDef.uuid] = seriesData;
