@@ -14,6 +14,7 @@ class TwoDimensionalGridViewWithScrollbar extends StatefulWidget {
     this.horizontalScrollPositionHandler,
     this.verticalScrollController,
     this.horizontalScrollController,
+    this.bottomScrollExtend = 0,
   });
 
   final int lineHeight;
@@ -24,6 +25,7 @@ class TwoDimensionalGridViewWithScrollbar extends StatefulWidget {
   final void Function(ScrollPosition value)? horizontalScrollPositionHandler;
   final ScrollController? verticalScrollController;
   final ScrollController? horizontalScrollController;
+  final double bottomScrollExtend;
 
   @override
   State<TwoDimensionalGridViewWithScrollbar> createState() => _TwoDimensionalGridViewWithScrollbarState();
@@ -88,6 +90,7 @@ class _TwoDimensionalGridViewWithScrollbarState extends State<TwoDimensionalGrid
           delegate: widget.twoDimensionalChildBuilderDelegate,
           verticalController: _verticalController,
           horizontalController: _horizontalController,
+          bottomScrollExtend: widget.bottomScrollExtend,
         ),
       ),
     );

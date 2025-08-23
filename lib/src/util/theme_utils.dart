@@ -17,8 +17,10 @@ class ThemeUtils {
   static const cardBorderRadius = BorderRadius.all(Radius.circular(20));
   static const cardPadding = EdgeInsets.all(20);
   static final btnShape = RoundedRectangleBorder(borderRadius: BorderRadius.circular(24));
-  static const double seriesDataViewTopPadding = 48;
   static const double seriesDataInputDlgMaxWidth = 300;
+
+  /// [seriesDataBottomFilterViewHeight] = 56 (e.g. Slider height 48 + padding/borders)
+  static const double seriesDataBottomFilterViewHeight = 56;
 
   static ThemeData? _light;
   static ThemeData? _dark;
@@ -64,6 +66,10 @@ class ThemeUtils {
         constraints: const BoxConstraints(
           maxWidth: 300,
         ),
+      ),
+      sliderTheme: SliderThemeData(
+        valueIndicatorColor: cardBackgroundColor,
+        valueIndicatorTextStyle: TextStyle(color: dark ? Colors.white : Colors.black),
       ),
       appBarTheme: AppBarTheme(
         elevation: 8,
@@ -120,6 +126,7 @@ class ThemeUtils {
       datePickerTheme: DatePickerThemeData(headerBackgroundColor: cardBackgroundColor),
       timePickerTheme: TimePickerThemeData(backgroundColor: chipBackgroundColor),
       dividerTheme: DividerThemeData(color: secondary, thickness: 1, space: 10),
+      progressIndicatorTheme: ProgressIndicatorThemeData(color: primary, linearTrackColor: secondary.withAlpha(128)),
       navigationRailTheme: NavigationRailThemeData(backgroundColor: backgroundColor),
       elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(

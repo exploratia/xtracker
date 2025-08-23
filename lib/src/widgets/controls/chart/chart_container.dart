@@ -26,7 +26,7 @@ class ChartContainer extends StatelessWidget {
     final mediaQueryInfo = MediaQueryUtils(MediaQuery.of(context));
 
     var screenHeight = mediaQueryInfo.mediaQueryData.size.height;
-    var possibleChartHeight = screenHeight - _appbarHeight - _screenPadding - ThemeUtils.seriesDataViewTopPadding;
+    var possibleChartHeight = screenHeight - _appbarHeight - _screenPadding;
     if (showDateTooltip) {
       possibleChartHeight -= _bottomLabelsHeight;
     }

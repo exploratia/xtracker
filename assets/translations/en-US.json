@@ -38,6 +38,11 @@
       "midday": "Midday",
       "evening": "Evening"
     },
+    "btn": {
+      "selectDate": {
+        "tooltip": "Select date"
+      }
+    },
     "dialog": {
       "title": {
         "areYouSure": "Are you sure?",
@@ -65,6 +70,16 @@
       "emptyValue": "Please enter a value"
     }
   },
+  "controls": {
+    "select": {
+      "dayRangeSlider": {
+        "btn": {
+          "showSlider": "Show date slider",
+          "hideSlider": "Hide date slider"
+        }
+      }
+    }
+  },
   "enum": {
     "seriesType": {
       "bloodPressure": {
@@ -78,6 +93,10 @@
       "free": {
         "title": "Free",
         "info": "Measure something with no repeating interval. E.g. car refuel distance and costs."
+      },
+      "habit": {
+        "title": "Habit",
+        "info": "Track habits multiple times a day. E.g. coffee consumption or drinking enough water."
       },
       "monthly": {
         "title": "Monthly",
@@ -96,6 +115,10 @@
       "dots": {
         "title": "Overview",
         "tooltip": "View as daily dots overview"
+      },
+      "pixels": {
+        "title": "Pixels",
+        "tooltip": "View as daily pixels"
       },
       "table": {
         "title": "Table",
@@ -217,7 +240,8 @@
       }
     },
     "label": {
-      "noData": "No data available..."
+      "noData": "No data available...",
+      "noDataBecauseOfFilter": "No data due to filter settings"
     }
   },
   "seriesDefRenderer": {
@@ -280,19 +304,45 @@
         "seriesColor": "Color"
       },
       "displaySettings": {
-        "title": "Display settings",
-         "switch": {
+        "title": "Display settings"
+      }
+    },
+    "displaySettings": {
+      "dotsView": {
+        "switch": {
           "dotsViewShowCount": {
             "label": "In dots view, show count if a data point represents multiple values:"
           }
         }
+      },
+      "pixelsView": {
+        "preview": {
+          "title": "Pixel preview",
+          "pixelViewSettingsInfo": {
+            "tooltip": "Pixel view settings",
+            "title": "Adjust pixel view",
+            "text": "Configure the pixel view coloring here – depending on whether 'more' of the habit is positive or negative for you.\nValue 1 uses the series color."
+          }
+        },
+        "switch": {
+          "invertHueDirection": {
+            "label": "Reverse hue wheel direction"
+          }
+        },
+        "slider": {
+          "hueFactor": {
+            "label": "Set color for highest value"
+          }
+        }
       }
     },
-    "bloodPressure": {
-      "title": "Blood pressure settings",
-      "switch": {
-        "hideMedicationInput": {
-          "label": "Hide medication input in dialog:"
+    "seriesSettings": {
+      "bloodPressure": {
+        "title": "Blood pressure settings",
+        "switch": {
+          "hideMedicationInput": {
+            "label": "Hide medication input in dialog:"
+          }
         }
       }
     }
@@ -363,6 +413,13 @@
     "dailyCheck": {
       "btn": {
         "toggleCheck": {
+          "tooltip": "Toggle value"
+        }
+      }
+    },
+    "habit": {
+      "btn": {
+        "toggleValue": {
           "tooltip": "Toggle value"
         }
       }

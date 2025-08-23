@@ -65,6 +65,7 @@ class SeriesDef {
     return switch (seriesDef.seriesType) {
       SeriesType.bloodPressure => 1,
       SeriesType.dailyCheck => 1,
+      SeriesType.habit => 1,
       // SeriesType.monthly => 1,
       // SeriesType.free => 1,
     };

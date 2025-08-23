@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../model/series/data/blood_pressure/blood_pressure_value.dart';
 import '../model/series/data/daily_check/daily_check_value.dart';
+import '../model/series/data/habit/habit_value.dart';
 import '../model/series/data/series_data.dart';
 import '../model/series/series_def.dart';
 import '../model/series/series_type.dart';
@@ -15,11 +16,13 @@ import 'series_current_value_provider.dart';
 class SeriesDataProvider with ChangeNotifier {
   final Map<String, SeriesData<BloodPressureValue>> _uuid2seriesDataBloodPressure = HashMap();
   final Map<String, SeriesData<DailyCheckValue>> _uuid2seriesDataDailyCheck = HashMap();
+  final Map<String, SeriesData<HabitValue>> _uuid2seriesDataHabit = HashMap();
 
   Future<void> fetchDataIfNotYetLoaded(SeriesDef seriesDef) async {
     var seriesData = switch (seriesDef.seriesType) {
       SeriesType.bloodPressure => _uuid2seriesDataBloodPressure[seriesDef.uuid],
       SeriesType.dailyCheck => _uuid2seriesDataDailyCheck[seriesDef.uuid],
+      SeriesType.habit => _uuid2seriesDataHabit[seriesDef.uuid],
     };
 
     if (seriesData == null) {
@@ -93,6 +96,32 @@ class SeriesDataProvider with ChangeNotifier {
           seriesData.sort();
           _uuid2seriesDataDailyCheck[seriesDef.uuid] = seriesData;
         }
+      case SeriesType.habit:
+        var seriesData = _uuid2seriesDataHabit[seriesDef.uuid];
+        if (seriesData == null) {
+          var store = Stores.getOrCreateSeriesDataStore(seriesDef);
+          var list = await store.getAllSeriesDataValuesAsHabitValue();
+
+          // // TODO only for dev - remove!
+          // if (list.isEmpty) {
+          //   Random random = Random();
+          //
+          //   // for (var i = 0; i < 365 * 5; ++i) {
+          //   for (var i = 0; i < 365 * 1; i += 100) {
+          //     // for (var i = 0; i < 20; ++i) {
+          //     int randomNumber = random.nextInt(10);
+          //     for (var j = 0; j < randomNumber; ++j) {
+          //       list.add(HabitValue(const UuidV4().generate().toString(), DateTime.now().subtract(Duration(days: i, hours: j * 2))));
+          //     }
+          //   }
+          //   await store.saveAll(list);
+          //   list = await store.getAllSeriesDataValuesAsHabitValue();
+          // }
+
+          seriesData = SeriesData<HabitValue>(seriesDef.uuid, list);
+          seriesData.sort();
+          _uuid2seriesDataHabit[seriesDef.uuid] = seriesData;
+        }
     }
   }
 
@@ -104,9 +133,16 @@ class SeriesDataProvider with ChangeNotifier {
     //  await Future.delayed(const Duration(seconds: 10)); // for testing
 
     await Stores.dropSeriesDataStore(seriesDef);
-    _uuid2seriesDataBloodPressure.remove(seriesDef.uuid);
-    _uuid2seriesDataDailyCheck.remove(seriesDef.uuid);
-    // TODO remove on other maps
+
+    switch (seriesDef.seriesType) {
+      case SeriesType.bloodPressure:
+        _uuid2seriesDataBloodPressure.remove(seriesDef.uuid);
+      case SeriesType.dailyCheck:
+        _uuid2seriesDataDailyCheck.remove(seriesDef.uuid);
+      case SeriesType.habit:
+        _uuid2seriesDataHabit.remove(seriesDef.uuid);
+    }
+
     notifyListeners();
   }
 
@@ -114,6 +150,7 @@ class SeriesDataProvider with ChangeNotifier {
     return switch (seriesDef.seriesType) {
       SeriesType.bloodPressure => bloodPressureData(seriesDef),
       SeriesType.dailyCheck => dailyCheckData(seriesDef),
+      SeriesType.habit => habitData(seriesDef),
     };
   }
 
@@ -135,6 +172,17 @@ class SeriesDataProvider with ChangeNotifier {
 
   SeriesData<DailyCheckValue> requireDailyCheckData(SeriesDef seriesDef) {
     var seriesData = dailyCheckData(seriesDef);
+    _checkOnSeriesData(seriesData, seriesDef);
+    return seriesData!;
+  }
+
+  SeriesData<HabitValue>? habitData(SeriesDef seriesDef) {
+    var seriesData = _uuid2seriesDataHabit[seriesDef.uuid];
+    return seriesData;
+  }
+
+  SeriesData<HabitValue> requireHabitData(SeriesDef seriesDef) {
+    var seriesData = habitData(seriesDef);
     _checkOnSeriesData(seriesData, seriesDef);
     return seriesData!;
   }
@@ -166,6 +214,9 @@ class SeriesDataProvider with ChangeNotifier {
       case SeriesType.dailyCheck:
         DailyCheckValue.checkOnDailyCheckValue(value);
         seriesData = requireDailyCheckData(seriesDef);
+      case SeriesType.habit:
+        HabitValue.checkOnHabitValue(value);
+        seriesData = requireHabitData(seriesDef);
     }
 
     if (action == _Action.insert) {
@@ -203,6 +254,13 @@ class SeriesDataProvider with ChangeNotifier {
       case SeriesType.dailyCheck:
         var seriesData = requireDailyCheckData(seriesDef);
         seriesData.insertAll(values.map(DailyCheckValue.checkOnDailyCheckValue));
+        seriesData.sort();
+        await store.saveAll(seriesData.data);
+        var latest = seriesData.data.lastOrNull;
+        if (latest != null) await seriesCurrentValueProvider.save(seriesDef, latest);
+      case SeriesType.habit:
+        var seriesData = requireHabitData(seriesDef);
+        seriesData.insertAll(values.map(HabitValue.checkOnHabitValue));
         seriesData.sort();
         await store.saveAll(seriesData.data);
         var latest = seriesData.data.lastOrNull;

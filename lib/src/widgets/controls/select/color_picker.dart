@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
+import '../../../util/color_utils.dart';
+
 class ColorPicker extends StatefulWidget {
   const ColorPicker({super.key, this.color = const Color(0xffde0b30), required this.colorSelected});
 
@@ -27,7 +29,7 @@ class _ColorPickerState extends State<ColorPicker> {
 
   @override
   Widget build(BuildContext context) {
-    final contrastColor = useWhiteForeground(currentColor) ? Colors.white : Colors.black;
+    final contrastColor = ColorUtils.getContrastingTextColor(currentColor); // useWhiteForeground(currentColor) ? Colors.white : Colors.black;
     return ElevatedButton(
       onPressed: () {
         showDialog(

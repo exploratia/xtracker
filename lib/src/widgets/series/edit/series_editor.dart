@@ -146,19 +146,21 @@ class _SeriesEditorState extends State<SeriesEditor> {
           },
         ),
         const SizedBox(height: 10),
-        _SeriesSymbolAndColor(seriesDef: _seriesDef),
+        _SeriesSymbolAndColor(_seriesDef, _updateState),
 
         switch (_seriesDef.seriesType) {
           SeriesType.bloodPressure => Expandable(
               initialExpanded: true,
               icon: const Icon(Icons.monitor_heart_outlined),
-              title: LocaleKeys.seriesEdit_bloodPressure_title.tr(),
+              title: LocaleKeys.seriesEdit_seriesSettings_bloodPressure_title.tr(),
               child: BloodPressureSeriesEdit(_seriesDef, _updateState),
             ),
           SeriesType.dailyCheck => Container(),
+          SeriesType.habit => Container(),
         },
 
-        SeriesEditDisplaySettings(_seriesDef, _updateState),
+        // only show DisplaySettings if there is something for that series type
+        if (SeriesEditDisplaySettings.applicableOn(_seriesDef)) SeriesEditDisplaySettings(_seriesDef, _updateState),
       ],
     );
 
@@ -224,9 +226,10 @@ class _SeriesTypeHeadline extends StatelessWidget {
 }
 
 class _SeriesSymbolAndColor extends StatelessWidget {
-  const _SeriesSymbolAndColor({required this.seriesDef});
+  const _SeriesSymbolAndColor(this.seriesDef, this.updateStateCB);
 
   final SeriesDef seriesDef;
+  final Function() updateStateCB;
 
   @override
   Widget build(BuildContext context) {
@@ -241,9 +244,11 @@ class _SeriesSymbolAndColor extends StatelessWidget {
           children: [
             Text(LocaleKeys.seriesEdit_common_label_seriesIcon.tr()),
             IconPicker(
-              icoName: seriesDef.iconName,
-              icoSelected: (icoName) => seriesDef.iconName = icoName,
-            ),
+                icoName: seriesDef.iconName,
+                icoSelected: (icoName) {
+                  seriesDef.iconName = icoName;
+                  updateStateCB();
+                }),
           ],
         ),
         Row(
@@ -253,7 +258,10 @@ class _SeriesSymbolAndColor extends StatelessWidget {
             Text(LocaleKeys.seriesEdit_common_label_seriesColor.tr()),
             ColorPicker(
               color: seriesDef.color,
-              colorSelected: (color) => seriesDef.color = color,
+              colorSelected: (color) {
+                seriesDef.color = color;
+                updateStateCB();
+              },
             ),
           ],
         ),

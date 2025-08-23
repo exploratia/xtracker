@@ -4,28 +4,38 @@ import 'package:flutter/material.dart';
 
 import '../../../../../../model/column_profile/fix_column_profiles.dart';
 import '../../../../../../model/series/data/blood_pressure/blood_pressure_value.dart';
-import '../../../../../../model/series/data/series_data.dart';
+import '../../../../../../model/series/data/series_data_filter.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
 import '../../../../../../util/date_time_utils.dart';
 import '../../../../../../util/globals.dart';
 import '../../../../../../util/theme_utils.dart';
 import '../../../../../controls/grid/two_dimensional_scrollable_table.dart';
+import '../../series_data_no_data.dart';
 import 'blood_pressure_values_renderer.dart';
 
 class SeriesDataBloodPressureTableView extends StatelessWidget {
-  final SeriesData<BloodPressureValue> seriesData;
+  final List<BloodPressureValue> seriesData;
   final SeriesViewMetaData seriesViewMetaData;
+  final SeriesDataFilter seriesDataFilter;
 
   /// Rows are always equal sized. But if set to false, multi line rows are inflated to multiple single line rows
   final bool _useEqualSizedRows = false;
 
-  const SeriesDataBloodPressureTableView({super.key, required this.seriesViewMetaData, required this.seriesData});
+  const SeriesDataBloodPressureTableView({super.key, required this.seriesViewMetaData, required this.seriesData, required this.seriesDataFilter});
 
   @override
   Widget build(BuildContext context) {
     // for blood pressure we need a special TableColumnProfile
 
-    List<_BloodPressureDayItem> data = _buildTableDataProvider(seriesData);
+    var filteredSeriesData = seriesData.where((value) => seriesDataFilter.filter(value)).toList();
+    if (filteredSeriesData.isEmpty) {
+      return SeriesDataNoData(
+        seriesViewMetaData: seriesViewMetaData,
+        noDataBecauseOfFilter: true,
+      );
+    }
+
+    List<_BloodPressureDayItem> data = _buildTableDataProvider(filteredSeriesData);
     int lineHeight = 30;
     if (_useEqualSizedRows) {
       // calc line height = single line height * max lines per day of all items
@@ -64,20 +74,17 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
       );
     }
 
-    // padding because of headline in stack
-    return Padding(
-      padding: const EdgeInsets.only(top: ThemeUtils.seriesDataViewTopPadding),
-      child: TwoDimensionalScrollableTable(
-        tableColumnProfile: FixColumnProfiles.columnProfileDateMorningMiddayEvening,
-        lineCount: data.length,
-        gridCellBuilder: gridCellBuilder,
-        lineHeight: lineHeight,
-        useFixedFirstColumn: true,
-      ),
+    return TwoDimensionalScrollableTable(
+      tableColumnProfile: FixColumnProfiles.columnProfileDateMorningMiddayEvening,
+      lineCount: data.length,
+      gridCellBuilder: gridCellBuilder,
+      lineHeight: lineHeight,
+      useFixedFirstColumn: true,
+      bottomScrollExtend: ThemeUtils.seriesDataBottomFilterViewHeight,
     );
   }
 
-  List<_BloodPressureDayItem> _buildTableDataProvider(SeriesData<BloodPressureValue> seriesData) {
+  List<_BloodPressureDayItem> _buildTableDataProvider(List<BloodPressureValue> seriesData) {
     List<_BloodPressureDayItem> list = [];
 
     var emptyDate = '';
@@ -115,7 +122,7 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
 
     _BloodPressureDayItem? actItem;
 
-    for (var item in seriesData.data.reversed) {
+    for (var item in seriesData.reversed) {
       String dateDay = DateTimeUtils.formateDate(item.dateTime);
       if (actItem == null || actItem.date != dateDay) {
         if (actItem != null) {

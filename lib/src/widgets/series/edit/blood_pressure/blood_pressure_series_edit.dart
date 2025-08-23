@@ -17,7 +17,7 @@ class BloodPressureSeriesEdit extends StatelessWidget {
       children: [
         SwitchListTile(
           title: Text(
-            LocaleKeys.seriesEdit_bloodPressure_switch_hideMedicationInput_label.tr(),
+            LocaleKeys.seriesEdit_seriesSettings_bloodPressure_switch_hideMedicationInput_label.tr(),
           ),
           value: settings.hideMedicationInput,
           onChanged: (value) => settings.hideMedicationInput = value,

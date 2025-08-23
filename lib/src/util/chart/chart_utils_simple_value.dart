@@ -4,16 +4,14 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 import '../../model/chart/chart_meta_data.dart';
-import '../../model/series/data/daily_check/daily_check_value.dart';
-import '../../model/series/data/series_data.dart';
 import '../../model/series/series_view_meta_data.dart';
 import '../color_utils.dart';
 import '../date_time_utils.dart';
 import 'chart_utils.dart';
 
-class ChartUtilsDailyCheck {
-  static LineChartData buildLineChartData(SeriesViewMetaData seriesViewMetaData, SeriesData<DailyCheckValue> seriesData, List<CombinedValue> combinedSeriesData,
-      ThemeData themeData, Function(FlTouchEvent, LineTouchResponse?)? touchCallback) {
+class ChartUtilsSimpleValue {
+  static LineChartData buildLineChartData(
+      SeriesViewMetaData seriesViewMetaData, List<SimpleValue> simpleValues, ThemeData themeData, Function(FlTouchEvent, LineTouchResponse?)? touchCallback) {
     List<LineChartBarData> lineBarsData = [];
 
     ChartMetaData chartMetaData = ChartMetaData();
@@ -21,7 +19,7 @@ class ChartUtilsDailyCheck {
 
     List<FlSpot> values = [];
 
-    for (var item in combinedSeriesData) {
+    for (var item in simpleValues) {
       var value = item.value;
       var t = item.dateTime.millisecondsSinceEpoch;
 
@@ -144,11 +142,11 @@ class TitlesWidgetBottomAxis extends StatelessWidget {
   }
 }
 
-class CombinedValue {
+class SimpleValue {
   double value = 1;
   final DateTime dateTime;
 
-  CombinedValue(this.dateTime);
+  SimpleValue(this.dateTime);
 
   void increment() {
     value++;

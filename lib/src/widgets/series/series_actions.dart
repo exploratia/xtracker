@@ -5,6 +5,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../../generated/locale_keys.g.dart';
 import '../../model/series/data/daily_check/daily_check_value.dart';
+import '../../model/series/data/habit/habit_value.dart';
 import '../../model/series/data/series_data.dart';
 import '../../model/series/series_def.dart';
 import '../../model/series/series_type.dart';
@@ -18,13 +19,19 @@ class SeriesActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Widget valueBtn = switch (seriesDef.seriesType) {
+      SeriesType.dailyCheck => _DailyCheckBtn(seriesDef: seriesDef),
+      SeriesType.habit => _HabitBtn(seriesDef: seriesDef),
+      _ => _ShowSeriesDataInputDlgBtn(seriesDef: seriesDef),
+    };
+
     return Material(
       color: Colors.transparent,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         spacing: 8,
         children: [
-          seriesDef.seriesType == SeriesType.dailyCheck ? _DailyCheckBtn(seriesDef: seriesDef) : _ShowSeriesDataInputDlgBtn(seriesDef: seriesDef),
+          valueBtn,
           _ShowSeriesDataBtn(seriesDef: seriesDef),
         ],
       ),
@@ -85,5 +92,23 @@ class _DailyCheckBtn extends StatelessWidget {
           context.read<SeriesDataProvider>().addValue(seriesDef, DailyCheckValue(const Uuid().v4(), DateTime.now()), context);
         },
         icon: const Icon(Icons.check_outlined));
+  }
+}
+
+class _HabitBtn extends StatelessWidget {
+  const _HabitBtn({
+    required this.seriesDef,
+  });
+
+  final SeriesDef seriesDef;
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+        tooltip: LocaleKeys.seriesDefRenderer_action_addValue_tooltip.tr(),
+        onPressed: () {
+          context.read<SeriesDataProvider>().addValue(seriesDef, HabitValue(const Uuid().v4(), DateTime.now()), context);
+        },
+        icon: Icon(seriesDef.iconData()));
   }
 }

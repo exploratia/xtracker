@@ -12,6 +12,7 @@ class TwoDimensionalGridView extends TwoDimensionalScrollView {
   final int lineHeight;
   final ColumnProfile tableColumnProfile;
   final Key viewportSizeKey;
+  final double bottomScrollExtend;
 
   TwoDimensionalGridView(
     this.lineHeight,
@@ -28,6 +29,7 @@ class TwoDimensionalGridView extends TwoDimensionalScrollView {
     super.clipBehavior = Clip.hardEdge,
     required ScrollController verticalController,
     required ScrollController horizontalController,
+    this.bottomScrollExtend = 0,
   }) : super(
           delegate: delegate,
           verticalDetails: ScrollableDetails.vertical(controller: verticalController),
@@ -52,6 +54,7 @@ class TwoDimensionalGridView extends TwoDimensionalScrollView {
       delegate: delegate as TwoDimensionalChildBuilderDelegate,
       cacheExtent: cacheExtent,
       clipBehavior: clipBehavior,
+      bottomScrollExtend: bottomScrollExtend,
     );
   }
 }
@@ -59,6 +62,7 @@ class TwoDimensionalGridView extends TwoDimensionalScrollView {
 class TwoDimensionalGridViewport extends TwoDimensionalViewport {
   final int lineHeight;
   final ColumnProfile tableColumnProfile;
+  final double bottomScrollExtend;
 
   const TwoDimensionalGridViewport(
     this.lineHeight,
@@ -72,23 +76,22 @@ class TwoDimensionalGridViewport extends TwoDimensionalViewport {
     required super.mainAxis,
     super.cacheExtent,
     super.clipBehavior = Clip.hardEdge,
+    this.bottomScrollExtend = 0,
   });
 
   @override
   RenderTwoDimensionalViewport createRenderObject(BuildContext context) {
-    return RenderTwoDimensionalGridViewport(
-      lineHeight,
-      tableColumnProfile,
-      horizontalOffset: horizontalOffset,
-      horizontalAxisDirection: horizontalAxisDirection,
-      verticalOffset: verticalOffset,
-      verticalAxisDirection: verticalAxisDirection,
-      mainAxis: mainAxis,
-      delegate: delegate as TwoDimensionalChildBuilderDelegate,
-      childManager: context as TwoDimensionalChildManager,
-      cacheExtent: cacheExtent,
-      clipBehavior: clipBehavior,
-    );
+    return RenderTwoDimensionalGridViewport(lineHeight, tableColumnProfile,
+        horizontalOffset: horizontalOffset,
+        horizontalAxisDirection: horizontalAxisDirection,
+        verticalOffset: verticalOffset,
+        verticalAxisDirection: verticalAxisDirection,
+        mainAxis: mainAxis,
+        delegate: delegate as TwoDimensionalChildBuilderDelegate,
+        childManager: context as TwoDimensionalChildManager,
+        cacheExtent: cacheExtent,
+        clipBehavior: clipBehavior,
+        bottomScrollExtend: bottomScrollExtend);
   }
 
   @override
@@ -111,7 +114,9 @@ class TwoDimensionalGridViewport extends TwoDimensionalViewport {
 class RenderTwoDimensionalGridViewport extends RenderTwoDimensionalViewport {
   final int lineHeight;
   final ColumnProfile tableColumnProfile;
+  final double bottomScrollExtend;
 
+  /// [bottomScrollExtend] additional empty space at the bottom of the scroll area
   RenderTwoDimensionalGridViewport(
     this.lineHeight,
     this.tableColumnProfile, {
@@ -124,6 +129,7 @@ class RenderTwoDimensionalGridViewport extends RenderTwoDimensionalViewport {
     required super.childManager,
     super.cacheExtent,
     super.clipBehavior = Clip.hardEdge,
+    this.bottomScrollExtend = 0,
   }) : super(delegate: delegate);
 
   @override
@@ -180,7 +186,7 @@ class RenderTwoDimensionalGridViewport extends RenderTwoDimensionalViewport {
     }
 
     // Set the min and max scroll extents for each axis.
-    final double verticalExtent = lineHeight * (maxRowIndex + 1);
+    final double verticalExtent = lineHeight * (maxRowIndex + 1) + bottomScrollExtend;
     verticalOffset.applyContentDimensions(
       0.0,
       clampDouble(verticalExtent - viewportDimension.height, 0.0, double.infinity),

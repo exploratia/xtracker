@@ -2,11 +2,13 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../generated/locale_keys.g.dart';
+import '../../widgets/controls/select/icon_map.dart';
 import 'view_type.dart';
 
 enum SeriesType {
   bloodPressure('bloodPressure', 'monitor_heart_outlined', Colors.red, [ViewType.dots, ViewType.lineChart, ViewType.table]),
-  dailyCheck("dailyCheck", 'check_box_outlined', Colors.blue, [ViewType.barChart, ViewType.table, ViewType.dots]);
+  dailyCheck("dailyCheck", 'check_box_outlined', Colors.blue, [ViewType.barChart, ViewType.table, ViewType.dots]),
+  habit("habit", 'repeat_outlined', Color.fromRGBO(13, 133, 0, 1), [ViewType.barChart, ViewType.table, ViewType.pixels]);
   // monthly("monthly", 'calendar_month_outlined', Colors.deepPurple, [ViewType.table, ViewType.lineChart]),
   // free("free", 'calendar_today_outlined', Colors.green, [ViewType.lineChart, ViewType.table]);
   // TODO TimeTracker
@@ -18,6 +20,7 @@ enum SeriesType {
   /// order is used in AppBar actions and last one is used as default/first view
   final List<ViewType> viewTypes;
 
+  /// [iconName] one of [IconMap]
   const SeriesType(this.typeName, this.iconName, this.color, this.viewTypes);
 
   static SeriesType byTypeName(String typeName) {
@@ -28,6 +31,7 @@ enum SeriesType {
     return switch (seriesType) {
       SeriesType.bloodPressure => LocaleKeys.enum_seriesType_bloodPressure_title.tr(),
       SeriesType.dailyCheck => LocaleKeys.enum_seriesType_dailyCheck_title.tr(),
+      SeriesType.habit => LocaleKeys.enum_seriesType_habit_title.tr(),
       // SeriesType.monthly => LocaleKeys.series_seriesType_monthly_title.tr(),
       // SeriesType.free => LocaleKeys.series_seriesType_free_title.tr(),
     };
@@ -37,6 +41,7 @@ enum SeriesType {
     return switch (seriesType) {
       SeriesType.bloodPressure => LocaleKeys.enum_seriesType_bloodPressure_info.tr(),
       SeriesType.dailyCheck => LocaleKeys.enum_seriesType_dailyCheck_info.tr(),
+      SeriesType.habit => LocaleKeys.enum_seriesType_habit_info.tr(),
       // SeriesType.monthly => LocaleKeys.series_seriesType_monthly_info.tr(),
       // SeriesType.free => LocaleKeys.series_seriesType_free_info.tr(),
     };
