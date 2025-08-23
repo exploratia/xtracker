@@ -1,5 +1,3 @@
-
-
 abstract class SeriesSettings {
   final String _prefix;
 
