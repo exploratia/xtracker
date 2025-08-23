@@ -204,8 +204,15 @@ class _ScrollableGridState extends State<_ScrollableGrid> {
                 child: ListView.builder(
                   controller: _verticalScrollControllerFirstColumn,
                   scrollDirection: Axis.vertical,
-                  itemCount: widget.lineCount,
+                  itemCount: widget.lineCount + (widget.bottomScrollExtend > 0 ? 1 : 0), // add one line in case of scroll extend
                   itemBuilder: (context, yIndex) {
+                    // in case of scroll extend intercept on last yIndex
+                    if (yIndex >= widget.lineCount) {
+                      return SizedBox(
+                        height: widget.bottomScrollExtend,
+                        width: firstColumnWidth,
+                      );
+                    }
                     final cellData = widget.gridCellBuilder(context, yIndex, 0);
 
                     return Container(
