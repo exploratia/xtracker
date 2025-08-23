@@ -220,6 +220,10 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
                       ? LocaleKeys.controls_select_dayRangeSlider_btn_hideSlider.tr()
                       : LocaleKeys.controls_select_dayRangeSlider_btn_showSlider.tr(),
                   child: TextButton(
+                    // button a bit smaller width to not overflow at 250
+                    style: TextButton.styleFrom(
+                      minimumSize: const Size(56, 48),
+                    ),
                     onPressed: _toggleSliderVisible,
                     child: Text(
                       _sliderVisible ? '▼' : '▲',
