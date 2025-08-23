@@ -116,13 +116,23 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
 
     Widget title;
     if (_seriesDef != null) {
-      title = Row(
-        spacing: 8,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Icon(_viewType.iconData, color: themeData.colorScheme.onPrimary),
-          OverflowText(ViewType.displayNameOf(_viewType)),
-        ],
+      title = LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          if (constraints.maxWidth < 24) {
+            return const SizedBox();
+          }
+          if (constraints.maxWidth < 55) {
+            return Icon(_viewType.iconData, color: themeData.colorScheme.onPrimary);
+          }
+          return Row(
+            spacing: 8,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Icon(_viewType.iconData, color: themeData.colorScheme.onPrimary),
+              OverflowText(ViewType.displayNameOf(_viewType)),
+            ],
+          );
+        },
       );
     } else {
       title = Text(navItem.titleBuilder());
