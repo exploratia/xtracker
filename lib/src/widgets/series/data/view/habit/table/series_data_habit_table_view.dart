@@ -25,7 +25,8 @@ class SeriesDataHabitTableView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // for daily check we need a special TableColumnProfile
+    // fix TableColumnProfile
+    bool useDateTimeValueColumnProfile = seriesViewMetaData.seriesDef.displaySettingsReadonly().tableViewUseColumnProfileDateTimeValue;
 
     var filteredSeriesData = seriesData.where((value) => seriesDataFilter.filter(value)).toList();
     if (filteredSeriesData.isEmpty) {
@@ -35,14 +36,15 @@ class SeriesDataHabitTableView extends StatelessWidget {
       );
     }
 
-    List<_HabitDayItem> data = _buildTableDataProvider(filteredSeriesData);
+    List<_HabitDayItem> data = _buildTableDataProvider(seriesViewMetaData, filteredSeriesData);
     int lineHeight = 28;
     if (_useEqualSizedRows) {
       // calc line height = single line height * max lines per day of all items
       var maxItemsPerDayPart = data.fold(
         1,
         (previousValue, item) {
-          var maxItems = math.max(math.max(item.morning.length, item.midday.length), item.evening.length);
+          var maxItems = [item.all.length, item.morning.length, item.midday.length, item.evening.length].reduce(math.max);
+          ;
           return math.max(previousValue, maxItems);
         },
       );
@@ -57,6 +59,22 @@ class SeriesDataHabitTableView extends StatelessWidget {
       }
 
       List<HabitValue> habitValues;
+
+      if (useDateTimeValueColumnProfile) {
+        Widget gridCellChild = Container();
+        habitValues = habitDayItem.all;
+        if (xIndex == 1) {
+          gridCellChild = Center(child: Text(DateTimeUtils.formateTime(habitValues.first.dateTime)));
+        } else if (xIndex == 2) {
+          gridCellChild = HabitValuesRenderer(
+            habitValues: habitValues,
+            seriesViewMetaData: seriesViewMetaData,
+          );
+        }
+
+        return GridCell(backgroundColor: habitDayItem.backgroundColor, child: gridCellChild);
+      }
+
       if (xIndex == 1) {
         habitValues = habitDayItem.morning;
       } else if (xIndex == 2) {
@@ -74,7 +92,8 @@ class SeriesDataHabitTableView extends StatelessWidget {
     }
 
     return TwoDimensionalScrollableTable(
-      tableColumnProfile: FixColumnProfiles.columnProfileDateMorningMiddayEvening,
+      tableColumnProfile:
+          useDateTimeValueColumnProfile ? FixColumnProfiles.columnProfileDateTimeValue : FixColumnProfiles.columnProfileDateMorningMiddayEvening,
       lineCount: data.length,
       gridCellBuilder: gridCellBuilder,
       lineHeight: lineHeight,
@@ -83,7 +102,8 @@ class SeriesDataHabitTableView extends StatelessWidget {
     );
   }
 
-  List<_HabitDayItem> _buildTableDataProvider(List<HabitValue> seriesData) {
+  List<_HabitDayItem> _buildTableDataProvider(SeriesViewMetaData seriesViewMetaData, List<HabitValue> seriesData) {
+    bool useDateTimeValueColumnProfile = seriesViewMetaData.seriesDef.displaySettingsReadonly().tableViewUseColumnProfileDateTimeValue;
     List<_HabitDayItem> list = [];
 
     var emptyDate = '';
@@ -94,7 +114,7 @@ class SeriesDataHabitTableView extends StatelessWidget {
       }
 
       // use multiple rows for a single day if more than 1 element in one of the lists
-      var maxItems = math.max(math.max(item.morning.length, item.midday.length), item.evening.length);
+      var maxItems = [item.all.length, item.morning.length, item.midday.length, item.evening.length].reduce(math.max);
       if (maxItems == 1) {
         list.add(item);
         return;
@@ -105,6 +125,9 @@ class SeriesDataHabitTableView extends StatelessWidget {
         // show date only on the first row
         var date = i == 0 ? item.date : emptyDate;
         inflated.add(_HabitDayItem(date, item.backgroundColor));
+      }
+      for (var i = 0; i < item.all.length; ++i) {
+        inflated[i].all.add(item.all[i]);
       }
       for (var i = 0; i < item.morning.length; ++i) {
         inflated[i].morning.add(item.morning[i]);
@@ -136,7 +159,9 @@ class SeriesDataHabitTableView extends StatelessWidget {
         actItem = _HabitDayItem(dateDay, backgroundColor);
       }
 
-      if (item.dateTime.hour < 10) {
+      if (useDateTimeValueColumnProfile) {
+        actItem.all.add(item);
+      } else if (item.dateTime.hour < 10) {
         actItem.morning.add(item);
       } else if (item.dateTime.hour > 16) {
         actItem.evening.add(item);
@@ -157,6 +182,7 @@ class SeriesDataHabitTableView extends StatelessWidget {
 class _HabitDayItem {
   final String date;
   final Color? backgroundColor;
+  List<HabitValue> all = [];
   List<HabitValue> morning = [];
   List<HabitValue> midday = [];
   List<HabitValue> evening = [];
