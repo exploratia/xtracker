@@ -22,10 +22,7 @@ class DailyCheckDayItem extends DayItem<DailyCheckValue> {
     _showCount = seriesDef.displaySettingsReadonly().dotsViewShowCount;
   }
 
-  @override
   Dot toDot(bool monthly) {
-    if (count < 1) return noValueDot(monthly);
-
     return Dot(
       dotColor1: _color1,
       dotColor2: _color2,

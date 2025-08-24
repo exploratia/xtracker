@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../model/series/data/series_data_value.dart';
 import '../../../series/data/view/series_data_tooltip_content.dart';
 import '../../tooltip/lazy_tooltip.dart';
+import 'day/day_item.dart';
 
 class Dot<T extends SeriesDataValue> extends StatelessWidget {
   const Dot(
@@ -99,5 +100,13 @@ class Dot<T extends SeriesDataValue> extends StatelessWidget {
       return LazyTooltip(child: dotRender, tooltipBuilder: (_) => SeriesDataTooltipContent.buildSeriesValueTooltipWidget(seriesValues, tooltipValueBuilder!));
     }
     return dotRender;
+  }
+
+  static Dot noValueDot(DayItem<SeriesDataValue> dayItem, bool monthly) {
+    return Dot(
+      dotColor1: Colors.grey.withAlpha(64),
+      isStartMarker: monthly ? false : dayItem.dateTimeDayStart.day == 1,
+      seriesValues: [],
+    );
   }
 }

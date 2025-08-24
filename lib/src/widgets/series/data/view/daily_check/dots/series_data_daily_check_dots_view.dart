@@ -7,6 +7,7 @@ import '../../../../../../model/series/series_view_meta_data.dart';
 import '../../../../../../util/theme_utils.dart';
 import '../../../../../controls/grid/daily/day/daily_check_day_item.dart';
 import '../../../../../controls/grid/daily/dot.dart';
+import '../../../../../controls/grid/daily/dot_cell_builder.dart';
 import '../../../../../controls/grid/daily/row/row_item.dart';
 import '../../../../../controls/grid/two_dimensional_scrollable_table.dart';
 import '../../series_data_no_data.dart';
@@ -39,31 +40,12 @@ class SeriesDataDailyCheckDotsView extends StatelessWidget {
 
         List<RowItem<DailyCheckDayItem>> data = monthly ? RowItem.buildMonthRowItems(dayItems) : RowItem.buildWeekRowItems(dayItems);
 
-        gridCellBuilder(BuildContext context, int yIndex, int xIndex) {
-          var rowItem = data[yIndex];
-
-          if (xIndex == 0) {
-            if (rowItem.displayDate != null) {
-              return GridCell(child: Center(child: Text(rowItem.displayDate!)));
-            }
-            return GridCell(child: Container());
-          }
-
-          var dayItem = rowItem.getDayItem(xIndex - 1);
-          if (dayItem == null) {
-            return GridCell(child: Container());
-          }
-
-          return GridCell(
-            backgroundColor: dayItem.backgroundColor,
-            child: dayItem.toDot(monthly),
-          );
-        }
+        var dotCellBuilder = DotCellBuilder(data: data, monthly: monthly, gridCellChildBuilder: (dayItem) => dayItem.toDot(monthly));
 
         return TwoDimensionalScrollableTable(
           tableColumnProfile: monthly ? FixColumnProfiles.columnProfileDateMonthDays : FixColumnProfiles.columnProfileDateWeekdays,
           lineCount: data.length,
-          gridCellBuilder: gridCellBuilder,
+          gridCellBuilder: dotCellBuilder.gridCellBuilder,
           lineHeight: Dot.dotHeight,
           useFixedFirstColumn: true,
           bottomScrollExtend: ThemeUtils.seriesDataBottomFilterViewHeight,
