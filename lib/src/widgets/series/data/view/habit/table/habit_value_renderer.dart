@@ -9,8 +9,14 @@ import '../../../../../../util/tooltip_utils.dart';
 class HabitValueRenderer extends StatelessWidget {
   static int height = 28;
 
-  const HabitValueRenderer(
-      {super.key, required this.habitValue, required this.seriesDef, this.editMode = false, this.centered = false, this.wrapWithDateTimeTooltip = false});
+  const HabitValueRenderer({
+    super.key,
+    required this.habitValue,
+    required this.seriesDef,
+    this.editMode = false,
+    this.centered = false,
+    this.wrapWithDateTimeTooltip = false,
+  });
 
   final HabitValue habitValue;
   final bool editMode;
