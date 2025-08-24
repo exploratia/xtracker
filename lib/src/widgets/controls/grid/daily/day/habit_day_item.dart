@@ -25,8 +25,8 @@ class HabitDayItem extends DayItem<HabitValue> {
     // );
   }
 
-  Widget toPixel(bool monthly, List<Color> colors) {
-    return Pixel(
+  Pixel toPixel(bool monthly, List<Color> colors) {
+    return Pixel<HabitValue>(
       colors: colors,
       backgroundColor: backgroundColor,
       pixelText: count > 0 ? '$count' : null,
