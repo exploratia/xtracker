@@ -275,8 +275,11 @@
         "tooltip": "Position der Messreihe anpassen"
       }
     },
-    "label": {
-      "noValue": "Kein aktueller Wert vorhanden."
+    "currentValue": {
+      "tooltip": "Wert bearbeiten",
+      "label": {
+        "noValue": "Kein aktueller Wert vorhanden."
+      }
     },
     "query": {
       "deleteSeriesData": "Die Daten der Messreihe '{}' wirklich löschen?",
