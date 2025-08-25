@@ -8,6 +8,11 @@ class FixColumnProfiles {
     ColumnDef(minWidth: 80, title: '-', msgId: I18N.commonsDateMidday),
     ColumnDef(minWidth: 80, title: '-', msgId: I18N.commonsDateEvening),
   ]);
+  static final ColumnProfile columnProfileDateTimeValue = ColumnProfile(columns: [
+    ColumnDef(minWidth: 80, title: '-', msgId: I18N.commonsDateDate),
+    ColumnDef(minWidth: 80, title: '-', msgId: I18N.commonsDateTime),
+    ColumnDef(minWidth: 80, title: '-', msgId: I18N.commonsLabelValue),
+  ]);
 
   static final ColumnProfile columnProfileDateWeekdays = ColumnProfile(columns: [
     ColumnDef(minWidth: 80, title: '-', msgId: I18N.commonsDateDate),

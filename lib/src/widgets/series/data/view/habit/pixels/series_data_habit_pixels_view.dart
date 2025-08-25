@@ -9,6 +9,7 @@ import '../../../../../../model/series/series_view_meta_data.dart';
 import '../../../../../../util/theme_utils.dart';
 import '../../../../../controls/grid/daily/day/habit_day_item.dart';
 import '../../../../../controls/grid/daily/pixel.dart';
+import '../../../../../controls/grid/daily/pixel_cell_builder.dart';
 import '../../../../../controls/grid/daily/row/row_item.dart';
 import '../../../../../controls/grid/two_dimensional_scrollable_table.dart';
 import '../../series_data_no_data.dart';
@@ -50,36 +51,21 @@ class SeriesDataHabitPixelsView extends StatelessWidget {
 
         List<RowItem<HabitDayItem>> data = monthly ? RowItem.buildMonthRowItems(dayItems) : RowItem.buildWeekRowItems(dayItems);
 
-        gridCellBuilder(BuildContext context, int yIndex, int xIndex) {
-          var rowItem = data[yIndex];
-
-          if (xIndex == 0) {
-            if (rowItem.displayDate != null) {
-              return GridCell(child: Center(child: Text(rowItem.displayDate!)));
-            }
-            return GridCell(child: Container());
-          }
-
-          var dayItem = rowItem.getDayItem(xIndex - 1);
-          if (dayItem == null) {
-            return GridCell(child: Container());
-          }
-
-          return GridCell(
-            child: dayItem.toPixel(
+        var pixelCellBuilder = PixelCellBuilder(
+          data: data,
+          monthly: monthly,
+          gridCellChildBuilder: (HabitDayItem dayItem) {
+            return dayItem.toPixel(
               monthly,
-              [
-                if (dayItem.count > 0)
-                  Pixel.pixelColor(baseColor, dayItem.count, minVal, maxVal, invertHueDirection: pixelsViewInvertHueDirection, hueFactor: pixelsViewHueFactor),
-              ],
-            ),
-          );
-        }
+              [Pixel.pixelColor(baseColor, dayItem.count, minVal, maxVal, invertHueDirection: pixelsViewInvertHueDirection, hueFactor: pixelsViewHueFactor)],
+            );
+          },
+        );
 
         return TwoDimensionalScrollableTable(
           tableColumnProfile: monthly ? FixColumnProfiles.columnProfileDateMonthDays : FixColumnProfiles.columnProfileDateWeekdays,
           lineCount: data.length,
-          gridCellBuilder: gridCellBuilder,
+          gridCellBuilder: pixelCellBuilder.gridCellBuilder,
           lineHeight: Pixel.pixelHeight,
           useFixedFirstColumn: true,
           bottomScrollExtend: ThemeUtils.seriesDataBottomFilterViewHeight,

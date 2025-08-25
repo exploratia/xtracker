@@ -4,7 +4,6 @@ import '../../../../../model/series/data/series_data_value.dart';
 import '../../../../../model/series/series_def.dart';
 import '../../../../../util/date_time_utils.dart';
 import '../../../../../util/globals.dart';
-import '../dot.dart';
 
 abstract class DayItem<T extends SeriesDataValue> {
   late final DateTime dateTimeDayStart;
@@ -29,16 +28,6 @@ abstract class DayItem<T extends SeriesDataValue> {
 
   int get count {
     return seriesValues.length;
-  }
-
-  Dot toDot(bool monthly);
-
-  Dot noValueDot(bool monthly) {
-    return Dot(
-      dotColor1: Colors.grey.withAlpha(64),
-      isStartMarker: monthly ? false : dateTimeDayStart.day == 1,
-      seriesValues: [],
-    );
   }
 
   @override

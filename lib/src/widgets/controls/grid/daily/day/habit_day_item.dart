@@ -4,29 +4,14 @@ import '../../../../../model/series/data/habit/habit_value.dart';
 import '../../../../../model/series/series_def.dart';
 import '../../../../../util/date_time_utils.dart';
 import '../../../../series/data/view/habit/table/habit_value_renderer.dart';
-import '../dot.dart';
 import '../pixel.dart';
 import './day_item.dart';
 
 class HabitDayItem extends DayItem<HabitValue> {
   HabitDayItem(super.dateTimeDayStart, super.seriesDef);
 
-  @override
-  Dot toDot(bool monthly) {
-    throw UnimplementedError();
-    // if (count < 1) return noValueDot(monthly);
-    //
-    // return Dot(
-    //   dotColor1: Colors.blueAccent,
-    //   dotColor2: Colors.blue,
-    //   showCount: true,
-    //   isStartMarker: monthly ? false : dateTimeDayStart.day == 1,
-    //   seriesValues: seriesValues,
-    // );
-  }
-
-  Widget toPixel(bool monthly, List<Color> colors) {
-    return Pixel(
+  Pixel toPixel(bool monthly, List<Color> colors) {
+    return Pixel<HabitValue>(
       colors: colors,
       backgroundColor: backgroundColor,
       pixelText: count > 0 ? '$count' : null,

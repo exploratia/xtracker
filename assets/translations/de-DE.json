@@ -34,6 +34,7 @@
         "sunday": "So"
       },
       "date": "Datum",
+      "time": "Uhrzeit",
       "morning": "Morgens",
       "midday": "Mittags",
       "evening": "Abends"
@@ -61,6 +62,9 @@
       "failedToLoadData": "Laden der Daten fehlgeschlagen...",
       "failedToSaveData": "Speichern fehlgeschlagen...",
       "failedToShareData": "Teilen fehlgeschlagen..."
+    },
+    "label": {
+      "value": "Wert"
     },
     "snackbar": {
       "pressBackAgainToExit": "Zum Beenden nochmal drücken...",
@@ -271,8 +275,11 @@
         "tooltip": "Position der Messreihe anpassen"
       }
     },
-    "label": {
-      "noValue": "Kein aktueller Wert vorhanden."
+    "currentValue": {
+      "tooltip": "Wert bearbeiten",
+      "label": {
+        "noValue": "Kein aktueller Wert vorhanden."
+      }
     },
     "query": {
       "deleteSeriesData": "Die Daten der Messreihe '{}' wirklich löschen?",
@@ -311,7 +318,7 @@
       "dotsView": {
         "switch": {
           "dotsViewShowCount": {
-            "label": "In der Übersicht Anzahl an Datenpunkten anzeigen, wenn diese mehrere Werte repräsentieren."
+            "label": "Anzahl in Übersicht anzeigen, wenn ein Datenpunkt mehrere Werte repräsentiert."
           }
         }
       },
@@ -332,6 +339,13 @@
         "slider": {
           "hueFactor": {
             "label": "Farbe für den Höchstwert festlegen"
+          }
+        }
+      },
+      "tableView": {
+        "switch": {
+          "useColumnProfileDateTimeValue": {
+            "label": "Spaltenprofil Datum|Zeit|Wert in Tabellenansicht verwenden:"
           }
         }
       }

@@ -35,6 +35,17 @@ class SeriesEditDisplaySettings extends StatelessWidget {
         spacing: 10,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          // Table use Date|Time|Value Column profile
+          if (seriesType == SeriesType.dailyCheck || seriesType == SeriesType.habit || seriesType == SeriesType.bloodPressure)
+            SwitchListTile(
+              title: Text(
+                LocaleKeys.seriesEdit_displaySettings_tableView_switch_useColumnProfileDateTimeValue_label.tr(),
+              ),
+              value: settings.tableViewUseColumnProfileDateTimeValue,
+              onChanged: (value) => settings.tableViewUseColumnProfileDateTimeValue = value,
+              secondary: const Icon(Icons.view_column_outlined),
+            ),
+          // Dots show count
           if (seriesType == SeriesType.dailyCheck || seriesType == SeriesType.bloodPressure)
             SwitchListTile(
               title: Text(

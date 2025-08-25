@@ -3,35 +3,46 @@ import 'package:flutter/material.dart';
 import '../../../../../../model/series/data/blood_pressure/blood_pressure_value.dart';
 import '../../../../../../model/series/data/series_data.dart';
 import '../../../../../../model/series/series_def.dart';
+import '../../../../../../util/date_time_utils.dart';
+import '../../../../../../util/tooltip_utils.dart';
 
 class BloodPressureValueRenderer extends StatelessWidget {
+  static int height = 30;
+
   /// [showBorder] show a border around the value - fix true if [editMode] is set
-  const BloodPressureValueRenderer({super.key, required this.bloodPressureValue, required this.seriesDef, this.editMode = false, this.showBorder = false});
+  const BloodPressureValueRenderer({
+    super.key,
+    required this.bloodPressureValue,
+    required this.seriesDef,
+    this.editMode = false,
+    this.showBorder = false,
+    this.wrapWithDateTimeTooltip = false,
+  });
 
   final BloodPressureValue bloodPressureValue;
   final bool editMode;
   final bool showBorder;
   final SeriesDef seriesDef;
+  final bool wrapWithDateTimeTooltip;
 
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
 
-    Widget value;
+    Widget result = _Value(bloodPressureValue: bloodPressureValue);
+
     if (editMode) {
-      value = Material(
+      result = Material(
         color: Colors.transparent,
         child: InkWell(
           borderRadius: const BorderRadius.all(Radius.circular(4)),
           onTap: () => SeriesData.showSeriesDataInputDlg(context, seriesDef, value: bloodPressureValue),
-          child: _Value(bloodPressureValue: bloodPressureValue),
+          child: result,
         ),
       );
-    } else {
-      value = _Value(bloodPressureValue: bloodPressureValue);
     }
 
-    return Container(
+    result = Container(
       margin: const EdgeInsets.all(2),
       decoration: BoxDecoration(
         border: (showBorder || editMode) ? Border.all(width: 1, color: editMode ? themeData.colorScheme.secondary : themeData.cardColor) : null,
@@ -43,8 +54,18 @@ class BloodPressureValueRenderer extends StatelessWidget {
           ],
         ),
       ),
-      child: value,
+      child: result,
     );
+
+    if (wrapWithDateTimeTooltip) {
+      result = Tooltip(
+        message: '${DateTimeUtils.formateDate(bloodPressureValue.dateTime)}   ${DateTimeUtils.formateTime(bloodPressureValue.dateTime)}',
+        textStyle: TooltipUtils.tooltipMonospaceStyle,
+        child: result,
+      );
+    }
+
+    return result;
   }
 }
 

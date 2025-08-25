@@ -34,14 +34,14 @@ class SeriesCurrentValueProvider with ChangeNotifier {
   Future<void> save(SeriesDef seriesDef, SeriesDataValue seriesDataValue) async {
     await fetchDataIfNotYetLoaded();
 
-    var soFarValue = get(seriesDef);
-    if (soFarValue == null || soFarValue.dateTime.isBefore(seriesDataValue.dateTime) || soFarValue.uuid == seriesDataValue.uuid) {
-      var seriesCurrentValue = SeriesCurrentValue(seriesDef.uuid, seriesDef.seriesType, seriesDataValue);
-      await _storeSeriesCurrentValue.save(seriesCurrentValue);
-      _uuid2seriesCurrentValue[seriesDef.uuid] = seriesCurrentValue;
+    // #45 so far doesn't matter. If the latest value is deleted or date modified a before older timestamp could now be the newest.
+    // var soFarValue = get(seriesDef);
+    // if (soFarValue == null || soFarValue.dateTime.isBefore(seriesDataValue.dateTime) || soFarValue.uuid == seriesDataValue.uuid) {
+    var seriesCurrentValue = SeriesCurrentValue(seriesDef.uuid, seriesDef.seriesType, seriesDataValue);
+    await _storeSeriesCurrentValue.save(seriesCurrentValue);
+    _uuid2seriesCurrentValue[seriesDef.uuid] = seriesCurrentValue;
 
-      notifyListeners();
-    }
+    notifyListeners();
   }
 
   Future<void> delete(SeriesDef seriesDef) async {
@@ -50,15 +50,6 @@ class SeriesCurrentValueProvider with ChangeNotifier {
     _uuid2seriesCurrentValue.remove(seriesDef.uuid);
 
     notifyListeners();
-  }
-
-  Future<void> deleteValue(SeriesDef seriesDef, SeriesDataValue seriesDataValue) async {
-    await fetchDataIfNotYetLoaded();
-
-    var soFarValue = get(seriesDef);
-    if (soFarValue != null && soFarValue.uuid == seriesDataValue.uuid) {
-      await delete(seriesDef);
-    }
   }
 
   SeriesDataValue? get(SeriesDef seriesDef) {

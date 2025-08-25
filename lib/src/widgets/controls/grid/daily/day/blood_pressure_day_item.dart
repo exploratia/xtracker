@@ -29,10 +29,7 @@ class BloodPressureDayItem extends DayItem<BloodPressureValue> {
     medication |= med;
   }
 
-  @override
   Dot toDot(bool monthly) {
-    if (count < 1) return noValueDot(monthly);
-
     return Dot(
       dotColor1: BloodPressureValue.colorHigh(high),
       dotColor2: BloodPressureValue.colorLow(low),

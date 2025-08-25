@@ -5,6 +5,7 @@ class DisplaySettings extends SeriesSettings {
   final String _dotsViewHideCount = 'DotsViewHideCount';
   final String _pixelsViewInvertHueDirection = 'PixelsViewInvertHueDirection';
   final String _pixelsViewHueFactor = 'PixelsViewHueFactor';
+  final String _tableViewUseColumnProfileDateTimeValue = 'TableViewUseColumnProfileDateTimeValue';
 
   /// [updateStateCB] optional callback which is called when the settings map is changed. If not set readonly.
   DisplaySettings(Map<String, dynamic> settings, Function()? updateStateCB) : super(_prefix, settings, updateStateCB);
@@ -31,5 +32,13 @@ class DisplaySettings extends SeriesSettings {
 
   set pixelsViewHueFactor(double value) {
     set(_pixelsViewHueFactor, value);
+  }
+
+  bool get tableViewUseColumnProfileDateTimeValue {
+    return getBool(_tableViewUseColumnProfileDateTimeValue);
+  }
+
+  set tableViewUseColumnProfileDateTimeValue(bool value) {
+    set(_tableViewUseColumnProfileDateTimeValue, value);
   }
 }

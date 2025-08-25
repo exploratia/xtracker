@@ -34,6 +34,7 @@
         "sunday": "Sun"
       },
       "date": "Date",
+      "time": "Time",
       "morning": "Morning",
       "midday": "Midday",
       "evening": "Evening"
@@ -61,6 +62,9 @@
       "failedToLoadData": "Failed to load data...",
       "failedToSaveData": "Failed to save data...",
       "failedToShareData": "Failed to share..."
+    },
+    "label": {
+      "value": "Value"
     },
     "snackbar": {
       "pressBackAgainToExit": "Press BACK again to exit...",
@@ -271,8 +275,11 @@
         "tooltip": "Reorder series position"
       }
     },
+    "currentValue": {
+      "tooltip": "Edit value",
     "label": {
       "noValue": "No current value available."
+    }
     },
     "query": {
       "deleteSeriesData": "Do you really want to delete the values of series '{}'?",
@@ -332,6 +339,13 @@
         "slider": {
           "hueFactor": {
             "label": "Set color for highest value"
+          }
+        }
+      },
+      "tableView": {
+        "switch": {
+          "useColumnProfileDateTimeValue": {
+            "label": "Use column profile Date|Time|Value in table view:"
           }
         }
       }
