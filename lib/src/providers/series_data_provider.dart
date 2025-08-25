@@ -7,6 +7,7 @@ import '../model/series/data/blood_pressure/blood_pressure_value.dart';
 import '../model/series/data/daily_check/daily_check_value.dart';
 import '../model/series/data/habit/habit_value.dart';
 import '../model/series/data/series_data.dart';
+import '../model/series/data/series_data_value.dart';
 import '../model/series/series_def.dart';
 import '../model/series/series_type.dart';
 import '../store/stores.dart';
@@ -222,50 +223,53 @@ class SeriesDataProvider with ChangeNotifier {
     if (action == _Action.insert) {
       seriesData.insert(value);
       await store.save(value);
-      await seriesCurrentValueProvider.save(seriesDef, value);
     } else if (action == _Action.update) {
       seriesData.update(value);
       await store.save(value);
-      await seriesCurrentValueProvider.save(seriesDef, value);
     } else if (action == _Action.delete) {
       seriesData.delete(value);
       await store.delete(value);
-      await seriesCurrentValueProvider.deleteValue(seriesDef, value);
     }
     seriesData.sort();
+
+    // #45 always update currentValue with the last value
+    if (seriesData.isEmpty()) {
+      await seriesCurrentValueProvider.delete(seriesDef);
+    } else {
+      await seriesCurrentValueProvider.save(seriesDef, seriesData.data.last);
+    }
 
     notifyListeners();
   }
 
   Future<void> addValues(SeriesDef seriesDef, List<dynamic> values, BuildContext context) async {
     SeriesCurrentValueProvider seriesCurrentValueProvider = context.read<SeriesCurrentValueProvider>();
+    SeriesDataValue? latest;
 
     await fetchDataIfNotYetLoaded(seriesDef);
     var store = Stores.getOrCreateSeriesDataStore(seriesDef);
-
     switch (seriesDef.seriesType) {
       case SeriesType.bloodPressure:
         var seriesData = requireBloodPressureData(seriesDef);
         seriesData.insertAll(values.map(BloodPressureValue.checkOnBloodPressureValue));
         seriesData.sort();
         await store.saveAll(seriesData.data);
-        var latest = seriesData.data.lastOrNull;
-        if (latest != null) await seriesCurrentValueProvider.save(seriesDef, latest);
+        latest = seriesData.data.lastOrNull;
       case SeriesType.dailyCheck:
         var seriesData = requireDailyCheckData(seriesDef);
         seriesData.insertAll(values.map(DailyCheckValue.checkOnDailyCheckValue));
         seriesData.sort();
         await store.saveAll(seriesData.data);
-        var latest = seriesData.data.lastOrNull;
-        if (latest != null) await seriesCurrentValueProvider.save(seriesDef, latest);
+        latest = seriesData.data.lastOrNull;
       case SeriesType.habit:
         var seriesData = requireHabitData(seriesDef);
         seriesData.insertAll(values.map(HabitValue.checkOnHabitValue));
         seriesData.sort();
         await store.saveAll(seriesData.data);
-        var latest = seriesData.data.lastOrNull;
-        if (latest != null) await seriesCurrentValueProvider.save(seriesDef, latest);
+        latest = seriesData.data.lastOrNull;
     }
+
+    if (latest != null) await seriesCurrentValueProvider.save(seriesDef, latest);
 
     notifyListeners();
   }
