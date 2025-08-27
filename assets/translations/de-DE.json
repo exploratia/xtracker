@@ -241,6 +241,9 @@
       },
       "monthlyView": {
         "tooltip": "Monatliche Anzeige"
+      },
+      "dailyView": {
+        "tooltip": "Tägliche Anzeige"
       }
     },
     "label": {

@@ -6,12 +6,11 @@ import 'package:flutter/material.dart';
 import '../../model/chart/chart_meta_data.dart';
 import '../../model/series/series_view_meta_data.dart';
 import '../color_utils.dart';
-import '../date_time_utils.dart';
 import 'chart_utils.dart';
 
 class ChartUtilsSimpleValue {
-  static LineChartData buildLineChartData(
-      SeriesViewMetaData seriesViewMetaData, List<SimpleValue> simpleValues, ThemeData themeData, Function(FlTouchEvent, LineTouchResponse?)? touchCallback) {
+  static LineChartData buildLineChartData(SeriesViewMetaData seriesViewMetaData, List<SimpleValue> simpleValues, ThemeData themeData,
+      String Function(DateTime dateTime) dateFormatter, Function(FlTouchEvent, LineTouchResponse?)? touchCallback) {
     List<LineChartBarData> lineBarsData = [];
 
     ChartMetaData chartMetaData = ChartMetaData();
@@ -55,8 +54,6 @@ class ChartUtilsSimpleValue {
         )));
 
     chartMetaData.calcPadding();
-
-    final String Function(DateTime dateTime) dateFormatter = seriesViewMetaData.showYearly ? DateTimeUtils.formateYear : DateTimeUtils.formateMonthYear;
 
     return LineChartData(
       minY: chartMetaData.yMinPadded,

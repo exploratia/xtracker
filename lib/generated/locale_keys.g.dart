@@ -98,6 +98,7 @@ abstract class  LocaleKeys {
   static const seriesData_action_viewTypeMenu_tooltip = 'seriesData.action.viewTypeMenu.tooltip';
   static const seriesData_action_yearlyView_tooltip = 'seriesData.action.yearlyView.tooltip';
   static const seriesData_action_monthlyView_tooltip = 'seriesData.action.monthlyView.tooltip';
+  static const seriesData_action_dailyView_tooltip = 'seriesData.action.dailyView.tooltip';
   static const seriesData_label_noData = 'seriesData.label.noData';
   static const seriesData_label_noDataBecauseOfFilter = 'seriesData.label.noDataBecauseOfFilter';
   static const seriesDefRenderer_action_addValue_tooltip = 'seriesDefRenderer.action.addValue.tooltip';

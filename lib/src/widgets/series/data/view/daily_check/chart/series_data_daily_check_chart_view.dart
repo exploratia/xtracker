@@ -31,6 +31,7 @@ class SeriesDataDailyCheckChartView extends StatelessWidget {
     }
 
     List<SimpleValue> combinedSeriesData = _buildDataProvider();
+    var dateFormatter = seriesViewMetaData.showCompressed ? DateTimeUtils.formateYear : DateTimeUtils.formateMonthYear;
 
     return LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
       return SingleChildScrollViewWithScrollbar(
@@ -41,10 +42,10 @@ class SeriesDataDailyCheckChartView extends StatelessWidget {
             ChartContainer(
               showDateTooltip: true,
               maxVisibleHeight: constraints.maxHeight - ThemeUtils.seriesDataBottomFilterViewHeight,
-              dateFormatter: seriesViewMetaData.showYearly ? DateTimeUtils.formateYear : DateTimeUtils.formateMonthYear,
+              dateFormatter: dateFormatter,
               chartWidgetBuilder: (touchCallback) {
                 return LineChart(
-                  ChartUtilsSimpleValue.buildLineChartData(seriesViewMetaData, combinedSeriesData, themeData, touchCallback),
+                  ChartUtilsSimpleValue.buildLineChartData(seriesViewMetaData, combinedSeriesData, themeData, dateFormatter, touchCallback),
                 );
               },
             ),
@@ -61,7 +62,7 @@ class SeriesDataDailyCheckChartView extends StatelessWidget {
     List<SimpleValue> combinedSeriesData = [];
     SimpleValue? actSimpleValue;
     for (var seriesItem in seriesData) {
-      var dateTime = seriesViewMetaData.showYearly ? DateTimeUtils.firstDayOfYear(seriesItem.dateTime) : DateTimeUtils.firstDayOfMonth(seriesItem.dateTime);
+      var dateTime = seriesViewMetaData.showCompressed ? DateTimeUtils.firstDayOfYear(seriesItem.dateTime) : DateTimeUtils.firstDayOfMonth(seriesItem.dateTime);
       if (actSimpleValue == null || actSimpleValue.dateTime != dateTime) {
         actSimpleValue = SimpleValue(dateTime);
         combinedSeriesData.add(actSimpleValue);

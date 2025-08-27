@@ -31,6 +31,7 @@ class SeriesDataHabitChartView extends StatelessWidget {
     }
 
     List<SimpleValue> combinedSeriesData = _buildDataProvider(filteredSeriesData);
+    var dateFormatter = seriesViewMetaData.showCompressed ? DateTimeUtils.formateMonthYear : DateTimeUtils.formateDate;
 
     return LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
       return SingleChildScrollViewWithScrollbar(
@@ -41,10 +42,10 @@ class SeriesDataHabitChartView extends StatelessWidget {
             ChartContainer(
               showDateTooltip: true,
               maxVisibleHeight: constraints.maxHeight - ThemeUtils.seriesDataBottomFilterViewHeight,
-              dateFormatter: seriesViewMetaData.showYearly ? DateTimeUtils.formateYear : DateTimeUtils.formateMonthYear,
+              dateFormatter: dateFormatter,
               chartWidgetBuilder: (touchCallback) {
                 return LineChart(
-                  ChartUtilsSimpleValue.buildLineChartData(seriesViewMetaData, combinedSeriesData, themeData, touchCallback),
+                  ChartUtilsSimpleValue.buildLineChartData(seriesViewMetaData, combinedSeriesData, themeData, dateFormatter, touchCallback),
                 );
               },
             ),
@@ -61,7 +62,7 @@ class SeriesDataHabitChartView extends StatelessWidget {
     List<SimpleValue> combinedSeriesData = [];
     SimpleValue? actSimpleValue;
     for (var seriesItem in filteredSeriesData) {
-      var dateTime = seriesViewMetaData.showYearly ? DateTimeUtils.firstDayOfYear(seriesItem.dateTime) : DateTimeUtils.firstDayOfMonth(seriesItem.dateTime);
+      var dateTime = seriesViewMetaData.showCompressed ? DateTimeUtils.firstDayOfMonth(seriesItem.dateTime) : DateTimeUtils.truncateToDay(seriesItem.dateTime);
       if (actSimpleValue == null || actSimpleValue.dateTime != dateTime) {
         actSimpleValue = SimpleValue(dateTime);
         combinedSeriesData.add(actSimpleValue);

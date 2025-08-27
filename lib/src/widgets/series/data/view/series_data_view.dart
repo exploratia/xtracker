@@ -128,9 +128,8 @@ class _SeriesDataFilterView<T extends SeriesDataValue> extends StatelessWidget {
         var maxByWidth = constraints.maxWidth * 0.8; // One data point per pixel - more is not displayable
         // for daily check the data is reduced to monthly or even yearly
         if (seriesViewMetaData.seriesDef.seriesType == SeriesType.dailyCheck) {
-          maxByWidth *= 31 * (seriesViewMetaData.showYearly ? 12 : 1);
+          maxByWidth *= 31 * (seriesViewMetaData.showCompressed ? 12 : 1);
         }
-        print('$maxDuration $maxByWidth');
         int maxSpan = min(maxDuration, maxByWidth.toInt());
 
         return _StackedRangeSliderView(
