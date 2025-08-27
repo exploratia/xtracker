@@ -23,7 +23,7 @@ class SeriesDataHabitView extends StatelessWidget {
       case ViewType.lineChart:
         throw UnimplementedError();
       case ViewType.barChart:
-        return SeriesDataHabitChartView(seriesViewMetaData: seriesViewMetaData, seriesData: seriesData);
+        return SeriesDataHabitChartView(seriesViewMetaData: seriesViewMetaData, seriesData: seriesData, seriesDataFilter: seriesDataFilter);
       case ViewType.dots:
         throw UnimplementedError();
       case ViewType.pixels:

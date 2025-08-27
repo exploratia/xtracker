@@ -4,61 +4,52 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 import '../../../util/date_time_utils.dart';
-import '../../../util/media_query_utils.dart';
-import '../../../util/theme_utils.dart';
 
 class ChartContainer extends StatelessWidget {
-  ChartContainer({super.key, this.title, this.showDateTooltip = false, required this.chartWidgetBuilder, this.dateFormatter});
+  const ChartContainer({
+    super.key,
+    this.title,
+    this.showDateTooltip = false,
+    required this.chartWidgetBuilder,
+    this.dateFormatter,
+    required this.maxVisibleHeight,
+  });
 
   final Widget? title;
   final bool showDateTooltip;
-  final Widget Function(int maxWidth, Function(FlTouchEvent, LineTouchResponse?)? touchCallback) chartWidgetBuilder;
+  final Widget Function(Function(FlTouchEvent, LineTouchResponse?)? touchCallback) chartWidgetBuilder;
   final String Function(DateTime dateTime)? dateFormatter;
+  final double maxVisibleHeight;
 
   final double _maxChartHeight = 300;
   final double _minChartHeight = 100;
-  final double _appbarHeight = 56;
-  final double _screenPadding = ThemeUtils.screenPadding.vertical.toDouble() / 2;
-  final double _bottomLabelsHeight = 20;
 
   @override
   Widget build(BuildContext context) {
-    final mediaQueryInfo = MediaQueryUtils(MediaQuery.of(context));
+    double chartContainerHeight = math.min(math.max(maxVisibleHeight, _minChartHeight), _maxChartHeight);
 
-    var screenHeight = mediaQueryInfo.mediaQueryData.size.height;
-    var possibleChartHeight = screenHeight - _appbarHeight - _screenPadding;
-    if (showDateTooltip) {
-      possibleChartHeight -= _bottomLabelsHeight;
+    Widget chart;
+    if (!showDateTooltip) {
+      chart = chartWidgetBuilder(null);
+    } else {
+      chart = _ChartContainerWithDateTooltip(
+        chartWidgetBuilder: chartWidgetBuilder,
+        dateFormatter: dateFormatter ?? DateTimeUtils.formateDate,
+      );
     }
-    double chartContainerHeight = math.min(math.max(possibleChartHeight, _minChartHeight), _maxChartHeight);
 
     return Column(
       children: [
         if (title != null) title!,
-        LayoutBuilder(
-          builder: (context, constraints) {
-            var maxWidth = constraints.maxWidth.truncate();
-            Widget chart;
-            if (!showDateTooltip) {
-              chart = chartWidgetBuilder(maxWidth, null);
-            } else {
-              chart = _ChartContainerWithDateTooltip(
-                maxWidth: maxWidth,
-                chartWidgetBuilder: chartWidgetBuilder,
-                dateFormatter: dateFormatter ?? DateTimeUtils.formateDate,
-              );
-            }
-            return SizedBox(
-              width: double.infinity,
-              height: chartContainerHeight,
-              child: chart,
-              // child: AspectRatio(
-              //   aspectRatio: isPortrait ? 3 / 2 : 3 / 1,
-              //   child: child,
-              // ),
-            );
-          },
-        ),
+        SizedBox(
+          width: double.infinity,
+          height: chartContainerHeight,
+          child: chart,
+          // child: AspectRatio(
+          //   aspectRatio: isPortrait ? 3 / 2 : 3 / 1,
+          //   child: child,
+          // ),
+        )
       ],
     );
   }
@@ -67,12 +58,10 @@ class ChartContainer extends StatelessWidget {
 class _ChartContainerWithDateTooltip extends StatefulWidget {
   const _ChartContainerWithDateTooltip({
     required this.chartWidgetBuilder,
-    required this.maxWidth,
     required this.dateFormatter,
   });
 
-  final int maxWidth;
-  final Widget Function(int maxWidth, Function(FlTouchEvent, LineTouchResponse?)? touchCallback) chartWidgetBuilder;
+  final Widget Function(Function(FlTouchEvent, LineTouchResponse?)? touchCallback) chartWidgetBuilder;
   final String Function(DateTime dateTime) dateFormatter;
 
   @override
@@ -114,7 +103,7 @@ class _ChartContainerWithDateTooltipState extends State<_ChartContainerWithDateT
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     return Stack(children: [
-      widget.chartWidgetBuilder(widget.maxWidth, touchCallback),
+      widget.chartWidgetBuilder(touchCallback),
       if (_xValue != null)
         Positioned(
             left: _tooltipPosition!.dx, // - 40, // Adjust position

@@ -21,7 +21,7 @@ class SeriesDataBloodPressureView extends StatelessWidget {
       case ViewType.table:
         return SeriesDataBloodPressureTableView(seriesViewMetaData: seriesViewMetaData, seriesData: seriesData, seriesDataFilter: seriesDataFilter);
       case ViewType.lineChart:
-        return SeriesDataBloodPressureChartView(seriesViewMetaData: seriesViewMetaData, seriesData: seriesData);
+        return SeriesDataBloodPressureChartView(seriesViewMetaData: seriesViewMetaData, seriesData: seriesData, seriesDataFilter: seriesDataFilter);
       case ViewType.barChart:
         throw UnimplementedError();
       case ViewType.dots:
