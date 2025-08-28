@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -117,7 +119,26 @@ class _SeriesDataFilterView<T extends SeriesDataValue> extends StatelessWidget {
         seriesData: seriesData,
         seriesViewMetaData: seriesViewMetaData,
         seriesDataViewBuilder: seriesDataViewBuilder,
+        maxSpan: 366 * 2,
       );
+    } else if (seriesViewMetaData.viewType == ViewType.lineChart || seriesViewMetaData.viewType == ViewType.barChart) {
+      return LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
+        // max span: 5 years or as much as fits into view
+        var maxDuration = 365 * 5;
+        var maxByWidth = constraints.maxWidth * 0.8; // One data point per pixel - more is not displayable
+        // for daily check the data is reduced to monthly or even yearly
+        if (seriesViewMetaData.seriesDef.seriesType == SeriesType.dailyCheck) {
+          maxByWidth *= 31 * (seriesViewMetaData.showCompressed ? 12 : 1);
+        }
+        int maxSpan = min(maxDuration, maxByWidth.toInt());
+
+        return _StackedRangeSliderView(
+          seriesData: seriesData,
+          seriesViewMetaData: seriesViewMetaData,
+          seriesDataViewBuilder: seriesDataViewBuilder,
+          maxSpan: maxSpan,
+        );
+      });
     }
 
     // fallback no filter
@@ -126,11 +147,13 @@ class _SeriesDataFilterView<T extends SeriesDataValue> extends StatelessWidget {
 }
 
 class _StackedRangeSliderView<T extends SeriesDataValue> extends StatefulWidget {
-  const _StackedRangeSliderView({super.key, required this.seriesData, required this.seriesViewMetaData, required this.seriesDataViewBuilder});
+  const _StackedRangeSliderView(
+      {super.key, required this.seriesData, required this.seriesViewMetaData, required this.seriesDataViewBuilder, required this.maxSpan});
 
   final SeriesViewMetaData seriesViewMetaData;
   final List<T> seriesData;
   final Widget Function(SeriesDataFilter filter) seriesDataViewBuilder;
+  final int maxSpan;
 
   @override
   State<_StackedRangeSliderView> createState() => _StackedRangeSliderViewState<T>();
@@ -215,7 +238,7 @@ class _StackedRangeSliderViewState<T extends SeriesDataValue> extends State<_Sta
           duration: const Duration(milliseconds: 300),
           child: DayRangeSlider(
               pageCallback: _setFilter,
-              maxSpan: 366 * 2,
+              maxSpan: widget.maxSpan,
               sliderInitialVisible: false,
               sliderVisibleCallback: _setSliderVisible,
               date1: widget.seriesData.first.dateTime,

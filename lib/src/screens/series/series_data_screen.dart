@@ -68,7 +68,7 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
   SeriesDef? _seriesDef;
   ViewType _viewType = ViewType.lineChart;
   bool _editMode = false;
-  bool _showYearly = false;
+  bool _showCompressed = false;
 
   @override
   void initState() {
@@ -98,9 +98,9 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
     });
   }
 
-  void _toggleMonthlyYearlyMode() {
+  void _toggleCompressedMode() {
     setState(() {
-      _showYearly = !_showYearly;
+      _showCompressed = !_showCompressed;
     });
   }
 
@@ -150,7 +150,7 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
         useSeriesCallback: _seriesDef == null,
         viewType: _viewType,
         editMode: _editMode,
-        showYearly: _showYearly,
+        showCompressed: _showCompressed,
       );
     } else {
       view = DataProviderLoader(
@@ -161,7 +161,7 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
           useSeriesCallback: _seriesDef == null,
           viewType: _viewType,
           editMode: _editMode,
-          showYearly: _showYearly,
+          showCompressed: _showCompressed,
         ),
       );
     }
@@ -211,13 +211,20 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
 
       // in charts add depending on series type switch interval (month/year) btn
       if (_viewType == ViewType.lineChart || _viewType == ViewType.barChart) {
-        if (/*seriesType == SeriesType.monthly ||*/ seriesType == SeriesType.dailyCheck) {
+        if (/*seriesType == SeriesType.monthly ||*/ seriesType == SeriesType.dailyCheck || seriesType == SeriesType.habit) {
+          // monthly | yearly
+          var tooltip = _showCompressed ? LocaleKeys.seriesData_action_monthlyView_tooltip.tr() : LocaleKeys.seriesData_action_yearlyView_tooltip.tr();
+          if (seriesType == SeriesType.habit) {
+            // daily | monthly
+            tooltip = _showCompressed ? LocaleKeys.seriesData_action_dailyView_tooltip.tr() : LocaleKeys.seriesData_action_monthlyView_tooltip.tr();
+          }
+
           viewActions.insert(
             0,
             IconButton(
-              tooltip: _showYearly ? LocaleKeys.seriesData_action_monthlyView_tooltip.tr() : LocaleKeys.seriesData_action_yearlyView_tooltip.tr(),
-              onPressed: () => _toggleMonthlyYearlyMode(),
-              icon: Icon(_showYearly ? Icons.calendar_month_outlined : Icons.calendar_today_outlined),
+              tooltip: tooltip,
+              onPressed: () => _toggleCompressedMode(),
+              icon: Icon(_showCompressed ? Icons.calendar_month_outlined : Icons.calendar_today_outlined),
             ),
           );
         }
@@ -248,7 +255,7 @@ class _SeriesDataViewTitleWrapper extends StatelessWidget {
       required this.useSeriesCallback,
       required this.viewType,
       required this.editMode,
-      required this.showYearly});
+      required this.showCompressed});
 
   final String seriesUuid;
   final bool useSeriesCallback;
@@ -256,7 +263,7 @@ class _SeriesDataViewTitleWrapper extends StatelessWidget {
   final Function(SeriesDef seriesDef) setSeriesDef;
   final ViewType viewType;
   final bool editMode;
-  final bool showYearly;
+  final bool showCompressed;
 
   @override
   Widget build(BuildContext context) {
@@ -277,7 +284,7 @@ class _SeriesDataViewTitleWrapper extends StatelessWidget {
         seriesDef: seriesDef,
         viewType: viewType,
         editMode: editMode,
-        showYearly: showYearly,
+        showCompressed: showCompressed,
       ),
     );
   }

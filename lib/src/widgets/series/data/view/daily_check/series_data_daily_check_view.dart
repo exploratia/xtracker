@@ -23,7 +23,7 @@ class SeriesDataDailyCheckView extends StatelessWidget {
       case ViewType.lineChart:
         throw UnimplementedError();
       case ViewType.barChart:
-        return SeriesDataDailyCheckChartView(seriesViewMetaData: seriesViewMetaData, seriesData: seriesData);
+        return SeriesDataDailyCheckChartView(seriesViewMetaData: seriesViewMetaData, seriesData: seriesData, seriesDataFilter: seriesDataFilter);
       case ViewType.dots:
         return SeriesDataDailyCheckDotsView(seriesViewMetaData: seriesViewMetaData, seriesData: seriesData, seriesDataFilter: seriesDataFilter);
       case ViewType.pixels:

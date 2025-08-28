@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../../model/chart/chart_meta_data.dart';
 import '../../model/series/data/blood_pressure/blood_pressure_value.dart';
 import '../date_time_utils.dart';
+import '../pair.dart';
 import 'chart_utils.dart';
 
 class ChartUtilsBloodPressure {
@@ -30,12 +31,14 @@ class ChartUtilsBloodPressure {
 
       if (lowVal < lowMin) {
         lowMin = lowVal;
-      } else if (lowVal > lowMax) {
+      }
+      if (lowVal > lowMax) {
         lowMax = lowVal;
       }
       if (highVal < highMin) {
         highMin = highVal;
-      } else if (highVal > highMax) {
+      }
+      if (highVal > highMax) {
         highMax = highVal;
       }
 
@@ -45,23 +48,26 @@ class ChartUtilsBloodPressure {
       highValues.add(FlSpot(t.toDouble(), highVal.toDouble()));
     }
 
+    var gradientData = buildGradient(highMin.toDouble(), highMax.toDouble(), 120, BloodPressureValue.colorHigh);
     lineBarsData.add(LineChartBarData(
       spots: highValues,
       isCurved: false,
       preventCurveOverShooting: true,
       barWidth: 2,
-      gradient: ChartUtils.createTopToBottomGradient([BloodPressureValue.colorHigh(highMax), BloodPressureValue.colorHigh(highMin)]),
+      gradient: ChartUtils.createBottomToTopGradient(gradientData.k, stops: gradientData.v),
       dotData: ChartUtils.createDotData(chartMetaData),
       isStrokeCapRound: true,
       // dashArray: [5, 5],
     ));
+
+    gradientData = buildGradient(lowMin.toDouble(), lowMax.toDouble(), 80, BloodPressureValue.colorLow);
     lineBarsData.add(LineChartBarData(
       spots: lowValues,
       isCurved: false,
       preventCurveOverShooting: true,
       // curveSmoothness: 0.02, // only makes sense if no BetweenBarsData
       barWidth: 2,
-      gradient: ChartUtils.createTopToBottomGradient([BloodPressureValue.colorLow(lowMax), BloodPressureValue.colorLow(lowMin)]),
+      gradient: ChartUtils.createBottomToTopGradient(gradientData.k, stops: gradientData.v),
       dotData: ChartUtils.createDotData(chartMetaData),
       isStrokeCapRound: true,
     ));
@@ -128,6 +134,56 @@ class ChartUtilsBloodPressure {
         ),
       ),
     );
+  }
+
+  static Pair<List<Color>, List<double>> buildGradient(double startValue, double endValue, double optimum, Color Function(int val) colorBuilder) {
+    final double mid = optimum;
+    final double low = optimum - 40;
+    final double high = optimum + 40;
+
+    // helper: check for approximate equality (avoid floating-point issues)
+    bool approxEq(double a, double b, [double eps = 1e-9]) => (a - b).abs() <= eps;
+
+    // special case: identical values → use same color twice (valid gradient)
+    if (approxEq(startValue, endValue)) {
+      final c = colorBuilder(startValue.toInt());
+      return Pair(
+        [c, c],
+        const [0.0, 1.0],
+      );
+    }
+
+    // check if gradient direction is descendin
+    final bool descending = endValue < startValue;
+
+    // thresholds that lie *between* start and end
+    final double minV = math.min(startValue, endValue);
+    final double maxV = math.max(startValue, endValue);
+    final thresholdsInRange = <double>[
+      if (low > minV && low < maxV) low,
+      if (mid > minV && mid < maxV) mid,
+      if (high > minV && high < maxV) high,
+    ]..sort((a, b) => descending ? b.compareTo(a) : a.compareTo(b));
+
+    // build knots: start → possible thresholds → end (in direction order)
+    final knots = <double>[startValue, ...thresholdsInRange, endValue];
+
+    // normalize value to [0..1] relative to start/end
+    double tOf(double v) => ((v - startValue) / (endValue - startValue)).clamp(0.0, 1.0);
+
+    final colors = <Color>[];
+    final stops = <double>[];
+
+    for (final v in knots) {
+      colors.add(colorBuilder(v.toInt()));
+      stops.add(tOf(v));
+    }
+
+// enforce exact 0.0/1.0 at first/last stop
+    stops[0] = 0.0;
+    stops[stops.length - 1] = 1.0;
+
+    return Pair(colors, stops);
   }
 }
 

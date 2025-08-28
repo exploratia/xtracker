@@ -38,13 +38,25 @@ class ChartUtils {
     return const Shadow(color: Colors.black26, offset: Offset(5, 5));
   }
 
-  static LinearGradient? createTopToBottomGradient(List<Color>? gradientColors) {
+  static LinearGradient? createTopToBottomGradient(List<Color>? gradientColors, {List<double>? stops}) {
     if (gradientColors == null) return null;
     return LinearGradient(
       colors: gradientColors,
       // stops:  [0.0, 1.0], // ohne angabe dyn. verteilt
+      stops: (stops == null || stops.length != gradientColors.length) ? null : stops,
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter,
+    );
+  }
+
+  static LinearGradient? createBottomToTopGradient(List<Color>? gradientColors, {List<double>? stops}) {
+    if (gradientColors == null) return null;
+    return LinearGradient(
+      colors: gradientColors,
+      // stops:  [0.0, 1.0], // ohne angabe dyn. verteilt
+      stops: (stops == null || stops.length != gradientColors.length) ? null : stops,
+      begin: Alignment.bottomCenter,
+      end: Alignment.topCenter,
     );
   }
 

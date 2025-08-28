@@ -5,12 +5,12 @@ class SeriesViewMetaData {
   final SeriesDef seriesDef;
   final ViewType viewType;
   final bool editMode;
-  final bool showYearly;
+  final bool showCompressed;
 
   SeriesViewMetaData({
     required this.seriesDef,
     required this.viewType,
     required this.editMode,
-    required this.showYearly,
+    required this.showCompressed,
   });
 }

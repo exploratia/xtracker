@@ -3,4 +3,9 @@ class Pair<K, V> {
   V v;
 
   Pair(this.k, this.v);
+
+  @override
+  String toString() {
+    return 'Pair{k: $k, v: $v}';
+  }
 }

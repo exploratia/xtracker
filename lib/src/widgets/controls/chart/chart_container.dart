@@ -4,92 +4,91 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 import '../../../util/date_time_utils.dart';
-import '../../../util/media_query_utils.dart';
-import '../../../util/theme_utils.dart';
 
 class ChartContainer extends StatelessWidget {
-  ChartContainer({super.key, this.title, this.showDateTooltip = false, required this.chartWidgetBuilder, this.dateFormatter});
+  const ChartContainer({
+    super.key,
+    this.title,
+    this.showDateTooltip = false,
+    required this.chartWidgetBuilder,
+    this.dateFormatter,
+    required this.maxVisibleHeight,
+  });
 
   final Widget? title;
   final bool showDateTooltip;
-  final Widget Function(int maxWidth, Function(FlTouchEvent, LineTouchResponse?)? touchCallback) chartWidgetBuilder;
+  final Widget Function(Function(FlTouchEvent, LineTouchResponse?)? touchCallback) chartWidgetBuilder;
   final String Function(DateTime dateTime)? dateFormatter;
+  final double maxVisibleHeight;
 
   final double _maxChartHeight = 300;
   final double _minChartHeight = 100;
-  final double _appbarHeight = 56;
-  final double _screenPadding = ThemeUtils.screenPadding.vertical.toDouble() / 2;
-  final double _bottomLabelsHeight = 20;
 
   @override
   Widget build(BuildContext context) {
-    final mediaQueryInfo = MediaQueryUtils(MediaQuery.of(context));
+    double chartContainerHeight = math.min(math.max(maxVisibleHeight, _minChartHeight), _maxChartHeight);
 
-    var screenHeight = mediaQueryInfo.mediaQueryData.size.height;
-    var possibleChartHeight = screenHeight - _appbarHeight - _screenPadding;
-    if (showDateTooltip) {
-      possibleChartHeight -= _bottomLabelsHeight;
+    Widget chart;
+    if (!showDateTooltip) {
+      chart = chartWidgetBuilder(null);
+    } else {
+      chart = _ChartContainerWithDateTooltip(
+        chartWidgetBuilder: chartWidgetBuilder,
+        dateFormatter: dateFormatter ?? DateTimeUtils.formateDate,
+      );
     }
-    double chartContainerHeight = math.min(math.max(possibleChartHeight, _minChartHeight), _maxChartHeight);
 
     return Column(
       children: [
         if (title != null) title!,
-        LayoutBuilder(
-          builder: (context, constraints) {
-            var maxWidth = constraints.maxWidth.truncate();
-            Widget chart;
-            if (!showDateTooltip) {
-              chart = chartWidgetBuilder(maxWidth, null);
-            } else {
-              chart = _ChartContainerWithDateTooltip(
-                maxWidth: maxWidth,
-                chartWidgetBuilder: chartWidgetBuilder,
-                dateFormatter: dateFormatter ?? DateTimeUtils.formateDate,
-              );
-            }
-            return SizedBox(
-              width: double.infinity,
-              height: chartContainerHeight,
-              child: chart,
-              // child: AspectRatio(
-              //   aspectRatio: isPortrait ? 3 / 2 : 3 / 1,
-              //   child: child,
-              // ),
-            );
-          },
-        ),
+        SizedBox(
+          width: double.infinity,
+          height: chartContainerHeight,
+          child: chart,
+          // child: AspectRatio(
+          //   aspectRatio: isPortrait ? 3 / 2 : 3 / 1,
+          //   child: child,
+          // ),
+        )
       ],
     );
   }
 }
 
-class _ChartContainerWithDateTooltip extends StatefulWidget {
-  const _ChartContainerWithDateTooltip({
+class _ChartContainerWithDateTooltip extends StatelessWidget {
+  _ChartContainerWithDateTooltip({
     required this.chartWidgetBuilder,
-    required this.maxWidth,
     required this.dateFormatter,
   });
 
-  final int maxWidth;
-  final Widget Function(int maxWidth, Function(FlTouchEvent, LineTouchResponse?)? touchCallback) chartWidgetBuilder;
+  final Widget Function(Function(FlTouchEvent, LineTouchResponse?)? touchCallback) chartWidgetBuilder;
+  final String Function(DateTime dateTime) dateFormatter;
+  final GlobalKey<_TooltipState> childKey = GlobalKey<_TooltipState>();
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(children: [
+      chartWidgetBuilder((event, touchResponse) => childKey.currentState?.touchCallback(event, touchResponse)),
+      _Tooltip(key: childKey, dateFormatter: dateFormatter),
+    ]);
+  }
+}
+
+class _Tooltip extends StatefulWidget {
+  const _Tooltip({super.key, required this.dateFormatter});
+
   final String Function(DateTime dateTime) dateFormatter;
 
   @override
-  State<_ChartContainerWithDateTooltip> createState() => _ChartContainerWithDateTooltipState();
+  State<_Tooltip> createState() => _TooltipState();
 }
 
-class _ChartContainerWithDateTooltipState extends State<_ChartContainerWithDateTooltip> {
+class _TooltipState extends State<_Tooltip> {
   double? _xValue;
   Offset? _tooltipPosition;
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
   void touchCallback(FlTouchEvent event, LineTouchResponse? touchResponse) {
-    if (event is FlTapDownEvent || event is FlPointerHoverEvent) {
+    if (event is FlTapDownEvent || event is FlPointerHoverEvent || event is FlPanStartEvent || event is FlPanUpdateEvent) {
       setState(() {
         if (touchResponse != null) {
           if (touchResponse.lineBarSpots != null && touchResponse.lineBarSpots!.isNotEmpty) {
@@ -102,7 +101,7 @@ class _ChartContainerWithDateTooltipState extends State<_ChartContainerWithDateT
           }
         }
       });
-    } else if (event is FlPointerExitEvent || event is FlTapUpEvent) {
+    } else if (event is FlPointerExitEvent || event is FlTapUpEvent || event is FlPanEndEvent) {
       setState(() {
         _xValue = null;
         _tooltipPosition = null;
@@ -113,21 +112,20 @@ class _ChartContainerWithDateTooltipState extends State<_ChartContainerWithDateT
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    return Stack(children: [
-      widget.chartWidgetBuilder(widget.maxWidth, touchCallback),
-      if (_xValue != null)
-        Positioned(
-            left: _tooltipPosition!.dx, // - 40, // Adjust position
-            bottom: 3,
-            child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(3)),
-                  color: themeData.chipTheme.backgroundColor?.withAlpha(220),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
-                  child: Text(widget.dateFormatter(DateTime.fromMillisecondsSinceEpoch(_xValue!.truncate()))),
-                ))),
-    ]);
+    if (_xValue != null) {
+      return Positioned(
+          left: _tooltipPosition!.dx, // - 40, // Adjust position
+          bottom: 3,
+          child: Container(
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(3)),
+                color: themeData.chipTheme.backgroundColor?.withAlpha(220),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
+                child: Text(widget.dateFormatter(DateTime.fromMillisecondsSinceEpoch(_xValue!.truncate()))),
+              )));
+    }
+    return Positioned(child: Container());
   }
 }

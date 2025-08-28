@@ -8,6 +8,7 @@ class SingleChildScrollViewWithScrollbar extends StatefulWidget {
   final Future<void> Function()? onRefreshCallback;
   final void Function(ScrollPosition value)? scrollPositionHandler;
   final bool useScreenPadding;
+  final bool useHorizontalScreenPadding;
 
   /// [useScreenPadding] set to false if used in widgets which already have padding (e.g. AlertDialog)
   const SingleChildScrollViewWithScrollbar({
@@ -17,6 +18,7 @@ class SingleChildScrollViewWithScrollbar extends StatefulWidget {
     this.onRefreshCallback,
     this.scrollPositionHandler,
     this.useScreenPadding = true,
+    this.useHorizontalScreenPadding = false,
   });
 
   @override
@@ -57,10 +59,17 @@ class _SingleChildScrollViewWithScrollbarState extends State<SingleChildScrollVi
       child = widget.child;
     }
 
+    EdgeInsetsGeometry padding = const EdgeInsets.all(0);
+    if (widget.useScreenPadding) {
+      padding = ThemeUtils.screenPadding;
+    } else if (widget.useHorizontalScreenPadding) {
+      padding = EdgeInsets.symmetric(horizontal: ThemeUtils.screenPadding.horizontal / 2);
+    }
+
     final scrollbar = Scrollbar(
       controller: _scrollController,
       child: SingleChildScrollView(
-        padding: widget.useScreenPadding ? ThemeUtils.screenPadding : const EdgeInsets.all(0),
+        padding: padding,
         physics: scrollPhysics,
         controller: _scrollController,
         scrollDirection: widget.scrollDirection,
