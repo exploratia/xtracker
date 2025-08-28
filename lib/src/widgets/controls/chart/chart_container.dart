@@ -88,7 +88,7 @@ class _TooltipState extends State<_Tooltip> {
   Offset? _tooltipPosition;
 
   void touchCallback(FlTouchEvent event, LineTouchResponse? touchResponse) {
-    if (event is FlTapDownEvent || event is FlPointerHoverEvent) {
+    if (event is FlTapDownEvent || event is FlPointerHoverEvent || event is FlPanStartEvent || event is FlPanUpdateEvent) {
       setState(() {
         if (touchResponse != null) {
           if (touchResponse.lineBarSpots != null && touchResponse.lineBarSpots!.isNotEmpty) {
@@ -101,7 +101,7 @@ class _TooltipState extends State<_Tooltip> {
           }
         }
       });
-    } else if (event is FlPointerExitEvent || event is FlTapUpEvent) {
+    } else if (event is FlPointerExitEvent || event is FlTapUpEvent || event is FlPanEndEvent) {
       setState(() {
         _xValue = null;
         _tooltipPosition = null;
