@@ -31,12 +31,14 @@ class ChartUtilsBloodPressure {
 
       if (lowVal < lowMin) {
         lowMin = lowVal;
-      } else if (lowVal > lowMax) {
+      }
+      if (lowVal > lowMax) {
         lowMax = lowVal;
       }
       if (highVal < highMin) {
         highMin = highVal;
-      } else if (highVal > highMax) {
+      }
+      if (highVal > highMax) {
         highMax = highVal;
       }
 
