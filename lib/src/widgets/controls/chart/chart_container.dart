@@ -55,27 +55,37 @@ class ChartContainer extends StatelessWidget {
   }
 }
 
-class _ChartContainerWithDateTooltip extends StatefulWidget {
-  const _ChartContainerWithDateTooltip({
+class _ChartContainerWithDateTooltip extends StatelessWidget {
+  _ChartContainerWithDateTooltip({
     required this.chartWidgetBuilder,
     required this.dateFormatter,
   });
 
   final Widget Function(Function(FlTouchEvent, LineTouchResponse?)? touchCallback) chartWidgetBuilder;
   final String Function(DateTime dateTime) dateFormatter;
+  final GlobalKey<_TooltipState> childKey = GlobalKey<_TooltipState>();
 
   @override
-  State<_ChartContainerWithDateTooltip> createState() => _ChartContainerWithDateTooltipState();
+  Widget build(BuildContext context) {
+    return Stack(children: [
+      chartWidgetBuilder((event, touchResponse) => childKey.currentState?.touchCallback(event, touchResponse)),
+      _Tooltip(key: childKey, dateFormatter: dateFormatter),
+    ]);
+  }
 }
 
-class _ChartContainerWithDateTooltipState extends State<_ChartContainerWithDateTooltip> {
-  double? _xValue;
-  Offset? _tooltipPosition;
+class _Tooltip extends StatefulWidget {
+  const _Tooltip({super.key, required this.dateFormatter});
+
+  final String Function(DateTime dateTime) dateFormatter;
 
   @override
-  void initState() {
-    super.initState();
-  }
+  State<_Tooltip> createState() => _TooltipState();
+}
+
+class _TooltipState extends State<_Tooltip> {
+  double? _xValue;
+  Offset? _tooltipPosition;
 
   void touchCallback(FlTouchEvent event, LineTouchResponse? touchResponse) {
     if (event is FlTapDownEvent || event is FlPointerHoverEvent) {
@@ -102,21 +112,20 @@ class _ChartContainerWithDateTooltipState extends State<_ChartContainerWithDateT
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    return Stack(children: [
-      widget.chartWidgetBuilder(touchCallback),
-      if (_xValue != null)
-        Positioned(
-            left: _tooltipPosition!.dx, // - 40, // Adjust position
-            bottom: 3,
-            child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(Radius.circular(3)),
-                  color: themeData.chipTheme.backgroundColor?.withAlpha(220),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
-                  child: Text(widget.dateFormatter(DateTime.fromMillisecondsSinceEpoch(_xValue!.truncate()))),
-                ))),
-    ]);
+    if (_xValue != null) {
+      return Positioned(
+          left: _tooltipPosition!.dx, // - 40, // Adjust position
+          bottom: 3,
+          child: Container(
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.all(Radius.circular(3)),
+                color: themeData.chipTheme.backgroundColor?.withAlpha(220),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
+                child: Text(widget.dateFormatter(DateTime.fromMillisecondsSinceEpoch(_xValue!.truncate()))),
+              )));
+    }
+    return Positioned(child: Container());
   }
 }
