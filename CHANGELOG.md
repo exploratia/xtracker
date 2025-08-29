@@ -2,12 +2,29 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.0] - 2025-08-29
+
+### Features
+
+- save initial app start on device storage for coming improvements (backup
+  reminder, ...) ([#49](https://github.com/exploratia/xtracker/issues/49))
+- add display option for different table column profile with time
+  column ([#36](https://github.com/exploratia/xtracker/issues/36))
+- add new series type habit ([#43](https://github.com/exploratia/xtracker/issues/43))
+
+### Fixes
+
+- show tooltip in charts while touch dragging
+- blood pressure chart gradient calculation
+- build charts too often (on hover for tooltip)
+- add date filter for views ([#47](https://github.com/exploratia/xtracker/issues/47))
+- show always the latest value in series overview ([#45](https://github.com/exploratia/xtracker/issues/45))
+
 ## [1.0.4] - 2025-08-10
 
 ### Other
 
 - set minimum SDK to 21 (Android 5) to support older devices.
--
 
 ## [1.0.3] - 2025-08-09
 
