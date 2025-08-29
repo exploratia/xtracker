@@ -52,4 +52,26 @@ class SettingsService {
   Future<void> updateHideNavigationLabels(bool value) async {
     await DeviceStorage.writeBool(DeviceStorageKeys.layoutHideNavLabels, value);
   }
+
+  /// Loads the initial app start and set if not yet exists
+  Future<DateTime> initialAppStart() async {
+    var strTimestamp = await DeviceStorage.read(DeviceStorageKeys.initialAppStart);
+    DateTime? timestamp;
+    if (strTimestamp != null) {
+      var split = strTimestamp.split("-");
+      if (split.length == 3) {
+        int? year = int.tryParse(split[0], radix: 10);
+        int? month = int.tryParse(split[1], radix: 10);
+        int? day = int.tryParse(split[2], radix: 10);
+        if (year != null && month != null && day != null) {
+          timestamp = DateTime(year, month = month, day = day);
+        }
+      }
+    }
+    if (timestamp == null) {
+      timestamp = DateTime.now();
+      await DeviceStorage.write(DeviceStorageKeys.initialAppStart, '${timestamp.year}-${timestamp.month}-${timestamp.day}');
+    }
+    return timestamp;
+  }
 }

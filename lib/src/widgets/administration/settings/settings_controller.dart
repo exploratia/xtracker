@@ -15,6 +15,10 @@ class SettingsController with ChangeNotifier {
   // Make SettingsService a private variable so it is not used directly.
   final SettingsService _settingsService;
 
+  late DateTime _initialAppStart;
+
+  DateTime get initialAppStart => _initialAppStart;
+
   // Make ThemeMode a private variable so it is not updated directly without
   // also persisting the changes with the SettingsService.
   late ThemeMode _themeMode;
@@ -34,6 +38,7 @@ class SettingsController with ChangeNotifier {
   /// local database or the internet. The controller only knows it can load the
   /// settings from the service.
   Future<void> loadSettings() async {
+    _initialAppStart = await _settingsService.initialAppStart();
     _themeMode = await _settingsService.themeMode();
     _locale = await _settingsService.locale();
     _hideNavigationLabels = await _settingsService.hideNavigationLabels();

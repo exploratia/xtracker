@@ -4,4 +4,5 @@ class DeviceStorageKeys {
   static const layoutHideNavLabels = 'layoutHideNavLabels';
   static const logLevel = 'logLevel';
   static const logStack = 'logStack';
+  static const initialAppStart = 'initialAppStart';
 }
