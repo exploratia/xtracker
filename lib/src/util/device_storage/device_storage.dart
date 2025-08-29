@@ -9,7 +9,7 @@ class DeviceStorage {
     ),
   );
 
-  // Read value
+  /// Read value
   static Future<String?> read(String key) async {
     return storage.read(key: key);
   }
@@ -20,22 +20,22 @@ class DeviceStorage {
     return data == null ? false : true;
   }
 
-  // Read all values
+  /// Read all values
   static Future<Map<String, String>> readAll() async {
     return storage.readAll();
   }
 
-  // Delete value
+  /// Delete value
   static Future<void> delete(String key) async {
     return storage.delete(key: key);
   }
 
-  // Delete all
+  /// Delete all
   static Future<void> deleteAll() async {
     return storage.deleteAll();
   }
 
-  // Write value
+  /// Write value
   static Future<void> write(String key, String? value) async {
     return storage.write(key: key, value: value);
   }
