@@ -218,12 +218,13 @@ class _StackedRangeSliderViewState<T extends SeriesDataValue> extends State<_Sta
         Positioned.fill(
           child: widget.seriesDataViewBuilder(filter),
         ),
+        // filter view background - extra widget to be able to use ignore pointer
         AnimatedPositioned(
           height: ThemeUtils.seriesDataBottomFilterViewHeight * (_sliderVisible ? 2 : 1),
           left: 0,
           right: 0,
           bottom: 0,
-          duration: const Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: ThemeUtils.animationDuration),
           child: IgnorePointer(
             child: Container(
               color: themeData.scaffoldBackgroundColor.withAlpha(128),
@@ -235,7 +236,7 @@ class _StackedRangeSliderViewState<T extends SeriesDataValue> extends State<_Sta
           left: 0,
           right: 0,
           bottom: 0,
-          duration: const Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: ThemeUtils.animationDuration),
           child: DayRangeSlider(
               pageCallback: _setFilter,
               maxSpan: widget.maxSpan,
