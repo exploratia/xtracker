@@ -1,14 +1,21 @@
+import 'dart:io';
+
 import 'package:easy_localization/easy_localization.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../generated/locale_keys.g.dart';
 import '../../model/navigation/navigation_item.dart';
 import '../../util/dialogs.dart';
+import '../../util/ex.dart';
+import '../../util/file_extension.dart';
 import '../../util/logging/daily_files.dart';
 import '../../util/logging/flutter_simple_logging.dart';
 import '../../widgets/administration/logging/log_view.dart';
 import '../../widgets/controls/appbar/gradient_app_bar.dart';
+import '../../widgets/controls/popupmenu/icon_popup_menu.dart';
 import '../../widgets/controls/responsive/screen_builder.dart';
 
 class LogScreen extends StatelessWidget {
@@ -34,26 +41,15 @@ class LogScreen extends StatelessWidget {
         addLeadingBackBtn: true,
         title: Text("${navItem.titleBuilder()} ${logFileN.replaceAll('.txt', '')}"),
         actions: [
-          IconButton(
-            tooltip: LocaleKeys.log_action_shareLog_tooltip.tr(),
-            onPressed: () async {
-              try {
-                final result = await SharePlus.instance.share(
-                    ShareParams(files: [XFile(DailyFiles.getFullLogPath(logFileN))], text: '${/*AppInfo.appName*/ LocaleKeys.appTitle.tr()} Log $logFileName'));
-                if (result.status == ShareResultStatus.success) {
-                  SimpleLogging.i("Successfully shared log '$logFileName'.");
-                  if (context.mounted) {
-                    Dialogs.showSnackBar(LocaleKeys.log_snackbar_shareSuccess.tr(), context);
-                  }
-                }
-              } catch (err) {
-                SimpleLogging.w('Failed to share log.', error: err);
-                if (context.mounted) {
-                  Dialogs.simpleErrOkDialog('${LocaleKeys.commons_alert_failedToShareData.tr()}\n\n$err', context);
-                }
-              }
-            },
-            icon: const Icon(Icons.share_outlined),
+          Tooltip(
+            message: LocaleKeys.log_action_exportOrShareLog_tooltip.tr(),
+            child: IconPopupMenu(
+              icon: const Icon(Icons.download_outlined),
+              menuEntries: [
+                _buildExportIconPopupMenuEntry(logFileN, context),
+                _buildShareIconPopupMenuEntry(logFileN, context),
+              ],
+            ),
           ),
           IconButton(
             tooltip: LocaleKeys.log_action_deleteLog_tooltip.tr(),
@@ -85,6 +81,62 @@ class LogScreen extends StatelessWidget {
         ],
       ),
       bodyBuilder: (context) => LogView(logFileN),
+    );
+  }
+
+  IconPopupMenuEntry _buildExportIconPopupMenuEntry(String logFileN, BuildContext context) {
+    return IconPopupMenuEntry(
+      const Icon(Icons.download_outlined),
+      () async {
+        try {
+          final logFile = File(DailyFiles.getFullLogPath(logFileN));
+          if (!await logFile.exists()) {
+            throw Ex("File does not exist!");
+          }
+          final fileBytes = await logFile.readAsBytes();
+
+          var selectedFile = await FilePicker.platform.saveFile(
+              dialogTitle: 'Please select an output file:', fileName: logFile.name, type: FileType.custom, allowedExtensions: ["txt"], bytes: fileBytes);
+          bool exported = selectedFile != null || kIsWeb; // in web no file select - just download
+
+          if (exported) {
+            SimpleLogging.i('Successfully exported log.');
+            if (context.mounted) {
+              Dialogs.showSnackBar(LocaleKeys.log_snackbar_exportSuccess.tr(), context);
+            }
+          }
+        } catch (err) {
+          SimpleLogging.w('Failed to export log.', error: err);
+          if (context.mounted) {
+            Dialogs.simpleErrOkDialog('${LocaleKeys.commons_alert_failedToSaveData.tr()}\n\n$err', context);
+          }
+        }
+      },
+      LocaleKeys.log_action_exportLog_tooltip.tr(),
+    );
+  }
+
+  IconPopupMenuEntry _buildShareIconPopupMenuEntry(String logFileN, BuildContext context) {
+    return IconPopupMenuEntry(
+      const Icon(Icons.share_outlined),
+      () async {
+        try {
+          final result = await SharePlus.instance.share(
+              ShareParams(files: [XFile(DailyFiles.getFullLogPath(logFileN))], text: '${/*AppInfo.appName*/ LocaleKeys.appTitle.tr()} Log $logFileName'));
+          if (result.status == ShareResultStatus.success) {
+            SimpleLogging.i("Successfully shared log '$logFileName'.");
+            if (context.mounted) {
+              Dialogs.showSnackBar(LocaleKeys.log_snackbar_shareSuccess.tr(), context);
+            }
+          }
+        } catch (err) {
+          SimpleLogging.w('Failed to share log.', error: err);
+          if (context.mounted) {
+            Dialogs.simpleErrOkDialog('${LocaleKeys.commons_alert_failedToShareData.tr()}\n\n$err', context);
+          }
+        }
+      },
+      LocaleKeys.log_action_shareLog_tooltip.tr(),
     );
   }
 }

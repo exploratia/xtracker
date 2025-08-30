@@ -147,6 +147,12 @@
   "log": {
     "title": "Log",
     "action": {
+      "exportOrShareLog": {
+        "tooltip": "Export / share log"
+      },
+      "exportLog": {
+        "tooltip": "Export log"
+      },
       "shareLog": {
         "tooltip": "Share log"
       },
@@ -161,7 +167,8 @@
       "deleteLog": "Do you really want to delete the log file?"
     },
     "snackbar": {
-      "shareSuccess": "Log successfully shared."
+      "shareSuccess": "Log shared successfully.",
+      "exportSuccess": "Log exported successfully."
     }
   },
   "logs": {
@@ -169,6 +176,12 @@
     "action": {
       "logSettings": {
         "tooltip": "Log settings"
+      },
+      "exportOrShareLogs": {
+        "tooltip": "Export / share logs"
+      },
+      "exportLogs": {
+        "tooltip": "Export logs"
       },
       "shareLogs": {
         "tooltip": "Share logs"
@@ -185,7 +198,8 @@
       "deleteAllLogs": "Do you really want to delete all log files?"
     },
     "snackbar": {
-      "shareSuccess": "Logs shared successfully."
+      "shareSuccess": "Logs shared successfully.",
+      "exportSuccess": "Logs exported successfully."
     }
   },
   "logSettings": {

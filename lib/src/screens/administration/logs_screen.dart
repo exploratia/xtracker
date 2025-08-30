@@ -1,17 +1,22 @@
 import 'dart:io';
 
 import 'package:easy_localization/easy_localization.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 
 import '../../../generated/locale_keys.g.dart';
 import '../../model/navigation/navigation_item.dart';
 import '../../util/dialogs.dart';
+import '../../util/ex.dart';
+import '../../util/file_extension.dart';
 import '../../util/logging/daily_files.dart';
 import '../../util/logging/flutter_simple_logging.dart';
 import '../../util/navigation/generic_route.dart';
 import '../../widgets/administration/logging/logs_view.dart';
 import '../../widgets/controls/appbar/gradient_app_bar.dart';
+import '../../widgets/controls/popupmenu/icon_popup_menu.dart';
 import '../../widgets/controls/responsive/screen_builder.dart';
 import 'log_screen.dart';
 import 'log_settings_screen.dart';
@@ -50,39 +55,15 @@ class _LogsScreenState extends State<LogsScreen> {
             },
             icon: LogSettingsScreen.navItem.icon,
           ),
-          IconButton(
-            tooltip: LocaleKeys.logs_action_shareLogs_tooltip.tr(),
-            onPressed: () async {
-              try {
-                final zipAllLogs = await DailyFiles.zipAllLogs();
-                try {
-                  final result = await SharePlus.instance.share(ShareParams(files: [XFile(zipAllLogs)], text: 'App Logs'));
-                  if (result.status == ShareResultStatus.success) {
-                    SimpleLogging.i('Successfully shared logs.');
-                    if (context.mounted) {
-                      Dialogs.showSnackBar(LocaleKeys.logs_snackbar_shareSuccess.tr(), context);
-                    }
-                  }
-                } catch (err) {
-                  if (context.mounted) {
-                    SimpleLogging.w('Failed to share logs.', error: err);
-                    Dialogs.simpleErrOkDialog('${LocaleKeys.commons_alert_failedToShareData.tr()}\n\n$err', context);
-                  }
-                } finally {
-                  try {
-                    await File(zipAllLogs).delete();
-                  } catch (err2) {
-                    SimpleLogging.w('Failed to delete zipped logs "$zipAllLogs" after sharing!', error: err2);
-                  }
-                }
-              } catch (err) {
-                SimpleLogging.w('Failed to zip logs.', error: err);
-                if (context.mounted) {
-                  Dialogs.simpleErrOkDialog('${LocaleKeys.logs_alert_failedToZipLogs.tr()}\n\n$err', context);
-                }
-              }
-            },
-            icon: const Icon(Icons.share_outlined),
+          Tooltip(
+            message: LocaleKeys.logs_action_exportOrShareLogs_tooltip.tr(),
+            child: IconPopupMenu(
+              icon: const Icon(Icons.download_outlined),
+              menuEntries: [
+                _buildExportIconPopupMenuEntry(context),
+                _buildShareIconPopupMenuEntry(context),
+              ],
+            ),
           ),
           IconButton(
             tooltip: LocaleKeys.logs_action_deleteLogs_tooltip.tr(),
@@ -117,6 +98,88 @@ class _LogsScreenState extends State<LogsScreen> {
           )));
         },
       ),
+    );
+  }
+
+  IconPopupMenuEntry _buildExportIconPopupMenuEntry(BuildContext context) {
+    return IconPopupMenuEntry(
+      const Icon(Icons.download_outlined),
+      () async {
+        try {
+          final zipAllLogs = await DailyFiles.zipAllLogs();
+          if (!await zipAllLogs.exists()) {
+            throw Ex("File does not exist!");
+          }
+          try {
+            final fileBytes = await zipAllLogs.readAsBytes();
+
+            var selectedFile = await FilePicker.platform.saveFile(
+                dialogTitle: 'Please select an output file:', fileName: zipAllLogs.name, type: FileType.custom, allowedExtensions: ["zip"], bytes: fileBytes);
+            bool exported = selectedFile != null || kIsWeb; // in web no file select - just download
+
+            if (exported) {
+              SimpleLogging.i('Successfully exported logs.');
+              if (context.mounted) {
+                Dialogs.showSnackBar(LocaleKeys.logs_snackbar_exportSuccess.tr(), context);
+              }
+            }
+          } catch (err) {
+            if (context.mounted) {
+              SimpleLogging.w('Failed to export logs.', error: err);
+              Dialogs.simpleErrOkDialog('${LocaleKeys.commons_alert_failedToSaveData.tr()}\n\n$err', context);
+            }
+          } finally {
+            try {
+              await File(zipAllLogs.path).delete();
+            } catch (err2) {
+              SimpleLogging.w('Failed to delete zipped logs "${zipAllLogs.path}" after exporting!', error: err2);
+            }
+          }
+        } catch (err) {
+          SimpleLogging.w('Failed to zip logs.', error: err);
+          if (context.mounted) {
+            Dialogs.simpleErrOkDialog('${LocaleKeys.logs_alert_failedToZipLogs.tr()}\n\n$err', context);
+          }
+        }
+      },
+      LocaleKeys.logs_action_exportLogs_tooltip.tr(),
+    );
+  }
+
+  IconPopupMenuEntry _buildShareIconPopupMenuEntry(BuildContext context) {
+    return IconPopupMenuEntry(
+      const Icon(Icons.share_outlined),
+      () async {
+        try {
+          final zipAllLogs = await DailyFiles.zipAllLogs();
+          try {
+            final result = await SharePlus.instance.share(ShareParams(files: [XFile(zipAllLogs.path)], text: 'App Logs'));
+            if (result.status == ShareResultStatus.success) {
+              SimpleLogging.i('Successfully shared logs.');
+              if (context.mounted) {
+                Dialogs.showSnackBar(LocaleKeys.logs_snackbar_shareSuccess.tr(), context);
+              }
+            }
+          } catch (err) {
+            if (context.mounted) {
+              SimpleLogging.w('Failed to share logs.', error: err);
+              Dialogs.simpleErrOkDialog('${LocaleKeys.commons_alert_failedToShareData.tr()}\n\n$err', context);
+            }
+          } finally {
+            try {
+              await File(zipAllLogs.path).delete();
+            } catch (err2) {
+              SimpleLogging.w('Failed to delete zipped logs "${zipAllLogs.path}" after sharing!', error: err2);
+            }
+          }
+        } catch (err) {
+          SimpleLogging.w('Failed to zip logs.', error: err);
+          if (context.mounted) {
+            Dialogs.simpleErrOkDialog('${LocaleKeys.logs_alert_failedToZipLogs.tr()}\n\n$err', context);
+          }
+        }
+      },
+      LocaleKeys.logs_action_shareLogs_tooltip.tr(),
     );
   }
 }
