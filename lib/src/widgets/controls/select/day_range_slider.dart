@@ -158,8 +158,8 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
       children: [
         // progress
         Positioned(
-          left: 10,
-          right: 10,
+          left: ThemeUtils.screenPadding,
+          right: ThemeUtils.screenPadding,
           top: _sliderVisible ? 58 : 55,
           height: 1,
           child: ReverseProgress(
@@ -172,15 +172,14 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
           ),
         ),
         // button with date range
-        AnimatedPositioned(
+        Positioned(
           left: 0,
           right: 0,
           top: 2,
-          duration: const Duration(milliseconds: 300),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
-            spacing: 10,
+            spacing: ThemeUtils.horizontalSpacing,
             children: [
               Container(
                 decoration: btnBoxDecoration,
@@ -244,7 +243,7 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
             ignoring: !_sliderVisible,
             child: AnimatedOpacity(
               opacity: _sliderVisible ? 1 : 0,
-              duration: const Duration(milliseconds: 300),
+              duration: Duration(milliseconds: _sliderVisible ? ThemeUtils.animationDuration : ThemeUtils.animationDurationShort),
               child: RangeSlider(
                 min: 0,
                 max: _maxDays.toDouble(),
@@ -288,7 +287,7 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
               ignoring: !_sliderVisible,
               child: AnimatedOpacity(
                 opacity: _sliderVisible ? 1 : 0,
-                duration: const Duration(milliseconds: 300),
+                duration: Duration(milliseconds: _sliderVisible ? ThemeUtils.animationDuration : ThemeUtils.animationDurationShort),
                 child: LayoutBuilder(
                   builder: (context, constraints) {
                     double sliderWidth = constraints.maxWidth - 48; // 48 padding
@@ -367,7 +366,7 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
                               margin: const EdgeInsets.symmetric(vertical: 14),
                               decoration: BoxDecoration(
                                 color: themeData.colorScheme.primary,
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: ThemeUtils.borderRadiusCircular,
                               ),
                               child: Center(
                                 child: Text(

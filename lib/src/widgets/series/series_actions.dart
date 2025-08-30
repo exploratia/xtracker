@@ -11,6 +11,7 @@ import '../../model/series/series_def.dart';
 import '../../model/series/series_type.dart';
 import '../../providers/series_data_provider.dart';
 import '../../screens/series/series_data_screen.dart';
+import '../../util/theme_utils.dart';
 
 class SeriesActions extends StatelessWidget {
   const SeriesActions({super.key, required this.seriesDef});
@@ -29,7 +30,7 @@ class SeriesActions extends StatelessWidget {
       color: Colors.transparent,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
-        spacing: 8,
+        spacing: ThemeUtils.horizontalSpacing,
         children: [
           valueBtn,
           _ShowSeriesDataBtn(seriesDef: seriesDef),

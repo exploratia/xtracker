@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../util/theme_utils.dart';
+
 /// DropDownMenuItem with "selected" border
 class DropDownMenuItemChild extends StatelessWidget {
   const DropDownMenuItemChild({
@@ -21,11 +23,11 @@ class DropDownMenuItemChild extends StatelessWidget {
     }
 
     return Padding(
-      padding: const EdgeInsets.only(left: 8),
+      padding: const EdgeInsets.only(left: ThemeUtils.defaultPadding),
       child: Container(
           decoration: boxDeco,
           child: Padding(
-            padding: const EdgeInsets.only(left: 8),
+            padding: const EdgeInsets.only(left: ThemeUtils.defaultPadding),
             child: child,
           )),
     );

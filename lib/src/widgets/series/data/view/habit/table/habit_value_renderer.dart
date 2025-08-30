@@ -4,6 +4,7 @@ import '../../../../../../model/series/data/habit/habit_value.dart';
 import '../../../../../../model/series/data/series_data.dart';
 import '../../../../../../model/series/series_def.dart';
 import '../../../../../../util/date_time_utils.dart';
+import '../../../../../../util/theme_utils.dart';
 import '../../../../../../util/tooltip_utils.dart';
 
 class HabitValueRenderer extends StatelessWidget {
@@ -37,7 +38,7 @@ class HabitValueRenderer extends StatelessWidget {
 
     if (editMode) {
       result = InkWell(
-        borderRadius: const BorderRadius.all(Radius.circular(4)),
+        borderRadius: ThemeUtils.borderRadiusCircularSmall,
         onTap: () => SeriesData.showSeriesDataInputDlg(context, seriesDef, value: habitValue),
         child: result,
       );

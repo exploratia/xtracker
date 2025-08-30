@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../util/launch_uri.dart';
+import '../../../util/theme_utils.dart';
 
 class ImgLnk extends StatelessWidget {
   const ImgLnk({super.key, required this.uri, required this.imageProvider, required this.height, required this.width, this.darkHover = true});
@@ -17,7 +18,7 @@ class ImgLnk extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: InkWell(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: ThemeUtils.borderRadiusCircular,
         onTap: () => LaunchUri.launchUri(uri),
         splashColor: darkHover ? Colors.black12 : Colors.white30,
         hoverColor: darkHover ? Colors.black12 : Colors.white10,

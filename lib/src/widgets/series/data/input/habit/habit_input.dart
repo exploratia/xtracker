@@ -102,11 +102,10 @@ class _HabitInputState extends State<HabitInput> {
 
     var edit = Column(
       mainAxisSize: MainAxisSize.min,
-      spacing: 10,
+      spacing: ThemeUtils.verticalSpacing,
       children: [
         InputHeader(dateTime: _dateTime, seriesDef: widget.seriesDef, setDateTime: _setDateTime),
         const Divider(height: 1),
-        const SizedBox(height: 3),
         IconButton(
           tooltip: LocaleKeys.seriesValue_habit_btn_toggleValue_tooltip.tr(),
           iconSize: 40,
@@ -120,13 +119,12 @@ class _HabitInputState extends State<HabitInput> {
       title: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: ThemeUtils.seriesDataInputDlgMaxWidth),
         child: Row(
+          spacing: ThemeUtils.horizontalSpacing,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             widget.habitValue == null ? const Icon(Icons.add_outlined) : const Icon(Icons.edit_outlined),
-            const SizedBox(width: 10),
             OverflowText(widget.seriesDef.name),
-            // Text(SeriesType.displayNameOf(widget.seriesDef.seriesType)),
             if (widget.habitValue != null)
               IconButton(
                 tooltip: LocaleKeys.seriesValue_action_deleteValue_tooltip.tr(),

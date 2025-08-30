@@ -61,9 +61,9 @@ class _SingleChildScrollViewWithScrollbarState extends State<SingleChildScrollVi
 
     EdgeInsetsGeometry padding = const EdgeInsets.all(0);
     if (widget.useScreenPadding) {
-      padding = ThemeUtils.screenPadding;
+      padding = ThemeUtils.screenPaddingAll;
     } else if (widget.useHorizontalScreenPadding) {
-      padding = EdgeInsets.symmetric(horizontal: ThemeUtils.screenPadding.horizontal / 2);
+      padding = const EdgeInsets.symmetric(horizontal: ThemeUtils.screenPadding);
     }
 
     final scrollbar = Scrollbar(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../util/theme_utils.dart';
+
 class AnimatedHighlightContainer<T> extends StatefulWidget {
   final T Function(BuildContext) valueSelector;
   final Widget Function(BuildContext, T) builder;
@@ -53,11 +55,11 @@ class _AnimatedHighlightState<T> extends State<AnimatedHighlightContainer<T>> {
     return AnimatedContainer(
       duration: widget.duration,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: ThemeUtils.borderRadiusCircular,
         color: _highlight ? widget.highlightColor : widget.baseColor,
       ),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+        padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.defaultPadding / 2, vertical: 1),
         child: widget.builder(context, value),
       ),
     );

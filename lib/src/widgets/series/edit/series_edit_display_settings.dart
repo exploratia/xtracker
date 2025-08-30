@@ -5,6 +5,7 @@ import '../../../../../generated/locale_keys.g.dart';
 import '../../../model/series/series_def.dart';
 import '../../../model/series/series_type.dart';
 import '../../../util/dialogs.dart';
+import '../../../util/theme_utils.dart';
 import '../../controls/card/expandable.dart';
 import '../../controls/layout/single_child_scroll_view_with_scrollbar.dart';
 import 'pixel_view_preview.dart';
@@ -32,7 +33,7 @@ class SeriesEditDisplaySettings extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
-        spacing: 10,
+        spacing: ThemeUtils.verticalSpacing,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           // Table use Date|Time|Value Column profile
@@ -58,9 +59,9 @@ class SeriesEditDisplaySettings extends StatelessWidget {
           // Pixel Preview
           if (PixelViewPreview.applicableOn(seriesDef)) ...[
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.cardPadding),
               child: Wrap(
-                spacing: 10,
+                spacing: ThemeUtils.horizontalSpacing,
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
                   Text(LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_title.tr()),
@@ -89,9 +90,9 @@ class SeriesEditDisplaySettings extends StatelessWidget {
               onChanged: (value) => settings.pixelsViewInvertHueDirection = value,
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.cardPadding),
               child: Wrap(
-                spacing: 10,
+                spacing: ThemeUtils.horizontalSpacing,
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
                   Text(LocaleKeys.seriesEdit_displaySettings_pixelsView_slider_hueFactor_label.tr()),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../util/theme_utils.dart';
 import '../text/overflow_text.dart';
 
 class Expandable extends StatefulWidget {
@@ -35,16 +36,16 @@ class _ExpandableState extends State<Expandable> {
     return Column(
       spacing: 0,
       children: [
-        const SizedBox(height: 16),
+        const SizedBox(height: ThemeUtils.verticalSpacingLarge),
         InkWell(
           onTap: () => _toggleExpanded(),
           customBorder: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+            padding: const EdgeInsets.all(ThemeUtils.defaultPadding),
             child: Row(
-              spacing: 10,
+              spacing: ThemeUtils.horizontalSpacing,
               // mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -62,7 +63,7 @@ class _ExpandableState extends State<Expandable> {
           ),
         ),
         AnimatedCrossFade(
-          duration: Duration(milliseconds: _expanded ? 300 : 150),
+          duration: Duration(milliseconds: _expanded ? ThemeUtils.animationDuration : ThemeUtils.animationDurationShort),
           crossFadeState: _expanded ? CrossFadeState.showFirst : CrossFadeState.showSecond,
           firstChild: Container(
             decoration: BoxDecoration(
@@ -71,15 +72,16 @@ class _ExpandableState extends State<Expandable> {
                 end: const AlignmentDirectional(0, 1),
                 colors: [Colors.transparent, themeData.cardTheme.color ?? Colors.black],
               ),
-              borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(8), bottomRight: Radius.circular(8)),
+              borderRadius:
+                  const BorderRadius.only(bottomLeft: Radius.circular(ThemeUtils.borderRadius), bottomRight: Radius.circular(ThemeUtils.borderRadius)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Divider(),
-                const SizedBox(height: 10),
+                const SizedBox(height: ThemeUtils.verticalSpacing),
                 widget.child,
-                const SizedBox(height: 8),
+                const SizedBox(height: ThemeUtils.verticalSpacing),
                 // const Divider(),
               ],
             ),

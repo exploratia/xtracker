@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../model/series/series_view_meta_data.dart';
+import '../../../../util/theme_utils.dart';
 import '../../../controls/text/overflow_text.dart';
 
 class SeriesTitle extends StatelessWidget {
@@ -13,7 +14,7 @@ class SeriesTitle extends StatelessWidget {
     final themeData = Theme.of(context);
     return Center(
       child: Padding(
-        padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
+        padding: const EdgeInsets.only(left: ThemeUtils.defaultPadding, right: ThemeUtils.defaultPadding, bottom: ThemeUtils.defaultPadding),
         child: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -41,10 +42,10 @@ class SeriesTitle extends StatelessWidget {
                 borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(ThemeUtils.defaultPadding),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
-                  spacing: 8,
+                  spacing: ThemeUtils.horizontalSpacing,
                   children: [
                     Hero(tag: 'seriesDef_${seriesViewMetaData.seriesDef.uuid}', child: seriesViewMetaData.seriesDef.icon()),
                     OverflowText(

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../util/logging/daily_files.dart';
 import '../../../util/media_query_utils.dart';
+import '../../../util/theme_utils.dart';
 import '../../controls/future/future_builder_with_progress_indicator.dart';
 import '../../controls/layout/scroll_footer.dart';
 import '../../controls/navigation/hide_bottom_navigation_bar.dart';
@@ -51,8 +52,8 @@ class _LogLines extends StatelessWidget {
   final List<String> logLines;
   final VoidCallback refreshHandler;
 
-  static const double linePad = 4;
-  static const double outerPad = 8;
+  static const double linePad = ThemeUtils.defaultPadding / 2;
+  static const double outerPad = ThemeUtils.defaultPadding;
 
   @override
   Widget build(BuildContext context) {

@@ -102,11 +102,10 @@ class _DailyCheckInputState extends State<DailyCheckInput> {
 
     var edit = Column(
       mainAxisSize: MainAxisSize.min,
-      spacing: 10,
+      spacing: ThemeUtils.verticalSpacing,
       children: [
         InputHeader(dateTime: _dateTime, seriesDef: widget.seriesDef, setDateTime: _setDateTime),
         const Divider(height: 1),
-        const SizedBox(height: 3),
         IconButton(
           tooltip: LocaleKeys.seriesValue_dailyCheck_btn_toggleCheck_tooltip.tr(),
           iconSize: 40,
@@ -120,13 +119,12 @@ class _DailyCheckInputState extends State<DailyCheckInput> {
       title: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: ThemeUtils.seriesDataInputDlgMaxWidth),
         child: Row(
+          spacing: ThemeUtils.horizontalSpacing,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             widget.dailyCheckValue == null ? const Icon(Icons.add_outlined) : const Icon(Icons.edit_outlined),
-            const SizedBox(width: 10),
             OverflowText(widget.seriesDef.name),
-            // Text(SeriesType.displayNameOf(widget.seriesDef.seriesType)),
             if (widget.dailyCheckValue != null)
               IconButton(
                 tooltip: LocaleKeys.seriesValue_action_deleteValue_tooltip.tr(),

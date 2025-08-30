@@ -8,6 +8,7 @@ import '../../../model/series/series_type.dart';
 import '../../../providers/series_provider.dart';
 import '../../../util/dialogs.dart';
 import '../../../util/logging/flutter_simple_logging.dart';
+import '../../../util/theme_utils.dart';
 import '../../controls/card/expandable.dart';
 import '../../controls/layout/scrollable_centered_form_wrapper.dart';
 import '../../controls/select/color_picker.dart';
@@ -145,7 +146,7 @@ class _SeriesEditorState extends State<SeriesEditor> {
             _seriesDef.name = value;
           },
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: ThemeUtils.verticalSpacing),
         _SeriesSymbolAndColor(_seriesDef, _updateState),
 
         switch (_seriesDef.seriesType) {
@@ -211,11 +212,11 @@ class _SeriesTypeHeadline extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     return Row(
+      spacing: ThemeUtils.horizontalSpacing,
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         IconMap.icon(seriesDef.iconName),
-        const SizedBox(width: 10),
         OverflowText(
           SeriesType.displayNameOf(seriesDef.seriesType),
           style: themeData.textTheme.titleLarge,
@@ -240,7 +241,7 @@ class _SeriesSymbolAndColor extends StatelessWidget {
       children: [
         Row(
           mainAxisSize: MainAxisSize.min,
-          spacing: 10,
+          spacing: ThemeUtils.horizontalSpacing,
           children: [
             Text(LocaleKeys.seriesEdit_common_label_seriesIcon.tr()),
             IconPicker(
@@ -253,7 +254,7 @@ class _SeriesSymbolAndColor extends StatelessWidget {
         ),
         Row(
           mainAxisSize: MainAxisSize.min,
-          spacing: 10,
+          spacing: ThemeUtils.horizontalSpacing,
           children: [
             Text(LocaleKeys.seriesEdit_common_label_seriesColor.tr()),
             ColorPicker(

@@ -6,6 +6,7 @@ import '../../../../generated/locale_keys.g.dart';
 import '../../../model/series/series_def.dart';
 import '../../../model/series/series_type.dart';
 import '../../../util/dialogs.dart';
+import '../../../util/theme_utils.dart';
 import '../../controls/layout/v_centered_single_child_scroll_view_with_scrollbar.dart';
 import '../../controls/select/icon_map.dart';
 import 'series_editor.dart';
@@ -116,7 +117,7 @@ class _SeriesTypeInfoBtn extends StatelessWidget {
         onPressed: () => Dialogs.simpleOkDialog(
               SeriesType.infoOf(st),
               context,
-              title: Row(spacing: 10, children: [IconMap.icon(st.iconName), Text(SeriesType.displayNameOf(st))]),
+              title: Row(spacing: ThemeUtils.horizontalSpacing, children: [IconMap.icon(st.iconName), Text(SeriesType.displayNameOf(st))]),
             ),
         icon: const Icon(Icons.info_outline));
   }

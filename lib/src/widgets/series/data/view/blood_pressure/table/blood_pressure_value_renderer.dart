@@ -4,6 +4,7 @@ import '../../../../../../model/series/data/blood_pressure/blood_pressure_value.
 import '../../../../../../model/series/data/series_data.dart';
 import '../../../../../../model/series/series_def.dart';
 import '../../../../../../util/date_time_utils.dart';
+import '../../../../../../util/theme_utils.dart';
 import '../../../../../../util/tooltip_utils.dart';
 
 class BloodPressureValueRenderer extends StatelessWidget {
@@ -35,7 +36,7 @@ class BloodPressureValueRenderer extends StatelessWidget {
       result = Material(
         color: Colors.transparent,
         child: InkWell(
-          borderRadius: const BorderRadius.all(Radius.circular(4)),
+          borderRadius: ThemeUtils.borderRadiusCircularSmall,
           onTap: () => SeriesData.showSeriesDataInputDlg(context, seriesDef, value: bloodPressureValue),
           child: result,
         ),
@@ -43,10 +44,10 @@ class BloodPressureValueRenderer extends StatelessWidget {
     }
 
     result = Container(
-      margin: const EdgeInsets.all(2),
+      margin: const EdgeInsets.all(ThemeUtils.paddingSmall / 2),
       decoration: BoxDecoration(
         border: (showBorder || editMode) ? Border.all(width: 1, color: editMode ? themeData.colorScheme.secondary : themeData.cardColor) : null,
-        borderRadius: const BorderRadius.all(Radius.circular(4)),
+        borderRadius: ThemeUtils.borderRadiusCircularSmall,
         gradient: LinearGradient(
           colors: [
             BloodPressureValue.colorHighOf(bloodPressureValue),

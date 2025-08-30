@@ -18,6 +18,7 @@ import '../date_time_utils.dart';
 import '../dialogs.dart';
 import '../ex.dart';
 import '../logging/flutter_simple_logging.dart';
+import '../theme_utils.dart';
 
 class SeriesImportExport {
   static Future<Map<String, dynamic>> _buildSeriesExportJson(SeriesDef seriesDef, BuildContext context) async {
@@ -259,7 +260,7 @@ class SeriesImportExport {
       useScreenPadding: false,
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        spacing: 8,
+        spacing: ThemeUtils.verticalSpacing,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // all series

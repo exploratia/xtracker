@@ -37,6 +37,7 @@ class Navigation {
   static final List<MainNavigationItem> mainNavigationItems = [];
 
   static void registerMainNavigationItem(MainNavigationItem mainNavigationItem) {
+    if (mainNavigationItems.contains(mainNavigationItem)) return;
     mainNavigationItems.add(mainNavigationItem);
     _maxTextWidth = -1;
   }

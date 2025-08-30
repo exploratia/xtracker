@@ -10,6 +10,7 @@ import '../../util/about_dlg.dart';
 import '../../util/globals.dart';
 import '../../util/info_type.dart';
 import '../../util/launch_uri.dart';
+import '../../util/theme_utils.dart';
 import '../controls/card/settings_card.dart';
 import '../controls/layout/scroll_footer.dart';
 import '../controls/layout/single_child_scroll_view_with_scrollbar.dart';
@@ -35,11 +36,11 @@ class AdministrationView extends StatelessWidget {
     return SingleChildScrollViewWithScrollbar(
       scrollPositionHandler: HideBottomNavigationBar.setScrollPosition,
       child: Column(
-        spacing: 16,
+        spacing: ThemeUtils.cardPadding,
         mainAxisSize: MainAxisSize.min,
         children: [
           SettingsCard(
-            spacing: 10,
+            spacing: ThemeUtils.verticalSpacing,
             showDivider: false,
             children: [
               ...links.map((lnk) => ListTile(
@@ -82,7 +83,7 @@ class _AppInfoCard extends StatelessWidget {
 
         var exploratiaLaunchUrl = BtnLnk(uri: Globals.urlExploratia);
         var exploratiaLogoWide = Container(
-          decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
+          decoration: BoxDecoration(borderRadius: BorderRadius.circular(ThemeUtils.borderRadius)),
           clipBehavior: Clip.antiAlias,
           child: ImgLnk(uri: Globals.urlExploratia, imageProvider: Assets.images.logos.exploratiaLogoWide.provider(), height: 32, width: 138, darkHover: false),
         );
@@ -106,8 +107,8 @@ class _AppInfoCard extends StatelessWidget {
 
         return SettingsCard(
             title: Wrap(
-              spacing: 8,
-              runSpacing: 4,
+              spacing: ThemeUtils.horizontalSpacing,
+              runSpacing: ThemeUtils.verticalSpacingSmall,
               alignment: WrapAlignment.spaceBetween,
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
@@ -119,12 +120,12 @@ class _AppInfoCard extends StatelessWidget {
                 ),
               ],
             ),
-            spacing: 10,
+            spacing: ThemeUtils.verticalSpacing,
             children: [
               // legals buttons
               Wrap(
-                spacing: 10,
-                runSpacing: 10,
+                spacing: ThemeUtils.horizontalSpacing,
+                runSpacing: ThemeUtils.verticalSpacing,
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
                   OutlinedButton.icon(
@@ -157,9 +158,9 @@ class _AppInfoCard extends StatelessWidget {
                   ),
                 ],
               ),
-              const Divider(height: 20),
+              const Divider(height: ThemeUtils.verticalSpacingLarge),
               ...rows.map((r) => Wrap(
-                    spacing: 10,
+                    spacing: ThemeUtils.horizontalSpacing,
                     crossAxisAlignment: WrapCrossAlignment.center,
                     children: [...r],
                   )),
@@ -174,10 +175,10 @@ class _SupportTheApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SettingsCard(spacing: 10, title: LocaleKeys.administration_supportApp_title.tr(), showDivider: true, children: [
+    return SettingsCard(spacing: ThemeUtils.verticalSpacing, title: LocaleKeys.administration_supportApp_title.tr(), showDivider: true, children: [
       Text(LocaleKeys.administration_supportApp_label_buyMeACoffee.tr()),
       ImgLnk(uri: Globals.urlCoffeeExploratia, imageProvider: Assets.images.bmc.bmcButton.provider(), height: 48, width: 171),
-      const SizedBox(height: 16),
+      const SizedBox(height: ThemeUtils.verticalSpacing),
       Wrap(
         crossAxisAlignment: WrapCrossAlignment.center,
         children: [

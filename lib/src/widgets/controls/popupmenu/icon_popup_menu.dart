@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../util/theme_utils.dart';
+
 class IconPopupMenu extends StatefulWidget {
   /// [animated] if true, fly in. Fade is always active, because of the default page transition.
   const IconPopupMenu({super.key, required this.icon, required this.menuEntries, this.animated = true});
@@ -161,7 +163,7 @@ class _MenuItemIconButton extends StatelessWidget {
       shape: const CircleBorder(),
       clipBehavior: Clip.antiAlias,
       color: themeData.colorScheme.secondary,
-      elevation: 4.0,
+      elevation: ThemeUtils.elevation,
       child: IconButton(
         tooltip: menuEntry.tooltip,
         hoverColor: themeData.colorScheme.primary,

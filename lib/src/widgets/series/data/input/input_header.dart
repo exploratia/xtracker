@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../model/series/series_def.dart';
 import '../../../../util/date_time_utils.dart';
+import '../../../../util/theme_utils.dart';
 
 class InputHeader extends StatelessWidget {
   final DateTime dateTime;
@@ -53,7 +54,7 @@ class _DateTimeHeader extends StatelessWidget {
       spacing: 20,
       children: [
         InkWell(
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: ThemeUtils.borderRadiusCircularSmall,
           onTap: () => _selectDate(context, dateTime),
           child: Padding(
             padding: const EdgeInsets.all(2.0),
@@ -64,7 +65,7 @@ class _DateTimeHeader extends StatelessWidget {
           ),
         ),
         InkWell(
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: ThemeUtils.borderRadiusCircularSmall,
           onTap: () => _selectTime(context, dateTime),
           child: Padding(
             padding: const EdgeInsets.all(2.0),

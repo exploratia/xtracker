@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../../model/chart/chart_meta_data.dart';
 import '../../model/series/series_view_meta_data.dart';
 import '../color_utils.dart';
+import '../theme_utils.dart';
 import 'chart_utils.dart';
 
 class ChartUtilsSimpleValue {
@@ -131,7 +132,7 @@ class TitlesWidgetBottomAxis extends StatelessWidget {
         maxWidth: 180,
         // maxHeight: 22,
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
+          padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.paddingSmall, vertical: ThemeUtils.paddingSmall / 2),
           child: Text(dateFormatter(DateTime.fromMillisecondsSinceEpoch(value.truncate()))),
         ),
       ),

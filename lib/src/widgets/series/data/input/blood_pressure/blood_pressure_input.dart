@@ -159,12 +159,12 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
       autovalidateMode: _autoValidate ? AutovalidateMode.always : AutovalidateMode.disabled,
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        spacing: 10,
+        spacing: ThemeUtils.verticalSpacing,
         children: [
           InputHeader(dateTime: _dateTime, seriesDef: widget.seriesDef, setDateTime: _setDateTime),
           const Divider(height: 1),
           Row(
-            spacing: 8,
+            spacing: ThemeUtils.horizontalSpacing,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Flexible(
@@ -246,11 +246,11 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
           ),
           if (showMedicationInput)
             SwitchListTile(
-              contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 4),
+              contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: ThemeUtils.defaultPadding),
               title: Tooltip(
                 message: LocaleKeys.seriesValue_bloodPressure_switch_medication_tooltip.tr(),
                 child: Row(
-                  spacing: 4,
+                  spacing: ThemeUtils.horizontalSpacingSmall,
                   children: [
                     const Icon(Icons.medication_outlined),
                     OverflowText(
@@ -267,18 +267,15 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
     );
 
     return AlertDialog(
-      // contentPadding: EdgeInsets.all(0),
       title: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: ThemeUtils.seriesDataInputDlgMaxWidth),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          spacing: ThemeUtils.horizontalSpacing,
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             widget.bloodPressureValue == null ? const Icon(Icons.add_outlined) : const Icon(Icons.edit_outlined),
-            const SizedBox(width: 10),
             OverflowText(widget.seriesDef.name),
-            // Text(SeriesType.displayNameOf(widget.seriesDef.seriesType)),
-            // Flexible(child: Container()),
             if (widget.bloodPressureValue != null)
               IconButton(
                 tooltip: LocaleKeys.seriesValue_action_deleteValue_tooltip.tr(),

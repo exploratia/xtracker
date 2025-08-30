@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../util/theme_utils.dart';
+
 @immutable
 class FabActionButton extends StatelessWidget {
   const FabActionButton({
@@ -18,7 +20,7 @@ class FabActionButton extends StatelessWidget {
       shape: const CircleBorder(),
       clipBehavior: Clip.antiAlias,
       color: theme.colorScheme.secondary,
-      elevation: 4.0,
+      elevation: ThemeUtils.elevation,
       child: IconButton(
         onPressed: onPressed,
         icon: icon,

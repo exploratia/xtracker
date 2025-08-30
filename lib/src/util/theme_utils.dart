@@ -13,9 +13,28 @@ class ThemeUtils {
   static final MaterialColor secondary = ColorUtils.customMaterialColor(const Color(0xff911d31));
   static final MaterialColor tertiary = ColorUtils.customMaterialColor(const Color(0xffbfff00));
 
-  static const screenPadding = EdgeInsets.symmetric(horizontal: 16, vertical: 16); // .all(16);
-  static const cardBorderRadius = BorderRadius.all(Radius.circular(20));
-  static const cardPadding = EdgeInsets.all(20);
+  static const double screenPadding = 16;
+  static const double cardPadding = 16;
+  static const double defaultPadding = 8;
+  static const double paddingSmall = 4;
+  static const double horizontalSpacing = 8;
+  static const double horizontalSpacingSmall = 4;
+  static const double verticalSpacing = 12;
+  static const double verticalSpacingSmall = 4;
+  static const double verticalSpacingLarge = 24;
+  static const double borderRadius = 8;
+  static const double borderRadiusSmall = 4;
+  static const double elevation = 4;
+
+  static const int animationDuration = 300;
+  static const int animationDurationShort = 150;
+
+  static final borderRadiusCircular = BorderRadius.circular(borderRadius);
+  static final borderRadiusCircularSmall = BorderRadius.circular(borderRadiusSmall);
+
+  static const screenPaddingAll = EdgeInsets.all(screenPadding); // .all(screenPaddingValue);
+  static final cardBorderRadius = BorderRadius.circular(20);
+  static const cardPaddingAll = EdgeInsets.all(20);
   static final btnShape = RoundedRectangleBorder(borderRadius: BorderRadius.circular(24));
   static const double seriesDataInputDlgMaxWidth = 300;
 
@@ -56,7 +75,7 @@ class ThemeUtils {
           // titleSmall: TextStyle(color: dynamicThemeData.getPrimaryColor(dark)),
           ),
       tooltipTheme: TooltipThemeData(
-        padding: const EdgeInsets.all(8),
+        padding: const EdgeInsets.all(defaultPadding),
         textStyle: TextStyle(inherit: true, color: dark ? Colors.white : Colors.black),
         // decoration: GlowingBorderContainer.createGlowingBoxDecoration(secondary, secondary),
         decoration: GlowingBorderContainer.createGlowingBoxDecoration(secondary, backgroundColor),
@@ -72,7 +91,7 @@ class ThemeUtils {
         valueIndicatorTextStyle: TextStyle(color: dark ? Colors.white : Colors.black),
       ),
       appBarTheme: AppBarTheme(
-        elevation: 8,
+        elevation: elevation * 2,
         backgroundColor: secondary,
         // backgroundColor,
         foregroundColor: onPrimary,
@@ -111,21 +130,22 @@ class ThemeUtils {
       // Card (e.g. in Settings)
       cardTheme: Theme.of(context).cardTheme.copyWith(
             color: cardBackgroundColor,
-            shape: const RoundedRectangleBorder(
+            shape: RoundedRectangleBorder(
               borderRadius: ThemeUtils.cardBorderRadius,
             ),
           ),
+
       chipTheme: ChipThemeData(backgroundColor: chipBackgroundColor),
       dialogTheme: DialogThemeData(
         // for fullscreen background has to be set manually
         backgroundColor: chipBackgroundColor,
-        shape: const RoundedRectangleBorder(
+        shape: RoundedRectangleBorder(
           borderRadius: ThemeUtils.cardBorderRadius,
         ),
       ),
       datePickerTheme: DatePickerThemeData(headerBackgroundColor: cardBackgroundColor),
       timePickerTheme: TimePickerThemeData(backgroundColor: chipBackgroundColor),
-      dividerTheme: DividerThemeData(color: secondary, thickness: 1, space: 10),
+      dividerTheme: DividerThemeData(color: secondary, thickness: 1, space: verticalSpacing),
       progressIndicatorTheme: ProgressIndicatorThemeData(color: primary, linearTrackColor: secondary.withAlpha(128)),
       navigationRailTheme: NavigationRailThemeData(backgroundColor: backgroundColor),
       elevatedButtonTheme: ElevatedButtonThemeData(

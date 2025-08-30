@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'theme_utils.dart';
+
 class TableUtils {
   static TableRow tableHeadline(
     List<dynamic> values, {
@@ -9,7 +11,7 @@ class TableUtils {
     return TableRow(decoration: decoration, children: [
       ...values.map(
         (value) {
-          EdgeInsets cellPad = cellPadding ?? const EdgeInsets.symmetric(vertical: 4, horizontal: 4);
+          EdgeInsets cellPad = cellPadding ?? const EdgeInsets.all(ThemeUtils.paddingSmall);
 
           Widget child;
           if (value is Widget) {

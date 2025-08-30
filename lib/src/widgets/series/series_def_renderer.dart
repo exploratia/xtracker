@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../model/series/series_def.dart';
+import '../../util/theme_utils.dart';
 import '../controls/card/glowing_border_container.dart';
 import '../controls/select/icon_map.dart';
 import '../controls/text/overflow_text.dart';
@@ -37,7 +38,7 @@ class SeriesDefRenderer extends StatelessWidget {
                     if (twoRows) {
                       return Column(
                         children: [
-                          _SeriesIconAndName(seriesDef: seriesDef, verticalPadding: 10),
+                          _SeriesIconAndName(seriesDef: seriesDef, verticalPadding: ThemeUtils.defaultPadding),
                           Divider(
                             height: 2,
                             thickness: 2,
@@ -77,7 +78,7 @@ class SeriesDefRenderer extends StatelessWidget {
             _HDivider(seriesDef: seriesDef),
             Expanded(
                 child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.defaultPadding, vertical: ThemeUtils.defaultPadding / 2),
               child: SeriesLatestValueRenderer(seriesDef: seriesDef),
             )),
           ],
@@ -123,7 +124,7 @@ class _SeriesIconAndName extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 8, vertical: verticalPadding),
+            padding: EdgeInsets.symmetric(horizontal: ThemeUtils.defaultPadding, vertical: verticalPadding),
             child: Hero(
               tag: 'seriesDef_${seriesDef.uuid}',
               child: Icon(

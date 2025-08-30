@@ -97,6 +97,7 @@ class GeneralSettingsView extends StatelessWidget {
         ValueListenableBuilder(
           valueListenable: HideNavigationLabels.visible,
           builder: (BuildContext ctx1, navLabelsVisible, _) => SwitchListTile(
+            contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: ThemeUtils.defaultPadding),
             value: controller.hideNavigationLabels,
             onChanged: (bool value) {
               controller.updateHideNavigationLabels(value);

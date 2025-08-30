@@ -6,6 +6,7 @@ import '../../../../generated/locale_keys.g.dart';
 import '../../../model/series/series_def.dart';
 import '../../../providers/series_provider.dart';
 import '../../../util/series/series_import_export.dart';
+import '../../../util/theme_utils.dart';
 import '../../controls/animation/animate_in.dart';
 import '../../controls/animation/fade_in.dart';
 import '../../controls/layout/centered_message.dart';
@@ -92,14 +93,14 @@ class _SeriesList extends StatelessWidget {
         return Opacity(
           opacity: 0.6,
           child: Material(
-            // elevation: 8, // Shadow effect while dragging
+            // elevation: ThemeUtils.elevation, // Shadow effect while dragging
             borderRadius: BorderRadius.circular(16), // Rounded corners
             color: Colors.transparent,
             child: child,
           ),
         );
       },
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(ThemeUtils.cardPadding),
       children: children,
       // children: [...series.map((s) => SeriesDefRenderer(key: Key(s.uuid), managementMode: true, seriesDef: s))],
       onReorder: (int oldIndex, int newIndex) => context.read<SeriesProvider>().reorder(oldIndex, newIndex),

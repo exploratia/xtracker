@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../util/theme_utils.dart';
 import 'settings_card.dart';
 
 class ExpandableSettingsCard extends StatefulWidget {
@@ -25,20 +26,19 @@ class _ExpandableSettingsCardState extends State<ExpandableSettingsCard> {
   @override
   Widget build(BuildContext context) {
     return SettingsCard(
-        spacing: 10,
         showDivider: false,
         title: InkWell(
           onTap: () => _toggleExpanded(),
           customBorder: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(ThemeUtils.cardPadding),
           ),
           child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 8),
+            padding: const EdgeInsets.symmetric(vertical: ThemeUtils.defaultPadding, horizontal: ThemeUtils.defaultPadding),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 widget.title,
-                const SizedBox(width: 10),
+                const SizedBox(width: ThemeUtils.verticalSpacing),
                 Icon(_expanded ? Icons.arrow_drop_up_outlined : Icons.arrow_drop_down_outlined, color: Theme.of(context).colorScheme.primary),
               ],
             ),
@@ -46,13 +46,12 @@ class _ExpandableSettingsCardState extends State<ExpandableSettingsCard> {
         ),
         children: [
           AnimatedCrossFade(
-            duration: Duration(milliseconds: _expanded ? 300 : 150),
+            duration: Duration(milliseconds: _expanded ? ThemeUtils.animationDuration : ThemeUtils.animationDurationShort),
             crossFadeState: _expanded ? CrossFadeState.showFirst : CrossFadeState.showSecond,
             firstChild: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(height: 10),
-                const Divider(),
+                const Divider(height: ThemeUtils.verticalSpacingLarge),
                 widget.content,
               ],
             ),

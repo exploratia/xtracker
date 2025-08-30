@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../util/i18n.dart';
+import '../../util/theme_utils.dart';
 import '../../widgets/controls/text/overflow_text.dart';
 
 class ColumnProfile {
@@ -119,7 +120,7 @@ class ColumnDef {
     }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
+      padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.paddingSmall),
       child: OverflowText(
         txt,
         expanded: false,

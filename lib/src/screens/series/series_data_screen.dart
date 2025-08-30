@@ -13,6 +13,7 @@ import '../../model/series/series_view_meta_data.dart';
 import '../../model/series/view_type.dart';
 import '../../providers/series_provider.dart';
 import '../../util/globals.dart';
+import '../../util/theme_utils.dart';
 import '../../widgets/controls/appbar/app_bar_actions_divider.dart';
 import '../../widgets/controls/appbar/gradient_app_bar.dart';
 import '../../widgets/controls/layout/centered_message.dart';
@@ -125,7 +126,7 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
             return Icon(_viewType.iconData, color: themeData.colorScheme.onPrimary);
           }
           return Row(
-            spacing: 8,
+            spacing: ThemeUtils.horizontalSpacing,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Icon(_viewType.iconData, color: themeData.colorScheme.onPrimary),
@@ -182,7 +183,7 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
 
       List<Widget> viewActions = [
         Padding(
-          padding: const EdgeInsets.only(right: 8),
+          padding: const EdgeInsets.only(right: ThemeUtils.defaultPadding),
           child: Tooltip(
             message: LocaleKeys.seriesData_action_viewTypeMenu_tooltip.tr(),
             child: IconPopupMenu(

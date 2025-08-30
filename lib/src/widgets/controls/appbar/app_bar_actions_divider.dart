@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../util/theme_utils.dart';
+
 class AppBarActionsDivider extends StatelessWidget {
   const AppBarActionsDivider({super.key});
 
@@ -20,7 +22,7 @@ class AppBarActionsDivider extends StatelessWidget {
           ],
         ),
       ),
-      margin: const EdgeInsets.symmetric(horizontal: 8), // Spacing
+      margin: const EdgeInsets.symmetric(horizontal: ThemeUtils.defaultPadding), // Spacing
     );
   }
 }

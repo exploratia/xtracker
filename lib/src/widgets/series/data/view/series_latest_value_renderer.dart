@@ -12,6 +12,7 @@ import '../../../../model/series/series_def.dart';
 import '../../../../model/series/series_type.dart';
 import '../../../../providers/series_current_value_provider.dart';
 import '../../../../util/date_time_utils.dart';
+import '../../../../util/theme_utils.dart';
 import '../../../controls/animation/animated_highlight_container.dart';
 import 'blood_pressure/table/blood_pressure_value_renderer.dart';
 import 'daily_check/table/daily_check_value_renderer.dart';
@@ -114,10 +115,10 @@ class _CurrentValueEdit extends StatelessWidget {
       child: Tooltip(
         message: LocaleKeys.seriesDefRenderer_currentValue_tooltip.tr(),
         child: InkWell(
-          borderRadius: const BorderRadius.all(Radius.circular(4)),
+          borderRadius: ThemeUtils.borderRadiusCircularSmall,
           onTap: () => SeriesData.showSeriesDataInputDlg(context, seriesDef, value: seriesDataValue),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
+            padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.defaultPadding),
             child: child,
           ),
         ),
@@ -136,8 +137,8 @@ class _LatestValueWrap extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Wrap(
-      spacing: 10,
-      runSpacing: 4,
+      spacing: ThemeUtils.horizontalSpacing,
+      runSpacing: ThemeUtils.verticalSpacingSmall,
       alignment: WrapAlignment.center,
       runAlignment: WrapAlignment.center,
       crossAxisAlignment: WrapCrossAlignment.center,

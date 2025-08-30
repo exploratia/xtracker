@@ -4,6 +4,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 import '../../../util/date_time_utils.dart';
+import '../../../util/theme_utils.dart';
 
 class ChartContainer extends StatelessWidget {
   const ChartContainer({
@@ -122,7 +123,7 @@ class _TooltipState extends State<_Tooltip> {
                 color: themeData.chipTheme.backgroundColor?.withAlpha(220),
               ),
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 1),
+                padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.defaultPadding, vertical: 1),
                 child: Text(widget.dateFormatter(DateTime.fromMillisecondsSinceEpoch(_xValue!.truncate()))),
               )));
     }
