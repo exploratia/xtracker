@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../generated/locale_keys.g.dart';
+import '../../../model/series/series_def.dart';
 import '../../../providers/series_provider.dart';
 import '../../../util/series/series_import_export.dart';
 import '../../controls/animation/animate_in.dart';
@@ -23,6 +24,13 @@ class SeriesManagementView extends StatelessWidget {
         backgroundColor: themeData.colorScheme.secondary,
         title: Text(LocaleKeys.seriesManagement_title.tr()),
         actions: [
+          IconButton(
+            tooltip: LocaleKeys.seriesDashboard_action_addSeries_tooltip.tr(),
+            onPressed: () async {
+              /*SeriesDef? s=*/ await SeriesDef.addNewSeries(context);
+            },
+            icon: const Icon(Icons.add_chart_outlined),
+          ),
           IconButton(
             tooltip: LocaleKeys.seriesManagement_action_importExport_tooltip.tr(),
             onPressed: () async => SeriesImportExport.showImportExportDlg(context),
