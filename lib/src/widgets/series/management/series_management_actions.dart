@@ -27,8 +27,11 @@ class SeriesManagementActions extends StatelessWidget {
           crossAxisAlignment: WrapCrossAlignment.center,
           children: [
             _EditSeriesBtn(seriesDef: seriesDef),
-            _ExportSeriesDataBtn(seriesDef: seriesDef),
-            _ShareSeriesDataBtn(seriesDef: seriesDef),
+            IconButton(
+              tooltip: LocaleKeys.seriesDefRenderer_action_importExportSeries_tooltip.tr(),
+              onPressed: () async => SeriesImportExport.showImportExportDlg(context, seriesDef: seriesDef),
+              icon: const Icon(Icons.import_export_outlined),
+            ),
             _ClearSeriesDataBtn(seriesDef: seriesDef),
             _DeleteSeriesBtn(seriesDef: seriesDef),
           ],
@@ -121,58 +124,6 @@ class _ClearSeriesDataBtn extends StatelessWidget {
       tooltip: LocaleKeys.seriesDefRenderer_action_deleteSeriesValues_tooltip.tr(),
       onPressed: handler,
       icon: const Icon(Icons.highlight_remove_outlined),
-    );
-  }
-}
-
-class _ExportSeriesDataBtn extends StatelessWidget {
-  const _ExportSeriesDataBtn({
-    required this.seriesDef,
-  });
-
-  final SeriesDef seriesDef;
-
-  @override
-  Widget build(BuildContext context) {
-    handler() async {
-      try {
-        await SeriesImportExport.exportSeriesDef(seriesDef, context);
-      } catch (ex) {
-        SimpleLogging.w("Failed to export ${seriesDef.toLogString()}.", error: ex);
-        if (context.mounted) Dialogs.showSnackBar(ex.toString(), context);
-      }
-    }
-
-    return IconButton(
-      tooltip: LocaleKeys.seriesDefRenderer_action_saveSeries_tooltip.tr(),
-      onPressed: handler,
-      icon: const Icon(Icons.download_outlined),
-    );
-  }
-}
-
-class _ShareSeriesDataBtn extends StatelessWidget {
-  const _ShareSeriesDataBtn({
-    required this.seriesDef,
-  });
-
-  final SeriesDef seriesDef;
-
-  @override
-  Widget build(BuildContext context) {
-    handler() async {
-      try {
-        await SeriesImportExport.shareSeriesDef(seriesDef, context);
-      } catch (ex) {
-        SimpleLogging.w("Failed to share ${seriesDef.toLogString()}.", error: ex);
-        if (context.mounted) Dialogs.showSnackBar(ex.toString(), context);
-      }
-    }
-
-    return IconButton(
-      tooltip: LocaleKeys.seriesDefRenderer_action_shareSeries_tooltip.tr(),
-      onPressed: handler,
-      icon: const Icon(Icons.share_outlined),
     );
   }
 }

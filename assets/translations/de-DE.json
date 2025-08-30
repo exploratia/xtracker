@@ -262,11 +262,8 @@
       "editSeries": {
         "tooltip": "Messreihe konfigurieren"
       },
-      "saveSeries": {
-        "tooltip": "Konfiguration und Werte der Messreihe als JSON-Datei speichern"
-      },
-      "shareSeries": {
-        "tooltip": "Konfiguration und Werte der Messreihe als JSON-Datei teilen"
+      "importExportSeries": {
+        "tooltip": "Messreihe importieren/exportieren"
       },
       "deleteSeriesValues": {
         "tooltip": "Werte der Messreihe löschen"
@@ -381,15 +378,20 @@
       "title": "Messreihen importieren / exportieren",
       "btn": {
         "exportSeries": "Alle Messreihen exportieren",
+        "exportSingleSeries": "Messreihe exportieren",
         "importSeries": "Messreihen importieren",
-        "shareSeries": "Alle Messreihen teilen"
+        "shareSeries": "Alle Messreihen teilen",
+        "shareSingleSeries": "Messreihe teilen"
       },
       "label": {
         "exportSeries": "Alle Messreihen als eine JSON-Datei speichern.",
-        "exportSeriesTip": "Tipp: Einzelne Messreihen über das Export-Symbol speichern.",
+        "exportSingleSeries": "Messreihe (Konfiguration und Werte) als JSON-Datei speichern.",
+        "exportSeriesTip": "Tipp: Einzelne Messreihen über das Export-Symbol der jeweiligen Messreihe speichern.",
+        "exportSingleSeriesTip": "Tipp: Alle Messreihen gemeinsam über das Export-Symbol der Messreihenverwaltung speichern.",
         "importSeries": "JSON-Dateien mit Messreihen zum Import auswählen.\nVorhandene Serien (inklusive Daten) werden anhand ihrer ID überschrieben. Neue Messreihen werden automatisch erstellt.",
         "importSeriesTip": "Tipp: Zuerst eine passende Messreihe erstellen und exportieren. Danach Daten in die Datei einfügen und erneut importieren – so passt das Format sicher.",
-        "shareSeries": "Alle Messreihen als eine JSON-Datei teilen."
+        "shareSeries": "Alle Messreihen als eine JSON-Datei teilen.",
+        "shareSingleSeries": "Messreihe (Konfiguration und Werte) als JSON-Datei teilen."
       },
       "snackbar": {
         "exportSuccessful": "Export erfolgreich...",

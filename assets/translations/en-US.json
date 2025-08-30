@@ -262,11 +262,8 @@
       "editSeries": {
         "tooltip": "Edit series"
       },
-      "saveSeries": {
-        "tooltip": "Save series definition and values as json file"
-      },
-      "shareSeries": {
-        "tooltip": "Share series definition and values as json file"
+      "importExportSeries": {
+        "tooltip": "Import / export series"
       },
       "deleteSeriesValues": {
         "tooltip": "Delete series values"
@@ -280,9 +277,9 @@
     },
     "currentValue": {
       "tooltip": "Edit value",
-    "label": {
-      "noValue": "No current value available."
-    }
+      "label": {
+        "noValue": "No current value available."
+      }
     },
     "query": {
       "deleteSeriesData": "Do you really want to delete the values of series '{}'?",
@@ -381,15 +378,20 @@
       "title": "Import / Export series data",
       "btn": {
         "exportSeries": "Export all series",
+        "exportSingleSeries": "Export series",
         "importSeries": "Import series",
-        "shareSeries": "Share all series"
+        "shareSeries": "Share all series",
+        "shareSingleSeries": "Share series"
       },
       "label": {
         "exportSeries": "Export all series as one JSON file.",
+        "exportSingleSeries": "Export series (definition and values) as JSON file.",
         "exportSeriesTip": "Tip: To save separate measurement series, use the export icon of the respective series.",
+        "exportSingleSeriesTip": "Tip: To save all measurement series in one file, use the export icon of the management view.",
         "importSeries": "Select series JSON files to import.\nExisting series (and their data) will be overwritten (identified by their unique id). New series will be created if they don't already exist.",
         "importSeriesTip": "Tip: Create and export a matching series first. Then insert your data into the exported file and re-import it. That way the format will be correct.",
-        "shareSeries": "Share all series as one JSON file."
+        "shareSeries": "Share all series as one JSON file.",
+        "shareSingleSeries": "Share series (definition and values) as JSON file."
       },
       "snackbar": {
         "exportSuccessful": "Export successful...",
