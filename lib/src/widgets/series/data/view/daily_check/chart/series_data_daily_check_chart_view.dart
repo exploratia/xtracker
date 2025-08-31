@@ -6,17 +6,19 @@ import '../../../../../../model/series/data/series_data_filter.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
 import '../../../../../../util/chart/chart_utils_simple_value.dart';
 import '../../../../../../util/date_time_utils.dart';
-import '../../../../../../util/theme_utils.dart';
 import '../../../../../controls/chart/chart_container.dart';
 import '../../../../../controls/layout/single_child_scroll_view_with_scrollbar.dart';
 import '../../series_data_no_data.dart';
+import '../../series_data_view_overlays.dart';
 
 class SeriesDataDailyCheckChartView extends StatelessWidget {
-  const SeriesDataDailyCheckChartView({super.key, required this.seriesViewMetaData, required this.seriesData, required this.seriesDataFilter});
+  const SeriesDataDailyCheckChartView(
+      {super.key, required this.seriesViewMetaData, required this.seriesData, required this.seriesDataFilter, required this.seriesDataViewOverlays});
 
   final SeriesViewMetaData seriesViewMetaData;
   final List<DailyCheckValue> seriesData;
   final SeriesDataFilter seriesDataFilter;
+  final SeriesDataViewOverlays seriesDataViewOverlays;
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +41,10 @@ class SeriesDataDailyCheckChartView extends StatelessWidget {
         useHorizontalScreenPadding: true,
         child: Column(
           children: [
+            seriesDataViewOverlays.buildTopSpacer(),
             ChartContainer(
               showDateTooltip: true,
-              maxVisibleHeight: constraints.maxHeight - ThemeUtils.seriesDataBottomFilterViewHeight,
+              maxVisibleHeight: constraints.maxHeight - seriesDataViewOverlays.height,
               dateFormatter: dateFormatter,
               chartWidgetBuilder: (touchCallback) {
                 return LineChart(
@@ -49,9 +52,7 @@ class SeriesDataDailyCheckChartView extends StatelessWidget {
                 );
               },
             ),
-            const SizedBox(
-              height: ThemeUtils.seriesDataBottomFilterViewHeight,
-            ),
+            seriesDataViewOverlays.buildBottomSpacer(),
           ],
         ),
       );

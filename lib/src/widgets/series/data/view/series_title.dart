@@ -5,6 +5,8 @@ import '../../../../util/theme_utils.dart';
 import '../../../controls/text/overflow_text.dart';
 
 class SeriesTitle extends StatelessWidget {
+  static const double seriesTitleHeight = 50;
+
   const SeriesTitle({super.key, required this.seriesViewMetaData});
 
   final SeriesViewMetaData seriesViewMetaData;

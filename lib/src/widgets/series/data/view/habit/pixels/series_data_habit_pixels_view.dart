@@ -6,20 +6,22 @@ import '../../../../../../model/column_profile/fix_column_profiles.dart';
 import '../../../../../../model/series/data/habit/habit_value.dart';
 import '../../../../../../model/series/data/series_data_filter.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
-import '../../../../../../util/theme_utils.dart';
 import '../../../../../controls/grid/daily/day/habit_day_item.dart';
 import '../../../../../controls/grid/daily/pixel.dart';
 import '../../../../../controls/grid/daily/pixel_cell_builder.dart';
 import '../../../../../controls/grid/daily/row/row_item.dart';
 import '../../../../../controls/grid/two_dimensional_scrollable_table.dart';
 import '../../series_data_no_data.dart';
+import '../../series_data_view_overlays.dart';
 
 class SeriesDataHabitPixelsView extends StatelessWidget {
   final List<HabitValue> seriesData;
   final SeriesViewMetaData seriesViewMetaData;
   final SeriesDataFilter seriesDataFilter;
+  final SeriesDataViewOverlays seriesDataViewOverlays;
 
-  const SeriesDataHabitPixelsView({super.key, required this.seriesViewMetaData, required this.seriesData, required this.seriesDataFilter});
+  const SeriesDataHabitPixelsView(
+      {super.key, required this.seriesViewMetaData, required this.seriesData, required this.seriesDataFilter, required this.seriesDataViewOverlays});
 
   @override
   Widget build(BuildContext context) {
@@ -62,13 +64,24 @@ class SeriesDataHabitPixelsView extends StatelessWidget {
           },
         );
 
-        return TwoDimensionalScrollableTable(
-          tableColumnProfile: monthly ? FixColumnProfiles.columnProfileDateMonthDays : FixColumnProfiles.columnProfileDateWeekdays,
-          lineCount: data.length,
-          gridCellBuilder: pixelCellBuilder.gridCellBuilder,
-          lineHeight: Pixel.pixelHeight,
-          useFixedFirstColumn: true,
-          bottomScrollExtend: ThemeUtils.seriesDataBottomFilterViewHeight,
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          spacing: 0,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            seriesDataViewOverlays.buildTopSpacer(),
+            Expanded(
+              child: TwoDimensionalScrollableTable(
+                tableColumnProfile: monthly ? FixColumnProfiles.columnProfileDateMonthDays : FixColumnProfiles.columnProfileDateWeekdays,
+                lineCount: data.length,
+                gridCellBuilder: pixelCellBuilder.gridCellBuilder,
+                lineHeight: Pixel.pixelHeight,
+                useFixedFirstColumn: true,
+                bottomScrollExtend: seriesDataViewOverlays.bottomHeight,
+              ),
+            ),
+          ],
         );
       },
     );
