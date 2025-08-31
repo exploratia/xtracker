@@ -21,7 +21,8 @@ class SettingsService {
 
   /// Persists the user's preferred ThemeMode to local or remote storage.
   Future<void> updateThemeMode(ThemeMode theme) async {
-    var value = theme.name;
+    String? value = theme.name;
+    if (value == "system") value = null;
     await DeviceStorage.write(DeviceStorageKeys.theme, value);
   }
 
