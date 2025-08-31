@@ -5,6 +5,7 @@ import '../../providers/series_current_value_provider.dart';
 import '../../providers/series_provider.dart';
 import '../../util/dialogs.dart';
 import '../../util/logging/flutter_simple_logging.dart';
+import '../administration/settings/settings_controller.dart';
 import '../controls/animation/fade_in.dart';
 import '../controls/layout/v_centered_single_child_scroll_view_with_scrollbar.dart';
 import '../controls/provider/data_provider_loader.dart';
@@ -13,7 +14,9 @@ import 'add_first_series.dart';
 import 'series_def_renderer.dart';
 
 class SeriesView extends StatelessWidget {
-  const SeriesView({super.key});
+  final SettingsController settingsController;
+
+  const SeriesView({super.key, required this.settingsController});
 
   Future<void> onRefresh(BuildContext context) async {
     try {
@@ -35,14 +38,16 @@ class SeriesView extends StatelessWidget {
       ]),
       child: VCenteredSingleChildScrollViewWithScrollbar(
         onRefreshCallback: () => onRefresh(context),
-        child: const _SeriesList(),
+        child: _SeriesList(settingsController),
       ),
     );
   }
 }
 
 class _SeriesList extends StatelessWidget {
-  const _SeriesList();
+  final SettingsController settingsController;
+
+  const _SeriesList(this.settingsController);
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +60,13 @@ class _SeriesList extends StatelessWidget {
     List<Widget> children = [];
     var idx = 0;
     for (var s in series) {
-      children.add(FadeIn(durationMS: 200 + idx * 400, child: SeriesDefRenderer(seriesDef: s, index: idx)));
+      children.add(FadeIn(
+          durationMS: 200 + idx * 400,
+          child: SeriesDefRenderer(
+            seriesDef: s,
+            index: idx,
+            settingsController: settingsController,
+          )));
       idx++;
     }
 

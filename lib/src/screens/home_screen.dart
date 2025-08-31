@@ -5,6 +5,7 @@ import '../../generated/assets.gen.dart';
 import '../../generated/locale_keys.g.dart';
 import '../model/navigation/main_navigation_item.dart';
 import '../model/series/series_def.dart';
+import '../widgets/administration/settings/settings_controller.dart';
 import '../widgets/controls/appbar/gradient_app_bar.dart';
 import '../widgets/controls/navigation/hide_bottom_navigation_bar.dart';
 import '../widgets/controls/responsive/screen_builder.dart';
@@ -19,7 +20,9 @@ class HomeScreen extends StatelessWidget {
     tooltipBuilder: () => LocaleKeys.seriesDashboard_nav_tooltip.tr(),
   );
 
-  const HomeScreen({super.key});
+  final SettingsController settingsController;
+
+  const HomeScreen({super.key, required this.settingsController});
 
   void _showSeriesManagement(BuildContext context) async {
     final themeData = Theme.of(context);
@@ -28,7 +31,9 @@ class HomeScreen extends StatelessWidget {
         builder: (context) {
           return Dialog.fullscreen(
             backgroundColor: themeData.scaffoldBackgroundColor,
-            child: const HideBottomNavigationBar(child: SeriesManagementView()),
+            child: HideBottomNavigationBar(
+              child: SeriesManagementView(settingsController: settingsController),
+            ),
           );
         });
   }
@@ -61,7 +66,9 @@ class HomeScreen extends StatelessWidget {
               ),
             ]);
       },
-      bodyBuilder: (context) => const SeriesView(),
+      bodyBuilder: (context) => SeriesView(
+        settingsController: settingsController,
+      ),
     );
   }
 }

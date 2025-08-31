@@ -9,11 +9,13 @@ import '../../../providers/series_provider.dart';
 import '../../../util/dialogs.dart';
 import '../../../util/logging/flutter_simple_logging.dart';
 import '../../../util/series/series_import_export.dart';
+import '../../administration/settings/settings_controller.dart';
 
 class SeriesManagementActions extends StatelessWidget {
-  const SeriesManagementActions({super.key, required this.seriesDef});
+  const SeriesManagementActions({super.key, required this.seriesDef, required this.settingsController});
 
   final SeriesDef seriesDef;
+  final SettingsController settingsController;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,7 @@ class SeriesManagementActions extends StatelessWidget {
             _EditSeriesBtn(seriesDef: seriesDef),
             IconButton(
               tooltip: LocaleKeys.seriesDefRenderer_action_importExportSeries_tooltip.tr(),
-              onPressed: () async => SeriesImportExport.showImportExportDlg(context, seriesDef: seriesDef),
+              onPressed: () async => SeriesImportExport.showImportExportDlg(context, seriesDef: seriesDef, settingsController: settingsController),
               icon: const Icon(Icons.import_export_outlined),
             ),
             _ClearSeriesDataBtn(seriesDef: seriesDef),

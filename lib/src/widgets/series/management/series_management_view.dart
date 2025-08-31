@@ -7,6 +7,7 @@ import '../../../model/series/series_def.dart';
 import '../../../providers/series_provider.dart';
 import '../../../util/series/series_import_export.dart';
 import '../../../util/theme_utils.dart';
+import '../../administration/settings/settings_controller.dart';
 import '../../controls/animation/animate_in.dart';
 import '../../controls/animation/fade_in.dart';
 import '../../controls/layout/centered_message.dart';
@@ -14,7 +15,9 @@ import '../../controls/responsive/device_dependent_constrained_box.dart';
 import '../series_def_renderer.dart';
 
 class SeriesManagementView extends StatelessWidget {
-  const SeriesManagementView({super.key});
+  final SettingsController settingsController;
+
+  const SeriesManagementView({super.key, required this.settingsController});
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +37,7 @@ class SeriesManagementView extends StatelessWidget {
           ),
           IconButton(
             tooltip: LocaleKeys.seriesManagement_action_importExport_tooltip.tr(),
-            onPressed: () async => SeriesImportExport.showImportExportDlg(context),
+            onPressed: () async => SeriesImportExport.showImportExportDlg(context, settingsController: settingsController),
             icon: const Icon(Icons.import_export_outlined),
           ),
           IconButton(
@@ -53,13 +56,15 @@ class SeriesManagementView extends StatelessWidget {
       //     IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.edit_off_outlined)),
       //   ],
       // ),
-      body: const Center(child: DeviceDependentWidthConstrainedBox(child: _SeriesList())),
+      body: Center(child: DeviceDependentWidthConstrainedBox(child: _SeriesList(settingsController))),
     );
   }
 }
 
 class _SeriesList extends StatelessWidget {
-  const _SeriesList();
+  final SettingsController settingsController;
+
+  const _SeriesList(this.settingsController);
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +88,7 @@ class _SeriesList extends StatelessWidget {
             managementMode: true,
             seriesDef: s,
             index: idx,
+            settingsController: settingsController,
           )));
       idx++;
     }

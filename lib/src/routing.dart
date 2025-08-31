@@ -57,7 +57,7 @@ class Routing {
         // << series
 
         // fallback
-        return const HomeScreen();
+        return HomeScreen(settingsController: settingsController);
       },
     );
   }

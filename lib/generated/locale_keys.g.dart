@@ -155,6 +155,7 @@ abstract class  LocaleKeys {
   static const seriesManagement_importExport_label_exportSingleSeriesTip = 'seriesManagement.importExport.label.exportSingleSeriesTip';
   static const seriesManagement_importExport_label_importSeries = 'seriesManagement.importExport.label.importSeries';
   static const seriesManagement_importExport_label_importSeriesTip = 'seriesManagement.importExport.label.importSeriesTip';
+  static const seriesManagement_importExport_label_latestSeriesExport = 'seriesManagement.importExport.label.latestSeriesExport';
   static const seriesManagement_importExport_label_shareSeries = 'seriesManagement.importExport.label.shareSeries';
   static const seriesManagement_importExport_label_shareSingleSeries = 'seriesManagement.importExport.label.shareSingleSeries';
   static const seriesManagement_importExport_snackbar_exportSuccessful = 'seriesManagement.importExport.snackbar.exportSuccessful';

@@ -404,6 +404,7 @@
         "exportSingleSeriesTip": "Tip: To save all measurement series in one file, use the export icon of the management view.",
         "importSeries": "Select series JSON files to import.\nExisting series (and their data) will be overwritten (identified by their unique id). New series will be created if they don't already exist.",
         "importSeriesTip": "Tip: Create and export a matching series first. Then insert your data into the exported file and re-import it. That way the format will be correct.",
+        "latestSeriesExport": "Last exported: {}",
         "shareSeries": "Share all series as one JSON file.",
         "shareSingleSeries": "Share series (definition and values) as JSON file."
       },

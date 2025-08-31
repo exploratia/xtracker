@@ -57,6 +57,31 @@ class SettingsService {
   /// Loads the initial app start and set if not yet exists
   Future<DateTime> initialAppStart() async {
     var strTimestamp = await DeviceStorage.read(DeviceStorageKeys.initialAppStart);
+    DateTime? timestamp = _parseDate(strTimestamp);
+    if (timestamp == null) {
+      timestamp = DateTime.now();
+      await DeviceStorage.write(DeviceStorageKeys.initialAppStart, _toDateStr(timestamp));
+    }
+    return timestamp;
+  }
+
+  /// Loads last series export date (if any)
+  Future<DateTime?> seriesExportDate() async {
+    var strTimestamp = await DeviceStorage.read(DeviceStorageKeys.seriesExportDate);
+    DateTime? timestamp = _parseDate(strTimestamp);
+    return timestamp;
+  }
+
+  /// Persists series export date
+  Future<DateTime> updateSeriesExportDate() async {
+    var dateTime = DateTime.now();
+    await DeviceStorage.write(DeviceStorageKeys.seriesExportDate, _toDateStr(dateTime));
+    return dateTime;
+  }
+
+  static String _toDateStr(DateTime timestamp) => '${timestamp.year}-${timestamp.month}-${timestamp.day}';
+
+  static DateTime? _parseDate(String? strTimestamp) {
     DateTime? timestamp;
     if (strTimestamp != null) {
       var split = strTimestamp.split("-");
@@ -68,10 +93,6 @@ class SettingsService {
           timestamp = DateTime(year, month = month, day = day);
         }
       }
-    }
-    if (timestamp == null) {
-      timestamp = DateTime.now();
-      await DeviceStorage.write(DeviceStorageKeys.initialAppStart, '${timestamp.year}-${timestamp.month}-${timestamp.day}');
     }
     return timestamp;
   }

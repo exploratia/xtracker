@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../model/series/series_def.dart';
 import '../../util/theme_utils.dart';
+import '../administration/settings/settings_controller.dart';
 import '../controls/card/glowing_border_container.dart';
 import '../controls/select/icon_map.dart';
 import '../controls/text/overflow_text.dart';
@@ -16,11 +17,13 @@ class SeriesDefRenderer extends StatelessWidget {
     required this.seriesDef,
     this.managementMode = false,
     required this.index,
+    required this.settingsController,
   });
 
   final SeriesDef seriesDef;
   final bool managementMode;
   final int index;
+  final SettingsController settingsController;
 
   @override
   Widget build(BuildContext context) {
@@ -35,6 +38,10 @@ class SeriesDefRenderer extends StatelessWidget {
               Expanded(
                 child: Builder(
                   builder: (BuildContext context) {
+                    var seriesManagementActions = SeriesManagementActions(
+                      seriesDef: seriesDef,
+                      settingsController: settingsController,
+                    );
                     if (twoRows) {
                       return Column(
                         children: [
@@ -44,7 +51,7 @@ class SeriesDefRenderer extends StatelessWidget {
                             thickness: 2,
                             color: seriesDef.color,
                           ),
-                          SeriesManagementActions(seriesDef: seriesDef),
+                          seriesManagementActions,
                         ],
                       );
                     } else {
@@ -52,7 +59,10 @@ class SeriesDefRenderer extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           _SeriesIconAndName(seriesDef: seriesDef),
-                          _LeftBorder(color: seriesDef.color, child: SeriesManagementActions(seriesDef: seriesDef)),
+                          _LeftBorder(
+                            color: seriesDef.color,
+                            child: seriesManagementActions,
+                          ),
                         ],
                       );
                     }

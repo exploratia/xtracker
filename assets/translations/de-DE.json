@@ -404,6 +404,7 @@
         "exportSingleSeriesTip": "Tipp: Alle Messreihen gemeinsam über das Export-Symbol der Messreihenverwaltung speichern.",
         "importSeries": "JSON-Dateien mit Messreihen zum Import auswählen.\nVorhandene Serien (inklusive Daten) werden anhand ihrer ID überschrieben. Neue Messreihen werden automatisch erstellt.",
         "importSeriesTip": "Tipp: Zuerst eine passende Messreihe erstellen und exportieren. Danach Daten in die Datei einfügen und erneut importieren – so passt das Format sicher.",
+        "latestSeriesExport": "Zuletzt exportiert: {}",
         "shareSeries": "Alle Messreihen als eine JSON-Datei teilen.",
         "shareSingleSeries": "Messreihe (Konfiguration und Werte) als JSON-Datei teilen."
       },

@@ -13,6 +13,7 @@ import '../../model/series/series_def.dart';
 import '../../model/series/series_type.dart';
 import '../../providers/series_data_provider.dart';
 import '../../providers/series_provider.dart';
+import '../../widgets/administration/settings/settings_controller.dart';
 import '../../widgets/controls/layout/single_child_scroll_view_with_scrollbar.dart';
 import '../date_time_utils.dart';
 import '../dialogs.dart';
@@ -85,13 +86,14 @@ class SeriesImportExport {
     return (result.status == ShareResultStatus.success);
   }
 
-  static Future<void> _exportSeriesDef(SeriesDef seriesDef, BuildContext context) async {
+  static Future<void> _exportSeriesDef(SeriesDef seriesDef, BuildContext context, VoidCallback afterExport) async {
     Map<String, dynamic>? json = await _buildSeriesExportJson(seriesDef, context);
     try {
       bool exported = await _exportJsonFile(json, 'xtracker_series_export_${seriesDef.uuid}_${DateTimeUtils.formateExportDateTime()}.json');
       if (exported) {
         SimpleLogging.i('Successfully exported ${seriesDef.toLogString()}');
         if (context.mounted) Dialogs.showSnackBar(LocaleKeys.seriesManagement_importExport_snackbar_exportSuccessful.tr(), context);
+        afterExport();
       }
     } catch (ex) {
       SimpleLogging.w("Failed to export ${seriesDef.toLogString()}.", error: ex);
@@ -100,13 +102,14 @@ class SeriesImportExport {
     if (context.mounted) Navigator.of(context).pop();
   }
 
-  static Future<void> _shareSeriesDef(SeriesDef seriesDef, BuildContext context) async {
+  static Future<void> _shareSeriesDef(SeriesDef seriesDef, BuildContext context, VoidCallback afterExport) async {
     Map<String, dynamic>? json = await _buildSeriesExportJson(seriesDef, context);
     try {
       bool shared = await _shareJsonFile(json, 'xtracker_series_export_${seriesDef.uuid}_${DateTimeUtils.formateExportDateTime()}.json');
       if (shared) {
         SimpleLogging.i('Successfully shared ${seriesDef.toLogString()}');
         if (context.mounted) Dialogs.showSnackBar(LocaleKeys.seriesManagement_importExport_snackbar_exportSuccessful.tr(), context);
+        afterExport();
       }
     } catch (ex) {
       SimpleLogging.w('Failed to share series ${seriesDef.toLogString()}.', error: ex);
@@ -116,13 +119,14 @@ class SeriesImportExport {
   }
 
   /// export all series with data
-  static Future<void> _exportSeries(BuildContext context) async {
+  static Future<void> _exportSeries(BuildContext context, VoidCallback afterExport) async {
     try {
       Map<String, dynamic> json = await _buildAllSeriesExportJson(context);
       bool exported = await _exportJsonFile(json, 'xtracker_multi_series_export_${DateTimeUtils.formateExportDateTime()}.json');
       if (exported) {
         SimpleLogging.i('Successfully exported all series.');
         if (context.mounted) Dialogs.showSnackBar(LocaleKeys.seriesManagement_importExport_snackbar_exportSuccessful.tr(), context);
+        afterExport();
       }
     } catch (ex) {
       SimpleLogging.w('Failed to exported all series!', error: ex);
@@ -131,13 +135,14 @@ class SeriesImportExport {
     if (context.mounted) Navigator.of(context).pop();
   }
 
-  static Future<void> _shareSeries(BuildContext context) async {
+  static Future<void> _shareSeries(BuildContext context, VoidCallback afterExport) async {
     try {
       Map<String, dynamic> json = await _buildAllSeriesExportJson(context);
       bool shared = await _shareJsonFile(json, 'xtracker_multi_series_export_${DateTimeUtils.formateExportDateTime()}.json');
       if (shared) {
         SimpleLogging.i('Successfully shared all series.');
         if (context.mounted) Dialogs.showSnackBar(LocaleKeys.seriesManagement_importExport_snackbar_exportSuccessful.tr(), context);
+        afterExport();
       }
     } catch (ex) {
       SimpleLogging.w('Failed to shared all series!', error: ex);
@@ -251,9 +256,7 @@ class SeriesImportExport {
     if (context.mounted) Navigator.of(context).pop();
   }
 
-  static Future<void> showImportExportDlg(BuildContext context, {SeriesDef? seriesDef}) async {
-    final themeData = Theme.of(context);
-
+  static Future<void> showImportExportDlg(BuildContext context, {SeriesDef? seriesDef, required SettingsController settingsController}) async {
     bool exportPossible = context.read<SeriesProvider>().series.isNotEmpty;
 
     Widget dialogContent = SingleChildScrollViewWithScrollbar(
@@ -263,49 +266,69 @@ class SeriesImportExport {
         spacing: ThemeUtils.verticalSpacing,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          ListenableBuilder(
+            listenable: settingsController,
+            builder: (context, child) {
+              DateTime? lastExportDate = settingsController.seriesExportDate;
+              String lastExport = "-";
+              if (lastExportDate != null) {
+                lastExport = DateTimeUtils.formateDate(lastExportDate);
+              }
+
+              return Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: ThemeUtils.defaultPadding * 3),
+                    child: _LabelMedium(LocaleKeys.seriesManagement_importExport_label_latestSeriesExport.tr(args: [lastExport])),
+                  ),
+                ],
+              );
+            },
+          ),
           // all series
           if (seriesDef == null) ...[
             ElevatedButton.icon(
               onPressed: exportPossible
                   ? () async {
-                      await _exportSeries(context);
+                      await _exportSeries(context, settingsController.updateSeriesExportDate);
                     }
                   : null,
               icon: const Icon(Icons.download_outlined),
               label: Text(LocaleKeys.seriesManagement_importExport_btn_exportSeries.tr()),
             ),
-            Text(style: themeData.textTheme.labelMedium, LocaleKeys.seriesManagement_importExport_label_exportSeries.tr()),
-            Text(style: themeData.textTheme.labelMedium, LocaleKeys.seriesManagement_importExport_label_exportSeriesTip.tr()),
+            _LabelMedium(LocaleKeys.seriesManagement_importExport_label_exportSeries.tr()),
+            _LabelMedium(LocaleKeys.seriesManagement_importExport_label_exportSeriesTip.tr()),
             ElevatedButton.icon(
               onPressed: exportPossible
                   ? () async {
-                      await _shareSeries(context);
+                      await _shareSeries(context, settingsController.updateSeriesExportDate);
                     }
                   : null,
               icon: const Icon(Icons.share_outlined),
               label: Text(LocaleKeys.seriesManagement_importExport_btn_shareSeries.tr()),
             ),
-            Text(style: themeData.textTheme.labelMedium, LocaleKeys.seriesManagement_importExport_label_shareSeries.tr()),
+            _LabelMedium(LocaleKeys.seriesManagement_importExport_label_shareSeries.tr()),
           ],
           // single series
           if (seriesDef != null) ...[
             ElevatedButton.icon(
               onPressed: () async {
-                await _exportSeriesDef(seriesDef, context);
+                await _exportSeriesDef(seriesDef, context, settingsController.updateSeriesExportDate);
               },
               icon: const Icon(Icons.download_outlined),
               label: Text(LocaleKeys.seriesManagement_importExport_btn_exportSingleSeries.tr()),
             ),
-            Text(style: themeData.textTheme.labelMedium, LocaleKeys.seriesManagement_importExport_label_exportSingleSeries.tr()),
-            Text(style: themeData.textTheme.labelMedium, LocaleKeys.seriesManagement_importExport_label_exportSingleSeriesTip.tr()),
+            _LabelMedium(LocaleKeys.seriesManagement_importExport_label_exportSingleSeries.tr()),
+            _LabelMedium(LocaleKeys.seriesManagement_importExport_label_exportSingleSeriesTip.tr()),
             ElevatedButton.icon(
               onPressed: () async {
-                await _shareSeriesDef(seriesDef, context);
+                await _shareSeriesDef(seriesDef, context, settingsController.updateSeriesExportDate);
               },
               icon: const Icon(Icons.share_outlined),
               label: Text(LocaleKeys.seriesManagement_importExport_btn_shareSingleSeries.tr()),
             ),
-            Text(style: themeData.textTheme.labelMedium, LocaleKeys.seriesManagement_importExport_label_shareSingleSeries.tr()),
+            _LabelMedium(LocaleKeys.seriesManagement_importExport_label_shareSingleSeries.tr()),
           ],
 
           // import
@@ -317,13 +340,26 @@ class SeriesImportExport {
             icon: const Icon(Icons.upload_outlined),
             label: Text(LocaleKeys.seriesManagement_importExport_btn_importSeries.tr()),
           ),
-          Text(style: themeData.textTheme.labelMedium, LocaleKeys.seriesManagement_importExport_label_importSeries.tr()),
-          Text(style: themeData.textTheme.labelMedium, LocaleKeys.seriesManagement_importExport_label_importSeriesTip.tr()),
+          _LabelMedium(LocaleKeys.seriesManagement_importExport_label_importSeries.tr()),
+          _LabelMedium(LocaleKeys.seriesManagement_importExport_label_importSeriesTip.tr()),
         ],
       ),
     );
 
     await Dialogs.simpleOkDialog(dialogContent, context,
         title: LocaleKeys.seriesManagement_importExport_title.tr(), buttonText: LocaleKeys.commons_dialog_btn_cancel.tr());
+  }
+}
+
+class _LabelMedium extends StatelessWidget {
+  const _LabelMedium(this.txt);
+
+  final String txt;
+
+  @override
+  Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
+    var txtStyleLabelMedium = themeData.textTheme.labelMedium;
+    return Text(style: txtStyleLabelMedium, txt);
   }
 }

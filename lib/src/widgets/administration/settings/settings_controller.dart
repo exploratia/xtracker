@@ -34,6 +34,10 @@ class SettingsController with ChangeNotifier {
 
   bool get hideNavigationLabels => _hideNavigationLabels;
 
+  DateTime? _seriesExportDate;
+
+  DateTime? get seriesExportDate => _seriesExportDate;
+
   /// Load the user's settings from the SettingsService. It may load from a
   /// local database or the internet. The controller only knows it can load the
   /// settings from the service.
@@ -43,6 +47,7 @@ class SettingsController with ChangeNotifier {
     _locale = await _settingsService.locale();
     _hideNavigationLabels = await _settingsService.hideNavigationLabels();
     HideNavigationLabels.setVisible(!_hideNavigationLabels);
+    _seriesExportDate = await _settingsService.seriesExportDate();
     // Important! Inform listeners a change has occurred.
     notifyListeners();
   }
@@ -111,5 +116,11 @@ class SettingsController with ChangeNotifier {
 
     // Persist the changes to a local database or the internet using the SettingService.
     await _settingsService.updateHideNavigationLabels(value);
+  }
+
+  /// Update and persist the hide nav labels based on the user's selection.
+  Future<void> updateSeriesExportDate() async {
+    _seriesExportDate = await _settingsService.updateSeriesExportDate();
+    notifyListeners();
   }
 }

@@ -5,4 +5,5 @@ class DeviceStorageKeys {
   static const logLevel = 'logLevel';
   static const logStack = 'logStack';
   static const initialAppStart = 'initialAppStart';
+  static const seriesExportDate = 'seriesExportDate';
 }
