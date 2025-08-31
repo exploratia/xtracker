@@ -37,7 +37,8 @@ class Navigation {
   static final List<MainNavigationItem> mainNavigationItems = [];
 
   static void registerMainNavigationItem(MainNavigationItem mainNavigationItem) {
-    if (mainNavigationItems.contains(mainNavigationItem)) return;
+    // in debug sometimes nav items were duplicated
+    if (kDebugMode && mainNavigationItems.where((element) => element.routeName == mainNavigationItem.routeName).isNotEmpty) return;
     mainNavigationItems.add(mainNavigationItem);
     _maxTextWidth = -1;
   }
