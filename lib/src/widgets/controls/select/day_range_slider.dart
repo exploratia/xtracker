@@ -160,7 +160,7 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
         Positioned(
           left: ThemeUtils.screenPadding,
           right: ThemeUtils.screenPadding,
-          top: _sliderVisible ? 58 : 55,
+          top: _sliderVisible ? 52 : 50,
           height: 1,
           child: ReverseProgress(
             key: _reverseProgressKey,

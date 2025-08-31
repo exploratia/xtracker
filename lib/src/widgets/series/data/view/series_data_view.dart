@@ -17,7 +17,7 @@ import '../../../../util/theme_utils.dart';
 import '../../../../util/tooltip_utils.dart';
 import '../../../controls/navigation/hide_bottom_navigation_bar.dart';
 import '../../../controls/provider/data_provider_loader.dart';
-import '../../../controls/select/day_range_slider.dart';
+import '../../../controls/select/day_range_slider_overlay.dart';
 import 'blood_pressure/series_data_blood_pressure_view.dart';
 import 'daily_check/series_data_daily_check_view.dart';
 import 'habit/series_data_habit_view.dart';
@@ -135,27 +135,7 @@ class _SeriesDataFilterView<T extends SeriesDataValue> extends StatelessWidget {
         }
 
         // fallback no filter
-        return Stack(
-          children: [
-            Positioned.fill(
-              child: seriesDataViewBuilder(
-                SeriesDataFilter(),
-                SeriesDataViewOverlays(
-                  topHeight: SeriesTitle.seriesTitleHeight,
-                ),
-              ),
-            ),
-            Positioned(
-              top: 0,
-              left: 0,
-              right: 0,
-              height: SeriesTitle.seriesTitleHeight,
-              child: IgnorePointer(
-                child: SeriesTitle(seriesViewMetaData: seriesViewMetaData),
-              ),
-            ),
-          ],
-        );
+        return _NoFilterView(seriesDataViewBuilder: seriesDataViewBuilder, seriesViewMetaData: seriesViewMetaData);
       },
     );
   }
@@ -176,7 +156,6 @@ class _StackedRangeSliderView<T extends SeriesDataValue> extends StatefulWidget 
 
 class _StackedRangeSliderViewState<T extends SeriesDataValue> extends State<_StackedRangeSliderView<T>> {
   SeriesDataFilter filter = SeriesDataFilter();
-  bool _sliderVisible = false;
 
   /// oldest (most past) date
   late DateTime _firstDate;
@@ -218,16 +197,8 @@ class _StackedRangeSliderViewState<T extends SeriesDataValue> extends State<_Sta
     });
   }
 
-  void _setSliderVisible(bool visible) {
-    setState(() {
-      _sliderVisible = visible;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
-
     return Stack(
       children: [
         Positioned.fill(
@@ -248,32 +219,48 @@ class _StackedRangeSliderViewState<T extends SeriesDataValue> extends State<_Sta
             child: SeriesTitle(seriesViewMetaData: widget.seriesViewMetaData),
           ),
         ),
-        // filter view background - extra widget to be able to use ignore pointer
-        AnimatedPositioned(
-          height: ThemeUtils.seriesDataBottomFilterViewHeight * (_sliderVisible ? 2 : 1),
-          left: 0,
-          right: 0,
-          bottom: 0,
-          duration: const Duration(milliseconds: ThemeUtils.animationDuration),
-          child: IgnorePointer(
-            child: Container(
-              color: themeData.scaffoldBackgroundColor.withAlpha(128),
+        Positioned.fill(
+          child: DayRangeSliderOverlay(
+            maxSpan: widget.maxSpan,
+            date1: widget.seriesData.first.dateTime,
+            date2: widget.seriesData.last.dateTime,
+            setFilter: _setFilter,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _NoFilterView extends StatelessWidget {
+  const _NoFilterView({
+    required this.seriesDataViewBuilder,
+    required this.seriesViewMetaData,
+  });
+
+  final Widget Function(SeriesDataFilter filter, SeriesDataViewOverlays seriesDataViewOverlays) seriesDataViewBuilder;
+  final SeriesViewMetaData seriesViewMetaData;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: seriesDataViewBuilder(
+            SeriesDataFilter(),
+            SeriesDataViewOverlays(
+              topHeight: SeriesTitle.seriesTitleHeight,
             ),
           ),
         ),
-        AnimatedPositioned(
-          height: ThemeUtils.seriesDataBottomFilterViewHeight * (_sliderVisible ? 2 : 1),
+        Positioned(
+          top: 0,
           left: 0,
           right: 0,
-          bottom: 0,
-          duration: const Duration(milliseconds: ThemeUtils.animationDuration),
-          child: DayRangeSlider(
-              pageCallback: _setFilter,
-              maxSpan: widget.maxSpan,
-              sliderInitialVisible: false,
-              sliderVisibleCallback: _setSliderVisible,
-              date1: widget.seriesData.first.dateTime,
-              date2: widget.seriesData.last.dateTime),
+          height: SeriesTitle.seriesTitleHeight,
+          child: IgnorePointer(
+            child: SeriesTitle(seriesViewMetaData: seriesViewMetaData),
+          ),
         ),
       ],
     );
