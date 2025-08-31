@@ -18,42 +18,46 @@ class DeviceStorageView extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        FutureBuilderWithProgressIndicator(
-          future: DeviceStorage.readAll(),
-          errorBuilder: (error) => 'Failed to storage data!',
-          widgetBuilder: (storageData, BuildContext ctx) {
-            if (storageData == null) {
-              return Container();
-            }
-            List<TableRow> rows = [
-              TableUtils.tableHeadline([
-                LocaleKeys.settings_deviceStorage_table_column_key.tr(),
-                LocaleKeys.settings_deviceStorage_table_column_value.tr(),
-              ])
-            ];
+        ListenableBuilder(
+            listenable: controller,
+            builder: (BuildContext context, Widget? child) {
+              return FutureBuilderWithProgressIndicator(
+                future: DeviceStorage.readAll(),
+                errorBuilder: (error) => 'Failed to storage data!',
+                widgetBuilder: (storageData, BuildContext ctx) {
+                  if (storageData == null) {
+                    return Container();
+                  }
+                  List<TableRow> rows = [
+                    TableUtils.tableHeadline([
+                      LocaleKeys.settings_deviceStorage_table_column_key.tr(),
+                      LocaleKeys.settings_deviceStorage_table_column_value.tr(),
+                    ])
+                  ];
 
-            final keys = storageData.keys.toList();
-            keys.sort();
-            for (var key in keys) {
-              var value = storageData[key];
-              rows.add(TableUtils.tableRow([key, value ?? '-']));
-            }
+                  final keys = storageData.keys.toList();
+                  keys.sort();
+                  for (var key in keys) {
+                    var value = storageData[key];
+                    rows.add(TableUtils.tableRow([key, value ?? '-']));
+                  }
 
-            return LayoutBuilder(builder: (BuildContext _, BoxConstraints constraints) {
-              return Table(
-                // https://api.flutter.dev/flutter/widgets/Table-class.html
-                columnWidths: <int, TableColumnWidth>{
-                  0: constraints.maxWidth < 200 ? FixedColumnWidth(constraints.maxWidth / 2) : const IntrinsicColumnWidth(),
-                  1: const FlexColumnWidth(),
+                  return LayoutBuilder(builder: (BuildContext _, BoxConstraints constraints) {
+                    return Table(
+                      // https://api.flutter.dev/flutter/widgets/Table-class.html
+                      columnWidths: <int, TableColumnWidth>{
+                        0: constraints.maxWidth < 200 ? FixedColumnWidth(constraints.maxWidth / 2) : const IntrinsicColumnWidth(),
+                        1: const FlexColumnWidth(),
+                      },
+                      border: const TableBorder.symmetric(
+                        inside: BorderSide(width: 1, color: Colors.black12),
+                      ),
+                      children: rows,
+                    );
+                  });
                 },
-                border: const TableBorder.symmetric(
-                  inside: BorderSide(width: 1, color: Colors.black12),
-                ),
-                children: rows,
               );
-            });
-          },
-        ),
+            }),
         const Divider(),
         Wrap(
           alignment: WrapAlignment.spaceBetween,

@@ -106,8 +106,8 @@ class SettingsController with ChangeNotifier {
     _hideNavigationLabels = value;
 
     // Important! Inform listeners a change has occurred.
-    // notifyListeners();
     HideNavigationLabels.setVisible(!_hideNavigationLabels);
+    notifyListeners();
 
     // Persist the changes to a local database or the internet using the SettingService.
     await _settingsService.updateHideNavigationLabels(value);
