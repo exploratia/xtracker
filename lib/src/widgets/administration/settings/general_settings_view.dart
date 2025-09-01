@@ -105,6 +105,14 @@ class GeneralSettingsView extends StatelessWidget {
             title: Text(LocaleKeys.settings_general_label_hideNavigationLabels.tr()),
           ),
         ),
+        SwitchListTile(
+          contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: ThemeUtils.defaultPadding),
+          value: controller.seriesExportDisableReminder,
+          onChanged: (bool value) {
+            controller.updateSeriesExportDisableReminder(value);
+          },
+          title: Text(LocaleKeys.settings_general_label_seriesExportDisableReminder.tr()),
+        )
       ],
     );
   }

@@ -28,6 +28,7 @@ abstract class  LocaleKeys {
   static const commons_dialog_title_areYouSure = 'commons.dialog.title.areYouSure';
   static const commons_dialog_title_errorOccurred = 'commons.dialog.title.errorOccurred';
   static const commons_dialog_btn_cancel = 'commons.dialog.btn.cancel';
+  static const commons_dialog_btn_close = 'commons.dialog.btn.close';
   static const commons_dialog_btn_no = 'commons.dialog.btn.no';
   static const commons_dialog_btn_okay = 'commons.dialog.btn.okay';
   static const commons_dialog_btn_save = 'commons.dialog.btn.save';
@@ -143,6 +144,11 @@ abstract class  LocaleKeys {
   static const seriesManagement_action_importExport_tooltip = 'seriesManagement.action.importExport.tooltip';
   static const seriesManagement_action_closeSeriesManagement_tooltip = 'seriesManagement.action.closeSeriesManagement.tooltip';
   static const seriesManagement_label_noSeries = 'seriesManagement.label.noSeries';
+  static const seriesManagement_backupAlert_title = 'seriesManagement.backupAlert.title';
+  static const seriesManagement_backupAlert_label_lastExport = 'seriesManagement.backupAlert.label.lastExport';
+  static const seriesManagement_backupAlert_btn_export = 'seriesManagement.backupAlert.btn.export';
+  static const seriesManagement_backupAlert_btn_reminderIn3Days = 'seriesManagement.backupAlert.btn.reminderIn3Days';
+  static const seriesManagement_backupAlert_btn_disableReminder = 'seriesManagement.backupAlert.btn.disableReminder';
   static const seriesManagement_importExport_title = 'seriesManagement.importExport.title';
   static const seriesManagement_importExport_btn_exportSeries = 'seriesManagement.importExport.btn.exportSeries';
   static const seriesManagement_importExport_btn_exportSingleSeries = 'seriesManagement.importExport.btn.exportSingleSeries';
@@ -181,6 +187,7 @@ abstract class  LocaleKeys {
   static const settings_deviceStorage_table_column_value = 'settings.deviceStorage.table.column.value';
   static const settings_general_title = 'settings.general.title';
   static const settings_general_label_hideNavigationLabels = 'settings.general.label.hideNavigationLabels';
+  static const settings_general_label_seriesExportDisableReminder = 'settings.general.label.seriesExportDisableReminder';
   static const settings_general_label_lang = 'settings.general.label.lang';
   static const settings_general_label_theme = 'settings.general.label.theme';
   static const settings_general_language_system = 'settings.general.language.system';

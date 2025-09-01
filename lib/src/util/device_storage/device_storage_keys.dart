@@ -6,4 +6,6 @@ class DeviceStorageKeys {
   static const logStack = 'logStack';
   static const initialAppStart = 'initialAppStart';
   static const seriesExportDate = 'seriesExportDate';
+  static const seriesExportDisableReminder = 'seriesExportDisableReminder';
+  static const seriesExportReminderDate = 'seriesExportReminderDate';
 }

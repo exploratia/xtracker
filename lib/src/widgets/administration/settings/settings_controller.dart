@@ -38,6 +38,14 @@ class SettingsController with ChangeNotifier {
 
   DateTime? get seriesExportDate => _seriesExportDate;
 
+  bool _seriesExportDisableReminder = false;
+
+  bool get seriesExportDisableReminder => _seriesExportDisableReminder;
+
+  DateTime? _seriesExportReminderDate;
+
+  DateTime? get seriesExportReminderDate => _seriesExportReminderDate;
+
   /// Load the user's settings from the SettingsService. It may load from a
   /// local database or the internet. The controller only knows it can load the
   /// settings from the service.
@@ -48,6 +56,8 @@ class SettingsController with ChangeNotifier {
     _hideNavigationLabels = await _settingsService.hideNavigationLabels();
     HideNavigationLabels.setVisible(!_hideNavigationLabels);
     _seriesExportDate = await _settingsService.seriesExportDate();
+    _seriesExportDisableReminder = await _settingsService.seriesExportDisableReminder();
+    _seriesExportReminderDate = await _settingsService.seriesExportReminderDate();
     // Important! Inform listeners a change has occurred.
     notifyListeners();
   }
@@ -118,9 +128,28 @@ class SettingsController with ChangeNotifier {
     await _settingsService.updateHideNavigationLabels(value);
   }
 
-  /// Update and persist the hide nav labels based on the user's selection.
+  /// Update and persist
   Future<void> updateSeriesExportDate() async {
     _seriesExportDate = await _settingsService.updateSeriesExportDate();
+    await updateSeriesExportReminderDate(30);
+    // notifyListeners(); // notify is already called in updateSeriesExportReminderDate
+  }
+
+  /// Update and persist the series export reminder
+  Future<void> updateSeriesExportDisableReminder(bool value) async {
+    if (value == _seriesExportDisableReminder) return;
+    _seriesExportDisableReminder = value;
+
     notifyListeners();
+
+    await _settingsService.updateSeriesExportDisableReminder(value);
+  }
+
+  /// Update and persist
+  Future<void> updateSeriesExportReminderDate(int days) async {
+    var dateTime = DateTime.now().add(Duration(days: days));
+    _seriesExportReminderDate = dateTime;
+    notifyListeners();
+    await _settingsService.updateSeriesExportReminderDate(dateTime);
   }
 }

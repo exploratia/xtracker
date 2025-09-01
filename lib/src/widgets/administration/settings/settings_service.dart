@@ -79,6 +79,26 @@ class SettingsService {
     return dateTime;
   }
 
+  Future<bool> seriesExportDisableReminder() async {
+    return await DeviceStorage.readBool(DeviceStorageKeys.seriesExportDisableReminder);
+  }
+
+  Future<void> updateSeriesExportDisableReminder(bool value) async {
+    await DeviceStorage.writeBool(DeviceStorageKeys.seriesExportDisableReminder, value);
+  }
+
+  /// Loads series export reminder date (if any)
+  Future<DateTime?> seriesExportReminderDate() async {
+    var strTimestamp = await DeviceStorage.read(DeviceStorageKeys.seriesExportReminderDate);
+    DateTime? timestamp = _parseDate(strTimestamp);
+    return timestamp;
+  }
+
+  /// Persists series export reminder date
+  Future<void> updateSeriesExportReminderDate(DateTime dateTime) async {
+    await DeviceStorage.write(DeviceStorageKeys.seriesExportReminderDate, _toDateStr(dateTime));
+  }
+
   static String _toDateStr(DateTime timestamp) => '${timestamp.year}-${timestamp.month}-${timestamp.day}';
 
   static DateTime? _parseDate(String? strTimestamp) {

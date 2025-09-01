@@ -51,6 +51,7 @@
       },
       "btn": {
         "cancel": "CANCEL",
+        "close": "CLOSE",
         "no": "NO",
         "okay": "OK",
         "save": "SAVE",
@@ -388,6 +389,17 @@
     "label": {
       "noSeries": "No series created yet..."
     },
+    "backupAlert": {
+      "title": "Backup?",
+      "label": {
+        "lastExport": "No backup has been created for a long time.\nLast export: {}"
+      },
+      "btn": {
+        "export": "Open export",
+        "reminderIn3Days": "Remind me again in 3 days",
+        "disableReminder": "Don't remind again"
+      }
+    },
     "importExport": {
       "title": "Import / Export series data",
       "btn": {
@@ -480,6 +492,7 @@
       "title": "General settings",
       "label": {
         "hideNavigationLabels": "Hide navigation labels (menu & bottom navigation):",
+        "seriesExportDisableReminder": "Disable series export reminder (30 days after last export):",
         "lang": "Language:",
         "theme": "Theme:"
       },

@@ -12,6 +12,7 @@ import '../controls/provider/data_provider_loader.dart';
 import '../controls/responsive/device_dependent_constrained_box.dart';
 import 'add_first_series.dart';
 import 'series_def_renderer.dart';
+import 'series_export_check.dart';
 
 class SeriesView extends StatelessWidget {
   final SettingsController settingsController;
@@ -70,11 +71,14 @@ class _SeriesList extends StatelessWidget {
       idx++;
     }
 
-    return DeviceDependentWidthConstrainedBox(
-      child: Column(
-        spacing: 16,
-        children: children,
-        // children: [ ...series.map((s) => SeriesDefRenderer(seriesDef: s)) ],
+    return SeriesExportCheck(
+      settingsController: settingsController,
+      child: DeviceDependentWidthConstrainedBox(
+        child: Column(
+          spacing: 16,
+          children: children,
+          // children: [ ...series.map((s) => SeriesDefRenderer(seriesDef: s)) ],
+        ),
       ),
     );
   }

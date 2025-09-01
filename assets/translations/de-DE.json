@@ -51,6 +51,7 @@
       },
       "btn": {
         "cancel": "ABBRECHEN",
+        "close": "SCHLIEßEN",
         "no": "NEIN",
         "okay": "OK",
         "save": "SPEICHERN",
@@ -388,6 +389,17 @@
     "label": {
       "noSeries": "Noch keine Messreihen vorhanden."
     },
+    "backupAlert": {
+      "title": "Backup?",
+      "label": {
+        "lastExport": "Es wurde lange keine Sicherung mehr erstellt.\nLetzter Export: {}"
+      },
+      "btn": {
+        "export": "Export öffnen",
+        "reminderIn3Days": "In 3 Tagen erneut erinnern",
+        "disableReminder": "Nicht erneut erinnern"
+      }
+    },
     "importExport": {
       "title": "Messreihen importieren / exportieren",
       "btn": {
@@ -480,6 +492,7 @@
       "title": "Allgemeine Einstellungen",
       "label": {
         "hideNavigationLabels": "Navigationslabels verstecken (Menü & Navigationsleiste):",
+        "seriesExportDisableReminder": "Erinnerung für Messreihenexport deaktivieren (30 Tage nach letztem Export):",
         "lang": "Sprache:",
         "theme": "Theme:"
       },
