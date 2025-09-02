@@ -8,4 +8,5 @@ class DeviceStorageKeys {
   static const seriesExportDate = 'seriesExportDate';
   static const seriesExportDisableReminder = 'seriesExportDisableReminder';
   static const seriesExportReminderDate = 'seriesExportReminderDate';
+  static const appSupportReminderDate = 'appSupportReminderDate';
 }

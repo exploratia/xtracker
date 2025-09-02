@@ -18,6 +18,11 @@
     }
   },
   "appTitle": "xTracker",
+  "appSupport": {
+    "title": "Thanks for being here!",
+    "oneYearMsg": "One year ago, you first opened this app – amazing that you’re still using it!\n\nIf you enjoy the app and would like to support its future development, consider buying me a coffee. Your contribution helps keep improving the app and offering it for free.",
+    "multipleYearsMsg": "Another year with this app has gone by – thanks for sticking with it.\n\nIf you’d like to support ongoing development, I’d be grateful for a coffee. Your support helps to keep the app up to date and free to use."
+  },
   "commons": {
     "nav": {
       "hideMenu": "Close navigation menu",

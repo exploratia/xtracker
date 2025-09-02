@@ -18,6 +18,11 @@
     }
   },
   "appTitle": "xTracker",
+  "appSupport": {
+    "title": "Danke, dass du dabei bist!",
+    "oneYearMsg": "Vor einem Jahr hast du die App zum ersten Mal gestartet – großartig, dass du sie nutzt!\n\nWenn dir die App gefällt und du ihre Weiterentwicklung unterstützen möchtest, kannst du mir gerne einen Kaffee spendieren. Dein Beitrag hilft, die App weiter zu verbessern und kostenlos bereitzustellen.",
+    "multipleYearsMsg": "Ein weiteres Jahr mit dieser App liegt hinter dir – danke, dass du sie treu nutzt.\n\nWenn du die Weiterentwicklung unterstützen möchtest, freue ich mich über einen Kaffee. So hilfst du mir, die App aktuell und kostenlos zu halten."
+  },
   "commons": {
     "nav": {
       "hideMenu": "Navigationsmenü schließen",

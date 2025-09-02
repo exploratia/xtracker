@@ -9,8 +9,11 @@ class SingleChildScrollViewWithScrollbar extends StatefulWidget {
   final void Function(ScrollPosition value)? scrollPositionHandler;
   final bool useScreenPadding;
   final bool useHorizontalScreenPadding;
+  final bool useHorizontalScreenPaddingForScrollbar;
 
   /// [useScreenPadding] set to false if used in widgets which already have padding (e.g. AlertDialog)
+  /// [useHorizontalScreenPadding] set to true if only horizontal padding should be used
+  /// [useHorizontalScreenPaddingForScrollbar] set to true if only horizontal padding at scrollbar side should be used
   const SingleChildScrollViewWithScrollbar({
     super.key,
     required this.child,
@@ -19,6 +22,7 @@ class SingleChildScrollViewWithScrollbar extends StatefulWidget {
     this.scrollPositionHandler,
     this.useScreenPadding = true,
     this.useHorizontalScreenPadding = false,
+    this.useHorizontalScreenPaddingForScrollbar = false,
   });
 
   @override
@@ -59,15 +63,28 @@ class _SingleChildScrollViewWithScrollbarState extends State<SingleChildScrollVi
       child = widget.child;
     }
 
+    ScrollbarOrientation? orientation;
     EdgeInsetsGeometry padding = const EdgeInsets.all(0);
     if (widget.useScreenPadding) {
       padding = ThemeUtils.screenPaddingAll;
     } else if (widget.useHorizontalScreenPadding) {
       padding = const EdgeInsets.symmetric(horizontal: ThemeUtils.screenPadding);
+    } else if (widget.useHorizontalScreenPaddingForScrollbar) {
+      // LTR or RTL?
+      final textDirection = Directionality.of(context);
+      // Scrollbar orientation
+      if (textDirection == TextDirection.ltr) {
+        orientation = ScrollbarOrientation.right;
+        padding = const EdgeInsets.only(right: ThemeUtils.screenPadding);
+      } else {
+        orientation = ScrollbarOrientation.left;
+        padding = const EdgeInsets.only(left: ThemeUtils.screenPadding);
+      }
     }
 
     final scrollbar = Scrollbar(
       controller: _scrollController,
+      scrollbarOrientation: orientation,
       child: SingleChildScrollView(
         padding: padding,
         physics: scrollPhysics,

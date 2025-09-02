@@ -46,6 +46,13 @@ class SettingsController with ChangeNotifier {
 
   DateTime? get seriesExportReminderDate => _seriesExportReminderDate;
 
+  DateTime? _appSupportReminderDate;
+
+  DateTime get appSupportReminderDate {
+    _appSupportReminderDate ??= DateTime(initialAppStart.year + 1, initialAppStart.month, initialAppStart.day);
+    return _appSupportReminderDate!;
+  }
+
   /// Load the user's settings from the SettingsService. It may load from a
   /// local database or the internet. The controller only knows it can load the
   /// settings from the service.
@@ -58,6 +65,7 @@ class SettingsController with ChangeNotifier {
     _seriesExportDate = await _settingsService.seriesExportDate();
     _seriesExportDisableReminder = await _settingsService.seriesExportDisableReminder();
     _seriesExportReminderDate = await _settingsService.seriesExportReminderDate();
+    _appSupportReminderDate = await _settingsService.appSupportReminderDate();
     // Important! Inform listeners a change has occurred.
     notifyListeners();
   }
@@ -151,5 +159,14 @@ class SettingsController with ChangeNotifier {
     _seriesExportReminderDate = dateTime;
     notifyListeners();
     await _settingsService.updateSeriesExportReminderDate(dateTime);
+  }
+
+  /// Update and persist
+  Future<void> updateAppSupportReminderDate() async {
+    var now = DateTime.now();
+    var dateTime = DateTime(now.year + 1, initialAppStart.month, initialAppStart.day);
+    _appSupportReminderDate = dateTime;
+    notifyListeners();
+    await _settingsService.updateAppSupportReminderDate(dateTime);
   }
 }

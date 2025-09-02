@@ -9,6 +9,7 @@ import '../widgets/administration/settings/settings_controller.dart';
 import '../widgets/controls/appbar/gradient_app_bar.dart';
 import '../widgets/controls/navigation/hide_bottom_navigation_bar.dart';
 import '../widgets/controls/responsive/screen_builder.dart';
+import '../widgets/series/app_support_check.dart';
 import '../widgets/series/management/series_management_view.dart';
 import '../widgets/series/series_view.dart';
 
@@ -66,8 +67,11 @@ class HomeScreen extends StatelessWidget {
               ),
             ]);
       },
-      bodyBuilder: (context) => SeriesView(
+      bodyBuilder: (context) => AppSupportCheck(
         settingsController: settingsController,
+        child: SeriesView(
+          settingsController: settingsController,
+        ),
       ),
     );
   }

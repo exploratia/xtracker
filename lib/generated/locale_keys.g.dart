@@ -10,6 +10,9 @@ abstract class  LocaleKeys {
   static const administration_supportApp_label_reportABug = 'administration.supportApp.label.reportABug';
   static const administration_infoAndLegals_btn_version = 'administration.infoAndLegals.btn.version';
   static const appTitle = 'appTitle';
+  static const appSupport_title = 'appSupport.title';
+  static const appSupport_oneYearMsg = 'appSupport.oneYearMsg';
+  static const appSupport_multipleYearsMsg = 'appSupport.multipleYearsMsg';
   static const commons_nav_hideMenu = 'commons.nav.hideMenu';
   static const commons_nav_openMenu = 'commons.nav.openMenu';
   static const commons_date_shortWeekday_monday = 'commons.date.shortWeekday.monday';

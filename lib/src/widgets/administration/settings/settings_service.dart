@@ -99,6 +99,18 @@ class SettingsService {
     await DeviceStorage.write(DeviceStorageKeys.seriesExportReminderDate, _toDateStr(dateTime));
   }
 
+  /// Loads app support reminder date (if any)
+  Future<DateTime?> appSupportReminderDate() async {
+    var strTimestamp = await DeviceStorage.read(DeviceStorageKeys.appSupportReminderDate);
+    DateTime? timestamp = _parseDate(strTimestamp);
+    return timestamp;
+  }
+
+  /// Persists app support reminder date
+  Future<void> updateAppSupportReminderDate(DateTime dateTime) async {
+    await DeviceStorage.write(DeviceStorageKeys.appSupportReminderDate, _toDateStr(dateTime));
+  }
+
   static String _toDateStr(DateTime timestamp) => '${timestamp.year}-${timestamp.month}-${timestamp.day}';
 
   static DateTime? _parseDate(String? strTimestamp) {

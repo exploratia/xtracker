@@ -44,8 +44,11 @@ class $AssetsImagesBmcGen {
   /// File path: assets/images/bmc/bmc-button.png
   AssetGenImage get bmcButton => const AssetGenImage('assets/images/bmc/bmc-button.png');
 
+  /// File path: assets/images/bmc/coffee.png
+  AssetGenImage get coffee => const AssetGenImage('assets/images/bmc/coffee.png');
+
   /// List of all assets
-  List<AssetGenImage> get values => [bmcButton];
+  List<AssetGenImage> get values => [bmcButton, coffee];
 }
 
 class $AssetsImagesLogosGen {
