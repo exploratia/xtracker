@@ -10,7 +10,12 @@ class Navigation {
   static final ValueNotifier<int> currentMainNavigationIdx = ValueNotifier<int>(0);
 
   static void setCurrentMainNavigationRouteIdx(int value, BuildContext context) {
-    if (value < 0 || currentMainNavigationIdx.value == value) return;
+    if (value < 0
+        // don't jump back to main navigation start page:
+        // || currentMainNavigationIdx.value == value
+        ) {
+      return;
+    }
 
     currentMainNavigationIdx.value = value;
     var currentItem = mainNavigationItems[value];
