@@ -37,7 +37,6 @@ class SeriesDataDailyCheckChartView extends StatelessWidget {
 
     return LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
       return SingleChildScrollViewWithScrollbar(
-        useScreenPadding: false,
         useHorizontalScreenPadding: true,
         child: Column(
           children: [

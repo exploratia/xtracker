@@ -11,7 +11,7 @@ class SingleChildScrollViewWithScrollbar extends StatefulWidget {
   final bool useHorizontalScreenPadding;
   final bool useHorizontalScreenPaddingForScrollbar;
 
-  /// [useScreenPadding] set to false if used in widgets which already have padding (e.g. AlertDialog)
+  /// [useScreenPadding] set to true if screen padding should be used
   /// [useHorizontalScreenPadding] set to true if only horizontal padding should be used
   /// [useHorizontalScreenPaddingForScrollbar] set to true if only horizontal padding at scrollbar side should be used
   const SingleChildScrollViewWithScrollbar({
@@ -20,7 +20,7 @@ class SingleChildScrollViewWithScrollbar extends StatefulWidget {
     this.scrollDirection = Axis.vertical,
     this.onRefreshCallback,
     this.scrollPositionHandler,
-    this.useScreenPadding = true,
+    this.useScreenPadding = false,
     this.useHorizontalScreenPadding = false,
     this.useHorizontalScreenPaddingForScrollbar = false,
   });

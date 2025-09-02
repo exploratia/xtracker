@@ -258,7 +258,7 @@ class SeriesImportExport {
     bool exportPossible = context.read<SeriesProvider>().series.isNotEmpty;
 
     Widget dialogContent = SingleChildScrollViewWithScrollbar(
-      useScreenPadding: false,
+      useHorizontalScreenPaddingForScrollbar: true,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         spacing: ThemeUtils.verticalSpacing,
@@ -274,10 +274,7 @@ class SeriesImportExport {
                 return Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: ThemeUtils.defaultPadding * 3),
-                      child: _LabelMedium(LocaleKeys.seriesManagement_importExport_label_latestSeriesExport.tr(args: [lastExport])),
-                    ),
+                    _LabelMedium(LocaleKeys.seriesManagement_importExport_label_latestSeriesExport.tr(args: [lastExport])),
                   ],
                 );
               },

@@ -287,7 +287,6 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
         ),
       ),
       content: SingleChildScrollViewWithScrollbar(
-        useScreenPadding: false,
         child: edit,
       ),
       actions: [

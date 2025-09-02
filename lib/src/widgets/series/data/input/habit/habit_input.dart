@@ -136,7 +136,6 @@ class _HabitInputState extends State<HabitInput> {
         ),
       ),
       content: SingleChildScrollViewWithScrollbar(
-        useScreenPadding: false,
         child: edit,
       ),
       actions: [

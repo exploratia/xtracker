@@ -35,6 +35,7 @@ class InfoView extends StatelessWidget {
     };
 
     return SingleChildScrollViewWithScrollbar(
+      useScreenPadding: true,
       scrollPositionHandler: HideBottomNavigationBar.setScrollPosition,
       child: FutureBuilder(
           future: infoType.html(context),

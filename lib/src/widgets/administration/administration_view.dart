@@ -34,6 +34,7 @@ class AdministrationView extends StatelessWidget {
         });
 
     return SingleChildScrollViewWithScrollbar(
+      useScreenPadding: true,
       scrollPositionHandler: HideBottomNavigationBar.setScrollPosition,
       child: Column(
         spacing: ThemeUtils.cardPadding,

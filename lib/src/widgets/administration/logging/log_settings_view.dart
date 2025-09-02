@@ -17,6 +17,7 @@ class LogSettingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollViewWithScrollbar(
+      useScreenPadding: true,
       scrollPositionHandler: HideBottomNavigationBar.setScrollPosition,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,

@@ -27,6 +27,7 @@ class _LogsViewState extends State<LogsView> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollViewWithScrollbar(
+      useScreenPadding: true,
       scrollPositionHandler: HideBottomNavigationBar.setScrollPosition,
       onRefreshCallback: () async {
         _rebuild();

@@ -69,7 +69,6 @@ class SeriesEditDisplaySettings extends StatelessWidget {
                       tooltip: LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_tooltip.tr(),
                       onPressed: () => Dialogs.simpleOkDialog(
                             SingleChildScrollViewWithScrollbar(
-                              useScreenPadding: false,
                               child: Text(LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_text.tr()),
                             ),
                             context,

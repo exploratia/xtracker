@@ -42,7 +42,7 @@ class _SeriesExportCheckState extends State<SeriesExportCheck> {
     String lastExport = SeriesImportExport.buildLastExportDateStr(settingsController);
 
     Widget dialogContent = SingleChildScrollViewWithScrollbar(
-      useScreenPadding: false,
+      useHorizontalScreenPaddingForScrollbar: true,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         spacing: ThemeUtils.verticalSpacing,

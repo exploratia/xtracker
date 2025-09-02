@@ -16,16 +16,14 @@ class ScrollableCenteredFormWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollViewWithScrollbar(
+      useScreenPadding: true,
       child: CenterH(
         child: DeviceDependentWidthConstrainedBox(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Form(
-              key: formKey,
-              autovalidateMode: autovalidateMode,
-              child: Column(
-                children: children,
-              ),
+          child: Form(
+            key: formKey,
+            autovalidateMode: autovalidateMode,
+            child: Column(
+              children: children,
             ),
           ),
         ),
