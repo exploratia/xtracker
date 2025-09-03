@@ -15,6 +15,7 @@ class DeviceStorageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
@@ -28,12 +29,7 @@ class DeviceStorageView extends StatelessWidget {
                   if (storageData == null) {
                     return Container();
                   }
-                  List<TableRow> rows = [
-                    TableUtils.tableHeadline([
-                      LocaleKeys.settings_deviceStorage_table_column_key.tr(),
-                      LocaleKeys.settings_deviceStorage_table_column_value.tr(),
-                    ])
-                  ];
+                  List<TableRow> rows = TableUtils.buildKeyValueTableRows(context);
 
                   final keys = storageData.keys.toList();
                   keys.sort();
@@ -49,9 +45,10 @@ class DeviceStorageView extends StatelessWidget {
                         0: constraints.maxWidth < 200 ? FixedColumnWidth(constraints.maxWidth / 2) : const IntrinsicColumnWidth(),
                         1: const FlexColumnWidth(),
                       },
-                      border: const TableBorder.symmetric(
-                        inside: BorderSide(width: 1, color: Colors.black12),
+                      border: TableBorder.symmetric(
+                        inside: BorderSide(width: 1, color: themeData.canvasColor),
                       ),
+                      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                       children: rows,
                     );
                   });

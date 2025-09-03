@@ -43,9 +43,17 @@ abstract class  LocaleKeys {
   static const commons_label_value = 'commons.label.value';
   static const commons_snackbar_pressBackAgainToExit = 'commons.snackbar.pressBackAgainToExit';
   static const commons_snackbar_saved = 'commons.snackbar.saved';
+  static const commons_table_column_key = 'commons.table.column.key';
+  static const commons_table_column_value = 'commons.table.column.value';
   static const commons_validator_emptyValue = 'commons.validator.emptyValue';
   static const controls_select_dayRangeSlider_btn_showSlider = 'controls.select.dayRangeSlider.btn.showSlider';
   static const controls_select_dayRangeSlider_btn_hideSlider = 'controls.select.dayRangeSlider.btn.hideSlider';
+  static const deviceInfo_title = 'deviceInfo.title';
+  static const deviceInfo_action_exportOrShare_tooltip = 'deviceInfo.action.exportOrShare.tooltip';
+  static const deviceInfo_action_export_tooltip = 'deviceInfo.action.export.tooltip';
+  static const deviceInfo_action_share_tooltip = 'deviceInfo.action.share.tooltip';
+  static const deviceInfo_snackbar_shareSuccess = 'deviceInfo.snackbar.shareSuccess';
+  static const deviceInfo_snackbar_exportSuccess = 'deviceInfo.snackbar.exportSuccess';
   static const enum_seriesType_bloodPressure_title = 'enum.seriesType.bloodPressure.title';
   static const enum_seriesType_bloodPressure_info = 'enum.seriesType.bloodPressure.info';
   static const enum_seriesType_dailyCheck_title = 'enum.seriesType.dailyCheck.title';
@@ -186,8 +194,6 @@ abstract class  LocaleKeys {
   static const settings_deviceStorage_title = 'settings.deviceStorage.title';
   static const settings_deviceStorage_btn_clearStorage = 'settings.deviceStorage.btn.clearStorage';
   static const settings_deviceStorage_query_removeAllData = 'settings.deviceStorage.query.removeAllData';
-  static const settings_deviceStorage_table_column_key = 'settings.deviceStorage.table.column.key';
-  static const settings_deviceStorage_table_column_value = 'settings.deviceStorage.table.column.value';
   static const settings_general_title = 'settings.general.title';
   static const settings_general_label_hideNavigationLabels = 'settings.general.label.hideNavigationLabels';
   static const settings_general_label_seriesExportDisableReminder = 'settings.general.label.seriesExportDisableReminder';

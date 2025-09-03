@@ -2,10 +2,8 @@ import 'dart:convert';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:share_plus/share_plus.dart';
 
 import '../../../generated/locale_keys.g.dart';
 import '../../model/series/data/series_data.dart';
@@ -18,6 +16,7 @@ import '../../widgets/controls/layout/single_child_scroll_view_with_scrollbar.da
 import '../date_time_utils.dart';
 import '../dialogs.dart';
 import '../ex.dart';
+import '../json_utils.dart';
 import '../logging/flutter_simple_logging.dart';
 import '../theme_utils.dart';
 
@@ -62,34 +61,10 @@ class SeriesImportExport {
     return json;
   }
 
-  static Future<bool> _exportJsonFile(Map<String, dynamic> json, String fileName) async {
-    var enc = const Utf8Encoder();
-    Uint8List bytes = enc.convert(jsonEncode(json));
-
-    // https://pub.dev/packages/file_picker
-    var selectedFile = await FilePicker.platform
-        .saveFile(dialogTitle: 'Please select an output file:', fileName: fileName, type: FileType.custom, allowedExtensions: ["json"], bytes: bytes);
-    return selectedFile != null || kIsWeb; // in web no file select - just download
-  }
-
-  static Future<bool> _shareJsonFile(Map<String, dynamic> json, String fileName) async {
-    var enc = const Utf8Encoder();
-    Uint8List bytes = enc.convert(jsonEncode(json));
-
-    XFile file = XFile.fromData(
-      bytes,
-      name: fileName,
-      mimeType: 'application/json',
-    );
-
-    final result = await SharePlus.instance.share(ShareParams(files: [file], text: fileName, fileNameOverrides: [fileName]));
-    return (result.status == ShareResultStatus.success);
-  }
-
   static Future<void> _exportSeriesDef(SeriesDef seriesDef, BuildContext context) async {
     Map<String, dynamic>? json = await _buildSeriesExportJson(seriesDef, context);
     try {
-      bool exported = await _exportJsonFile(json, 'xtracker_series_export_${seriesDef.uuid}_${DateTimeUtils.formateExportDateTime()}.json');
+      bool exported = await JsonUtils.exportJsonFile(json, 'xtracker_series_export_${seriesDef.uuid}_${DateTimeUtils.formateExportDateTime()}.json');
       if (exported) {
         SimpleLogging.i('Successfully exported ${seriesDef.toLogString()}');
         if (context.mounted) Dialogs.showSnackBar(LocaleKeys.seriesManagement_importExport_snackbar_exportSuccessful.tr(), context);
@@ -104,7 +79,7 @@ class SeriesImportExport {
   static Future<void> _shareSeriesDef(SeriesDef seriesDef, BuildContext context) async {
     Map<String, dynamic>? json = await _buildSeriesExportJson(seriesDef, context);
     try {
-      bool shared = await _shareJsonFile(json, 'xtracker_series_export_${seriesDef.uuid}_${DateTimeUtils.formateExportDateTime()}.json');
+      bool shared = await JsonUtils.shareJsonFile(json, 'xtracker_series_export_${seriesDef.uuid}_${DateTimeUtils.formateExportDateTime()}.json');
       if (shared) {
         SimpleLogging.i('Successfully shared ${seriesDef.toLogString()}');
         if (context.mounted) Dialogs.showSnackBar(LocaleKeys.seriesManagement_importExport_snackbar_exportSuccessful.tr(), context);
@@ -120,7 +95,7 @@ class SeriesImportExport {
   static Future<void> _exportSeries(BuildContext context, VoidCallback afterExport) async {
     try {
       Map<String, dynamic> json = await _buildAllSeriesExportJson(context);
-      bool exported = await _exportJsonFile(json, 'xtracker_multi_series_export_${DateTimeUtils.formateExportDateTime()}.json');
+      bool exported = await JsonUtils.exportJsonFile(json, 'xtracker_multi_series_export_${DateTimeUtils.formateExportDateTime()}.json');
       if (exported) {
         SimpleLogging.i('Successfully exported all series.');
         if (context.mounted) Dialogs.showSnackBar(LocaleKeys.seriesManagement_importExport_snackbar_exportSuccessful.tr(), context);
@@ -136,7 +111,7 @@ class SeriesImportExport {
   static Future<void> _shareSeries(BuildContext context, VoidCallback afterExport) async {
     try {
       Map<String, dynamic> json = await _buildAllSeriesExportJson(context);
-      bool shared = await _shareJsonFile(json, 'xtracker_multi_series_export_${DateTimeUtils.formateExportDateTime()}.json');
+      bool shared = await JsonUtils.shareJsonFile(json, 'xtracker_multi_series_export_${DateTimeUtils.formateExportDateTime()}.json');
       if (shared) {
         SimpleLogging.i('Successfully shared all series.');
         if (context.mounted) Dialogs.showSnackBar(LocaleKeys.seriesManagement_importExport_snackbar_exportSuccessful.tr(), context);

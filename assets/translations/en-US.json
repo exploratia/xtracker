@@ -76,6 +76,12 @@
       "pressBackAgainToExit": "Press BACK again to exit...",
       "saved": "Saved..."
     },
+    "table": {
+      "column": {
+        "key": "Key",
+        "value": "Value"
+      }
+    },
     "validator": {
       "emptyValue": "Please enter a value"
     }
@@ -88,6 +94,24 @@
           "hideSlider": "Hide date slider"
         }
       }
+    }
+  },
+  "deviceInfo": {
+    "title": "Device info",
+    "action": {
+      "exportOrShare": {
+        "tooltip": "Export / share device info"
+      },
+      "export": {
+        "tooltip": "Export device info"
+      },
+      "share": {
+        "tooltip": "Share device info"
+      }
+    },
+    "snackbar": {
+      "shareSuccess": "Device info shared successfully.",
+      "exportSuccess": "Device info exported successfully."
     }
   },
   "enum": {
@@ -485,12 +509,6 @@
       },
       "query": {
         "removeAllData": "Do you really want to remove all app data from your device?"
-      },
-      "table": {
-        "column": {
-          "key": "Key",
-          "value": "Value"
-        }
       }
     },
     "general": {

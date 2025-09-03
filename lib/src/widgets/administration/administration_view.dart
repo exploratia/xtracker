@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../generated/assets.gen.dart';
 import '../../../generated/locale_keys.g.dart';
+import '../../screens/administration/device_info_screen.dart';
 import '../../screens/administration/info_screen.dart';
 import '../../screens/administration/logs_screen.dart';
 import '../../screens/administration/settings_screen.dart';
@@ -27,7 +28,7 @@ class AdministrationView extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
 
-    final links = [SettingsScreen.navItem, LogsScreen.navItem].map((navItem) => {
+    final links = [SettingsScreen.navItem, LogsScreen.navItem, DeviceInfoScreen.navItem].map((navItem) => {
           'ico': navItem.icon,
           'title': navItem.titleBuilder(),
           'routeName': navItem.routeName,
@@ -45,6 +46,7 @@ class AdministrationView extends StatelessWidget {
             showDivider: false,
             children: [
               ...links.map((lnk) => ListTile(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(ThemeUtils.borderRadius)),
                     leading: lnk['ico'] as Widget,
                     title: Text(lnk['title'] as String),
                     trailing: Icon(

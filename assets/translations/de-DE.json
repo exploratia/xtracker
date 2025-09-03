@@ -76,6 +76,12 @@
       "pressBackAgainToExit": "Zum Beenden nochmal drücken...",
       "saved": "Gespeichert..."
     },
+    "table": {
+      "column": {
+        "key": "Schlüssel",
+        "value": "Wert"
+      }
+    },
     "validator": {
       "emptyValue": "Ungültiger Wert"
     }
@@ -88,6 +94,24 @@
           "hideSlider": "Datum-Slider ausblenden"
         }
       }
+    }
+  },
+  "deviceInfo": {
+    "title": "Geräteinfo",
+    "action": {
+      "exportOrShare": {
+        "tooltip": "Geräteinfo exportieren / teilen"
+      },
+      "export": {
+        "tooltip": "Geräteinfo exportieren"
+      },
+      "share": {
+        "tooltip": "Geräteinfo teilen"
+      }
+    },
+    "snackbar": {
+      "shareSuccess": "Geräteinfo erfolgreich geteilt.",
+      "exportSuccess": "Geräteinfo erfolgreich exportiert."
     }
   },
   "enum": {
@@ -485,12 +509,6 @@
       },
       "query": {
         "removeAllData": "Wirklich alle App-Daten löschen?"
-      },
-      "table": {
-        "column": {
-          "key": "Schlüssel",
-          "value": "Wert"
-        }
       }
     },
     "general": {
