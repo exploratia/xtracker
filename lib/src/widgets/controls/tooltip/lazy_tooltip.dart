@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../../../util/media_query_utils.dart';
 import '../../../util/theme_utils.dart';
 
 class LazyTooltip extends StatefulWidget {
@@ -153,7 +154,7 @@ class _LazyTooltipState extends State<LazyTooltip> with SingleTickerProviderStat
     Size tooltipSize,
     bool isTouch,
   ) {
-    final mediaQuery = MediaQuery.of(context);
+    final mediaQuery = MediaQueryUtils.of(context).mediaQueryData;
     final screenWidth = mediaQuery.size.width;
     final screenHeight = mediaQuery.size.height;
 

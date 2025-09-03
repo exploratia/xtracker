@@ -10,6 +10,7 @@ import '../../util/date_time_utils.dart';
 import '../../util/dialogs.dart';
 import '../../util/json_utils.dart';
 import '../../util/logging/flutter_simple_logging.dart';
+import '../../util/media_query_utils.dart';
 import '../../util/theme_utils.dart';
 import '../../widgets/administration/device_info_view.dart';
 import '../../widgets/controls/appbar/gradient_app_bar.dart';
@@ -53,7 +54,7 @@ class _DeviceInfoScreenState extends State<DeviceInfoScreen> {
     super.initState();
     initPlatformState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final mediaQuery = MediaQuery.of(context);
+      final mediaQuery = MediaQueryUtils.of(context).mediaQueryData;
       final size = mediaQuery.size;
       final devicePixelRatio = mediaQuery.devicePixelRatio;
       final physicalWidth = size.width * devicePixelRatio;
