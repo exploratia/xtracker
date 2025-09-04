@@ -76,9 +76,40 @@ class ThemeUtils {
     var themeData = ThemeData(
       useMaterial3: false,
       brightness: brightness,
-      // canvas e.g. DropdownButton-Menu in settings
-      canvasColor: canvasColor,
+      canvasColor: canvasColor /* canvas e.g. DropdownButton-Menu in settings */,
+      scaffoldBackgroundColor: backgroundColor /* otherwise white|black */,
       shadowColor: shadowColor,
+      // themes
+      appBarTheme: AppBarTheme(
+        elevation: elevation * 2,
+        backgroundColor: secondary,
+        foregroundColor: onPrimary,
+        actionsIconTheme: const IconThemeData(
+          color: onPrimary,
+          size: iconSize,
+        ),
+        systemOverlayStyle: SystemUiOverlayStyle.light,
+        // dark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
+        shadowColor: shadowColor,
+      ),
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: backgroundColor,
+        selectedItemColor: primary,
+      ),
+      // Card (e.g. in Settings)
+      cardTheme: CardThemeData(
+        color: cardBackgroundColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: ThemeUtils.cardBorderRadius,
+        ),
+      ),
+      chipTheme: ChipThemeData(
+        backgroundColor: chipBackgroundColor,
+        iconTheme: IconThemeData(
+          size: iconSize,
+          color: primary,
+        ),
+      ),
       colorScheme: ColorScheme.fromSeed(seedColor: primary, brightness: brightness).copyWith(
         primary: primary,
         onPrimary: onPrimary,
@@ -86,6 +117,60 @@ class ThemeUtils {
         onSecondary: onPrimary,
         tertiary: tertiary,
       ),
+      datePickerTheme: DatePickerThemeData(
+        headerBackgroundColor: cardBackgroundColor,
+      ),
+      dialogTheme: DialogThemeData(
+        // for fullscreen background has to be set manually
+        backgroundColor: chipBackgroundColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: ThemeUtils.cardBorderRadius,
+        ),
+      ),
+      dividerTheme: DividerThemeData(
+        color: secondary,
+        thickness: 1,
+        space: verticalSpacing,
+      ),
+      drawerTheme: DrawerThemeData(
+        backgroundColor: backgroundColor,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(20),
+            bottomRight: Radius.circular(5), // 2 if scrollable
+          ),
+        ),
+      ),
+      iconTheme: IconThemeData(
+        size: iconSize,
+        color: textColor,
+      ),
+      navigationRailTheme: NavigationRailThemeData(
+        backgroundColor: backgroundColor,
+      ),
+      progressIndicatorTheme: ProgressIndicatorThemeData(
+        color: primary,
+        linearTrackColor: secondary.withAlpha(128),
+      ),
+      scrollbarTheme: ScrollbarThemeData(
+        thumbColor: WidgetStatePropertyAll(primary),
+        radius: Radius.zero,
+        interactive: true,
+        // thickness: const MaterialStatePropertyAll(10),
+        // thumbVisibility: const MaterialStatePropertyAll(true),
+        // trackVisibility: const MaterialStatePropertyAll(true),
+        // trackColor: const MaterialStatePropertyAll(Colors.blueAccent),
+        // trackBorderColor: const MaterialStatePropertyAll(Colors.purpleAccent),
+      ),
+      sliderTheme: SliderThemeData(
+        valueIndicatorColor: cardBackgroundColor,
+        valueIndicatorTextStyle: TextStyle(color: textColor),
+      ),
+      snackBarTheme: SnackBarThemeData(
+        backgroundColor: cardBackgroundColor,
+        contentTextStyle: TextStyle(color: textColor, fontSize: fontSizeBodyM),
+      ),
+      tabBarTheme: TabBarThemeData(indicatorColor: textColor),
       textTheme: TextTheme(
         titleLarge: TextStyle(color: textColor, fontSize: fontSizeTitleL, fontWeight: FontWeight.w500),
         titleMedium: TextStyle(color: textColor, fontSize: fontSizeTitleM, fontWeight: FontWeight.w400),
@@ -97,9 +182,8 @@ class ThemeUtils {
         labelMedium: TextStyle(color: textColor, fontSize: fontSizeLabelM, fontWeight: FontWeight.w400),
         labelSmall: TextStyle(color: textColor, fontSize: fontSizeLabelS, fontWeight: FontWeight.w400),
       ),
-      iconTheme: IconThemeData(
-        size: iconSize,
-        color: textColor,
+      timePickerTheme: TimePickerThemeData(
+        backgroundColor: chipBackgroundColor,
       ),
       tooltipTheme: TooltipThemeData(
         padding: const EdgeInsets.all(defaultPadding),
@@ -112,90 +196,13 @@ class ThemeUtils {
         waitDuration: const Duration(milliseconds: 500),
         // showDuration: Duration(seconds: 2),
         preferBelow: false,
-        constraints: const BoxConstraints(
-          maxWidth: 300,
-        ),
+        constraints: const BoxConstraints(maxWidth: 300),
       ),
-      sliderTheme: SliderThemeData(
-        valueIndicatorColor: cardBackgroundColor,
-        valueIndicatorTextStyle: TextStyle(color: textColor),
-      ),
-      appBarTheme: AppBarTheme(
-        elevation: elevation * 2,
-        backgroundColor: secondary,
-        // backgroundColor,
-        foregroundColor: onPrimary,
-        // dark ? Colors.white : Colors.black,
-        actionsIconTheme: const IconThemeData(
-          color: onPrimary, // dark ? Colors.white : Colors.black,
-        ),
-        systemOverlayStyle: SystemUiOverlayStyle.light,
-        // dark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
-        shadowColor: shadowColor,
-      ),
-      tabBarTheme: TabBarThemeData(indicatorColor: textColor),
-      drawerTheme: DrawerThemeData(
-        backgroundColor: backgroundColor,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topRight: Radius.circular(20),
-            bottomRight: Radius.circular(5), // 2 if scrollable
-          ),
-        ),
-      ),
-      // dividerColor: dividerColor, // Trenner bei MenuItems-Gruppierung
-      scaffoldBackgroundColor: backgroundColor /* otherwise white|black */,
-      scrollbarTheme: Theme.of(context).scrollbarTheme.copyWith(
-            thumbColor: WidgetStatePropertyAll(primary),
-            radius: Radius.zero,
-            interactive: true,
-            // thickness: const MaterialStatePropertyAll(10),
-            // thumbVisibility: const MaterialStatePropertyAll(true),
-            // trackVisibility: const MaterialStatePropertyAll(true),
-            // trackColor: const MaterialStatePropertyAll(Colors.blueAccent),
-            // trackBorderColor: const MaterialStatePropertyAll(Colors.purpleAccent),
-          ),
-      bottomNavigationBarTheme: BottomNavigationBarThemeData(backgroundColor: backgroundColor, selectedItemColor: primary),
-      snackBarTheme: SnackBarThemeData(backgroundColor: cardBackgroundColor, contentTextStyle: TextStyle(color: textColor)),
-      // Card (e.g. in Settings)
-      cardTheme: Theme.of(context).cardTheme.copyWith(
-            color: cardBackgroundColor,
-            shape: RoundedRectangleBorder(
-              borderRadius: ThemeUtils.cardBorderRadius,
-            ),
-          ),
-
-      chipTheme: ChipThemeData(
-        backgroundColor: chipBackgroundColor,
-        iconTheme: IconThemeData(
-          size: iconSize,
-          color: primary,
-        ),
-      ),
-      dialogTheme: DialogThemeData(
-        // for fullscreen background has to be set manually
-        backgroundColor: chipBackgroundColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: ThemeUtils.cardBorderRadius,
-        ),
-      ),
-      datePickerTheme: DatePickerThemeData(headerBackgroundColor: cardBackgroundColor),
-      timePickerTheme: TimePickerThemeData(backgroundColor: chipBackgroundColor),
-      dividerTheme: DividerThemeData(color: secondary, thickness: 1, space: verticalSpacing),
-      progressIndicatorTheme: ProgressIndicatorThemeData(color: primary, linearTrackColor: secondary.withAlpha(128)),
-      navigationRailTheme: NavigationRailThemeData(backgroundColor: backgroundColor),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-        shape: btnShape,
-      )),
-      textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(
-        shape: btnShape,
-      )),
-      outlinedButtonTheme: OutlinedButtonThemeData(
-          style: OutlinedButton.styleFrom(
-        shape: btnShape,
-      )),
+      // buttons
+      elevatedButtonTheme: ElevatedButtonThemeData(style: ElevatedButton.styleFrom(shape: btnShape)),
+      textButtonTheme: TextButtonThemeData(style: TextButton.styleFrom(shape: btnShape)),
+      outlinedButtonTheme: OutlinedButtonThemeData(style: OutlinedButton.styleFrom(shape: btnShape)),
+      // page transition
       pageTransitionsTheme: const PageTransitionsTheme(
         builders: {
           TargetPlatform.android: FadeTransitionsBuilder(),
