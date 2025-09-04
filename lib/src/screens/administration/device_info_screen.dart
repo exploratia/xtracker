@@ -65,7 +65,7 @@ class _DeviceInfoScreenState extends State<DeviceInfoScreen> {
         _deviceScreenData["Logical Size (dp)"] = "${size.width.toStringAsFixed(2)} × ${size.height.toStringAsFixed(2)}";
         _deviceScreenData["Device Pixel Ratio"] = devicePixelRatio;
         _deviceScreenData["Physical Pixels"] = "${physicalWidth.toStringAsFixed(0)} × ${physicalHeight.toStringAsFixed(0)}";
-        _deviceScreenData["Text scale ~"] = textScaler.scale(1);
+        _deviceScreenData["Text scale ~"] = (textScaler.scale(1) * 1000).round() / 1000;
 
         _deviceScreenData["Safe Area Top"] = "${padding.top.toStringAsFixed(2)} dp";
         _deviceScreenData["Safe Area Bottom"] = "${padding.bottom.toStringAsFixed(2)} dp";
