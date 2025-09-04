@@ -78,7 +78,7 @@
       "exportFailed": "Export fehlgeschlagen",
       "shareFailed": "Teilen fehlgeschlagen",
       "exportSuccess": "Export erfolgreich",
-      "shareSuccess": "Share erfolgreich"
+      "shareSuccess": "Teilen erfolgreich"
     },
     "table": {
       "column": {
@@ -151,7 +151,7 @@
         "tooltip": "Anzeige als Punkt-Kalender-Übersicht"
       },
       "pixels": {
-        "title": "Pixels",
+        "title": "Pixel",
         "tooltip": "Anzeige als Pixel-Kalender"
       },
       "table": {
@@ -416,7 +416,7 @@
         "lastExport": "Es wurde lange keine Sicherung mehr erstellt.\nLetzter Export: {}"
       },
       "btn": {
-        "export": "Export öffnen",
+        "export": "Jetzt exportieren...",
         "reminderIn3Days": "In 3 Tagen erneut erinnern",
         "disableReminder": "Nicht erneut erinnern"
       }
