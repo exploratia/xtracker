@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../../../util/theme_utils.dart';
 import '../navigation/hide_bottom_navigation_bar.dart';
 import 'single_child_scroll_view_with_scrollbar.dart';
 
@@ -22,10 +23,11 @@ class VCenteredSingleChildScrollViewWithScrollbar extends StatelessWidget {
         Expanded(
           child: LayoutBuilder(
             builder: (context, constraints) => SingleChildScrollViewWithScrollbar(
+              useScreenPadding: true,
               scrollPositionHandler: HideBottomNavigationBar.setScrollPosition,
               onRefreshCallback: onRefreshCallback,
               child: Container(
-                constraints: BoxConstraints(minHeight: math.max(20, constraints.maxHeight - 32)) /*-padding*/,
+                constraints: BoxConstraints(minHeight: math.max(20, constraints.maxHeight - 2 * ThemeUtils.screenPadding)),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

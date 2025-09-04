@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 
 import '../../../../model/series/series_view_meta_data.dart';
+import '../../../../util/media_query_utils.dart';
+import '../../../../util/theme_utils.dart';
 import '../../../controls/text/overflow_text.dart';
 
 class SeriesTitle extends StatelessWidget {
+  static double get seriesTitleHeight {
+    return ThemeUtils.defaultPadding + 1 + 10 + ThemeUtils.defaultPadding + ThemeUtils.fontSizeTitleL * MediaQueryUtils.textScaleFactor;
+  }
+
   const SeriesTitle({super.key, required this.seriesViewMetaData});
 
   final SeriesViewMetaData seriesViewMetaData;
@@ -11,9 +17,15 @@ class SeriesTitle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    return Center(
+    return Align(
+      alignment: AlignmentGeometry.topCenter,
       child: Padding(
-        padding: const EdgeInsets.only(left: 8, right: 8, bottom: 8),
+        padding: const EdgeInsets.only(
+          top: 0,
+          left: ThemeUtils.defaultPadding,
+          right: ThemeUtils.defaultPadding,
+          bottom: ThemeUtils.defaultPadding,
+        ),
         child: Container(
           decoration: BoxDecoration(
             gradient: LinearGradient(
@@ -41,12 +53,12 @@ class SeriesTitle extends StatelessWidget {
                 borderRadius: const BorderRadius.only(bottomLeft: Radius.circular(10), bottomRight: Radius.circular(10)),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(ThemeUtils.defaultPadding),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
-                  spacing: 8,
+                  spacing: ThemeUtils.horizontalSpacing,
                   children: [
-                    Hero(tag: 'seriesDef_${seriesViewMetaData.seriesDef.uuid}', child: seriesViewMetaData.seriesDef.icon()),
+                    Hero(tag: 'seriesDef_${seriesViewMetaData.seriesDef.uuid}', child: seriesViewMetaData.seriesDef.icon(size: ThemeUtils.iconSizeScaled)),
                     OverflowText(
                       seriesViewMetaData.seriesDef.name,
                       expanded: false,

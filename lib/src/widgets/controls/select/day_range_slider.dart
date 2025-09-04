@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../../../../generated/locale_keys.g.dart';
 import '../../../util/date_time_utils.dart';
 import '../../../util/defer.dart';
+import '../../../util/media_query_utils.dart';
 import '../../../util/theme_utils.dart';
 import '../../../util/tooltip_utils.dart';
 import '../animation/reverse_progress.dart';
@@ -33,6 +34,10 @@ class DayRangeSlider extends StatefulWidget {
 
   @override
   State<DayRangeSlider> createState() => _DayRangeSliderState();
+
+  static double calcAdditionalHeightByTextScale() {
+    return MediaQueryUtils.calcAdditionalHeightByTextScale(ThemeUtils.fontSizeBodyM);
+  }
 }
 
 class _DayRangeSliderState extends State<DayRangeSlider> {
@@ -150,7 +155,7 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
     var btnBoxDecoration = BoxDecoration(
       color: themeData.scaffoldBackgroundColor.withAlpha(192),
       border: Border.all(color: btnBorderColor, width: 1),
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(ThemeUtils.borderRadiusLarge),
     );
     var btnTextStyle = TooltipUtils.tooltipMonospaceStyle.copyWith(color: themeData.colorScheme.primary);
 
@@ -158,80 +163,92 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
       children: [
         // progress
         Positioned(
-          left: 10,
-          right: 10,
-          top: _sliderVisible ? 58 : 55,
-          height: 1,
+          left: ThemeUtils.screenPadding,
+          right: ThemeUtils.screenPadding,
+          top: 54,
+          height: 1 * MediaQueryUtils.textScaleFactor,
           child: ReverseProgress(
             key: _reverseProgressKey,
             maxWidth: 230,
-            height: 1,
+            height: 1 * MediaQueryUtils.textScaleFactor,
             color: themeData.colorScheme.secondary,
             duration: Defer.defaultDuration,
             onEndCallback: _onProgressEnd,
           ),
         ),
         // button with date range
-        AnimatedPositioned(
+        Positioned(
           left: 0,
           right: 0,
           top: 2,
-          duration: const Duration(milliseconds: 300),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            spacing: 10,
-            children: [
-              Container(
-                decoration: btnBoxDecoration,
-                child: Row(
-                  children: [
-                    Tooltip(
-                      message: LocaleKeys.commons_btn_selectDate_tooltip.tr(),
-                      child: TextButton(
-                        onPressed: () => _selectDate(context, true),
-                        child: Text(
-                          DateTimeUtils.formateYYYMMDD(_firstDayStart.add(Duration(days: _values.start.toInt(), hours: 12))),
-                          style: btnTextStyle,
+          child: LayoutBuilder(
+            builder: (BuildContext context, BoxConstraints constraints) {
+              return SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minWidth: constraints.maxWidth, // extend if row smaller then layout builder width
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    spacing: ThemeUtils.horizontalSpacing,
+                    // mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Container(
+                        decoration: btnBoxDecoration,
+                        child: Row(
+                          children: [
+                            Tooltip(
+                              message: LocaleKeys.commons_btn_selectDate_tooltip.tr(),
+                              child: TextButton(
+                                onPressed: () => _selectDate(context, true),
+                                child: Text(
+                                  DateTimeUtils.formateYYYMMDD(_firstDayStart.add(Duration(days: _values.start.toInt(), hours: 12))),
+                                  style: btnTextStyle,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              "-",
+                              style: btnTextStyle,
+                            ),
+                            Tooltip(
+                              message: LocaleKeys.commons_btn_selectDate_tooltip.tr(),
+                              child: TextButton(
+                                onPressed: () => _selectDate(context, false),
+                                child: Text(
+                                  DateTimeUtils.formateYYYMMDD(_firstDayStart.add(Duration(days: _values.end.toInt(), hours: 12))),
+                                  style: btnTextStyle,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                    Text(
-                      "-",
-                      style: btnTextStyle,
-                    ),
-                    Tooltip(
-                      message: LocaleKeys.commons_btn_selectDate_tooltip.tr(),
-                      child: TextButton(
-                        onPressed: () => _selectDate(context, false),
-                        child: Text(
-                          DateTimeUtils.formateYYYMMDD(_firstDayStart.add(Duration(days: _values.end.toInt(), hours: 12))),
-                          style: btnTextStyle,
+                      Container(
+                        decoration: btnBoxDecoration,
+                        child: Tooltip(
+                          message: _sliderVisible
+                              ? LocaleKeys.controls_select_dayRangeSlider_btn_hideSlider.tr()
+                              : LocaleKeys.controls_select_dayRangeSlider_btn_showSlider.tr(),
+                          child: TextButton(
+                            // button a bit smaller width to not overflow at 250
+                            style: TextButton.styleFrom(
+                              minimumSize: const Size(56, 48),
+                            ),
+                            onPressed: _toggleSliderVisible,
+                            child: Text(
+                              _sliderVisible ? '▼' : '▲',
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              Container(
-                decoration: btnBoxDecoration,
-                child: Tooltip(
-                  message: _sliderVisible
-                      ? LocaleKeys.controls_select_dayRangeSlider_btn_hideSlider.tr()
-                      : LocaleKeys.controls_select_dayRangeSlider_btn_showSlider.tr(),
-                  child: TextButton(
-                    // button a bit smaller width to not overflow at 250
-                    style: TextButton.styleFrom(
-                      minimumSize: const Size(56, 48),
-                    ),
-                    onPressed: _toggleSliderVisible,
-                    child: Text(
-                      _sliderVisible ? '▼' : '▲',
-                    ),
+                    ],
                   ),
                 ),
-              ),
-            ],
+              );
+            },
           ),
         ),
         // Slider
@@ -244,7 +261,7 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
             ignoring: !_sliderVisible,
             child: AnimatedOpacity(
               opacity: _sliderVisible ? 1 : 0,
-              duration: const Duration(milliseconds: 300),
+              duration: Duration(milliseconds: _sliderVisible ? ThemeUtils.animationDuration : ThemeUtils.animationDurationShort),
               child: RangeSlider(
                 min: 0,
                 max: _maxDays.toDouble(),
@@ -288,7 +305,7 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
               ignoring: !_sliderVisible,
               child: AnimatedOpacity(
                 opacity: _sliderVisible ? 1 : 0,
-                duration: const Duration(milliseconds: 300),
+                duration: Duration(milliseconds: _sliderVisible ? ThemeUtils.animationDuration : ThemeUtils.animationDurationShort),
                 child: LayoutBuilder(
                   builder: (context, constraints) {
                     double sliderWidth = constraints.maxWidth - 48; // 48 padding
@@ -367,14 +384,18 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
                               margin: const EdgeInsets.symmetric(vertical: 14),
                               decoration: BoxDecoration(
                                 color: themeData.colorScheme.primary,
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: ThemeUtils.borderRadiusCircular,
                               ),
-                              child: Center(
-                                child: Text(
-                                  "|||",
-                                  style: themeData.textTheme.bodyMedium?.copyWith(color: themeData.colorScheme.onPrimary),
-                                ),
-                              ),
+                              child: const Center(
+                                  child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                spacing: ThemeUtils.horizontalSpacingSmall,
+                                children: [
+                                  _DragLine(),
+                                  _DragLine(),
+                                  _DragLine(),
+                                ],
+                              )),
                             ),
                           ),
                         ),
@@ -386,6 +407,19 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
             ),
           ),
       ],
+    );
+  }
+}
+
+class _DragLine extends StatelessWidget {
+  const _DragLine();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: ThemeUtils.onPrimary,
+      height: ThemeUtils.fontSizeBodyM,
+      width: 2,
     );
   }
 }

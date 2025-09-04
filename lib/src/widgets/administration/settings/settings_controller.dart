@@ -34,6 +34,25 @@ class SettingsController with ChangeNotifier {
 
   bool get hideNavigationLabels => _hideNavigationLabels;
 
+  DateTime? _seriesExportDate;
+
+  DateTime? get seriesExportDate => _seriesExportDate;
+
+  bool _seriesExportDisableReminder = false;
+
+  bool get seriesExportDisableReminder => _seriesExportDisableReminder;
+
+  DateTime? _seriesExportReminderDate;
+
+  DateTime? get seriesExportReminderDate => _seriesExportReminderDate;
+
+  DateTime? _appSupportReminderDate;
+
+  DateTime get appSupportReminderDate {
+    _appSupportReminderDate ??= DateTime(initialAppStart.year + 1, initialAppStart.month, initialAppStart.day);
+    return _appSupportReminderDate!;
+  }
+
   /// Load the user's settings from the SettingsService. It may load from a
   /// local database or the internet. The controller only knows it can load the
   /// settings from the service.
@@ -43,6 +62,10 @@ class SettingsController with ChangeNotifier {
     _locale = await _settingsService.locale();
     _hideNavigationLabels = await _settingsService.hideNavigationLabels();
     HideNavigationLabels.setVisible(!_hideNavigationLabels);
+    _seriesExportDate = await _settingsService.seriesExportDate();
+    _seriesExportDisableReminder = await _settingsService.seriesExportDisableReminder();
+    _seriesExportReminderDate = await _settingsService.seriesExportReminderDate();
+    _appSupportReminderDate = await _settingsService.appSupportReminderDate();
     // Important! Inform listeners a change has occurred.
     notifyListeners();
   }
@@ -106,10 +129,44 @@ class SettingsController with ChangeNotifier {
     _hideNavigationLabels = value;
 
     // Important! Inform listeners a change has occurred.
-    // notifyListeners();
     HideNavigationLabels.setVisible(!_hideNavigationLabels);
+    notifyListeners();
 
     // Persist the changes to a local database or the internet using the SettingService.
     await _settingsService.updateHideNavigationLabels(value);
+  }
+
+  /// Update and persist
+  Future<void> updateSeriesExportDate() async {
+    _seriesExportDate = await _settingsService.updateSeriesExportDate();
+    await updateSeriesExportReminderDate(30);
+    // notifyListeners(); // notify is already called in updateSeriesExportReminderDate
+  }
+
+  /// Update and persist the series export reminder
+  Future<void> updateSeriesExportDisableReminder(bool value) async {
+    if (value == _seriesExportDisableReminder) return;
+    _seriesExportDisableReminder = value;
+
+    notifyListeners();
+
+    await _settingsService.updateSeriesExportDisableReminder(value);
+  }
+
+  /// Update and persist
+  Future<void> updateSeriesExportReminderDate(int days) async {
+    var dateTime = DateTime.now().add(Duration(days: days));
+    _seriesExportReminderDate = dateTime;
+    notifyListeners();
+    await _settingsService.updateSeriesExportReminderDate(dateTime);
+  }
+
+  /// Update and persist
+  Future<void> updateAppSupportReminderDate() async {
+    var now = DateTime.now();
+    var dateTime = DateTime(now.year + 1, initialAppStart.month, initialAppStart.day);
+    _appSupportReminderDate = dateTime;
+    notifyListeners();
+    await _settingsService.updateAppSupportReminderDate(dateTime);
   }
 }

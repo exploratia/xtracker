@@ -37,10 +37,21 @@ class _IconPickerState extends State<IconPicker> {
       value: currentIcoName,
       onChanged: (value) => changeIco(value),
       // menuMaxHeight: 300,
+      iconSize: ThemeUtils.iconSizeScaled,
       items: IconMap.icons.keys.map((icoName) {
-        var text = Icon(IconMap.icons[icoName]);
+        var ico = Icon(
+          IconMap.icons[icoName],
+          size: ThemeUtils.iconSizeScaled,
+        );
         var selected = currentIcoName == icoName;
-        return DropdownMenuItem<String>(key: Key('icoSelect_$icoName'), value: icoName, child: DropDownMenuItemChild(selected: selected, child: text));
+        return DropdownMenuItem<String>(
+          key: Key('icoSelect_$icoName'),
+          value: icoName,
+          child: DropDownMenuItemChild(
+            selected: selected,
+            child: ico,
+          ),
+        );
       }).toList(),
     );
 

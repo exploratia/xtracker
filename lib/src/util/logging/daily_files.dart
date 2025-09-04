@@ -310,14 +310,14 @@ class DailyFiles {
     });
   }
 
-  static Future<String> zipAllLogs() async {
+  static Future<File> zipAllLogs() async {
     final tmpDir = _tmpDir;
     if (tmpDir == null) throw 'No tmp dir available!';
     final logsDir = _logsDir;
     if (logsDir == null) throw 'No log dir found!';
     var zipFile = File('${tmpDir.path}/logs_${DateFormat('yyyy-MM-dd_HH_mm_ss').format(DateTime.now())}.zip');
     await ZipFile.createFromDirectory(sourceDir: logsDir, zipFile: zipFile, recurseSubDirs: true);
-    return zipFile.path;
+    return zipFile;
   }
 }
 

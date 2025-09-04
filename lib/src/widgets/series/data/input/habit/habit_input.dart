@@ -9,6 +9,7 @@ import '../../../../../model/series/series_def.dart';
 import '../../../../../providers/series_data_provider.dart';
 import '../../../../../util/dialogs.dart';
 import '../../../../../util/logging/flutter_simple_logging.dart';
+import '../../../../../util/media_query_utils.dart';
 import '../../../../../util/theme_utils.dart';
 import '../../../../controls/layout/single_child_scroll_view_with_scrollbar.dart';
 import '../../../../controls/text/overflow_text.dart';
@@ -90,7 +91,7 @@ class _HabitInputState extends State<HabitInput> {
       } catch (err) {
         SimpleLogging.w('Failed to delete habit value.', error: err);
         if (mounted) {
-          Dialogs.simpleErrOkDialog('$err', context);
+          Dialogs.showSnackBarWarning(LocaleKeys.commons_snackbar_deleteFailed.tr(), context);
         }
       }
     }
@@ -99,17 +100,17 @@ class _HabitInputState extends State<HabitInput> {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
+    var iconSize = ThemeUtils.iconSizeScaled;
 
     var edit = Column(
       mainAxisSize: MainAxisSize.min,
-      spacing: 10,
+      spacing: ThemeUtils.verticalSpacing,
       children: [
         InputHeader(dateTime: _dateTime, seriesDef: widget.seriesDef, setDateTime: _setDateTime),
         const Divider(height: 1),
-        const SizedBox(height: 3),
         IconButton(
           tooltip: LocaleKeys.seriesValue_habit_btn_toggleValue_tooltip.tr(),
-          iconSize: 40,
+          iconSize: 40 * MediaQueryUtils.textScaleFactor,
           icon: Icon(_isValid ? Icons.check_box_outlined : Icons.check_box_outline_blank),
           onPressed: _toggleChecked,
         ),
@@ -120,25 +121,24 @@ class _HabitInputState extends State<HabitInput> {
       title: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: ThemeUtils.seriesDataInputDlgMaxWidth),
         child: Row(
+          spacing: ThemeUtils.horizontalSpacing,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            widget.habitValue == null ? const Icon(Icons.add_outlined) : const Icon(Icons.edit_outlined),
-            const SizedBox(width: 10),
+            widget.habitValue == null ? Icon(Icons.add_outlined, size: iconSize) : Icon(Icons.edit_outlined, size: iconSize),
             OverflowText(widget.seriesDef.name),
-            // Text(SeriesType.displayNameOf(widget.seriesDef.seriesType)),
             if (widget.habitValue != null)
               IconButton(
                 tooltip: LocaleKeys.seriesValue_action_deleteValue_tooltip.tr(),
                 onPressed: _deleteHandler,
                 color: themeData.colorScheme.secondary,
+                iconSize: iconSize,
                 icon: const Icon(Icons.delete_outlined),
               ),
           ],
         ),
       ),
       content: SingleChildScrollViewWithScrollbar(
-        useScreenPadding: false,
         child: edit,
       ),
       actions: [

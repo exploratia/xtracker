@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../util/theme_utils.dart';
+
 class IconPopupMenu extends StatefulWidget {
   /// [animated] if true, fly in. Fade is always active, because of the default page transition.
   const IconPopupMenu({super.key, required this.icon, required this.menuEntries, this.animated = true});
@@ -29,7 +31,7 @@ class _IconPopupMenuState extends State<IconPopupMenu> {
     final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
     final Offset offset = button.localToGlobal(Offset.zero, ancestor: overlay);
 
-    final menuPosition = Offset(offset.dx, offset.dy + button.size.height + 16);
+    final menuPosition = Offset(offset.dx, offset.dy + button.size.height + ThemeUtils.verticalSpacingLarge);
 
     showGeneralDialog(
       context: context,
@@ -62,7 +64,7 @@ class _Menu extends StatelessWidget {
         ? _AnimatedMenu(menuEntries: menuEntries)
         : Column(
             mainAxisSize: MainAxisSize.min,
-            spacing: 16,
+            spacing: ThemeUtils.verticalSpacingLarge,
             children: [
               ...menuEntries.map(
                 (mi) => _MenuItemIconButton(mi),
@@ -142,7 +144,7 @@ class _AnimatedMenuState extends State<_AnimatedMenu> with SingleTickerProviderS
     }
 
     return Column(
-      spacing: 16,
+      spacing: ThemeUtils.verticalSpacingLarge,
       mainAxisSize: MainAxisSize.min,
       children: items,
     );
@@ -161,7 +163,7 @@ class _MenuItemIconButton extends StatelessWidget {
       shape: const CircleBorder(),
       clipBehavior: Clip.antiAlias,
       color: themeData.colorScheme.secondary,
-      elevation: 4.0,
+      elevation: ThemeUtils.elevation,
       child: IconButton(
         tooltip: menuEntry.tooltip,
         hoverColor: themeData.colorScheme.primary,

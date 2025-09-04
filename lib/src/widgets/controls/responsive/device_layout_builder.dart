@@ -10,7 +10,7 @@ class DeviceLayoutBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mediaQueryInfo = MediaQueryUtils(MediaQuery.of(context));
+    final mediaQueryInfo = MediaQueryUtils.of(context);
     if (mediaQueryInfo.isTablet && tabletBuilder != null) {
       return tabletBuilder!(context);
     }

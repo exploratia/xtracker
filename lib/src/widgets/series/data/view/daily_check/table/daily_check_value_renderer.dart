@@ -4,10 +4,14 @@ import '../../../../../../model/series/data/daily_check/daily_check_value.dart';
 import '../../../../../../model/series/data/series_data.dart';
 import '../../../../../../model/series/series_def.dart';
 import '../../../../../../util/date_time_utils.dart';
+import '../../../../../../util/media_query_utils.dart';
+import '../../../../../../util/theme_utils.dart';
 import '../../../../../../util/tooltip_utils.dart';
 
 class DailyCheckValueRenderer extends StatelessWidget {
-  static int height = 28;
+  static int get height {
+    return (28 * MediaQueryUtils.textScaleFactor).ceil();
+  }
 
   const DailyCheckValueRenderer({
     super.key,
@@ -30,6 +34,7 @@ class DailyCheckValueRenderer extends StatelessWidget {
     Widget result = Container(
       margin: const EdgeInsets.all(2),
       child: Icon(
+        size: ThemeUtils.iconSizeScaled,
         Icons.check_box_outlined,
         color: editMode ? themeData.colorScheme.secondary : null,
       ),
@@ -37,7 +42,7 @@ class DailyCheckValueRenderer extends StatelessWidget {
 
     if (editMode) {
       result = InkWell(
-        borderRadius: const BorderRadius.all(Radius.circular(4)),
+        borderRadius: ThemeUtils.borderRadiusCircularSmall,
         onTap: () => SeriesData.showSeriesDataInputDlg(context, seriesDef, value: dailyCheckValue),
         child: result,
       );

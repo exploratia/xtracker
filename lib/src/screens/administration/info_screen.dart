@@ -10,7 +10,7 @@ import '../../widgets/controls/responsive/screen_builder.dart';
 
 class InfoScreen extends StatelessWidget {
   static NavigationItem navItem = NavigationItem(
-    icon: const Icon(Icons.info_outline),
+    iconData: Icons.info_outline,
     routeName: '/info',
     titleBuilder: () => LocaleKeys.appTitle.tr(), // title is overridden in appBarBuilder
   );

@@ -35,16 +35,13 @@ class SettingsCard extends StatelessWidget {
     return CenterH(
       child: DeviceDependentWidthConstrainedBox(
         child: Card(
-          // margin: const EdgeInsets.all(8.0),
           child: Padding(
-            padding: ThemeUtils.cardPadding,
+            padding: ThemeUtils.cardPaddingAll,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _buildTitle(context),
-                if (showDivider) const SizedBox(height: 10),
-                if (showDivider) const Divider(),
-                if (showDivider) const SizedBox(height: 10),
+                if (showDivider) const Divider(height: ThemeUtils.verticalSpacingLarge),
                 Column(
                   crossAxisAlignment: childrenColumnCrossAxisAlignment,
                   spacing: spacing,

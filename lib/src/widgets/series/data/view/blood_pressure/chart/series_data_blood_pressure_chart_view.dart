@@ -5,17 +5,19 @@ import '../../../../../../model/series/data/blood_pressure/blood_pressure_value.
 import '../../../../../../model/series/data/series_data_filter.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
 import '../../../../../../util/chart/chart_utils_blood_pressure.dart';
-import '../../../../../../util/theme_utils.dart';
 import '../../../../../controls/chart/chart_container.dart';
 import '../../../../../controls/layout/single_child_scroll_view_with_scrollbar.dart';
 import '../../series_data_no_data.dart';
+import '../../series_data_view_overlays.dart';
 
 class SeriesDataBloodPressureChartView extends StatelessWidget {
-  const SeriesDataBloodPressureChartView({super.key, required this.seriesViewMetaData, required this.seriesData, required this.seriesDataFilter});
+  const SeriesDataBloodPressureChartView(
+      {super.key, required this.seriesViewMetaData, required this.seriesData, required this.seriesDataFilter, required this.seriesDataViewOverlays});
 
   final SeriesViewMetaData seriesViewMetaData;
   final List<BloodPressureValue> seriesData;
   final SeriesDataFilter seriesDataFilter;
+  final SeriesDataViewOverlays seriesDataViewOverlays;
 
   @override
   Widget build(BuildContext context) {
@@ -31,22 +33,20 @@ class SeriesDataBloodPressureChartView extends StatelessWidget {
 
     return LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
       return SingleChildScrollViewWithScrollbar(
-        useScreenPadding: false,
         useHorizontalScreenPadding: true,
         child: Column(
           children: [
+            seriesDataViewOverlays.buildTopSpacer(),
             ChartContainer(
               showDateTooltip: true,
-              maxVisibleHeight: constraints.maxHeight - ThemeUtils.seriesDataBottomFilterViewHeight,
+              maxVisibleHeight: constraints.maxHeight - seriesDataViewOverlays.height,
               chartWidgetBuilder: (touchCallback) {
                 return LineChart(
-                  ChartUtilsBloodPressure.buildLineChartData(filteredSeriesData, themeData, touchCallback),
+                  ChartUtilsBloodPressure.buildLineChartData(filteredSeriesData, themeData, touchCallback, context),
                 );
               },
             ),
-            const SizedBox(
-              height: ThemeUtils.seriesDataBottomFilterViewHeight,
-            ),
+            seriesDataViewOverlays.buildBottomSpacer(),
           ],
         ),
       );

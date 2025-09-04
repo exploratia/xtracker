@@ -1,6 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../generated/locale_keys.g.dart';
 import '../../../providers/series_data_provider.dart';
 import '../../../util/dialogs.dart';
 import '../../../util/logging/flutter_simple_logging.dart';
@@ -112,7 +114,7 @@ class SeriesData<T extends SeriesDataValue> {
             } catch (ex) {
               SimpleLogging.w('Failed to store blood pressure value.', error: ex);
               if (context.mounted) {
-                Dialogs.simpleErrOkDialog(ex.toString(), context);
+                Dialogs.showSnackBarWarning(LocaleKeys.commons_snackbar_saveFailed.tr(), context);
               }
             }
           }
@@ -135,7 +137,7 @@ class SeriesData<T extends SeriesDataValue> {
             } catch (ex) {
               SimpleLogging.w('Failed to store daily check value.', error: ex);
               if (context.mounted) {
-                Dialogs.simpleErrOkDialog(ex.toString(), context);
+                Dialogs.showSnackBarWarning(LocaleKeys.commons_snackbar_saveFailed.tr(), context);
               }
             }
           }
@@ -158,7 +160,7 @@ class SeriesData<T extends SeriesDataValue> {
             } catch (ex) {
               SimpleLogging.w('Failed to store habit value.', error: ex);
               if (context.mounted) {
-                Dialogs.simpleErrOkDialog(ex.toString(), context);
+                Dialogs.showSnackBarWarning(LocaleKeys.commons_snackbar_saveFailed.tr(), context);
               }
             }
           }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'screens/administration/administration_screen.dart';
+import 'screens/administration/device_info_screen.dart';
 import 'screens/administration/info_screen.dart';
 import 'screens/administration/log_screen.dart';
 import 'screens/administration/log_settings_screen.dart';
@@ -51,13 +52,14 @@ class Routing {
         if (routeName == LogSettingsScreen.navItem.routeName) return const LogSettingsScreen();
         if (routeName == InfoScreen.navItem.routeName) return InfoScreen(args: args);
         if (routeName == SettingsScreen.navItem.routeName) return SettingsScreen(controller: settingsController);
+        if (routeName == DeviceInfoScreen.navItem.routeName) return const DeviceInfoScreen();
         // << administration
         // series >>
         if (routeName == SeriesDataScreen.navItem.routeName) return SeriesDataScreen(args: args);
         // << series
 
         // fallback
-        return const HomeScreen();
+        return HomeScreen(settingsController: settingsController);
       },
     );
   }

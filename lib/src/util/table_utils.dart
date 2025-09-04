@@ -1,16 +1,25 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+
+import '../../generated/locale_keys.g.dart';
+import 'theme_utils.dart';
 
 class TableUtils {
   static TableRow tableHeadline(
     List<dynamic> values, {
-    Decoration? decoration,
     EdgeInsets? cellPadding,
+    required ThemeData themeData,
   }) {
+    Decoration decoration = BoxDecoration(
+      color: themeData.canvasColor,
+      borderRadius: const BorderRadius.vertical(top: Radius.circular(ThemeUtils.borderRadius)),
+    );
+    EdgeInsets cellPad = cellPadding ??
+        const EdgeInsets.only(top: ThemeUtils.defaultPadding, left: ThemeUtils.paddingSmall, right: ThemeUtils.paddingSmall, bottom: ThemeUtils.paddingSmall);
+
     return TableRow(decoration: decoration, children: [
       ...values.map(
         (value) {
-          EdgeInsets cellPad = cellPadding ?? const EdgeInsets.symmetric(vertical: 4, horizontal: 4);
-
           Widget child;
           if (value is Widget) {
             child = value;
@@ -37,6 +46,8 @@ class TableUtils {
     Decoration? decoration,
     EdgeInsets? cellPadding,
   }) {
+    var cPadding = cellPadding ?? const EdgeInsets.symmetric(vertical: ThemeUtils.paddingSmall / 2, horizontal: ThemeUtils.paddingSmall);
+
     return TableRow(decoration: decoration, children: [
       ...values.map((value) {
         Widget child;
@@ -50,25 +61,40 @@ class TableUtils {
         }
         return _TableCellPadding(
           child,
-          edgeInsets: cellPadding,
+          edgeInsets: cPadding,
         );
       }),
     ]);
+  }
+
+  /// returns a TableRows list for a key value table. Headline row is already inserted.
+  static List<TableRow> buildKeyValueTableRows(BuildContext context) {
+    final themeData = Theme.of(context);
+    return [
+      TableUtils.tableHeadline(
+        [
+          LocaleKeys.commons_table_column_key.tr(),
+          LocaleKeys.commons_table_column_value.tr(),
+        ],
+        themeData: themeData,
+      ),
+    ];
   }
 }
 
 class _TableCellPadding extends StatelessWidget {
   final Widget child;
-  final EdgeInsets? edgeInsets;
+  final EdgeInsets edgeInsets;
 
-  const _TableCellPadding(this.child, {this.edgeInsets});
+  const _TableCellPadding(this.child, {required this.edgeInsets});
 
   @override
   Widget build(BuildContext context) {
     return TableCell(
-      verticalAlignment: TableCellVerticalAlignment.middle,
+      // could be set per table by  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+      // verticalAlignment: TableCellVerticalAlignment.middle,
       child: Padding(
-        padding: edgeInsets ?? const EdgeInsets.symmetric(vertical: 2, horizontal: 4),
+        padding: edgeInsets,
         child: child,
       ),
     );

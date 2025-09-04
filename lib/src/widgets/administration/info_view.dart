@@ -4,6 +4,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../util/info_type.dart';
 import '../../util/logging/flutter_simple_logging.dart';
+import '../../util/theme_utils.dart';
 import '../controls/layout/single_child_scroll_view_with_scrollbar.dart';
 import '../controls/navigation/hide_bottom_navigation_bar.dart';
 
@@ -28,13 +29,14 @@ class InfoView extends StatelessWidget {
     final themeData = Theme.of(context);
     var defaultTextStyle = TextStyle(
       color: themeData.textTheme.bodyMedium?.color,
-      fontSize: 14,
+      fontSize: ThemeUtils.fontSizeBodyM,
     );
     Map<String, TextStyle> overrideStyle = {
       "a": TextStyle(color: themeData.colorScheme.primary, fontWeight: themeData.textTheme.bodyMedium?.fontWeight),
     };
 
     return SingleChildScrollViewWithScrollbar(
+      useScreenPadding: true,
       scrollPositionHandler: HideBottomNavigationBar.setScrollPosition,
       child: FutureBuilder(
           future: infoType.html(context),

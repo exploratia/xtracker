@@ -2,6 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../../../util/media_query_utils.dart';
+import '../../../util/theme_utils.dart';
+
 class LazyTooltip extends StatefulWidget {
   final Widget child;
   final Widget Function(BuildContext) tooltipBuilder;
@@ -68,14 +71,14 @@ class _LazyTooltipState extends State<LazyTooltip> with SingleTickerProviderStat
         color: Colors.transparent,
         child: Container(
           key: tooltipKey,
-          padding: theme.padding ?? const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          padding: theme.padding ?? const EdgeInsets.symmetric(horizontal: ThemeUtils.defaultPadding, vertical: ThemeUtils.defaultPadding / 2),
           decoration: theme.decoration ??
               BoxDecoration(
                 color: Colors.grey,
-                borderRadius: BorderRadius.circular(4),
+                borderRadius: ThemeUtils.borderRadiusCircularSmall,
               ),
           child: DefaultTextStyle(
-            style: theme.textStyle ?? const TextStyle(color: Colors.white, fontSize: 12),
+            style: theme.textStyle ?? const TextStyle(color: Colors.white, fontSize: ThemeUtils.fontSizeBodyS),
             child: widget.tooltipBuilder(context),
           ),
         ),
@@ -151,16 +154,17 @@ class _LazyTooltipState extends State<LazyTooltip> with SingleTickerProviderStat
     Size tooltipSize,
     bool isTouch,
   ) {
-    final mediaQuery = MediaQuery.of(context);
+    final mediaQuery = MediaQueryUtils.of(context).mediaQueryData;
     final screenWidth = mediaQuery.size.width;
     final screenHeight = mediaQuery.size.height;
 
     final touchMargin = isTouch ? 24 : 0;
+    var saveSpace = ThemeUtils.defaultPadding;
 
-    final safeLeft = mediaQuery.padding.left + 8;
-    final safeRight = screenWidth - mediaQuery.padding.right - 8;
-    final safeTop = mediaQuery.padding.top + 8 + touchMargin;
-    final safeBottom = screenHeight - mediaQuery.padding.bottom - 8 - touchMargin;
+    final safeLeft = mediaQuery.padding.left + saveSpace;
+    final safeRight = screenWidth - mediaQuery.padding.right - saveSpace;
+    final safeTop = mediaQuery.padding.top + saveSpace + touchMargin;
+    final safeBottom = screenHeight - mediaQuery.padding.bottom - saveSpace - touchMargin;
 
     // Horizontal position
     double left = targetPos.dx + targetSize.width / 2 - tooltipSize.width / 2;
@@ -174,9 +178,9 @@ class _LazyTooltipState extends State<LazyTooltip> with SingleTickerProviderStat
     final spaceBelow = safeBottom - (targetPos.dy + targetSize.height);
     double top;
     if (tooltipSize.height <= spaceAbove) {
-      top = targetPos.dy - tooltipSize.height - 8 - touchMargin;
+      top = targetPos.dy - tooltipSize.height - saveSpace - touchMargin;
     } else if (tooltipSize.height <= spaceBelow) {
-      top = targetPos.dy + targetSize.height + 8 + touchMargin;
+      top = targetPos.dy + targetSize.height + saveSpace + touchMargin;
     } else {
       if (spaceAbove > spaceBelow) {
         top = safeTop;

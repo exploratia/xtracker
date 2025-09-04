@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../util/i18n.dart';
+import '../../util/media_query_utils.dart';
+import '../../util/theme_utils.dart';
 import '../../widgets/controls/text/overflow_text.dart';
 
 class ColumnProfile {
@@ -14,6 +16,10 @@ class ColumnProfile {
 
   double minWidth() {
     return columns.fold(0, (previousValue, element) => previousValue + element.minWidth);
+  }
+
+  double minWidthScaled() {
+    return columns.fold(0, (previousValue, element) => previousValue + element.minWidthScaled);
   }
 
   int length() {
@@ -31,9 +37,9 @@ class ColumnProfile {
 
   /// stretch to given width
   ColumnProfile adjustToWidth(double width) {
-    double minW = minWidth().toDouble();
+    double minWScaled = minWidthScaled();
     // is column profile wider then available width - return clone
-    if (minW >= width) {
+    if (minWScaled >= width) {
       return ColumnProfile(columns: [...columns]);
     }
 
@@ -41,8 +47,8 @@ class ColumnProfile {
     bool addMargin = false;
     double horizontalMargin = -1000;
 
-    double widthFactor = width / minW;
-    // if too wide limit and add margin to first (=date) column
+    double widthFactor = (width / MediaQueryUtils.textScaleFactor) / minWidth();
+    // if too wide limit and add margin columns
     if (widthFactor > 2) {
       widthFactor = 2;
       addMargin = true;
@@ -50,8 +56,8 @@ class ColumnProfile {
     List<ColumnDef> adjustedColumns = columns.map((e) => e.copyWithWidthFactor(widthFactor)).toList();
 
     if (addMargin) {
-      var adjustedWidth = adjustedColumns.fold(0.toDouble(), (previousValue, element) => previousValue + element.minWidth);
-      horizontalMargin = (width - adjustedWidth) / 2;
+      double adjustedWidthScaled = adjustedColumns.fold(0.toDouble(), (previousValue, element) => previousValue + element.minWidthScaled);
+      horizontalMargin = (width - adjustedWidthScaled) / 2;
       adjustedColumns = [
         ColumnDef(minWidth: horizontalMargin, isMarginColumn: true, title: ''),
         ...adjustedColumns,
@@ -85,6 +91,12 @@ class ColumnDef {
         minWidth: (minWidth * widthFactor), title: title, msgId: msgId, textAlign: textAlign, titleWidget: titleWidget, disablePadding: disablePadding);
   }
 
+  double get minWidthScaled {
+    // scale must only be applied to value columns - must not be applied to margin columns!
+    if (isMarginColumn) return minWidth;
+    return minWidth * MediaQueryUtils.textScaleFactor;
+  }
+
   MainAxisAlignment determineMainAxisAlignmentFromTextAlign() {
     var mainAxisAlignment = MainAxisAlignment.center;
     if (textAlign != null) {
@@ -99,7 +111,7 @@ class ColumnDef {
 
   @override
   String toString() {
-    return 'TableColumn{minWidth: $minWidth}';
+    return 'TableColumn{minWidth: $minWidth (scaled: $minWidthScaled)}';
   }
 
   Widget getTableColumnHeadItemWidget() {
@@ -119,7 +131,7 @@ class ColumnDef {
     }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4),
+      padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.paddingSmall),
       child: OverflowText(
         txt,
         expanded: false,

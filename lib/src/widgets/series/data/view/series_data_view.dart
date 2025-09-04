@@ -18,10 +18,12 @@ import '../../../../util/tooltip_utils.dart';
 import '../../../controls/navigation/hide_bottom_navigation_bar.dart';
 import '../../../controls/provider/data_provider_loader.dart';
 import '../../../controls/select/day_range_slider.dart';
+import '../../../controls/select/day_range_slider_overlay.dart';
 import 'blood_pressure/series_data_blood_pressure_view.dart';
 import 'daily_check/series_data_daily_check_view.dart';
 import 'habit/series_data_habit_view.dart';
 import 'series_data_no_data.dart';
+import 'series_data_view_overlays.dart';
 import 'series_title.dart';
 
 class SeriesDataView extends StatelessWidget {
@@ -34,20 +36,10 @@ class SeriesDataView extends StatelessWidget {
     TooltipUtils.updateTooltipMonospaceStyle(context);
 
     return HideBottomNavigationBar(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        mainAxisSize: MainAxisSize.max,
-        spacing: 0,
-        children: [
-          SeriesTitle(seriesViewMetaData: seriesViewMetaData),
-          Expanded(
-            child: DataProviderLoader(
-              obtainDataProviderFuture: context.read<SeriesDataProvider>().fetchDataIfNotYetLoaded(seriesViewMetaData.seriesDef),
-              progressIndicatorMarginTop: 24,
-              child: _SeriesDataView(seriesViewMetaData: seriesViewMetaData),
-            ),
-          ),
-        ],
+      child: DataProviderLoader(
+        obtainDataProviderFuture: context.read<SeriesDataProvider>().fetchDataIfNotYetLoaded(seriesViewMetaData.seriesDef),
+        progressIndicatorMarginTop: 24,
+        child: _SeriesDataView(seriesViewMetaData: seriesViewMetaData),
       ),
     );
   }
@@ -71,10 +63,11 @@ class _SeriesDataView extends StatelessWidget {
         return _SeriesDataFilterView<BloodPressureValue>(
           seriesViewMetaData: seriesViewMetaData,
           seriesData: seriesData!.data,
-          seriesDataViewBuilder: (SeriesDataFilter filter) => SeriesDataBloodPressureView(
+          seriesDataViewBuilder: (SeriesDataFilter filter, SeriesDataViewOverlays seriesDataViewOverlays) => SeriesDataBloodPressureView(
             seriesViewMetaData: seriesViewMetaData,
             seriesData: seriesData.data,
             seriesDataFilter: filter,
+            seriesDataViewOverlays: seriesDataViewOverlays,
           ),
         );
       case SeriesType.dailyCheck:
@@ -83,10 +76,11 @@ class _SeriesDataView extends StatelessWidget {
         return _SeriesDataFilterView<DailyCheckValue>(
           seriesViewMetaData: seriesViewMetaData,
           seriesData: seriesData!.data,
-          seriesDataViewBuilder: (SeriesDataFilter filter) => SeriesDataDailyCheckView(
+          seriesDataViewBuilder: (SeriesDataFilter filter, SeriesDataViewOverlays seriesDataViewOverlays) => SeriesDataDailyCheckView(
             seriesViewMetaData: seriesViewMetaData,
             seriesData: seriesData.data,
             seriesDataFilter: filter,
+            seriesDataViewOverlays: seriesDataViewOverlays,
           ),
         );
       case SeriesType.habit:
@@ -95,10 +89,11 @@ class _SeriesDataView extends StatelessWidget {
         return _SeriesDataFilterView<HabitValue>(
           seriesViewMetaData: seriesViewMetaData,
           seriesData: seriesData!.data,
-          seriesDataViewBuilder: (SeriesDataFilter filter) => SeriesDataHabitView(
+          seriesDataViewBuilder: (SeriesDataFilter filter, SeriesDataViewOverlays seriesDataViewOverlays) => SeriesDataHabitView(
             seriesViewMetaData: seriesViewMetaData,
             seriesData: seriesData.data,
             seriesDataFilter: filter,
+            seriesDataViewOverlays: seriesDataViewOverlays,
           ),
         );
     }
@@ -110,39 +105,40 @@ class _SeriesDataFilterView<T extends SeriesDataValue> extends StatelessWidget {
 
   final SeriesViewMetaData seriesViewMetaData;
   final List<T> seriesData;
-  final Widget Function(SeriesDataFilter filter) seriesDataViewBuilder;
+  final Widget Function(SeriesDataFilter filter, SeriesDataViewOverlays seriesDataViewOverlays) seriesDataViewBuilder;
 
   @override
   Widget build(BuildContext context) {
-    if (seriesViewMetaData.viewType == ViewType.dots || seriesViewMetaData.viewType == ViewType.pixels || seriesViewMetaData.viewType == ViewType.table) {
-      return _StackedRangeSliderView(
-        seriesData: seriesData,
-        seriesViewMetaData: seriesViewMetaData,
-        seriesDataViewBuilder: seriesDataViewBuilder,
-        maxSpan: 366 * 2,
-      );
-    } else if (seriesViewMetaData.viewType == ViewType.lineChart || seriesViewMetaData.viewType == ViewType.barChart) {
-      return LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
-        // max span: 5 years or as much as fits into view
-        var maxDuration = 365 * 5;
-        var maxByWidth = constraints.maxWidth * 0.8; // One data point per pixel - more is not displayable
-        // for daily check the data is reduced to monthly or even yearly
-        if (seriesViewMetaData.seriesDef.seriesType == SeriesType.dailyCheck) {
-          maxByWidth *= 31 * (seriesViewMetaData.showCompressed ? 12 : 1);
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        // range slider date filter
+        if ([ViewType.dots, ViewType.pixels, ViewType.table, ViewType.lineChart, ViewType.barChart].contains(seriesViewMetaData.viewType)) {
+          int maxSpan = 366 * 2;
+
+          // for charts wider maxSpan
+          if ([ViewType.lineChart, ViewType.barChart].contains(seriesViewMetaData.viewType)) {
+            // max span: 5 years or as much as fits into view
+            var maxDuration = 365 * 5;
+            var maxByWidth = constraints.maxWidth * 0.8; // One data point per pixel - more is not displayable
+            // for daily check the data is reduced to monthly or even yearly
+            if (seriesViewMetaData.seriesDef.seriesType == SeriesType.dailyCheck) {
+              maxByWidth *= 31 * (seriesViewMetaData.showCompressed ? 12 : 1);
+            }
+            maxSpan = min(maxDuration, maxByWidth.toInt());
+          }
+
+          return _StackedRangeSliderView(
+            seriesData: seriesData,
+            seriesViewMetaData: seriesViewMetaData,
+            seriesDataViewBuilder: seriesDataViewBuilder,
+            maxSpan: maxSpan,
+          );
         }
-        int maxSpan = min(maxDuration, maxByWidth.toInt());
 
-        return _StackedRangeSliderView(
-          seriesData: seriesData,
-          seriesViewMetaData: seriesViewMetaData,
-          seriesDataViewBuilder: seriesDataViewBuilder,
-          maxSpan: maxSpan,
-        );
-      });
-    }
-
-    // fallback no filter
-    return seriesDataViewBuilder(SeriesDataFilter());
+        // fallback no filter
+        return _NoFilterView(seriesDataViewBuilder: seriesDataViewBuilder, seriesViewMetaData: seriesViewMetaData);
+      },
+    );
   }
 }
 
@@ -152,7 +148,7 @@ class _StackedRangeSliderView<T extends SeriesDataValue> extends StatefulWidget 
 
   final SeriesViewMetaData seriesViewMetaData;
   final List<T> seriesData;
-  final Widget Function(SeriesDataFilter filter) seriesDataViewBuilder;
+  final Widget Function(SeriesDataFilter filter, SeriesDataViewOverlays seriesDataViewOverlays) seriesDataViewBuilder;
   final int maxSpan;
 
   @override
@@ -161,7 +157,6 @@ class _StackedRangeSliderView<T extends SeriesDataValue> extends StatefulWidget 
 
 class _StackedRangeSliderViewState<T extends SeriesDataValue> extends State<_StackedRangeSliderView<T>> {
   SeriesDataFilter filter = SeriesDataFilter();
-  bool _sliderVisible = false;
 
   /// oldest (most past) date
   late DateTime _firstDate;
@@ -203,46 +198,71 @@ class _StackedRangeSliderViewState<T extends SeriesDataValue> extends State<_Sta
     });
   }
 
-  void _setSliderVisible(bool visible) {
-    setState(() {
-      _sliderVisible = visible;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
-
+    double addHeightForTextScale = DayRangeSlider.calcAdditionalHeightByTextScale();
     return Stack(
       children: [
         Positioned.fill(
-          child: widget.seriesDataViewBuilder(filter),
-        ),
-        AnimatedPositioned(
-          height: ThemeUtils.seriesDataBottomFilterViewHeight * (_sliderVisible ? 2 : 1),
-          left: 0,
-          right: 0,
-          bottom: 0,
-          duration: const Duration(milliseconds: 300),
-          child: IgnorePointer(
-            child: Container(
-              color: themeData.scaffoldBackgroundColor.withAlpha(128),
+          child: widget.seriesDataViewBuilder(
+            filter,
+            SeriesDataViewOverlays(
+              topHeight: SeriesTitle.seriesTitleHeight,
+              bottomHeight: ThemeUtils.seriesDataBottomFilterViewHeight + addHeightForTextScale,
             ),
           ),
         ),
-        AnimatedPositioned(
-          height: ThemeUtils.seriesDataBottomFilterViewHeight * (_sliderVisible ? 2 : 1),
+        Positioned(
+          top: 0,
           left: 0,
           right: 0,
-          bottom: 0,
-          duration: const Duration(milliseconds: 300),
-          child: DayRangeSlider(
-              pageCallback: _setFilter,
-              maxSpan: widget.maxSpan,
-              sliderInitialVisible: false,
-              sliderVisibleCallback: _setSliderVisible,
-              date1: widget.seriesData.first.dateTime,
-              date2: widget.seriesData.last.dateTime),
+          height: SeriesTitle.seriesTitleHeight,
+          child: IgnorePointer(
+            child: SeriesTitle(seriesViewMetaData: widget.seriesViewMetaData),
+          ),
+        ),
+        Positioned.fill(
+          child: DayRangeSliderOverlay(
+            maxSpan: widget.maxSpan,
+            date1: widget.seriesData.first.dateTime,
+            date2: widget.seriesData.last.dateTime,
+            setFilter: _setFilter,
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _NoFilterView extends StatelessWidget {
+  const _NoFilterView({
+    required this.seriesDataViewBuilder,
+    required this.seriesViewMetaData,
+  });
+
+  final Widget Function(SeriesDataFilter filter, SeriesDataViewOverlays seriesDataViewOverlays) seriesDataViewBuilder;
+  final SeriesViewMetaData seriesViewMetaData;
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Positioned.fill(
+          child: seriesDataViewBuilder(
+            SeriesDataFilter(),
+            SeriesDataViewOverlays(
+              topHeight: SeriesTitle.seriesTitleHeight,
+            ),
+          ),
+        ),
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          height: SeriesTitle.seriesTitleHeight,
+          child: IgnorePointer(
+            child: SeriesTitle(seriesViewMetaData: seriesViewMetaData),
+          ),
         ),
       ],
     );

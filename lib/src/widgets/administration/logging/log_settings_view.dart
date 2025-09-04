@@ -17,6 +17,7 @@ class LogSettingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollViewWithScrollbar(
+      useScreenPadding: true,
       scrollPositionHandler: HideBottomNavigationBar.setScrollPosition,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -89,7 +90,6 @@ class _LogLevelSelectorState extends State<_LogLevelSelector> {
     return DropdownButton<Level>(
         key: const Key('logSettingsLogLevelSelect'),
         dropdownColor: themeData.cardColor,
-        // borderRadius: BorderRadius.circular(4),
         value: SimpleLogging.logLevel,
         items: SimpleLogging.getKnownLevels().map<DropdownMenuItem<Level>>((logLevel) {
           var selected = (logLevel == SimpleLogging.logLevel);

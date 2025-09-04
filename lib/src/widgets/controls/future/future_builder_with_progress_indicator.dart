@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../util/logging/flutter_simple_logging.dart';
+import '../../../util/theme_utils.dart';
 
 class FutureBuilderWithProgressIndicator<T> extends StatelessWidget {
   const FutureBuilderWithProgressIndicator({super.key, required this.future, this.errorBuilder, required this.widgetBuilder, this.marginTop = 0});
@@ -51,7 +52,7 @@ class _ErrMsg extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
         child: Padding(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(ThemeUtils.defaultPadding),
       child: Text(msg),
     ));
   }

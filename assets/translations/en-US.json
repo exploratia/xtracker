@@ -18,6 +18,11 @@
     }
   },
   "appTitle": "xTracker",
+  "appSupport": {
+    "title": "Thanks for being here!",
+    "oneYearMsg": "One year ago, you first opened this app – amazing that you’re still using it!\n\nIf you enjoy the app and would like to support its future development, consider buying me a coffee. Your contribution helps keep improving the app and offering it for free.",
+    "multipleYearsMsg": "Another year with this app has gone by – thanks for sticking with it.\n\nIf you’d like to support ongoing development, I’d be grateful for a coffee. Your support helps to keep the app up to date and free to use."
+  },
   "commons": {
     "nav": {
       "hideMenu": "Close navigation menu",
@@ -51,6 +56,7 @@
       },
       "btn": {
         "cancel": "CANCEL",
+        "close": "CLOSE",
         "no": "NO",
         "okay": "OK",
         "save": "SAVE",
@@ -59,16 +65,26 @@
       }
     },
     "alert": {
-      "failedToLoadData": "Failed to load data...",
-      "failedToSaveData": "Failed to save data...",
-      "failedToShareData": "Failed to share..."
     },
     "label": {
       "value": "Value"
     },
     "snackbar": {
       "pressBackAgainToExit": "Press BACK again to exit...",
-      "saved": "Saved..."
+      "saveSuccess": "Saved",
+      "saveFailed": "Save failed",
+      "loadFailed": "Load failed",
+      "deleteFailed": "Delete failed",
+      "exportFailed": "Export failed",
+      "shareFailed": "Share failed",
+      "exportSuccess": "Export successful",
+      "shareSuccess": "Share successful"
+    },
+    "table": {
+      "column": {
+        "key": "Key",
+        "value": "Value"
+      }
     },
     "validator": {
       "emptyValue": "Please enter a value"
@@ -81,6 +97,20 @@
           "showSlider": "Show date slider",
           "hideSlider": "Hide date slider"
         }
+      }
+    }
+  },
+  "deviceInfo": {
+    "title": "Device info",
+    "action": {
+      "exportOrShare": {
+        "tooltip": "Export / share device info"
+      },
+      "export": {
+        "tooltip": "Export device info"
+      },
+      "share": {
+        "tooltip": "Share device info"
       }
     }
   },
@@ -147,6 +177,12 @@
   "log": {
     "title": "Log",
     "action": {
+      "exportOrShareLog": {
+        "tooltip": "Export / share log"
+      },
+      "exportLog": {
+        "tooltip": "Export log"
+      },
       "shareLog": {
         "tooltip": "Share log"
       },
@@ -159,9 +195,6 @@
     },
     "query": {
       "deleteLog": "Do you really want to delete the log file?"
-    },
-    "snackbar": {
-      "shareSuccess": "Log successfully shared."
     }
   },
   "logs": {
@@ -169,6 +202,12 @@
     "action": {
       "logSettings": {
         "tooltip": "Log settings"
+      },
+      "exportOrShareLogs": {
+        "tooltip": "Export / share logs"
+      },
+      "exportLogs": {
+        "tooltip": "Export logs"
       },
       "shareLogs": {
         "tooltip": "Share logs"
@@ -183,9 +222,6 @@
     },
     "query": {
       "deleteAllLogs": "Do you really want to delete all log files?"
-    },
-    "snackbar": {
-      "shareSuccess": "Logs shared successfully."
     }
   },
   "logSettings": {
@@ -262,11 +298,8 @@
       "editSeries": {
         "tooltip": "Edit series"
       },
-      "saveSeries": {
-        "tooltip": "Save series definition and values as json file"
-      },
-      "shareSeries": {
-        "tooltip": "Share series definition and values as json file"
+      "importExportSeries": {
+        "tooltip": "Import / export series"
       },
       "deleteSeriesValues": {
         "tooltip": "Delete series values"
@@ -280,9 +313,9 @@
     },
     "currentValue": {
       "tooltip": "Edit value",
-    "label": {
-      "noValue": "No current value available."
-    }
+      "label": {
+        "noValue": "No current value available."
+      }
     },
     "query": {
       "deleteSeriesData": "Do you really want to delete the values of series '{}'?",
@@ -377,22 +410,38 @@
     "label": {
       "noSeries": "No series created yet..."
     },
+    "backupAlert": {
+      "title": "Backup?",
+      "label": {
+        "lastExport": "No backup has been created for a long time.\nLast export: {}"
+      },
+      "btn": {
+        "export": "Open export",
+        "reminderIn3Days": "Remind me again in 3 days",
+        "disableReminder": "Don't remind again"
+      }
+    },
     "importExport": {
       "title": "Import / Export series data",
       "btn": {
         "exportSeries": "Export all series",
+        "exportSingleSeries": "Export series",
         "importSeries": "Import series",
-        "shareSeries": "Share all series"
+        "shareSeries": "Share all series",
+        "shareSingleSeries": "Share series"
       },
       "label": {
         "exportSeries": "Export all series as one JSON file.",
+        "exportSingleSeries": "Export series (definition and values) as JSON file.",
         "exportSeriesTip": "Tip: To save separate measurement series, use the export icon of the respective series.",
+        "exportSingleSeriesTip": "Tip: To save all measurement series in one file, use the export icon of the management view.",
         "importSeries": "Select series JSON files to import.\nExisting series (and their data) will be overwritten (identified by their unique id). New series will be created if they don't already exist.",
         "importSeriesTip": "Tip: Create and export a matching series first. Then insert your data into the exported file and re-import it. That way the format will be correct.",
-        "shareSeries": "Share all series as one JSON file."
+        "latestSeriesExport": "Last exported: {}",
+        "shareSeries": "Share all series as one JSON file.",
+        "shareSingleSeries": "Share series (definition and values) as JSON file."
       },
       "snackbar": {
-        "exportSuccessful": "Export successful...",
         "importSuccessfulXofY": "Imported {} series from {} files successfully."
       },
       "alert": {
@@ -451,18 +500,13 @@
       },
       "query": {
         "removeAllData": "Do you really want to remove all app data from your device?"
-      },
-      "table": {
-        "column": {
-          "key": "Key",
-          "value": "Value"
-        }
       }
     },
     "general": {
       "title": "General settings",
       "label": {
         "hideNavigationLabels": "Hide navigation labels (menu & bottom navigation):",
+        "seriesExportDisableReminder": "Disable series export reminder (30 days after last export):",
         "lang": "Language:",
         "theme": "Theme:"
       },

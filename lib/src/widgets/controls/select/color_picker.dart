@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 import '../../../util/color_utils.dart';
+import '../../../util/media_query_utils.dart';
 
 class ColorPicker extends StatefulWidget {
   const ColorPicker({super.key, this.color = const Color(0xffde0b30), required this.colorSelected});
@@ -39,7 +40,7 @@ class _ColorPickerState extends State<ColorPicker> {
               titlePadding: const EdgeInsets.all(0),
               contentPadding: const EdgeInsets.all(0),
               shape: RoundedRectangleBorder(
-                borderRadius: MediaQuery.of(context).orientation == Orientation.portrait
+                borderRadius: MediaQueryUtils.of(context).orientation == Orientation.portrait
                     ? const BorderRadius.vertical(
                         top: Radius.circular(500),
                         bottom: Radius.circular(100),

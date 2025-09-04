@@ -6,7 +6,7 @@ class MainNavigationItem extends NavigationItem {
 
   MainNavigationItem({
     required this.tooltipBuilder,
-    required super.icon,
+    required super.iconData,
     required super.routeName,
     required super.titleBuilder,
   }) {

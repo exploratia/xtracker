@@ -9,26 +9,33 @@ import '../../../providers/series_provider.dart';
 import '../../../util/dialogs.dart';
 import '../../../util/logging/flutter_simple_logging.dart';
 import '../../../util/series/series_import_export.dart';
+import '../../../util/theme_utils.dart';
+import '../../administration/settings/settings_controller.dart';
 
 class SeriesManagementActions extends StatelessWidget {
-  const SeriesManagementActions({super.key, required this.seriesDef});
+  const SeriesManagementActions({super.key, required this.seriesDef, required this.settingsController});
 
   final SeriesDef seriesDef;
+  final SettingsController settingsController;
 
   @override
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.screenPadding),
         child: Wrap(
           runAlignment: WrapAlignment.center,
           alignment: WrapAlignment.center,
           crossAxisAlignment: WrapCrossAlignment.center,
           children: [
             _EditSeriesBtn(seriesDef: seriesDef),
-            _ExportSeriesDataBtn(seriesDef: seriesDef),
-            _ShareSeriesDataBtn(seriesDef: seriesDef),
+            IconButton(
+              tooltip: LocaleKeys.seriesDefRenderer_action_importExportSeries_tooltip.tr(),
+              onPressed: () async => SeriesImportExport.showImportExportDlg(context, seriesDef: seriesDef, settingsController: settingsController),
+              iconSize: ThemeUtils.iconSizeScaled,
+              icon: const Icon(Icons.import_export_outlined),
+            ),
             _ClearSeriesDataBtn(seriesDef: seriesDef),
             _DeleteSeriesBtn(seriesDef: seriesDef),
           ],
@@ -61,7 +68,7 @@ class _DeleteSeriesBtn extends StatelessWidget {
         } catch (err) {
           SimpleLogging.w("Failed to delete ${seriesDef.toLogString()}.", error: err);
           if (context.mounted) {
-            Dialogs.simpleErrOkDialog('$err', context);
+            Dialogs.showSnackBarWarning(LocaleKeys.commons_snackbar_deleteFailed.tr(), context);
           }
         }
       }
@@ -70,6 +77,7 @@ class _DeleteSeriesBtn extends StatelessWidget {
     return IconButton(
       tooltip: LocaleKeys.seriesDefRenderer_action_deleteSeries_tooltip.tr(),
       onPressed: deleteHandler,
+      iconSize: ThemeUtils.iconSizeScaled,
       icon: const Icon(Icons.close_outlined),
     );
   }
@@ -92,6 +100,7 @@ class _EditSeriesBtn extends StatelessWidget {
     return IconButton(
       tooltip: LocaleKeys.seriesDefRenderer_action_editSeries_tooltip.tr(),
       onPressed: editHandler,
+      iconSize: ThemeUtils.iconSizeScaled,
       icon: const Icon(Icons.edit_outlined),
     );
   }
@@ -120,59 +129,8 @@ class _ClearSeriesDataBtn extends StatelessWidget {
     return IconButton(
       tooltip: LocaleKeys.seriesDefRenderer_action_deleteSeriesValues_tooltip.tr(),
       onPressed: handler,
+      iconSize: ThemeUtils.iconSizeScaled,
       icon: const Icon(Icons.highlight_remove_outlined),
-    );
-  }
-}
-
-class _ExportSeriesDataBtn extends StatelessWidget {
-  const _ExportSeriesDataBtn({
-    required this.seriesDef,
-  });
-
-  final SeriesDef seriesDef;
-
-  @override
-  Widget build(BuildContext context) {
-    handler() async {
-      try {
-        await SeriesImportExport.exportSeriesDef(seriesDef, context);
-      } catch (ex) {
-        SimpleLogging.w("Failed to export ${seriesDef.toLogString()}.", error: ex);
-        if (context.mounted) Dialogs.showSnackBar(ex.toString(), context);
-      }
-    }
-
-    return IconButton(
-      tooltip: LocaleKeys.seriesDefRenderer_action_saveSeries_tooltip.tr(),
-      onPressed: handler,
-      icon: const Icon(Icons.download_outlined),
-    );
-  }
-}
-
-class _ShareSeriesDataBtn extends StatelessWidget {
-  const _ShareSeriesDataBtn({
-    required this.seriesDef,
-  });
-
-  final SeriesDef seriesDef;
-
-  @override
-  Widget build(BuildContext context) {
-    handler() async {
-      try {
-        await SeriesImportExport.shareSeriesDef(seriesDef, context);
-      } catch (ex) {
-        SimpleLogging.w("Failed to share ${seriesDef.toLogString()}.", error: ex);
-        if (context.mounted) Dialogs.showSnackBar(ex.toString(), context);
-      }
-    }
-
-    return IconButton(
-      tooltip: LocaleKeys.seriesDefRenderer_action_shareSeries_tooltip.tr(),
-      onPressed: handler,
-      icon: const Icon(Icons.share_outlined),
     );
   }
 }

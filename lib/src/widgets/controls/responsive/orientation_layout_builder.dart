@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../util/media_query_utils.dart';
+
 class OrientationLayoutBuilder extends StatelessWidget {
   final Widget Function(BuildContext context)? landscapeBuilder;
   final Widget Function(BuildContext context)? portraitBuilder;
@@ -16,7 +18,7 @@ class OrientationLayoutBuilder extends StatelessWidget {
       return landscapeBuilder!(context);
     }
 
-    final orientation = MediaQuery.of(context).orientation;
+    final orientation = MediaQueryUtils.of(context).orientation;
     if (orientation == Orientation.landscape && landscapeBuilder != null) {
       return landscapeBuilder!(context);
     }

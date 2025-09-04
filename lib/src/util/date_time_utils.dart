@@ -1,7 +1,7 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/cupertino.dart';
 
 import 'globals.dart';
 
@@ -31,7 +31,7 @@ class DateTimeUtils {
 
   static DateTime getMonthlyDataInsertDate() {
     final now = DateTime.now();
-    final thisOrLastMonth = now.day > 15 ? now : DateTime(now.year, now.month, -1);
+    final thisOrLastMonth = now.day > 15 ? truncateToDay(now) : DateTime(now.year, now.month, -1);
     return thisOrLastMonth;
   }
 
@@ -84,7 +84,7 @@ class DateTimeUtils {
 
   static DateTime lastDayOfMonth(DateTime date) {
     return firstDayOfMonth(firstDayOfMonth(date).add(const Duration(days: 40))).subtract(const Duration(days: 1));
-    // was not always correct: missing april - probably because of the 29th
+    // was not always correct: missing april - probably because of the 29th feb.
     // return DateTime(date.year, date.month + 1, 0);
   }
 

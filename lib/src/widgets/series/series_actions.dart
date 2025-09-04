@@ -11,6 +11,7 @@ import '../../model/series/series_def.dart';
 import '../../model/series/series_type.dart';
 import '../../providers/series_data_provider.dart';
 import '../../screens/series/series_data_screen.dart';
+import '../../util/theme_utils.dart';
 
 class SeriesActions extends StatelessWidget {
   const SeriesActions({super.key, required this.seriesDef});
@@ -29,7 +30,7 @@ class SeriesActions extends StatelessWidget {
       color: Colors.transparent,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
-        spacing: 8,
+        spacing: ThemeUtils.horizontalSpacing,
         children: [
           valueBtn,
           _ShowSeriesDataBtn(seriesDef: seriesDef),
@@ -55,6 +56,7 @@ class _ShowSeriesDataBtn extends StatelessWidget {
     return IconButton(
       tooltip: LocaleKeys.seriesDefRenderer_action_showSeriesValues_tooltip.tr(),
       onPressed: showDataHandler,
+      iconSize: ThemeUtils.iconSizeScaled,
       icon: const Icon(Icons.remove_red_eye_outlined),
     );
   }
@@ -72,6 +74,7 @@ class _ShowSeriesDataInputDlgBtn extends StatelessWidget {
     return IconButton(
       tooltip: LocaleKeys.seriesDefRenderer_action_addValue_tooltip.tr(),
       onPressed: () => SeriesData.showSeriesDataInputDlg(context, seriesDef),
+      iconSize: ThemeUtils.iconSizeScaled,
       icon: const Icon(Icons.add),
     );
   }
@@ -91,6 +94,7 @@ class _DailyCheckBtn extends StatelessWidget {
         onPressed: () {
           context.read<SeriesDataProvider>().addValue(seriesDef, DailyCheckValue(const Uuid().v4(), DateTime.now()), context);
         },
+        iconSize: ThemeUtils.iconSizeScaled,
         icon: const Icon(Icons.check_outlined));
   }
 }
@@ -109,6 +113,7 @@ class _HabitBtn extends StatelessWidget {
         onPressed: () {
           context.read<SeriesDataProvider>().addValue(seriesDef, HabitValue(const Uuid().v4(), DateTime.now()), context);
         },
+        iconSize: ThemeUtils.iconSizeScaled,
         icon: Icon(seriesDef.iconData()));
   }
 }

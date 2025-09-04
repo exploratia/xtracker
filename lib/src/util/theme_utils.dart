@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import '../widgets/controls/card/glowing_border_container.dart';
 import 'color_utils.dart';
+import 'media_query_utils.dart';
 import 'navigation/fade_transition_builder.dart';
 
 class ThemeUtils {
@@ -13,9 +14,42 @@ class ThemeUtils {
   static final MaterialColor secondary = ColorUtils.customMaterialColor(const Color(0xff911d31));
   static final MaterialColor tertiary = ColorUtils.customMaterialColor(const Color(0xffbfff00));
 
-  static const screenPadding = EdgeInsets.symmetric(horizontal: 16, vertical: 16); // .all(16);
-  static const cardBorderRadius = BorderRadius.all(Radius.circular(20));
-  static const cardPadding = EdgeInsets.all(20);
+  static const double screenPadding = 16;
+  static const double cardPadding = 16;
+  static const double defaultPadding = 8;
+  static const double paddingSmall = 4;
+  static const double horizontalSpacing = 8;
+  static const double horizontalSpacingSmall = 4;
+  static const double horizontalSpacingLarge = 16;
+  static const double verticalSpacing = 12;
+  static const double verticalSpacingSmall = 4;
+  static const double verticalSpacingLarge = 24;
+  static const double borderRadius = 8;
+  static const double borderRadiusSmall = 4;
+  static const double borderRadiusLarge = 16;
+  static const double elevation = 4;
+  static const double iconSize = 24;
+  static const double fontSizeTitleL = 20;
+  static const double fontSizeTitleM = 16;
+  static const double fontSizeTitleS = 14;
+  static const double fontSizeBodyL = 14;
+  static const double fontSizeBodyM = 14;
+  static const double fontSizeBodyS = 12;
+  static const double fontSizeLabelL = 14;
+  static const double fontSizeLabelM = 12;
+  static const double fontSizeLabelS = 10;
+
+  static double get iconSizeScaled => iconSize * MediaQueryUtils.textScaleFactor;
+
+  static const int animationDuration = 300;
+  static const int animationDurationShort = 150;
+
+  static final borderRadiusCircular = BorderRadius.circular(borderRadius);
+  static final borderRadiusCircularSmall = BorderRadius.circular(borderRadiusSmall);
+
+  static const screenPaddingAll = EdgeInsets.all(screenPadding); // .all(screenPaddingValue);
+  static final cardBorderRadius = BorderRadius.circular(20);
+  static const cardPaddingAll = EdgeInsets.all(20);
   static final btnShape = RoundedRectangleBorder(borderRadius: BorderRadius.circular(24));
   static const double seriesDataInputDlgMaxWidth = 300;
 
@@ -37,12 +71,45 @@ class ThemeUtils {
     final canvasColor = dark ? const Color(0xff38364c) : const Color.fromRGBO(240, 240, 240, 1);
 
     final shadowColor = dark ? backgroundColor : Colors.black45;
+    final textColor = dark ? Colors.white : Colors.black;
+
     var themeData = ThemeData(
       useMaterial3: false,
       brightness: brightness,
-      // canvas e.g. DropdownButton-Menu in settings
-      canvasColor: canvasColor,
+      canvasColor: canvasColor /* canvas e.g. DropdownButton-Menu in settings */,
+      scaffoldBackgroundColor: backgroundColor /* otherwise white|black */,
       shadowColor: shadowColor,
+      // themes
+      appBarTheme: AppBarTheme(
+        elevation: elevation * 2,
+        backgroundColor: secondary,
+        foregroundColor: onPrimary,
+        actionsIconTheme: const IconThemeData(
+          color: onPrimary,
+          size: iconSize,
+        ),
+        systemOverlayStyle: SystemUiOverlayStyle.light,
+        // dark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
+        shadowColor: shadowColor,
+      ),
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
+        backgroundColor: backgroundColor,
+        selectedItemColor: primary,
+      ),
+      // Card (e.g. in Settings)
+      cardTheme: CardThemeData(
+        color: cardBackgroundColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: ThemeUtils.cardBorderRadius,
+        ),
+      ),
+      chipTheme: ChipThemeData(
+        backgroundColor: chipBackgroundColor,
+        iconTheme: IconThemeData(
+          size: iconSize,
+          color: primary,
+        ),
+      ),
       colorScheme: ColorScheme.fromSeed(seedColor: primary, brightness: brightness).copyWith(
         primary: primary,
         onPrimary: onPrimary,
@@ -50,41 +117,21 @@ class ThemeUtils {
         onSecondary: onPrimary,
         tertiary: tertiary,
       ),
-      textTheme: const TextTheme(
-          // titleLarge: TextStyle(color: dynamicThemeData.getPrimaryColor(dark)),
-          // titleMedium: TextStyle(fontWeight: FontWeight.bold),
-          // titleSmall: TextStyle(color: dynamicThemeData.getPrimaryColor(dark)),
-          ),
-      tooltipTheme: TooltipThemeData(
-        padding: const EdgeInsets.all(8),
-        textStyle: TextStyle(inherit: true, color: dark ? Colors.white : Colors.black),
-        // decoration: GlowingBorderContainer.createGlowingBoxDecoration(secondary, secondary),
-        decoration: GlowingBorderContainer.createGlowingBoxDecoration(secondary, backgroundColor),
-        waitDuration: const Duration(milliseconds: 500),
-        // showDuration: Duration(seconds: 2),
-        preferBelow: false,
-        constraints: const BoxConstraints(
-          maxWidth: 300,
+      datePickerTheme: DatePickerThemeData(
+        headerBackgroundColor: cardBackgroundColor,
+      ),
+      dialogTheme: DialogThemeData(
+        // for fullscreen background has to be set manually
+        backgroundColor: chipBackgroundColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: ThemeUtils.cardBorderRadius,
         ),
       ),
-      sliderTheme: SliderThemeData(
-        valueIndicatorColor: cardBackgroundColor,
-        valueIndicatorTextStyle: TextStyle(color: dark ? Colors.white : Colors.black),
+      dividerTheme: DividerThemeData(
+        color: secondary,
+        thickness: 1,
+        space: verticalSpacing,
       ),
-      appBarTheme: AppBarTheme(
-        elevation: 8,
-        backgroundColor: secondary,
-        // backgroundColor,
-        foregroundColor: onPrimary,
-        // dark ? Colors.white : Colors.black,
-        actionsIconTheme: const IconThemeData(
-          color: onPrimary, // dark ? Colors.white : Colors.black,
-        ),
-        systemOverlayStyle: SystemUiOverlayStyle.light,
-        // dark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
-        shadowColor: shadowColor,
-      ),
-      tabBarTheme: TabBarThemeData(indicatorColor: dark ? Colors.white : Colors.black),
       drawerTheme: DrawerThemeData(
         backgroundColor: backgroundColor,
         shape: const RoundedRectangleBorder(
@@ -94,52 +141,68 @@ class ThemeUtils {
           ),
         ),
       ),
-      // dividerColor: dividerColor, // Trenner bei MenuItems-Gruppierung
-      scaffoldBackgroundColor: backgroundColor /* otherwise white|black */,
-      scrollbarTheme: Theme.of(context).scrollbarTheme.copyWith(
-            thumbColor: WidgetStatePropertyAll(primary),
-            radius: Radius.zero,
-            interactive: true,
-            // thickness: const MaterialStatePropertyAll(10),
-            // thumbVisibility: const MaterialStatePropertyAll(true),
-            // trackVisibility: const MaterialStatePropertyAll(true),
-            // trackColor: const MaterialStatePropertyAll(Colors.blueAccent),
-            // trackBorderColor: const MaterialStatePropertyAll(Colors.purpleAccent),
-          ),
-      bottomNavigationBarTheme: BottomNavigationBarThemeData(backgroundColor: backgroundColor, selectedItemColor: primary),
-      snackBarTheme: SnackBarThemeData(backgroundColor: cardBackgroundColor, contentTextStyle: TextStyle(color: dark ? Colors.white : Colors.black)),
-      // Card (e.g. in Settings)
-      cardTheme: Theme.of(context).cardTheme.copyWith(
-            color: cardBackgroundColor,
-            shape: const RoundedRectangleBorder(
-              borderRadius: ThemeUtils.cardBorderRadius,
-            ),
-          ),
-      chipTheme: ChipThemeData(backgroundColor: chipBackgroundColor),
-      dialogTheme: DialogThemeData(
-        // for fullscreen background has to be set manually
-        backgroundColor: chipBackgroundColor,
-        shape: const RoundedRectangleBorder(
-          borderRadius: ThemeUtils.cardBorderRadius,
-        ),
+      iconTheme: IconThemeData(
+        size: iconSize,
+        color: textColor,
       ),
-      datePickerTheme: DatePickerThemeData(headerBackgroundColor: cardBackgroundColor),
-      timePickerTheme: TimePickerThemeData(backgroundColor: chipBackgroundColor),
-      dividerTheme: DividerThemeData(color: secondary, thickness: 1, space: 10),
-      progressIndicatorTheme: ProgressIndicatorThemeData(color: primary, linearTrackColor: secondary.withAlpha(128)),
-      navigationRailTheme: NavigationRailThemeData(backgroundColor: backgroundColor),
-      elevatedButtonTheme: ElevatedButtonThemeData(
-          style: ElevatedButton.styleFrom(
-        shape: btnShape,
-      )),
-      textButtonTheme: TextButtonThemeData(
-          style: TextButton.styleFrom(
-        shape: btnShape,
-      )),
-      outlinedButtonTheme: OutlinedButtonThemeData(
-          style: OutlinedButton.styleFrom(
-        shape: btnShape,
-      )),
+      navigationRailTheme: NavigationRailThemeData(
+        backgroundColor: backgroundColor,
+      ),
+      progressIndicatorTheme: ProgressIndicatorThemeData(
+        color: primary,
+        linearTrackColor: secondary.withAlpha(128),
+      ),
+      scrollbarTheme: ScrollbarThemeData(
+        thumbColor: WidgetStatePropertyAll(primary),
+        radius: Radius.zero,
+        interactive: true,
+        // thickness: const MaterialStatePropertyAll(10),
+        // thumbVisibility: const MaterialStatePropertyAll(true),
+        // trackVisibility: const MaterialStatePropertyAll(true),
+        // trackColor: const MaterialStatePropertyAll(Colors.blueAccent),
+        // trackBorderColor: const MaterialStatePropertyAll(Colors.purpleAccent),
+      ),
+      sliderTheme: SliderThemeData(
+        valueIndicatorColor: cardBackgroundColor,
+        valueIndicatorTextStyle: TextStyle(color: textColor),
+      ),
+      snackBarTheme: SnackBarThemeData(
+        backgroundColor: cardBackgroundColor,
+        contentTextStyle: TextStyle(color: textColor, fontSize: fontSizeBodyM),
+      ),
+      tabBarTheme: TabBarThemeData(indicatorColor: textColor),
+      textTheme: TextTheme(
+        titleLarge: TextStyle(color: textColor, fontSize: fontSizeTitleL, fontWeight: FontWeight.w500),
+        titleMedium: TextStyle(color: textColor, fontSize: fontSizeTitleM, fontWeight: FontWeight.w400),
+        titleSmall: TextStyle(color: textColor, fontSize: fontSizeTitleS, fontWeight: FontWeight.w500),
+        bodyLarge: TextStyle(color: textColor, fontSize: fontSizeBodyL, fontWeight: FontWeight.w500),
+        bodyMedium: TextStyle(color: textColor, fontSize: fontSizeBodyM, fontWeight: FontWeight.w500),
+        bodySmall: TextStyle(color: textColor, fontSize: fontSizeBodyS, fontWeight: FontWeight.w400),
+        labelLarge: TextStyle(color: textColor, fontSize: fontSizeLabelL, fontWeight: FontWeight.w500),
+        labelMedium: TextStyle(color: textColor, fontSize: fontSizeLabelM, fontWeight: FontWeight.w400),
+        labelSmall: TextStyle(color: textColor, fontSize: fontSizeLabelS, fontWeight: FontWeight.w400),
+      ),
+      timePickerTheme: TimePickerThemeData(
+        backgroundColor: chipBackgroundColor,
+      ),
+      tooltipTheme: TooltipThemeData(
+        padding: const EdgeInsets.all(defaultPadding),
+        textStyle: TextStyle(
+          color: textColor,
+          fontSize: fontSizeBodyM,
+        ),
+        // decoration: GlowingBorderContainer.createGlowingBoxDecoration(secondary, secondary),
+        decoration: GlowingBorderContainer.createGlowingBoxDecoration(secondary, backgroundColor),
+        waitDuration: const Duration(milliseconds: 500),
+        // showDuration: Duration(seconds: 2),
+        preferBelow: false,
+        constraints: const BoxConstraints(maxWidth: 300),
+      ),
+      // buttons
+      elevatedButtonTheme: ElevatedButtonThemeData(style: ElevatedButton.styleFrom(shape: btnShape)),
+      textButtonTheme: TextButtonThemeData(style: TextButton.styleFrom(shape: btnShape)),
+      outlinedButtonTheme: OutlinedButtonThemeData(style: OutlinedButton.styleFrom(shape: btnShape)),
+      // page transition
       pageTransitionsTheme: const PageTransitionsTheme(
         builders: {
           TargetPlatform.android: FadeTransitionsBuilder(),

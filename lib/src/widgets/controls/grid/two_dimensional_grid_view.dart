@@ -151,7 +151,7 @@ class RenderTwoDimensionalGridViewport extends RenderTwoDimensionalViewport {
       if (summedColumnPixels < horizontalPixels + viewportWidth) {
         trailingColumnIdx++;
       }
-      summedColumnPixels += tableColumn.minWidth;
+      summedColumnPixels += tableColumn.minWidthScaled;
       if (summedColumnPixels < horizontalPixels) {
         leadingColumnIdx++;
       }
@@ -166,7 +166,7 @@ class RenderTwoDimensionalGridViewport extends RenderTwoDimensionalViewport {
 
     double leadingColumnPixels = 0;
     for (var idx = 0; idx < leadingColumnIdx; ++idx) {
-      leadingColumnPixels += tableColumnProfile.getColumnAt(idx).minWidth;
+      leadingColumnPixels += tableColumnProfile.getColumnAt(idx).minWidthScaled;
     }
 
     double xLayoutOffset = leadingColumnPixels - horizontalOffset.pixels;
@@ -182,7 +182,7 @@ class RenderTwoDimensionalGridViewport extends RenderTwoDimensionalViewport {
         parentDataOf(child).layoutOffset = Offset(xLayoutOffset, yLayoutOffset);
         yLayoutOffset += lineHeight;
       }
-      xLayoutOffset += tableColumnProfile.getColumnAt(columnIdx).minWidth;
+      xLayoutOffset += tableColumnProfile.getColumnAt(columnIdx).minWidthScaled;
     }
 
     // Set the min and max scroll extents for each axis.
@@ -192,7 +192,7 @@ class RenderTwoDimensionalGridViewport extends RenderTwoDimensionalViewport {
       clampDouble(verticalExtent - viewportDimension.height, 0.0, double.infinity),
     );
 
-    final double horizontalExtent = tableColumnProfile.minWidth().toDouble();
+    final double horizontalExtent = tableColumnProfile.minWidthScaled().toDouble();
     horizontalOffset.applyContentDimensions(
       0.0,
       clampDouble(horizontalExtent - viewportDimension.width, 0.0, double.infinity),

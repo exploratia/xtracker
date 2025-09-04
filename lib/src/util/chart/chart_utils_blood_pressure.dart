@@ -5,12 +5,15 @@ import 'package:flutter/material.dart';
 
 import '../../model/chart/chart_meta_data.dart';
 import '../../model/series/data/blood_pressure/blood_pressure_value.dart';
+import '../../widgets/controls/chart/title_bottom_axis.dart';
 import '../date_time_utils.dart';
+import '../media_query_utils.dart';
 import '../pair.dart';
 import 'chart_utils.dart';
 
 class ChartUtilsBloodPressure {
-  static LineChartData buildLineChartData(List<BloodPressureValue> seriesData, ThemeData themeData, Function(FlTouchEvent, LineTouchResponse?)? touchCallback) {
+  static LineChartData buildLineChartData(
+      List<BloodPressureValue> seriesData, ThemeData themeData, Function(FlTouchEvent, LineTouchResponse?)? touchCallback, BuildContext context) {
     List<LineChartBarData> lineBarsData = [];
 
     ChartMetaData chartMetaData = ChartMetaData();
@@ -74,6 +77,15 @@ class ChartUtilsBloodPressure {
 
     chartMetaData.calcPadding();
 
+    // calc from values? But the values could be formated like 2k instead of 2000
+    // var maxLenVal = [chartMetaData.yMax.round().toString(), chartMetaData.yMin.round().toString()]
+    //     .reduce((value, element) => (value.length > element.length ? value : element));
+    // var maxLen = TextUtils.determineTextSize(maxLenVal, context, null).width * 1.1;
+    var maxLen = 40;
+    var leftTitlesWidth = maxLen * MediaQueryUtils.textScaleFactor;
+    var bottomTitlesHeight = 22 * MediaQueryUtils.textScaleFactor;
+    var bottomTitlesMaxWidth = 180 * MediaQueryUtils.textScaleFactor;
+
     return LineChartData(
       minY: chartMetaData.yMinPadded,
       maxY: chartMetaData.yMaxPadded,
@@ -102,19 +114,20 @@ class ChartUtilsBloodPressure {
       titlesData: FlTitlesData(
         rightTitles: ChartUtils.axisTitlesNoTitles,
         topTitles: ChartUtils.axisTitlesNoTitles,
-        leftTitles: const AxisTitles(
+        leftTitles: AxisTitles(
           drawBelowEverything: true,
           sideTitles: SideTitles(
             showTitles: true,
             maxIncluded: false,
             minIncluded: false,
-            reservedSize: 40,
+            reservedSize: leftTitlesWidth,
             getTitlesWidget: ChartUtils.createTitlesLeft,
           ),
         ),
         bottomTitles: AxisTitles(
           drawBelowEverything: true,
           sideTitles: SideTitles(
+            reservedSize: bottomTitlesHeight,
             showTitles: true,
             maxIncluded: true,
             minIncluded: true,
@@ -124,9 +137,21 @@ class ChartUtilsBloodPressure {
             getTitlesWidget: (value, meta) {
               if (value == meta.min) {
                 // use chartMetaData min/max - not the value which has padding!
-                return TitlesWidgetBottomAxis(alignment: Alignment.topLeft, value: chartMetaData.xMin);
+                return TitleBottomAxis(
+                  alignment: Alignment.topLeft,
+                  value: chartMetaData.xMin,
+                  height: bottomTitlesHeight,
+                  maxWidth: bottomTitlesMaxWidth,
+                  dateFormatter: DateTimeUtils.formateDate,
+                );
               } else if (value == meta.max) {
-                return TitlesWidgetBottomAxis(alignment: Alignment.topRight, value: chartMetaData.xMax);
+                return TitleBottomAxis(
+                  alignment: Alignment.topRight,
+                  value: chartMetaData.xMax,
+                  height: bottomTitlesHeight,
+                  maxWidth: bottomTitlesMaxWidth,
+                  dateFormatter: DateTimeUtils.formateDate,
+                );
               }
               return Container();
             },
@@ -184,33 +209,5 @@ class ChartUtilsBloodPressure {
     stops[stops.length - 1] = 1.0;
 
     return Pair(colors, stops);
-  }
-}
-
-class TitlesWidgetBottomAxis extends StatelessWidget {
-  const TitlesWidgetBottomAxis({
-    super.key,
-    required this.alignment,
-    required this.value,
-  });
-
-  final Alignment alignment;
-  final double value;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 0,
-      // height: 22,
-      child: OverflowBox(
-        alignment: alignment,
-        maxWidth: 180,
-        // maxHeight: 22,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 2),
-          child: Text(DateTimeUtils.formateDate(DateTime.fromMillisecondsSinceEpoch(value.truncate()))),
-        ),
-      ),
-    );
   }
 }

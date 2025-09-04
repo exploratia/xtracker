@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../model/series/data/series_data_value.dart';
 import '../../../../util/date_time_utils.dart';
 import '../../../../util/pair.dart';
+import '../../../../util/theme_utils.dart';
 import '../../../../util/tooltip_utils.dart';
 
 class SeriesDataTooltipContent {
@@ -13,12 +14,12 @@ class SeriesDataTooltipContent {
         mainAxisAlignment: MainAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.calendar_today_outlined, size: 12),
-          const SizedBox(width: 5),
+          const Icon(Icons.calendar_today_outlined, size: ThemeUtils.fontSizeBodyS),
+          const SizedBox(width: ThemeUtils.horizontalSpacingSmall),
           Text(DateTimeUtils.formateDate(seriesValues.first.dateTime), style: TooltipUtils.tooltipMonospaceStyle),
         ],
       ),
-      const SizedBox(height: 5),
+      const SizedBox(height: ThemeUtils.verticalSpacingSmall),
     ];
 
     // bring all times to same length for showing a nice table like tooltip
@@ -47,10 +48,10 @@ class SeriesDataTooltipContent {
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
-        const Icon(Icons.access_time_outlined, size: 12),
-        const SizedBox(width: 5),
+        const Icon(Icons.access_time_outlined, size: ThemeUtils.fontSizeBodyS),
+        const SizedBox(width: ThemeUtils.verticalSpacingSmall),
         Text(time, style: TooltipUtils.tooltipMonospaceStyle),
-        const SizedBox(width: 15),
+        const SizedBox(width: ThemeUtils.horizontalSpacingLarge),
         Transform.scale(scale: 0.7, child: value),
       ],
     );

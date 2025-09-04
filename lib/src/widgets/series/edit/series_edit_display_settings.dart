@@ -5,6 +5,7 @@ import '../../../../../generated/locale_keys.g.dart';
 import '../../../model/series/series_def.dart';
 import '../../../model/series/series_type.dart';
 import '../../../util/dialogs.dart';
+import '../../../util/theme_utils.dart';
 import '../../controls/card/expandable.dart';
 import '../../controls/layout/single_child_scroll_view_with_scrollbar.dart';
 import 'pixel_view_preview.dart';
@@ -27,12 +28,12 @@ class SeriesEditDisplaySettings extends StatelessWidget {
     var seriesType = seriesDef.seriesType;
 
     return Expandable(
-      icon: const Icon(Icons.settings_outlined),
+      icon: Icon(Icons.settings_outlined, size: ThemeUtils.iconSizeScaled),
       title: LocaleKeys.seriesEdit_common_displaySettings_title.tr(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
-        spacing: 10,
+        spacing: ThemeUtils.verticalSpacing,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           // Table use Date|Time|Value Column profile
@@ -43,7 +44,7 @@ class SeriesEditDisplaySettings extends StatelessWidget {
               ),
               value: settings.tableViewUseColumnProfileDateTimeValue,
               onChanged: (value) => settings.tableViewUseColumnProfileDateTimeValue = value,
-              secondary: const Icon(Icons.view_column_outlined),
+              secondary: Icon(Icons.view_column_outlined, size: ThemeUtils.iconSizeScaled),
             ),
           // Dots show count
           if (seriesType == SeriesType.dailyCheck || seriesType == SeriesType.bloodPressure)
@@ -53,14 +54,14 @@ class SeriesEditDisplaySettings extends StatelessWidget {
               ),
               value: settings.dotsViewShowCount,
               onChanged: (value) => settings.dotsViewShowCount = value,
-              secondary: const Icon(Icons.numbers_outlined),
+              secondary: Icon(Icons.numbers_outlined, size: ThemeUtils.iconSizeScaled),
             ),
           // Pixel Preview
           if (PixelViewPreview.applicableOn(seriesDef)) ...[
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.cardPadding),
               child: Wrap(
-                spacing: 10,
+                spacing: ThemeUtils.horizontalSpacing,
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
                   Text(LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_title.tr()),
@@ -68,7 +69,6 @@ class SeriesEditDisplaySettings extends StatelessWidget {
                       tooltip: LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_tooltip.tr(),
                       onPressed: () => Dialogs.simpleOkDialog(
                             SingleChildScrollViewWithScrollbar(
-                              useScreenPadding: false,
                               child: Text(LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_text.tr()),
                             ),
                             context,
@@ -89,9 +89,9 @@ class SeriesEditDisplaySettings extends StatelessWidget {
               onChanged: (value) => settings.pixelsViewInvertHueDirection = value,
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.cardPadding),
               child: Wrap(
-                spacing: 10,
+                spacing: ThemeUtils.horizontalSpacing,
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
                   Text(LocaleKeys.seriesEdit_displaySettings_pixelsView_slider_hueFactor_label.tr()),

@@ -1,6 +1,14 @@
 import 'package:flutter/material.dart';
 
 class MediaQueryUtils {
+  static double textScaleFactor = 1;
+
+  /// returns the height by which a text is larger by the actual text scale
+  static double calcAdditionalHeightByTextScale(double fontSize) {
+    var addHeightForTextScale = (fontSize * textScaleFactor - fontSize);
+    return addHeightForTextScale;
+  }
+
   late final MediaQueryData mediaQueryData;
 
   /// usage:
@@ -8,8 +16,13 @@ class MediaQueryUtils {
   /// final mediaQueryInfo = MediaQueryUtils(context);
   MediaQueryUtils(this.mediaQueryData);
 
-  MediaQueryUtils.of(BuildContext context) {
+  MediaQueryUtils.of(BuildContext context, {calcTextScale = false}) {
     mediaQueryData = MediaQuery.of(context);
+
+    if (calcTextScale) {
+      // might not be correct in all case (for larger font sizes it scales not linear)
+      textScaleFactor = mediaQueryData.textScaler.scale(1);
+    }
   }
 
   Orientation get orientation {

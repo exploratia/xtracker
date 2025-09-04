@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../../model/chart/chart_meta_data.dart';
 import '../color_utils.dart';
+import '../theme_utils.dart';
 
 class ChartUtils {
   static const AxisTitles axisTitlesNoTitles = AxisTitles(sideTitles: SideTitles(showTitles: false));
@@ -28,7 +29,7 @@ class ChartUtils {
       return Container();
     }
     return SideTitleWidget(
-      space: 10,
+      space: ThemeUtils.horizontalSpacing,
       meta: meta,
       child: Text(meta.formattedValue),
     );
@@ -104,7 +105,7 @@ class ChartUtils {
                   touchedSpot.bar.color ??
                   Colors.blueGrey,
               fontWeight: FontWeight.bold,
-              fontSize: 14,
+              fontSize: ThemeUtils.fontSizeBodyM,
               shadows: const [Shadow(color: Colors.black, blurRadius: 0, offset: Offset(1, 1))],
             );
             return LineTooltipItem(touchedSpot.y.toStringAsFixed(fractionDigits), textStyle,

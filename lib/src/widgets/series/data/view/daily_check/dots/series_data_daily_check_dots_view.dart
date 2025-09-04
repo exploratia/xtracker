@@ -4,20 +4,22 @@ import '../../../../../../model/column_profile/fix_column_profiles.dart';
 import '../../../../../../model/series/data/daily_check/daily_check_value.dart';
 import '../../../../../../model/series/data/series_data_filter.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
-import '../../../../../../util/theme_utils.dart';
 import '../../../../../controls/grid/daily/day/daily_check_day_item.dart';
 import '../../../../../controls/grid/daily/dot.dart';
 import '../../../../../controls/grid/daily/dot_cell_builder.dart';
 import '../../../../../controls/grid/daily/row/row_item.dart';
 import '../../../../../controls/grid/two_dimensional_scrollable_table.dart';
 import '../../series_data_no_data.dart';
+import '../../series_data_view_overlays.dart';
 
 class SeriesDataDailyCheckDotsView extends StatelessWidget {
   final List<DailyCheckValue> seriesData;
   final SeriesViewMetaData seriesViewMetaData;
   final SeriesDataFilter seriesDataFilter;
+  final SeriesDataViewOverlays seriesDataViewOverlays;
 
-  const SeriesDataDailyCheckDotsView({super.key, required this.seriesViewMetaData, required this.seriesData, required this.seriesDataFilter});
+  const SeriesDataDailyCheckDotsView(
+      {super.key, required this.seriesViewMetaData, required this.seriesData, required this.seriesDataFilter, required this.seriesDataViewOverlays});
 
   @override
   Widget build(BuildContext context) {
@@ -36,19 +38,30 @@ class SeriesDataDailyCheckDotsView extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        bool monthly = constraints.maxWidth > FixColumnProfiles.columnProfileDateMonthDays.minWidth();
+        bool monthly = constraints.maxWidth > FixColumnProfiles.columnProfileDateMonthDays.minWidthScaled();
 
         List<RowItem<DailyCheckDayItem>> data = monthly ? RowItem.buildMonthRowItems(dayItems) : RowItem.buildWeekRowItems(dayItems);
 
         var dotCellBuilder = DotCellBuilder(data: data, monthly: monthly, gridCellChildBuilder: (dayItem) => dayItem.toDot(monthly));
 
-        return TwoDimensionalScrollableTable(
-          tableColumnProfile: monthly ? FixColumnProfiles.columnProfileDateMonthDays : FixColumnProfiles.columnProfileDateWeekdays,
-          lineCount: data.length,
-          gridCellBuilder: dotCellBuilder.gridCellBuilder,
-          lineHeight: Dot.dotHeight,
-          useFixedFirstColumn: true,
-          bottomScrollExtend: ThemeUtils.seriesDataBottomFilterViewHeight,
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          spacing: 0,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            seriesDataViewOverlays.buildTopSpacer(),
+            Expanded(
+              child: TwoDimensionalScrollableTable(
+                tableColumnProfile: monthly ? FixColumnProfiles.columnProfileDateMonthDays : FixColumnProfiles.columnProfileDateWeekdays,
+                lineCount: data.length,
+                gridCellBuilder: dotCellBuilder.gridCellBuilder,
+                lineHeight: Dot.dotHeight,
+                useFixedFirstColumn: true,
+                bottomScrollExtend: seriesDataViewOverlays.bottomHeight,
+              ),
+            ),
+          ],
         );
       },
     );

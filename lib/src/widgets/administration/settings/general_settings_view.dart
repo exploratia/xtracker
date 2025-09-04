@@ -45,10 +45,10 @@ class GeneralSettingsView extends StatelessWidget {
         Table(
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
           // https://api.flutter.dev/flutter/widgets/Table-class.html
-          columnWidths: const <int, TableColumnWidth>{
-            0: FixedColumnWidth(96),
-            // 0: IntrinsicColumnWidth(),
-            1: IntrinsicColumnWidth(),
+          columnWidths: <int, TableColumnWidth>{
+            // 0: FixedColumnWidth(96 * MediaQueryUtils.textScaleFactor),
+            0: const IntrinsicColumnWidth(),
+            1: const IntrinsicColumnWidth(),
             // 1: FlexColumnWidth(),
           },
           // border: TableBorder.symmetric(
@@ -97,6 +97,7 @@ class GeneralSettingsView extends StatelessWidget {
         ValueListenableBuilder(
           valueListenable: HideNavigationLabels.visible,
           builder: (BuildContext ctx1, navLabelsVisible, _) => SwitchListTile(
+            contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: ThemeUtils.defaultPadding),
             value: controller.hideNavigationLabels,
             onChanged: (bool value) {
               controller.updateHideNavigationLabels(value);
@@ -104,6 +105,14 @@ class GeneralSettingsView extends StatelessWidget {
             title: Text(LocaleKeys.settings_general_label_hideNavigationLabels.tr()),
           ),
         ),
+        SwitchListTile(
+          contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: ThemeUtils.defaultPadding),
+          value: controller.seriesExportDisableReminder,
+          onChanged: (bool value) {
+            controller.updateSeriesExportDisableReminder(value);
+          },
+          title: Text(LocaleKeys.settings_general_label_seriesExportDisableReminder.tr()),
+        )
       ],
     );
   }

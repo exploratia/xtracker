@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../util/theme_utils.dart';
+
 class TabToCloseFab extends StatelessWidget {
   const TabToCloseFab({super.key, required this.toggle});
 
@@ -14,11 +16,11 @@ class TabToCloseFab extends StatelessWidget {
         child: Material(
           shape: const CircleBorder(),
           clipBehavior: Clip.antiAlias,
-          elevation: 4.0,
+          elevation: ThemeUtils.elevation,
           child: InkWell(
             onTap: toggle,
             child: Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(ThemeUtils.defaultPadding),
               child: Icon(
                 Icons.close,
                 color: Theme.of(context).colorScheme.primary,

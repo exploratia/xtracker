@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../generated/locale_keys.g.dart';
+import '../../../util/theme_utils.dart';
 import '../../controls/card/expandable_settings_card.dart';
 import '../../controls/layout/scroll_footer.dart';
 import '../../controls/layout/single_child_scroll_view_with_scrollbar.dart';
@@ -23,9 +24,10 @@ class SettingsView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollViewWithScrollbar(
+      useScreenPadding: true,
       scrollPositionHandler: HideBottomNavigationBar.setScrollPosition,
       child: Column(
-        spacing: 16,
+        spacing: ThemeUtils.cardPadding,
         children: [
           ExpandableSettingsCard(
               title: OverflowText(LocaleKeys.settings_general_title.tr(), style: Theme.of(context).textTheme.titleLarge),

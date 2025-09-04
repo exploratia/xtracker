@@ -18,6 +18,11 @@
     }
   },
   "appTitle": "xTracker",
+  "appSupport": {
+    "title": "Danke, dass du dabei bist!",
+    "oneYearMsg": "Vor einem Jahr hast du die App zum ersten Mal gestartet – großartig, dass du sie nutzt!\n\nWenn dir die App gefällt und du ihre Weiterentwicklung unterstützen möchtest, kannst du mir gerne einen Kaffee spendieren. Dein Beitrag hilft, die App weiter zu verbessern und kostenlos bereitzustellen.",
+    "multipleYearsMsg": "Ein weiteres Jahr mit dieser App liegt hinter dir – danke, dass du sie treu nutzt.\n\nWenn du die Weiterentwicklung unterstützen möchtest, freue ich mich über einen Kaffee. So hilfst du mir, die App aktuell und kostenlos zu halten."
+  },
   "commons": {
     "nav": {
       "hideMenu": "Navigationsmenü schließen",
@@ -51,6 +56,7 @@
       },
       "btn": {
         "cancel": "ABBRECHEN",
+        "close": "SCHLIEßEN",
         "no": "NEIN",
         "okay": "OK",
         "save": "SPEICHERN",
@@ -59,16 +65,26 @@
       }
     },
     "alert": {
-      "failedToLoadData": "Laden der Daten fehlgeschlagen...",
-      "failedToSaveData": "Speichern fehlgeschlagen...",
-      "failedToShareData": "Teilen fehlgeschlagen..."
     },
     "label": {
       "value": "Wert"
     },
     "snackbar": {
       "pressBackAgainToExit": "Zum Beenden nochmal drücken...",
-      "saved": "Gespeichert..."
+      "saveSuccess": "Gespeichert",
+      "saveFailed": "Speichern fehlgeschlagen",
+      "loadFailed": "Laden fehlgeschlagen",
+      "deleteFailed": "Löschen fehlgeschlagen",
+      "exportFailed": "Export fehlgeschlagen",
+      "shareFailed": "Teilen fehlgeschlagen",
+      "exportSuccess": "Export erfolgreich",
+      "shareSuccess": "Share erfolgreich"
+    },
+    "table": {
+      "column": {
+        "key": "Schlüssel",
+        "value": "Wert"
+      }
     },
     "validator": {
       "emptyValue": "Ungültiger Wert"
@@ -81,6 +97,20 @@
           "showSlider": "Datum-Slider anzeigen",
           "hideSlider": "Datum-Slider ausblenden"
         }
+      }
+    }
+  },
+  "deviceInfo": {
+    "title": "Geräteinfo",
+    "action": {
+      "exportOrShare": {
+        "tooltip": "Geräteinfo exportieren / teilen"
+      },
+      "export": {
+        "tooltip": "Geräteinfo exportieren"
+      },
+      "share": {
+        "tooltip": "Geräteinfo teilen"
       }
     }
   },
@@ -147,6 +177,12 @@
   "log": {
     "title": "Log",
     "action": {
+      "exportOrShareLog": {
+        "tooltip": "Log exportieren / teilen"
+      },
+      "exportLog": {
+        "tooltip": "Log exportieren"
+      },
       "shareLog": {
         "tooltip": "Log teilen"
       },
@@ -159,9 +195,6 @@
     },
     "query": {
       "deleteLog": "Log-Datei wirklich löschen?"
-    },
-    "snackbar": {
-      "shareSuccess": "Log wurde erfolgreich geteilt."
     }
   },
   "logs": {
@@ -169,6 +202,12 @@
     "action": {
       "logSettings": {
         "tooltip": "Log Einstellungen"
+      },
+      "exportOrShareLogs": {
+        "tooltip": "Logs exportieren / teilen"
+      },
+      "exportLogs": {
+        "tooltip": "Logs exportieren"
       },
       "shareLogs": {
         "tooltip": "Logs teilen"
@@ -183,9 +222,6 @@
     },
     "query": {
       "deleteAllLogs": "Wirklich alle Log-Dateien löschen?"
-    },
-    "snackbar": {
-      "shareSuccess": "Logs wurden erfolgreich geteilt."
     }
   },
   "logSettings": {
@@ -262,11 +298,8 @@
       "editSeries": {
         "tooltip": "Messreihe konfigurieren"
       },
-      "saveSeries": {
-        "tooltip": "Konfiguration und Werte der Messreihe als JSON-Datei speichern"
-      },
-      "shareSeries": {
-        "tooltip": "Konfiguration und Werte der Messreihe als JSON-Datei teilen"
+      "importExportSeries": {
+        "tooltip": "Messreihe importieren/exportieren"
       },
       "deleteSeriesValues": {
         "tooltip": "Werte der Messreihe löschen"
@@ -377,22 +410,38 @@
     "label": {
       "noSeries": "Noch keine Messreihen vorhanden."
     },
+    "backupAlert": {
+      "title": "Backup?",
+      "label": {
+        "lastExport": "Es wurde lange keine Sicherung mehr erstellt.\nLetzter Export: {}"
+      },
+      "btn": {
+        "export": "Export öffnen",
+        "reminderIn3Days": "In 3 Tagen erneut erinnern",
+        "disableReminder": "Nicht erneut erinnern"
+      }
+    },
     "importExport": {
       "title": "Messreihen importieren / exportieren",
       "btn": {
         "exportSeries": "Alle Messreihen exportieren",
+        "exportSingleSeries": "Messreihe exportieren",
         "importSeries": "Messreihen importieren",
-        "shareSeries": "Alle Messreihen teilen"
+        "shareSeries": "Alle Messreihen teilen",
+        "shareSingleSeries": "Messreihe teilen"
       },
       "label": {
         "exportSeries": "Alle Messreihen als eine JSON-Datei speichern.",
-        "exportSeriesTip": "Tipp: Einzelne Messreihen über das Export-Symbol speichern.",
+        "exportSingleSeries": "Messreihe (Konfiguration und Werte) als JSON-Datei speichern.",
+        "exportSeriesTip": "Tipp: Einzelne Messreihen über das Export-Symbol der jeweiligen Messreihe speichern.",
+        "exportSingleSeriesTip": "Tipp: Alle Messreihen gemeinsam über das Export-Symbol der Messreihenverwaltung speichern.",
         "importSeries": "JSON-Dateien mit Messreihen zum Import auswählen.\nVorhandene Serien (inklusive Daten) werden anhand ihrer ID überschrieben. Neue Messreihen werden automatisch erstellt.",
         "importSeriesTip": "Tipp: Zuerst eine passende Messreihe erstellen und exportieren. Danach Daten in die Datei einfügen und erneut importieren – so passt das Format sicher.",
-        "shareSeries": "Alle Messreihen als eine JSON-Datei teilen."
+        "latestSeriesExport": "Zuletzt exportiert: {}",
+        "shareSeries": "Alle Messreihen als eine JSON-Datei teilen.",
+        "shareSingleSeries": "Messreihe (Konfiguration und Werte) als JSON-Datei teilen."
       },
       "snackbar": {
-        "exportSuccessful": "Export erfolgreich...",
         "importSuccessfulXofY": "{} Messreihen aus {} Dateien erfolgreich importiert."
       },
       "alert": {
@@ -451,18 +500,13 @@
       },
       "query": {
         "removeAllData": "Wirklich alle App-Daten löschen?"
-      },
-      "table": {
-        "column": {
-          "key": "Schlüssel",
-          "value": "Wert"
-        }
       }
     },
     "general": {
       "title": "Allgemeine Einstellungen",
       "label": {
         "hideNavigationLabels": "Navigationslabels verstecken (Menü & Navigationsleiste):",
+        "seriesExportDisableReminder": "Erinnerung für Messreihenexport deaktivieren (30 Tage nach letztem Export):",
         "lang": "Sprache:",
         "theme": "Theme:"
       },

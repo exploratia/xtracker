@@ -4,6 +4,7 @@ import '../../../../generated/assets.gen.dart';
 import '../../../model/navigation/navigation.dart';
 import '../../../model/navigation/navigation_item.dart';
 import '../../../util/media_query_utils.dart';
+import '../../../util/theme_utils.dart';
 import '../navigation/app_bottom_navigation_bar.dart';
 import '../navigation/app_drawer.dart';
 import '../navigation/app_navigation_rail.dart';
@@ -59,7 +60,7 @@ class ScreenBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mediaQueryInfo = MediaQueryUtils.of(context);
+    final mediaQueryInfo = MediaQueryUtils.of(context, calcTextScale: true);
 
     if (mediaQueryInfo.isSmallScreen) {
       return const _TooSmallScreen();
@@ -111,11 +112,11 @@ class _TooSmallScreen extends StatelessWidget {
           child: Center(
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              spacing: 10,
-              mainAxisAlignment: MainAxisAlignment.center,
+              spacing: ThemeUtils.verticalSpacing,
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const SizedBox(height: 10),
+                const SizedBox(height: ThemeUtils.verticalSpacing),
                 SizedBox(
                   height: 32,
                   width: 32,

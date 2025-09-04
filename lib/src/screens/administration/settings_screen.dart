@@ -10,7 +10,7 @@ import '../../widgets/controls/responsive/screen_builder.dart';
 
 class SettingsScreen extends StatelessWidget {
   static NavigationItem navItem = NavigationItem(
-    icon: const Icon(Icons.settings_outlined),
+    iconData: Icons.settings_outlined,
     routeName: '/settings',
     titleBuilder: () => LocaleKeys.settings_title.tr(),
   );

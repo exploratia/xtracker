@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../model/navigation/navigation.dart';
 import '../../../util/navigation/hide_navigation_labels.dart';
 import '../../../util/navigation/navigation_utils.dart';
+import '../../../util/theme_utils.dart';
 import '../layout/single_child_scroll_view_with_scrollbar.dart';
 import 'app_drawer_header.dart';
 
@@ -22,6 +23,7 @@ class AppDrawer extends StatelessWidget {
               // Divider(),
               Expanded(
                 child: SingleChildScrollViewWithScrollbar(
+                  useScreenPadding: true,
                   child: ValueListenableBuilder(
                     valueListenable: Navigation.currentMainNavigationIdx,
                     builder: (BuildContext ctx, currentIdx, _) => _buildNavItems(ctx, currentIdx, navLabelsVisible),
@@ -39,8 +41,9 @@ class AppDrawer extends StatelessWidget {
     int actIdx = -1;
     for (var navItem in Navigation.mainNavigationItems) {
       int itemIdx = ++actIdx;
-      var icon = Tooltip(message: navItem.tooltipBuilder(), child: navItem.icon);
+      var icon = Tooltip(message: navItem.tooltipBuilder(), child: navItem.icon());
       result.add(ListTile(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(ThemeUtils.borderRadius)),
         selected: actIdx == currentIdx,
         leading: navLabelsVisible ? icon : null,
         title: navLabelsVisible ? Text(navItem.titleBuilder()) : icon,

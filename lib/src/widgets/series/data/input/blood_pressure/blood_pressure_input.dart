@@ -143,7 +143,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
       } catch (err) {
         SimpleLogging.w('Failed to delete blood pressure value.', error: err);
         if (mounted) {
-          Dialogs.simpleErrOkDialog('$err', context);
+          Dialogs.showSnackBarWarning(LocaleKeys.commons_snackbar_deleteFailed.tr(), context);
         }
       }
     }
@@ -152,6 +152,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
+    var iconSize = ThemeUtils.iconSizeScaled;
     final showMedicationInput = !widget.seriesDef.bloodPressureSettingsReadonly().hideMedicationInput;
 
     var edit = Form(
@@ -159,12 +160,12 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
       autovalidateMode: _autoValidate ? AutovalidateMode.always : AutovalidateMode.disabled,
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        spacing: 10,
+        spacing: ThemeUtils.verticalSpacing,
         children: [
           InputHeader(dateTime: _dateTime, seriesDef: widget.seriesDef, setDateTime: _setDateTime),
           const Divider(height: 1),
           Row(
-            spacing: 8,
+            spacing: ThemeUtils.horizontalSpacing,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Flexible(
@@ -246,11 +247,11 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
           ),
           if (showMedicationInput)
             SwitchListTile(
-              contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: 4),
+              contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: ThemeUtils.defaultPadding),
               title: Tooltip(
                 message: LocaleKeys.seriesValue_bloodPressure_switch_medication_tooltip.tr(),
                 child: Row(
-                  spacing: 4,
+                  spacing: ThemeUtils.horizontalSpacingSmall,
                   children: [
                     const Icon(Icons.medication_outlined),
                     OverflowText(
@@ -267,30 +268,27 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
     );
 
     return AlertDialog(
-      // contentPadding: EdgeInsets.all(0),
       title: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: ThemeUtils.seriesDataInputDlgMaxWidth),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          spacing: ThemeUtils.horizontalSpacing,
+          mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            widget.bloodPressureValue == null ? const Icon(Icons.add_outlined) : const Icon(Icons.edit_outlined),
-            const SizedBox(width: 10),
+            widget.bloodPressureValue == null ? Icon(Icons.add_outlined, size: iconSize) : Icon(Icons.edit_outlined, size: iconSize),
             OverflowText(widget.seriesDef.name),
-            // Text(SeriesType.displayNameOf(widget.seriesDef.seriesType)),
-            // Flexible(child: Container()),
             if (widget.bloodPressureValue != null)
               IconButton(
                 tooltip: LocaleKeys.seriesValue_action_deleteValue_tooltip.tr(),
                 onPressed: _deleteHandler,
                 color: themeData.colorScheme.secondary,
+                iconSize: iconSize,
                 icon: const Icon(Icons.delete_outlined),
               ),
           ],
         ),
       ),
       content: SingleChildScrollViewWithScrollbar(
-        useScreenPadding: false,
         child: edit,
       ),
       actions: [

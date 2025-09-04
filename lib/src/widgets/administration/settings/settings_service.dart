@@ -21,7 +21,8 @@ class SettingsService {
 
   /// Persists the user's preferred ThemeMode to local or remote storage.
   Future<void> updateThemeMode(ThemeMode theme) async {
-    var value = theme.name;
+    String? value = theme.name;
+    if (value == "system") value = null;
     await DeviceStorage.write(DeviceStorageKeys.theme, value);
   }
 
@@ -56,6 +57,63 @@ class SettingsService {
   /// Loads the initial app start and set if not yet exists
   Future<DateTime> initialAppStart() async {
     var strTimestamp = await DeviceStorage.read(DeviceStorageKeys.initialAppStart);
+    DateTime? timestamp = _parseDate(strTimestamp);
+    if (timestamp == null) {
+      timestamp = DateTime.now();
+      await DeviceStorage.write(DeviceStorageKeys.initialAppStart, _toDateStr(timestamp));
+    }
+    return timestamp;
+  }
+
+  /// Loads last series export date (if any)
+  Future<DateTime?> seriesExportDate() async {
+    var strTimestamp = await DeviceStorage.read(DeviceStorageKeys.seriesExportDate);
+    DateTime? timestamp = _parseDate(strTimestamp);
+    return timestamp;
+  }
+
+  /// Persists series export date
+  Future<DateTime> updateSeriesExportDate() async {
+    var dateTime = DateTime.now();
+    await DeviceStorage.write(DeviceStorageKeys.seriesExportDate, _toDateStr(dateTime));
+    return dateTime;
+  }
+
+  Future<bool> seriesExportDisableReminder() async {
+    return await DeviceStorage.readBool(DeviceStorageKeys.seriesExportDisableReminder);
+  }
+
+  Future<void> updateSeriesExportDisableReminder(bool value) async {
+    await DeviceStorage.writeBool(DeviceStorageKeys.seriesExportDisableReminder, value);
+  }
+
+  /// Loads series export reminder date (if any)
+  Future<DateTime?> seriesExportReminderDate() async {
+    var strTimestamp = await DeviceStorage.read(DeviceStorageKeys.seriesExportReminderDate);
+    DateTime? timestamp = _parseDate(strTimestamp);
+    return timestamp;
+  }
+
+  /// Persists series export reminder date
+  Future<void> updateSeriesExportReminderDate(DateTime dateTime) async {
+    await DeviceStorage.write(DeviceStorageKeys.seriesExportReminderDate, _toDateStr(dateTime));
+  }
+
+  /// Loads app support reminder date (if any)
+  Future<DateTime?> appSupportReminderDate() async {
+    var strTimestamp = await DeviceStorage.read(DeviceStorageKeys.appSupportReminderDate);
+    DateTime? timestamp = _parseDate(strTimestamp);
+    return timestamp;
+  }
+
+  /// Persists app support reminder date
+  Future<void> updateAppSupportReminderDate(DateTime dateTime) async {
+    await DeviceStorage.write(DeviceStorageKeys.appSupportReminderDate, _toDateStr(dateTime));
+  }
+
+  static String _toDateStr(DateTime timestamp) => '${timestamp.year}-${timestamp.month}-${timestamp.day}';
+
+  static DateTime? _parseDate(String? strTimestamp) {
     DateTime? timestamp;
     if (strTimestamp != null) {
       var split = strTimestamp.split("-");
@@ -67,10 +125,6 @@ class SettingsService {
           timestamp = DateTime(year, month = month, day = day);
         }
       }
-    }
-    if (timestamp == null) {
-      timestamp = DateTime.now();
-      await DeviceStorage.write(DeviceStorageKeys.initialAppStart, '${timestamp.year}-${timestamp.month}-${timestamp.day}');
     }
     return timestamp;
   }

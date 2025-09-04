@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class ColorUtils {
   // https://stackoverflow.com/questions/58360989/programmatically-lighten-or-darken-a-hex-color-in-dart
+  static const int hexRadix = 16;
 
   /// Darken a color by [percent] amount (100 = black)
   static Color darken(Color c, [int percent = 10]) {
@@ -29,15 +30,15 @@ class ColorUtils {
     if (hexColor.length == 6) {
       hexColor = "FF$hexColor";
     }
-    return Color(int.tryParse(hexColor, radix: 16) ?? 0);
+    return Color(int.tryParse(hexColor, radix: hexRadix) ?? 0);
   }
 
   /// Prefixes a hash sign if [leadingHashSign] is set to `true` (default is `true`).
   static String toHex(Color c, {bool leadingHashSign = true}) => '${leadingHashSign ? '#' : ''}'
-      '${(c.a * 255).toInt().toRadixString(16).padLeft(2, '0')}'
-      '${(c.r * 255).toInt().toRadixString(16).padLeft(2, '0')}'
-      '${(c.g * 255).toInt().toRadixString(16).padLeft(2, '0')}'
-      '${(c.b * 255).toInt().toRadixString(16).padLeft(2, '0')}';
+      '${(c.a * 255).toInt().toRadixString(hexRadix).padLeft(2, '0')}'
+      '${(c.r * 255).toInt().toRadixString(hexRadix).padLeft(2, '0')}'
+      '${(c.g * 255).toInt().toRadixString(hexRadix).padLeft(2, '0')}'
+      '${(c.b * 255).toInt().toRadixString(hexRadix).padLeft(2, '0')}';
 
   /// usage: e.g. <pre>MaterialColor mColor = customMaterialColor(const Color(0xffbab0d4));</pre>
   static MaterialColor customMaterialColor(Color mainColor) {

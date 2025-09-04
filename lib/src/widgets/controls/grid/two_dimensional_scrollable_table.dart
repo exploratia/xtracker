@@ -37,9 +37,8 @@ class TwoDimensionalScrollableTable extends StatelessWidget {
     return HideBottomNavigationBar(
       child: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
         final ColumnProfile adjustedTableColumnProfile = tableColumnProfile.adjustToWidth(constraints.maxWidth);
-
         ColumnDef? fixedFirstColumnTableColumn;
-        final bool showFixedFirstColumn = useFixedFirstColumn && adjustedTableColumnProfile.minWidth() > constraints.maxWidth;
+        final bool showFixedFirstColumn = useFixedFirstColumn && adjustedTableColumnProfile.minWidthScaled() > constraints.maxWidth;
         if (showFixedFirstColumn) {
           fixedFirstColumnTableColumn = adjustedTableColumnProfile.columns.removeAt(0);
         }
@@ -53,7 +52,7 @@ class TwoDimensionalScrollableTable extends StatelessWidget {
               // print('$vicinity');
               int yIndex = vicinity.yIndex;
               ColumnDef tableColumn = adjustedTableColumnProfile.getColumnAt(vicinity.xIndex);
-              final columnWidth = tableColumn.minWidth;
+              final columnWidth = tableColumn.minWidthScaled;
 
               if (tableColumn.isMarginColumn) {
                 return SizedBox(width: columnWidth);
@@ -169,10 +168,10 @@ class _ScrollableGridState extends State<_ScrollableGrid> {
     List<Widget> tableHeader = [];
     for (var tableColumn in columnProfile.columns) {
       if (tableColumn.isMarginColumn) {
-        tableHeader.add(SizedBox(width: tableColumn.minWidth));
+        tableHeader.add(SizedBox(width: tableColumn.minWidthScaled));
       } else {
         Widget tableHeaderItemWidget = SizedBox(
-          width: tableColumn.minWidth.toDouble(),
+          width: tableColumn.minWidthScaled,
           child: tableColumn.getTableColumnHeadItemWidget(),
         );
         tableHeader.add(tableHeaderItemWidget);
@@ -182,7 +181,7 @@ class _ScrollableGridState extends State<_ScrollableGrid> {
     Widget? firstColumn;
     if (widget.fixedFirstColumnTableColumn != null) {
       var fixedFirstColumnTableColumn = widget.fixedFirstColumnTableColumn!;
-      double firstColumnWidth = fixedFirstColumnTableColumn.minWidth;
+      double firstColumnWidth = fixedFirstColumnTableColumn.minWidthScaled;
       firstColumn = SizedBox(
         width: firstColumnWidth,
         child: Column(
@@ -241,8 +240,12 @@ class _ScrollableGridState extends State<_ScrollableGrid> {
                 scrollDirection: Axis.horizontal,
                 child: SizedBox(
                   height: widget.tableHeadHeight,
-                  width: columnProfile.minWidth().toDouble(),
-                  child: Row(crossAxisAlignment: CrossAxisAlignment.center, children: tableHeader),
+                  width: columnProfile.minWidthScaled().toDouble(),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: tableHeader,
+                  ),
                 ),
               ),
               const _TextColoredDivider(),

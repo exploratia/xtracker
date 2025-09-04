@@ -3,8 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../generated/locale_keys.g.dart';
+import '../../../model/series/series_def.dart';
 import '../../../providers/series_provider.dart';
 import '../../../util/series/series_import_export.dart';
+import '../../../util/theme_utils.dart';
+import '../../administration/settings/settings_controller.dart';
 import '../../controls/animation/animate_in.dart';
 import '../../controls/animation/fade_in.dart';
 import '../../controls/layout/centered_message.dart';
@@ -12,7 +15,9 @@ import '../../controls/responsive/device_dependent_constrained_box.dart';
 import '../series_def_renderer.dart';
 
 class SeriesManagementView extends StatelessWidget {
-  const SeriesManagementView({super.key});
+  final SettingsController settingsController;
+
+  const SeriesManagementView({super.key, required this.settingsController});
 
   @override
   Widget build(BuildContext context) {
@@ -24,8 +29,15 @@ class SeriesManagementView extends StatelessWidget {
         title: Text(LocaleKeys.seriesManagement_title.tr()),
         actions: [
           IconButton(
+            tooltip: LocaleKeys.seriesDashboard_action_addSeries_tooltip.tr(),
+            onPressed: () async {
+              /*SeriesDef? s=*/ await SeriesDef.addNewSeries(context);
+            },
+            icon: const Icon(Icons.add_chart_outlined),
+          ),
+          IconButton(
             tooltip: LocaleKeys.seriesManagement_action_importExport_tooltip.tr(),
-            onPressed: () async => SeriesImportExport.showImportExportDlg(context),
+            onPressed: () async => SeriesImportExport.showImportExportDlg(context, settingsController: settingsController),
             icon: const Icon(Icons.import_export_outlined),
           ),
           IconButton(
@@ -44,13 +56,15 @@ class SeriesManagementView extends StatelessWidget {
       //     IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.edit_off_outlined)),
       //   ],
       // ),
-      body: const Center(child: DeviceDependentWidthConstrainedBox(child: _SeriesList())),
+      body: Center(child: DeviceDependentWidthConstrainedBox(child: _SeriesList(settingsController))),
     );
   }
 }
 
 class _SeriesList extends StatelessWidget {
-  const _SeriesList();
+  final SettingsController settingsController;
+
+  const _SeriesList(this.settingsController);
 
   @override
   Widget build(BuildContext context) {
@@ -74,6 +88,7 @@ class _SeriesList extends StatelessWidget {
             managementMode: true,
             seriesDef: s,
             index: idx,
+            settingsController: settingsController,
           )));
       idx++;
     }
@@ -84,14 +99,14 @@ class _SeriesList extends StatelessWidget {
         return Opacity(
           opacity: 0.6,
           child: Material(
-            // elevation: 8, // Shadow effect while dragging
-            borderRadius: BorderRadius.circular(16), // Rounded corners
+            // elevation: ThemeUtils.elevation, // Shadow effect while dragging
+            borderRadius: BorderRadius.circular(ThemeUtils.borderRadiusLarge), // Rounded corners
             color: Colors.transparent,
             child: child,
           ),
         );
       },
-      padding: const EdgeInsets.all(16),
+      padding: const EdgeInsets.all(ThemeUtils.cardPadding),
       children: children,
       // children: [...series.map((s) => SeriesDefRenderer(key: Key(s.uuid), managementMode: true, seriesDef: s))],
       onReorder: (int oldIndex, int newIndex) => context.read<SeriesProvider>().reorder(oldIndex, newIndex),
