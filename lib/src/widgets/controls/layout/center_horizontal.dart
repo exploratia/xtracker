@@ -7,13 +7,9 @@ class CenterH extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [child],
-      ),
+    return Align(
+      alignment: AlignmentGeometry.topCenter,
+      child: child,
     );
   }
 }
