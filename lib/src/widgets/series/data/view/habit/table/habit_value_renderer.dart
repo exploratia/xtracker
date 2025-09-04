@@ -4,11 +4,14 @@ import '../../../../../../model/series/data/habit/habit_value.dart';
 import '../../../../../../model/series/data/series_data.dart';
 import '../../../../../../model/series/series_def.dart';
 import '../../../../../../util/date_time_utils.dart';
+import '../../../../../../util/media_query_utils.dart';
 import '../../../../../../util/theme_utils.dart';
 import '../../../../../../util/tooltip_utils.dart';
 
 class HabitValueRenderer extends StatelessWidget {
-  static int height = 28;
+  static int get height {
+    return (28 * MediaQueryUtils.textScaleFactor).ceil();
+  }
 
   const HabitValueRenderer({
     super.key,
@@ -31,6 +34,7 @@ class HabitValueRenderer extends StatelessWidget {
     Widget result = Container(
       margin: const EdgeInsets.all(2),
       child: Icon(
+        size: ThemeUtils.iconSizeScaled,
         seriesDef.iconData(),
         color: editMode ? themeData.colorScheme.secondary : null,
       ),

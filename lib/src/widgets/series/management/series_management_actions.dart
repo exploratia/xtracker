@@ -9,6 +9,7 @@ import '../../../providers/series_provider.dart';
 import '../../../util/dialogs.dart';
 import '../../../util/logging/flutter_simple_logging.dart';
 import '../../../util/series/series_import_export.dart';
+import '../../../util/theme_utils.dart';
 import '../../administration/settings/settings_controller.dart';
 
 class SeriesManagementActions extends StatelessWidget {
@@ -22,7 +23,7 @@ class SeriesManagementActions extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.screenPadding),
         child: Wrap(
           runAlignment: WrapAlignment.center,
           alignment: WrapAlignment.center,
@@ -32,6 +33,7 @@ class SeriesManagementActions extends StatelessWidget {
             IconButton(
               tooltip: LocaleKeys.seriesDefRenderer_action_importExportSeries_tooltip.tr(),
               onPressed: () async => SeriesImportExport.showImportExportDlg(context, seriesDef: seriesDef, settingsController: settingsController),
+              iconSize: ThemeUtils.iconSizeScaled,
               icon: const Icon(Icons.import_export_outlined),
             ),
             _ClearSeriesDataBtn(seriesDef: seriesDef),
@@ -75,6 +77,7 @@ class _DeleteSeriesBtn extends StatelessWidget {
     return IconButton(
       tooltip: LocaleKeys.seriesDefRenderer_action_deleteSeries_tooltip.tr(),
       onPressed: deleteHandler,
+      iconSize: ThemeUtils.iconSizeScaled,
       icon: const Icon(Icons.close_outlined),
     );
   }
@@ -97,6 +100,7 @@ class _EditSeriesBtn extends StatelessWidget {
     return IconButton(
       tooltip: LocaleKeys.seriesDefRenderer_action_editSeries_tooltip.tr(),
       onPressed: editHandler,
+      iconSize: ThemeUtils.iconSizeScaled,
       icon: const Icon(Icons.edit_outlined),
     );
   }
@@ -125,6 +129,7 @@ class _ClearSeriesDataBtn extends StatelessWidget {
     return IconButton(
       tooltip: LocaleKeys.seriesDefRenderer_action_deleteSeriesValues_tooltip.tr(),
       onPressed: handler,
+      iconSize: ThemeUtils.iconSizeScaled,
       icon: const Icon(Icons.highlight_remove_outlined),
     );
   }

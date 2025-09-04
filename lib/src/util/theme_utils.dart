@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import '../widgets/controls/card/glowing_border_container.dart';
 import 'color_utils.dart';
+import 'media_query_utils.dart';
 import 'navigation/fade_transition_builder.dart';
 
 class ThemeUtils {
@@ -25,6 +26,9 @@ class ThemeUtils {
   static const double borderRadius = 8;
   static const double borderRadiusSmall = 4;
   static const double elevation = 4;
+  static const double iconSize = 24;
+
+  static double get iconSizeScaled => iconSize * MediaQueryUtils.textScaleFactor;
 
   static const int animationDuration = 300;
   static const int animationDurationShort = 150;
@@ -56,6 +60,8 @@ class ThemeUtils {
     final canvasColor = dark ? const Color(0xff38364c) : const Color.fromRGBO(240, 240, 240, 1);
 
     final shadowColor = dark ? backgroundColor : Colors.black45;
+    final textColor = dark ? Colors.white : Colors.black;
+
     var themeData = ThemeData(
       useMaterial3: false,
       brightness: brightness,
@@ -74,9 +80,13 @@ class ThemeUtils {
           // titleMedium: TextStyle(fontWeight: FontWeight.bold),
           // titleSmall: TextStyle(color: dynamicThemeData.getPrimaryColor(dark)),
           ),
+      iconTheme: IconThemeData(
+        size: iconSize,
+        color: textColor,
+      ),
       tooltipTheme: TooltipThemeData(
         padding: const EdgeInsets.all(defaultPadding),
-        textStyle: TextStyle(inherit: true, color: dark ? Colors.white : Colors.black),
+        textStyle: TextStyle(inherit: true, color: textColor),
         // decoration: GlowingBorderContainer.createGlowingBoxDecoration(secondary, secondary),
         decoration: GlowingBorderContainer.createGlowingBoxDecoration(secondary, backgroundColor),
         waitDuration: const Duration(milliseconds: 500),
@@ -88,7 +98,7 @@ class ThemeUtils {
       ),
       sliderTheme: SliderThemeData(
         valueIndicatorColor: cardBackgroundColor,
-        valueIndicatorTextStyle: TextStyle(color: dark ? Colors.white : Colors.black),
+        valueIndicatorTextStyle: TextStyle(color: textColor),
       ),
       appBarTheme: AppBarTheme(
         elevation: elevation * 2,
@@ -103,7 +113,7 @@ class ThemeUtils {
         // dark ? SystemUiOverlayStyle.light : SystemUiOverlayStyle.dark,
         shadowColor: shadowColor,
       ),
-      tabBarTheme: TabBarThemeData(indicatorColor: dark ? Colors.white : Colors.black),
+      tabBarTheme: TabBarThemeData(indicatorColor: textColor),
       drawerTheme: DrawerThemeData(
         backgroundColor: backgroundColor,
         shape: const RoundedRectangleBorder(
@@ -126,7 +136,7 @@ class ThemeUtils {
             // trackBorderColor: const MaterialStatePropertyAll(Colors.purpleAccent),
           ),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(backgroundColor: backgroundColor, selectedItemColor: primary),
-      snackBarTheme: SnackBarThemeData(backgroundColor: cardBackgroundColor, contentTextStyle: TextStyle(color: dark ? Colors.white : Colors.black)),
+      snackBarTheme: SnackBarThemeData(backgroundColor: cardBackgroundColor, contentTextStyle: TextStyle(color: textColor)),
       // Card (e.g. in Settings)
       cardTheme: Theme.of(context).cardTheme.copyWith(
             color: cardBackgroundColor,
@@ -135,7 +145,13 @@ class ThemeUtils {
             ),
           ),
 
-      chipTheme: ChipThemeData(backgroundColor: chipBackgroundColor),
+      chipTheme: ChipThemeData(
+        backgroundColor: chipBackgroundColor,
+        iconTheme: IconThemeData(
+          size: iconSize,
+          color: primary,
+        ),
+      ),
       dialogTheme: DialogThemeData(
         // for fullscreen background has to be set manually
         backgroundColor: chipBackgroundColor,

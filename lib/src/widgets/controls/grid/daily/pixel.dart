@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../../model/series/data/series_data_value.dart';
 import '../../../../util/color_utils.dart';
 import '../../../../util/math_utils.dart';
+import '../../../../util/theme_utils.dart';
 import '../../../series/data/view/series_data_tooltip_content.dart';
 import '../../tooltip/lazy_tooltip.dart';
 
@@ -16,7 +17,7 @@ class Pixel<T extends SeriesDataValue> extends StatelessWidget {
   final bool isStartMarker;
   final Color? backgroundColor;
 
-  static const int pixelHeight = 24;
+  static int get pixelHeight => ThemeUtils.iconSizeScaled.ceil();
 
   static TextStyle _darkTextStyle = const TextStyle(inherit: true);
   static TextStyle _lightTextStyle = const TextStyle(inherit: true);

@@ -260,7 +260,7 @@ class SeriesImportExport {
                       await _exportSeries(context, settingsController.updateSeriesExportDate);
                     }
                   : null,
-              icon: const Icon(Icons.download_outlined),
+              icon: Icon(Icons.download_outlined, size: ThemeUtils.iconSizeScaled),
               label: Text(LocaleKeys.seriesManagement_importExport_btn_exportSeries.tr()),
             ),
             _LabelMedium(LocaleKeys.seriesManagement_importExport_label_exportSeries.tr()),
@@ -271,7 +271,7 @@ class SeriesImportExport {
                       await _shareSeries(context, settingsController.updateSeriesExportDate);
                     }
                   : null,
-              icon: const Icon(Icons.share_outlined),
+              icon: Icon(Icons.share_outlined, size: ThemeUtils.iconSizeScaled),
               label: Text(LocaleKeys.seriesManagement_importExport_btn_shareSeries.tr()),
             ),
             _LabelMedium(LocaleKeys.seriesManagement_importExport_label_shareSeries.tr()),
@@ -282,7 +282,7 @@ class SeriesImportExport {
               onPressed: () async {
                 await _exportSeriesDef(seriesDef, context);
               },
-              icon: const Icon(Icons.download_outlined),
+              icon: Icon(Icons.download_outlined, size: ThemeUtils.iconSizeScaled),
               label: Text(LocaleKeys.seriesManagement_importExport_btn_exportSingleSeries.tr()),
             ),
             _LabelMedium(LocaleKeys.seriesManagement_importExport_label_exportSingleSeries.tr()),
@@ -291,7 +291,7 @@ class SeriesImportExport {
               onPressed: () async {
                 await _shareSeriesDef(seriesDef, context);
               },
-              icon: const Icon(Icons.share_outlined),
+              icon: Icon(Icons.share_outlined, size: ThemeUtils.iconSizeScaled),
               label: Text(LocaleKeys.seriesManagement_importExport_btn_shareSingleSeries.tr()),
             ),
             _LabelMedium(LocaleKeys.seriesManagement_importExport_label_shareSingleSeries.tr()),
@@ -303,7 +303,7 @@ class SeriesImportExport {
             onPressed: () async {
               await _importJsonFile(context);
             },
-            icon: const Icon(Icons.upload_outlined),
+            icon: Icon(Icons.upload_outlined, size: ThemeUtils.iconSizeScaled),
             label: Text(LocaleKeys.seriesManagement_importExport_btn_importSeries.tr()),
           ),
           _LabelMedium(LocaleKeys.seriesManagement_importExport_label_importSeries.tr()),

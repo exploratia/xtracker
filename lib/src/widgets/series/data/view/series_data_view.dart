@@ -17,6 +17,7 @@ import '../../../../util/theme_utils.dart';
 import '../../../../util/tooltip_utils.dart';
 import '../../../controls/navigation/hide_bottom_navigation_bar.dart';
 import '../../../controls/provider/data_provider_loader.dart';
+import '../../../controls/select/day_range_slider.dart';
 import '../../../controls/select/day_range_slider_overlay.dart';
 import 'blood_pressure/series_data_blood_pressure_view.dart';
 import 'daily_check/series_data_daily_check_view.dart';
@@ -199,6 +200,7 @@ class _StackedRangeSliderViewState<T extends SeriesDataValue> extends State<_Sta
 
   @override
   Widget build(BuildContext context) {
+    double addHeightForTextScale = DayRangeSlider.calcAdditionalHeightByTextScale(context);
     return Stack(
       children: [
         Positioned.fill(
@@ -206,7 +208,7 @@ class _StackedRangeSliderViewState<T extends SeriesDataValue> extends State<_Sta
             filter,
             SeriesDataViewOverlays(
               topHeight: SeriesTitle.seriesTitleHeight,
-              bottomHeight: ThemeUtils.seriesDataBottomFilterViewHeight,
+              bottomHeight: ThemeUtils.seriesDataBottomFilterViewHeight + addHeightForTextScale,
             ),
           ),
         ),
@@ -214,7 +216,7 @@ class _StackedRangeSliderViewState<T extends SeriesDataValue> extends State<_Sta
           top: 0,
           left: 0,
           right: 0,
-          height: 49,
+          height: SeriesTitle.seriesTitleHeight,
           child: IgnorePointer(
             child: SeriesTitle(seriesViewMetaData: widget.seriesViewMetaData),
           ),

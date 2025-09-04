@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 
 import '../../model/chart/chart_meta_data.dart';
 import '../../model/series/series_view_meta_data.dart';
+import '../../widgets/controls/chart/title_bottom_axis.dart';
 import '../color_utils.dart';
-import '../theme_utils.dart';
+import '../media_query_utils.dart';
 import 'chart_utils.dart';
 
 class ChartUtilsSimpleValue {
@@ -56,6 +57,11 @@ class ChartUtilsSimpleValue {
 
     chartMetaData.calcPadding();
 
+    var maxLen = 40;
+    var leftTitlesWidth = maxLen * MediaQueryUtils.textScaleFactor;
+    var bottomTitlesHeight = 22 * MediaQueryUtils.textScaleFactor;
+    var bottomTitlesMaxWidth = 180 * MediaQueryUtils.textScaleFactor;
+
     return LineChartData(
       minY: chartMetaData.yMinPadded,
       maxY: chartMetaData.yMaxPadded,
@@ -75,19 +81,20 @@ class ChartUtilsSimpleValue {
       titlesData: FlTitlesData(
         rightTitles: ChartUtils.axisTitlesNoTitles,
         topTitles: ChartUtils.axisTitlesNoTitles,
-        leftTitles: const AxisTitles(
+        leftTitles: AxisTitles(
           drawBelowEverything: true,
           sideTitles: SideTitles(
             showTitles: true,
             maxIncluded: false,
             minIncluded: false,
-            reservedSize: 40,
+            reservedSize: leftTitlesWidth,
             getTitlesWidget: ChartUtils.createTitlesLeft,
           ),
         ),
         bottomTitles: AxisTitles(
           drawBelowEverything: true,
           sideTitles: SideTitles(
+            reservedSize: bottomTitlesHeight,
             showTitles: true,
             maxIncluded: true,
             minIncluded: true,
@@ -97,43 +104,25 @@ class ChartUtilsSimpleValue {
             getTitlesWidget: (value, meta) {
               if (value == meta.min) {
                 // use chartMetaData min/max - not the value which has padding!
-                return TitlesWidgetBottomAxis(alignment: Alignment.topLeft, value: chartMetaData.xMin, dateFormatter: dateFormatter);
+                return TitleBottomAxis(
+                  alignment: Alignment.topLeft,
+                  value: chartMetaData.xMin,
+                  dateFormatter: dateFormatter,
+                  height: bottomTitlesHeight,
+                  maxWidth: bottomTitlesMaxWidth,
+                );
               } else if (value == meta.max) {
-                return TitlesWidgetBottomAxis(alignment: Alignment.topRight, value: chartMetaData.xMax, dateFormatter: dateFormatter);
+                return TitleBottomAxis(
+                  alignment: Alignment.topRight,
+                  value: chartMetaData.xMax,
+                  dateFormatter: dateFormatter,
+                  height: bottomTitlesHeight,
+                  maxWidth: bottomTitlesMaxWidth,
+                );
               }
               return Container();
             },
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class TitlesWidgetBottomAxis extends StatelessWidget {
-  const TitlesWidgetBottomAxis({
-    super.key,
-    required this.alignment,
-    required this.value,
-    required this.dateFormatter,
-  });
-
-  final Alignment alignment;
-  final double value;
-  final String Function(DateTime dateTime) dateFormatter;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 0,
-      // height: 22,
-      child: OverflowBox(
-        alignment: alignment,
-        maxWidth: 180,
-        // maxHeight: 22,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.paddingSmall, vertical: ThemeUtils.paddingSmall / 2),
-          child: Text(dateFormatter(DateTime.fromMillisecondsSinceEpoch(value.truncate()))),
         ),
       ),
     );

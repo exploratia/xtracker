@@ -152,7 +152,7 @@ class _SeriesEditorState extends State<SeriesEditor> {
         switch (_seriesDef.seriesType) {
           SeriesType.bloodPressure => Expandable(
               initialExpanded: true,
-              icon: const Icon(Icons.monitor_heart_outlined),
+              icon: Icon(Icons.monitor_heart_outlined, size: ThemeUtils.iconSizeScaled),
               title: LocaleKeys.seriesEdit_seriesSettings_bloodPressure_title.tr(),
               child: BloodPressureSeriesEdit(_seriesDef, _updateState),
             ),
@@ -216,7 +216,7 @@ class _SeriesTypeHeadline extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        IconMap.icon(seriesDef.iconName),
+        IconMap.icon(seriesDef.iconName, size: ThemeUtils.iconSizeScaled),
         OverflowText(
           SeriesType.displayNameOf(seriesDef.seriesType),
           style: themeData.textTheme.titleLarge,

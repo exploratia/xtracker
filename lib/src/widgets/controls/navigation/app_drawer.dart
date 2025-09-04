@@ -41,7 +41,7 @@ class AppDrawer extends StatelessWidget {
     int actIdx = -1;
     for (var navItem in Navigation.mainNavigationItems) {
       int itemIdx = ++actIdx;
-      var icon = Tooltip(message: navItem.tooltipBuilder(), child: navItem.icon);
+      var icon = Tooltip(message: navItem.tooltipBuilder(), child: navItem.icon());
       result.add(ListTile(
         shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(ThemeUtils.borderRadius)),
         selected: actIdx == currentIdx,

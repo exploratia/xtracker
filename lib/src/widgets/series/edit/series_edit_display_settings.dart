@@ -28,7 +28,7 @@ class SeriesEditDisplaySettings extends StatelessWidget {
     var seriesType = seriesDef.seriesType;
 
     return Expandable(
-      icon: const Icon(Icons.settings_outlined),
+      icon: Icon(Icons.settings_outlined, size: ThemeUtils.iconSizeScaled),
       title: LocaleKeys.seriesEdit_common_displaySettings_title.tr(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,7 +44,7 @@ class SeriesEditDisplaySettings extends StatelessWidget {
               ),
               value: settings.tableViewUseColumnProfileDateTimeValue,
               onChanged: (value) => settings.tableViewUseColumnProfileDateTimeValue = value,
-              secondary: const Icon(Icons.view_column_outlined),
+              secondary: Icon(Icons.view_column_outlined, size: ThemeUtils.iconSizeScaled),
             ),
           // Dots show count
           if (seriesType == SeriesType.dailyCheck || seriesType == SeriesType.bloodPressure)
@@ -54,7 +54,7 @@ class SeriesEditDisplaySettings extends StatelessWidget {
               ),
               value: settings.dotsViewShowCount,
               onChanged: (value) => settings.dotsViewShowCount = value,
-              secondary: const Icon(Icons.numbers_outlined),
+              secondary: Icon(Icons.numbers_outlined, size: ThemeUtils.iconSizeScaled),
             ),
           // Pixel Preview
           if (PixelViewPreview.applicableOn(seriesDef)) ...[

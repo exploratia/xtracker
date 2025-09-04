@@ -57,7 +57,11 @@ class _ExpandableState extends State<Expandable> {
                     style: themeData.textTheme.titleMedium,
                   ),
                 if (widget.title == null && widget.icon == null) Container(), // fallback -> expand icon always at the end
-                Icon(_expanded ? Icons.arrow_drop_up_outlined : Icons.arrow_drop_down_outlined, color: Theme.of(context).colorScheme.primary),
+                Icon(
+                  _expanded ? Icons.arrow_drop_up_outlined : Icons.arrow_drop_down_outlined,
+                  color: Theme.of(context).colorScheme.primary,
+                  size: ThemeUtils.iconSizeScaled,
+                ),
               ],
             ),
           ),

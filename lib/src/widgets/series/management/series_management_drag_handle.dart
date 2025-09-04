@@ -17,7 +17,7 @@ class SeriesManagementDragHandle extends StatelessWidget {
         padding: const EdgeInsets.all(ThemeUtils.defaultPadding),
         child: Tooltip(
           message: LocaleKeys.seriesDefRenderer_action_dragSeries_tooltip.tr(),
-          child: const Icon(Icons.drag_handle_outlined),
+          child: Icon(Icons.drag_handle_outlined, size: ThemeUtils.iconSizeScaled),
         ),
       ),
     );

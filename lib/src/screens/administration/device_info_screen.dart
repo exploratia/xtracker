@@ -19,7 +19,7 @@ import '../../widgets/controls/responsive/screen_builder.dart';
 
 class DeviceInfoScreen extends StatefulWidget {
   static NavigationItem navItem = NavigationItem(
-    icon: const Icon(Icons.perm_device_info_outlined),
+    iconData: Icons.perm_device_info_outlined,
     routeName: '/device_info_screen',
     titleBuilder: () => LocaleKeys.deviceInfo_title.tr(),
   );

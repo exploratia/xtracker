@@ -15,7 +15,7 @@ import '../widgets/series/series_view.dart';
 
 class HomeScreen extends StatelessWidget {
   static MainNavigationItem navItem = MainNavigationItem(
-    icon: const Icon(Icons.home_outlined),
+    iconData: Icons.home_outlined,
     routeName: '/',
     titleBuilder: () => LocaleKeys.seriesDashboard_nav_title.tr(),
     tooltipBuilder: () => LocaleKeys.seriesDashboard_nav_tooltip.tr(),

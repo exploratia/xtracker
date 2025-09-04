@@ -27,12 +27,13 @@ class _DayRangeSliderOverlayState extends State<DayRangeSliderOverlay> {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
+    double addHeightForTextScale = DayRangeSlider.calcAdditionalHeightByTextScale(context);
 
     return Stack(
       children: [
         // filter view background - extra widget to be able to use ignore pointer
         AnimatedPositioned(
-          height: ThemeUtils.seriesDataBottomFilterViewHeight + (_sliderVisible ? 48 : 0),
+          height: ThemeUtils.seriesDataBottomFilterViewHeight + addHeightForTextScale + (_sliderVisible ? 48 : 0),
           left: 0,
           right: 0,
           bottom: 0,
@@ -44,7 +45,7 @@ class _DayRangeSliderOverlayState extends State<DayRangeSliderOverlay> {
           ),
         ),
         AnimatedPositioned(
-          height: ThemeUtils.seriesDataBottomFilterViewHeight + (_sliderVisible ? 48 : 0),
+          height: ThemeUtils.seriesDataBottomFilterViewHeight + addHeightForTextScale + (_sliderVisible ? 48 : 0),
           left: 0,
           right: 0,
           bottom: 0,

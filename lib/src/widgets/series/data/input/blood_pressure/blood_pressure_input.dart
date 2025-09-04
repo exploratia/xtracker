@@ -152,6 +152,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
+    var iconSize = ThemeUtils.iconSizeScaled;
     final showMedicationInput = !widget.seriesDef.bloodPressureSettingsReadonly().hideMedicationInput;
 
     var edit = Form(
@@ -274,13 +275,14 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            widget.bloodPressureValue == null ? const Icon(Icons.add_outlined) : const Icon(Icons.edit_outlined),
+            widget.bloodPressureValue == null ? Icon(Icons.add_outlined, size: iconSize) : Icon(Icons.edit_outlined, size: iconSize),
             OverflowText(widget.seriesDef.name),
             if (widget.bloodPressureValue != null)
               IconButton(
                 tooltip: LocaleKeys.seriesValue_action_deleteValue_tooltip.tr(),
                 onPressed: _deleteHandler,
                 color: themeData.colorScheme.secondary,
+                iconSize: iconSize,
                 icon: const Icon(Icons.delete_outlined),
               ),
           ],

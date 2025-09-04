@@ -29,7 +29,7 @@ class AdministrationView extends StatelessWidget {
     final themeData = Theme.of(context);
 
     final links = [SettingsScreen.navItem, LogsScreen.navItem, DeviceInfoScreen.navItem].map((navItem) => {
-          'ico': navItem.icon,
+          'ico': navItem.icon(),
           'title': navItem.titleBuilder(),
           'routeName': navItem.routeName,
         });
@@ -139,24 +139,24 @@ class _AppInfoCard extends StatelessWidget {
                   OutlinedButton.icon(
                     onPressed: () =>
                         Navigator.restorablePushNamed(context, InfoScreen.navItem.routeName, arguments: {'infoType': InfoType.legalNotice.typeName}),
-                    icon: InfoScreen.navItem.icon,
+                    icon: InfoScreen.navItem.icon(),
                     label: Text(InfoType.legalNotice.title()),
                   ),
                   OutlinedButton.icon(
                     onPressed: () =>
                         Navigator.restorablePushNamed(context, InfoScreen.navItem.routeName, arguments: {'infoType': InfoType.privacyPolicy.typeName}),
-                    icon: InfoScreen.navItem.icon,
+                    icon: InfoScreen.navItem.icon(),
                     label: Text(InfoType.privacyPolicy.title()),
                   ),
                   OutlinedButton.icon(
                     onPressed: () =>
                         Navigator.restorablePushNamed(context, InfoScreen.navItem.routeName, arguments: {'infoType': InfoType.disclaimer.typeName}),
-                    icon: InfoScreen.navItem.icon,
+                    icon: InfoScreen.navItem.icon(),
                     label: Text(InfoType.disclaimer.title()),
                   ),
                   OutlinedButton.icon(
                     onPressed: () => Navigator.restorablePushNamed(context, InfoScreen.navItem.routeName, arguments: {'infoType': InfoType.eula.typeName}),
-                    icon: InfoScreen.navItem.icon,
+                    icon: InfoScreen.navItem.icon(),
                     label: Text(InfoType.eula.title()),
                   ),
                 ],

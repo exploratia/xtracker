@@ -42,7 +42,7 @@ class SeriesDataBloodPressureChartView extends StatelessWidget {
               maxVisibleHeight: constraints.maxHeight - seriesDataViewOverlays.height,
               chartWidgetBuilder: (touchCallback) {
                 return LineChart(
-                  ChartUtilsBloodPressure.buildLineChartData(filteredSeriesData, themeData, touchCallback),
+                  ChartUtilsBloodPressure.buildLineChartData(filteredSeriesData, themeData, touchCallback, context),
                 );
               },
             ),

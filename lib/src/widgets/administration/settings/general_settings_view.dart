@@ -45,10 +45,10 @@ class GeneralSettingsView extends StatelessWidget {
         Table(
           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
           // https://api.flutter.dev/flutter/widgets/Table-class.html
-          columnWidths: const <int, TableColumnWidth>{
-            0: FixedColumnWidth(96),
-            // 0: IntrinsicColumnWidth(),
-            1: IntrinsicColumnWidth(),
+          columnWidths: <int, TableColumnWidth>{
+            // 0: FixedColumnWidth(96 * MediaQueryUtils.textScaleFactor),
+            0: const IntrinsicColumnWidth(),
+            1: const IntrinsicColumnWidth(),
             // 1: FlexColumnWidth(),
           },
           // border: TableBorder.symmetric(

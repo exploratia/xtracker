@@ -86,18 +86,19 @@ class _SeriesTypeSelector extends StatelessWidget {
           const Divider(),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            spacing: ThemeUtils.verticalSpacing,
             children: [
               ...SeriesType.values.map((st) => Row(mainAxisSize: MainAxisSize.min, children: [
                     _SeriesTypeInfoBtn(st),
                     ElevatedButton.icon(
-                      icon: IconMap.icon(st.iconName),
+                      icon: IconMap.icon(st.iconName, size: ThemeUtils.iconSizeScaled),
                       label: Text(SeriesType.displayNameOf(st)),
                       onPressed: () => createSeriesDef(st),
                     )
                   ])),
             ],
           ),
-          const SizedBox(height: 20),
+          const SizedBox(height: ThemeUtils.verticalSpacingLarge),
           Text(LocaleKeys.seriesEdit_label_moreSeriesToCome.tr()),
         ],
       ),
@@ -113,12 +114,20 @@ class _SeriesTypeInfoBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-        tooltip: LocaleKeys.seriesEdit_btn_showSeriesTypeInfo.tr(),
-        onPressed: () => Dialogs.simpleOkDialog(
-              SeriesType.infoOf(st),
-              context,
-              title: Row(spacing: ThemeUtils.horizontalSpacing, children: [IconMap.icon(st.iconName), Text(SeriesType.displayNameOf(st))]),
-            ),
-        icon: const Icon(Icons.info_outline));
+      tooltip: LocaleKeys.seriesEdit_btn_showSeriesTypeInfo.tr(),
+      onPressed: () => Dialogs.simpleOkDialog(
+        SeriesType.infoOf(st),
+        context,
+        title: Row(
+          spacing: ThemeUtils.horizontalSpacing,
+          children: [
+            IconMap.icon(st.iconName, size: ThemeUtils.iconSizeScaled),
+            Text(SeriesType.displayNameOf(st)),
+          ],
+        ),
+      ),
+      iconSize: ThemeUtils.iconSizeScaled,
+      icon: const Icon(Icons.info_outline),
+    );
   }
 }

@@ -71,7 +71,7 @@ class AppBottomNavigationBar extends StatelessWidget {
 
     for (var navItem in Navigation.mainNavigationItems) {
       result.add(BottomNavigationBarItem(
-        icon: navItem.icon,
+        icon: navItem.icon(),
         label: navItem.titleBuilder(),
         tooltip: navItem.tooltipBuilder(),
       ));

@@ -60,7 +60,7 @@ class ScreenBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mediaQueryInfo = MediaQueryUtils.of(context);
+    final mediaQueryInfo = MediaQueryUtils.of(context, calcTextScale: true);
 
     if (mediaQueryInfo.isSmallScreen) {
       return const _TooSmallScreen();

@@ -38,7 +38,7 @@ class SeriesDataDailyCheckDotsView extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        bool monthly = constraints.maxWidth > FixColumnProfiles.columnProfileDateMonthDays.minWidth();
+        bool monthly = constraints.maxWidth > FixColumnProfiles.columnProfileDateMonthDays.minWidthScaled();
 
         List<RowItem<DailyCheckDayItem>> data = monthly ? RowItem.buildMonthRowItems(dayItems) : RowItem.buildWeekRowItems(dayItems);
 

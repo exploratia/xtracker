@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../../model/series/data/series_data_value.dart';
+import '../../../../util/media_query_utils.dart';
+import '../../../../util/theme_utils.dart';
 import '../../../series/data/view/series_data_tooltip_content.dart';
 import '../../tooltip/lazy_tooltip.dart';
 import 'day/day_item.dart';
@@ -24,7 +26,7 @@ class Dot<T extends SeriesDataValue> extends StatelessWidget {
   final List<T> seriesValues;
   final Widget Function(T dataValue)? tooltipValueBuilder;
 
-  static const int dotHeight = 24;
+  static int get dotHeight => ThemeUtils.iconSizeScaled.ceil();
 
   static TextStyle _countTextStyle = const TextStyle(inherit: true);
   static TextStyle _dotTextStyle = const TextStyle(inherit: true);
@@ -39,6 +41,7 @@ class Dot<T extends SeriesDataValue> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget? dotTextChild = dotText != null ? Text(dotText!, textAlign: TextAlign.right, style: _dotTextStyle) : null;
+    double scale = MediaQueryUtils.textScaleFactor;
 
     Text? countText;
     int count = seriesValues.length;
@@ -76,20 +79,20 @@ class Dot<T extends SeriesDataValue> extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        const SizedBox(height: 7),
+        SizedBox(height: 7 * scale),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              height: 10,
-              width: 10,
+              height: 10 * scale,
+              width: 10 * scale,
               decoration: dotBoxDecoration,
               child: dotTextChild,
             ),
           ],
         ),
         Container(
-          height: 7,
+          height: 7 * scale,
           decoration: startMarkerBoxDecoration,
           child: countText,
         ),

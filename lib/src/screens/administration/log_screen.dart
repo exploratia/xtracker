@@ -20,7 +20,7 @@ import '../../widgets/controls/responsive/screen_builder.dart';
 
 class LogScreen extends StatelessWidget {
   static NavigationItem navItem = NavigationItem(
-    icon: const Icon(Icons.short_text_outlined),
+    iconData: Icons.short_text_outlined,
     routeName: '/log_screen',
     titleBuilder: () => LocaleKeys.log_title.tr(),
   );

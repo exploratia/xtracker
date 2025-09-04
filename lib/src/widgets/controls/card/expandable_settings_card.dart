@@ -39,7 +39,11 @@ class _ExpandableSettingsCardState extends State<ExpandableSettingsCard> {
               children: [
                 widget.title,
                 const SizedBox(width: ThemeUtils.verticalSpacing),
-                Icon(_expanded ? Icons.arrow_drop_up_outlined : Icons.arrow_drop_down_outlined, color: Theme.of(context).colorScheme.primary),
+                Icon(
+                  _expanded ? Icons.arrow_drop_up_outlined : Icons.arrow_drop_down_outlined,
+                  color: Theme.of(context).colorScheme.primary,
+                  size: ThemeUtils.iconSizeScaled,
+                ),
               ],
             ),
           ),

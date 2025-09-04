@@ -150,8 +150,8 @@ class IconMap {
     return iconData;
   }
 
-  static Icon icon(String iconName) {
-    return Icon(iconData(iconName));
+  static Icon icon(String iconName, {double? size}) {
+    return Icon(iconData(iconName), size: size);
   }
 
 // static IconData _materialIconData(int codePoint) {

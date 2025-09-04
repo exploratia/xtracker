@@ -71,7 +71,10 @@ class _Chip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ActionChip(
-      avatar: Icon(LogScreen.navItem.icon.icon, color: Theme.of(context).colorScheme.primary),
+      avatar: Icon(
+        LogScreen.navItem.iconData,
+        // size: ThemeUtils.iconSizeScaled,
+      ),
       label: Text(logFileName.replaceAll('.txt', '')),
       onPressed: () => pressedHandler(),
     );

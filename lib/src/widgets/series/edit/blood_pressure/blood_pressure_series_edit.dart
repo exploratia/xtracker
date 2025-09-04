@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../generated/locale_keys.g.dart';
 import '../../../../model/series/series_def.dart';
+import '../../../../util/theme_utils.dart';
 
 class BloodPressureSeriesEdit extends StatelessWidget {
   final SeriesDef seriesDef;
@@ -21,7 +22,7 @@ class BloodPressureSeriesEdit extends StatelessWidget {
           ),
           value: settings.hideMedicationInput,
           onChanged: (value) => settings.hideMedicationInput = value,
-          secondary: const Icon(Icons.medication_outlined),
+          secondary: Icon(Icons.medication_outlined, size: ThemeUtils.iconSizeScaled),
         ),
       ],
     );

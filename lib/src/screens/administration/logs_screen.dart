@@ -14,6 +14,7 @@ import '../../util/file_extension.dart';
 import '../../util/logging/daily_files.dart';
 import '../../util/logging/flutter_simple_logging.dart';
 import '../../util/navigation/generic_route.dart';
+import '../../util/theme_utils.dart';
 import '../../widgets/administration/logging/logs_view.dart';
 import '../../widgets/controls/appbar/gradient_app_bar.dart';
 import '../../widgets/controls/popupmenu/icon_popup_menu.dart';
@@ -23,7 +24,7 @@ import 'log_settings_screen.dart';
 
 class LogsScreen extends StatefulWidget {
   static NavigationItem navItem = NavigationItem(
-    icon: const Icon(Icons.text_snippet_outlined),
+    iconData: Icons.text_snippet_outlined,
     routeName: '/logs_screen',
     titleBuilder: () => LocaleKeys.logs_title.tr(),
   );
@@ -53,7 +54,7 @@ class _LogsScreenState extends State<LogsScreen> {
             onPressed: () async {
               Navigator.restorablePushNamed(context, LogSettingsScreen.navItem.routeName);
             },
-            icon: LogSettingsScreen.navItem.icon,
+            icon: LogSettingsScreen.navItem.icon(size: ThemeUtils.iconSize /* in app bar not scaled! */),
           ),
           Tooltip(
             message: LocaleKeys.logs_action_exportOrShareLogs_tooltip.tr(),

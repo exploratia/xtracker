@@ -4,11 +4,14 @@ import '../../../../../../model/series/data/blood_pressure/blood_pressure_value.
 import '../../../../../../model/series/data/series_data.dart';
 import '../../../../../../model/series/series_def.dart';
 import '../../../../../../util/date_time_utils.dart';
+import '../../../../../../util/media_query_utils.dart';
 import '../../../../../../util/theme_utils.dart';
 import '../../../../../../util/tooltip_utils.dart';
 
 class BloodPressureValueRenderer extends StatelessWidget {
-  static int height = 30;
+  static int get height {
+    return (30 * MediaQueryUtils.textScaleFactor).ceil();
+  }
 
   /// [showBorder] show a border around the value - fix true if [editMode] is set
   const BloodPressureValueRenderer({
@@ -79,21 +82,22 @@ class _Value extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double scale = MediaQueryUtils.textScaleFactor;
     return Padding(
       padding: const EdgeInsets.all(3.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          SizedBox(width: 30, child: Text('${bloodPressureValue.high}', style: const TextStyle(color: Colors.white), textAlign: TextAlign.center)),
+          SizedBox(width: 30 * scale, child: Text('${bloodPressureValue.high}', style: const TextStyle(color: Colors.white), textAlign: TextAlign.center)),
           bloodPressureValue.medication
-              ? const Icon(
+              ? Icon(
                   Icons.medication_outlined,
-                  size: 16,
+                  size: 15 * scale,
                   color: Colors.white,
                 )
-              : const SizedBox(height: 16, child: VerticalDivider(thickness: 1, width: 8, color: Colors.white)),
-          SizedBox(width: 30, child: Text('${bloodPressureValue.low}', style: const TextStyle(color: Colors.white), textAlign: TextAlign.center)),
+              : SizedBox(height: 16 * scale, child: VerticalDivider(thickness: 1 * scale, width: ThemeUtils.horizontalSpacing, color: Colors.white)),
+          SizedBox(width: 30 * scale, child: Text('${bloodPressureValue.low}', style: const TextStyle(color: Colors.white), textAlign: TextAlign.center)),
         ],
       ),
     );

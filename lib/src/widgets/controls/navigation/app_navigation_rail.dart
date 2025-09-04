@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../generated/locale_keys.g.dart';
 import '../../../model/navigation/navigation.dart';
+import '../../../util/theme_utils.dart';
 
 class AppNavigationRail extends StatefulWidget {
   const AppNavigationRail({super.key});
@@ -49,14 +50,18 @@ class _AppNavigationRailState extends State<AppNavigationRail> {
     // special expand item
     result.add(NavigationRailDestination(
       icon: Tooltip(
-          message: Navigation.navRailExpanded ? LocaleKeys.commons_nav_hideMenu.tr() : LocaleKeys.commons_nav_openMenu.tr(),
-          child: Icon(Navigation.navRailExpanded ? Icons.arrow_left : Icons.arrow_right)),
+        message: Navigation.navRailExpanded ? LocaleKeys.commons_nav_hideMenu.tr() : LocaleKeys.commons_nav_openMenu.tr(),
+        child: Icon(
+          Navigation.navRailExpanded ? Icons.arrow_left : Icons.arrow_right,
+          size: ThemeUtils.iconSizeScaled,
+        ),
+      ),
       label: const SizedBox(width: 0, height: 0),
     ));
 
     for (var navItem in Navigation.mainNavigationItems) {
       result.add(NavigationRailDestination(
-        icon: Tooltip(message: navItem.tooltipBuilder(), child: navItem.icon),
+        icon: Tooltip(message: navItem.tooltipBuilder(), child: navItem.icon()),
         label: Text(navItem.titleBuilder()),
       ));
     }

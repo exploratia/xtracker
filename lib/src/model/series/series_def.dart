@@ -71,8 +71,8 @@ class SeriesDef {
     };
   }
 
-  Icon icon() {
-    return Icon(iconData(), color: color);
+  Icon icon({double? size}) {
+    return Icon(iconData(), color: color, size: size);
   }
 
   IconData iconData() {
