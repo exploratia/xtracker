@@ -39,7 +39,7 @@ class DayRangeSlider extends StatefulWidget {
     return MediaQueryUtils.calcAdditionalHeightByTextScale(ThemeUtils.fontSizeBodyM);
   }
 }
- 
+
 class _DayRangeSliderState extends State<DayRangeSlider> {
   final _reverseProgressKey = GlobalKey<ReverseProgressState>();
 
