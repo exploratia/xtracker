@@ -27,7 +27,7 @@ class _DayRangeSliderOverlayState extends State<DayRangeSliderOverlay> {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    double addHeightForTextScale = DayRangeSlider.calcAdditionalHeightByTextScale(context);
+    double addHeightForTextScale = DayRangeSlider.calcAdditionalHeightByTextScale();
 
     return Stack(
       children: [

@@ -35,13 +35,11 @@ class DayRangeSlider extends StatefulWidget {
   @override
   State<DayRangeSlider> createState() => _DayRangeSliderState();
 
-  static double calcAdditionalHeightByTextScale(BuildContext context) {
-    final themeData = Theme.of(context);
-    var dateFontSize = themeData.tooltipTheme.textStyle?.fontSize ?? 18;
-    return MediaQueryUtils.calcAdditionalHeightByTextScale(dateFontSize);
+  static double calcAdditionalHeightByTextScale() {
+    return MediaQueryUtils.calcAdditionalHeightByTextScale(ThemeUtils.fontSizeBodyM);
   }
 }
-
+ 
 class _DayRangeSliderState extends State<DayRangeSlider> {
   final _reverseProgressKey = GlobalKey<ReverseProgressState>();
 
@@ -157,7 +155,7 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
     var btnBoxDecoration = BoxDecoration(
       color: themeData.scaffoldBackgroundColor.withAlpha(192),
       border: Border.all(color: btnBorderColor, width: 1),
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(ThemeUtils.borderRadiusLarge),
     );
     var btnTextStyle = TooltipUtils.tooltipMonospaceStyle.copyWith(color: themeData.colorScheme.primary);
 
@@ -391,7 +389,7 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
                               child: const Center(
                                   child: Row(
                                 mainAxisSize: MainAxisSize.min,
-                                spacing: 4,
+                                spacing: ThemeUtils.horizontalSpacingSmall,
                                 children: [
                                   _DragLine(),
                                   _DragLine(),
@@ -420,7 +418,7 @@ class _DragLine extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: ThemeUtils.onPrimary,
-      height: 14,
+      height: ThemeUtils.fontSizeBodyM,
       width: 2,
     );
   }

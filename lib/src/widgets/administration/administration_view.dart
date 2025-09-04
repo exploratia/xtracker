@@ -79,7 +79,7 @@ class _AppInfoCard extends StatelessWidget {
 
         List<List<Widget>> rows = [
           [
-            CaLogo(radius: 16, backgroundColor: themeData.scaffoldBackgroundColor),
+            CaLogo(radius: ThemeUtils.borderRadiusLarge, backgroundColor: themeData.scaffoldBackgroundColor),
             Text('${DateFormat('yyyy').format(DateTime.now())} \u00a9 Christian Adler'),
           ],
         ];
@@ -92,13 +92,13 @@ class _AppInfoCard extends StatelessWidget {
         );
         if (maxWidth > 450) {
           rows.add([
-            ExploratiaLogo(radius: 16, backgroundColor: themeData.scaffoldBackgroundColor),
+            ExploratiaLogo(radius: ThemeUtils.borderRadiusLarge, backgroundColor: themeData.scaffoldBackgroundColor),
             exploratiaLaunchUrl,
             exploratiaLogoWide,
           ]);
         } else if (maxWidth <= 400) {
           rows.add([
-            ExploratiaLogo(radius: 16, backgroundColor: themeData.scaffoldBackgroundColor),
+            ExploratiaLogo(radius: ThemeUtils.borderRadiusLarge, backgroundColor: themeData.scaffoldBackgroundColor),
             exploratiaLaunchUrl,
           ]);
         } else {

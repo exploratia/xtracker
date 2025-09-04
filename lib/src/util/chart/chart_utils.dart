@@ -105,7 +105,7 @@ class ChartUtils {
                   touchedSpot.bar.color ??
                   Colors.blueGrey,
               fontWeight: FontWeight.bold,
-              fontSize: 14,
+              fontSize: ThemeUtils.fontSizeBodyM,
               shadows: const [Shadow(color: Colors.black, blurRadius: 0, offset: Offset(1, 1))],
             );
             return LineTooltipItem(touchedSpot.y.toStringAsFixed(fractionDigits), textStyle,

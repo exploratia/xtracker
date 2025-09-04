@@ -5,6 +5,7 @@ import '../../providers/series_current_value_provider.dart';
 import '../../providers/series_provider.dart';
 import '../../util/dialogs.dart';
 import '../../util/logging/flutter_simple_logging.dart';
+import '../../util/theme_utils.dart';
 import '../administration/settings/settings_controller.dart';
 import '../controls/animation/fade_in.dart';
 import '../controls/layout/v_centered_single_child_scroll_view_with_scrollbar.dart';
@@ -75,7 +76,7 @@ class _SeriesList extends StatelessWidget {
       settingsController: settingsController,
       child: DeviceDependentWidthConstrainedBox(
         child: Column(
-          spacing: 16,
+          spacing: ThemeUtils.verticalSpacingLarge,
           children: children,
           // children: [ ...series.map((s) => SeriesDefRenderer(seriesDef: s)) ],
         ),

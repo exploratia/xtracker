@@ -78,7 +78,7 @@ class _LazyTooltipState extends State<LazyTooltip> with SingleTickerProviderStat
                 borderRadius: ThemeUtils.borderRadiusCircularSmall,
               ),
           child: DefaultTextStyle(
-            style: theme.textStyle ?? const TextStyle(color: Colors.white, fontSize: 12),
+            style: theme.textStyle ?? const TextStyle(color: Colors.white, fontSize: ThemeUtils.fontSizeBodyS),
             child: widget.tooltipBuilder(context),
           ),
         ),

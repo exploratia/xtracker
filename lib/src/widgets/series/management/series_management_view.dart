@@ -100,7 +100,7 @@ class _SeriesList extends StatelessWidget {
           opacity: 0.6,
           child: Material(
             // elevation: ThemeUtils.elevation, // Shadow effect while dragging
-            borderRadius: BorderRadius.circular(16), // Rounded corners
+            borderRadius: BorderRadius.circular(ThemeUtils.borderRadiusLarge), // Rounded corners
             color: Colors.transparent,
             child: child,
           ),

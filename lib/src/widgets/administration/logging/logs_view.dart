@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../screens/administration/log_screen.dart';
 import '../../../util/logging/daily_files.dart';
+import '../../../util/theme_utils.dart';
 import '../../controls/card/settings_card.dart';
 import '../../controls/future/future_builder_with_progress_indicator.dart';
 import '../../controls/layout/scroll_footer.dart';
@@ -47,7 +48,7 @@ class _LogsViewState extends State<LogsView> {
                   }
                   return Center(
                     child: Wrap(
-                      spacing: 20,
+                      spacing: ThemeUtils.horizontalSpacing,
                       children: [...logFiles.map((logFile) => _Chip(logFile, () => widget.logSelectHandler(logFile, _rebuild)))],
                     ),
                   );

@@ -40,7 +40,7 @@ class _ExpandableState extends State<Expandable> {
         InkWell(
           onTap: () => _toggleExpanded(),
           customBorder: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(ThemeUtils.borderRadiusLarge),
           ),
           child: Padding(
             padding: const EdgeInsets.all(ThemeUtils.defaultPadding),

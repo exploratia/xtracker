@@ -7,7 +7,7 @@ import '../../../controls/text/overflow_text.dart';
 
 class SeriesTitle extends StatelessWidget {
   static double get seriesTitleHeight {
-    return ThemeUtils.defaultPadding + 1 + 10 + ThemeUtils.defaultPadding + 24 * MediaQueryUtils.textScaleFactor;
+    return ThemeUtils.defaultPadding + 1 + 10 + ThemeUtils.defaultPadding + ThemeUtils.fontSizeTitleL * MediaQueryUtils.textScaleFactor;
   }
 
   const SeriesTitle({super.key, required this.seriesViewMetaData});

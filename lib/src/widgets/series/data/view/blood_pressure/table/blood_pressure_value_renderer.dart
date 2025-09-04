@@ -96,7 +96,7 @@ class _Value extends StatelessWidget {
                   size: 15 * scale,
                   color: Colors.white,
                 )
-              : SizedBox(height: 16 * scale, child: VerticalDivider(thickness: 1 * scale, width: ThemeUtils.horizontalSpacing, color: Colors.white)),
+              : SizedBox(height: 15 * scale, child: VerticalDivider(thickness: 1 * scale, width: ThemeUtils.horizontalSpacing, color: Colors.white)),
           SizedBox(width: 30 * scale, child: Text('${bloodPressureValue.low}', style: const TextStyle(color: Colors.white), textAlign: TextAlign.center)),
         ],
       ),

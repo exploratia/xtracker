@@ -20,13 +20,24 @@ class ThemeUtils {
   static const double paddingSmall = 4;
   static const double horizontalSpacing = 8;
   static const double horizontalSpacingSmall = 4;
+  static const double horizontalSpacingLarge = 16;
   static const double verticalSpacing = 12;
   static const double verticalSpacingSmall = 4;
   static const double verticalSpacingLarge = 24;
   static const double borderRadius = 8;
   static const double borderRadiusSmall = 4;
+  static const double borderRadiusLarge = 16;
   static const double elevation = 4;
   static const double iconSize = 24;
+  static const double fontSizeTitleL = 20;
+  static const double fontSizeTitleM = 16;
+  static const double fontSizeTitleS = 14;
+  static const double fontSizeBodyL = 14;
+  static const double fontSizeBodyM = 14;
+  static const double fontSizeBodyS = 12;
+  static const double fontSizeLabelL = 14;
+  static const double fontSizeLabelM = 12;
+  static const double fontSizeLabelS = 10;
 
   static double get iconSizeScaled => iconSize * MediaQueryUtils.textScaleFactor;
 
@@ -75,18 +86,27 @@ class ThemeUtils {
         onSecondary: onPrimary,
         tertiary: tertiary,
       ),
-      textTheme: const TextTheme(
-          // titleLarge: TextStyle(color: dynamicThemeData.getPrimaryColor(dark)),
-          // titleMedium: TextStyle(fontWeight: FontWeight.bold),
-          // titleSmall: TextStyle(color: dynamicThemeData.getPrimaryColor(dark)),
-          ),
+      textTheme: TextTheme(
+        titleLarge: TextStyle(color: textColor, fontSize: fontSizeTitleL, fontWeight: FontWeight.w500),
+        titleMedium: TextStyle(color: textColor, fontSize: fontSizeTitleM, fontWeight: FontWeight.w400),
+        titleSmall: TextStyle(color: textColor, fontSize: fontSizeTitleS, fontWeight: FontWeight.w500),
+        bodyLarge: TextStyle(color: textColor, fontSize: fontSizeBodyL, fontWeight: FontWeight.w500),
+        bodyMedium: TextStyle(color: textColor, fontSize: fontSizeBodyM, fontWeight: FontWeight.w500),
+        bodySmall: TextStyle(color: textColor, fontSize: fontSizeBodyS, fontWeight: FontWeight.w400),
+        labelLarge: TextStyle(color: textColor, fontSize: fontSizeLabelL, fontWeight: FontWeight.w500),
+        labelMedium: TextStyle(color: textColor, fontSize: fontSizeLabelM, fontWeight: FontWeight.w400),
+        labelSmall: TextStyle(color: textColor, fontSize: fontSizeLabelS, fontWeight: FontWeight.w400),
+      ),
       iconTheme: IconThemeData(
         size: iconSize,
         color: textColor,
       ),
       tooltipTheme: TooltipThemeData(
         padding: const EdgeInsets.all(defaultPadding),
-        textStyle: TextStyle(inherit: true, color: textColor),
+        textStyle: TextStyle(
+          color: textColor,
+          fontSize: fontSizeBodyM,
+        ),
         // decoration: GlowingBorderContainer.createGlowingBoxDecoration(secondary, secondary),
         decoration: GlowingBorderContainer.createGlowingBoxDecoration(secondary, backgroundColor),
         waitDuration: const Duration(milliseconds: 500),

@@ -200,7 +200,7 @@ class _StackedRangeSliderViewState<T extends SeriesDataValue> extends State<_Sta
 
   @override
   Widget build(BuildContext context) {
-    double addHeightForTextScale = DayRangeSlider.calcAdditionalHeightByTextScale(context);
+    double addHeightForTextScale = DayRangeSlider.calcAdditionalHeightByTextScale();
     return Stack(
       children: [
         Positioned.fill(
