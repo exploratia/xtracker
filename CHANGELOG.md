@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.1.1] - 2025-09-04
+
+### Features
+
+- device info view
+- app support reminder
+- series backup reminder
+- store and display latest series export
+
+### Fixes
+
+- adjust app layout for larger text scales
+
 ## [1.1.0] - 2025-08-29
 
 ### Features
