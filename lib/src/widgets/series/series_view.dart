@@ -1,6 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../../generated/locale_keys.g.dart';
 import '../../providers/series_current_value_provider.dart';
 import '../../providers/series_provider.dart';
 import '../../util/dialogs.dart';
@@ -26,7 +28,7 @@ class SeriesView extends StatelessWidget {
     } catch (e) {
       SimpleLogging.w('Failure on refresh view.', error: e);
       if (context.mounted) {
-        await Dialogs.simpleErrOkDialog(e.toString(), context);
+        Dialogs.showSnackBarWarning(LocaleKeys.commons_snackbar_loadFailed.tr(), context);
       }
     }
   }

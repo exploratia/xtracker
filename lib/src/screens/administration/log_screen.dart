@@ -68,7 +68,7 @@ class LogScreen extends StatelessWidget {
                 } catch (err) {
                   SimpleLogging.w('Failed to delete log.', error: err);
                   if (context.mounted) {
-                    Dialogs.simpleErrOkDialog('${LocaleKeys.log_alert_deleteLogFailed.tr()}\n\n$err', context);
+                    Dialogs.showSnackBarWarning(LocaleKeys.log_alert_deleteLogFailed.tr(), context);
                   }
                 }
                 final rebuildLogs = rebuildLogsView;
@@ -102,13 +102,13 @@ class LogScreen extends StatelessWidget {
           if (exported) {
             SimpleLogging.i('Successfully exported log.');
             if (context.mounted) {
-              Dialogs.showSnackBar(LocaleKeys.log_snackbar_exportSuccess.tr(), context);
+              Dialogs.showSnackBar(LocaleKeys.commons_snackbar_exportSuccess.tr(), context);
             }
           }
         } catch (err) {
           SimpleLogging.w('Failed to export log.', error: err);
           if (context.mounted) {
-            Dialogs.simpleErrOkDialog('${LocaleKeys.commons_alert_failedToSaveData.tr()}\n\n$err', context);
+            Dialogs.showSnackBarWarning(LocaleKeys.commons_snackbar_exportFailed.tr(), context);
           }
         }
       },
@@ -126,13 +126,13 @@ class LogScreen extends StatelessWidget {
           if (result.status == ShareResultStatus.success) {
             SimpleLogging.i("Successfully shared log '$logFileName'.");
             if (context.mounted) {
-              Dialogs.showSnackBar(LocaleKeys.log_snackbar_shareSuccess.tr(), context);
+              Dialogs.showSnackBar(LocaleKeys.commons_snackbar_shareSuccess.tr(), context);
             }
           }
         } catch (err) {
           SimpleLogging.w('Failed to share log.', error: err);
           if (context.mounted) {
-            Dialogs.simpleErrOkDialog('${LocaleKeys.commons_alert_failedToShareData.tr()}\n\n$err', context);
+            Dialogs.showSnackBarWarning(LocaleKeys.commons_snackbar_shareFailed.tr(), context);
           }
         }
       },

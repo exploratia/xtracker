@@ -68,7 +68,7 @@ class _DeleteSeriesBtn extends StatelessWidget {
         } catch (err) {
           SimpleLogging.w("Failed to delete ${seriesDef.toLogString()}.", error: err);
           if (context.mounted) {
-            Dialogs.simpleErrOkDialog('$err', context);
+            Dialogs.showSnackBarWarning(LocaleKeys.commons_snackbar_deleteFailed.tr(), context);
           }
         }
       }

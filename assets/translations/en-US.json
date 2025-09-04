@@ -65,16 +65,20 @@
       }
     },
     "alert": {
-      "failedToLoadData": "Failed to load data...",
-      "failedToSaveData": "Failed to save data...",
-      "failedToShareData": "Failed to share..."
     },
     "label": {
       "value": "Value"
     },
     "snackbar": {
       "pressBackAgainToExit": "Press BACK again to exit...",
-      "saved": "Saved..."
+      "saveSuccess": "Saved",
+      "saveFailed": "Save failed",
+      "loadFailed": "Load failed",
+      "deleteFailed": "Delete failed",
+      "exportFailed": "Export failed",
+      "shareFailed": "Share failed",
+      "exportSuccess": "Export successful",
+      "shareSuccess": "Share successful"
     },
     "table": {
       "column": {
@@ -108,10 +112,6 @@
       "share": {
         "tooltip": "Share device info"
       }
-    },
-    "snackbar": {
-      "shareSuccess": "Device info shared successfully.",
-      "exportSuccess": "Device info exported successfully."
     }
   },
   "enum": {
@@ -195,10 +195,6 @@
     },
     "query": {
       "deleteLog": "Do you really want to delete the log file?"
-    },
-    "snackbar": {
-      "shareSuccess": "Log shared successfully.",
-      "exportSuccess": "Log exported successfully."
     }
   },
   "logs": {
@@ -226,10 +222,6 @@
     },
     "query": {
       "deleteAllLogs": "Do you really want to delete all log files?"
-    },
-    "snackbar": {
-      "shareSuccess": "Logs shared successfully.",
-      "exportSuccess": "Logs exported successfully."
     }
   },
   "logSettings": {
@@ -450,7 +442,6 @@
         "shareSingleSeries": "Share series (definition and values) as JSON file."
       },
       "snackbar": {
-        "exportSuccessful": "Export successful...",
         "importSuccessfulXofY": "Imported {} series from {} files successfully."
       },
       "alert": {

@@ -80,12 +80,15 @@ class Dialogs {
 
   /// show [SnackBar]
   /// * [content] Widget or Text
-  static void showSnackBar(dynamic content, BuildContext context, {Duration? duration, SnackBarAction? snackBarAction}) {
+  static void showSnackBar(dynamic content, BuildContext context, {Duration? duration, SnackBarAction? snackBarAction, Color? color}) {
     Duration d = duration ?? const Duration(seconds: 2);
     Widget c = (content is Widget)
         ? content
         : (content is String)
-            ? Text(content)
+            ? Text(
+                content,
+                style: TextStyle(color: color),
+              )
             : const Text('invalid content given');
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
@@ -96,6 +99,10 @@ class Dialogs {
         // behavior: SnackBarBehavior.floating,
       ),
     );
+  }
+
+  static void showSnackBarWarning(String content, BuildContext context, {Duration? duration, SnackBarAction? snackBarAction}) {
+    showSnackBar('⚠  $content', context, color: Colors.orange, duration: duration);
   }
 
   static Widget? _contentWidget(dynamic content) {

@@ -37,12 +37,16 @@ abstract class  LocaleKeys {
   static const commons_dialog_btn_save = 'commons.dialog.btn.save';
   static const commons_dialog_btn_delete = 'commons.dialog.btn.delete';
   static const commons_dialog_btn_yes = 'commons.dialog.btn.yes';
-  static const commons_alert_failedToLoadData = 'commons.alert.failedToLoadData';
-  static const commons_alert_failedToSaveData = 'commons.alert.failedToSaveData';
-  static const commons_alert_failedToShareData = 'commons.alert.failedToShareData';
   static const commons_label_value = 'commons.label.value';
   static const commons_snackbar_pressBackAgainToExit = 'commons.snackbar.pressBackAgainToExit';
-  static const commons_snackbar_saved = 'commons.snackbar.saved';
+  static const commons_snackbar_saveSuccess = 'commons.snackbar.saveSuccess';
+  static const commons_snackbar_saveFailed = 'commons.snackbar.saveFailed';
+  static const commons_snackbar_loadFailed = 'commons.snackbar.loadFailed';
+  static const commons_snackbar_deleteFailed = 'commons.snackbar.deleteFailed';
+  static const commons_snackbar_exportFailed = 'commons.snackbar.exportFailed';
+  static const commons_snackbar_shareFailed = 'commons.snackbar.shareFailed';
+  static const commons_snackbar_exportSuccess = 'commons.snackbar.exportSuccess';
+  static const commons_snackbar_shareSuccess = 'commons.snackbar.shareSuccess';
   static const commons_table_column_key = 'commons.table.column.key';
   static const commons_table_column_value = 'commons.table.column.value';
   static const commons_validator_emptyValue = 'commons.validator.emptyValue';
@@ -52,8 +56,6 @@ abstract class  LocaleKeys {
   static const deviceInfo_action_exportOrShare_tooltip = 'deviceInfo.action.exportOrShare.tooltip';
   static const deviceInfo_action_export_tooltip = 'deviceInfo.action.export.tooltip';
   static const deviceInfo_action_share_tooltip = 'deviceInfo.action.share.tooltip';
-  static const deviceInfo_snackbar_shareSuccess = 'deviceInfo.snackbar.shareSuccess';
-  static const deviceInfo_snackbar_exportSuccess = 'deviceInfo.snackbar.exportSuccess';
   static const enum_seriesType_bloodPressure_title = 'enum.seriesType.bloodPressure.title';
   static const enum_seriesType_bloodPressure_info = 'enum.seriesType.bloodPressure.info';
   static const enum_seriesType_dailyCheck_title = 'enum.seriesType.dailyCheck.title';
@@ -85,8 +87,6 @@ abstract class  LocaleKeys {
   static const log_action_deleteLog_tooltip = 'log.action.deleteLog.tooltip';
   static const log_alert_deleteLogFailed = 'log.alert.deleteLogFailed';
   static const log_query_deleteLog = 'log.query.deleteLog';
-  static const log_snackbar_shareSuccess = 'log.snackbar.shareSuccess';
-  static const log_snackbar_exportSuccess = 'log.snackbar.exportSuccess';
   static const logs_title = 'logs.title';
   static const logs_action_logSettings_tooltip = 'logs.action.logSettings.tooltip';
   static const logs_action_exportOrShareLogs_tooltip = 'logs.action.exportOrShareLogs.tooltip';
@@ -96,8 +96,6 @@ abstract class  LocaleKeys {
   static const logs_alert_deleteAllLogsFailed = 'logs.alert.deleteAllLogsFailed';
   static const logs_alert_failedToZipLogs = 'logs.alert.failedToZipLogs';
   static const logs_query_deleteAllLogs = 'logs.query.deleteAllLogs';
-  static const logs_snackbar_shareSuccess = 'logs.snackbar.shareSuccess';
-  static const logs_snackbar_exportSuccess = 'logs.snackbar.exportSuccess';
   static const logSettings_title = 'logSettings.title';
   static const logSettings_label_logFullStack = 'logSettings.label.logFullStack';
   static const logSettings_label_logLevel = 'logSettings.label.logLevel';
@@ -175,7 +173,6 @@ abstract class  LocaleKeys {
   static const seriesManagement_importExport_label_latestSeriesExport = 'seriesManagement.importExport.label.latestSeriesExport';
   static const seriesManagement_importExport_label_shareSeries = 'seriesManagement.importExport.label.shareSeries';
   static const seriesManagement_importExport_label_shareSingleSeries = 'seriesManagement.importExport.label.shareSingleSeries';
-  static const seriesManagement_importExport_snackbar_exportSuccessful = 'seriesManagement.importExport.snackbar.exportSuccessful';
   static const seriesManagement_importExport_snackbar_importSuccessfulXofY = 'seriesManagement.importExport.snackbar.importSuccessfulXofY';
   static const seriesManagement_importExport_alert_unexpectedDataStructure = 'seriesManagement.importExport.alert.unexpectedDataStructure';
   static const seriesManagement_importExport_alert_unexpectedFile = 'seriesManagement.importExport.alert.unexpectedFile';

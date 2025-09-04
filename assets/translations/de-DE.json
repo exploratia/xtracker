@@ -65,16 +65,20 @@
       }
     },
     "alert": {
-      "failedToLoadData": "Laden der Daten fehlgeschlagen...",
-      "failedToSaveData": "Speichern fehlgeschlagen...",
-      "failedToShareData": "Teilen fehlgeschlagen..."
     },
     "label": {
       "value": "Wert"
     },
     "snackbar": {
       "pressBackAgainToExit": "Zum Beenden nochmal drücken...",
-      "saved": "Gespeichert..."
+      "saveSuccess": "Gespeichert",
+      "saveFailed": "Speichern fehlgeschlagen",
+      "loadFailed": "Laden fehlgeschlagen",
+      "deleteFailed": "Löschen fehlgeschlagen",
+      "exportFailed": "Export fehlgeschlagen",
+      "shareFailed": "Teilen fehlgeschlagen",
+      "exportSuccess": "Export erfolgreich",
+      "shareSuccess": "Share erfolgreich"
     },
     "table": {
       "column": {
@@ -108,10 +112,6 @@
       "share": {
         "tooltip": "Geräteinfo teilen"
       }
-    },
-    "snackbar": {
-      "shareSuccess": "Geräteinfo erfolgreich geteilt.",
-      "exportSuccess": "Geräteinfo erfolgreich exportiert."
     }
   },
   "enum": {
@@ -195,10 +195,6 @@
     },
     "query": {
       "deleteLog": "Log-Datei wirklich löschen?"
-    },
-    "snackbar": {
-      "shareSuccess": "Log erfolgreich geteilt.",
-      "exportSuccess": "Log erfolgreich exportiert."
     }
   },
   "logs": {
@@ -226,10 +222,6 @@
     },
     "query": {
       "deleteAllLogs": "Wirklich alle Log-Dateien löschen?"
-    },
-    "snackbar": {
-      "shareSuccess": "Logs erfolgreich geteilt.",
-      "exportSuccess": "Logs erfolgreich exportiert."
     }
   },
   "logSettings": {
@@ -450,7 +442,6 @@
         "shareSingleSeries": "Messreihe (Konfiguration und Werte) als JSON-Datei teilen."
       },
       "snackbar": {
-        "exportSuccessful": "Export erfolgreich...",
         "importSuccessfulXofY": "{} Messreihen aus {} Dateien erfolgreich importiert."
       },
       "alert": {

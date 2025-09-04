@@ -302,11 +302,11 @@ class _DeviceInfoScreenState extends State<DeviceInfoScreen> {
           bool exported = await JsonUtils.exportJsonFile(_buildExportableJson(), 'xtracker_device_info_${DateTimeUtils.formateExportDateTime()}.json');
           if (exported) {
             SimpleLogging.i('Successfully exported device info.');
-            if (context.mounted) Dialogs.showSnackBar(LocaleKeys.deviceInfo_snackbar_exportSuccess.tr(), context);
+            if (context.mounted) Dialogs.showSnackBar(LocaleKeys.commons_snackbar_exportSuccess.tr(), context);
           }
         } catch (ex) {
           SimpleLogging.w("Failed to export device info.", error: ex);
-          if (context.mounted) Dialogs.showSnackBar(ex.toString(), context);
+          if (context.mounted) Dialogs.showSnackBarWarning(LocaleKeys.commons_snackbar_exportFailed, context);
         }
       },
       LocaleKeys.deviceInfo_action_export_tooltip.tr(),
@@ -321,11 +321,11 @@ class _DeviceInfoScreenState extends State<DeviceInfoScreen> {
           bool shared = await JsonUtils.shareJsonFile(_buildExportableJson(), 'xtracker_device_info_${DateTimeUtils.formateExportDateTime()}.json');
           if (shared) {
             SimpleLogging.i('Successfully shared device info.');
-            if (context.mounted) Dialogs.showSnackBar(LocaleKeys.deviceInfo_snackbar_shareSuccess.tr(), context);
+            if (context.mounted) Dialogs.showSnackBar(LocaleKeys.commons_snackbar_shareSuccess.tr(), context);
           }
         } catch (ex) {
           SimpleLogging.w('Failed to share series device info.', error: ex);
-          if (context.mounted) Dialogs.showSnackBar(ex.toString(), context);
+          if (context.mounted) Dialogs.showSnackBarWarning(LocaleKeys.commons_snackbar_shareFailed, context);
         }
       },
       LocaleKeys.deviceInfo_action_share_tooltip.tr(),

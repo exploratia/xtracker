@@ -91,7 +91,7 @@ class _HabitInputState extends State<HabitInput> {
       } catch (err) {
         SimpleLogging.w('Failed to delete habit value.', error: err);
         if (mounted) {
-          Dialogs.simpleErrOkDialog('$err', context);
+          Dialogs.showSnackBarWarning(LocaleKeys.commons_snackbar_deleteFailed.tr(), context);
         }
       }
     }

@@ -80,7 +80,7 @@ class _LogsScreenState extends State<LogsScreen> {
                 } catch (err) {
                   SimpleLogging.w('Failed to delete all logs.', error: err);
                   if (context.mounted) {
-                    Dialogs.simpleErrOkDialog('${LocaleKeys.logs_alert_deleteAllLogsFailed.tr()}\n\n$err', context);
+                    Dialogs.showSnackBarWarning(LocaleKeys.logs_alert_deleteAllLogsFailed.tr(), context);
                   }
                 }
                 _rebuild();
@@ -121,13 +121,13 @@ class _LogsScreenState extends State<LogsScreen> {
             if (exported) {
               SimpleLogging.i('Successfully exported logs.');
               if (context.mounted) {
-                Dialogs.showSnackBar(LocaleKeys.logs_snackbar_exportSuccess.tr(), context);
+                Dialogs.showSnackBar(LocaleKeys.commons_snackbar_exportSuccess.tr(), context);
               }
             }
           } catch (err) {
             if (context.mounted) {
               SimpleLogging.w('Failed to export logs.', error: err);
-              Dialogs.simpleErrOkDialog('${LocaleKeys.commons_alert_failedToSaveData.tr()}\n\n$err', context);
+              Dialogs.showSnackBarWarning(LocaleKeys.commons_snackbar_exportFailed.tr(), context);
             }
           } finally {
             try {
@@ -139,7 +139,7 @@ class _LogsScreenState extends State<LogsScreen> {
         } catch (err) {
           SimpleLogging.w('Failed to zip logs.', error: err);
           if (context.mounted) {
-            Dialogs.simpleErrOkDialog('${LocaleKeys.logs_alert_failedToZipLogs.tr()}\n\n$err', context);
+            Dialogs.showSnackBarWarning(LocaleKeys.logs_alert_failedToZipLogs.tr(), context);
           }
         }
       },
@@ -158,13 +158,13 @@ class _LogsScreenState extends State<LogsScreen> {
             if (result.status == ShareResultStatus.success) {
               SimpleLogging.i('Successfully shared logs.');
               if (context.mounted) {
-                Dialogs.showSnackBar(LocaleKeys.logs_snackbar_shareSuccess.tr(), context);
+                Dialogs.showSnackBar(LocaleKeys.commons_snackbar_shareSuccess.tr(), context);
               }
             }
           } catch (err) {
             if (context.mounted) {
               SimpleLogging.w('Failed to share logs.', error: err);
-              Dialogs.simpleErrOkDialog('${LocaleKeys.commons_alert_failedToShareData.tr()}\n\n$err', context);
+              Dialogs.showSnackBarWarning(LocaleKeys.commons_snackbar_shareFailed.tr(), context);
             }
           } finally {
             try {
@@ -176,7 +176,7 @@ class _LogsScreenState extends State<LogsScreen> {
         } catch (err) {
           SimpleLogging.w('Failed to zip logs.', error: err);
           if (context.mounted) {
-            Dialogs.simpleErrOkDialog('${LocaleKeys.logs_alert_failedToZipLogs.tr()}\n\n$err', context);
+            Dialogs.showSnackBarWarning(LocaleKeys.logs_alert_failedToZipLogs.tr(), context);
           }
         }
       },

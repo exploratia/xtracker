@@ -67,11 +67,11 @@ class SeriesImportExport {
       bool exported = await JsonUtils.exportJsonFile(json, 'xtracker_series_export_${seriesDef.uuid}_${DateTimeUtils.formateExportDateTime()}.json');
       if (exported) {
         SimpleLogging.i('Successfully exported ${seriesDef.toLogString()}');
-        if (context.mounted) Dialogs.showSnackBar(LocaleKeys.seriesManagement_importExport_snackbar_exportSuccessful.tr(), context);
+        if (context.mounted) Dialogs.showSnackBar(LocaleKeys.commons_snackbar_exportSuccess.tr(), context);
       }
     } catch (ex) {
       SimpleLogging.w("Failed to export ${seriesDef.toLogString()}.", error: ex);
-      if (context.mounted) Dialogs.showSnackBar(ex.toString(), context);
+      if (context.mounted) Dialogs.showSnackBarWarning(LocaleKeys.commons_snackbar_exportFailed, context);
     }
     if (context.mounted) Navigator.of(context).pop();
   }
@@ -82,11 +82,11 @@ class SeriesImportExport {
       bool shared = await JsonUtils.shareJsonFile(json, 'xtracker_series_export_${seriesDef.uuid}_${DateTimeUtils.formateExportDateTime()}.json');
       if (shared) {
         SimpleLogging.i('Successfully shared ${seriesDef.toLogString()}');
-        if (context.mounted) Dialogs.showSnackBar(LocaleKeys.seriesManagement_importExport_snackbar_exportSuccessful.tr(), context);
+        if (context.mounted) Dialogs.showSnackBar(LocaleKeys.commons_snackbar_shareSuccess.tr(), context);
       }
     } catch (ex) {
       SimpleLogging.w('Failed to share series ${seriesDef.toLogString()}.', error: ex);
-      if (context.mounted) Dialogs.showSnackBar(ex.toString(), context);
+      if (context.mounted) Dialogs.showSnackBarWarning(LocaleKeys.commons_snackbar_shareFailed, context);
     }
     if (context.mounted) Navigator.of(context).pop();
   }
@@ -98,12 +98,12 @@ class SeriesImportExport {
       bool exported = await JsonUtils.exportJsonFile(json, 'xtracker_multi_series_export_${DateTimeUtils.formateExportDateTime()}.json');
       if (exported) {
         SimpleLogging.i('Successfully exported all series.');
-        if (context.mounted) Dialogs.showSnackBar(LocaleKeys.seriesManagement_importExport_snackbar_exportSuccessful.tr(), context);
+        if (context.mounted) Dialogs.showSnackBar(LocaleKeys.commons_snackbar_exportSuccess.tr(), context);
         afterExport();
       }
     } catch (ex) {
       SimpleLogging.w('Failed to exported all series!', error: ex);
-      if (context.mounted) Dialogs.showSnackBar(ex.toString(), context);
+      if (context.mounted) Dialogs.showSnackBarWarning(LocaleKeys.commons_snackbar_exportFailed, context);
     }
     if (context.mounted) Navigator.of(context).pop();
   }
@@ -114,12 +114,12 @@ class SeriesImportExport {
       bool shared = await JsonUtils.shareJsonFile(json, 'xtracker_multi_series_export_${DateTimeUtils.formateExportDateTime()}.json');
       if (shared) {
         SimpleLogging.i('Successfully shared all series.');
-        if (context.mounted) Dialogs.showSnackBar(LocaleKeys.seriesManagement_importExport_snackbar_exportSuccessful.tr(), context);
+        if (context.mounted) Dialogs.showSnackBar(LocaleKeys.commons_snackbar_shareSuccess.tr(), context);
         afterExport();
       }
     } catch (ex) {
       SimpleLogging.w('Failed to shared all series!', error: ex);
-      if (context.mounted) Dialogs.showSnackBar(ex.toString(), context);
+      if (context.mounted) Dialogs.showSnackBarWarning(LocaleKeys.commons_snackbar_shareFailed, context);
     }
     if (context.mounted) Navigator.of(context).pop();
   }

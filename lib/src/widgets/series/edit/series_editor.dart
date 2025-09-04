@@ -92,11 +92,11 @@ class _SeriesEditorState extends State<SeriesEditor> {
     try {
       var seriesProvider = context.read<SeriesProvider>();
       await seriesProvider.save(_seriesDef);
-      if (mounted) Dialogs.showSnackBar(LocaleKeys.commons_snackbar_saved.tr(), context);
+      if (mounted) Dialogs.showSnackBar(LocaleKeys.commons_snackbar_saveSuccess.tr(), context);
     } catch (err) {
       SimpleLogging.w('Failed to store series.', error: err);
       if (mounted) {
-        await Dialogs.simpleErrOkDialog(err.toString(), context);
+        Dialogs.showSnackBarWarning(LocaleKeys.commons_snackbar_saveFailed.tr(), context);
       }
     }
 

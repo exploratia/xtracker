@@ -143,7 +143,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
       } catch (err) {
         SimpleLogging.w('Failed to delete blood pressure value.', error: err);
         if (mounted) {
-          Dialogs.simpleErrOkDialog('$err', context);
+          Dialogs.showSnackBarWarning(LocaleKeys.commons_snackbar_deleteFailed.tr(), context);
         }
       }
     }

@@ -91,7 +91,7 @@ class _DailyCheckInputState extends State<DailyCheckInput> {
       } catch (err) {
         SimpleLogging.w('Failed to delete daily check value.', error: err);
         if (mounted) {
-          Dialogs.simpleErrOkDialog('$err', context);
+          Dialogs.showSnackBarWarning(LocaleKeys.commons_snackbar_deleteFailed.tr(), context);
         }
       }
     }
