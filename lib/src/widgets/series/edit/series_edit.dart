@@ -86,7 +86,7 @@ class _SeriesTypeSelector extends StatelessWidget {
           const Divider(),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            spacing: ThemeUtils.verticalSpacing,
+            spacing: ThemeUtils.verticalSpacingSmall,
             children: [
               ...SeriesType.values.map((st) => Row(mainAxisSize: MainAxisSize.min, children: [
                     _SeriesTypeInfoBtn(st),
