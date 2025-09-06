@@ -111,6 +111,10 @@ class DateTimeUtils {
     return truncateToDay(date.subtract(Duration(hours: date.hour + 12)));
   }
 
+  static DateTime dayAfter(DateTime date) {
+    return DateTimeUtils.truncateToDay(DateTimeUtils.truncateToDay(date).add(const Duration(hours: 36)));
+  }
+
   static DateTime truncateToDay(DateTime date) {
     return DateTime(date.year, date.month, date.day);
   }

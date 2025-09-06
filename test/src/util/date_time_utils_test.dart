@@ -171,6 +171,29 @@ void main() {
       expect(29, datetime.day);
     });
 
+    test('test dayAfter', () {
+      var datetime = DateTimeUtils.dayAfter(DateTime(2025, 8, 31));
+      expect(2025, datetime.year);
+      expect(9, datetime.month);
+      expect(1, datetime.day);
+      datetime = DateTimeUtils.dayAfter(DateTime(2025, 8, 25));
+      expect(2025, datetime.year);
+      expect(8, datetime.month);
+      expect(26, datetime.day);
+      datetime = DateTimeUtils.dayAfter(DateTime(2025, 2, 28));
+      expect(2025, datetime.year);
+      expect(3, datetime.month);
+      expect(1, datetime.day);
+      datetime = DateTimeUtils.dayAfter(DateTime(2024, 2, 28));
+      expect(2024, datetime.year);
+      expect(2, datetime.month);
+      expect(29, datetime.day);
+      datetime = DateTimeUtils.dayAfter(DateTime(2024, 2, 29));
+      expect(2024, datetime.year);
+      expect(3, datetime.month);
+      expect(1, datetime.day);
+    });
+
     test('test truncateToDay', () {
       var now = DateTime.now();
       var datetime = DateTimeUtils.truncateToDay(now);
