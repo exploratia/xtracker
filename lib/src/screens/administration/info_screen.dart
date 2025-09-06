@@ -25,7 +25,13 @@ class InfoScreen extends StatelessWidget {
 
     return ScreenBuilder.withStandardNavBuilders(
       navItem: navItem,
-      appBarBuilder: (context) => GradientAppBar.build(context, addLeadingBackBtn: true, title: Text(infoType.title() /*navItem.titleBuilder()*/)),
+      appBarBuilder: (context) => GradientAppBar.build(
+        context,
+        addLeadingBackBtn: true,
+        title: Text(
+          infoType.title() /*navItem.titleBuilder()*/,
+        ),
+      ),
       bodyBuilder: (context) => InfoView(infoType: infoType),
     );
   }

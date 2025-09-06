@@ -267,7 +267,7 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
       String? tooltip = showDateFilter
           ? LocaleKeys.seriesData_action_filter_hide_tooltip.tr()
           : LocaleKeys.seriesData_action_filter_show_tooltip.tr(args: [widget.filter.toString()]);
-      if (!dateFilterPossible) tooltip = null;
+      // if (!dateFilterPossible) tooltip = null;
       var iconButtonToggleShowDateFilter = IconButton(
         tooltip: tooltip,
         onPressed: dateFilterPossible ? () => _toggleShowDateFilter() : null,
@@ -312,18 +312,15 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
     // more then one view type? Add view type selection
     if (seriesType.viewTypes.length > 1) {
       viewActions.add(
-        Padding(
-          padding: const EdgeInsets.only(right: ThemeUtils.defaultPadding),
-          child: Tooltip(
-            message: LocaleKeys.seriesData_action_viewTypeMenu_tooltip.tr(),
-            child: IconPopupMenu(
-              icon: const Icon(Icons.remove_red_eye_outlined),
-              menuEntries: [
-                ...seriesType.viewTypes.where((vt) => vt != viewType).map(
-                      (vt) => IconPopupMenuEntry(Icon(vt.iconData), () => _setViewType(vt), vt.displayName()),
-                    ),
-              ],
-            ),
+        Tooltip(
+          message: LocaleKeys.seriesData_action_viewTypeMenu_tooltip.tr(),
+          child: IconPopupMenu(
+            icon: const Icon(Icons.remove_red_eye_outlined),
+            menuEntries: [
+              ...seriesType.viewTypes.where((vt) => vt != viewType).map(
+                    (vt) => IconPopupMenuEntry(Icon(vt.iconData), () => _setViewType(vt), vt.displayName()),
+                  ),
+            ],
           ),
         ),
       );
@@ -335,6 +332,7 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
     actions = [
       ...dataActions,
       ...viewActions,
+      const SizedBox(width: ThemeUtils.defaultPadding),
     ];
 
     // show bottom actions bar?

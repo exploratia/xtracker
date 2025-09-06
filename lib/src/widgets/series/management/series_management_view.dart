@@ -45,6 +45,7 @@ class SeriesManagementView extends StatelessWidget {
             onPressed: () => Navigator.pop(context),
             icon: const Icon(Icons.edit_off_outlined),
           ),
+          const SizedBox(width: ThemeUtils.defaultPadding),
         ],
       ),
       // appBar: GradientAppBar.build(

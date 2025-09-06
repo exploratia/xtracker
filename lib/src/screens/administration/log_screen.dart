@@ -13,6 +13,7 @@ import '../../util/ex.dart';
 import '../../util/file_extension.dart';
 import '../../util/logging/daily_files.dart';
 import '../../util/logging/flutter_simple_logging.dart';
+import '../../util/theme_utils.dart';
 import '../../widgets/administration/logging/log_view.dart';
 import '../../widgets/controls/appbar/gradient_app_bar.dart';
 import '../../widgets/controls/popupmenu/icon_popup_menu.dart';
@@ -78,6 +79,7 @@ class LogScreen extends StatelessWidget {
             },
             icon: const Icon(Icons.delete_outline),
           ),
+          const SizedBox(width: ThemeUtils.defaultPadding),
         ],
       ),
       bodyBuilder: (context) => LogView(logFileN),
