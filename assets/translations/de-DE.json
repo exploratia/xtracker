@@ -260,26 +260,38 @@
   "seriesData": {
     "title": "Messreihe",
     "action": {
-      "enableEditMode": {
-        "tooltip": "Bearbeitungsmodus"
-      },
-      "disableEditMode": {
-        "tooltip": "Ansichtsmodus"
-      },
       "addValue": {
         "tooltip": "Neuen Wert erfassen"
       },
+      "compression": {
+        "yearly": {
+          "tooltip": "Jahresanzeige"
+        },
+        "monthly": {
+          "tooltip": "Monatliche Anzeige"
+        },
+        "daily": {
+          "tooltip": "Tägliche Anzeige"
+        }
+      },
+      "editMode": {
+        "enable": {
+          "tooltip": "Bearbeitungsmodus"
+        },
+        "disable": {
+          "tooltip": "Ansichtsmodus"
+        }
+      },
+      "filter": {
+        "show": {
+          "tooltip": "Filter anzeigen {}"
+        },
+        "hide": {
+          "tooltip": "Filter ausblenden"
+        }
+      },
       "viewTypeMenu": {
         "tooltip": "Weitere verfügbare Anzeige-Modi"
-      },
-      "yearlyView": {
-        "tooltip": "Jahresanzeige"
-      },
-      "monthlyView": {
-        "tooltip": "Monatliche Anzeige"
-      },
-      "dailyView": {
-        "tooltip": "Tägliche Anzeige"
       }
     },
     "label": {

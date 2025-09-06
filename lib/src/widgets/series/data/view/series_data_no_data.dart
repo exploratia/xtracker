@@ -2,7 +2,6 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../generated/locale_keys.g.dart';
-import '../../../../model/series/data/series_data.dart';
 import '../../../../model/series/series_view_meta_data.dart';
 import '../../../controls/animation/fade_in.dart';
 import '../../../controls/layout/centered_message.dart';
@@ -30,7 +29,7 @@ class SeriesDataNoData extends StatelessWidget {
     );
   }
 
-  static bool isNoData(SeriesData<dynamic>? seriesData) {
-    return (seriesData == null || seriesData.isEmpty());
+  static bool isNoData(List<dynamic>? seriesData) {
+    return (seriesData == null || seriesData.isEmpty);
   }
 }

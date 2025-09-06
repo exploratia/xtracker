@@ -260,26 +260,38 @@
   "seriesData": {
     "title": "Series",
     "action": {
-      "enableEditMode": {
-        "tooltip": "Edit mode"
-      },
-      "disableEditMode": {
-        "tooltip": "View mode"
-      },
       "addValue": {
         "tooltip": "Add new value"
       },
+      "compression": {
+        "yearly": {
+          "tooltip": "Yearly view"
+        },
+        "monthly": {
+          "tooltip": "Monthly view"
+        },
+        "daily": {
+          "tooltip": "Daily view"
+        }
+      },
+      "editMode": {
+        "enable": {
+          "tooltip": "Edit mode"
+        },
+        "disable": {
+          "tooltip": "View mode"
+        }
+      },
+      "filter": {
+        "show": {
+          "tooltip": "Show filter {}"
+        },
+        "hide": {
+          "tooltip": "Hide filter"
+        }
+      },
       "viewTypeMenu": {
         "tooltip": "Available view types"
-      },
-      "yearlyView": {
-        "tooltip": "Yearly view"
-      },
-      "monthlyView": {
-        "tooltip": "Monthly view"
-      },
-      "dailyView": {
-        "tooltip": "Daily view"
       }
     },
     "label": {

@@ -7,21 +7,32 @@ import 'package:uuid/uuid.dart';
 import '../../../generated/locale_keys.g.dart';
 import '../../model/navigation/navigation_item.dart';
 import '../../model/series/data/series_data.dart';
+import '../../model/series/data/series_data_filter.dart';
+import '../../model/series/data/series_data_value.dart';
 import '../../model/series/series_def.dart';
 import '../../model/series/series_type.dart';
 import '../../model/series/series_view_meta_data.dart';
 import '../../model/series/view_type.dart';
+import '../../providers/series_data_provider.dart';
 import '../../providers/series_provider.dart';
+import '../../util/date_time_utils.dart';
 import '../../util/globals.dart';
+import '../../util/media_query_utils.dart';
 import '../../util/theme_utils.dart';
 import '../../widgets/controls/appbar/app_bar_actions_divider.dart';
 import '../../widgets/controls/appbar/gradient_app_bar.dart';
 import '../../widgets/controls/layout/centered_message.dart';
+import '../../widgets/controls/layout/h_centered_scroll_view.dart';
+import '../../widgets/controls/navigation/hide_bottom_navigation_bar.dart';
 import '../../widgets/controls/popupmenu/icon_popup_menu.dart';
 import '../../widgets/controls/provider/data_provider_loader.dart';
 import '../../widgets/controls/responsive/screen_builder.dart';
 import '../../widgets/controls/text/overflow_text.dart';
+import '../../widgets/series/data/view/series_data_no_data.dart';
 import '../../widgets/series/data/view/series_data_view.dart';
+import '../../widgets/series/data/view/series_data_view_content_builder.dart';
+import '../../widgets/series/data/view/series_data_view_overlays.dart';
+import '../../widgets/series/data/view/series_title.dart';
 
 class SeriesDataScreen extends StatelessWidget {
   static NavigationItem navItem = NavigationItem(
@@ -51,62 +62,125 @@ class SeriesDataScreen extends StatelessWidget {
       seriesUuid = seriesDef.uuid;
     }
 
-    return _ScreenBuilder(seriesUuid: seriesUuid, seriesDef: seriesDef);
+    return HideBottomNavigationBar(
+      child: DataProviderLoader(
+        obtainDataProviderFuture: context.read<SeriesProvider>().fetchDataIfNotYetLoaded(),
+        child: _SeriesDefLoader(
+          seriesUuid: seriesUuid,
+          seriesDef: seriesDef,
+          builder: (SeriesViewMetaData? seriesViewMetaData) {
+            if (seriesViewMetaData == null) {
+              // pop screen if no series is available.
+              WidgetsBinding.instance.addPostFrameCallback((_) => Navigator.pop(context));
+              return const CenteredMessage(message: 'Invalid series!');
+            }
+
+            return DataProviderLoader(
+              obtainDataProviderFuture: context.read<SeriesDataProvider>().fetchDataIfNotYetLoaded(seriesViewMetaData.seriesDef),
+              child: _SeriesDataFilterWrapper(
+                seriesViewMetaData: seriesViewMetaData,
+                builder: (SeriesDataFilter filter, VoidCallback updateFilter) {
+                  return _SeriesDataViewOverlaysWrapper(
+                    builder: (SeriesDataViewOverlays seriesDataViewOverlays, void Function({double? topHeight, double? bottomHeight}) updateOverlays) {
+                      return SeriesDataViewContentBuilder(
+                        seriesViewMetaData: seriesViewMetaData,
+                        seriesDataFilter: filter,
+                        seriesDataViewOverlays: seriesDataViewOverlays,
+                        builder: (Widget Function() seriesDataViewBuilder, List<SeriesDataValue> seriesDataValues) {
+                          return OrientationBuilder(builder: (BuildContext context, Orientation orientation) {
+                            var isLandscape = orientation == Orientation.landscape;
+                            return _ScreenBuilder(
+                              seriesViewMetaData: seriesViewMetaData,
+                              seriesDataViewBuilder: seriesDataViewBuilder,
+                              seriesDataValues: seriesDataValues,
+                              filter: filter,
+                              updateFilter: updateFilter,
+                              seriesDataViewOverlays: seriesDataViewOverlays,
+                              updateOverlays: updateOverlays,
+                              isLandScape: isLandscape,
+                            );
+                          });
+                        },
+                      );
+                    },
+                  );
+                },
+              ),
+            );
+          },
+        ),
+      ),
+    );
   }
 }
 
 class _ScreenBuilder extends StatefulWidget {
-  const _ScreenBuilder({required this.seriesUuid, this.seriesDef});
+  const _ScreenBuilder({
+    required this.seriesViewMetaData,
+    required this.seriesDataViewBuilder,
+    required this.seriesDataValues,
+    required this.filter,
+    required this.updateFilter,
+    required this.seriesDataViewOverlays,
+    required this.updateOverlays,
+    required this.isLandScape,
+  });
 
-  final String seriesUuid;
-  final SeriesDef? seriesDef;
+  final SeriesViewMetaData seriesViewMetaData;
+  final bool isLandScape;
+  final SeriesDataFilter filter;
+  final VoidCallback updateFilter;
+  final SeriesDataViewOverlays seriesDataViewOverlays;
+  final void Function({double? topHeight, double? bottomHeight}) updateOverlays;
+  final Widget Function() seriesDataViewBuilder;
+  final List<SeriesDataValue> seriesDataValues;
 
   @override
   State<_ScreenBuilder> createState() => _ScreenBuilderState();
 }
 
 class _ScreenBuilderState extends State<_ScreenBuilder> {
-  SeriesDef? _seriesDef;
-  ViewType _viewType = ViewType.lineChart;
-  bool _editMode = false;
-  bool _showCompressed = false;
+  bool _isLandscapeMode = false;
 
   @override
   void initState() {
-    _seriesDef = widget.seriesDef;
-    if (_seriesDef != null) {
-      _viewType = _seriesDef!.seriesType.viewTypes.last;
-    }
+    _isLandscapeMode = widget.isLandScape;
     super.initState();
   }
 
-  void _setSeriesDef(SeriesDef seriesDef) {
-    setState(() {
-      _seriesDef = seriesDef;
-      _viewType = seriesDef.seriesType.viewTypes.last;
-    });
+  @override
+  void didUpdateWidget(covariant _ScreenBuilder oldWidget) {
+    _isLandscapeMode = widget.isLandScape;
+    super.didUpdateWidget(oldWidget);
   }
 
   void _setViewType(ViewType viewType) {
     setState(() {
-      _viewType = viewType;
+      widget.seriesViewMetaData.viewType = viewType;
     });
   }
 
   void _toggleEditMode() {
     setState(() {
-      _editMode = !_editMode;
+      widget.seriesViewMetaData.toggleEditMode();
     });
   }
 
   void _toggleCompressedMode() {
     setState(() {
-      _showCompressed = !_showCompressed;
+      widget.seriesViewMetaData.toggleShowCompressed();
+    });
+  }
+
+  void _toggleShowDateFilter() {
+    setState(() {
+      widget.seriesViewMetaData.toggleShowDateFilter();
+      if (!widget.seriesViewMetaData.showDateFilter) widget.updateOverlays(bottomHeight: 0);
     });
   }
 
   void _addSeriesValueHandler(BuildContext context) async {
-    await SeriesData.showSeriesDataInputDlg(context, _seriesDef!);
+    await SeriesData.showSeriesDataInputDlg(context, widget.seriesViewMetaData.seriesDef);
     setState(() {});
   }
 
@@ -115,73 +189,129 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
     final themeData = Theme.of(context);
     NavigationItem navItem = SeriesDataScreen.navItem;
 
-    Widget title;
-    if (_seriesDef != null) {
-      title = LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          if (constraints.maxWidth < 24) {
-            return const SizedBox();
-          }
-          if (constraints.maxWidth < 55) {
-            return Icon(_viewType.iconData, color: themeData.colorScheme.onPrimary);
-          }
-          return Row(
-            spacing: ThemeUtils.horizontalSpacing,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Icon(_viewType.iconData, color: themeData.colorScheme.onPrimary),
-              OverflowText(ViewType.displayNameOf(_viewType)),
-            ],
-          );
-        },
-      );
-    } else {
-      title = Text(navItem.titleBuilder());
-    }
+    var title = _buildAbbBarTitle(themeData, navItem);
+    var metaData = widget.seriesViewMetaData;
+    var seriesType = metaData.seriesDef.seriesType;
+    var viewType = metaData.viewType;
+    var hasNoData = SeriesDataNoData.isNoData(widget.seriesDataValues);
 
     Widget view;
-    if (widget.seriesUuid == Globals.invalid) {
-      view = const CenteredMessage(message: 'Got invalid series id!');
-      // pop screen if no series id is available.
-      WidgetsBinding.instance.addPostFrameCallback((_) => Navigator.pop(context));
-    } else if (_seriesDef != null) {
-      view = _SeriesDataViewTitleWrapper(
-        seriesUuid: widget.seriesUuid,
-        setSeriesDef: _setSeriesDef,
-        useSeriesCallback: _seriesDef == null,
-        viewType: _viewType,
-        editMode: _editMode,
-        showCompressed: _showCompressed,
-      );
+    if (hasNoData) {
+      view = SeriesDataNoData(seriesViewMetaData: metaData);
     } else {
-      view = DataProviderLoader(
-        obtainDataProviderFuture: context.read<SeriesProvider>().fetchDataIfNotYetLoaded(),
-        child: _SeriesDataViewTitleWrapper(
-          seriesUuid: widget.seriesUuid,
-          setSeriesDef: _setSeriesDef,
-          useSeriesCallback: _seriesDef == null,
-          viewType: _viewType,
-          editMode: _editMode,
-          showCompressed: _showCompressed,
-        ),
+      view = SeriesDataView(
+        seriesViewMetaData: widget.seriesViewMetaData,
+        seriesDataValues: widget.seriesDataValues,
+        seriesDataViewContentBuilder: widget.seriesDataViewBuilder,
+        filter: widget.filter,
+        updateFilter: widget.updateFilter,
+        seriesDataViewOverlays: widget.seriesDataViewOverlays,
+        updateOverlays: widget.updateOverlays,
       );
     }
 
     List<Widget> actions = [];
+    // in case of portrait show actions as own bar in the bottom
+    List<Widget> bottomBarActions = [];
 
-    if (_seriesDef != null) {
-      var seriesType = _seriesDef!.seriesType;
+    List<Widget> dataActions = [];
+    List<Widget> viewActions = [];
+    List<Widget> orientationDependentViewActions = [];
 
-      List<Widget> dataActions = [
-        // add value btn
+    // in table add edit-mode
+    if (viewType == ViewType.table) {
+      var editMode = metaData.editMode;
+      dataActions.add(
         IconButton(
-          tooltip: LocaleKeys.seriesData_action_addValue_tooltip.tr(),
-          onPressed: () => _addSeriesValueHandler(context),
-          icon: const Icon(Icons.add),
+          tooltip: editMode ? LocaleKeys.seriesData_action_editMode_disable_tooltip.tr() : LocaleKeys.seriesData_action_editMode_enable_tooltip.tr(),
+          onPressed: hasNoData ? null : () => _toggleEditMode(),
+          icon: Icon(editMode ? Icons.edit_off_outlined : Icons.edit_outlined),
         ),
-      ];
+      );
+    }
 
-      List<Widget> viewActions = [
+    // in charts add depending on series type switch interval (day/month/year) btn
+    if (viewType == ViewType.lineChart || viewType == ViewType.barChart) {
+      if (/*seriesType == SeriesType.monthly ||*/ seriesType == SeriesType.dailyCheck || seriesType == SeriesType.habit) {
+        var showCompressed = metaData.showCompressed;
+        // monthly | yearly
+        var tooltip =
+            showCompressed ? LocaleKeys.seriesData_action_compression_monthly_tooltip.tr() : LocaleKeys.seriesData_action_compression_yearly_tooltip.tr();
+        if (seriesType == SeriesType.habit) {
+          // daily | monthly
+          tooltip =
+              showCompressed ? LocaleKeys.seriesData_action_compression_daily_tooltip.tr() : LocaleKeys.seriesData_action_compression_monthly_tooltip.tr();
+        }
+
+        var iconButtonToggleCompressed = IconButton(
+          tooltip: tooltip,
+          onPressed: hasNoData ? null : () => _toggleCompressedMode(),
+          icon: Icon(showCompressed ? Icons.calendar_month_outlined : Icons.calendar_today_outlined),
+        );
+        orientationDependentViewActions.add(iconButtonToggleCompressed);
+      }
+    }
+
+    // date filter - so far all views support date filter
+    {
+      var showDateFilter = metaData.showDateFilter;
+      bool dateFilterPossible = !hasNoData;
+      if (dateFilterPossible) {
+        var d1 = widget.seriesDataValues.first.dateTime;
+        var d2 = widget.seriesDataValues.last.dateTime;
+        dateFilterPossible = d1.year != d2.year || d1.month != d2.month || d1.day != d2.day;
+      }
+      if (!dateFilterPossible && showDateFilter) {
+        WidgetsBinding.instance.addPostFrameCallback((_) => _toggleShowDateFilter());
+      }
+      String? tooltip = showDateFilter
+          ? LocaleKeys.seriesData_action_filter_hide_tooltip.tr()
+          : LocaleKeys.seriesData_action_filter_show_tooltip.tr(args: [widget.filter.toString()]);
+      if (!dateFilterPossible) tooltip = null;
+      var iconButtonToggleShowDateFilter = IconButton(
+        tooltip: tooltip,
+        onPressed: dateFilterPossible ? () => _toggleShowDateFilter() : null,
+        icon: SizedBox(
+          height: ThemeUtils.iconSizeScaled,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              const Positioned(
+                top: -4,
+                right: -2,
+                child: Icon(Icons.filter_list_outlined),
+              ),
+              Positioned(
+                left: 0,
+                bottom: -2,
+                child: Icon(showDateFilter ? Icons.visibility_off_outlined : Icons.visibility_outlined, size: 14 * MediaQueryUtils.textScaleFactor),
+              ),
+            ],
+          ),
+        ),
+      );
+      orientationDependentViewActions.add(iconButtonToggleShowDateFilter);
+    }
+
+    // depending on orientation add dependent actions
+    if (_isLandscapeMode) {
+      viewActions.addAll(orientationDependentViewActions);
+    } else {
+      bottomBarActions.addAll(orientationDependentViewActions);
+    }
+
+    dataActions.add(
+      // add value btn
+      IconButton(
+        tooltip: LocaleKeys.seriesData_action_addValue_tooltip.tr(),
+        onPressed: () => _addSeriesValueHandler(context),
+        icon: const Icon(Icons.add),
+      ),
+    );
+
+    // more then one view type? Add view type selection
+    if (seriesType.viewTypes.length > 1) {
+      viewActions.add(
         Padding(
           padding: const EdgeInsets.only(right: ThemeUtils.defaultPadding),
           child: Tooltip(
@@ -189,55 +319,43 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
             child: IconPopupMenu(
               icon: const Icon(Icons.remove_red_eye_outlined),
               menuEntries: [
-                ...seriesType.viewTypes.where((vt) => vt != _viewType).map(
+                ...seriesType.viewTypes.where((vt) => vt != viewType).map(
                       (vt) => IconPopupMenuEntry(Icon(vt.iconData), () => _setViewType(vt), vt.displayName()),
                     ),
               ],
             ),
           ),
         ),
-      ];
+      );
+    }
 
-      // in table add edit-mode
-      if (_viewType == ViewType.table) {
-        dataActions.insert(
-          0,
-          IconButton(
-            tooltip: _editMode ? LocaleKeys.seriesData_action_disableEditMode_tooltip.tr() : LocaleKeys.seriesData_action_enableEditMode_tooltip.tr(),
-            onPressed: () => _toggleEditMode(),
-            icon: Icon(_editMode ? Icons.edit_off_outlined : Icons.edit_outlined),
-          ),
-        );
-      }
+    // Divider necessary?
+    if (viewActions.isNotEmpty && dataActions.isNotEmpty) dataActions.add(const AppBarActionsDivider());
 
-      // in charts add depending on series type switch interval (month/year) btn
-      if (_viewType == ViewType.lineChart || _viewType == ViewType.barChart) {
-        if (/*seriesType == SeriesType.monthly ||*/ seriesType == SeriesType.dailyCheck || seriesType == SeriesType.habit) {
-          // monthly | yearly
-          var tooltip = _showCompressed ? LocaleKeys.seriesData_action_monthlyView_tooltip.tr() : LocaleKeys.seriesData_action_yearlyView_tooltip.tr();
-          if (seriesType == SeriesType.habit) {
-            // daily | monthly
-            tooltip = _showCompressed ? LocaleKeys.seriesData_action_dailyView_tooltip.tr() : LocaleKeys.seriesData_action_monthlyView_tooltip.tr();
-          }
+    actions = [
+      ...dataActions,
+      ...viewActions,
+    ];
 
-          viewActions.insert(
-            0,
-            IconButton(
-              tooltip: tooltip,
-              onPressed: () => _toggleCompressedMode(),
-              icon: Icon(_showCompressed ? Icons.calendar_month_outlined : Icons.calendar_today_outlined),
+    // show bottom actions bar?
+    if (bottomBarActions.isNotEmpty) {
+      view = Column(
+        spacing: 0,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(child: view),
+          Container(
+            height: kBottomNavigationBarHeight,
+            color: themeData.cardTheme.color,
+            child: Material(
+              child: HCenteredScrollView(
+                // mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: bottomBarActions,
+              ),
             ),
-          );
-        }
-      }
-
-      // Divider necessary?
-      if (viewActions.isNotEmpty && dataActions.isNotEmpty) dataActions.add(const AppBarActionsDivider());
-
-      actions = [
-        ...dataActions,
-        ...viewActions,
-      ];
+          )
+        ],
+      );
     }
 
     return ScreenBuilder.withStandardNavBuilders(
@@ -246,47 +364,112 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
       bodyBuilder: (context) => view,
     );
   }
+
+  Widget _buildAbbBarTitle(ThemeData themeData, NavigationItem navItem) {
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        if (constraints.maxWidth < 24) {
+          return const SizedBox();
+        }
+        var viewType = widget.seriesViewMetaData.viewType;
+        if (constraints.maxWidth < 55) {
+          return Icon(viewType.iconData, color: themeData.colorScheme.onPrimary);
+        }
+        return Row(
+          spacing: ThemeUtils.horizontalSpacing,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(viewType.iconData, color: themeData.colorScheme.onPrimary),
+            OverflowText(ViewType.displayNameOf(viewType)),
+          ],
+        );
+      },
+    );
+  }
 }
 
-/// read series def from provider -> set AppBar title and then show series data
-class _SeriesDataViewTitleWrapper extends StatelessWidget {
-  const _SeriesDataViewTitleWrapper(
-      {required this.seriesUuid,
-      required this.setSeriesDef,
-      required this.useSeriesCallback,
-      required this.viewType,
-      required this.editMode,
-      required this.showCompressed});
+class _SeriesDefLoader extends StatelessWidget {
+  const _SeriesDefLoader({required this.seriesUuid, this.seriesDef, required this.builder});
 
   final String seriesUuid;
-  final bool useSeriesCallback;
 
-  final Function(SeriesDef seriesDef) setSeriesDef;
-  final ViewType viewType;
-  final bool editMode;
-  final bool showCompressed;
+  final SeriesDef? seriesDef;
+  final Widget Function(SeriesViewMetaData? seriesViewMetaData) builder;
 
   @override
   Widget build(BuildContext context) {
-    SeriesDef? seriesDef = context.read<SeriesProvider>().getSeries(seriesUuid);
+    SeriesDef? loaded = seriesDef ?? context.read<SeriesProvider>().getSeries(seriesUuid);
 
-    if (seriesDef == null) {
-      return const CenteredMessage(message: 'No series found for given id!');
+    SeriesViewMetaData? seriesViewMetaData;
+    if (loaded != null) {
+      seriesViewMetaData = SeriesViewMetaData(seriesDef: loaded);
     }
 
-    // set title and actions if not already correct
-    if (useSeriesCallback) {
-      WidgetsBinding.instance.addPostFrameCallback((_) => setSeriesDef(seriesDef));
-      return Container();
-    }
+    return builder(seriesViewMetaData);
+  }
+}
 
-    return SeriesDataView(
-      seriesViewMetaData: SeriesViewMetaData(
-        seriesDef: seriesDef,
-        viewType: viewType,
-        editMode: editMode,
-        showCompressed: showCompressed,
-      ),
-    );
+/// Wraps an Instance of SeriesDataFilter
+class _SeriesDataFilterWrapper extends StatefulWidget {
+  const _SeriesDataFilterWrapper({required this.builder, required this.seriesViewMetaData});
+
+  final SeriesViewMetaData seriesViewMetaData;
+  final Widget Function(SeriesDataFilter filter, VoidCallback updateFilter) builder;
+
+  @override
+  State<_SeriesDataFilterWrapper> createState() => _SeriesDataFilterWrapperState();
+}
+
+class _SeriesDataFilterWrapperState extends State<_SeriesDataFilterWrapper> {
+  SeriesDataFilter filter = SeriesDataFilter();
+
+  @override
+  void initState() {
+    var filterStart = DateTimeUtils.firstDayOfMonth(DateTime.now().subtract(const Duration(days: 365)));
+    var seriesData = context.read<SeriesDataProvider>().seriesData(widget.seriesViewMetaData.seriesDef);
+    if (seriesData != null && !seriesData.isEmpty()) {
+      var firstValueDateTime = seriesData.data.first.dateTime;
+      if (firstValueDateTime.isAfter(filterStart)) {
+        filterStart = firstValueDateTime;
+      }
+    }
+    filter.start = filterStart;
+    super.initState();
+  }
+
+  void updateFilter() {
+    if (filter.getAndResetDirty()) {
+      setState(() {});
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.builder(filter, updateFilter);
+  }
+}
+
+/// Wraps an Instance of SeriesDataFilter
+class _SeriesDataViewOverlaysWrapper extends StatefulWidget {
+  const _SeriesDataViewOverlaysWrapper({required this.builder});
+
+  final Widget Function(SeriesDataViewOverlays seriesDataViewOverlays, void Function({double? topHeight, double? bottomHeight}) updateOverlays) builder;
+
+  @override
+  State<_SeriesDataViewOverlaysWrapper> createState() => _SeriesDataViewOverlaysWrapperState();
+}
+
+class _SeriesDataViewOverlaysWrapperState extends State<_SeriesDataViewOverlaysWrapper> {
+  SeriesDataViewOverlays seriesDataViewOverlays = SeriesDataViewOverlays(topHeight: SeriesTitle.seriesTitleHeight);
+
+  void updateOverlays({double? topHeight, double? bottomHeight}) {
+    if (seriesDataViewOverlays.setTopHeight(topHeight) || seriesDataViewOverlays.setBottomHeight(bottomHeight)) {
+      setState(() {});
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return widget.builder(seriesDataViewOverlays, updateOverlays);
   }
 }

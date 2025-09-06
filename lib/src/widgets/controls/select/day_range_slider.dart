@@ -10,24 +10,29 @@ import '../../../util/media_query_utils.dart';
 import '../../../util/theme_utils.dart';
 import '../../../util/tooltip_utils.dart';
 import '../animation/reverse_progress.dart';
+import '../layout/h_centered_scroll_view.dart';
 
 /// ... -2 -1 0
 class DayRangeSlider extends StatefulWidget {
-  final DateTime date1;
-  final DateTime date2;
+  final DateTime dateRangeFrom;
+  final DateTime dateRangeTill;
   final int maxSpan;
+  final DateTime? selectedDateRangeFrom;
+  final DateTime? selectedDateRangeTill;
 
-  final Function(RangeValues) pageCallback;
+  final Function(DayRange) rangeCallback;
   final Function(bool)? sliderVisibleCallback;
   final bool sliderInitialVisible;
 
-  /// [pageCallback] receives a RangeValues
+  /// [rangeCallback] receives a RangeValues
   const DayRangeSlider({
     super.key,
-    required this.pageCallback,
-    required this.date1,
-    required this.date2,
+    required this.rangeCallback,
+    required this.dateRangeFrom,
+    required this.dateRangeTill,
     this.maxSpan = 366 + 31,
+    this.selectedDateRangeFrom,
+    this.selectedDateRangeTill,
     this.sliderVisibleCallback,
     this.sliderInitialVisible = true,
   });
@@ -38,14 +43,20 @@ class DayRangeSlider extends StatefulWidget {
   static double calcAdditionalHeightByTextScale() {
     return MediaQueryUtils.calcAdditionalHeightByTextScale(ThemeUtils.fontSizeBodyM);
   }
+
+  static int _calcNumFilterableDates(List<DateTime> dates) {
+    dates.sort((a, b) => a.compareTo(b));
+    return DateTimeUtils.truncateToDay(dates.last).add(const Duration(hours: 12)).difference(DateTimeUtils.truncateToDay(dates.first)).inDays.abs();
+  }
 }
 
 class _DayRangeSliderState extends State<DayRangeSlider> {
   final _reverseProgressKey = GlobalKey<ReverseProgressState>();
 
-  late int _maxDays;
-  late DateTime _firstDayStart;
-  late DateTime _lastDayStart;
+  // slider values from 0 to _sliderRange = max days possible
+  late int _sliderRange;
+  late DateTime _dateRangeFrom;
+  late DateTime _dateRangeTill;
 
   late RangeValues _values;
 
@@ -58,30 +69,59 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
   void initState() {
     _sliderVisible = widget.sliderInitialVisible;
     _calcVars();
+
+    // selected range given?
+    if (widget.selectedDateRangeFrom != null) {
+      DayRange selectedDayRange = DayRange(
+        DateTimeUtils.truncateToDay(widget.selectedDateRangeFrom!),
+        DateTimeUtils.truncateToDay(widget.selectedDateRangeTill ?? DateTimeUtils.dayAfter(DateTime.now())),
+      );
+
+      _setValuesFromDayRange(selectedDayRange);
+    }
+    // otherwise start range at the end (the newest date) if maxSpan < maxDays
+    else {
+      _values = RangeValues(_sliderRange.toDouble() - min(widget.maxSpan, _sliderRange), _sliderRange.toDouble());
+    }
+
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      var rangeValues = RangeValues(_values.start.roundToDouble(), _values.end.roundToDouble());
-      widget.pageCallback(rangeValues);
+      _onProgressEnd();
     });
   }
 
+  void _setValuesFromDayRange(DayRange dayRange) {
+    DateTime from = dayRange.from;
+    DateTime till = dayRange.till;
+    // check range
+    if (from.isBefore(_dateRangeFrom) || from.isAfter(_dateRangeTill)) {
+      from = _dateRangeFrom;
+    }
+    if (till.isAfter(_dateRangeTill) || till.isBefore(_dateRangeFrom)) {
+      till = _dateRangeTill;
+    }
+    _values = RangeValues(_dateRangeFrom.difference(from).inDays.abs().toDouble(), _dateRangeFrom.difference(till).inDays.abs().toDouble());
+  }
+
   void _calcVars() {
-    var dates = [widget.date1, widget.date2];
-    dates.sort((a, b) => a.compareTo(b));
-    _firstDayStart = DateTimeUtils.truncateToDay(dates.first);
-    _lastDayStart = DateTimeUtils.truncateToDay(dates.last);
-    _maxDays = DateTimeUtils.truncateToDay(dates.last).add(const Duration(hours: 12)).difference(_firstDayStart).inDays.abs();
+    _dateRangeFrom = DateTimeUtils.truncateToDay(widget.dateRangeFrom);
+    _dateRangeTill = DateTimeUtils.truncateToDay(widget.dateRangeTill);
+    _sliderRange = min(widget.maxSpan, DayRangeSlider._calcNumFilterableDates([widget.dateRangeFrom, widget.dateRangeTill]));
     // start range at the end (the newest date) if maxSpan < maxDays
-    _values = RangeValues(_maxDays.toDouble() - min(widget.maxSpan, _maxDays), _maxDays.toDouble());
+    // _values = RangeValues(_sliderRange.toDouble() - min(widget.maxSpan, _sliderRange), _sliderRange.toDouble());
   }
 
   @override
   void didUpdateWidget(covariant DayRangeSlider oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.date1 != widget.date1 || oldWidget.date2 != widget.date2) {
+    if (oldWidget.dateRangeFrom != widget.dateRangeFrom || oldWidget.dateRangeTill != widget.dateRangeTill || oldWidget.maxSpan != widget.maxSpan) {
       setState(() {
+        // save act dates to be able to restore
+        var actSelectedValues = _buildDayRange(false);
         _calcVars();
+        // restore dates
+        _setValuesFromDayRange(actSelectedValues);
       });
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -108,15 +148,24 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
   }
 
   void _onProgressEnd() {
-    var rangeValues = RangeValues(_values.start.roundToDouble(), _values.end.roundToDouble());
-    widget.pageCallback(rangeValues);
+    DayRange dayRange = _buildDayRange(true);
+    widget.rangeCallback(dayRange);
+  }
+
+  DayRange _buildDayRange(bool forExternals) {
+    int add = forExternals ? 1 : 0; // +1 : next day start
+    DayRange dayRange = DayRange(
+      DateTimeUtils.truncateToDay(_dateRangeFrom.add(Duration(days: _values.start.roundToDouble().toInt(), hours: 12))),
+      DateTimeUtils.truncateToDay(_dateRangeFrom.add(Duration(days: _values.end.roundToDouble().toInt() + add, hours: 12))), // +1 : next day start
+    ); // next day start
+    return dayRange;
   }
 
   Future<void> _selectDate(BuildContext context, bool isStartDate) async {
-    var initialDate = DateTimeUtils.truncateToDay(_firstDayStart.add(Duration(days: (isStartDate ? _values.start : _values.end).toInt(), hours: 12)));
+    var initialDate = DateTimeUtils.truncateToDay(_dateRangeFrom.add(Duration(days: (isStartDate ? _values.start : _values.end).toInt(), hours: 12)));
     // calc min max allowed dates
-    var firstDate = isStartDate ? _firstDayStart : DateTimeUtils.truncateToDay(_firstDayStart.add(Duration(days: _values.start.toInt(), hours: 12)));
-    var lastDate = isStartDate ? DateTimeUtils.truncateToDay(_firstDayStart.add(Duration(days: _values.end.toInt(), hours: 12))) : _lastDayStart;
+    var firstDate = isStartDate ? _dateRangeFrom : DateTimeUtils.truncateToDay(_dateRangeFrom.add(Duration(days: _values.start.toInt(), hours: 12)));
+    var lastDate = isStartDate ? DateTimeUtils.truncateToDay(_dateRangeFrom.add(Duration(days: _values.end.toInt(), hours: 12))) : _dateRangeTill;
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: initialDate,
@@ -125,7 +174,7 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
     );
 
     if (pickedDate != null) {
-      var diff = (pickedDate.difference(_firstDayStart).inHours / 24).round().toDouble(); // hours and round instead of days because of daylight saving
+      var diff = (pickedDate.difference(_dateRangeFrom).inHours / 24).round().toDouble(); // hours and round instead of days because of daylight saving
       if (diff < 0) return;
       double start = (isStartDate ? diff : _values.start);
       double end = (isStartDate ? _values.end : diff);
@@ -145,8 +194,8 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
 
   @override
   Widget build(BuildContext context) {
-    if (_maxDays <= 0) {
-      return Container();
+    if (_sliderRange <= 0) {
+      return const Center(child: Text("Not enough data..."));
     }
 
     final themeData = Theme.of(context);
@@ -181,74 +230,58 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
           left: 0,
           right: 0,
           top: 2,
-          child: LayoutBuilder(
-            builder: (BuildContext context, BoxConstraints constraints) {
-              return SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: ConstrainedBox(
-                  constraints: BoxConstraints(
-                    minWidth: constraints.maxWidth, // extend if row smaller then layout builder width
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    spacing: ThemeUtils.horizontalSpacing,
-                    // mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        decoration: btnBoxDecoration,
-                        child: Row(
-                          children: [
-                            Tooltip(
-                              message: LocaleKeys.commons_btn_selectDate_tooltip.tr(),
-                              child: TextButton(
-                                onPressed: () => _selectDate(context, true),
-                                child: Text(
-                                  DateTimeUtils.formateYYYMMDD(_firstDayStart.add(Duration(days: _values.start.toInt(), hours: 12))),
-                                  style: btnTextStyle,
-                                ),
-                              ),
-                            ),
-                            Text(
-                              "-",
-                              style: btnTextStyle,
-                            ),
-                            Tooltip(
-                              message: LocaleKeys.commons_btn_selectDate_tooltip.tr(),
-                              child: TextButton(
-                                onPressed: () => _selectDate(context, false),
-                                child: Text(
-                                  DateTimeUtils.formateYYYMMDD(_firstDayStart.add(Duration(days: _values.end.toInt(), hours: 12))),
-                                  style: btnTextStyle,
-                                ),
-                              ),
-                            ),
-                          ],
+          child: HCenteredScrollView(
+            children: [
+              Container(
+                decoration: btnBoxDecoration,
+                child: Row(
+                  children: [
+                    Tooltip(
+                      message: LocaleKeys.commons_btn_selectDate_tooltip.tr(),
+                      child: TextButton(
+                        onPressed: () => _selectDate(context, true),
+                        child: Text(
+                          DateTimeUtils.formateYYYMMDD(_dateRangeFrom.add(Duration(days: _values.start.toInt(), hours: 12))),
+                          style: btnTextStyle,
                         ),
                       ),
-                      Container(
-                        decoration: btnBoxDecoration,
-                        child: Tooltip(
-                          message: _sliderVisible
-                              ? LocaleKeys.controls_select_dayRangeSlider_btn_hideSlider.tr()
-                              : LocaleKeys.controls_select_dayRangeSlider_btn_showSlider.tr(),
-                          child: TextButton(
-                            // button a bit smaller width to not overflow at 250
-                            style: TextButton.styleFrom(
-                              minimumSize: const Size(56, 48),
-                            ),
-                            onPressed: _toggleSliderVisible,
-                            child: Text(
-                              _sliderVisible ? '▼' : '▲',
-                            ),
-                          ),
+                    ),
+                    Text(
+                      "-",
+                      style: btnTextStyle,
+                    ),
+                    Tooltip(
+                      message: LocaleKeys.commons_btn_selectDate_tooltip.tr(),
+                      child: TextButton(
+                        onPressed: () => _selectDate(context, false),
+                        child: Text(
+                          DateTimeUtils.formateYYYMMDD(_dateRangeFrom.add(Duration(days: _values.end.toInt(), hours: 12))),
+                          style: btnTextStyle,
                         ),
                       ),
-                    ],
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                decoration: btnBoxDecoration,
+                child: Tooltip(
+                  message: _sliderVisible
+                      ? LocaleKeys.controls_select_dayRangeSlider_btn_hideSlider.tr()
+                      : LocaleKeys.controls_select_dayRangeSlider_btn_showSlider.tr(),
+                  child: TextButton(
+                    // button a bit smaller width to not overflow at 250
+                    style: TextButton.styleFrom(
+                      minimumSize: const Size(56, 48),
+                    ),
+                    onPressed: _toggleSliderVisible,
+                    child: Text(
+                      _sliderVisible ? '▼' : '▲',
+                    ),
                   ),
                 ),
-              );
-            },
+              ),
+            ],
           ),
         ),
         // Slider
@@ -264,9 +297,9 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
               duration: Duration(milliseconds: _sliderVisible ? ThemeUtils.animationDuration : ThemeUtils.animationDurationShort),
               child: RangeSlider(
                 min: 0,
-                max: _maxDays.toDouble(),
+                max: _sliderRange.toDouble(),
                 values: _values,
-                divisions: _maxDays,
+                divisions: _sliderRange,
                 // as we show the range always as text we need no labels here
                 // labels: RangeLabels(
                 //   DateTimeUtils.formateDate(_firstDayStart.add(Duration(days: _values.start.toInt()))),
@@ -295,7 +328,7 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
         ),
 
         // drag area (only if slider is not on min & max)
-        if (_values.start > 0 || _values.end < _maxDays)
+        if (_values.start > 0 || _values.end < _sliderRange)
           Positioned(
             left: 0,
             right: 0,
@@ -309,7 +342,7 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
                 child: LayoutBuilder(
                   builder: (context, constraints) {
                     double sliderWidth = constraints.maxWidth - 48; // 48 padding
-                    double totalRange = _maxDays.toDouble();
+                    double totalRange = _sliderRange.toDouble();
 
                     double left = _values.start / totalRange * sliderWidth + 24;
                     double right = _values.end / totalRange * sliderWidth + 24;
@@ -370,9 +403,9 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
                                 newEnd += -newStart;
                                 newStart = 0;
                               }
-                              if (newEnd > _maxDays) {
-                                newStart -= newEnd - _maxDays;
-                                newEnd = _maxDays.toDouble();
+                              if (newEnd > _sliderRange) {
+                                newStart -= newEnd - _sliderRange;
+                                newEnd = _sliderRange.toDouble();
                               }
 
                               _updateValues(RangeValues(newStart, newEnd));
@@ -421,5 +454,17 @@ class _DragLine extends StatelessWidget {
       height: ThemeUtils.fontSizeBodyM,
       width: 2,
     );
+  }
+}
+
+class DayRange {
+  final DateTime from;
+  final DateTime till;
+
+  DayRange(this.from, this.till);
+
+  @override
+  String toString() {
+    return 'DayRange{from: $from, till: $till}';
   }
 }

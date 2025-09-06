@@ -4,12 +4,22 @@ import '../../../util/theme_utils.dart';
 import 'day_range_slider.dart';
 
 class DayRangeSliderOverlay extends StatefulWidget {
-  const DayRangeSliderOverlay({super.key, required this.maxSpan, required this.date1, required this.date2, required this.setFilter});
+  const DayRangeSliderOverlay({
+    super.key,
+    required this.maxSpan,
+    required this.dateRangeFrom,
+    required this.dateRangeTill,
+    required this.setFilter,
+    this.selectedDateRangeFrom,
+    this.selectedDateRangeTill,
+  });
 
+  final DateTime dateRangeFrom;
+  final DateTime dateRangeTill;
   final int maxSpan;
-  final DateTime date1;
-  final DateTime date2;
-  final Function(RangeValues daysRange) setFilter;
+  final DateTime? selectedDateRangeFrom;
+  final DateTime? selectedDateRangeTill;
+  final Function(DayRange daysRange) setFilter;
 
   @override
   State<DayRangeSliderOverlay> createState() => _DayRangeSliderOverlayState();
@@ -51,12 +61,15 @@ class _DayRangeSliderOverlayState extends State<DayRangeSliderOverlay> {
           bottom: 0,
           duration: const Duration(milliseconds: ThemeUtils.animationDuration),
           child: DayRangeSlider(
-              pageCallback: widget.setFilter,
-              maxSpan: widget.maxSpan,
-              sliderInitialVisible: false,
-              sliderVisibleCallback: _setSliderVisible,
-              date1: widget.date1,
-              date2: widget.date2),
+            rangeCallback: widget.setFilter,
+            maxSpan: widget.maxSpan,
+            sliderInitialVisible: false,
+            sliderVisibleCallback: _setSliderVisible,
+            dateRangeFrom: widget.dateRangeFrom,
+            dateRangeTill: widget.dateRangeTill,
+            selectedDateRangeFrom: widget.selectedDateRangeFrom,
+            selectedDateRangeTill: widget.selectedDateRangeTill,
+          ),
         ),
       ],
     );
