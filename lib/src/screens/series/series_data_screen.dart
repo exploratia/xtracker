@@ -430,7 +430,7 @@ class _SeriesDataFilterWrapperState extends State<_SeriesDataFilterWrapper> {
     if (seriesData != null && !seriesData.isEmpty()) {
       var firstValueDateTime = seriesData.data.first.dateTime;
       if (firstValueDateTime.isAfter(filterStart)) {
-        filterStart = firstValueDateTime;
+        filterStart = DateTimeUtils.truncateToDay(firstValueDateTime);
       }
     }
     filter.start = filterStart;

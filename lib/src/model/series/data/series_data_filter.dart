@@ -27,11 +27,11 @@ class SeriesDataFilter {
     DateTime? endDate,
   }) {
     if (start != startDate) {
-      start = startDate;
+      start = startDate != null ? DateTimeUtils.truncateToDay(startDate) : null;
       _dirty = true;
     }
     if (end != endDate) {
-      end = endDate;
+      end = endDate != null ? DateTimeUtils.truncateToDay(endDate) : null;
       _dirty = true;
     }
   }
