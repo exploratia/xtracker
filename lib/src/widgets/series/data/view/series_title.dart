@@ -7,7 +7,7 @@ import '../../../controls/text/overflow_text.dart';
 
 class SeriesTitle extends StatelessWidget {
   static double get seriesTitleHeight {
-    return ThemeUtils.defaultPadding + 1 + 10 + ThemeUtils.defaultPadding + ThemeUtils.fontSizeTitleL * MediaQueryUtils.textScaleFactor;
+    return ThemeUtils.defaultPadding + 1 + 2 + 10 + ThemeUtils.defaultPadding + ThemeUtils.fontSizeTitleL * MediaQueryUtils.textScaleFactor;
   }
 
   const SeriesTitle({super.key, required this.seriesViewMetaData});
@@ -56,6 +56,7 @@ class SeriesTitle extends StatelessWidget {
                 padding: const EdgeInsets.all(ThemeUtils.defaultPadding),
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   spacing: ThemeUtils.horizontalSpacing,
                   children: [
                     Hero(tag: 'seriesDef_${seriesViewMetaData.seriesDef.uuid}', child: seriesViewMetaData.seriesDef.icon(size: ThemeUtils.iconSizeScaled)),
