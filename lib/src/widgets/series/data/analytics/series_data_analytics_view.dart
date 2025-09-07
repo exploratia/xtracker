@@ -7,6 +7,7 @@ import '../../../../util/theme_utils.dart';
 import '../../../controls/layout/single_child_scroll_view_with_scrollbar.dart';
 import '../../../controls/responsive/device_dependent_constrained_box.dart';
 import '../view/series_title.dart';
+import 'series_data_analytics_view_content_builder.dart';
 
 class SeriesDataAnalyticsView extends StatelessWidget {
   const SeriesDataAnalyticsView({super.key, required this.seriesViewMetaData});
@@ -43,17 +44,11 @@ class SeriesDataAnalyticsView extends StatelessWidget {
                     SizedBox(
                       height: SeriesTitle.seriesTitleHeight,
                     ),
-                    Text("data"),
-                    Placeholder(
-                      fallbackHeight: 300,
-                    ),
-                    Text("data"),
-                    Placeholder(
-                      fallbackHeight: 300,
-                    ),
-                    Text("data"),
-                    Placeholder(
-                      fallbackHeight: 300,
+                    SeriesDataAnalyticsViewContentBuilder(
+                      seriesViewMetaData: seriesViewMetaData,
+                      builder: (Widget Function() seriesDataViewBuilder) {
+                        return seriesDataViewBuilder();
+                      },
                     ),
                   ],
                 ),

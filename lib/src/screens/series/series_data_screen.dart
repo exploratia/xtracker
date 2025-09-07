@@ -236,14 +236,22 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
     List<Widget> orientationDependentViewActions = [];
 
     // for all views analysis dialog
-    orientationDependentViewActions.add(
-      IconButton(
-        tooltip: LocaleKeys.seriesData_action_analytics_tooltip.tr(),
-        onPressed: hasNoData ? null : () => _showSeriesDataAnalytics(context),
-        icon: const Icon(Icons.analytics_outlined),
-      ),
-    );
-    orientationDependentViewActions.add(const AppBarActionsDivider());
+    {
+      bool analyticsPossible = !hasNoData;
+      if (analyticsPossible) {
+        var d1 = widget.seriesDataValues.first.dateTime;
+        var d2 = widget.seriesDataValues.last.dateTime;
+        analyticsPossible = d1.year != d2.year || d1.month != d2.month || d1.day != d2.day;
+      }
+      orientationDependentViewActions.add(
+        IconButton(
+          tooltip: LocaleKeys.seriesData_action_analytics_tooltip.tr(),
+          onPressed: analyticsPossible ? () => _showSeriesDataAnalytics(context) : null,
+          icon: const Icon(Icons.analytics_outlined),
+        ),
+      );
+      orientationDependentViewActions.add(const AppBarActionsDivider());
+    }
 
     // in table add edit-mode
     if (viewType == ViewType.table) {
