@@ -68,13 +68,17 @@ class TableUtils {
   }
 
   /// returns a TableRows list for a key value table. Headline row is already inserted.
-  static List<TableRow> buildKeyValueTableRows(BuildContext context) {
+  static List<TableRow> buildKeyValueTableRows(
+    BuildContext context, {
+    String? keyColumnTitle,
+    String? valueColumnTitle,
+  }) {
     final themeData = Theme.of(context);
     return [
       TableUtils.tableHeadline(
         [
-          LocaleKeys.commons_table_column_key.tr(),
-          LocaleKeys.commons_table_column_value.tr(),
+          keyColumnTitle ?? LocaleKeys.commons_table_column_key.tr(),
+          valueColumnTitle ?? LocaleKeys.commons_table_column_value.tr(),
         ],
         themeData: themeData,
       ),
