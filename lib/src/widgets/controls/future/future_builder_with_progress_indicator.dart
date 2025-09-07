@@ -8,7 +8,7 @@ class FutureBuilderWithProgressIndicator<T> extends StatelessWidget {
 
   final Future<T> future;
   final dynamic Function(Object error)? errorBuilder;
-  final Widget Function(T? data, BuildContext context) widgetBuilder;
+  final Widget Function(T data, BuildContext context) widgetBuilder;
   final double marginTop;
 
   @override
@@ -34,9 +34,40 @@ class FutureBuilderWithProgressIndicator<T> extends StatelessWidget {
             return _ErrMsg(msg: snapshot.error!.toString());
           }
         } else {
-          return widgetBuilder(snapshot.data, context);
+          T? data = snapshot.data;
+          if (data == null) {
+            SimpleLogging.w('No data in future - although there was no snapshot error.');
+            return const _ErrMsg(msg: "Future failure - no data.");
+          }
+          return widgetBuilder(data, context);
         }
       },
+    );
+  }
+}
+
+class VoidFutureBuilderWithProgressIndicator extends StatelessWidget {
+  VoidFutureBuilderWithProgressIndicator({super.key, required this.future, this.errorBuilder, required this.widgetBuilder, this.marginTop = 0}) {
+    futureWrapper = Future(() async {
+      await future;
+      return true;
+    });
+  }
+
+  final Future<void> future;
+  final dynamic Function(Object error)? errorBuilder;
+  final Widget Function(BuildContext context) widgetBuilder;
+  final double marginTop;
+
+  late final Future<bool> futureWrapper;
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilderWithProgressIndicator(
+      future: futureWrapper,
+      errorBuilder: errorBuilder,
+      marginTop: marginTop,
+      widgetBuilder: (_, context) => widgetBuilder(context),
     );
   }
 }

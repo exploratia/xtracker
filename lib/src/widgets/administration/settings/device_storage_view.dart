@@ -26,9 +26,6 @@ class DeviceStorageView extends StatelessWidget {
                 future: DeviceStorage.readAll(),
                 errorBuilder: (error) => 'Failed to storage data!',
                 widgetBuilder: (storageData, BuildContext ctx) {
-                  if (storageData == null) {
-                    return Container();
-                  }
                   List<TableRow> rows = TableUtils.buildKeyValueTableRows(context);
 
                   final keys = storageData.keys.toList();
