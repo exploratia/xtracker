@@ -8,7 +8,7 @@ class SeriesDataFilter {
 
   bool filterDate(DateTime dateTime) {
     if (start != null && dateTime.isBefore(start!)) return false;
-    if (end != null && !dateTime.isBefore(end!)) return false;
+    if (end != null && dateTime.isAfter(end!)) return false;
     return true;
   }
 
@@ -27,11 +27,11 @@ class SeriesDataFilter {
     DateTime? endDate,
   }) {
     if (start != startDate) {
-      start = startDate != null ? DateTimeUtils.truncateToDay(startDate) : null;
+      start = startDate;
       _dirty = true;
     }
     if (end != endDate) {
-      end = endDate != null ? DateTimeUtils.truncateToDay(endDate) : null;
+      end = endDate;
       _dirty = true;
     }
   }
@@ -40,11 +40,11 @@ class SeriesDataFilter {
   String toString() {
     String res = "";
     if (start != null && end != null) {
-      res += "[${DateTimeUtils.formateYYYMMDD(start!)} - ${DateTimeUtils.formateYYYMMDD(DateTimeUtils.dayBefore(end!))}]";
+      res += "[${DateTimeUtils.formateYYYMMDD(start!)} - ${DateTimeUtils.formateYYYMMDD(end!)}]";
     } else if (start != null) {
       res += "[${DateTimeUtils.formateYYYMMDD(start!)} - [";
     } else if (end != null) {
-      res += "] - ${DateTimeUtils.formateYYYMMDD(DateTimeUtils.dayBefore(end!))}]";
+      res += "] - ${DateTimeUtils.formateYYYMMDD(end!)}]";
     }
     return res;
   }

@@ -179,7 +179,7 @@ class _StackedRangeSliderViewState extends State<_StackedRangeSliderView> {
     setState(() {
       var filterStartDate = daysRange.from;
       var filterEndDate = daysRange.till;
-      // print("set dayRange: $daysRange -> $_filterStartDate $_filterEndDate");
+      // print("set dayRange: $daysRange -> $filterStartDate $filterEndDate");
 
       // set filter values null, if extreme values
       widget.filter.setDate(

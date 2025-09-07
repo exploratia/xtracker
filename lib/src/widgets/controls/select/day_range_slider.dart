@@ -153,10 +153,12 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
   }
 
   DayRange _buildDayRange(bool forExternals) {
-    int add = forExternals ? 1 : 0; // +1 : next day start
+    int addDay = forExternals ? 1 : 0; // +1 : next day start
+    int subMicroS = forExternals ? 1 : 0; // -1 : smallest difference to midnight
     DayRange dayRange = DayRange(
       DateTimeUtils.truncateToDay(_dateRangeFrom.add(Duration(days: _values.start.roundToDouble().toInt(), hours: 12))),
-      DateTimeUtils.truncateToDay(_dateRangeFrom.add(Duration(days: _values.end.roundToDouble().toInt() + add, hours: 12))), // +1 : next day start
+      DateTimeUtils.truncateToDay(_dateRangeFrom.add(Duration(days: _values.end.roundToDouble().toInt() + addDay, hours: 12)))
+          .subtract(Duration(microseconds: subMicroS)),
     ); // next day start
     return dayRange;
   }
