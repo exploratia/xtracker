@@ -14,6 +14,13 @@ class TrendDataValues {
     xOrigin = values.first.x;
   }
 
+  int get length => values.length;
+
+  TrendDataValues filterLastXDays(int days) {
+    var dateFilter = DateTimeUtils.truncateToDay(DateTimeUtils.truncateToDay(DateTime.now()).subtract(Duration(days: days))).millisecondsSinceEpoch;
+    return TrendDataValues(values.where((v) => v.x >= dateFilter).toList());
+  }
+
   @override
   String toString() {
     return 'TrendDataValues{values: $values, xOrigin: $xOrigin}';
