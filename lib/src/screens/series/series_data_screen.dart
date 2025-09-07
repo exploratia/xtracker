@@ -28,6 +28,7 @@ import '../../widgets/controls/popupmenu/icon_popup_menu.dart';
 import '../../widgets/controls/provider/data_provider_loader.dart';
 import '../../widgets/controls/responsive/screen_builder.dart';
 import '../../widgets/controls/text/overflow_text.dart';
+import '../../widgets/series/data/analytics/series_data_analytics_view.dart';
 import '../../widgets/series/data/view/series_data_no_data.dart';
 import '../../widgets/series/data/view/series_data_view.dart';
 import '../../widgets/series/data/view/series_data_view_content_builder.dart';
@@ -184,6 +185,22 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
     setState(() {});
   }
 
+  void _showSeriesDataAnalytics(BuildContext context) async {
+    final themeData = Theme.of(context);
+    await showDialog(
+        context: context,
+        builder: (context) {
+          return Dialog.fullscreen(
+            backgroundColor: themeData.scaffoldBackgroundColor,
+            child: HideBottomNavigationBar(
+              child: SeriesDataAnalyticsView(
+                seriesViewMetaData: widget.seriesViewMetaData,
+              ),
+            ),
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
@@ -217,6 +234,16 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
     List<Widget> dataActions = [];
     List<Widget> viewActions = [];
     List<Widget> orientationDependentViewActions = [];
+
+    // for all views analysis dialog
+    orientationDependentViewActions.add(
+      IconButton(
+        tooltip: LocaleKeys.seriesData_action_analytics_tooltip.tr(),
+        onPressed: hasNoData ? null : () => _showSeriesDataAnalytics(context),
+        icon: const Icon(Icons.analytics_outlined),
+      ),
+    );
+    orientationDependentViewActions.add(const AppBarActionsDivider());
 
     // in table add edit-mode
     if (viewType == ViewType.table) {

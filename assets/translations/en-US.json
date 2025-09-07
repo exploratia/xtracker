@@ -263,6 +263,9 @@
       "addValue": {
         "tooltip": "Add new value"
       },
+      "analytics": {
+        "tooltip": "Show analytics"
+      },
       "compression": {
         "yearly": {
           "tooltip": "Yearly view"
@@ -297,6 +300,16 @@
     "label": {
       "noData": "No data available...",
       "noDataBecauseOfFilter": "No data due to filter settings"
+    }
+  },
+  "seriesDataAnalytics": {
+    "title": "Analytics",
+    "action": {
+      "close": {
+        "tooltip": "Close"
+      }
+    },
+    "label": {
     }
   },
   "seriesDefRenderer": {

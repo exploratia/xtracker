@@ -109,6 +109,7 @@ abstract class  LocaleKeys {
   static const seriesDashboard_btn_addSeries_tooltip = 'seriesDashboard.btn.addSeries.tooltip';
   static const seriesData_title = 'seriesData.title';
   static const seriesData_action_addValue_tooltip = 'seriesData.action.addValue.tooltip';
+  static const seriesData_action_analytics_tooltip = 'seriesData.action.analytics.tooltip';
   static const seriesData_action_compression_yearly_tooltip = 'seriesData.action.compression.yearly.tooltip';
   static const seriesData_action_compression_monthly_tooltip = 'seriesData.action.compression.monthly.tooltip';
   static const seriesData_action_compression_daily_tooltip = 'seriesData.action.compression.daily.tooltip';
@@ -119,6 +120,8 @@ abstract class  LocaleKeys {
   static const seriesData_action_viewTypeMenu_tooltip = 'seriesData.action.viewTypeMenu.tooltip';
   static const seriesData_label_noData = 'seriesData.label.noData';
   static const seriesData_label_noDataBecauseOfFilter = 'seriesData.label.noDataBecauseOfFilter';
+  static const seriesDataAnalytics_title = 'seriesDataAnalytics.title';
+  static const seriesDataAnalytics_action_close_tooltip = 'seriesDataAnalytics.action.close.tooltip';
   static const seriesDefRenderer_action_addValue_tooltip = 'seriesDefRenderer.action.addValue.tooltip';
   static const seriesDefRenderer_action_showSeriesValues_tooltip = 'seriesDefRenderer.action.showSeriesValues.tooltip';
   static const seriesDefRenderer_action_editSeries_tooltip = 'seriesDefRenderer.action.editSeries.tooltip';
