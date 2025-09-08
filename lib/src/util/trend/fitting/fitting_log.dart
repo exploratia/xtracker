@@ -17,7 +17,7 @@ class FittingLog extends Fitting {
     double sumLnx = 0;
     double sumLnx2 = 0;
 
-    for (var v in trendDataValues.values) {
+    for (var v in trendDataValues.trendCalculationDataProvider) {
       var xVal = v.x;
       var yVal = v.y;
       var lnX = math.log(xVal);

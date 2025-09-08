@@ -7,7 +7,7 @@ class FittingLinear extends Fitting {
 
   @override
   FitResult calc() {
-    if (trendDataValues.values.length < 2) return FitResultLinear(null, null, null);
+    if (trendDataValues.length < 2) return FitResultLinear(null, null, null);
 
     int n = 0;
     double sumXY = 0;
@@ -15,7 +15,7 @@ class FittingLinear extends Fitting {
     double sumY = 0;
     double sumX2 = 0;
 
-    for (var v in trendDataValues.values) {
+    for (var v in trendDataValues.trendCalculationDataProvider) {
       var xVal = v.x;
       var yVal = v.y;
 

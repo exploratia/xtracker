@@ -7,6 +7,7 @@ import '../pair.dart';
 import 'trend_data_value.dart';
 
 class TrendDataValues {
+  /// original values (not xOrigin adjusted)
   final List<TrendDataValue> values;
   late final double xOrigin;
 
@@ -15,6 +16,11 @@ class TrendDataValues {
   }
 
   int get length => values.length;
+
+  /// returns x adjusted values for trend calculation
+  Iterable<TrendDataValue> get trendCalculationDataProvider {
+    return values.map((e) => TrendDataValue(e.x - xOrigin, e.y));
+  }
 
   TrendDataValues filterLastXDays(int days) {
     var dateFilter = DateTimeUtils.truncateToDay(DateTimeUtils.truncateToDay(DateTime.now()).subtract(Duration(days: days))).millisecondsSinceEpoch;

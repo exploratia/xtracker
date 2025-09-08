@@ -17,7 +17,7 @@ class FittingExponential extends Fitting {
     double sumX = 0;
     double sumXLny = 0;
 
-    for (var v in trendDataValues.values) {
+    for (var v in trendDataValues.trendCalculationDataProvider) {
       var xVal = v.x;
       var yVal = v.y;
       var lnY = math.log(yVal);
