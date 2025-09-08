@@ -1,8 +1,7 @@
 import '../../model/series/data/blood_pressure/blood_pressure_value.dart';
 import '../../model/series/data/daily_check/daily_check_value.dart';
 import '../../model/series/data/habit/habit_value.dart';
-import '../../model/series/data/series_data_value.dart';
-import '../date_time_utils.dart';
+import '../day_item/day_item.dart';
 import '../pair.dart';
 import 'trend/trend_data_value_datetime.dart';
 import 'trend/trend_data_values_datetime.dart';
@@ -19,56 +18,12 @@ class TrendValuesBuilder {
   }
 
   static TrendDataValuesDateTime buildForDailyCheck(List<DailyCheckValue> seriesDataValues) {
-    var dayItems = _DayItem.buildDayItems(seriesDataValues);
-    return TrendDataValuesDateTime(dayItems.map((v) => v.trendDataValue).toList());
+    var dayItems = DayItem.buildDayItems(seriesDataValues, (day) => DayItem(day));
+    return TrendDataValuesDateTime(dayItems.map((di) => TrendDataValueDateTime(di.dayDate, di.count.toDouble())).toList());
   }
 
   static TrendDataValuesDateTime buildForHabit(List<HabitValue> seriesDataValues) {
-    var dayItems = _DayItem.buildDayItems(seriesDataValues);
-    return TrendDataValuesDateTime(dayItems.map((v) => v.trendDataValue).toList());
-  }
-}
-
-class _DayItem {
-  final DateTime dateTime;
-  double value = 0;
-
-  _DayItem(this.dateTime);
-
-  void addValue(double add) {
-    value += add;
-  }
-
-  TrendDataValueDateTime get trendDataValue {
-    return TrendDataValueDateTime(dateTime, value);
-  }
-
-  static List<_DayItem> buildDayItems(List<SeriesDataValue> seriesDataValues) {
-    List<_DayItem> list = [];
-
-    _DayItem? actItem;
-    DateTime? actDay;
-
-    _DayItem createDayItem(DateTime dateTimeDayStart) {
-      _DayItem dayItem = _DayItem(dateTimeDayStart);
-      list.add(dayItem);
-      return dayItem;
-    }
-
-    for (var item in seriesDataValues) {
-      DateTime dateDay = DateTimeUtils.truncateToDay(item.dateTime);
-      actDay ??= dateDay;
-      actItem ??= createDayItem(dateDay);
-
-      // not matching date - create (empty)
-      while (actDay!.isBefore(dateDay)) {
-        actDay = DateTimeUtils.dayAfter(actDay);
-        actItem = createDayItem(actDay);
-      }
-
-      actItem!.addValue(1);
-    }
-
-    return list;
+    var dayItems = DayItem.buildDayItems(seriesDataValues, (day) => DayItem(day));
+    return TrendDataValuesDateTime(dayItems.map((di) => TrendDataValueDateTime(di.dayDate, di.count.toDouble())).toList());
   }
 }

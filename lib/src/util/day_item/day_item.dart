@@ -1,16 +1,33 @@
 import '../../model/series/data/datetime_item.dart';
 import '../date_time_utils.dart';
 
+/// DayItem which combines one or more DateTimeItems of the same date. E.g. as one combined value in a daily grid.
 class DayItem<T extends DateTimeItem> {
   final List<T> dateTimeItems = [];
-  late final DateTime day;
+
+  /// Start of the day date time
+  late final DateTime dayDate;
 
   DayItem(DateTime dateTime) {
-    day = DateTimeUtils.truncateToDay(dateTime);
+    dayDate = DateTimeUtils.truncateToDay(dateTime);
+  }
+
+  void addItem(T item) {
+    dateTimeItems.add(item);
+  }
+
+  /// returns the number of dateTimeItems
+  int get count {
+    return dateTimeItems.length;
   }
 
   /// combines a list of DayTimeItems to a list of DayItems (one for each day) which contain the originals in their internal list.
-  static List<I> buildDayItems<I extends DayItem, T extends DateTimeItem>(List<T> values, I Function(DateTime day) dayItemBuilder) {
+  /// - [reversed] if true the returned list is in reverse order
+  static List<I> buildDayItems<I extends DayItem, T extends DateTimeItem>(
+    List<T> values,
+    I Function(DateTime day) dayItemBuilder, {
+    bool reversed = false,
+  }) {
     List<I> list = [];
 
     I? actItem;
@@ -35,6 +52,10 @@ class DayItem<T extends DateTimeItem> {
       }
 
       actItem!.dateTimeItems.add(item);
+    }
+
+    if (reversed) {
+      return list.reversed.toList();
     }
 
     return list;

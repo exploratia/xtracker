@@ -40,7 +40,7 @@ class PixelCellBuilder<T extends GridDayItem> {
           colors: [],
           backgroundColor: dayItem.backgroundColor,
           pixelText: null,
-          isStartMarker: monthly ? false : dayItem.dateTimeDayStart.day == 1,
+          isStartMarker: monthly ? false : dayItem.dayDate.day == 1,
           seriesValues: [],
         ),
       );

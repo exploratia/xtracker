@@ -29,7 +29,7 @@ class SeriesDataHabitPixelsView extends StatelessWidget {
 
     /// from new to old (latest date is the first item)
     List<HabitDayItem> allDayItems = HabitDayItem.buildDayItems(seriesData, seriesViewMetaData.seriesDef);
-    var dayItems = allDayItems.where((dayItem) => seriesDataFilter.filterDate(dayItem.dateTimeDayStart)).toList();
+    var dayItems = allDayItems.where((dayItem) => seriesDataFilter.filterDate(dayItem.dayDate)).toList();
 
     if (dayItems.isEmpty || dayItems.where((i) => i.count > 0).isEmpty) {
       return SeriesDataNoData(

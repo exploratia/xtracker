@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../model/series/data/habit/habit_value.dart';
 import '../../../../../model/series/series_def.dart';
-import '../../../../../util/date_time_utils.dart';
+import '../../../../../util/day_item/day_item.dart';
 import '../../../../series/data/view/habit/table/habit_value_renderer.dart';
 import '../pixel.dart';
 import 'grid_day_item.dart';
@@ -15,44 +15,22 @@ class HabitDayItem extends GridDayItem<HabitValue> {
       colors: colors,
       backgroundColor: backgroundColor,
       pixelText: count > 0 ? '$count' : null,
-      isStartMarker: monthly ? false : dateTimeDayStart.day == 1,
-      seriesValues: seriesValues,
+      isStartMarker: monthly ? false : dayDate.day == 1,
+      seriesValues: dateTimeItems,
       tooltipValueBuilder: (dataValue) => HabitValueRenderer(habitValue: dataValue, seriesDef: seriesDef),
     );
   }
 
   @override
   String toString() {
-    return 'HabitDayItem{date: $dateTimeDayStart, count: $count}';
+    return 'HabitDayItem{date: $dayDate, count: $count}';
   }
 
   static List<HabitDayItem> buildDayItems(List<HabitValue> seriesData, SeriesDef seriesDef) {
-    List<HabitDayItem> list = [];
-
-    HabitDayItem? actItem;
-    DateTime? actDay;
-
-    HabitDayItem createDayItem(DateTime dateTimeDayStart) {
-      HabitDayItem dayItem = HabitDayItem(dateTimeDayStart, seriesDef);
-      list.add(dayItem);
-      return dayItem;
-    }
-
-    for (var item in seriesData.reversed) {
-      DateTime dateDay = DateTimeUtils.truncateToDay(item.dateTime);
-      actDay ??= dateDay;
-
-      actItem ??= createDayItem(dateDay);
-
-      // not matching date - create (empty)
-      while (actDay!.isAfter(dateDay)) {
-        actDay = DateTimeUtils.dayBefore(actDay);
-        actItem = createDayItem(actDay);
-      }
-
-      actItem!.addValue(item);
-    }
-
-    return list;
+    return DayItem.buildDayItems(
+      seriesData,
+      (DateTime dayDate) => HabitDayItem(dayDate, seriesDef),
+      reversed: true /*reversed - we want to see newest date first*/,
+    );
   }
 }

@@ -2,36 +2,25 @@ import 'package:flutter/material.dart';
 
 import '../../../../../model/series/data/series_data_value.dart';
 import '../../../../../model/series/series_def.dart';
-import '../../../../../util/date_time_utils.dart';
+import '../../../../../util/day_item/day_item.dart';
 import '../../../../../util/globals.dart';
 
-abstract class GridDayItem<T extends SeriesDataValue> {
-  late final DateTime dateTimeDayStart;
+abstract class GridDayItem<T extends SeriesDataValue> extends DayItem<T> {
   late final Color? backgroundColor;
   final SeriesDef seriesDef;
-  final List<T> seriesValues = [];
 
-  GridDayItem(DateTime dateTimeDayStart, this.seriesDef) {
-    this.dateTimeDayStart = DateTimeUtils.truncateToDay(dateTimeDayStart);
-    if (dateTimeDayStart.weekday == DateTime.sunday) {
+  GridDayItem(super.dateTime, this.seriesDef) {
+    if (dayDate.weekday == DateTime.sunday) {
       backgroundColor = Globals.backgroundColorSunday;
-    } else if (dateTimeDayStart.weekday == DateTime.saturday) {
+    } else if (dayDate.weekday == DateTime.saturday) {
       backgroundColor = Globals.backgroundColorSaturday;
     } else {
       backgroundColor = null;
     }
   }
 
-  void addValue(T value) {
-    seriesValues.add(value);
-  }
-
-  int get count {
-    return seriesValues.length;
-  }
-
   @override
   String toString() {
-    return 'DayItem{count: $count}';
+    return 'GridDayItem{count: $count}';
   }
 }

@@ -108,7 +108,7 @@ class Dot<T extends SeriesDataValue> extends StatelessWidget {
   static Dot noValueDot(GridDayItem<SeriesDataValue> dayItem, bool monthly) {
     return Dot(
       dotColor1: Colors.grey.withAlpha(64),
-      isStartMarker: monthly ? false : dayItem.dateTimeDayStart.day == 1,
+      isStartMarker: monthly ? false : dayItem.dayDate.day == 1,
       seriesValues: [],
     );
   }
