@@ -6,9 +6,9 @@ import '../../../../../util/color_utils.dart';
 import '../../../../../util/date_time_utils.dart';
 import '../../../../series/data/view/daily_check/table/daily_check_value_renderer.dart';
 import '../dot.dart';
-import './day_item.dart';
+import 'grid_day_item.dart';
 
-class DailyCheckDayItem extends DayItem<DailyCheckValue> {
+class DailyCheckDayItem extends GridDayItem<DailyCheckValue> {
   DailyCheckDayItem(super.dateTimeDayStart, super.seriesDef);
 
   static Color _color1 = Colors.blue;

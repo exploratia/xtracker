@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../../../../model/series/data/series_data_value.dart';
 import '../two_dimensional_scrollable_table.dart';
-import 'day/day_item.dart';
+import 'day/grid_day_item.dart';
 import 'pixel.dart';
 import 'row/row_item.dart';
 
-class PixelCellBuilder<T extends DayItem> {
+class PixelCellBuilder<T extends GridDayItem> {
   final List<RowItem<T>> data;
   final Pixel Function(T dayItem) gridCellChildBuilder;
   final bool monthly;

@@ -7,9 +7,9 @@ import '../../../../../model/series/series_def.dart';
 import '../../../../../util/date_time_utils.dart';
 import '../../../../series/data/view/blood_pressure/table/blood_pressure_value_renderer.dart';
 import '../dot.dart';
-import './day_item.dart';
+import 'grid_day_item.dart';
 
-class BloodPressureDayItem extends DayItem<BloodPressureValue> {
+class BloodPressureDayItem extends GridDayItem<BloodPressureValue> {
   int high = -1000;
   int low = 1000;
   bool medication = false;

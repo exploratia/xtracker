@@ -5,13 +5,13 @@ import '../../../../../model/series/series_def.dart';
 import '../../../../../util/date_time_utils.dart';
 import '../../../../../util/globals.dart';
 
-abstract class DayItem<T extends SeriesDataValue> {
+abstract class GridDayItem<T extends SeriesDataValue> {
   late final DateTime dateTimeDayStart;
   late final Color? backgroundColor;
   final SeriesDef seriesDef;
   final List<T> seriesValues = [];
 
-  DayItem(DateTime dateTimeDayStart, this.seriesDef) {
+  GridDayItem(DateTime dateTimeDayStart, this.seriesDef) {
     this.dateTimeDayStart = DateTimeUtils.truncateToDay(dateTimeDayStart);
     if (dateTimeDayStart.weekday == DateTime.sunday) {
       backgroundColor = Globals.backgroundColorSunday;

@@ -5,7 +5,7 @@ import '../../../../util/media_query_utils.dart';
 import '../../../../util/theme_utils.dart';
 import '../../../series/data/view/series_data_tooltip_content.dart';
 import '../../tooltip/lazy_tooltip.dart';
-import 'day/day_item.dart';
+import 'day/grid_day_item.dart';
 
 class Dot<T extends SeriesDataValue> extends StatelessWidget {
   const Dot(
@@ -105,7 +105,7 @@ class Dot<T extends SeriesDataValue> extends StatelessWidget {
     return dotRender;
   }
 
-  static Dot noValueDot(DayItem<SeriesDataValue> dayItem, bool monthly) {
+  static Dot noValueDot(GridDayItem<SeriesDataValue> dayItem, bool monthly) {
     return Dot(
       dotColor1: Colors.grey.withAlpha(64),
       isStartMarker: monthly ? false : dayItem.dateTimeDayStart.day == 1,

@@ -5,9 +5,9 @@ import '../../../../../model/series/series_def.dart';
 import '../../../../../util/date_time_utils.dart';
 import '../../../../series/data/view/habit/table/habit_value_renderer.dart';
 import '../pixel.dart';
-import './day_item.dart';
+import 'grid_day_item.dart';
 
-class HabitDayItem extends DayItem<HabitValue> {
+class HabitDayItem extends GridDayItem<HabitValue> {
   HabitDayItem(super.dateTimeDayStart, super.seriesDef);
 
   Pixel toPixel(bool monthly, List<Color> colors) {
