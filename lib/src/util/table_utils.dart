@@ -48,30 +48,33 @@ class TableUtils {
   }) {
     var cPadding = cellPadding ?? const EdgeInsets.symmetric(vertical: ThemeUtils.paddingSmall / 2, horizontal: ThemeUtils.paddingSmall);
 
-    return TableRow(decoration: decoration, children: [
-      ...values.map((value) {
-        Widget child;
-        if (value is Widget) {
-          child = value;
-        } else {
-          child = Text(
-            value.toString(),
-            textAlign: (value is num) ? TextAlign.right : TextAlign.left,
+    return TableRow(
+      decoration: decoration,
+      children: [
+        ...values.map((value) {
+          Widget child;
+          if (value is Widget) {
+            child = value;
+          } else {
+            child = Text(
+              value.toString(),
+              textAlign: (value is num) ? TextAlign.right : TextAlign.left,
+            );
+          }
+          return _TableCellPadding(
+            child,
+            edgeInsets: cPadding,
           );
-        }
-        return _TableCellPadding(
-          child,
-          edgeInsets: cPadding,
-        );
-      }),
-    ]);
+        }),
+      ],
+    );
   }
 
   /// returns a TableRows list for a key value table. Headline row is already inserted.
   static List<TableRow> buildKeyValueTableRows(
     BuildContext context, {
-    String? keyColumnTitle,
-    String? valueColumnTitle,
+    dynamic keyColumnTitle,
+    dynamic valueColumnTitle,
   }) {
     final themeData = Theme.of(context);
     return [
