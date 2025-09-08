@@ -16,7 +16,7 @@ class SeriesDataTooltipContent {
         children: [
           const Icon(Icons.calendar_today_outlined, size: ThemeUtils.fontSizeBodyS),
           const SizedBox(width: ThemeUtils.horizontalSpacingSmall),
-          Text(DateTimeUtils.formateDate(seriesValues.first.dateTime), style: TooltipUtils.tooltipMonospaceStyle),
+          Text(DateTimeUtils.formateDateWithDay(seriesValues.first.dateTime), style: TooltipUtils.tooltipMonospaceStyle),
         ],
       ),
       const SizedBox(height: ThemeUtils.verticalSpacingSmall),

@@ -44,6 +44,11 @@ class DateTimeUtils {
     return DateFormat.yMd().format(dateTime);
   }
 
+  /// format date yMEd
+  static String formateDateWithDay(DateTime dateTime) {
+    return DateFormat.yMEd().format(dateTime);
+  }
+
   /// yyyy-MM-dd
   static String formateYYYMMDD(DateTime dateTime) {
     return DateFormat('yyyy-MM-dd').format(dateTime);
