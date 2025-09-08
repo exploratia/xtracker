@@ -1,8 +1,10 @@
-class TrendDataValue {
-  final double x;
+abstract class TrendDataValue<X> {
+  final X x;
   final double y;
 
   TrendDataValue(this.x, this.y);
+
+  double get xVal;
 
   @override
   String toString() {

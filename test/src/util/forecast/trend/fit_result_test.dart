@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:xtracker/src/util/trend/result/fit_result.dart';
-import 'package:xtracker/src/util/trend/result/fit_result_linear.dart';
-import 'package:xtracker/src/util/trend/trend_tendency.dart';
+import 'package:xtracker/src/util/forecast/trend/result/fit_result.dart';
+import 'package:xtracker/src/util/forecast/trend/result/fit_result_linear.dart';
+import 'package:xtracker/src/util/forecast/trend/trend_tendency.dart';
 
 void main() {
   group('Fitting Linear', () {

@@ -20,8 +20,8 @@
   "appTitle": "xTracker",
   "appSupport": {
     "title": "Thanks for being here!",
-    "oneYearMsg": "One year ago, you first opened this app – amazing that you’re still using it!\n\nIf you enjoy the app and would like to support its future development, consider buying me a coffee. Your contribution helps keep improving the app and offering it for free.",
-    "multipleYearsMsg": "Another year with this app has gone by – thanks for sticking with it.\n\nIf you’d like to support ongoing development, I’d be grateful for a coffee. Your support helps to keep the app up to date and free to use."
+    "oneYearMsg": "One year in - awesome!\n\nIf you enjoy the app and would like to support its future development, consider buying me a coffee. Your contribution helps keep improving the app and offering it for free.",
+    "multipleYearsMsg": "Another year gone – thanks for sticking with it.\n\nIf you’d like to support ongoing development, I’d be grateful for a coffee. Your support helps to keep the app up to date and free to use."
   },
   "commons": {
     "nav": {
@@ -47,12 +47,15 @@
     "btn": {
       "selectDate": {
         "tooltip": "Select date"
+      },
+      "info": {
+        "tooltip": "Show info"
       }
     },
     "dialog": {
       "title": {
         "areYouSure": "Are you sure?",
-        "errorOccurred": "An Error Occurred"
+        "errorOccurred": "Error occurred"
       },
       "btn": {
         "cancel": "CANCEL",
@@ -118,15 +121,15 @@
     "seriesType": {
       "bloodPressure": {
         "title": "Blood pressure",
-        "info": "Measure blood pressure 3 times a day."
+        "info": "Measure blood pressure three times a day."
       },
       "dailyCheck": {
         "title": "Daily check",
-        "info": "Track daily habits – e.g. exercise, taking breaks, or standing up."
+        "info": "Track daily habits – e.g. exercise, taking breaks, standing up or eat no sweats."
       },
       "free": {
         "title": "Free",
-        "info": "Measure something with no repeating interval. E.g. car refuel distance and costs."
+        "info": "Track things without a fixed interval. E.g. car refuel distance and costs."
       },
       "habit": {
         "title": "Habit",
@@ -229,11 +232,11 @@
     "label": {
       "logFullStack": "Log full stack:",
       "logLevel": "Log level:",
-      "writeTestLogMessages": "Write some test log messages:"
+      "writeTestLogMessages": "Write test logs:"
     },
     "btn": {
       "writeTestLogMessages": {
-        "tooltip": "Write some test log messages"
+        "tooltip": "Write test logs for each log level"
       }
     }
   },
@@ -310,6 +313,28 @@
       }
     },
     "label": {
+      "dataBasis": "Data basis",
+      "lastXDays": "Last {} days"
+    },
+    "trend": {
+      "title": "Trend Analysis",
+      "label": {
+        "forecast": "Forecast",
+        "failedToCalculateTrend": "Could not calculate trend.",
+        "trendCalculationNotPossible": "Trend analysis not possible."
+      },
+      "tendency": {
+        "none": "-",
+        "up": "Trend up",
+        "down": "Trend down"
+      }
+    },
+    "habit": {
+      "trend": {
+        "label": {
+          "trendInfo": "A linear trend function is calculated from the series values to forecast future values.\n\nThese forecasts are combined with the probability for each weekday.\n(If the series has no gaps, the probability is 100% for each day.)"
+        }
+      }
     }
   },
   "seriesDefRenderer": {
@@ -362,8 +387,8 @@
       "moreSeriesToCome": "More to come ..."
     },
     "btn": {
-      "showSeriesTypeInfo": "Show series type info",
-      "backToSeriesTypeSelection": "Back to select series type"
+      "showSeriesTypeInfo": "Series type info",
+      "backToSeriesTypeSelection": "Back to series type selection"
     },
     "common": {
       "label": {
@@ -433,12 +458,12 @@
       }
     },
     "label": {
-      "noSeries": "No series created yet..."
+      "noSeries": "No series yet..."
     },
     "backupAlert": {
       "title": "Backup?",
       "label": {
-        "lastExport": "No backup has been created for a long time.\nLast export: {}"
+        "lastExport": "No backup for a long time.\nLast export: {}"
       },
       "btn": {
         "export": "Export now...",

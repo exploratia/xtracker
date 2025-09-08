@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
 import '../result/fit_result.dart';
-import '../result/fit_result_log.dart';
 import '../result/fit_result_power_law.dart';
 import 'fitting.dart';
 
@@ -39,6 +38,6 @@ class FittingPowerLaw extends Fitting {
       a = math.exp(a);
     }
 
-    return FitResultLog(a, b, trendDataValues.xOrigin);
+    return FitResultPowerLaw(a, b, trendDataValues.xOrigin);
   }
 }

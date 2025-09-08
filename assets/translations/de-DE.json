@@ -19,9 +19,9 @@
   },
   "appTitle": "xTracker",
   "appSupport": {
-    "title": "Danke, dass du dabei bist!",
-    "oneYearMsg": "Vor einem Jahr hast du die App zum ersten Mal gestartet – großartig, dass du sie nutzt!\n\nWenn dir die App gefällt und du ihre Weiterentwicklung unterstützen möchtest, kannst du mir gerne einen Kaffee spendieren. Dein Beitrag hilft, die App weiter zu verbessern und kostenlos bereitzustellen.",
-    "multipleYearsMsg": "Ein weiteres Jahr mit dieser App liegt hinter dir – danke, dass du sie treu nutzt.\n\nWenn du die Weiterentwicklung unterstützen möchtest, freue ich mich über einen Kaffee. So hilfst du mir, die App aktuell und kostenlos zu halten."
+    "title": "Danke fürs Dabeisein!",
+    "oneYearMsg": "Seit einem Jahr dabei – großartig!\n\nWenn dir die App gefällt und du ihre Weiterentwicklung unterstützen möchtest, kannst du mir gerne einen Kaffee spendieren. Dein Beitrag hilft, die App weiter zu verbessern und kostenlos bereitzustellen.",
+    "multipleYearsMsg": "Wieder ein Jahr vorbei – danke, fürs Dranbleiben!\n\nWenn du die Weiterentwicklung unterstützen möchtest, freue ich mich über einen Kaffee. So hilfst du mir, die App aktuell und kostenlos zu halten."
   },
   "commons": {
     "nav": {
@@ -47,12 +47,15 @@
     "btn": {
       "selectDate": {
         "tooltip": "Datum auswählen"
+      },
+      "info": {
+        "tooltip": "Info anzeigen"
       }
     },
     "dialog": {
       "title": {
         "areYouSure": "Sicher?",
-        "errorOccurred": "Fehler"
+        "errorOccurred": "Fehler aufgetreten"
       },
       "btn": {
         "cancel": "ABBRECHEN",
@@ -87,7 +90,7 @@
       }
     },
     "validator": {
-      "emptyValue": "Ungültiger Wert"
+      "emptyValue": "Bitte Wert eingeben"
     }
   },
   "controls": {
@@ -122,11 +125,11 @@
       },
       "dailyCheck": {
         "title": "Täglicher Check",
-        "info": "Erledige täglich etwas - z.B. Sport oder Pause oder Aufstehen während einer sitzenden Tätigkeit."
+        "info": "Erledige täglich etwas - z.B. Sport oder Pause oder Aufstehen oder keine Süßigkeiten essen."
       },
       "free": {
         "title": "Frei",
-        "info": "Etwas ohne regelmäßiges Intervall aufzeichnen. Z.B. Auto betanken (Kosten und gefahrene Distanz)."
+        "info": "Dinge ohne festen Rhythmus aufzeichnen. Z.B. Auto betanken (Kosten und gefahrene Distanz)."
       },
       "habit": {
         "title": "Gewohnheit",
@@ -227,9 +230,9 @@
   "logSettings": {
     "title": "Log Einstellungen",
     "label": {
-      "logFullStack": "Vollständigen Stack schreiben:",
+      "logFullStack": "Vollständigen Stack loggen:",
       "logLevel": "Log Level:",
-      "writeTestLogMessages": "Test Log-Einträge schreiben:"
+      "writeTestLogMessages": "Test-Logs schreiben:"
     },
     "btn": {
       "writeTestLogMessages": {
@@ -247,7 +250,7 @@
         "tooltip": "Messreihe hinzufügen..."
       },
       "manageSeries": {
-        "tooltip": "Messreihenverwaltung"
+        "tooltip": "Messreihen verwalten"
       }
     },
     "btn": {
@@ -310,7 +313,29 @@
       }
     },
     "label": {
+      "dataBasis": "Datenbasis",
+      "lastXDays": "Letzte {} Tage"
+    },
+    "trend": {
+      "title": "Trend-Analyse",
+      "label": {
+        "forecast": "Prognose",
+        "failedToCalculateTrend": "Trend konnte nicht berechnet werden.",
+        "trendCalculationNotPossible": "Trend-Analyse nicht möglich."
+      },
+      "tendency": {
+        "none": "-",
+        "up": "Trend steigend",
+        "down": "Trend fallend"
+      }
+    },"habit": {
+      "trend": {
+        "label": {
+          "trendInfo": "Aus den Werten der Messreihe wird eine lineare Trendfunktion berechnet, um künftige Werte vorherzusagen.\n\nDiese Prognosen werden mit der Wahrscheinlichkeit für den jeweiligen Wochentag kombiniert.\n(Wenn die Messreihe keine Lücken hat, liegt die Wahrscheinlichkeit für jeden Tag bei 100%.)"
+        }
+      }
     }
+
   },
   "seriesDefRenderer": {
     "action": {
@@ -362,7 +387,7 @@
       "moreSeriesToCome": "Weitere folgen bald..."
     },
     "btn": {
-      "showSeriesTypeInfo": "Messreihen-Typ Info",
+      "showSeriesTypeInfo": "Info zum Messreihen-Typ",
       "backToSeriesTypeSelection": "Zurück zur Messreihen-Typ Auswahl"
     },
     "common": {
@@ -433,12 +458,12 @@
       }
     },
     "label": {
-      "noSeries": "Noch keine Messreihen vorhanden."
+      "noSeries": "Noch keine Messreihen erstellt."
     },
     "backupAlert": {
       "title": "Backup?",
       "label": {
-        "lastExport": "Es wurde lange keine Sicherung mehr erstellt.\nLetzter Export: {}"
+        "lastExport": "Schon lange kein Backup mehr gemacht.\nLetzter Export: {}"
       },
       "btn": {
         "export": "Jetzt exportieren...",

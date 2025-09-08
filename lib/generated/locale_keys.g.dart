@@ -28,6 +28,7 @@ abstract class  LocaleKeys {
   static const commons_date_midday = 'commons.date.midday';
   static const commons_date_evening = 'commons.date.evening';
   static const commons_btn_selectDate_tooltip = 'commons.btn.selectDate.tooltip';
+  static const commons_btn_info_tooltip = 'commons.btn.info.tooltip';
   static const commons_dialog_title_areYouSure = 'commons.dialog.title.areYouSure';
   static const commons_dialog_title_errorOccurred = 'commons.dialog.title.errorOccurred';
   static const commons_dialog_btn_cancel = 'commons.dialog.btn.cancel';
@@ -122,6 +123,16 @@ abstract class  LocaleKeys {
   static const seriesData_label_noDataBecauseOfFilter = 'seriesData.label.noDataBecauseOfFilter';
   static const seriesDataAnalytics_title = 'seriesDataAnalytics.title';
   static const seriesDataAnalytics_action_close_tooltip = 'seriesDataAnalytics.action.close.tooltip';
+  static const seriesDataAnalytics_label_dataBasis = 'seriesDataAnalytics.label.dataBasis';
+  static const seriesDataAnalytics_label_lastXDays = 'seriesDataAnalytics.label.lastXDays';
+  static const seriesDataAnalytics_trend_title = 'seriesDataAnalytics.trend.title';
+  static const seriesDataAnalytics_trend_label_forecast = 'seriesDataAnalytics.trend.label.forecast';
+  static const seriesDataAnalytics_trend_label_failedToCalculateTrend = 'seriesDataAnalytics.trend.label.failedToCalculateTrend';
+  static const seriesDataAnalytics_trend_label_trendCalculationNotPossible = 'seriesDataAnalytics.trend.label.trendCalculationNotPossible';
+  static const seriesDataAnalytics_trend_tendency_none = 'seriesDataAnalytics.trend.tendency.none';
+  static const seriesDataAnalytics_trend_tendency_up = 'seriesDataAnalytics.trend.tendency.up';
+  static const seriesDataAnalytics_trend_tendency_down = 'seriesDataAnalytics.trend.tendency.down';
+  static const seriesDataAnalytics_habit_trend_label_trendInfo = 'seriesDataAnalytics.habit.trend.label.trendInfo';
   static const seriesDefRenderer_action_addValue_tooltip = 'seriesDefRenderer.action.addValue.tooltip';
   static const seriesDefRenderer_action_showSeriesValues_tooltip = 'seriesDefRenderer.action.showSeriesValues.tooltip';
   static const seriesDefRenderer_action_editSeries_tooltip = 'seriesDefRenderer.action.editSeries.tooltip';

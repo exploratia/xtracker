@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../model/series/data/habit/habit_value.dart';
 import '../../../../../model/series/series_view_meta_data.dart';
+import 'trend/series_data_habit_trend_analytics_view.dart';
 
 class SeriesDataHabitAnalyticsView extends StatelessWidget {
   const SeriesDataHabitAnalyticsView({super.key, required this.seriesViewMetaData, required this.seriesDataValues});
@@ -11,20 +12,11 @@ class SeriesDataHabitAnalyticsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
     return Column(
       children: [
-        Text("data"),
-        Placeholder(
-          fallbackHeight: 300,
-        ),
-        Text("data"),
-        Placeholder(
-          fallbackHeight: 300,
-        ),
-        Text("data"),
-        Placeholder(
-          fallbackHeight: 300,
+        SeriesDataHabitTrendAnalyticsView(
+          seriesViewMetaData: seriesViewMetaData,
+          seriesDataValues: seriesDataValues,
         ),
       ],
     );
