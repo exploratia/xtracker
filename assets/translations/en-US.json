@@ -313,10 +313,17 @@
       }
     },
     "label": {
-      "dataBasis": "Data basis",
-      "lastXDays": "Last {} days"
+      "dataset": "Dataset",
+      "lastXDays": "Last {} days",
+      "total": "Total"
     },
-    "trend": {
+    "recordedDays": {
+      "title": "Recorded days",
+      "label": {
+        "ratio": "Ratio",
+        "recordedDaysInfo": "Number of days with recorded values. Multiple values on the same day are counted only once."
+      }
+    },  "trend": {
       "title": "Trend Analysis",
       "label": {
         "forecast": "Forecast",

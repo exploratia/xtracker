@@ -233,7 +233,7 @@ class TrendTable extends StatelessWidget {
       children: [
         Table(
           columnWidths: <int, TableColumnWidth>{
-            0: const IntrinsicColumnWidth(),
+            0: const FixedColumnWidth(120),
             1: const IntrinsicColumnWidth(),
           },
           border: TableBorder.symmetric(
@@ -256,7 +256,7 @@ class TrendTable extends StatelessWidget {
 
     List<TableRow> rows = TableUtils.buildKeyValueTableRows(
       context,
-      keyColumnTitle: LocaleKeys.seriesDataAnalytics_label_dataBasis.tr(),
+      keyColumnTitle: LocaleKeys.seriesDataAnalytics_label_dataset.tr(),
       valueColumnTitle: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         spacing: ThemeUtils.verticalSpacingSmall,

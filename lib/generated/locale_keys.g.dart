@@ -123,8 +123,12 @@ abstract class  LocaleKeys {
   static const seriesData_label_noDataBecauseOfFilter = 'seriesData.label.noDataBecauseOfFilter';
   static const seriesDataAnalytics_title = 'seriesDataAnalytics.title';
   static const seriesDataAnalytics_action_close_tooltip = 'seriesDataAnalytics.action.close.tooltip';
-  static const seriesDataAnalytics_label_dataBasis = 'seriesDataAnalytics.label.dataBasis';
+  static const seriesDataAnalytics_label_dataset = 'seriesDataAnalytics.label.dataset';
   static const seriesDataAnalytics_label_lastXDays = 'seriesDataAnalytics.label.lastXDays';
+  static const seriesDataAnalytics_label_total = 'seriesDataAnalytics.label.total';
+  static const seriesDataAnalytics_recordedDays_title = 'seriesDataAnalytics.recordedDays.title';
+  static const seriesDataAnalytics_recordedDays_label_ratio = 'seriesDataAnalytics.recordedDays.label.ratio';
+  static const seriesDataAnalytics_recordedDays_label_recordedDaysInfo = 'seriesDataAnalytics.recordedDays.label.recordedDaysInfo';
   static const seriesDataAnalytics_trend_title = 'seriesDataAnalytics.trend.title';
   static const seriesDataAnalytics_trend_label_forecast = 'seriesDataAnalytics.trend.label.forecast';
   static const seriesDataAnalytics_trend_label_failedToCalculateTrend = 'seriesDataAnalytics.trend.label.failedToCalculateTrend';

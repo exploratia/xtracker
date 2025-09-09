@@ -313,8 +313,16 @@
       }
     },
     "label": {
-      "dataBasis": "Datenbasis",
-      "lastXDays": "Letzte {} Tage"
+      "dataset": "Datenbasis",
+      "lastXDays": "Letzte {} Tage",
+      "total": "Gesamt"
+    },
+    "recordedDays": {
+      "title": "Aufgezeichnete Tage",
+      "label": {
+        "ratio": "Verhältnis",
+        "recordedDaysInfo": "Verhältnis aufgezeichnete Tage zu Datenbasis: zeigt an, an wie vielen Tagen (absolut und prozentual) Messwerte erfasst wurden. Mehrere Werte pro Tag zählen hier nicht mehrfach."
+      }
     },
     "trend": {
       "title": "Trend-Analyse",

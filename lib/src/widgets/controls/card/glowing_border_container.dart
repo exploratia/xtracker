@@ -30,10 +30,16 @@ class GlowingBorderContainer extends StatelessWidget {
     );
   }
 
-  static BoxDecoration createGlowingBoxDecoration(Color glowColor, Color backgroundColor, {double borderWidth = 2, double blurRadius = 10}) {
+  static BoxDecoration createGlowingBoxDecoration(
+    Color glowColor,
+    Color? backgroundColor, {
+    double borderRadius = 12,
+    double borderWidth = 2,
+    double blurRadius = 10,
+  }) {
     return BoxDecoration(
       color: backgroundColor, // Inner background color
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(borderRadius),
       border: Border.all(color: glowColor, width: borderWidth),
       boxShadow: [
         BoxShadow(

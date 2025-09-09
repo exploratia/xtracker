@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../../../../model/series/data/blood_pressure/blood_pressure_value.dart';
 import '../../../../../model/series/series_view_meta_data.dart';
+import '../../../../../util/theme_utils.dart';
+import '../series_data_analytics_days_recorded_view.dart';
 import 'trend/series_data_analytics_blood_pressure_trend_view.dart';
 
 class SeriesDataAnalyticsBloodPressureView extends StatelessWidget {
@@ -13,7 +15,12 @@ class SeriesDataAnalyticsBloodPressureView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      spacing: ThemeUtils.screenPadding,
       children: [
+        SeriesDataAnalyticsDaysRecordedView(
+          seriesViewMetaData: seriesViewMetaData,
+          seriesDataValues: seriesDataValues,
+        ),
         SeriesDataAnalyticsBloodPressureTrendView(
           seriesViewMetaData: seriesViewMetaData,
           seriesDataValues: seriesDataValues,
