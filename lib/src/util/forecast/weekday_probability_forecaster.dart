@@ -73,16 +73,16 @@ class WeekdayProbabilityForecaster {
       }
     }
 
-    final probs = List<double>.filled(8, 0.0);
-    probs[0] = -1;
+    final probabilities = List<double>.filled(8, 0.0);
+    probabilities[0] = -1;
     for (int wd = 1; wd <= 7; wd++) {
       // if there is no smoothing check division by 0!
       var divisor = (exposures[wd] + alpha + beta);
       if (divisor != 0) {
-        probs[wd] = (events[wd] + alpha) / divisor;
+        probabilities[wd] = (events[wd] + alpha) / divisor;
       }
     }
-    return probs;
+    return probabilities;
   }
 
   WeekdayPosteriors weekdayPosteriors() => WeekdayPosteriors(weekdayPosteriorsAsList());
