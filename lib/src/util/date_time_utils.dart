@@ -130,7 +130,7 @@ class DateTimeUtils {
   }
 
   static DateTime truncateToMidDay(DateTime date) {
-    return truncateToDay(DateTime.now()).add(const Duration(hours: 12));
+    return truncateToDay(date).add(const Duration(hours: 12));
   }
 
   static Color? backgroundColor(DateTime dateTime) {
