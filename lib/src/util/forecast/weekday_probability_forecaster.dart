@@ -76,7 +76,11 @@ class WeekdayProbabilityForecaster {
     final probs = List<double>.filled(8, 0.0);
     probs[0] = -1;
     for (int wd = 1; wd <= 7; wd++) {
-      probs[wd] = (events[wd] + alpha) / (exposures[wd] + alpha + beta);
+      // if there is no smoothing check division by 0!
+      var divisor = (exposures[wd] + alpha + beta);
+      if (divisor != 0) {
+        probs[wd] = (events[wd] + alpha) / divisor;
+      }
     }
     return probs;
   }
