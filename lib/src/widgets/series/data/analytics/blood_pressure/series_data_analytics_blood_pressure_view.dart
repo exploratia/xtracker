@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 
 import '../../../../../model/series/data/blood_pressure/blood_pressure_value.dart';
 import '../../../../../model/series/series_view_meta_data.dart';
-import 'trend/series_data_bloodpressure_trend_analytics_view.dart';
+import 'trend/series_data_analytics_blood_pressure_trend_view.dart';
 
-class SeriesDataBloodPressureAnalyticsView extends StatelessWidget {
-  const SeriesDataBloodPressureAnalyticsView({super.key, required this.seriesViewMetaData, required this.seriesDataValues});
+class SeriesDataAnalyticsBloodPressureView extends StatelessWidget {
+  const SeriesDataAnalyticsBloodPressureView({super.key, required this.seriesViewMetaData, required this.seriesDataValues});
 
   final SeriesViewMetaData seriesViewMetaData;
   final List<BloodPressureValue> seriesDataValues;
@@ -14,7 +14,7 @@ class SeriesDataBloodPressureAnalyticsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        SeriesDataBloodPressureTrendAnalyticsView(
+        SeriesDataAnalyticsBloodPressureTrendView(
           seriesViewMetaData: seriesViewMetaData,
           seriesDataValues: seriesDataValues,
         ),

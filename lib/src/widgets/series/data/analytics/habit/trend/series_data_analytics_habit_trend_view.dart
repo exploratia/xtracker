@@ -29,19 +29,19 @@ import '../../../../../controls/layout/h_centered_scroll_view.dart';
 import '../../../../../controls/layout/single_child_scroll_view_with_scrollbar.dart';
 import '../../../../../controls/text/overflow_text.dart';
 
-class SeriesDataHabitTrendAnalyticsView extends StatefulWidget {
+class SeriesDataAnalyticsHabitTrendView extends StatefulWidget {
   /// pixel and short day in headline width
   static const double _pixelWidth = 32;
   static const double _tendencyArrowWidth = 12;
   static const List<int> _dataBasisDays = [7, 30, 90, 365];
 
-  const SeriesDataHabitTrendAnalyticsView({super.key, required this.seriesViewMetaData, required this.seriesDataValues});
+  const SeriesDataAnalyticsHabitTrendView({super.key, required this.seriesViewMetaData, required this.seriesDataValues});
 
   final SeriesViewMetaData seriesViewMetaData;
   final List<HabitValue> seriesDataValues;
 
   @override
-  State<SeriesDataHabitTrendAnalyticsView> createState() => _SeriesDataHabitTrendAnalyticsViewState();
+  State<SeriesDataAnalyticsHabitTrendView> createState() => _SeriesDataAnalyticsHabitTrendViewState();
 
   static Future<List<_FitResultWrapper>> _calcTrends(List<HabitValue> seriesDataValues) async {
     Future<List<_FitResultWrapper>> exec(List<HabitValue> seriesDataValues) async {
@@ -63,13 +63,13 @@ class SeriesDataHabitTrendAnalyticsView extends StatefulWidget {
   }
 }
 
-class _SeriesDataHabitTrendAnalyticsViewState extends State<SeriesDataHabitTrendAnalyticsView> {
+class _SeriesDataAnalyticsHabitTrendViewState extends State<SeriesDataAnalyticsHabitTrendView> {
   late Future<List<_FitResultWrapper>> _calcTrendsFuture;
 
   @override
   void initState() {
     // if build is called multiple times because of state changes call future only once and store it.
-    _calcTrendsFuture = SeriesDataHabitTrendAnalyticsView._calcTrends(widget.seriesDataValues);
+    _calcTrendsFuture = SeriesDataAnalyticsHabitTrendView._calcTrends(widget.seriesDataValues);
     super.initState();
   }
 
@@ -89,7 +89,7 @@ class _SeriesDataHabitTrendAnalyticsViewState extends State<SeriesDataHabitTrend
 
           List<TableRow> rows = TrendTable.buildKeyValueTableRowsWithForecastHeader(
             forecastDays,
-            SeriesDataHabitTrendAnalyticsView._pixelWidth /* same as in trend_pixel_preview */,
+            SeriesDataAnalyticsHabitTrendView._pixelWidth /* same as in trend_pixel_preview */,
             context,
           );
 
@@ -113,7 +113,7 @@ class _SeriesDataHabitTrendAnalyticsViewState extends State<SeriesDataHabitTrend
                     children: [
                       // Tendency arrow
                       SizedBox(
-                        width: SeriesDataHabitTrendAnalyticsView._tendencyArrowWidth,
+                        width: SeriesDataAnalyticsHabitTrendView._tendencyArrowWidth,
                         child: Tooltip(
                           message: fitResult.getTendency().tooltip,
                           child: Text(fitResult.getTendency().arrow),
@@ -267,7 +267,7 @@ class TrendTable extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             spacing: ThemeUtils.horizontalSpacing,
             children: [
-              const SizedBox(width: SeriesDataHabitTrendAnalyticsView._tendencyArrowWidth),
+              const SizedBox(width: SeriesDataAnalyticsHabitTrendView._tendencyArrowWidth),
               Row(
                 spacing: ThemeUtils.horizontalSpacingSmall,
                 mainAxisSize: MainAxisSize.min,
@@ -347,7 +347,7 @@ class _TrendPixelPreview extends StatelessWidget {
               );
             }
             return SizedBox(
-              width: SeriesDataHabitTrendAnalyticsView._pixelWidth,
+              width: SeriesDataAnalyticsHabitTrendView._pixelWidth,
               height: Pixel.pixelHeight.toDouble(),
               child: pixel,
             );

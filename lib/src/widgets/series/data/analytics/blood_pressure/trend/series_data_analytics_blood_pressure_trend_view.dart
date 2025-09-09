@@ -19,9 +19,9 @@ import '../../../../../../util/pair.dart';
 import '../../../../../../util/table_utils.dart';
 import '../../../../../../util/theme_utils.dart';
 import '../../../../../controls/future/future_builder_with_progress_indicator.dart';
-import '../../habit/trend/series_data_habit_trend_analytics_view.dart';
+import '../../habit/trend/series_data_analytics_habit_trend_view.dart';
 
-class SeriesDataBloodPressureTrendAnalyticsView extends StatefulWidget {
+class SeriesDataAnalyticsBloodPressureTrendView extends StatefulWidget {
   /// pixel and short day in headline width
   static double get _bloodPressureRendererWidth {
     return 30 * MediaQueryUtils.textScaleFactor + 6;
@@ -30,13 +30,13 @@ class SeriesDataBloodPressureTrendAnalyticsView extends StatefulWidget {
   static const double _tendencyArrowWidth = 12;
   static const List<int> _dataBasisDays = [7, 30, 90, 365];
 
-  const SeriesDataBloodPressureTrendAnalyticsView({super.key, required this.seriesViewMetaData, required this.seriesDataValues});
+  const SeriesDataAnalyticsBloodPressureTrendView({super.key, required this.seriesViewMetaData, required this.seriesDataValues});
 
   final SeriesViewMetaData seriesViewMetaData;
   final List<BloodPressureValue> seriesDataValues;
 
   @override
-  State<SeriesDataBloodPressureTrendAnalyticsView> createState() => _SeriesDataBloodPressureTrendAnalyticsViewState();
+  State<SeriesDataAnalyticsBloodPressureTrendView> createState() => _SeriesDataAnalyticsBloodPressureTrendViewState();
 
   static Future<List<Pair<_FitResultWrapper, _FitResultWrapper>>> _calcTrends(List<BloodPressureValue> seriesDataValues) async {
     Future<List<Pair<_FitResultWrapper, _FitResultWrapper>>> exec(List<BloodPressureValue> seriesDataValues) async {
@@ -59,13 +59,13 @@ class SeriesDataBloodPressureTrendAnalyticsView extends StatefulWidget {
   }
 }
 
-class _SeriesDataBloodPressureTrendAnalyticsViewState extends State<SeriesDataBloodPressureTrendAnalyticsView> {
+class _SeriesDataAnalyticsBloodPressureTrendViewState extends State<SeriesDataAnalyticsBloodPressureTrendView> {
   late Future<List<Pair<_FitResultWrapper, _FitResultWrapper>>> _calcTrendsFuture;
 
   @override
   void initState() {
     // if build is called multiple times because of state changes call future only once and store it.
-    _calcTrendsFuture = SeriesDataBloodPressureTrendAnalyticsView._calcTrends(widget.seriesDataValues);
+    _calcTrendsFuture = SeriesDataAnalyticsBloodPressureTrendView._calcTrends(widget.seriesDataValues);
     super.initState();
   }
 
@@ -83,7 +83,7 @@ class _SeriesDataBloodPressureTrendAnalyticsViewState extends State<SeriesDataBl
 
             List<TableRow> rows = TrendTable.buildKeyValueTableRowsWithForecastHeader(
               forecastDays,
-              SeriesDataBloodPressureTrendAnalyticsView._bloodPressureRendererWidth,
+              SeriesDataAnalyticsBloodPressureTrendView._bloodPressureRendererWidth,
               context,
             );
 
@@ -110,10 +110,11 @@ class _SeriesDataBloodPressureTrendAnalyticsViewState extends State<SeriesDataBl
                       children: [
                         // Tendency arrow
                         SizedBox(
-                          width: SeriesDataBloodPressureTrendAnalyticsView._tendencyArrowWidth,
+                          width: SeriesDataAnalyticsBloodPressureTrendView._tendencyArrowWidth,
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisSize: MainAxisSize.min,
+                            spacing: ThemeUtils.verticalSpacingSmall,
                             children: [
                               Tooltip(
                                 message: fitResultHigh.getTendency().tooltip,
@@ -238,7 +239,7 @@ class _BloodPressureRenderer extends StatelessWidget {
     Widget result = _Value(high, low);
 
     result = Container(
-      width: SeriesDataBloodPressureTrendAnalyticsView._bloodPressureRendererWidth,
+      width: SeriesDataAnalyticsBloodPressureTrendView._bloodPressureRendererWidth,
       decoration: BoxDecoration(
         borderRadius: ThemeUtils.borderRadiusCircularSmall,
         gradient: ChartUtils.createTopToBottomGradient(
