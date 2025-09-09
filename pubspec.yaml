@@ -96,6 +96,7 @@ flutter:
     - assets/images/
     - assets/images/bmc/
     - assets/images/logos/
+    - assets/images/trend/
     - assets/translations/
     - assets/infos/
 

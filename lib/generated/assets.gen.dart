@@ -20,11 +20,8 @@ class $AssetsImagesGen {
   /// Directory path: assets/images/logos
   $AssetsImagesLogosGen get logos => const $AssetsImagesLogosGen();
 
-  /// File path: assets/images/trend_info.png
-  AssetGenImage get trendInfo => const AssetGenImage('assets/images/trend_info.png');
-
-  /// List of all assets
-  List<AssetGenImage> get values => [trendInfo];
+  /// Directory path: assets/images/trend
+  $AssetsImagesTrendGen get trend => const $AssetsImagesTrendGen();
 }
 
 class $AssetsInfosGen {
@@ -79,6 +76,19 @@ class $AssetsImagesLogosGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [appLogo, appLogoWhite, caLogo, exploratiaLogo, exploratiaLogoWide];
+}
+
+class $AssetsImagesTrendGen {
+  const $AssetsImagesTrendGen();
+
+  /// File path: assets/images/trend/blood_pressure_trend_info.png
+  AssetGenImage get bloodPressureTrendInfo => const AssetGenImage('assets/images/trend/blood_pressure_trend_info.png');
+
+  /// File path: assets/images/trend/habit_trend_info.png
+  AssetGenImage get habitTrendInfo => const AssetGenImage('assets/images/trend/habit_trend_info.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [bloodPressureTrendInfo, habitTrendInfo];
 }
 
 class Assets {

@@ -132,6 +132,7 @@ abstract class  LocaleKeys {
   static const seriesDataAnalytics_trend_tendency_none = 'seriesDataAnalytics.trend.tendency.none';
   static const seriesDataAnalytics_trend_tendency_up = 'seriesDataAnalytics.trend.tendency.up';
   static const seriesDataAnalytics_trend_tendency_down = 'seriesDataAnalytics.trend.tendency.down';
+  static const seriesDataAnalytics_bloodPressure_trend_label_trendInfo = 'seriesDataAnalytics.bloodPressure.trend.label.trendInfo';
   static const seriesDataAnalytics_habit_trend_label_trendInfo = 'seriesDataAnalytics.habit.trend.label.trendInfo';
   static const seriesDefRenderer_action_addValue_tooltip = 'seriesDefRenderer.action.addValue.tooltip';
   static const seriesDefRenderer_action_showSeriesValues_tooltip = 'seriesDefRenderer.action.showSeriesValues.tooltip';

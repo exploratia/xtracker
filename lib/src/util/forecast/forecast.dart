@@ -7,7 +7,7 @@ class Forecast {
     if (fitResult.solvable && days > 0) {
       var date = DateTimeUtils.truncateToDay(DateTime.now()); // today, but start with forecast tomorrow (each iteration increases the day)
       for (var i = 0; i < days; ++i) {
-        date = DateTimeUtils.dayAfter(date);
+        date = DateTimeUtils.truncateToMidDay(DateTimeUtils.dayAfter(date));
         double? yVal = fitResult.calc(date.millisecondsSinceEpoch.toDouble());
         res.add(DailyForecastValue(date, yVal));
       }
@@ -21,4 +21,9 @@ class DailyForecastValue {
   final double? value;
 
   DailyForecastValue(this.date, this.value);
+
+  @override
+  String toString() {
+    return 'DailyForecastValue{date: $date, value: $value}';
+  }
 }

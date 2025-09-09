@@ -328,14 +328,21 @@
         "up": "Trend steigend",
         "down": "Trend fallend"
       }
-    },"habit": {
+    },
+    "bloodPressure": {
+      "trend": {
+        "label": {
+          "trendInfo": "Für systolische (△) und diastolische (▽) Werte wird je eine lineare Trendfunktion berechnet, um künftige Werte vorherzusagen.\n\nÜber die Betrachtung verschiedener Zeiträume (letzte x Tage) lassen sich kurz- und langfristige Entwicklungen erkennen."
+        }
+      }
+    },
+    "habit": {
       "trend": {
         "label": {
           "trendInfo": "Aus den Werten der Messreihe wird eine lineare Trendfunktion berechnet, um künftige Werte vorherzusagen.\n\nDiese Prognosen werden mit der Wahrscheinlichkeit für den jeweiligen Wochentag kombiniert.\n(Wenn die Messreihe keine Lücken hat, liegt die Wahrscheinlichkeit für jeden Tag bei 100%.)"
         }
       }
     }
-
   },
   "seriesDefRenderer": {
     "action": {

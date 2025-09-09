@@ -32,6 +32,11 @@ class BloodPressureValue extends SeriesDataValue {
         if (medication) 'medication': medication, // only save if true
       };
 
+  @override
+  String toString() {
+    return 'BloodPressureValue{high: $high, low: $low, medication: $medication}';
+  }
+
   static Color bestPossibleValueColor = const Color.fromRGBO(0, 160, 0, 1);
 
   static Color colorHigh(int value) {

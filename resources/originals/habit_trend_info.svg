@@ -8,12 +8,13 @@
    version="1.1"
    id="svg1"
    inkscape:version="1.4 (86a8ad7, 2024-10-11)"
-   sodipodi:docname="blood_pressure_trend_info.svg"
-   inkscape:export-filename="..\..\assets\images\trend\blood_pressure_trend_info.png"
+   sodipodi:docname="habit_trend_info.svg"
+   inkscape:export-filename="..\..\assets\images\trend\habit_trend_info.png"
    inkscape:export-xdpi="96"
    inkscape:export-ydpi="96"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <sodipodi:namedview
@@ -52,7 +53,64 @@
        visible="true" />
   </sodipodi:namedview>
   <defs
-     id="defs1" />
+     id="defs1">
+    <pattern
+       inkscape:collect="always"
+       xlink:href="#Strips1_2"
+       preserveAspectRatio="xMidYMid"
+       id="pattern7"
+       patternTransform="matrix(1.0341776,-1.7912482,1.3994328,0.80796291,-1.666666,-62.173913)"
+       x="0"
+       y="0" />
+    <pattern
+       inkscape:collect="always"
+       patternUnits="userSpaceOnUse"
+       width="3"
+       height="1"
+       patternTransform="translate(0,0) scale(2,2)"
+       preserveAspectRatio="xMidYMid"
+       id="Strips1_2"
+       style="fill:#911d31"
+       inkscape:stockid="Stripes 03 (1:2)"
+       inkscape:isstock="true"
+       inkscape:label="Streifen 03 (1:2)">
+      <rect
+         style="stroke:none"
+         x="0"
+         y="-0.5"
+         width="1"
+         height="2"
+         id="rect146" />
+    </pattern>
+    <pattern
+       inkscape:collect="always"
+       xlink:href="#Strips1_2-5"
+       preserveAspectRatio="xMidYMid"
+       id="pattern7-4"
+       patternTransform="matrix(1.0341776,-1.7912482,1.3994328,0.80796291,118.33333,-62.173913)"
+       x="0"
+       y="0" />
+    <pattern
+       inkscape:collect="always"
+       patternUnits="userSpaceOnUse"
+       width="3"
+       height="1"
+       patternTransform="translate(0,0) scale(2,2)"
+       preserveAspectRatio="xMidYMid"
+       id="Strips1_2-5"
+       style="fill:#911d31"
+       inkscape:stockid="Stripes 03 (1:2)"
+       inkscape:isstock="true"
+       inkscape:label="Streifen 03 (1:2)">
+      <rect
+         style="stroke:none"
+         x="0"
+         y="-0.5"
+         width="1"
+         height="2"
+         id="rect146-5" />
+    </pattern>
+  </defs>
   <g
      inkscape:label="Ebene 1"
      inkscape:groupmode="layer"
@@ -69,6 +127,20 @@
        style="fill:none;stroke:#911c30;stroke-width:3;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        d="M 125,0 V 130"
        id="path2" />
+    <rect
+       style="fill:url(#pattern7);fill-opacity:1;stroke:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="rect2"
+       width="20"
+       height="130"
+       x="35"
+       y="0" />
+    <rect
+       style="fill:url(#pattern7-4);fill-opacity:1;stroke:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;paint-order:stroke fill markers"
+       id="rect2-7"
+       width="20"
+       height="130"
+       x="155"
+       y="0" />
     <g
        id="g7"
        transform="translate(0,-35)">
@@ -119,21 +191,8 @@
          id="path7-2-7-7" />
     </g>
     <g
-       id="g7-8-9-8"
-       transform="translate(158.1007,-81.63918)"
-       style="stroke:#911c30;stroke-opacity:1">
-      <path
-         style="fill:none;stroke:#911c30;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-         d="M 5,135 20,120"
-         id="path7-5-2-8" />
-      <path
-         style="fill:none;stroke:#911c30;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
-         d="M 20,135 5,120"
-         id="path7-2-7-7-24" />
-    </g>
-    <g
        id="g7-8-9-3"
-       transform="translate(186.20139,-93.27836)"
+       transform="translate(181.5,-90.653285)"
        style="stroke:#911c30;stroke-opacity:1">
       <path
          style="fill:none;stroke:#911c30;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"

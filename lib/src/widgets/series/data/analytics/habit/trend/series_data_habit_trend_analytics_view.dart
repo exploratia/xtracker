@@ -75,6 +75,98 @@ class _SeriesDataHabitTrendAnalyticsViewState extends State<SeriesDataHabitTrend
 
   @override
   Widget build(BuildContext context) {
+    return TrendViewSettingsCard(trendInfoDialogContent: const _TrendInfoDialogContent(), children: [
+      FutureBuilderWithProgressIndicator(
+        future: _calcTrendsFuture,
+        errorBuilder: (error) => LocaleKeys.seriesDataAnalytics_trend_label_failedToCalculateTrend.tr(),
+        widgetBuilder: (fitResultWrappers, BuildContext context) {
+          // determine all time max value (for correct max pixel color)
+          var dayItems = DayItem.buildDayItems(widget.seriesDataValues, (day) => DayItem(day));
+          int maxItemsOnSingleDay = dayItems.fold(0, (previousValue, element) => math.max(previousValue, element.dateTimeItems.length));
+
+          var mediaQueryUtils = MediaQueryUtils.of(context);
+          int forecastDays = mediaQueryUtils.isTablet || mediaQueryUtils.isLandscape ? 14 : 7;
+
+          List<TableRow> rows = TrendTable.buildKeyValueTableRowsWithForecastHeader(
+            forecastDays,
+            SeriesDataHabitTrendAnalyticsView._pixelWidth /* same as in trend_pixel_preview */,
+            context,
+          );
+
+          for (var fitResultWrapper in fitResultWrappers) {
+            var fitResult = fitResultWrapper.fitResult;
+
+            var keyWidget = Text(
+              LocaleKeys.seriesDataAnalytics_label_lastXDays.tr(args: [fitResultWrapper.dataBasisInDays.toString()]),
+              softWrap: false,
+            );
+
+            Widget valueWidget;
+            if (fitResult.solvable) {
+              valueWidget = Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    spacing: ThemeUtils.horizontalSpacing,
+                    children: [
+                      // Tendency arrow
+                      SizedBox(
+                        width: SeriesDataHabitTrendAnalyticsView._tendencyArrowWidth,
+                        child: Tooltip(
+                          message: fitResult.getTendency().tooltip,
+                          child: Text(fitResult.getTendency().arrow),
+                        ),
+                      ),
+                      // PixelPreview
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: ThemeUtils.verticalSpacingSmall),
+                        child: _TrendPixelPreview(
+                          seriesViewMetaData: widget.seriesViewMetaData,
+                          weekdayPosteriors: fitResultWrapper.weekdayPosteriors,
+                          allTimeMaxValue: maxItemsOnSingleDay,
+                          forecastDays: forecastDays,
+                          fitResultWrapper: fitResultWrapper,
+                        ),
+                      ),
+                    ],
+                  ),
+                  // Text(fitResult.formula()),
+                ],
+              );
+            } else {
+              valueWidget = Padding(
+                padding: const EdgeInsets.symmetric(vertical: ThemeUtils.verticalSpacingSmall),
+                child: Text(LocaleKeys.seriesDataAnalytics_trend_label_trendCalculationNotPossible.tr()),
+              );
+            }
+
+            rows.add(TableUtils.tableRow([
+              keyWidget,
+              valueWidget,
+            ]));
+          }
+
+          return TrendTable(rows: rows);
+        },
+      ),
+    ]);
+  }
+}
+
+class TrendViewSettingsCard extends StatelessWidget {
+  const TrendViewSettingsCard({
+    super.key,
+    required this.trendInfoDialogContent,
+    required this.children,
+  });
+
+  final Widget trendInfoDialogContent;
+  final List<Widget> children;
+
+  @override
+  Widget build(BuildContext context) {
     return SettingsCard(
       title: Row(
         spacing: ThemeUtils.horizontalSpacing,
@@ -92,18 +184,7 @@ class _SeriesDataHabitTrendAnalyticsViewState extends State<SeriesDataHabitTrend
             onPressed: () => Dialogs.simpleOkDialog(
               SingleChildScrollViewWithScrollbar(
                 useHorizontalScreenPaddingForScrollbar: true,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  spacing: ThemeUtils.verticalSpacingLarge,
-                  children: [
-                    Text(LocaleKeys.seriesDataAnalytics_habit_trend_label_trendInfo.tr()),
-                    Image(
-                      image: Assets.images.trendInfo.provider(),
-                      height: 130,
-                      width: 250,
-                    ),
-                  ],
-                ),
+                child: trendInfoDialogContent,
               ),
               context,
               title: LocaleKeys.seriesDataAnalytics_trend_title.tr(),
@@ -112,82 +193,60 @@ class _SeriesDataHabitTrendAnalyticsViewState extends State<SeriesDataHabitTrend
           ),
         ],
       ),
+      children: children,
+    );
+  }
+}
+
+class _TrendInfoDialogContent extends StatelessWidget {
+  const _TrendInfoDialogContent();
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      spacing: ThemeUtils.verticalSpacingLarge,
       children: [
-        FutureBuilderWithProgressIndicator(
-          future: _calcTrendsFuture,
-          errorBuilder: (error) => LocaleKeys.seriesDataAnalytics_trend_label_failedToCalculateTrend.tr(),
-          widgetBuilder: (fitResultWrappers, BuildContext context) {
-            // determine all time max value (for correct max pixel color)
-            var dayItems = DayItem.buildDayItems(widget.seriesDataValues, (day) => DayItem(day));
-            int maxItemsOnSingleDay = dayItems.fold(0, (previousValue, element) => math.max(previousValue, element.dateTimeItems.length));
+        Text(LocaleKeys.seriesDataAnalytics_habit_trend_label_trendInfo.tr()),
+        Image(
+          image: Assets.images.trend.habitTrendInfo.provider(),
+          height: 130,
+          width: 250,
+        ),
+      ],
+    );
+  }
+}
 
-            int forecastDays = MediaQueryUtils.of(context).isTablet ? 14 : 7;
+class TrendTable extends StatelessWidget {
+  const TrendTable({
+    super.key,
+    required this.rows,
+  });
 
-            List<TableRow> rows = _buildKeyValueTableRowsWithForecastHeader(forecastDays, context);
+  final List<TableRow> rows;
 
-            for (var fitResultWrapper in fitResultWrappers) {
-              var fitResult = fitResultWrapper.fitResult;
-
-              var keyWidget = Text(
-                LocaleKeys.seriesDataAnalytics_label_lastXDays.tr(args: [fitResultWrapper.dataBasisInDays.toString()]),
-                softWrap: false,
-              );
-
-              Widget valueWidget;
-              if (fitResult.solvable) {
-                valueWidget = Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      spacing: ThemeUtils.horizontalSpacing,
-                      children: [
-                        // Tendency arrow
-                        SizedBox(
-                          width: SeriesDataHabitTrendAnalyticsView._tendencyArrowWidth,
-                          child: Tooltip(
-                            message: fitResult.getTendency().tooltip,
-                            child: Text(fitResult.getTendency().arrow),
-                          ),
-                        ),
-                        // PixelPreview
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: ThemeUtils.verticalSpacingSmall),
-                          child: _TrendPixelPreview(
-                            seriesViewMetaData: widget.seriesViewMetaData,
-                            weekdayPosteriors: fitResultWrapper.weekdayPosteriors,
-                            allTimeMaxValue: maxItemsOnSingleDay,
-                            forecastDays: forecastDays,
-                            fitResultWrapper: fitResultWrapper,
-                          ),
-                        ),
-                      ],
-                    ),
-                    // Text(fitResult.formula()),
-                  ],
-                );
-              } else {
-                valueWidget = Padding(
-                  padding: const EdgeInsets.symmetric(vertical: ThemeUtils.verticalSpacingSmall),
-                  child: Text(LocaleKeys.seriesDataAnalytics_trend_label_trendCalculationNotPossible.tr()),
-                );
-              }
-
-              rows.add(TableUtils.tableRow([
-                keyWidget,
-                valueWidget,
-              ]));
-            }
-
-            return _TrendTable(rows: rows);
+  @override
+  Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
+    return HCenteredScrollView(
+      children: [
+        Table(
+          columnWidths: <int, TableColumnWidth>{
+            0: const IntrinsicColumnWidth(),
+            1: const IntrinsicColumnWidth(),
           },
+          border: TableBorder.symmetric(
+            inside: BorderSide(width: 1, color: themeData.canvasColor),
+          ),
+          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+          children: rows,
         ),
       ],
     );
   }
 
-  List<TableRow> _buildKeyValueTableRowsWithForecastHeader(int forecastDays, BuildContext context) {
+  static List<TableRow> buildKeyValueTableRowsWithForecastHeader(int forecastDays, double dayColumnWidth, BuildContext context) {
     // build next forecast days shortDay names list
     final today = DateTimeUtils.truncateToMidDay(DateTime.now());
     var dayNames = List<String>.generate(forecastDays, (i) {
@@ -215,7 +274,7 @@ class _SeriesDataHabitTrendAnalyticsViewState extends State<SeriesDataHabitTrend
                 children: [
                   ...dayNames.map(
                     (e) => SizedBox(
-                      width: SeriesDataHabitTrendAnalyticsView._pixelWidth /* same as in trend_pixel_preview */,
+                      width: dayColumnWidth,
                       child: Center(child: Text(e)),
                     ),
                   ),
@@ -227,34 +286,6 @@ class _SeriesDataHabitTrendAnalyticsViewState extends State<SeriesDataHabitTrend
       ),
     );
     return rows;
-  }
-}
-
-class _TrendTable extends StatelessWidget {
-  const _TrendTable({
-    required this.rows,
-  });
-
-  final List<TableRow> rows;
-
-  @override
-  Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
-    return HCenteredScrollView(
-      children: [
-        Table(
-          columnWidths: <int, TableColumnWidth>{
-            0: const IntrinsicColumnWidth(),
-            1: const IntrinsicColumnWidth(),
-          },
-          border: TableBorder.symmetric(
-            inside: BorderSide(width: 1, color: themeData.canvasColor),
-          ),
-          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-          children: rows,
-        ),
-      ],
-    );
   }
 }
 
