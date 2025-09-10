@@ -377,10 +377,10 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(child: view),
-          Container(
+          SizedBox(
             height: kBottomNavigationBarHeight,
-            color: themeData.cardTheme.color,
             child: Material(
+              color: themeData.cardTheme.color,
               child: HCenteredScrollView(
                 // mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: bottomBarActions,
