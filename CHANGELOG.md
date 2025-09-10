@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.0] - 2025-09-10
+
+### Features
+
+- implement recorded days analysis for series
+- implement trend analysis for blood pressure series
+- implement trend analysis for habit series
+
+### Fixes
+
+- correct date filter end calculation
+- correct series title height calculation
+
 ## [1.1.1] - 2025-09-04
 
 ### Features
