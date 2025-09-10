@@ -33,7 +33,11 @@ class FittingPowerLaw extends Fitting {
     double? a;
     double? b;
     if (n > 0) {
-      b = (n * sumLnxLny - sumLnx * sumLny) / (n * sumLnx2 - sumLnx * sumLnx);
+      var divisor = (n * sumLnx2 - sumLnx * sumLnx);
+      if (divisor == 0) {
+        return FitResultPowerLaw(null, null, null);
+      }
+      b = (n * sumLnxLny - sumLnx * sumLny) / divisor;
       a = (sumLny - b * sumLnx) / (n);
       a = math.exp(a);
     }

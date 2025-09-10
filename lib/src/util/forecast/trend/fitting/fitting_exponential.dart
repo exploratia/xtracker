@@ -32,8 +32,12 @@ class FittingExponential extends Fitting {
     double? a;
     double? b;
     if (n > 0) {
-      a = (sumLny * sumX2 - sumX * sumXLny) / (n * sumX2 - sumX * sumX);
-      b = (n * sumXLny - sumX * sumLny) / (n * sumX2 - sumX * sumX);
+      var divisor = (n * sumX2 - sumX * sumX);
+      if (divisor == 0) {
+        return FitResultExponential(null, null, null);
+      }
+      a = (sumLny * sumX2 - sumX * sumXLny) / divisor;
+      b = (n * sumXLny - sumX * sumLny) / divisor;
       a = math.exp(a);
     }
 

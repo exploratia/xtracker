@@ -32,7 +32,11 @@ class FittingLog extends Fitting {
     double? a;
     double? b;
     if (n > 0) {
-      b = (n * sumYLnx - sumY * sumLnx) / (n * sumLnx2 - sumLnx * sumLnx);
+      var divisor = (n * sumLnx2 - sumLnx * sumLnx);
+      if (divisor == 0) {
+        return FitResultLog(null, null, null);
+      }
+      b = (n * sumYLnx - sumY * sumLnx) / divisor;
       a = (sumY - b * sumLnx) / n;
     }
 

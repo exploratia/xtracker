@@ -29,7 +29,11 @@ class FittingLinear extends Fitting {
     double? m;
     double? b;
     if (n > 0) {
-      m = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+      var divisor = (n * sumX2 - sumX * sumX);
+      if (divisor == 0) {
+        return FitResultLinear(null, null, null);
+      }
+      m = (n * sumXY - sumX * sumY) / divisor;
       b = (sumY - m * sumX) / n;
     }
 

@@ -4,7 +4,7 @@ import 'package:xtracker/src/util/forecast/trend/result/fit_result_linear.dart';
 import 'package:xtracker/src/util/forecast/trend/trend_tendency.dart';
 
 void main() {
-  group('Fitting Linear', () {
+  group('Fit result linear', () {
     test('test linear fit no gradient', () {
       FitResult fitResult;
 
