@@ -8,7 +8,8 @@ import 'view_type.dart';
 enum SeriesType {
   bloodPressure('bloodPressure', 'monitor_heart_outlined', Colors.red, [ViewType.dots, ViewType.lineChart, ViewType.table]),
   dailyCheck("dailyCheck", 'check_box_outlined', Colors.blue, [ViewType.barChart, ViewType.table, ViewType.dots]),
-  habit("habit", 'repeat_outlined', Color.fromRGBO(13, 133, 0, 1), [ViewType.barChart, ViewType.table, ViewType.pixels]);
+  habit("habit", 'repeat_outlined', Color.fromRGBO(255, 154, 0, 1.0), [ViewType.barChart, ViewType.table, ViewType.pixels]),
+  dailyLife("dailyLife", 'account_circle_outlined', Color.fromRGBO(0, 255, 50, 1.0), [ViewType.pixels]);
   // monthly("monthly", 'calendar_month_outlined', Colors.deepPurple, [ViewType.table, ViewType.lineChart]),
   // free("free", 'calendar_today_outlined', Colors.green, [ViewType.lineChart, ViewType.table]);
   // TODO TimeTracker

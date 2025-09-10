@@ -86,6 +86,7 @@ class IconMap {
     map["monitor_weight_outlined"] = Icons.monitor_weight_outlined;
     map["power_input_outlined"] = Icons.power_input_outlined;
     map["solar_power_outlined"] = Icons.solar_power_outlined;
+    map["electric_bolt_outlined"] = Icons.electric_bolt_outlined;
     // calendar
     map["calendar_month_outlined"] = Icons.calendar_month_outlined;
     map["calendar_today_outlined"] = Icons.calendar_today_outlined;
@@ -94,6 +95,7 @@ class IconMap {
     map["directions_car_outlined"] = Icons.directions_car_outlined;
     map["directions_bike_outlined"] = Icons.directions_bike_outlined;
     map["directions_run_outlined"] = Icons.directions_run_outlined;
+    map["directions_walk_outlined"] = Icons.directions_walk_outlined;
     map["fitness_center_outlined"] = Icons.fitness_center_outlined;
     // human
     map["female_outlined"] = Icons.female_outlined;
@@ -103,12 +105,15 @@ class IconMap {
     map["sentiment_satisfied_outlined"] = Icons.sentiment_satisfied_outlined;
     map["thumb_down_outlined"] = Icons.thumb_down_outlined;
     map["thumb_up_outlined"] = Icons.thumb_up_outlined;
+    map["account_circle_outlined"] = Icons.account_circle_outlined;
+    map["contacts_outlined"] = Icons.contacts_outlined;
     // nature
     map["landscape_outlined"] = Icons.landscape_outlined;
     map["forest_outlined"] = Icons.forest_outlined;
     map["wb_sunny_outlined"] = Icons.wb_sunny_outlined;
     map["bedtime_outlined"] = Icons.bedtime_outlined;
     map["cloud_outlined"] = Icons.cloud_outlined;
+    map["eco_outlined"] = Icons.eco_outlined;
     // symbol
     map["bed_outlined"] = Icons.bed_outlined;
     map["book_outlined"] = Icons.book_outlined;
@@ -123,13 +128,19 @@ class IconMap {
     map["local_gas_station_outlined"] = Icons.local_gas_station_outlined;
     map["local_grocery_store_outlined"] = Icons.local_grocery_store_outlined;
     map["local_restaurant_outlined"] = Icons.local_restaurant_outlined;
+    map["fastfood_outlined"] = Icons.fastfood_outlined;
     map["music_note_outlined"] = Icons.music_note_outlined;
+    map["edit_outlined"] = Icons.edit_outlined;
+    map["bed_outlined"] = Icons.bed_outlined;
     map["pets_outlined"] = Icons.pets_outlined;
+    map["flag_outlined"] = Icons.flag_outlined;
     map["savings_outlined"] = Icons.savings_outlined;
     map["repeat_outlined"] = Icons.repeat_outlined;
 
     map["check_box_outlined"] = Icons.check_box_outlined;
     map["check_circle_outline"] = Icons.check_circle_outline;
+    map["done_outlined"] = Icons.done_outlined;
+    map["done_outline_outlined"] = Icons.done_outline_outlined;
     map["adjust_outlined"] = Icons.adjust_outlined;
     map["chat_outlined"] = Icons.chat_outlined;
     map["access_time_outlined"] = Icons.access_time_outlined;
@@ -137,8 +148,8 @@ class IconMap {
     map["star_border_outlined"] = Icons.star_border_outlined;
     map["visibility_outlined"] = Icons.visibility_outlined;
     map["warning_amber_outlined"] = Icons.warning_amber_outlined;
-    map["favorite_outlined"] = Icons.favorite_outlined;
-    map["help_outlined"] = Icons.help_outlined;
+    map["favorite_outline"] = Icons.favorite_outline;
+    map["help_outline"] = Icons.help_outline;
     map["hexagon_outlined"] = Icons.hexagon_outlined;
 
     return map;
