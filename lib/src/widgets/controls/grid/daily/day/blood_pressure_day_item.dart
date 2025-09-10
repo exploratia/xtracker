@@ -4,12 +4,12 @@ import 'package:flutter/cupertino.dart';
 
 import '../../../../../model/series/data/blood_pressure/blood_pressure_value.dart';
 import '../../../../../model/series/series_def.dart';
-import '../../../../../util/date_time_utils.dart';
+import '../../../../../util/day_item/day_item.dart';
 import '../../../../series/data/view/blood_pressure/table/blood_pressure_value_renderer.dart';
 import '../dot.dart';
-import './day_item.dart';
+import 'grid_day_item.dart';
 
-class BloodPressureDayItem extends DayItem<BloodPressureValue> {
+class BloodPressureDayItem extends GridDayItem<BloodPressureValue> {
   int high = -1000;
   int low = 1000;
   bool medication = false;
@@ -35,8 +35,8 @@ class BloodPressureDayItem extends DayItem<BloodPressureValue> {
       dotColor2: BloodPressureValue.colorLow(low),
       dotText: medication ? '+' : null,
       showCount: _showCount,
-      isStartMarker: monthly ? false : dateTimeDayStart.day == 1,
-      seriesValues: seriesValues,
+      isStartMarker: monthly ? false : dayDate.day == 1,
+      seriesValues: dateTimeItems,
       tooltipValueBuilder: (dataValue) =>
           SizedBox(width: 100, child: BloodPressureValueRenderer(bloodPressureValue: dataValue as BloodPressureValue, seriesDef: seriesDef)),
     );
@@ -44,35 +44,21 @@ class BloodPressureDayItem extends DayItem<BloodPressureValue> {
 
   @override
   String toString() {
-    return 'BloodPressureDayItem{date: $dateTimeDayStart, high: $high, low: $low, medication: $medication, count: $count}';
+    return 'BloodPressureDayItem{date: $dayDate, high: $high, low: $low, medication: $medication, count: $count}';
   }
 
   static List<BloodPressureDayItem> buildDayItems(List<BloodPressureValue> seriesData, SeriesDef seriesDef) {
-    List<BloodPressureDayItem> list = [];
+    List<BloodPressureDayItem> list = DayItem.buildDayItems(
+      seriesData,
+      (DateTime dayDate) => BloodPressureDayItem(dayDate, seriesDef),
+      reversed: true /*reversed - we want to see newest date first*/,
+    );
 
-    BloodPressureDayItem? actItem;
-    DateTime? actDay;
-
-    BloodPressureDayItem createDayItem(DateTime dateTimeDayStart) {
-      BloodPressureDayItem dayItem = BloodPressureDayItem(dateTimeDayStart, seriesDef);
-      list.add(dayItem);
-      return dayItem;
-    }
-
-    for (var item in seriesData.reversed) {
-      DateTime dateDay = DateTimeUtils.truncateToDay(item.dateTime);
-      actDay ??= dateDay;
-
-      actItem ??= createDayItem(dateDay);
-
-      // not matching date - create (empty)
-      while (actDay!.isAfter(dateDay)) {
-        actDay = DateTimeUtils.dayBefore(actDay);
-        actItem = createDayItem(actDay);
+    // Update day values
+    for (var dayItem in list) {
+      for (var bloodPressureValue in dayItem.dateTimeItems) {
+        dayItem.updateHighLow(bloodPressureValue.high, bloodPressureValue.low, bloodPressureValue.medication);
       }
-
-      actItem!.addValue(item);
-      actItem.updateHighLow(item.high, item.low, item.medication);
     }
 
     return list;

@@ -63,7 +63,8 @@ class SeriesProvider with ChangeNotifier {
   }
 
   SeriesDef? getSeries(String seriesUuid) {
-    return series.firstWhere((s) => s.uuid == seriesUuid);
+    if (_series.isEmpty) return null;
+    return _series.firstWhere((s) => s.uuid == seriesUuid);
   }
 
   Future<void> save(SeriesDef seriesDef) async {

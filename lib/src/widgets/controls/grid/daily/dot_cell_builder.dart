@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../two_dimensional_scrollable_table.dart';
-import 'day/day_item.dart';
+import 'day/grid_day_item.dart';
 import 'dot.dart';
 import 'row/row_item.dart';
 
-class DotCellBuilder<T extends DayItem> {
+class DotCellBuilder<T extends GridDayItem> {
   final List<RowItem<T>> data;
   final Dot Function(T dayItem) gridCellChildBuilder;
   final bool monthly;

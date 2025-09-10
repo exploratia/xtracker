@@ -40,24 +40,30 @@ class ChartUtils {
   }
 
   static LinearGradient? createTopToBottomGradient(List<Color>? gradientColors, {List<double>? stops}) {
-    if (gradientColors == null) return null;
-    return LinearGradient(
-      colors: gradientColors,
-      // stops:  [0.0, 1.0], // ohne angabe dyn. verteilt
-      stops: (stops == null || stops.length != gradientColors.length) ? null : stops,
-      begin: Alignment.topCenter,
-      end: Alignment.bottomCenter,
-    );
+    return createGradient(gradientColors, stops: stops, begin: Alignment.topCenter, end: Alignment.bottomCenter);
   }
 
   static LinearGradient? createBottomToTopGradient(List<Color>? gradientColors, {List<double>? stops}) {
+    return createGradient(gradientColors, stops: stops, begin: Alignment.bottomCenter, end: Alignment.topCenter);
+  }
+
+  static LinearGradient? createLeftToRightGradient(List<Color>? gradientColors, {List<double>? stops}) {
+    return createGradient(gradientColors, stops: stops, begin: Alignment.centerLeft, end: Alignment.centerRight);
+  }
+
+  static LinearGradient? createGradient(
+    List<Color>? gradientColors, {
+    List<double>? stops,
+    required Alignment begin,
+    required Alignment end,
+  }) {
     if (gradientColors == null) return null;
     return LinearGradient(
       colors: gradientColors,
       // stops:  [0.0, 1.0], // ohne angabe dyn. verteilt
       stops: (stops == null || stops.length != gradientColors.length) ? null : stops,
-      begin: Alignment.bottomCenter,
-      end: Alignment.topCenter,
+      begin: begin,
+      end: end,
     );
   }
 

@@ -44,6 +44,11 @@ class DateTimeUtils {
     return DateFormat.yMd().format(dateTime);
   }
 
+  /// format date yMEd
+  static String formateDateWithDay(DateTime dateTime) {
+    return DateFormat.yMEd().format(dateTime);
+  }
+
   /// yyyy-MM-dd
   static String formateYYYMMDD(DateTime dateTime) {
     return DateFormat('yyyy-MM-dd').format(dateTime);
@@ -55,6 +60,11 @@ class DateTimeUtils {
 
   static String formateMonthYear(DateTime dateTime) {
     return DateFormat.yMMM().format(dateTime);
+  }
+
+  /// E - e.g. Mon
+  static String formateShortDay(DateTime dateTime) {
+    return DateFormat.E().format(dateTime);
   }
 
   static String formateTime(DateTime dateTime) {
@@ -111,8 +121,16 @@ class DateTimeUtils {
     return truncateToDay(date.subtract(Duration(hours: date.hour + 12)));
   }
 
+  static DateTime dayAfter(DateTime date) {
+    return DateTimeUtils.truncateToDay(DateTimeUtils.truncateToDay(date).add(const Duration(hours: 36)));
+  }
+
   static DateTime truncateToDay(DateTime date) {
     return DateTime(date.year, date.month, date.day);
+  }
+
+  static DateTime truncateToMidDay(DateTime date) {
+    return truncateToDay(date).add(const Duration(hours: 12));
   }
 
   static Color? backgroundColor(DateTime dateTime) {

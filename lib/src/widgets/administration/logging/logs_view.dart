@@ -41,11 +41,8 @@ class _LogsViewState extends State<LogsView> {
             children: [
               FutureBuilderWithProgressIndicator(
                 future: DailyFiles.listLogFileNames(),
-                errorBuilder: (error) => 'Failed to load logs!',
+                errorBuilder: (error) => 'No log files found!',
                 widgetBuilder: (logFiles, _) {
-                  if (logFiles == null) {
-                    return const Center(child: Text('No log files found!'));
-                  }
                   return Center(
                     child: Wrap(
                       spacing: ThemeUtils.horizontalSpacing,

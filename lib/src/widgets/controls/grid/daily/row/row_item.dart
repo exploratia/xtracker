@@ -1,9 +1,9 @@
 import '../../../../../util/date_time_utils.dart';
-import '../day/day_item.dart';
+import '../day/grid_day_item.dart';
 import 'month_row_item.dart';
 import 'week_row_item.dart';
 
-abstract class RowItem<T extends DayItem> {
+abstract class RowItem<T extends GridDayItem> {
   final DateTime dateTime;
   String? displayDate;
   late final List<T?> dayItems;
@@ -18,7 +18,7 @@ abstract class RowItem<T extends DayItem> {
     return dayItems[index];
   }
 
-  static List<RowItem<T>> buildMonthRowItems<T extends DayItem>(List<T> dayItemsDescending) {
+  static List<RowItem<T>> buildMonthRowItems<T extends GridDayItem>(List<T> dayItemsDescending) {
     List<RowItem<T>> list = [];
 
     RowItem<T>? actRowItem;
@@ -35,7 +35,7 @@ abstract class RowItem<T extends DayItem> {
     }
 
     for (var dayItem in dayItemsDescending) {
-      var firstOfMonth = DateTimeUtils.firstDayOfMonth(dayItem.dateTimeDayStart);
+      var firstOfMonth = DateTimeUtils.firstDayOfMonth(dayItem.dayDate);
       actFirstOfMonth ??= firstOfMonth;
 
       // no act row yet - create the first row
@@ -48,7 +48,7 @@ abstract class RowItem<T extends DayItem> {
       }
 
       // set dayItem at day position in dayItems
-      actRowItem!.dayItems[dayItem.dateTimeDayStart.day - 1] = dayItem;
+      actRowItem!.dayItems[dayItem.dayDate.day - 1] = dayItem;
     }
 
     checkAtLeastOneDisplayDate(list);
@@ -56,7 +56,7 @@ abstract class RowItem<T extends DayItem> {
     return list;
   }
 
-  static List<RowItem<T>> buildWeekRowItems<T extends DayItem>(List<T> dayItemsDescending) {
+  static List<RowItem<T>> buildWeekRowItems<T extends GridDayItem>(List<T> dayItemsDescending) {
     List<RowItem<T>> list = [];
 
     RowItem<T>? actRowItem;
@@ -76,7 +76,7 @@ abstract class RowItem<T extends DayItem> {
     }
 
     for (var dayItem in dayItemsDescending) {
-      var firstOfWeek = DateTimeUtils.mondayOfSameWeek(dayItem.dateTimeDayStart);
+      var firstOfWeek = DateTimeUtils.mondayOfSameWeek(dayItem.dayDate);
       actFirstOfWeek ??= firstOfWeek;
 
       // no act row yet - create the first row
@@ -89,7 +89,7 @@ abstract class RowItem<T extends DayItem> {
       }
 
       // set dayItem at day position in dayItems
-      actRowItem.dayItems[dayItem.dateTimeDayStart.weekday - 1] = dayItem;
+      actRowItem.dayItems[dayItem.dayDate.weekday - 1] = dayItem;
     }
 
     checkAtLeastOneDisplayDate(list);
@@ -97,7 +97,7 @@ abstract class RowItem<T extends DayItem> {
     return list;
   }
 
-  static void checkAtLeastOneDisplayDate<T extends DayItem>(List<RowItem<T>> list) {
+  static void checkAtLeastOneDisplayDate<T extends GridDayItem>(List<RowItem<T>> list) {
     if (list.isNotEmpty && !list.fold(false, (previousValue, element) => previousValue || element.displayDate != null)) {
       list.last.displayDate = DateTimeUtils.formateMonthYear(list.last.dateTime);
     }

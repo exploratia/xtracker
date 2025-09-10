@@ -180,6 +180,7 @@ class _SeriesEditorState extends State<SeriesEditor> {
             onPressed: _saveHandler,
             icon: const Icon(Icons.save_outlined),
           ),
+          const SizedBox(width: ThemeUtils.defaultPadding),
         ],
       ),
       body: formWrapper,

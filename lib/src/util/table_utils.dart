@@ -48,33 +48,40 @@ class TableUtils {
   }) {
     var cPadding = cellPadding ?? const EdgeInsets.symmetric(vertical: ThemeUtils.paddingSmall / 2, horizontal: ThemeUtils.paddingSmall);
 
-    return TableRow(decoration: decoration, children: [
-      ...values.map((value) {
-        Widget child;
-        if (value is Widget) {
-          child = value;
-        } else {
-          child = Text(
-            value.toString(),
-            textAlign: (value is num) ? TextAlign.right : TextAlign.left,
+    return TableRow(
+      decoration: decoration,
+      children: [
+        ...values.map((value) {
+          Widget child;
+          if (value is Widget) {
+            child = value;
+          } else {
+            child = Text(
+              value.toString(),
+              textAlign: (value is num) ? TextAlign.right : TextAlign.left,
+            );
+          }
+          return _TableCellPadding(
+            child,
+            edgeInsets: cPadding,
           );
-        }
-        return _TableCellPadding(
-          child,
-          edgeInsets: cPadding,
-        );
-      }),
-    ]);
+        }),
+      ],
+    );
   }
 
   /// returns a TableRows list for a key value table. Headline row is already inserted.
-  static List<TableRow> buildKeyValueTableRows(BuildContext context) {
+  static List<TableRow> buildKeyValueTableRows(
+    BuildContext context, {
+    dynamic keyColumnTitle,
+    dynamic valueColumnTitle,
+  }) {
     final themeData = Theme.of(context);
     return [
       TableUtils.tableHeadline(
         [
-          LocaleKeys.commons_table_column_key.tr(),
-          LocaleKeys.commons_table_column_value.tr(),
+          keyColumnTitle ?? LocaleKeys.commons_table_column_key.tr(),
+          valueColumnTitle ?? LocaleKeys.commons_table_column_value.tr(),
         ],
         themeData: themeData,
       ),

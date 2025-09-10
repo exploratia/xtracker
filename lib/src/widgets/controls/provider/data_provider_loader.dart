@@ -25,10 +25,10 @@ class _DataProviderLoaderState extends State<DataProviderLoader> {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilderWithProgressIndicator(
+    return VoidFutureBuilderWithProgressIndicator(
       future: _dataProviderFuture,
       errorBuilder: (error) => 'Failed to load data...',
-      widgetBuilder: (_, __) => widget.child,
+      widgetBuilder: (_) => widget.child,
       marginTop: widget.progressIndicatorMarginTop,
     );
   }

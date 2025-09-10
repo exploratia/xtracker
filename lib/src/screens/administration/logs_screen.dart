@@ -88,6 +88,7 @@ class _LogsScreenState extends State<LogsScreen> {
             },
             icon: const Icon(Icons.delete_outline),
           ),
+          const SizedBox(width: ThemeUtils.defaultPadding),
         ],
       ),
       bodyBuilder: (context) => LogsView(

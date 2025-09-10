@@ -66,15 +66,16 @@ class SeriesEditDisplaySettings extends StatelessWidget {
                 children: [
                   Text(LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_title.tr()),
                   IconButton(
-                      tooltip: LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_tooltip.tr(),
-                      onPressed: () => Dialogs.simpleOkDialog(
-                            SingleChildScrollViewWithScrollbar(
-                              child: Text(LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_text.tr()),
-                            ),
-                            context,
-                            title: Text(LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_title.tr()),
-                          ),
-                      icon: const Icon(Icons.info_outline)),
+                    tooltip: LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_tooltip.tr(),
+                    onPressed: () => Dialogs.simpleOkDialog(
+                      SingleChildScrollViewWithScrollbar(
+                        child: Text(LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_text.tr()),
+                      ),
+                      context,
+                      title: Text(LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_title.tr()),
+                    ),
+                    icon: const Icon(Icons.info_outline),
+                  ),
                   PixelViewPreview(
                     color: seriesDef.color,
                     invertHueDirection: settings.pixelsViewInvertHueDirection,

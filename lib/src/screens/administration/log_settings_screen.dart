@@ -20,7 +20,13 @@ class LogSettingsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScreenBuilder.withStandardNavBuilders(
       navItem: navItem,
-      appBarBuilder: (context) => GradientAppBar.build(context, addLeadingBackBtn: true, title: Text(navItem.titleBuilder())),
+      appBarBuilder: (context) => GradientAppBar.build(
+        context,
+        addLeadingBackBtn: true,
+        title: Text(
+          navItem.titleBuilder(),
+        ),
+      ),
       bodyBuilder: (context) => const LogSettingsView(),
     );
   }
