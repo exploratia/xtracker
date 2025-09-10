@@ -314,7 +314,7 @@
     },
     "label": {
       "dataset": "Datenbasis",
-      "lastXDays": "Letzte {} Tage",
+      "lastVarDays": "Letzte {} Tage",
       "total": "Gesamt"
     },
     "recordedDays": {
@@ -322,6 +322,10 @@
       "label": {
         "ratio": "Verhältnis",
         "recordedDaysInfo": "Verhältnis aufgezeichnete Tage zu Datenbasis: zeigt an, an wie vielen Tagen (absolut und prozentual) Messwerte erfasst wurden. Mehrere Werte pro Tag zählen hier nicht mehrfach."
+      },
+      "chart": {
+        "chartTitle": "Verteilung auf die Wochentage",
+        "legendTitle": "Datenbasis (letzte x Tage)"
       }
     },
     "trend": {

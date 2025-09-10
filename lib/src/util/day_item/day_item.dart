@@ -27,6 +27,7 @@ class DayItem<T extends DateTimeItem> {
     List<T> values,
     I Function(DateTime day) dayItemBuilder, {
     bool reversed = false,
+    bool includeToday = false,
   }) {
     List<I> list = [];
 
@@ -52,6 +53,18 @@ class DayItem<T extends DateTimeItem> {
       }
 
       actItem!.dateTimeItems.add(item);
+    }
+
+    if (includeToday) {
+      DateTime dateDay = DateTimeUtils.truncateToDay(DateTime.now());
+      actDay ??= dateDay;
+      actItem ??= createDayItem(dateDay);
+
+      // not matching date - create (empty)
+      while (actDay!.isBefore(dateDay)) {
+        actDay = DateTimeUtils.dayAfter(actDay);
+        actItem = createDayItem(actDay);
+      }
     }
 
     if (reversed) {

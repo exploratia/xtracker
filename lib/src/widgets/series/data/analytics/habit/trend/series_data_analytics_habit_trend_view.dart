@@ -97,7 +97,7 @@ class _SeriesDataAnalyticsHabitTrendViewState extends State<SeriesDataAnalyticsH
             var fitResult = fitResultWrapper.fitResult;
 
             var keyWidget = Text(
-              LocaleKeys.seriesDataAnalytics_label_lastXDays.tr(args: [fitResultWrapper.dataBasisInDays.toString()]),
+              LocaleKeys.seriesDataAnalytics_label_lastVarDays.tr(args: [fitResultWrapper.dataBasisInDays.toString()]),
               softWrap: false,
             );
 

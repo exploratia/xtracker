@@ -314,7 +314,8 @@
     },
     "label": {
       "dataset": "Dataset",
-      "lastXDays": "Last {} days",
+      "lastVarDays": "Last {} days",
+      "lastXDays": "Last x days",
       "total": "Total"
     },
     "recordedDays": {
@@ -322,8 +323,13 @@
       "label": {
         "ratio": "Ratio",
         "recordedDaysInfo": "Number of days with recorded values. Multiple values on the same day are counted only once."
+      },
+      "chart": {
+        "chartTitle": "Distribution across weekdays",
+        "legendTitle": "Dataset (last x days)"
       }
-    },  "trend": {
+    },
+    "trend": {
       "title": "Trend Analysis",
       "label": {
         "forecast": "Forecast",

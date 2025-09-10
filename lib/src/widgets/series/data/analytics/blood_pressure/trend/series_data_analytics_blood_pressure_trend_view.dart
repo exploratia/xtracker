@@ -93,7 +93,7 @@ class _SeriesDataAnalyticsBloodPressureTrendViewState extends State<SeriesDataAn
               var fitResultLow = fitResultWrapperPair.v.fitResult;
 
               var keyWidget = Text(
-                LocaleKeys.seriesDataAnalytics_label_lastXDays.tr(args: [fitResultWrapperHigh.dataBasisInDays.toString()]),
+                LocaleKeys.seriesDataAnalytics_label_lastVarDays.tr(args: [fitResultWrapperHigh.dataBasisInDays.toString()]),
                 softWrap: false,
               );
 
