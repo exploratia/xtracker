@@ -1,7 +1,6 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../model/series/data/blood_pressure/blood_pressure_value.dart';
 import '../model/series/data/daily_check/daily_check_value.dart';
@@ -126,9 +125,7 @@ class SeriesDataProvider with ChangeNotifier {
     }
   }
 
-  Future<void> delete(SeriesDef seriesDef, BuildContext context) async {
-    SeriesCurrentValueProvider seriesCurrentValueProvider = context.read<SeriesCurrentValueProvider>();
-
+  Future<void> delete(SeriesDef seriesDef, SeriesCurrentValueProvider seriesCurrentValueProvider) async {
     // delete current value
     await seriesCurrentValueProvider.delete(seriesDef);
     //  await Future.delayed(const Duration(seconds: 10)); // for testing
@@ -240,8 +237,7 @@ class SeriesDataProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addValues(SeriesDef seriesDef, List<dynamic> values, BuildContext context) async {
-    SeriesCurrentValueProvider seriesCurrentValueProvider = context.read<SeriesCurrentValueProvider>();
+  Future<void> addValues(SeriesDef seriesDef, List<dynamic> values, SeriesCurrentValueProvider seriesCurrentValueProvider) async {
     SeriesDataValue? latest;
 
     await fetchDataIfNotYetLoaded(seriesDef);

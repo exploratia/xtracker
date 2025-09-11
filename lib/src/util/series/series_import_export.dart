@@ -11,6 +11,7 @@ import '../../model/series/series_def.dart';
 import '../../model/series/series_type.dart';
 import '../../providers/series_data_provider.dart';
 import '../../providers/series_provider.dart';
+import '../../providers/series_providers.dart';
 import '../../widgets/administration/settings/settings_controller.dart';
 import '../../widgets/controls/layout/single_child_scroll_view_with_scrollbar.dart';
 import '../date_time_utils.dart';
@@ -125,10 +126,8 @@ class SeriesImportExport {
   }
 
   /// import series with data from json
-  static Future<bool> _importSeries(Map<String, dynamic> json, String fileName, BuildContext context) async {
+  static Future<bool> _importSeries(Map<String, dynamic> json, String fileName, SeriesProviders seriesProviders) async {
     if (json["type"] as String == "seriesExport") {
-      var seriesProvider = context.read<SeriesProvider>();
-      var seriesDataProvider = context.read<SeriesDataProvider>();
       // check version...
       var seriesDef = SeriesDef.fromJson(json["seriesDef"] as Map<String, dynamic>);
       SeriesData seriesData;
@@ -140,9 +139,9 @@ class SeriesImportExport {
         case SeriesType.habit:
           seriesData = SeriesData.fromJsonHabitData(json["seriesData"] as Map<String, dynamic>);
       }
-      await seriesProvider.delete(seriesDef, context);
-      await seriesProvider.save(seriesDef);
-      if (context.mounted) await seriesDataProvider.addValues(seriesDef, seriesData.data, context);
+      await seriesProviders.seriesProvider.delete(seriesDef, seriesProviders);
+      await seriesProviders.seriesProvider.save(seriesDef);
+      await seriesProviders.seriesDataProvider.addValues(seriesDef, seriesData.data, seriesProviders.seriesCurrentValueProvider);
       return true;
     } else {
       throw Ex(LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [fileName]));
@@ -150,7 +149,7 @@ class SeriesImportExport {
   }
 
   /// import series with data
-  static Future<void> _importJsonFile(BuildContext context) async {
+  static Future<void> _importJsonFile(BuildContext context, SeriesProviders seriesProviders) async {
     FilePickerResult? result;
     try {
       // https://pub.dev/packages/file_picker
@@ -189,20 +188,16 @@ class SeriesImportExport {
           List<dynamic> seriesList = json["series"] as List<dynamic>;
           for (var seriesJson in seriesList) {
             if (seriesJson is Map<String, dynamic>) {
-              if (context.mounted) {
-                if (await _importSeries(seriesJson, file.name, context)) {
-                  successfulImports++;
-                }
+              if (await _importSeries(seriesJson, file.name, seriesProviders)) {
+                successfulImports++;
               }
             } else {
               throw Ex(LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]));
             }
           }
         } else if (json["type"] as String == "seriesExport") {
-          if (context.mounted) {
-            if (await _importSeries(json, file.name, context)) {
-              successfulImports++;
-            }
+          if (await _importSeries(json, file.name, seriesProviders)) {
+            successfulImports++;
           }
         } else {
           throw Ex(LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]));
@@ -219,18 +214,21 @@ class SeriesImportExport {
       }
     }
 
-    if (context.mounted && successfulImports > 0) {
+    if (successfulImports > 0) {
       SimpleLogging.i('Successfully imported $successfulImports series.');
-      Dialogs.showSnackBar(
-          LocaleKeys.seriesManagement_importExport_snackbar_importSuccessfulXofY.tr(args: [successfulImports.toString(), numSelectedFiles.toString()]),
-          context);
+      if (context.mounted) {
+        Dialogs.showSnackBar(
+            LocaleKeys.seriesManagement_importExport_snackbar_importSuccessfulXofY.tr(args: [successfulImports.toString(), numSelectedFiles.toString()]),
+            context);
+      }
     }
 
     if (context.mounted) Navigator.of(context).pop();
   }
 
   static Future<void> showImportExportDlg(BuildContext context, {SeriesDef? seriesDef, required SettingsController settingsController}) async {
-    bool exportPossible = context.read<SeriesProvider>().series.isNotEmpty;
+    SeriesProviders seriesProviders = SeriesProviders.readOf(context);
+    bool exportPossible = seriesProviders.seriesProvider.series.isNotEmpty;
 
     Widget dialogContent = SingleChildScrollViewWithScrollbar(
       useHorizontalScreenPaddingForScrollbar: true,
@@ -301,7 +299,7 @@ class SeriesImportExport {
           const Divider(),
           ElevatedButton.icon(
             onPressed: () async {
-              await _importJsonFile(context);
+              await _importJsonFile(context, seriesProviders);
             },
             icon: Icon(Icons.upload_outlined, size: ThemeUtils.iconSizeScaled),
             label: Text(LocaleKeys.seriesManagement_importExport_btn_importSeries.tr()),
