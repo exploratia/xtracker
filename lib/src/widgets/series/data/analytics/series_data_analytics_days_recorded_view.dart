@@ -151,7 +151,7 @@ class SeriesDataAnalyticsDaysRecordedView extends StatelessWidget {
 
   Widget bottomTitles(double value, TitleMeta meta, TextStyle axisTitlesTheme) {
     // 2025-9-1 is a monday. Add x value (0-6) to get the weekday label
-    var weekdayDay = DateTimeUtils.formateShortDay(DateTime(2025, 9, 1, 12).add(Duration(days: value.toInt())));
+    var weekdayDay = DateTimeUtils.formatShortDay(DateTime(2025, 9, 1, 12).add(Duration(days: value.toInt())));
     final Widget text = Text(
       weekdayDay,
       style: axisTitlesTheme,

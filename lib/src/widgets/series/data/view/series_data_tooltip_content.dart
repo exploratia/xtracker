@@ -16,7 +16,7 @@ class SeriesDataTooltipContent {
         children: [
           const Icon(Icons.calendar_today_outlined, size: ThemeUtils.fontSizeBodyS),
           const SizedBox(width: ThemeUtils.horizontalSpacingSmall),
-          Text(DateTimeUtils.formateDateWithDay(seriesValues.first.dateTime), style: TooltipUtils.tooltipMonospaceStyle),
+          Text(DateTimeUtils.formatDateWithDay(seriesValues.first.dateTime), style: TooltipUtils.tooltipMonospaceStyle),
         ],
       ),
       const SizedBox(height: ThemeUtils.verticalSpacingSmall),
@@ -26,7 +26,7 @@ class SeriesDataTooltipContent {
     List<Pair<String, Widget>> timeValuePairs = [];
 
     for (var value in seriesValues) {
-      timeValuePairs.add(Pair(DateTimeUtils.formateTime(value.dateTime), tooltipValueBuilder(value)));
+      timeValuePairs.add(Pair(DateTimeUtils.formatTime(value.dateTime), tooltipValueBuilder(value)));
     }
 
     final maxLength = timeValuePairs.map((p) => p.k.length).reduce((a, b) => a > b ? a : b);

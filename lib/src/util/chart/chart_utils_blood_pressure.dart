@@ -142,7 +142,7 @@ class ChartUtilsBloodPressure {
                   value: chartMetaData.xMin,
                   height: bottomTitlesHeight,
                   maxWidth: bottomTitlesMaxWidth,
-                  dateFormatter: DateTimeUtils.formateDate,
+                  dateFormatter: DateTimeUtils.formatDate,
                 );
               } else if (value == meta.max) {
                 return TitleBottomAxis(
@@ -150,7 +150,7 @@ class ChartUtilsBloodPressure {
                   value: chartMetaData.xMax,
                   height: bottomTitlesHeight,
                   maxWidth: bottomTitlesMaxWidth,
-                  dateFormatter: DateTimeUtils.formateDate,
+                  dateFormatter: DateTimeUtils.formatDate,
                 );
               }
               return Container();

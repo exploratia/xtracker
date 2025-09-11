@@ -66,7 +66,7 @@ class SeriesImportExport {
   static Future<void> _exportSeriesDef(SeriesDef seriesDef, BuildContext context) async {
     Map<String, dynamic>? json = await _buildSeriesExportJson(seriesDef, context);
     try {
-      bool exported = await JsonUtils.exportJsonFile(json, 'xtracker_series_export_${seriesDef.uuid}_${DateTimeUtils.formateExportDateTime()}.json');
+      bool exported = await JsonUtils.exportJsonFile(json, 'xtracker_series_export_${seriesDef.uuid}_${DateTimeUtils.formatExportDateTime()}.json');
       if (exported) {
         SimpleLogging.i('Successfully exported ${seriesDef.toLogString()}');
         if (context.mounted) Dialogs.showSnackBar(LocaleKeys.commons_snackbar_exportSuccess.tr(), context);
@@ -81,7 +81,7 @@ class SeriesImportExport {
   static Future<void> _shareSeriesDef(SeriesDef seriesDef, BuildContext context) async {
     Map<String, dynamic>? json = await _buildSeriesExportJson(seriesDef, context);
     try {
-      bool shared = await JsonUtils.shareJsonFile(json, 'xtracker_series_export_${seriesDef.uuid}_${DateTimeUtils.formateExportDateTime()}.json');
+      bool shared = await JsonUtils.shareJsonFile(json, 'xtracker_series_export_${seriesDef.uuid}_${DateTimeUtils.formatExportDateTime()}.json');
       if (shared) {
         SimpleLogging.i('Successfully shared ${seriesDef.toLogString()}');
         if (context.mounted) Dialogs.showSnackBar(LocaleKeys.commons_snackbar_shareSuccess.tr(), context);
@@ -97,7 +97,7 @@ class SeriesImportExport {
   static Future<void> _exportSeries(BuildContext context, VoidCallback afterExport) async {
     try {
       Map<String, dynamic> json = await _buildAllSeriesExportJson(context);
-      bool exported = await JsonUtils.exportJsonFile(json, 'xtracker_multi_series_export_${DateTimeUtils.formateExportDateTime()}.json');
+      bool exported = await JsonUtils.exportJsonFile(json, 'xtracker_multi_series_export_${DateTimeUtils.formatExportDateTime()}.json');
       if (exported) {
         SimpleLogging.i('Successfully exported all series.');
         if (context.mounted) Dialogs.showSnackBar(LocaleKeys.commons_snackbar_exportSuccess.tr(), context);
@@ -113,7 +113,7 @@ class SeriesImportExport {
   static Future<void> _shareSeries(BuildContext context, VoidCallback afterExport) async {
     try {
       Map<String, dynamic> json = await _buildAllSeriesExportJson(context);
-      bool shared = await JsonUtils.shareJsonFile(json, 'xtracker_multi_series_export_${DateTimeUtils.formateExportDateTime()}.json');
+      bool shared = await JsonUtils.shareJsonFile(json, 'xtracker_multi_series_export_${DateTimeUtils.formatExportDateTime()}.json');
       if (shared) {
         SimpleLogging.i('Successfully shared all series.');
         if (context.mounted) Dialogs.showSnackBar(LocaleKeys.commons_snackbar_shareSuccess.tr(), context);
@@ -327,7 +327,7 @@ class SeriesImportExport {
     DateTime? lastExportDate = settingsController.seriesExportDate;
     String lastExport = "-";
     if (lastExportDate != null) {
-      lastExport = DateTimeUtils.formateDate(lastExportDate);
+      lastExport = DateTimeUtils.formatDate(lastExportDate);
     }
     return lastExport;
   }

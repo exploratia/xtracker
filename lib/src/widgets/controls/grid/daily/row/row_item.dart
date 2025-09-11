@@ -27,7 +27,7 @@ abstract class RowItem<T extends GridDayItem> {
     RowItem<T> createRowItem(DateTime dateTimeFirstOfMonth) {
       String? displayDate;
       if (dateTimeFirstOfMonth.month % 2 == 0) {
-        displayDate = DateTimeUtils.formateMonthYear(dateTimeFirstOfMonth);
+        displayDate = DateTimeUtils.formatMonthYear(dateTimeFirstOfMonth);
       }
       MonthRowItem<T> rowItem = MonthRowItem(dateTimeFirstOfMonth, displayDate);
       list.add(rowItem);
@@ -68,7 +68,7 @@ abstract class RowItem<T extends GridDayItem> {
 
       String? displayDate;
       if (weekContainsMonthStart) {
-        displayDate = DateTimeUtils.formateMonthYear(dateTimeLastDayOfWeek);
+        displayDate = DateTimeUtils.formatMonthYear(dateTimeLastDayOfWeek);
       }
       WeekRowItem<T> rowItem = WeekRowItem(dateTimeFirstDayOfWeek, displayDate);
       list.add(rowItem);
@@ -99,7 +99,7 @@ abstract class RowItem<T extends GridDayItem> {
 
   static void checkAtLeastOneDisplayDate<T extends GridDayItem>(List<RowItem<T>> list) {
     if (list.isNotEmpty && !list.fold(false, (previousValue, element) => previousValue || element.displayDate != null)) {
-      list.last.displayDate = DateTimeUtils.formateMonthYear(list.last.dateTime);
+      list.last.displayDate = DateTimeUtils.formatMonthYear(list.last.dateTime);
     }
   }
 }

@@ -255,7 +255,7 @@ class TrendTable extends StatelessWidget {
     final today = DateTimeUtils.truncateToMidDay(DateTime.now());
     var dayNames = List<String>.generate(forecastDays, (i) {
       final day = today.add(Duration(days: i + 1));
-      return DateTimeUtils.formateShortDay(day);
+      return DateTimeUtils.formatShortDay(day);
     });
 
     List<TableRow> rows = TableUtils.buildKeyValueTableRows(

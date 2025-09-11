@@ -33,7 +33,7 @@ class SeriesDataHabitChartView extends StatelessWidget {
     }
 
     List<SimpleValue> combinedSeriesData = _buildDataProvider(filteredSeriesData);
-    var dateFormatter = seriesViewMetaData.showCompressed ? DateTimeUtils.formateMonthYear : DateTimeUtils.formateDate;
+    var dateFormatter = seriesViewMetaData.showCompressed ? DateTimeUtils.formatMonthYear : DateTimeUtils.formatDate;
 
     return LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
       return SingleChildScrollViewWithScrollbar(

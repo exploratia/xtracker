@@ -59,7 +59,7 @@ class _DateTimeHeader extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(2.0),
             child: Text(
-              DateTimeUtils.formateDate(dateTime),
+              DateTimeUtils.formatDate(dateTime),
               style: TextStyle(inherit: true, color: themeData.colorScheme.primary),
             ),
           ),
@@ -70,7 +70,7 @@ class _DateTimeHeader extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(2.0),
             child: Text(
-              DateTimeUtils.formateTime(dateTime),
+              DateTimeUtils.formatTime(dateTime),
               style: TextStyle(inherit: true, color: themeData.colorScheme.primary),
             ),
           ),

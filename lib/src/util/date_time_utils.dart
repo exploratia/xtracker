@@ -35,39 +35,39 @@ class DateTimeUtils {
     return thisOrLastMonth;
   }
 
-  static String formateExportDateTime() {
+  static String formatExportDateTime() {
     return DateFormat('yyyyMMdd_HHmmss').format(DateTime.now());
   }
 
   /// format date yMd
-  static String formateDate(DateTime dateTime) {
+  static String formatDate(DateTime dateTime) {
     return DateFormat.yMd().format(dateTime);
   }
 
   /// format date yMEd
-  static String formateDateWithDay(DateTime dateTime) {
+  static String formatDateWithDay(DateTime dateTime) {
     return DateFormat.yMEd().format(dateTime);
   }
 
   /// yyyy-MM-dd
-  static String formateYYYMMDD(DateTime dateTime) {
+  static String formatYYYYMMDD(DateTime dateTime) {
     return DateFormat('yyyy-MM-dd').format(dateTime);
   }
 
-  static String formateYear(DateTime dateTime) {
+  static String formatYear(DateTime dateTime) {
     return DateFormat.y().format(dateTime);
   }
 
-  static String formateMonthYear(DateTime dateTime) {
+  static String formatMonthYear(DateTime dateTime) {
     return DateFormat.yMMM().format(dateTime);
   }
 
   /// E - e.g. Mon
-  static String formateShortDay(DateTime dateTime) {
+  static String formatShortDay(DateTime dateTime) {
     return DateFormat.E().format(dateTime);
   }
 
-  static String formateTime(DateTime dateTime) {
+  static String formatTime(DateTime dateTime) {
     return DateFormat.jm().format(dateTime);
   }
 

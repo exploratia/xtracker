@@ -50,7 +50,7 @@ class DailyCheckValueRenderer extends StatelessWidget {
 
     if (wrapWithDateTimeTooltip) {
       result = Tooltip(
-        message: '${DateTimeUtils.formateDate(dailyCheckValue.dateTime)}   ${DateTimeUtils.formateTime(dailyCheckValue.dateTime)}',
+        message: '${DateTimeUtils.formatDate(dailyCheckValue.dateTime)}   ${DateTimeUtils.formatTime(dailyCheckValue.dateTime)}',
         textStyle: TooltipUtils.tooltipMonospaceStyle,
         child: result,
       );

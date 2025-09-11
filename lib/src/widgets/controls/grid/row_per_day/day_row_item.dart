@@ -49,7 +49,7 @@ class DayRowItem<T extends SeriesDataValue> {
     _DayMultiRowItem<T>? actItem;
 
     for (var item in seriesData.reversed) {
-      String dateDay = DateTimeUtils.formateDate(item.dateTime);
+      String dateDay = DateTimeUtils.formatDate(item.dateTime);
       if (actItem == null || actItem.date != dateDay) {
         if (actItem != null) {
           add2List(list, actItem);

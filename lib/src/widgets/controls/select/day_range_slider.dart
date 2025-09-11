@@ -241,7 +241,7 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
                       child: TextButton(
                         onPressed: () => _selectDate(context, true),
                         child: Text(
-                          DateTimeUtils.formateYYYMMDD(_dateRangeFrom.add(Duration(days: _values.start.toInt(), hours: 12))),
+                          DateTimeUtils.formatYYYYMMDD(_dateRangeFrom.add(Duration(days: _values.start.toInt(), hours: 12))),
                           style: btnTextStyle,
                         ),
                       ),
@@ -255,7 +255,7 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
                       child: TextButton(
                         onPressed: () => _selectDate(context, false),
                         child: Text(
-                          DateTimeUtils.formateYYYMMDD(_dateRangeFrom.add(Duration(days: _values.end.toInt(), hours: 12))),
+                          DateTimeUtils.formatYYYYMMDD(_dateRangeFrom.add(Duration(days: _values.end.toInt(), hours: 12))),
                           style: btnTextStyle,
                         ),
                       ),
@@ -465,6 +465,6 @@ class DayRange {
 
   @override
   String toString() {
-    return 'DayRange{from: ${DateTimeUtils.formateYYYMMDD(from)}, till: ${DateTimeUtils.formateYYYMMDD(till)}}';
+    return 'DayRange{from: ${DateTimeUtils.formatYYYYMMDD(from)}, till: ${DateTimeUtils.formatYYYYMMDD(till)}}';
   }
 }

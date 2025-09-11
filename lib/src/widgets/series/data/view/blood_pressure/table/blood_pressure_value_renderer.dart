@@ -63,7 +63,7 @@ class BloodPressureValueRenderer extends StatelessWidget {
 
     if (wrapWithDateTimeTooltip) {
       result = Tooltip(
-        message: '${DateTimeUtils.formateDate(bloodPressureValue.dateTime)}   ${DateTimeUtils.formateTime(bloodPressureValue.dateTime)}',
+        message: '${DateTimeUtils.formatDate(bloodPressureValue.dateTime)}   ${DateTimeUtils.formatTime(bloodPressureValue.dateTime)}',
         textStyle: TooltipUtils.tooltipMonospaceStyle,
         child: result,
       );
