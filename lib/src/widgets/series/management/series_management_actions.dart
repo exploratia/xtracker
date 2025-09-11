@@ -4,8 +4,9 @@ import 'package:provider/provider.dart';
 
 import '../../../../generated/locale_keys.g.dart';
 import '../../../model/series/series_def.dart';
+import '../../../providers/series_current_value_provider.dart';
 import '../../../providers/series_data_provider.dart';
-import '../../../providers/series_provider.dart';
+import '../../../providers/series_providers.dart';
 import '../../../util/dialogs.dart';
 import '../../../util/logging/flutter_simple_logging.dart';
 import '../../../util/series/series_import_export.dart';
@@ -54,6 +55,8 @@ class _DeleteSeriesBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SeriesProviders seriesProviders = SeriesProviders.readOf(context);
+
     deleteHandler() async {
       bool? res = await Dialogs.simpleYesNoDialog(
         LocaleKeys.seriesDefRenderer_query_deleteSeries.tr(args: [seriesDef.name]),
@@ -62,9 +65,7 @@ class _DeleteSeriesBtn extends StatelessWidget {
       );
       if (res == true) {
         try {
-          if (context.mounted) {
-            await context.read<SeriesProvider>().delete(seriesDef, context);
-          }
+          await seriesProviders.seriesProvider.delete(seriesDef, seriesProviders);
         } catch (err) {
           SimpleLogging.w("Failed to delete ${seriesDef.toLogString()}.", error: err);
           if (context.mounted) {
@@ -115,14 +116,17 @@ class _ClearSeriesDataBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SeriesDataProvider seriesDataProvider = context.read<SeriesDataProvider>();
+    SeriesCurrentValueProvider seriesCurrentValueProvider = context.read<SeriesCurrentValueProvider>();
+
     handler() async {
       var result = await Dialogs.simpleYesNoDialog(
         LocaleKeys.seriesDefRenderer_query_deleteSeriesData.tr(args: [seriesDef.name]),
         context,
         title: LocaleKeys.commons_dialog_title_areYouSure.tr(),
       );
-      if (result != null && result && context.mounted) {
-        await context.read<SeriesDataProvider>().delete(seriesDef, context);
+      if (result == true) {
+        await seriesDataProvider.delete(seriesDef, seriesCurrentValueProvider);
       }
     }
 

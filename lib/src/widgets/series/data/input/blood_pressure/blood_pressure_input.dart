@@ -1,19 +1,17 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../../../generated/locale_keys.g.dart';
 import '../../../../../model/series/data/blood_pressure/blood_pressure_value.dart';
 import '../../../../../model/series/series_def.dart';
-import '../../../../../providers/series_data_provider.dart';
 import '../../../../../util/dialogs.dart';
-import '../../../../../util/logging/flutter_simple_logging.dart';
 import '../../../../../util/theme_utils.dart';
 import '../../../../controls/layout/single_child_scroll_view_with_scrollbar.dart';
 import '../../../../controls/text/overflow_text.dart';
 import '../input_header.dart';
+import '../input_result.dart';
 
 class BloodPressureQuickInput extends StatefulWidget {
   const BloodPressureQuickInput({
@@ -25,10 +23,10 @@ class BloodPressureQuickInput extends StatefulWidget {
   final SeriesDef seriesDef;
   final BloodPressureValue? bloodPressureValue;
 
-  static Future<BloodPressureValue?> showInputDlg(BuildContext context, SeriesDef seriesDef, {BloodPressureValue? bloodPressureValue}) async {
-    return await showDialog<BloodPressureValue>(
+  static Future<InputResult<BloodPressureValue>?> showInputDlg(BuildContext context, SeriesDef seriesDef, {BloodPressureValue? bloodPressureValue}) async {
+    return await showDialog<InputResult<BloodPressureValue>>(
       context: context,
-      builder: (ctx) => BloodPressureQuickInput(
+      builder: (_) => BloodPressureQuickInput(
         seriesDef: seriesDef,
         bloodPressureValue: bloodPressureValue,
       ),
@@ -119,33 +117,24 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
   }
 
   void _saveHandler() {
+    bool insert = widget.bloodPressureValue == null;
     setState(() {
       _autoValidate = true;
     });
     _validate();
     if (!_isValid) return;
     var val = BloodPressureValue(_uuid, _dateTime, int.parse(_highController.text), int.parse(_lowController.text), _tablet);
-    Navigator.pop(context, val);
+    Navigator.pop(context, InputResult(val, insert ? InputResultAction.insert : InputResultAction.update));
   }
 
-  void _deleteHandler() async {
+  void _deleteHandler(BloodPressureValue bloodPressureValue) async {
     bool? res = await Dialogs.simpleYesNoDialog(
       LocaleKeys.seriesValue_query_deleteValue.tr(),
       context,
       title: LocaleKeys.commons_dialog_title_areYouSure.tr(),
     );
-    if (res == true) {
-      try {
-        if (mounted) {
-          await context.read<SeriesDataProvider>().deleteValue(widget.seriesDef, widget.bloodPressureValue, context);
-          if (mounted) Navigator.pop(context, null);
-        }
-      } catch (err) {
-        SimpleLogging.w('Failed to delete blood pressure value.', error: err);
-        if (mounted) {
-          Dialogs.showSnackBarWarning(LocaleKeys.commons_snackbar_deleteFailed.tr(), context);
-        }
-      }
+    if (res == true && mounted) {
+      Navigator.pop(context, InputResult(bloodPressureValue, InputResultAction.delete));
     }
   }
 
@@ -280,7 +269,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
             if (widget.bloodPressureValue != null)
               IconButton(
                 tooltip: LocaleKeys.seriesValue_action_deleteValue_tooltip.tr(),
-                onPressed: _deleteHandler,
+                onPressed: () => _deleteHandler(widget.bloodPressureValue!),
                 color: themeData.colorScheme.secondary,
                 iconSize: iconSize,
                 icon: const Icon(Icons.delete_outlined),

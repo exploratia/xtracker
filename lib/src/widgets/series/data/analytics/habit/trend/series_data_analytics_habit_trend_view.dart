@@ -32,7 +32,8 @@ import '../../../../../controls/text/overflow_text.dart';
 class SeriesDataAnalyticsHabitTrendView extends StatefulWidget {
   /// pixel and short day in headline width
   static const double _pixelWidth = 32;
-  static const double _tendencyArrowWidth = 12;
+  static const double _tendencyArrowWidth = 20;
+
   static const List<int> _dataBasisDays = [7, 30, 90, 365];
 
   const SeriesDataAnalyticsHabitTrendView({super.key, required this.seriesViewMetaData, required this.seriesDataValues});
@@ -116,7 +117,10 @@ class _SeriesDataAnalyticsHabitTrendViewState extends State<SeriesDataAnalyticsH
                         width: SeriesDataAnalyticsHabitTrendView._tendencyArrowWidth,
                         child: Tooltip(
                           message: fitResult.getTendency().tooltip,
-                          child: Text(fitResult.getTendency().arrow),
+                          child: Icon(
+                            fitResult.getTendency().arrow,
+                            size: SeriesDataAnalyticsHabitTrendView._tendencyArrowWidth,
+                          ),
                         ),
                       ),
                       // PixelPreview
@@ -251,7 +255,7 @@ class TrendTable extends StatelessWidget {
     final today = DateTimeUtils.truncateToMidDay(DateTime.now());
     var dayNames = List<String>.generate(forecastDays, (i) {
       final day = today.add(Duration(days: i + 1));
-      return DateTimeUtils.formateShortDay(day);
+      return DateTimeUtils.formatShortDay(day);
     });
 
     List<TableRow> rows = TableUtils.buildKeyValueTableRows(

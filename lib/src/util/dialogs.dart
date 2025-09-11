@@ -90,8 +90,9 @@ class Dialogs {
                 style: TextStyle(color: color),
               )
             : const Text('invalid content given');
-    ScaffoldMessenger.of(context).hideCurrentSnackBar();
-    ScaffoldMessenger.of(context).showSnackBar(
+    var scaffoldMessengerState = ScaffoldMessenger.of(context);
+    scaffoldMessengerState.hideCurrentSnackBar();
+    scaffoldMessengerState.showSnackBar(
       SnackBar(
         content: c,
         duration: d,

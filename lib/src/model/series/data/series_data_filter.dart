@@ -40,11 +40,11 @@ class SeriesDataFilter {
   String toString() {
     String res = "";
     if (start != null && end != null) {
-      res += "[${DateTimeUtils.formateYYYMMDD(start!)} - ${DateTimeUtils.formateYYYMMDD(end!)}]";
+      res += "[${DateTimeUtils.formatYYYYMMDD(start!)} - ${DateTimeUtils.formatYYYYMMDD(end!)}]";
     } else if (start != null) {
-      res += "[${DateTimeUtils.formateYYYMMDD(start!)} - [";
+      res += "[${DateTimeUtils.formatYYYYMMDD(start!)} - [";
     } else if (end != null) {
-      res += "] - ${DateTimeUtils.formateYYYMMDD(end!)}]";
+      res += "] - ${DateTimeUtils.formatYYYYMMDD(end!)}]";
     }
     return res;
   }

@@ -35,39 +35,39 @@ class DateTimeUtils {
     return thisOrLastMonth;
   }
 
-  static String formateExportDateTime() {
+  static String formatExportDateTime() {
     return DateFormat('yyyyMMdd_HHmmss').format(DateTime.now());
   }
 
   /// format date yMd
-  static String formateDate(DateTime dateTime) {
+  static String formatDate(DateTime dateTime) {
     return DateFormat.yMd().format(dateTime);
   }
 
   /// format date yMEd
-  static String formateDateWithDay(DateTime dateTime) {
+  static String formatDateWithDay(DateTime dateTime) {
     return DateFormat.yMEd().format(dateTime);
   }
 
   /// yyyy-MM-dd
-  static String formateYYYMMDD(DateTime dateTime) {
+  static String formatYYYYMMDD(DateTime dateTime) {
     return DateFormat('yyyy-MM-dd').format(dateTime);
   }
 
-  static String formateYear(DateTime dateTime) {
+  static String formatYear(DateTime dateTime) {
     return DateFormat.y().format(dateTime);
   }
 
-  static String formateMonthYear(DateTime dateTime) {
+  static String formatMonthYear(DateTime dateTime) {
     return DateFormat.yMMM().format(dateTime);
   }
 
   /// E - e.g. Mon
-  static String formateShortDay(DateTime dateTime) {
+  static String formatShortDay(DateTime dateTime) {
     return DateFormat.E().format(dateTime);
   }
 
-  static String formateTime(DateTime dateTime) {
+  static String formatTime(DateTime dateTime) {
     return DateFormat.jm().format(dateTime);
   }
 
@@ -77,6 +77,11 @@ class DateTimeUtils {
 
   static bool isMonthEnd(DateTime dateTime) {
     return dateTime.day == lastDayOfMonth(dateTime).day;
+  }
+
+  // is it a day start at 00:00:00.000
+  static bool isDayDate(DateTime dateTime) {
+    return dateTime.isAtSameMomentAs(DateTime(dateTime.year, dateTime.month, dateTime.day));
   }
 
   static DateTime mondayOfSameWeek(DateTime date) {
@@ -131,6 +136,16 @@ class DateTimeUtils {
 
   static DateTime truncateToMidDay(DateTime date) {
     return truncateToDay(date).add(const Duration(hours: 12));
+  }
+
+  /// end of day is next day start -1ys
+  static DateTime endOfDay(DateTime date) {
+    return dayAfter(date).subtract(const Duration(microseconds: 1));
+  }
+
+  /// returns the date with max utc timestamp
+  static DateTime maxDate(DateTime date1, DateTime date2) {
+    return (date1.isAfter(date2)) ? date1 : date2;
   }
 
   static Color? backgroundColor(DateTime dateTime) {

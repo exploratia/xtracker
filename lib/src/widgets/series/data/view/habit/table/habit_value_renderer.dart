@@ -50,7 +50,7 @@ class HabitValueRenderer extends StatelessWidget {
 
     if (wrapWithDateTimeTooltip) {
       result = Tooltip(
-        message: '${DateTimeUtils.formateDate(habitValue.dateTime)}   ${DateTimeUtils.formateTime(habitValue.dateTime)}',
+        message: '${DateTimeUtils.formatDate(habitValue.dateTime)}   ${DateTimeUtils.formatTime(habitValue.dateTime)}',
         textStyle: TooltipUtils.tooltipMonospaceStyle,
         child: result,
       );

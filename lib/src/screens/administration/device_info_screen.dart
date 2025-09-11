@@ -299,7 +299,7 @@ class _DeviceInfoScreenState extends State<DeviceInfoScreen> {
       const Icon(Icons.download_outlined),
       () async {
         try {
-          bool exported = await JsonUtils.exportJsonFile(_buildExportableJson(), 'xtracker_device_info_${DateTimeUtils.formateExportDateTime()}.json');
+          bool exported = await JsonUtils.exportJsonFile(_buildExportableJson(), 'xtracker_device_info_${DateTimeUtils.formatExportDateTime()}.json');
           if (exported) {
             SimpleLogging.i('Successfully exported device info.');
             if (context.mounted) Dialogs.showSnackBar(LocaleKeys.commons_snackbar_exportSuccess.tr(), context);
@@ -318,7 +318,7 @@ class _DeviceInfoScreenState extends State<DeviceInfoScreen> {
       const Icon(Icons.share_outlined),
       () async {
         try {
-          bool shared = await JsonUtils.shareJsonFile(_buildExportableJson(), 'xtracker_device_info_${DateTimeUtils.formateExportDateTime()}.json');
+          bool shared = await JsonUtils.shareJsonFile(_buildExportableJson(), 'xtracker_device_info_${DateTimeUtils.formatExportDateTime()}.json');
           if (shared) {
             SimpleLogging.i('Successfully shared device info.');
             if (context.mounted) Dialogs.showSnackBar(LocaleKeys.commons_snackbar_shareSuccess.tr(), context);

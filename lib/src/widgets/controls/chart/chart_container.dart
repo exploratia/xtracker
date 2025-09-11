@@ -36,7 +36,7 @@ class ChartContainer extends StatelessWidget {
     } else {
       chart = _ChartContainerWithDateTooltip(
         chartWidgetBuilder: chartWidgetBuilder,
-        dateFormatter: dateFormatter ?? DateTimeUtils.formateDate,
+        dateFormatter: dateFormatter ?? DateTimeUtils.formatDate,
       );
     }
 

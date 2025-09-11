@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../model/series/series_def.dart';
 import '../store/stores.dart';
-import 'series_current_value_provider.dart';
-import 'series_data_provider.dart';
+import 'series_providers.dart';
 
 class SeriesProvider with ChangeNotifier {
   final _storeMain = Stores.storeMain;
@@ -74,23 +72,15 @@ class SeriesProvider with ChangeNotifier {
     // notifyListeners(); notify is in fetch
   }
 
-  Future<void> deleteById(String seriesDefUuid, BuildContext context) async {
+  Future<void> deleteById(String seriesDefUuid, SeriesProviders seriesProviders) async {
     var idx = _series.indexWhere((s) => s.uuid == seriesDefUuid);
     if (idx < 0) return;
-    await delete(_series.removeAt(idx), context);
+    await delete(_series.removeAt(idx), seriesProviders);
   }
 
-  Future<void> delete(SeriesDef seriesDef, BuildContext context) async {
-    SeriesCurrentValueProvider seriesCurrentValueProvider = context.read<SeriesCurrentValueProvider>();
-    SeriesDataProvider seriesDataProvider = context.read<SeriesDataProvider>();
-
-    // delete current value
-    await seriesCurrentValueProvider.delete(seriesDef);
-
-    // delete series data
-    if (context.mounted) {
-      await seriesDataProvider.delete(seriesDef, context);
-    }
+  Future<void> delete(SeriesDef seriesDef, SeriesProviders seriesProviders) async {
+    // delete series data (current value is deleted inside)
+    await seriesProviders.seriesDataProvider.delete(seriesDef, seriesProviders.seriesCurrentValueProvider);
 
     await _storeSeriesDef.delete(seriesDef);
     await fetchData();

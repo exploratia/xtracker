@@ -33,7 +33,7 @@ class SeriesDataDailyCheckChartView extends StatelessWidget {
     }
 
     List<SimpleValue> combinedSeriesData = _buildDataProvider();
-    var dateFormatter = seriesViewMetaData.showCompressed ? DateTimeUtils.formateYear : DateTimeUtils.formateMonthYear;
+    var dateFormatter = seriesViewMetaData.showCompressed ? DateTimeUtils.formatYear : DateTimeUtils.formatMonthYear;
 
     return LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
       return SingleChildScrollViewWithScrollbar(
