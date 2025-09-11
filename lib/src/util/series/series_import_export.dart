@@ -14,6 +14,7 @@ import '../../providers/series_provider.dart';
 import '../../providers/series_providers.dart';
 import '../../widgets/administration/settings/settings_controller.dart';
 import '../../widgets/controls/layout/single_child_scroll_view_with_scrollbar.dart';
+import '../../widgets/controls/overlay/progress_overlay.dart';
 import '../date_time_utils.dart';
 import '../dialogs.dart';
 import '../ex.dart';
@@ -130,6 +131,7 @@ class SeriesImportExport {
     if (json["type"] as String == "seriesExport") {
       // check version...
       var seriesDef = SeriesDef.fromJson(json["seriesDef"] as Map<String, dynamic>);
+      SimpleLogging.i("Importing series and data for ${seriesDef.toLogString()} ...");
       SeriesData seriesData;
       switch (seriesDef.seriesType) {
         case SeriesType.bloodPressure:
@@ -142,6 +144,7 @@ class SeriesImportExport {
       await seriesProviders.seriesProvider.delete(seriesDef, seriesProviders);
       await seriesProviders.seriesProvider.save(seriesDef);
       await seriesProviders.seriesDataProvider.addValues(seriesDef, seriesData.data, seriesProviders.seriesCurrentValueProvider);
+      SimpleLogging.i("Import for ${seriesDef.toLogString()} finished.");
       return true;
     } else {
       throw Ex(LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [fileName]));
@@ -160,9 +163,13 @@ class SeriesImportExport {
       );
     } catch (ex, st) {
       SimpleLogging.w(ex.toString(), stackTrace: st);
-      if (context.mounted) Dialogs.showSnackBar(ex.toString(), context);
+      if (context.mounted) Dialogs.showSnackBar("Failure while choosing import file.", context);
     }
     if (result == null) return; // User canceled the picker
+
+    if (!context.mounted) return;
+    // already hide dialog -> the series could be seen while importing
+    Navigator.of(context).pop();
 
     // PlatformFile file = result.files.first;
     // print(file.name);
@@ -171,6 +178,7 @@ class SeriesImportExport {
     // print(file.extension);
     // print(file.path);
 
+    final overlay = ProgressOverlay.createAndShowProgressOverlay(context);
     int successfulImports = 0;
     int numSelectedFiles = result.xFiles.length;
 
@@ -180,6 +188,7 @@ class SeriesImportExport {
           throw Ex(LocaleKeys.seriesManagement_importExport_alert_unexpectedFile.tr(args: [file.name]));
         }
 
+        SimpleLogging.i("importing ${file.name} ...");
         var fileContent = await file.readAsString(); // utf8
         var json = jsonDecode(fileContent) as Map<String, dynamic>;
 
@@ -214,6 +223,8 @@ class SeriesImportExport {
       }
     }
 
+    overlay.remove();
+
     if (successfulImports > 0) {
       SimpleLogging.i('Successfully imported $successfulImports series.');
       if (context.mounted) {
@@ -222,8 +233,6 @@ class SeriesImportExport {
             context);
       }
     }
-
-    if (context.mounted) Navigator.of(context).pop();
   }
 
   static Future<void> showImportExportDlg(BuildContext context, {SeriesDef? seriesDef, required SettingsController settingsController}) async {
