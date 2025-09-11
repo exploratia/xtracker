@@ -19,6 +19,7 @@ import '../../util/date_time_utils.dart';
 import '../../util/globals.dart';
 import '../../util/media_query_utils.dart';
 import '../../util/theme_utils.dart';
+import '../../util/tooltip_utils.dart';
 import '../../widgets/controls/appbar/app_bar_actions_divider.dart';
 import '../../widgets/controls/appbar/gradient_app_bar.dart';
 import '../../widgets/controls/layout/centered_message.dart';
@@ -49,6 +50,7 @@ class SeriesDataScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TooltipUtils.updateTooltipMonospaceStyle(context);
     String seriesUuid = Globals.invalid;
     SeriesDef? seriesDef;
     var seriesParameterValue = args['series'];
