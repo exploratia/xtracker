@@ -79,6 +79,11 @@ class DateTimeUtils {
     return dateTime.day == lastDayOfMonth(dateTime).day;
   }
 
+  // is it a day start at 00:00:00.000
+  static bool isDayDate(DateTime dateTime) {
+    return dateTime.isAtSameMomentAs(DateTime(dateTime.year, dateTime.month, dateTime.day));
+  }
+
   static DateTime mondayOfSameWeek(DateTime date) {
     int daysToSubtract = date.weekday - DateTime.monday;
     DateTime monday = date.subtract(Duration(days: daysToSubtract));
@@ -131,6 +136,16 @@ class DateTimeUtils {
 
   static DateTime truncateToMidDay(DateTime date) {
     return truncateToDay(date).add(const Duration(hours: 12));
+  }
+
+  /// end of day is next day start -1ys
+  static DateTime endOfDay(DateTime date) {
+    return dayAfter(date).subtract(const Duration(microseconds: 1));
+  }
+
+  /// returns the date with max utc timestamp
+  static DateTime maxDate(DateTime date1, DateTime date2) {
+    return (date1.isAfter(date2)) ? date1 : date2;
   }
 
   static Color? backgroundColor(DateTime dateTime) {
