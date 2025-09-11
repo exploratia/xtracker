@@ -24,6 +24,7 @@ import '../../widgets/controls/appbar/app_bar_actions_divider.dart';
 import '../../widgets/controls/appbar/gradient_app_bar.dart';
 import '../../widgets/controls/layout/centered_message.dart';
 import '../../widgets/controls/layout/h_centered_scroll_view.dart';
+import '../../widgets/controls/navigation/app_bottom_navigation_bar.dart';
 import '../../widgets/controls/navigation/hide_bottom_navigation_bar.dart';
 import '../../widgets/controls/popupmenu/icon_popup_menu.dart';
 import '../../widgets/controls/provider/data_provider_loader.dart';
@@ -379,10 +380,12 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(child: view),
-          SizedBox(
+          Container(
+            decoration: AppBottomNavigationBar.buildBottomNavigationBarDecoration(context),
             height: kBottomNavigationBarHeight,
             child: Material(
-              color: themeData.cardTheme.color,
+              // color: themeData.bottomNavigationBarTheme.backgroundColor,
+              color: Colors.transparent,
               child: HCenteredScrollView(
                 // mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: bottomBarActions,

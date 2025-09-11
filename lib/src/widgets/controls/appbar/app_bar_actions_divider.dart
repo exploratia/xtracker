@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../util/chart/chart_utils.dart';
 import '../../../util/theme_utils.dart';
 
 class AppBarActionsDivider extends StatelessWidget {
@@ -8,21 +9,47 @@ class AppBarActionsDivider extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    return Container(
-      width: 1, // Divider thickness
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: const AlignmentDirectional(0, 1),
-          end: const AlignmentDirectional(0, -0.7),
-          colors: [
-            Colors.transparent,
-            themeData.colorScheme.onPrimary.withAlpha(32),
-            themeData.colorScheme.onPrimary.withAlpha(64),
-            themeData.scaffoldBackgroundColor.withAlpha(0),
-          ],
+    return Row(
+      spacing: 0,
+      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Container(
+          width: 1, // Divider thickness
+          decoration: BoxDecoration(
+            gradient: ChartUtils.createTopToBottomGradient(
+              [
+                Colors.transparent,
+                Colors.transparent,
+                Colors.black12,
+                Colors.black38,
+                Colors.black12,
+                Colors.transparent,
+                Colors.transparent,
+              ],
+            ),
+          ),
+          margin: const EdgeInsets.only(left: ThemeUtils.defaultPadding), // Spacing
         ),
-      ),
-      margin: const EdgeInsets.symmetric(horizontal: ThemeUtils.defaultPadding), // Spacing
+        Container(
+          width: 1, // Divider thickness
+          decoration: BoxDecoration(
+            gradient: ChartUtils.createTopToBottomGradient(
+              [
+                Colors.transparent,
+                Colors.transparent,
+                Colors.white24,
+                Colors.white54,
+                Colors.white24,
+                Colors.transparent,
+                Colors.transparent,
+              ],
+            ),
+          ),
+          margin: const EdgeInsets.only(right: ThemeUtils.defaultPadding), // Spacing
+        ),
+      ],
     );
   }
 }

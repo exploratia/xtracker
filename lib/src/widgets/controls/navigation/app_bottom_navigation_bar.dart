@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../model/navigation/navigation.dart';
+import '../../../util/chart/chart_utils.dart';
+import '../../../util/color_utils.dart';
 import '../../../util/navigation/hide_navigation_labels.dart';
 import 'hide_bottom_navigation_bar.dart';
 
@@ -34,21 +36,12 @@ class AppBottomNavigationBar extends StatelessWidget {
                     child: ValueListenableBuilder(
                       valueListenable: Navigation.currentMainNavigationIdx,
                       builder: (BuildContext ctx2, currentIdx, _) => Container(
-                        decoration: BoxDecoration(
-                          boxShadow: <BoxShadow>[
-                            BoxShadow(
-                              color: themeData.shadowColor,
-                              blurRadius: 8,
-                            ),
-                          ],
-                          // border: Border(
-                          //     top: BorderSide(
-                          //         color: themeData.scaffoldBackgroundColor, width: 1.0)),
-                        ),
+                        decoration: buildBottomNavigationBarDecoration(ctx2),
                         child: BottomNavigationBar(
+                          // set background to transparent (override the theme data) to see the parent background
+                          backgroundColor: Colors.transparent,
                           showUnselectedLabels: navLabelsVisible,
                           showSelectedLabels: navLabelsVisible,
-                          backgroundColor: themeData.cardTheme.color,
                           items: _buildNavItems(ctx2),
                           currentIndex: currentIdx,
                           type: BottomNavigationBarType.fixed,
@@ -78,5 +71,19 @@ class AppBottomNavigationBar extends StatelessWidget {
     }
 
     return result;
+  }
+
+  static BoxDecoration buildBottomNavigationBarDecoration(BuildContext context) {
+    final themeData = Theme.of(context);
+    Color baseColor = themeData.bottomNavigationBarTheme.backgroundColor ?? Colors.grey;
+    return BoxDecoration(
+      boxShadow: <BoxShadow>[
+        BoxShadow(
+          color: themeData.shadowColor,
+          blurRadius: 8,
+        ),
+      ],
+      gradient: ChartUtils.createTopToBottomGradient([baseColor, ColorUtils.darken(baseColor, 40)]),
+    );
   }
 }

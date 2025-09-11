@@ -13,6 +13,7 @@ class GradientAppBar extends AppBar {
       super.leading,
       super.automaticallyImplyLeading})
       : super(
+          shadowColor: Colors.black,
           flexibleSpace: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(

@@ -65,9 +65,9 @@ class ThemeUtils {
     if (!dark && _light != null) return _light!;
 
     final brightness = dark ? Brightness.dark : Brightness.light;
-    final backgroundColor = dark ? const Color(0xff06041f) : const Color.fromRGBO(255, 255, 255, 1);
-    final cardBackgroundColor = dark ? const Color(0xff1f1d35) : const Color.fromRGBO(235, 235, 235, 1.0);
-    final chipBackgroundColor = dark ? const Color(0xff38364c) : const Color.fromRGBO(209, 209, 209, 1.0);
+    final backgroundColor = dark ? const Color(0xff06041f) : const Color(0xfff0f0f0);
+    final cardBackgroundColor = dark ? const Color(0xff1f1d35) : const Color(0xfffdfdfd);
+    final chipBackgroundColor = dark ? const Color(0xff38364c) : const Color(0xffd1d1d1);
     final canvasColor = dark ? const Color(0xff38364c) : const Color.fromRGBO(240, 240, 240, 1);
 
     final shadowColor = dark ? backgroundColor : Colors.black45;
@@ -93,12 +93,15 @@ class ThemeUtils {
         shadowColor: shadowColor,
       ),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: backgroundColor,
+        backgroundColor: dark ? cardBackgroundColor : chipBackgroundColor,
+        elevation: 0,
         selectedItemColor: primary,
+        unselectedItemColor: textColor,
       ),
       // Card (e.g. in Settings)
       cardTheme: CardThemeData(
         color: cardBackgroundColor,
+        elevation: 16,
         shape: RoundedRectangleBorder(
           borderRadius: ThemeUtils.cardBorderRadius,
         ),
@@ -147,6 +150,9 @@ class ThemeUtils {
       ),
       navigationRailTheme: NavigationRailThemeData(
         backgroundColor: backgroundColor,
+        unselectedLabelTextStyle: TextStyle(color: textColor),
+        unselectedIconTheme: IconThemeData(color: textColor),
+        useIndicator: false,
       ),
       progressIndicatorTheme: ProgressIndicatorThemeData(
         color: primary,
@@ -167,7 +173,8 @@ class ThemeUtils {
         valueIndicatorTextStyle: TextStyle(color: textColor),
       ),
       snackBarTheme: SnackBarThemeData(
-        backgroundColor: cardBackgroundColor,
+        backgroundColor: dark ? cardBackgroundColor : chipBackgroundColor,
+        elevation: 8,
         contentTextStyle: TextStyle(color: textColor, fontSize: fontSizeBodyM),
       ),
       tabBarTheme: TabBarThemeData(indicatorColor: textColor),
@@ -192,7 +199,7 @@ class ThemeUtils {
           fontSize: fontSizeBodyM,
         ),
         // decoration: GlowingBorderContainer.createGlowingBoxDecoration(secondary, secondary),
-        decoration: GlowingBorderContainer.createGlowingBoxDecoration(secondary, backgroundColor),
+        decoration: GlowingBorderContainer.createGlowingBoxDecoration(secondary, dark ? backgroundColor : cardBackgroundColor),
         waitDuration: const Duration(milliseconds: 500),
         // showDuration: Duration(seconds: 2),
         preferBelow: false,

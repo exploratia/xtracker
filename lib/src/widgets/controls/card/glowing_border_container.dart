@@ -25,7 +25,12 @@ class GlowingBorderContainer extends StatelessWidget {
       // width: width,
       // height: height,
       margin: EdgeInsets.all(blurRadius),
-      decoration: createGlowingBoxDecoration(glowColor, themeData.scaffoldBackgroundColor, borderWidth: borderWidth, blurRadius: blurRadius),
+      decoration: createGlowingBoxDecoration(
+        glowColor,
+        (themeData.brightness == Brightness.dark) ? themeData.scaffoldBackgroundColor : themeData.cardTheme.color,
+        borderWidth: borderWidth,
+        blurRadius: blurRadius,
+      ),
       child: Center(child: child),
     );
   }
