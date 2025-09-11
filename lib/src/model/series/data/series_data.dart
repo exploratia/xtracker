@@ -3,12 +3,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../generated/locale_keys.g.dart';
+import '../../../providers/series_current_value_provider.dart';
 import '../../../providers/series_data_provider.dart';
 import '../../../util/dialogs.dart';
 import '../../../util/logging/flutter_simple_logging.dart';
 import '../../../widgets/series/data/input/blood_pressure/blood_pressure_input.dart';
 import '../../../widgets/series/data/input/daily_check/daily_check_input.dart';
 import '../../../widgets/series/data/input/habit/habit_input.dart';
+import '../../../widgets/series/data/input/input_result.dart';
 import '../series_def.dart';
 import '../series_type.dart';
 import 'blood_pressure/blood_pressure_value.dart';
@@ -94,75 +96,43 @@ class SeriesData<T extends SeriesDataValue> {
     return reduced;
   }
 
-  static Future<void> showSeriesDataInputDlg(BuildContext context, SeriesDef seriesDef, {dynamic value}) async {
+  static Future<void> showSeriesDataInputDlg(BuildContext context, SeriesDef seriesDef, {SeriesDataValue? value}) async {
+    var seriesDataProvider = context.read<SeriesDataProvider>();
+    var seriesCurrentValueProvider = context.read<SeriesCurrentValueProvider>();
+
+    InputResult<SeriesDataValue>? inputResult;
     switch (seriesDef.seriesType) {
       case SeriesType.bloodPressure:
-        {
-          BloodPressureValue? bloodPressureValue;
-          if (value is BloodPressureValue) bloodPressureValue = value;
-          var val = await BloodPressureQuickInput.showInputDlg(context, seriesDef, bloodPressureValue: bloodPressureValue);
-          if (val == null) return;
-          if (context.mounted) {
-            var seriesDataProvider = context.read<SeriesDataProvider>();
-
-            try {
-              if (bloodPressureValue == null) {
-                await seriesDataProvider.addValue(seriesDef, val, context); // insert
-              } else {
-                await seriesDataProvider.updateValue(seriesDef, val, context); // update
-              }
-            } catch (ex) {
-              SimpleLogging.w('Failed to store blood pressure value.', error: ex);
-              if (context.mounted) {
-                Dialogs.showSnackBarWarning(LocaleKeys.commons_snackbar_saveFailed.tr(), context);
-              }
-            }
-          }
-        }
+        inputResult = await BloodPressureQuickInput.showInputDlg(context, seriesDef, bloodPressureValue: (value is BloodPressureValue) ? value : null);
       case SeriesType.dailyCheck:
-        {
-          DailyCheckValue? dailyCheckValue;
-          if (value is DailyCheckValue) dailyCheckValue = value;
-          var val = await DailyCheckInput.showInputDlg(context, seriesDef, dailyCheckValue: dailyCheckValue);
-          if (val == null) return;
-          if (context.mounted) {
-            var seriesDataProvider = context.read<SeriesDataProvider>();
+        inputResult = await DailyCheckInput.showInputDlg(context, seriesDef, dailyCheckValue: (value is DailyCheckValue) ? value : null);
+      case SeriesType.habit:
+        inputResult = await HabitInput.showInputDlg(context, seriesDef, habitValue: (value is HabitValue) ? value : null);
+    }
 
-            try {
-              if (dailyCheckValue == null) {
-                await seriesDataProvider.addValue(seriesDef, val, context); // insert
-              } else {
-                await seriesDataProvider.updateValue(seriesDef, val, context); // update
-              }
-            } catch (ex) {
-              SimpleLogging.w('Failed to store daily check value.', error: ex);
-              if (context.mounted) {
-                Dialogs.showSnackBarWarning(LocaleKeys.commons_snackbar_saveFailed.tr(), context);
-              }
-            }
+    if (inputResult == null) return; // canceled
+    switch (inputResult.action) {
+      case InputResultAction.insert:
+      case InputResultAction.update:
+        try {
+          if (inputResult.action == InputResultAction.insert) {
+            await seriesDataProvider.addValue(seriesDef, inputResult.seriesDataValue, seriesCurrentValueProvider); // insert
+          } else {
+            await seriesDataProvider.updateValue(seriesDef, inputResult.seriesDataValue, seriesCurrentValueProvider); // update
+          }
+        } catch (ex) {
+          SimpleLogging.w('Failed to store ${seriesDef.seriesType.typeName} value.', error: ex);
+          if (context.mounted) {
+            Dialogs.showSnackBarWarning(LocaleKeys.commons_snackbar_saveFailed.tr(), context);
           }
         }
-      case SeriesType.habit:
-        {
-          HabitValue? habitValue;
-          if (value is HabitValue) habitValue = value;
-          var val = await HabitInput.showInputDlg(context, seriesDef, habitValue: habitValue);
-          if (val == null) return;
+      case InputResultAction.delete:
+        try {
+          await seriesDataProvider.deleteValue(seriesDef, inputResult.seriesDataValue, seriesCurrentValueProvider);
+        } catch (err) {
+          SimpleLogging.w('Failed to delete ${seriesDef.seriesType.typeName} value.', error: err);
           if (context.mounted) {
-            var seriesDataProvider = context.read<SeriesDataProvider>();
-
-            try {
-              if (habitValue == null) {
-                await seriesDataProvider.addValue(seriesDef, val, context); // insert
-              } else {
-                await seriesDataProvider.updateValue(seriesDef, val, context); // update
-              }
-            } catch (ex) {
-              SimpleLogging.w('Failed to store habit value.', error: ex);
-              if (context.mounted) {
-                Dialogs.showSnackBarWarning(LocaleKeys.commons_snackbar_saveFailed.tr(), context);
-              }
-            }
+            Dialogs.showSnackBarWarning(LocaleKeys.commons_snackbar_deleteFailed.tr(), context);
           }
         }
     }

@@ -188,21 +188,19 @@ class SeriesDataProvider with ChangeNotifier {
     return seriesData!;
   }
 
-  Future<void> addValue(SeriesDef seriesDef, dynamic value, BuildContext context) async {
-    await _addOrUpdateValue(seriesDef, value, _Action.insert, context);
+  Future<void> addValue(SeriesDef seriesDef, SeriesDataValue value, SeriesCurrentValueProvider seriesCurrentValueProvider) async {
+    await _handleValue(seriesDef, value, _Action.insert, seriesCurrentValueProvider);
   }
 
-  Future<void> updateValue(SeriesDef seriesDef, dynamic value, BuildContext context) async {
-    await _addOrUpdateValue(seriesDef, value, _Action.update, context);
+  Future<void> updateValue(SeriesDef seriesDef, SeriesDataValue value, SeriesCurrentValueProvider seriesCurrentValueProvider) async {
+    await _handleValue(seriesDef, value, _Action.update, seriesCurrentValueProvider);
   }
 
-  Future<void> deleteValue(SeriesDef seriesDef, dynamic value, BuildContext context) async {
-    await _addOrUpdateValue(seriesDef, value, _Action.delete, context);
+  Future<void> deleteValue(SeriesDef seriesDef, SeriesDataValue value, SeriesCurrentValueProvider seriesCurrentValueProvider) async {
+    await _handleValue(seriesDef, value, _Action.delete, seriesCurrentValueProvider);
   }
 
-  Future<void> _addOrUpdateValue(SeriesDef seriesDef, dynamic value, _Action action, BuildContext context) async {
-    SeriesCurrentValueProvider seriesCurrentValueProvider = context.read<SeriesCurrentValueProvider>();
-
+  Future<void> _handleValue(SeriesDef seriesDef, SeriesDataValue value, _Action action, SeriesCurrentValueProvider seriesCurrentValueProvider) async {
     await fetchDataIfNotYetLoaded(seriesDef);
     var store = Stores.getOrCreateSeriesDataStore(seriesDef);
 

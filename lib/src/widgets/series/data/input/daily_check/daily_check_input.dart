@@ -1,19 +1,17 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../../../generated/locale_keys.g.dart';
 import '../../../../../model/series/data/daily_check/daily_check_value.dart';
 import '../../../../../model/series/series_def.dart';
-import '../../../../../providers/series_data_provider.dart';
 import '../../../../../util/dialogs.dart';
-import '../../../../../util/logging/flutter_simple_logging.dart';
 import '../../../../../util/media_query_utils.dart';
 import '../../../../../util/theme_utils.dart';
 import '../../../../controls/layout/single_child_scroll_view_with_scrollbar.dart';
 import '../../../../controls/text/overflow_text.dart';
 import '../input_header.dart';
+import '../input_result.dart';
 
 class DailyCheckInput extends StatefulWidget {
   const DailyCheckInput({super.key, this.dailyCheckValue, required this.seriesDef});
@@ -21,8 +19,8 @@ class DailyCheckInput extends StatefulWidget {
   final SeriesDef seriesDef;
   final DailyCheckValue? dailyCheckValue;
 
-  static Future<DailyCheckValue?> showInputDlg(BuildContext context, SeriesDef seriesDef, {DailyCheckValue? dailyCheckValue}) async {
-    return await showDialog<DailyCheckValue>(
+  static Future<InputResult<DailyCheckValue>?> showInputDlg(BuildContext context, SeriesDef seriesDef, {DailyCheckValue? dailyCheckValue}) async {
+    return await showDialog<InputResult<DailyCheckValue>>(
       context: context,
       builder: (ctx) => DailyCheckInput(
         seriesDef: seriesDef,
@@ -66,34 +64,25 @@ class _DailyCheckInputState extends State<DailyCheckInput> {
     if (!_isValid) {
       // not valid means delete
       if (widget.dailyCheckValue != null) {
-        _deleteHandler();
+        _deleteHandler(widget.dailyCheckValue!);
       } else {
         Navigator.pop(context, null);
       }
       return;
     }
+    bool insert = widget.dailyCheckValue == null;
     var val = DailyCheckValue(_uuid, _dateTime);
-    Navigator.pop(context, val);
+    Navigator.pop(context, InputResult(val, insert ? InputResultAction.insert : InputResultAction.update));
   }
 
-  void _deleteHandler() async {
+  void _deleteHandler(DailyCheckValue dailyCheckValue) async {
     bool? res = await Dialogs.simpleYesNoDialog(
       LocaleKeys.seriesValue_query_deleteValue.tr(),
       context,
       title: LocaleKeys.commons_dialog_title_areYouSure.tr(),
     );
-    if (res == true) {
-      try {
-        if (mounted) {
-          await context.read<SeriesDataProvider>().deleteValue(widget.seriesDef, widget.dailyCheckValue, context);
-          if (mounted) Navigator.pop(context, null);
-        }
-      } catch (err) {
-        SimpleLogging.w('Failed to delete daily check value.', error: err);
-        if (mounted) {
-          Dialogs.showSnackBarWarning(LocaleKeys.commons_snackbar_deleteFailed.tr(), context);
-        }
-      }
+    if (res == true && mounted) {
+      Navigator.pop(context, InputResult(dailyCheckValue, InputResultAction.delete));
     }
   }
 
@@ -130,7 +119,7 @@ class _DailyCheckInputState extends State<DailyCheckInput> {
             if (widget.dailyCheckValue != null)
               IconButton(
                 tooltip: LocaleKeys.seriesValue_action_deleteValue_tooltip.tr(),
-                onPressed: _deleteHandler,
+                onPressed: () => _deleteHandler(widget.dailyCheckValue!),
                 color: themeData.colorScheme.secondary,
                 iconSize: iconSize,
                 icon: const Icon(Icons.delete_outlined),
@@ -155,7 +144,7 @@ class _DailyCheckInputState extends State<DailyCheckInput> {
           ),
         if (!_isValid && widget.dailyCheckValue != null)
           TextButton(
-            onPressed: _deleteHandler,
+            onPressed: () => _deleteHandler(widget.dailyCheckValue!),
             child: Text(LocaleKeys.commons_dialog_btn_delete.tr()),
           ),
       ],
