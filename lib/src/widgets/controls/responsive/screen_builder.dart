@@ -47,6 +47,7 @@ class ScreenBuilder extends StatelessWidget {
     required Widget Function(BuildContext context) bodyBuilder,
     Widget Function(BuildContext context)? floatingActionButtonBuilder,
     required NavigationItem navItem,
+    bool hideBottomNavigationBar = false,
   }) : this(
             key: key,
             appBarBuilder: appBarBuilder,
@@ -56,7 +57,7 @@ class ScreenBuilder extends StatelessWidget {
             isMainNavigation: Navigation.containsMainNavigationRoute(navItem.routeName),
             drawerBuilder: (context) => const AppDrawer(),
             navigationRailBuilder: (context) => const AppNavigationRail(),
-            bottomNavigationBarBuilder: (context) => const AppBottomNavigationBar());
+            bottomNavigationBarBuilder: hideBottomNavigationBar ? null : (context) => const AppBottomNavigationBar());
 
   @override
   Widget build(BuildContext context) {
