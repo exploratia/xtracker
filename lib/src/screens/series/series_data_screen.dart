@@ -211,7 +211,12 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
 
     Widget view;
     if (hasNoData) {
-      view = SeriesDataNoData(seriesViewMetaData: metaData);
+      view = Column(
+        children: [
+          SeriesTitle(seriesViewMetaData: widget.seriesViewMetaData),
+          Expanded(child: SeriesDataNoData(seriesViewMetaData: metaData)),
+        ],
+      );
     } else {
       view = SeriesDataView(
         seriesViewMetaData: widget.seriesViewMetaData,
