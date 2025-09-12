@@ -122,9 +122,9 @@ class ThemeUtils {
       ),
       datePickerTheme: DatePickerThemeData(
         headerBackgroundColor: cardBackgroundColor,
+        headerForegroundColor: textColor,
       ),
       dialogTheme: DialogThemeData(
-        // for fullscreen background has to be set manually
         backgroundColor: chipBackgroundColor,
         shape: RoundedRectangleBorder(
           borderRadius: ThemeUtils.cardBorderRadius,
