@@ -7,11 +7,11 @@ import 'media_query_utils.dart';
 import 'navigation/fade_transition_builder.dart';
 
 class ThemeUtils {
-  static final MaterialColor primary = ColorUtils.customMaterialColor(const Color(0xffde0b30));
+  static final MaterialColor primary = ColorUtils.customMaterialColor(const Color(0xffed1e79));
   static const Color onPrimary = Colors.white;
 
   // e.g. when pulling down | toggle switch:
-  static final MaterialColor secondary = ColorUtils.customMaterialColor(const Color(0xff911d31));
+  static final MaterialColor secondary = ColorUtils.customMaterialColor(const Color(0xff662d8c));
   static final MaterialColor tertiary = ColorUtils.customMaterialColor(const Color(0xffbfff00));
 
   static const double screenPadding = 16;
