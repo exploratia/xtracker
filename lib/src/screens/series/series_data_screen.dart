@@ -186,17 +186,16 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
   }
 
   void _showSeriesDataAnalytics(BuildContext context) async {
-    final themeData = Theme.of(context);
     await showDialog(
-        context: context,
-        builder: (context) {
-          return Dialog.fullscreen(
-            backgroundColor: themeData.scaffoldBackgroundColor,
-            child: SeriesDataAnalyticsView(
-              seriesViewMetaData: widget.seriesViewMetaData,
-            ),
-          );
-        });
+      context: context,
+      builder: (context) {
+        return Dialog.fullscreen(
+          child: SeriesDataAnalyticsView(
+            seriesViewMetaData: widget.seriesViewMetaData,
+          ),
+        );
+      },
+    );
   }
 
   @override

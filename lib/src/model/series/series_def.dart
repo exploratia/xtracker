@@ -111,15 +111,14 @@ class SeriesDef {
   }
 
   static Future<SeriesDef?> _showSeriesEdit(SeriesDef? seriesDef, BuildContext context) async {
-    final themeData = Theme.of(context);
-
     SeriesDef? editedSeriesDef = await showDialog<SeriesDef>(
-        context: context,
-        builder: (context) => Dialog.fullscreen(
-            backgroundColor: themeData.scaffoldBackgroundColor,
-            child: HideBottomNavigationBar(
-              child: SeriesEdit(seriesDef: seriesDef),
-            )));
+      context: context,
+      builder: (context) => Dialog.fullscreen(
+        child: HideBottomNavigationBar(
+          child: SeriesEdit(seriesDef: seriesDef),
+        ),
+      ),
+    );
     return editedSeriesDef;
   }
 }
