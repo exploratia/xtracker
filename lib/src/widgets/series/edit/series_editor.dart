@@ -108,8 +108,6 @@ class _SeriesEditorState extends State<SeriesEditor> {
 
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
-
     if (_isLoading) return const _Loading();
 
     var formWrapper = ScrollableCenteredFormWrapper(

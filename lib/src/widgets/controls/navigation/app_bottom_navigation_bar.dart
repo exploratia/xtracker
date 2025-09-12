@@ -4,6 +4,7 @@ import '../../../model/navigation/navigation.dart';
 import '../../../util/chart/chart_utils.dart';
 import '../../../util/color_utils.dart';
 import '../../../util/navigation/hide_navigation_labels.dart';
+import '../../../util/theme_utils.dart';
 import 'hide_bottom_navigation_bar.dart';
 
 class AppBottomNavigationBar extends StatelessWidget {
@@ -11,8 +12,7 @@ class AppBottomNavigationBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const animationDuration = Duration(milliseconds: 300);
-    final themeData = Theme.of(context);
+    const animationDuration = Duration(milliseconds: ThemeUtils.animationDuration);
     return SafeArea(
       child: ValueListenableBuilder(
         valueListenable: HideNavigationLabels.visible,

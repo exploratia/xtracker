@@ -8,7 +8,6 @@ class AppBarActionsDivider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
     return Row(
       spacing: 0,
       mainAxisAlignment: MainAxisAlignment.start,
