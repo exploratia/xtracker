@@ -79,6 +79,7 @@ class ThemeUtils {
       canvasColor: canvasColor /* canvas e.g. DropdownButton-Menu in settings */,
       scaffoldBackgroundColor: backgroundColor /* otherwise white|black */,
       shadowColor: shadowColor,
+      focusColor: primary.withAlpha(64),
       // themes
       appBarTheme: AppBarTheme(
         elevation: elevation * 2,
