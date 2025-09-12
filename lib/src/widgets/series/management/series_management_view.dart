@@ -10,6 +10,7 @@ import '../../../util/theme_utils.dart';
 import '../../administration/settings/settings_controller.dart';
 import '../../controls/animation/animate_in.dart';
 import '../../controls/animation/fade_in.dart';
+import '../../controls/appbar/gradient_app_bar.dart';
 import '../../controls/layout/centered_message.dart';
 import '../../controls/responsive/device_dependent_constrained_box.dart';
 import '../series_def_renderer.dart';
@@ -21,11 +22,9 @@ class SeriesManagementView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
-
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: themeData.colorScheme.secondary,
+      appBar: GradientAppBar.build(
+        context,
         title: Text(LocaleKeys.seriesManagement_title.tr()),
         actions: [
           IconButton(

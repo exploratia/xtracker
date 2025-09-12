@@ -7,6 +7,7 @@ import '../../../model/series/series_def.dart';
 import '../../../model/series/series_type.dart';
 import '../../../util/dialogs.dart';
 import '../../../util/theme_utils.dart';
+import '../../controls/appbar/gradient_app_bar.dart';
 import '../../controls/layout/v_centered_single_child_scroll_view_with_scrollbar.dart';
 import '../../controls/select/icon_map.dart';
 import 'series_editor.dart';
@@ -47,12 +48,10 @@ class _SeriesEditState extends State<SeriesEdit> {
 
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
-
     if (_seriesDef == null) {
       return Scaffold(
-        appBar: AppBar(
-          backgroundColor: themeData.colorScheme.secondary,
+        appBar: GradientAppBar.build(
+          context,
           title: Text(LocaleKeys.seriesEdit_title.tr()),
           leading: IconButton(
             tooltip: LocaleKeys.seriesEdit_action_abort_tooltip.tr(),

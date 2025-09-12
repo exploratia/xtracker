@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../../../generated/locale_keys.g.dart';
 import '../../../../model/series/series_view_meta_data.dart';
 import '../../../../util/theme_utils.dart';
+import '../../../controls/appbar/gradient_app_bar.dart';
 import '../../../controls/layout/single_child_scroll_view_with_scrollbar.dart';
 import '../../../controls/responsive/device_dependent_constrained_box.dart';
 import '../view/series_title.dart';
@@ -16,11 +17,9 @@ class SeriesDataAnalyticsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
-
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: themeData.colorScheme.secondary,
+      appBar: GradientAppBar.build(
+        context,
         title: Text(LocaleKeys.seriesDataAnalytics_title.tr()),
         actions: [
           IconButton(
