@@ -15,14 +15,15 @@ class SettingsScreen extends StatelessWidget {
     titleBuilder: () => LocaleKeys.settings_title.tr(),
   );
 
-  const SettingsScreen({super.key, required this.controller});
+  const SettingsScreen({super.key, required this.settingsController});
 
-  final SettingsController controller;
+  final SettingsController settingsController;
 
   @override
   Widget build(BuildContext context) {
     return ScreenBuilder.withStandardNavBuilders(
       navItem: navItem,
+      showWallpaper: settingsController.showWallpaper,
       appBarBuilder: (context) => GradientAppBar.build(
         context,
         addLeadingBackBtn: true,
@@ -30,7 +31,7 @@ class SettingsScreen extends StatelessWidget {
           navItem.titleBuilder(),
         ),
       ),
-      bodyBuilder: (context) => SettingsView(controller: controller),
+      bodyBuilder: (context) => SettingsView(controller: settingsController),
     );
   }
 }

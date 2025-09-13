@@ -13,6 +13,7 @@ import '../../util/logging/flutter_simple_logging.dart';
 import '../../util/media_query_utils.dart';
 import '../../util/theme_utils.dart';
 import '../../widgets/administration/device_info_view.dart';
+import '../../widgets/administration/settings/settings_controller.dart';
 import '../../widgets/controls/appbar/gradient_app_bar.dart';
 import '../../widgets/controls/popupmenu/icon_popup_menu.dart';
 import '../../widgets/controls/responsive/screen_builder.dart';
@@ -24,7 +25,9 @@ class DeviceInfoScreen extends StatefulWidget {
     titleBuilder: () => LocaleKeys.deviceInfo_title.tr(),
   );
 
-  const DeviceInfoScreen({super.key});
+  final SettingsController settingsController;
+
+  const DeviceInfoScreen({super.key, required this.settingsController});
 
   @override
   State<DeviceInfoScreen> createState() => _DeviceInfoScreenState();
@@ -272,6 +275,7 @@ class _DeviceInfoScreenState extends State<DeviceInfoScreen> {
   Widget build(BuildContext context) {
     return ScreenBuilder.withStandardNavBuilders(
       navItem: DeviceInfoScreen.navItem,
+      showWallpaper: widget.settingsController.showWallpaper,
       appBarBuilder: (context) => GradientAppBar.build(
         context,
         addLeadingBackBtn: true,

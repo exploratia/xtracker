@@ -43,6 +43,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return ScreenBuilder.withStandardNavBuilders(
       navItem: navItem,
+      showWallpaper: settingsController.showWallpaper,
       appBarBuilder: (context) {
         return GradientAppBar.build(context,
             title: Row(

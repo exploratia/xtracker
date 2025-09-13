@@ -9,9 +9,9 @@ import '../../../util/series/series_import_export.dart';
 import '../../../util/theme_utils.dart';
 import '../../administration/settings/settings_controller.dart';
 import '../../controls/animation/animate_in.dart';
-import '../../controls/animation/fade_in.dart';
 import '../../controls/appbar/gradient_app_bar.dart';
 import '../../controls/layout/centered_message.dart';
+import '../../controls/layout/wallpaper_behind_scaffold.dart';
 import '../../controls/responsive/device_dependent_constrained_box.dart';
 import '../series_def_renderer.dart';
 
@@ -22,7 +22,8 @@ class SeriesManagementView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    var scaffold = Scaffold(
+      backgroundColor: settingsController.showWallpaper ? Colors.transparent : null,
       appBar: GradientAppBar.build(
         context,
         title: Text(LocaleKeys.seriesManagement_title.tr()),
@@ -47,17 +48,11 @@ class SeriesManagementView extends StatelessWidget {
           const SizedBox(width: ThemeUtils.defaultPadding),
         ],
       ),
-      // appBar: GradientAppBar.build(
-      //   context,
-      //   addLeadingBackBtn: true,
-      //   title: Text(LocaleKeys.series_mgmt_title.tr()),
-      //   actions: [
-      //     IconButton(onPressed: () async => SeriesImportExport.showImportExportDlg(context), icon: const Icon(Icons.import_export_outlined)),
-      //     IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.edit_off_outlined)),
-      //   ],
-      // ),
       body: Center(child: DeviceDependentWidthConstrainedBox(child: _SeriesList(settingsController))),
     );
+
+    if (settingsController.showWallpaper) return WallpaperBehindScaffold(scaffold: scaffold);
+    return scaffold;
   }
 }
 
@@ -74,16 +69,20 @@ class _SeriesList extends StatelessWidget {
       return AnimateIn(
         fade: true,
         slideOffset: const Offset(0, -0.2),
-        child: CenteredMessage(message: LocaleKeys.seriesManagement_label_noSeries.tr()),
+        child: Padding(
+          padding: const EdgeInsets.only(top: 52),
+          child: CenteredMessage(message: LocaleKeys.seriesManagement_label_noSeries.tr()),
+        ),
       );
     }
 
     List<Widget> children = [];
     var idx = 0;
     for (var s in series) {
-      children.add(FadeIn(
+      children.add(AnimateIn(
           key: Key(s.uuid),
-          durationMS: 200 + idx * 400,
+          durationMS: 2000 + idx * 500,
+          slideOffset: const Offset(0, -0.2),
           child: SeriesDefRenderer(
             managementMode: true,
             seriesDef: s,

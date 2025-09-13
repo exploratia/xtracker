@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../generated/locale_keys.g.dart';
 import '../../model/navigation/main_navigation_item.dart';
 import '../../widgets/administration/administration_view.dart';
+import '../../widgets/administration/settings/settings_controller.dart';
 import '../../widgets/controls/appbar/gradient_app_bar.dart';
 import '../../widgets/controls/responsive/screen_builder.dart';
 
@@ -15,12 +16,15 @@ class AdministrationScreen extends StatelessWidget {
     tooltipBuilder: () => LocaleKeys.administration_nav_tooltip.tr(),
   );
 
-  const AdministrationScreen({super.key});
+  final SettingsController settingsController;
+
+  const AdministrationScreen({super.key, required this.settingsController});
 
   @override
   Widget build(BuildContext context) {
     return ScreenBuilder.withStandardNavBuilders(
       navItem: navItem,
+      showWallpaper: settingsController.showWallpaper,
       appBarBuilder: (context) => GradientAppBar.build(
         context,
         addLeadingBackBtn: true,

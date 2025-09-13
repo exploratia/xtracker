@@ -44,15 +44,14 @@ class Routing {
         if (routeSettings.arguments is Map<String, dynamic>) {
           args = routeSettings.arguments as Map<String, dynamic>;
         }
-
         // administration >>
-        if (routeName == AdministrationScreen.navItem.routeName) return const AdministrationScreen();
-        if (routeName == LogsScreen.navItem.routeName) return const LogsScreen();
+        if (routeName == AdministrationScreen.navItem.routeName) return AdministrationScreen(settingsController: settingsController);
+        if (routeName == LogsScreen.navItem.routeName) return LogsScreen(settingsController: settingsController);
         if (routeName == LogScreen.navItem.routeName) return const LogScreen();
-        if (routeName == LogSettingsScreen.navItem.routeName) return const LogSettingsScreen();
+        if (routeName == LogSettingsScreen.navItem.routeName) return LogSettingsScreen(settingsController: settingsController);
         if (routeName == InfoScreen.navItem.routeName) return InfoScreen(args: args);
-        if (routeName == SettingsScreen.navItem.routeName) return SettingsScreen(controller: settingsController);
-        if (routeName == DeviceInfoScreen.navItem.routeName) return const DeviceInfoScreen();
+        if (routeName == SettingsScreen.navItem.routeName) return SettingsScreen(settingsController: settingsController);
+        if (routeName == DeviceInfoScreen.navItem.routeName) return DeviceInfoScreen(settingsController: settingsController);
         // << administration
         // series >>
         if (routeName == SeriesDataScreen.navItem.routeName) return SeriesDataScreen(args: args);
