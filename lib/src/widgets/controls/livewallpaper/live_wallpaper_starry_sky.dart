@@ -26,13 +26,31 @@ class LiveWallpaperStarrySky extends StatefulWidget {
 }
 
 class _LiveWallpaperStarrySkyState extends State<LiveWallpaperStarrySky> {
+  double _density = 0;
   Size _lastSize = Size.zero;
   List<_Star> _stars = [];
+
+  @override
+  void initState() {
+    _density = widget.density;
+    super.initState();
+  }
+
+  @override
+  void didUpdateWidget(covariant LiveWallpaperStarrySky oldWidget) {
+    if (_density != widget.density) {
+      setState(() {
+        _density = widget.density;
+        _stars.clear();
+      });
+    }
+    super.didUpdateWidget(oldWidget);
+  }
 
   void _generateIfNeeded(Size size) {
     if (size == _lastSize && _stars.isNotEmpty) return;
     _lastSize = size;
-    _stars = _generateStars(size, widget.density, widget.seed);
+    _stars = _generateStars(size, _density, widget.seed);
   }
 
   List<_Star> _generateStars(Size size, double density, int? seed) {
