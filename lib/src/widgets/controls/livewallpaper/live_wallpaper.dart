@@ -26,7 +26,7 @@ class LiveWallpaper extends StatelessWidget {
         final minDim = math.min(width, height);
         final sceneDim = math.min(300.0, minDim);
 
-        var t2 = percentOfDay < 0.5 ? (percentOfDay * 2) : ((1 - percentOfDay) * 2);
+        var t2 = 1 - ((percentOfDay - 0.5) * 2).abs();
         Color skyColor = Color.lerp(const Color.fromRGBO(1, 6, 53, 1), ThemeUtils.primary, t2) ?? ThemeUtils.primary;
         Color groundColor = Color.lerp(const Color.fromRGBO(51, 21, 74, 1), ThemeUtils.secondary, t2) ?? ThemeUtils.secondary;
 
@@ -61,7 +61,7 @@ class LiveWallpaper extends StatelessWidget {
                   opacity: 1 - t2,
                   child: LiveWallpaperStarrySky(
                     seed: 1,
-                    density: 0.0003 * (1 - t2),
+                    density: 0.0005 * ((math.sin(1.65 * math.cos(2 * math.pi * percentOfDay)) + 1) / 2),
                   )),
             ),
             // sun & moon
