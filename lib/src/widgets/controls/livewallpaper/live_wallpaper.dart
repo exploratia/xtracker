@@ -33,7 +33,10 @@ class LiveWallpaper extends StatelessWidget {
         List<Widget>? fadeOuts = [];
         if (width > sceneDim) {
           var fadeWidth = (width - sceneDim) / 2;
-          var fadeOutColors = [themeData.scaffoldBackgroundColor, themeData.scaffoldBackgroundColor.withAlpha(0)];
+          var fadeOutColors = [
+            themeData.scaffoldBackgroundColor,
+            themeData.scaffoldBackgroundColor.withAlpha(0),
+          ];
           fadeOuts = [
             _buildFadeOut(fadeWidth, fadeOutColors, left: 0),
             _buildFadeOut(fadeWidth, fadeOutColors, right: 0),
@@ -54,13 +57,13 @@ class LiveWallpaper extends StatelessWidget {
             ),
             Positioned(
               top: 0,
-              bottom: height / 3,
+              bottom: (height / 3).truncateToDouble() - 1,
               left: 1,
               right: 1,
               child: Opacity(
                   opacity: 1 - t2,
                   child: LiveWallpaperStarrySky(
-                    seed: 1,
+                    seed: 2,
                     density: 0.0005 * ((math.sin(1.65 * math.cos(2 * math.pi * percentOfDay)) + 1) / 2),
                   )),
             ),
@@ -68,7 +71,7 @@ class LiveWallpaper extends StatelessWidget {
             _buildSunAndMoon(height, width, sceneDim, percentOfDay),
             // ground
             Positioned(
-              top: height * 2 / 3,
+              top: (height * 2 / 3).truncateToDouble() - 1,
               left: 1,
               right: 0,
               bottom: -1,
