@@ -18,9 +18,6 @@ class LiveWallpaperRefresh extends StatelessWidget {
     return StreamBuilder<int>(
       stream: Stream.periodic(Duration(seconds: intervalInSeconds), (count) => count),
       builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return Container();
-        }
         var now = DateTime.now();
         double percentOfDay = (now.difference(DateTimeUtils.truncateToDay(now)).inSeconds * speedFactor).toDouble() / (60 * 60 * 24);
         while (percentOfDay > 1) {
