@@ -26,14 +26,14 @@
      inkscape:pagecheckerboard="0"
      inkscape:deskcolor="#d1d1d1"
      inkscape:document-units="mm"
-     showgrid="true"
-     inkscape:zoom="3.061451"
-     inkscape:cx="39.687064"
-     inkscape:cy="73.004599"
-     inkscape:window-width="3440"
-     inkscape:window-height="1417"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
+     showgrid="false"
+     inkscape:zoom="1.0823864"
+     inkscape:cx="42.960629"
+     inkscape:cy="0.46194225"
+     inkscape:window-width="1920"
+     inkscape:window-height="1057"
+     inkscape:window-x="3432"
+     inkscape:window-y="349"
      inkscape:window-maximized="1"
      inkscape:current-layer="layer1">
     <inkscape:grid
@@ -49,7 +49,7 @@
        opacity="0.14901961"
        empspacing="10"
        enabled="true"
-       visible="true" />
+       visible="false" />
   </sodipodi:namedview>
   <defs
      id="defs1" />
@@ -58,202 +58,208 @@
      inkscape:groupmode="layer"
      id="layer1">
     <path
-       style="fill:none;stroke:#de0b30;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:none;stroke:#662d8c;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-opacity:1"
        d="M 125,40 5,65"
        id="path1"
        sodipodi:nodetypes="cc" />
     <path
-       style="fill:none;stroke:#de0b30;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:3, 9;stroke-dashoffset:0;stroke-opacity:1"
+       style="fill:none;stroke:#662d8c;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:3, 9;stroke-dashoffset:0;stroke-opacity:1"
        d="M 245,15 125,40"
        id="path1-8"
        sodipodi:nodetypes="cc" />
     <path
-       style="fill:none;stroke:#de0b30;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-opacity:1"
+       style="fill:none;stroke:#662d8c;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-opacity:1"
        d="M 125,95 5,110"
        id="path1-88"
        sodipodi:nodetypes="cc" />
     <path
-       style="fill:none;stroke:#de0b30;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:3, 9;stroke-dashoffset:0;stroke-opacity:1"
+       style="fill:none;stroke:#662d8c;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:3, 9;stroke-dashoffset:0;stroke-opacity:1"
        d="M 245,80 125,95"
        id="path1-8-2"
        sodipodi:nodetypes="cc" />
     <path
-       style="fill:none;stroke:#911c30;stroke-width:3;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       style="fill:none;stroke:#662d8c;stroke-width:3;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
        d="M 125,0 V 130"
        id="path2" />
     <g
        id="g7"
-       transform="translate(7.5,-77.5)">
+       transform="translate(7.5,-77.5)"
+       style="stroke:#ed1e79;stroke-opacity:1">
       <path
-         style="fill:none;stroke:#de0b30;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         style="fill:none;stroke:#ed1e79;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
          d="M 5,135 20,120"
          id="path7" />
       <path
-         style="fill:none;stroke:#de0b30;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         style="fill:none;stroke:#ed1e79;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
          d="M 20,135 5,120"
          id="path7-2" />
     </g>
     <g
        id="g7-1"
-       transform="translate(66.5,-71.5)">
+       transform="translate(66.5,-71.5)"
+       style="stroke:#ed1e79;stroke-opacity:1">
       <path
-         style="fill:none;stroke:#de0b30;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         style="fill:none;stroke:#ed1e79;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
          d="M 5,135 20,120"
          id="path7-7" />
       <path
-         style="fill:none;stroke:#de0b30;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         style="fill:none;stroke:#ed1e79;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
          d="M 20,135 5,120"
          id="path7-2-1" />
     </g>
     <g
        id="g7-4"
-       transform="translate(67.5,-32.5)">
+       transform="translate(67.5,-32.5)"
+       style="stroke:#ed1e79;stroke-opacity:1">
       <path
-         style="fill:none;stroke:#de0b30;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         style="fill:none;stroke:#ed1e79;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
          d="M 5,135 20,120"
          id="path7-23" />
       <path
-         style="fill:none;stroke:#de0b30;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         style="fill:none;stroke:#ed1e79;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
          d="M 20,135 5,120"
          id="path7-2-2" />
     </g>
     <g
        id="g7-7"
-       transform="translate(92.5,-22.5)">
+       transform="translate(92.5,-22.5)"
+       style="stroke:#ed1e79;stroke-opacity:1">
       <path
-         style="fill:none;stroke:#de0b30;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         style="fill:none;stroke:#ed1e79;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
          d="M 5,135 20,120"
          id="path7-6" />
       <path
-         style="fill:none;stroke:#de0b30;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         style="fill:none;stroke:#ed1e79;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
          d="M 20,135 5,120"
          id="path7-2-14" />
     </g>
     <g
        id="g7-2"
-       transform="translate(6.5,-23.5)">
+       transform="translate(6.5,-23.5)"
+       style="stroke:#ed1e79;stroke-opacity:1">
       <path
-         style="fill:none;stroke:#de0b30;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         style="fill:none;stroke:#ed1e79;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
          d="M 5,135 20,120"
          id="path7-1" />
       <path
-         style="fill:none;stroke:#de0b30;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         style="fill:none;stroke:#ed1e79;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
          d="M 20,135 5,120"
          id="path7-2-6" />
     </g>
     <g
        id="g7-8"
-       transform="translate(91.5,-91.5)">
+       transform="translate(91.5,-91.5)"
+       style="stroke:#ed1e79;stroke-opacity:1">
       <path
-         style="fill:none;stroke:#de0b30;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         style="fill:none;stroke:#ed1e79;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
          d="M 5,135 20,120"
          id="path7-5" />
       <path
-         style="fill:none;stroke:#de0b30;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         style="fill:none;stroke:#ed1e79;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
          d="M 20,135 5,120"
          id="path7-2-7" />
     </g>
     <g
        id="g7-8-9"
        transform="translate(132.5,-91.5)"
-       style="stroke:#911c30;stroke-opacity:1">
+       style="stroke:#ed1e79;stroke-opacity:0.50240773">
       <path
-         style="fill:none;stroke:#911c30;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         style="fill:none;stroke:#ed1e79;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.50240773"
          d="M 5,135 20,120"
          id="path7-5-2" />
       <path
-         style="fill:none;stroke:#911c30;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         style="fill:none;stroke:#ed1e79;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.50240773"
          d="M 20,135 5,120"
          id="path7-2-7-7" />
     </g>
     <g
        id="g7-8-9-6"
        transform="translate(132.5,-35.040692)"
-       style="stroke:#911c30;stroke-opacity:1">
+       style="stroke:#ed1e79;stroke-opacity:0.50240773">
       <path
-         style="fill:none;stroke:#911c30;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         style="fill:none;stroke:#ed1e79;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.50240773"
          d="M 5,135 20,120"
          id="path7-5-2-18" />
       <path
-         style="fill:none;stroke:#911c30;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         style="fill:none;stroke:#ed1e79;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.50240773"
          d="M 20,135 5,120"
          id="path7-2-7-7-9" />
     </g>
     <g
        id="g7-8-9-5"
        transform="translate(217.5,-45.652224)"
-       style="stroke:#911c30;stroke-opacity:1">
+       style="stroke:#ed1e79;stroke-opacity:0.50240773">
       <path
-         style="fill:none;stroke:#911c30;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         style="fill:none;stroke:#ed1e79;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.50240773"
          d="M 5,135 20,120"
          id="path7-5-2-4" />
       <path
-         style="fill:none;stroke:#911c30;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         style="fill:none;stroke:#ed1e79;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.50240773"
          d="M 20,135 5,120"
          id="path7-2-7-7-3" />
     </g>
     <g
        id="g7-8-9-34"
        transform="translate(189.16667,-42.115047)"
-       style="stroke:#911c30;stroke-opacity:1">
+       style="stroke:#ed1e79;stroke-opacity:0.50240773">
       <path
-         style="fill:none;stroke:#911c30;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         style="fill:none;stroke:#ed1e79;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.50240773"
          d="M 5,135 20,120"
          id="path7-5-2-11" />
       <path
-         style="fill:none;stroke:#911c30;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         style="fill:none;stroke:#ed1e79;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.50240773"
          d="M 20,135 5,120"
          id="path7-2-7-7-38" />
     </g>
     <g
        id="g7-8-9-7"
        transform="translate(160.83333,-38.577869)"
-       style="stroke:#911c30;stroke-opacity:1">
+       style="stroke:#ed1e79;stroke-opacity:0.50240773">
       <path
-         style="fill:none;stroke:#911c30;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         style="fill:none;stroke:#ed1e79;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.50240773"
          d="M 5,135 20,120"
          id="path7-5-2-7" />
       <path
-         style="fill:none;stroke:#911c30;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         style="fill:none;stroke:#ed1e79;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.50240773"
          d="M 20,135 5,120"
          id="path7-2-7-7-93" />
     </g>
     <g
        id="g7-8-9-8"
        transform="translate(160.83333,-97.59013)"
-       style="stroke:#911c30;stroke-opacity:1">
+       style="stroke:#ed1e79;stroke-opacity:0.50240773">
       <path
-         style="fill:none;stroke:#911c30;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         style="fill:none;stroke:#ed1e79;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.50240773"
          d="M 5,135 20,120"
          id="path7-5-2-8" />
       <path
-         style="fill:none;stroke:#911c30;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         style="fill:none;stroke:#ed1e79;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.50240773"
          d="M 20,135 5,120"
          id="path7-2-7-7-24" />
     </g>
     <g
        id="g7-8-9-3"
        transform="translate(189.16667,-103.68026)"
-       style="stroke:#911c30;stroke-opacity:1">
+       style="stroke:#ed1e79;stroke-opacity:0.50240773">
       <path
-         style="fill:none;stroke:#911c30;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         style="fill:none;stroke:#ed1e79;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.50240773"
          d="M 5,135 20,120"
          id="path7-5-2-1" />
       <path
-         style="fill:none;stroke:#911c30;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         style="fill:none;stroke:#ed1e79;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.50240773"
          d="M 20,135 5,120"
          id="path7-2-7-7-2" />
     </g>
     <g
        id="g7-8-9-1"
        transform="translate(217.5,-109.77039)"
-       style="stroke:#911c30;stroke-opacity:1">
+       style="stroke:#ed1e79;stroke-opacity:0.50240773">
       <path
-         style="fill:none;stroke:#911c30;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         style="fill:none;stroke:#ed1e79;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.50240773"
          d="M 5,135 20,120"
          id="path7-5-2-13" />
       <path
-         style="fill:none;stroke:#911c30;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         style="fill:none;stroke:#ed1e79;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:6.7;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:0.50240773"
          d="M 20,135 5,120"
          id="path7-2-7-7-8" />
     </g>
