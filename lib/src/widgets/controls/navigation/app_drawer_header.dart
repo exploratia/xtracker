@@ -14,7 +14,7 @@ class AppDrawerHeader extends StatelessWidget {
     final themeData = Theme.of(context);
 
     List<Color> gradientColors = [
-      if (themeData.brightness == Brightness.dark) themeData.scaffoldBackgroundColor,
+      if (ThemeUtils.isDarkMode(themeData)) themeData.scaffoldBackgroundColor,
       themeData.colorScheme.secondary,
       themeData.colorScheme.primary,
     ];

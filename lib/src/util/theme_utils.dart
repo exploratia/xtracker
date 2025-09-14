@@ -228,7 +228,15 @@ class ThemeUtils {
     return themeData;
   }
 
-  static bool isDarkMode(BuildContext context) {
-    return Theme.of(context).brightness == Brightness.dark;
+  static bool isDarkMode(dynamic contextOrThemeData) {
+    ThemeData themeData;
+    if (contextOrThemeData is ThemeData) {
+      themeData = contextOrThemeData;
+    } else if (contextOrThemeData is BuildContext) {
+      themeData = Theme.of(contextOrThemeData);
+    } else {
+      return false;
+    }
+    return themeData.brightness == Brightness.dark;
   }
 }

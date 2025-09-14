@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../util/theme_utils.dart';
+
 class GlowingBorderContainer extends StatelessWidget {
   // final double width;
   // final double height;
@@ -27,7 +29,7 @@ class GlowingBorderContainer extends StatelessWidget {
       margin: EdgeInsets.all(blurRadius),
       decoration: createGlowingBoxDecoration(
         glowColor,
-        (themeData.brightness == Brightness.dark) ? themeData.scaffoldBackgroundColor : themeData.cardTheme.color,
+        ThemeUtils.isDarkMode(themeData) ? themeData.scaffoldBackgroundColor : themeData.cardTheme.color,
         borderWidth: borderWidth,
         blurRadius: blurRadius,
       ),

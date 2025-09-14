@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../util/theme_utils.dart';
 import '../navigation/nav_back_icon_button.dart';
 
 class GradientAppBar extends AppBar {
@@ -40,7 +41,7 @@ class GradientAppBar extends AppBar {
     List<Color> gradientColors = [
       themeData.colorScheme.primary,
       themeData.colorScheme.secondary,
-      if (themeData.brightness == Brightness.dark) themeData.scaffoldBackgroundColor,
+      if (ThemeUtils.isDarkMode(themeData)) themeData.scaffoldBackgroundColor,
     ];
 
     Widget? leadingWidget = leading;
