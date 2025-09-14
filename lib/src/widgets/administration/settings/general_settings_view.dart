@@ -120,19 +120,18 @@ class GeneralSettingsView extends StatelessWidget {
           },
           title: Text(LocaleKeys.settings_general_label_hideWallpaper.tr()),
         ),
-        if (!controller.hideWallpaper)
-          Container(
-            clipBehavior: Clip.antiAlias,
-            margin: const EdgeInsets.only(bottom: ThemeUtils.verticalSpacing),
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(ThemeUtils.borderRadiusLarge)),
-            ),
-            height: 150,
-            child: const LiveWallpaperRefresh(
-              intervalInSeconds: 1,
-              speedFactor: 1000,
-            ),
+        Container(
+          clipBehavior: Clip.antiAlias,
+          margin: const EdgeInsets.only(bottom: ThemeUtils.verticalSpacing),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(ThemeUtils.borderRadiusLarge)),
           ),
+          height: 150,
+          child: const LiveWallpaperRefresh(
+            intervalInSeconds: 1,
+            speedFactor: 1000,
+          ),
+        ),
         SwitchListTile(
           contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: ThemeUtils.defaultPadding),
           value: controller.seriesExportDisableReminder,

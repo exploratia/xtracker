@@ -5,7 +5,7 @@ import '../../../model/navigation/navigation.dart';
 import '../../../model/navigation/navigation_item.dart';
 import '../../../util/media_query_utils.dart';
 import '../../../util/theme_utils.dart';
-import '../layout/wallpaper_behind_scaffold.dart';
+import '../layout/wallpaper.dart';
 import '../navigation/app_bottom_navigation_bar.dart';
 import '../navigation/app_drawer.dart';
 import '../navigation/app_navigation_rail.dart';
@@ -108,7 +108,7 @@ class ScreenBuilder extends StatelessWidget {
       backgroundColor: showWallpaper ? Colors.transparent : null,
     );
 
-    if (showWallpaper) return WallpaperBehindScaffold(scaffold: scaffold);
+    if (showWallpaper) return Wallpaper(child: scaffold);
     return scaffold;
   }
 }

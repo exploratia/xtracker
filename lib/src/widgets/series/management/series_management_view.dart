@@ -11,7 +11,7 @@ import '../../administration/settings/settings_controller.dart';
 import '../../controls/animation/animate_in.dart';
 import '../../controls/appbar/gradient_app_bar.dart';
 import '../../controls/layout/centered_message.dart';
-import '../../controls/layout/wallpaper_behind_scaffold.dart';
+import '../../controls/layout/wallpaper.dart';
 import '../../controls/responsive/device_dependent_constrained_box.dart';
 import '../series_def_renderer.dart';
 
@@ -51,7 +51,7 @@ class SeriesManagementView extends StatelessWidget {
       body: Center(child: DeviceDependentWidthConstrainedBox(child: _SeriesList(settingsController))),
     );
 
-    if (settingsController.showWallpaper) return WallpaperBehindScaffold(scaffold: scaffold);
+    if (settingsController.showWallpaper) return Wallpaper(child: scaffold);
     return scaffold;
   }
 }
