@@ -576,6 +576,7 @@
       "title": "General settings",
       "label": {
         "hideNavigationLabels": "Hide navigation labels (menu & bottom navigation):",
+        "hideWallpaper": "Hide wallpaper:",
         "seriesExportDisableReminder": "Disable series export reminder (30 days after last export):",
         "lang": "Language:",
         "theme": "Theme:"

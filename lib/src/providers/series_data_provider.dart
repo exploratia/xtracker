@@ -1,7 +1,6 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../model/series/data/blood_pressure/blood_pressure_value.dart';
 import '../model/series/data/daily_check/daily_check_value.dart';
@@ -126,9 +125,7 @@ class SeriesDataProvider with ChangeNotifier {
     }
   }
 
-  Future<void> delete(SeriesDef seriesDef, BuildContext context) async {
-    SeriesCurrentValueProvider seriesCurrentValueProvider = context.read<SeriesCurrentValueProvider>();
-
+  Future<void> delete(SeriesDef seriesDef, SeriesCurrentValueProvider seriesCurrentValueProvider) async {
     // delete current value
     await seriesCurrentValueProvider.delete(seriesDef);
     //  await Future.delayed(const Duration(seconds: 10)); // for testing
@@ -188,21 +185,19 @@ class SeriesDataProvider with ChangeNotifier {
     return seriesData!;
   }
 
-  Future<void> addValue(SeriesDef seriesDef, dynamic value, BuildContext context) async {
-    await _addOrUpdateValue(seriesDef, value, _Action.insert, context);
+  Future<void> addValue(SeriesDef seriesDef, SeriesDataValue value, SeriesCurrentValueProvider seriesCurrentValueProvider) async {
+    await _handleValue(seriesDef, value, _Action.insert, seriesCurrentValueProvider);
   }
 
-  Future<void> updateValue(SeriesDef seriesDef, dynamic value, BuildContext context) async {
-    await _addOrUpdateValue(seriesDef, value, _Action.update, context);
+  Future<void> updateValue(SeriesDef seriesDef, SeriesDataValue value, SeriesCurrentValueProvider seriesCurrentValueProvider) async {
+    await _handleValue(seriesDef, value, _Action.update, seriesCurrentValueProvider);
   }
 
-  Future<void> deleteValue(SeriesDef seriesDef, dynamic value, BuildContext context) async {
-    await _addOrUpdateValue(seriesDef, value, _Action.delete, context);
+  Future<void> deleteValue(SeriesDef seriesDef, SeriesDataValue value, SeriesCurrentValueProvider seriesCurrentValueProvider) async {
+    await _handleValue(seriesDef, value, _Action.delete, seriesCurrentValueProvider);
   }
 
-  Future<void> _addOrUpdateValue(SeriesDef seriesDef, dynamic value, _Action action, BuildContext context) async {
-    SeriesCurrentValueProvider seriesCurrentValueProvider = context.read<SeriesCurrentValueProvider>();
-
+  Future<void> _handleValue(SeriesDef seriesDef, SeriesDataValue value, _Action action, SeriesCurrentValueProvider seriesCurrentValueProvider) async {
     await fetchDataIfNotYetLoaded(seriesDef);
     var store = Stores.getOrCreateSeriesDataStore(seriesDef);
 
@@ -242,8 +237,7 @@ class SeriesDataProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addValues(SeriesDef seriesDef, List<dynamic> values, BuildContext context) async {
-    SeriesCurrentValueProvider seriesCurrentValueProvider = context.read<SeriesCurrentValueProvider>();
+  Future<void> addValues(SeriesDef seriesDef, List<dynamic> values, SeriesCurrentValueProvider seriesCurrentValueProvider) async {
     SeriesDataValue? latest;
 
     await fetchDataIfNotYetLoaded(seriesDef);

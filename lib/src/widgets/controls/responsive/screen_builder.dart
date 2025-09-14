@@ -5,6 +5,7 @@ import '../../../model/navigation/navigation.dart';
 import '../../../model/navigation/navigation_item.dart';
 import '../../../util/media_query_utils.dart';
 import '../../../util/theme_utils.dart';
+import '../layout/wallpaper.dart';
 import '../navigation/app_bottom_navigation_bar.dart';
 import '../navigation/app_drawer.dart';
 import '../navigation/app_navigation_rail.dart';
@@ -27,6 +28,8 @@ class ScreenBuilder extends StatelessWidget {
   /// MainNav ? on tap back goto home
   final bool isMainNavigation;
 
+  final bool showWallpaper;
+
   const ScreenBuilder({
     super.key,
     required this.bodyBuilder,
@@ -37,6 +40,7 @@ class ScreenBuilder extends StatelessWidget {
     this.navigationRailBuilder,
     required this.isHome,
     required this.isMainNavigation,
+    this.showWallpaper = false,
   });
 
   /// ShortHand constructor for standard navigation
@@ -47,16 +51,20 @@ class ScreenBuilder extends StatelessWidget {
     required Widget Function(BuildContext context) bodyBuilder,
     Widget Function(BuildContext context)? floatingActionButtonBuilder,
     required NavigationItem navItem,
+    bool hideBottomNavigationBar = false,
+    bool showWallpaper = false,
   }) : this(
-            key: key,
-            appBarBuilder: appBarBuilder,
-            bodyBuilder: bodyBuilder,
-            floatingActionButtonBuilder: floatingActionButtonBuilder,
-            isHome: navItem.routeName == '/',
-            isMainNavigation: Navigation.containsMainNavigationRoute(navItem.routeName),
-            drawerBuilder: (context) => const AppDrawer(),
-            navigationRailBuilder: (context) => const AppNavigationRail(),
-            bottomNavigationBarBuilder: (context) => const AppBottomNavigationBar());
+          key: key,
+          appBarBuilder: appBarBuilder,
+          bodyBuilder: bodyBuilder,
+          floatingActionButtonBuilder: floatingActionButtonBuilder,
+          isHome: navItem.routeName == '/',
+          isMainNavigation: Navigation.containsMainNavigationRoute(navItem.routeName),
+          drawerBuilder: (context) => const AppDrawer(),
+          navigationRailBuilder: (context) => const AppNavigationRail(),
+          bottomNavigationBarBuilder: hideBottomNavigationBar ? null : (context) => const AppBottomNavigationBar(),
+          showWallpaper: showWallpaper,
+        );
 
   @override
   Widget build(BuildContext context) {
@@ -91,13 +99,17 @@ class ScreenBuilder extends StatelessWidget {
       bodyPopScope = bodySafeArea;
     }
 
-    return Scaffold(
+    var scaffold = Scaffold(
       appBar: appBarBuilder != null ? appBarBuilder!(context) : null,
       drawer: buildDrawer ? SafeArea(child: drawerBuilder!(context)) : null,
       bottomNavigationBar: buildBottomNavigationBar ? bottomNavigationBarBuilder!(context) : null,
       body: bodyPopScope,
       floatingActionButton: floatingActionButtonBuilder != null ? floatingActionButtonBuilder!(context) : null,
+      backgroundColor: showWallpaper ? Colors.transparent : null,
     );
+
+    if (showWallpaper) return Wallpaper(child: scaffold);
+    return scaffold;
   }
 }
 

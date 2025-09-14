@@ -216,6 +216,7 @@ abstract class  LocaleKeys {
   static const settings_deviceStorage_query_removeAllData = 'settings.deviceStorage.query.removeAllData';
   static const settings_general_title = 'settings.general.title';
   static const settings_general_label_hideNavigationLabels = 'settings.general.label.hideNavigationLabels';
+  static const settings_general_label_hideWallpaper = 'settings.general.label.hideWallpaper';
   static const settings_general_label_seriesExportDisableReminder = 'settings.general.label.seriesExportDisableReminder';
   static const settings_general_label_lang = 'settings.general.label.lang';
   static const settings_general_label_theme = 'settings.general.label.theme';

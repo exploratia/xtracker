@@ -9,6 +9,7 @@ import '../../../providers/series_provider.dart';
 import '../../../util/dialogs.dart';
 import '../../../util/logging/flutter_simple_logging.dart';
 import '../../../util/theme_utils.dart';
+import '../../controls/appbar/gradient_app_bar.dart';
 import '../../controls/card/expandable.dart';
 import '../../controls/layout/scrollable_centered_form_wrapper.dart';
 import '../../controls/select/color_picker.dart';
@@ -107,8 +108,6 @@ class _SeriesEditorState extends State<SeriesEditor> {
 
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
-
     if (_isLoading) return const _Loading();
 
     var formWrapper = ScrollableCenteredFormWrapper(
@@ -166,8 +165,8 @@ class _SeriesEditorState extends State<SeriesEditor> {
     );
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: themeData.colorScheme.secondary,
+      appBar: GradientAppBar.build(
+        context,
         title: Text(LocaleKeys.seriesEdit_title.tr()),
         leading: IconButton(
           tooltip: LocaleKeys.seriesEdit_action_abort_tooltip.tr(),
@@ -193,10 +192,9 @@ class _Loading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: themeData.colorScheme.secondary,
+      appBar: GradientAppBar.build(
+        context,
         title: Text(LocaleKeys.seriesEdit_title.tr()),
       ),
       body: const LinearProgressIndicator(),

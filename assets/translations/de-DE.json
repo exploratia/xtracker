@@ -574,7 +574,8 @@
     "general": {
       "title": "Allgemeine Einstellungen",
       "label": {
-        "hideNavigationLabels": "Navigationslabels verstecken (Menü & Navigationsleiste):",
+        "hideNavigationLabels": "Navigationslabels ausblenden (Menü & Navigationsleiste):",
+        "hideWallpaper": "Hintergrundbild ausblenden:",
         "seriesExportDisableReminder": "Erinnerung für Messreihenexport deaktivieren (30 Tage nach letztem Export):",
         "lang": "Sprache:",
         "theme": "Theme:"

@@ -38,8 +38,8 @@ class SeriesLatestValueRenderer extends StatelessWidget {
                     seriesDataValue: currentValue,
                     child: _LatestValueWrap(
                       children: [
-                        Text(DateTimeUtils.formateDate(currentValue.dateTime)),
-                        Text(DateTimeUtils.formateTime(currentValue.dateTime)),
+                        Text(DateTimeUtils.formatDate(currentValue.dateTime)),
+                        Text(DateTimeUtils.formatTime(currentValue.dateTime)),
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
@@ -64,8 +64,8 @@ class SeriesLatestValueRenderer extends StatelessWidget {
                     seriesDef: seriesDef,
                     seriesDataValue: currentValue,
                     child: _LatestValueWrap(children: [
-                      Text(DateTimeUtils.formateDate(currentValue.dateTime)),
-                      Text(DateTimeUtils.formateTime(currentValue.dateTime)),
+                      Text(DateTimeUtils.formatDate(currentValue.dateTime)),
+                      Text(DateTimeUtils.formatTime(currentValue.dateTime)),
                       DailyCheckValueRenderer(dailyCheckValue: currentValue, seriesDef: seriesDef),
                     ]),
                   );
@@ -84,8 +84,8 @@ class SeriesLatestValueRenderer extends StatelessWidget {
                     seriesDef: seriesDef,
                     seriesDataValue: currentValue,
                     child: _LatestValueWrap(children: [
-                      Text(DateTimeUtils.formateDate(currentValue.dateTime)),
-                      Text(DateTimeUtils.formateTime(currentValue.dateTime)),
+                      Text(DateTimeUtils.formatDate(currentValue.dateTime)),
+                      Text(DateTimeUtils.formatTime(currentValue.dateTime)),
                       HabitValueRenderer(habitValue: currentValue, seriesDef: seriesDef),
                     ]),
                   );

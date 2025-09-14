@@ -27,7 +27,7 @@ class SeriesDataAnalyticsBloodPressureTrendView extends StatefulWidget {
     return 30 * MediaQueryUtils.textScaleFactor + 6;
   }
 
-  static const double _tendencyArrowWidth = 12;
+  static const double _tendencyArrowWidth = 20;
   static const List<int> _dataBasisDays = [7, 30, 90, 365];
 
   const SeriesDataAnalyticsBloodPressureTrendView({super.key, required this.seriesViewMetaData, required this.seriesDataValues});
@@ -118,11 +118,17 @@ class _SeriesDataAnalyticsBloodPressureTrendViewState extends State<SeriesDataAn
                             children: [
                               Tooltip(
                                 message: fitResultHigh.getTendency().tooltip,
-                                child: Text(fitResultHigh.getTendency().arrow),
+                                child: Icon(
+                                  fitResultHigh.getTendency().arrow,
+                                  size: SeriesDataAnalyticsBloodPressureTrendView._tendencyArrowWidth,
+                                ),
                               ),
                               Tooltip(
                                 message: fitResultLow.getTendency().tooltip,
-                                child: Text(fitResultLow.getTendency().arrow),
+                                child: Icon(
+                                  fitResultLow.getTendency().arrow,
+                                  size: SeriesDataAnalyticsBloodPressureTrendView._tendencyArrowWidth,
+                                ),
                               ),
                             ],
                           ),

@@ -25,7 +25,7 @@ class RowPerDayCellBuilder<T extends SeriesDataValue> {
       Widget gridCellChild = Container();
       value = dayItem.all;
       if (xIndex == 1 && value != null) {
-        gridCellChild = Center(child: Text(DateTimeUtils.formateTime(value.dateTime)));
+        gridCellChild = Center(child: Text(DateTimeUtils.formatTime(value.dateTime)));
       } else if (xIndex == 2 && value != null) {
         gridCellChild = gridCellChildBuilder(value);
       }

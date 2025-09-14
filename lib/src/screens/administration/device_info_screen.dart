@@ -13,6 +13,7 @@ import '../../util/logging/flutter_simple_logging.dart';
 import '../../util/media_query_utils.dart';
 import '../../util/theme_utils.dart';
 import '../../widgets/administration/device_info_view.dart';
+import '../../widgets/administration/settings/settings_controller.dart';
 import '../../widgets/controls/appbar/gradient_app_bar.dart';
 import '../../widgets/controls/popupmenu/icon_popup_menu.dart';
 import '../../widgets/controls/responsive/screen_builder.dart';
@@ -24,7 +25,9 @@ class DeviceInfoScreen extends StatefulWidget {
     titleBuilder: () => LocaleKeys.deviceInfo_title.tr(),
   );
 
-  const DeviceInfoScreen({super.key});
+  final SettingsController settingsController;
+
+  const DeviceInfoScreen({super.key, required this.settingsController});
 
   @override
   State<DeviceInfoScreen> createState() => _DeviceInfoScreenState();
@@ -272,6 +275,7 @@ class _DeviceInfoScreenState extends State<DeviceInfoScreen> {
   Widget build(BuildContext context) {
     return ScreenBuilder.withStandardNavBuilders(
       navItem: DeviceInfoScreen.navItem,
+      showWallpaper: widget.settingsController.showWallpaper,
       appBarBuilder: (context) => GradientAppBar.build(
         context,
         addLeadingBackBtn: true,
@@ -299,7 +303,7 @@ class _DeviceInfoScreenState extends State<DeviceInfoScreen> {
       const Icon(Icons.download_outlined),
       () async {
         try {
-          bool exported = await JsonUtils.exportJsonFile(_buildExportableJson(), 'xtracker_device_info_${DateTimeUtils.formateExportDateTime()}.json');
+          bool exported = await JsonUtils.exportJsonFile(_buildExportableJson(), 'xtracker_device_info_${DateTimeUtils.formatExportDateTime()}.json');
           if (exported) {
             SimpleLogging.i('Successfully exported device info.');
             if (context.mounted) Dialogs.showSnackBar(LocaleKeys.commons_snackbar_exportSuccess.tr(), context);
@@ -318,7 +322,7 @@ class _DeviceInfoScreenState extends State<DeviceInfoScreen> {
       const Icon(Icons.share_outlined),
       () async {
         try {
-          bool shared = await JsonUtils.shareJsonFile(_buildExportableJson(), 'xtracker_device_info_${DateTimeUtils.formateExportDateTime()}.json');
+          bool shared = await JsonUtils.shareJsonFile(_buildExportableJson(), 'xtracker_device_info_${DateTimeUtils.formatExportDateTime()}.json');
           if (shared) {
             SimpleLogging.i('Successfully shared device info.');
             if (context.mounted) Dialogs.showSnackBar(LocaleKeys.commons_snackbar_shareSuccess.tr(), context);

@@ -9,6 +9,7 @@ import '../../util/dialogs.dart';
 import '../../util/logging/flutter_simple_logging.dart';
 import '../../util/theme_utils.dart';
 import '../administration/settings/settings_controller.dart';
+import '../controls/animation/animate_in.dart';
 import '../controls/animation/fade_in.dart';
 import '../controls/layout/v_centered_single_child_scroll_view_with_scrollbar.dart';
 import '../controls/provider/data_provider_loader.dart';
@@ -64,8 +65,9 @@ class _SeriesList extends StatelessWidget {
     List<Widget> children = [];
     var idx = 0;
     for (var s in series) {
-      children.add(FadeIn(
-          durationMS: 200 + idx * 400,
+      children.add(AnimateIn(
+          durationMS: 1000 + idx * 500,
+          slideOffset: const Offset(0, 0.2),
           child: SeriesDefRenderer(
             seriesDef: s,
             index: idx,

@@ -96,10 +96,12 @@ class SeriesDefRenderer extends StatelessWidget {
       );
     }
 
-    return GlowingBorderContainer(
+    var glowingBorderContainer = GlowingBorderContainer(
       glowColor: seriesDef.color,
       child: content,
     );
+    if (settingsController.showWallpaper) return Opacity(opacity: 0.8, child: glowingBorderContainer);
+    return glowingBorderContainer;
   }
 }
 

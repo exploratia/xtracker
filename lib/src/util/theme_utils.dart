@@ -7,11 +7,11 @@ import 'media_query_utils.dart';
 import 'navigation/fade_transition_builder.dart';
 
 class ThemeUtils {
-  static final MaterialColor primary = ColorUtils.customMaterialColor(const Color(0xffde0b30));
+  static final MaterialColor primary = ColorUtils.customMaterialColor(const Color(0xffed1e79));
   static const Color onPrimary = Colors.white;
 
   // e.g. when pulling down | toggle switch:
-  static final MaterialColor secondary = ColorUtils.customMaterialColor(const Color(0xff911d31));
+  static final MaterialColor secondary = ColorUtils.customMaterialColor(const Color(0xff662d8c));
   static final MaterialColor tertiary = ColorUtils.customMaterialColor(const Color(0xffbfff00));
 
   static const double screenPadding = 16;
@@ -65,9 +65,9 @@ class ThemeUtils {
     if (!dark && _light != null) return _light!;
 
     final brightness = dark ? Brightness.dark : Brightness.light;
-    final backgroundColor = dark ? const Color(0xff06041f) : const Color.fromRGBO(255, 255, 255, 1);
-    final cardBackgroundColor = dark ? const Color(0xff1f1d35) : const Color.fromRGBO(235, 235, 235, 1.0);
-    final chipBackgroundColor = dark ? const Color(0xff38364c) : const Color.fromRGBO(209, 209, 209, 1.0);
+    final backgroundColor = dark ? const Color(0xff06041f) : const Color(0xfff0f0f0);
+    final cardBackgroundColor = dark ? const Color(0xff1f1d35) : const Color(0xfffdfdfd);
+    final chipBackgroundColor = dark ? const Color(0xff38364c) : const Color(0xffd1d1d1);
     final canvasColor = dark ? const Color(0xff38364c) : const Color.fromRGBO(240, 240, 240, 1);
 
     final shadowColor = dark ? backgroundColor : Colors.black45;
@@ -79,6 +79,7 @@ class ThemeUtils {
       canvasColor: canvasColor /* canvas e.g. DropdownButton-Menu in settings */,
       scaffoldBackgroundColor: backgroundColor /* otherwise white|black */,
       shadowColor: shadowColor,
+      focusColor: primary.withAlpha(64),
       // themes
       appBarTheme: AppBarTheme(
         elevation: elevation * 2,
@@ -93,12 +94,15 @@ class ThemeUtils {
         shadowColor: shadowColor,
       ),
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
-        backgroundColor: backgroundColor,
+        backgroundColor: dark ? cardBackgroundColor : chipBackgroundColor,
+        elevation: 0,
         selectedItemColor: primary,
+        unselectedItemColor: textColor,
       ),
       // Card (e.g. in Settings)
       cardTheme: CardThemeData(
         color: cardBackgroundColor,
+        elevation: 16,
         shape: RoundedRectangleBorder(
           borderRadius: ThemeUtils.cardBorderRadius,
         ),
@@ -119,9 +123,9 @@ class ThemeUtils {
       ),
       datePickerTheme: DatePickerThemeData(
         headerBackgroundColor: cardBackgroundColor,
+        headerForegroundColor: textColor,
       ),
       dialogTheme: DialogThemeData(
-        // for fullscreen background has to be set manually
         backgroundColor: chipBackgroundColor,
         shape: RoundedRectangleBorder(
           borderRadius: ThemeUtils.cardBorderRadius,
@@ -147,6 +151,9 @@ class ThemeUtils {
       ),
       navigationRailTheme: NavigationRailThemeData(
         backgroundColor: backgroundColor,
+        unselectedLabelTextStyle: TextStyle(color: textColor),
+        unselectedIconTheme: IconThemeData(color: textColor),
+        useIndicator: false,
       ),
       progressIndicatorTheme: ProgressIndicatorThemeData(
         color: primary,
@@ -167,7 +174,8 @@ class ThemeUtils {
         valueIndicatorTextStyle: TextStyle(color: textColor),
       ),
       snackBarTheme: SnackBarThemeData(
-        backgroundColor: cardBackgroundColor,
+        backgroundColor: dark ? cardBackgroundColor : chipBackgroundColor,
+        elevation: 8,
         contentTextStyle: TextStyle(color: textColor, fontSize: fontSizeBodyM),
       ),
       tabBarTheme: TabBarThemeData(indicatorColor: textColor),
@@ -192,7 +200,7 @@ class ThemeUtils {
           fontSize: fontSizeBodyM,
         ),
         // decoration: GlowingBorderContainer.createGlowingBoxDecoration(secondary, secondary),
-        decoration: GlowingBorderContainer.createGlowingBoxDecoration(secondary, backgroundColor),
+        decoration: GlowingBorderContainer.createGlowingBoxDecoration(secondary, dark ? backgroundColor : cardBackgroundColor),
         waitDuration: const Duration(milliseconds: 500),
         // showDuration: Duration(seconds: 2),
         preferBelow: false,
@@ -220,7 +228,15 @@ class ThemeUtils {
     return themeData;
   }
 
-  static bool isDarkMode(BuildContext context) {
-    return Theme.of(context).brightness == Brightness.dark;
+  static bool isDarkMode(dynamic contextOrThemeData) {
+    ThemeData themeData;
+    if (contextOrThemeData is ThemeData) {
+      themeData = contextOrThemeData;
+    } else if (contextOrThemeData is BuildContext) {
+      themeData = Theme.of(contextOrThemeData);
+    } else {
+      return false;
+    }
+    return themeData.brightness == Brightness.dark;
   }
 }

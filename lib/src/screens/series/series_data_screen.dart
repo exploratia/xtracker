@@ -19,11 +19,12 @@ import '../../util/date_time_utils.dart';
 import '../../util/globals.dart';
 import '../../util/media_query_utils.dart';
 import '../../util/theme_utils.dart';
+import '../../util/tooltip_utils.dart';
 import '../../widgets/controls/appbar/app_bar_actions_divider.dart';
 import '../../widgets/controls/appbar/gradient_app_bar.dart';
 import '../../widgets/controls/layout/centered_message.dart';
 import '../../widgets/controls/layout/h_centered_scroll_view.dart';
-import '../../widgets/controls/navigation/hide_bottom_navigation_bar.dart';
+import '../../widgets/controls/navigation/app_bottom_navigation_bar.dart';
 import '../../widgets/controls/popupmenu/icon_popup_menu.dart';
 import '../../widgets/controls/provider/data_provider_loader.dart';
 import '../../widgets/controls/responsive/screen_builder.dart';
@@ -49,6 +50,7 @@ class SeriesDataScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TooltipUtils.updateTooltipMonospaceStyle(context);
     String seriesUuid = Globals.invalid;
     SeriesDef? seriesDef;
     var seriesParameterValue = args['series'];
@@ -63,53 +65,51 @@ class SeriesDataScreen extends StatelessWidget {
       seriesUuid = seriesDef.uuid;
     }
 
-    return HideBottomNavigationBar(
-      child: DataProviderLoader(
-        obtainDataProviderFuture: context.read<SeriesProvider>().fetchDataIfNotYetLoaded(),
-        child: _SeriesDefLoader(
-          seriesUuid: seriesUuid,
-          seriesDef: seriesDef,
-          builder: (SeriesViewMetaData? seriesViewMetaData) {
-            if (seriesViewMetaData == null) {
-              // pop screen if no series is available.
-              WidgetsBinding.instance.addPostFrameCallback((_) => Navigator.pop(context));
-              return const CenteredMessage(message: 'Invalid series!');
-            }
+    return DataProviderLoader(
+      obtainDataProviderFuture: context.read<SeriesProvider>().fetchDataIfNotYetLoaded(),
+      child: _SeriesDefLoader(
+        seriesUuid: seriesUuid,
+        seriesDef: seriesDef,
+        builder: (SeriesViewMetaData? seriesViewMetaData) {
+          if (seriesViewMetaData == null) {
+            // pop screen if no series is available.
+            WidgetsBinding.instance.addPostFrameCallback((_) => Navigator.pop(context));
+            return const CenteredMessage(message: 'Invalid series!');
+          }
 
-            return DataProviderLoader(
-              obtainDataProviderFuture: context.read<SeriesDataProvider>().fetchDataIfNotYetLoaded(seriesViewMetaData.seriesDef),
-              child: _SeriesDataFilterWrapper(
-                seriesViewMetaData: seriesViewMetaData,
-                builder: (SeriesDataFilter filter, VoidCallback updateFilter) {
-                  return _SeriesDataViewOverlaysWrapper(
-                    builder: (SeriesDataViewOverlays seriesDataViewOverlays, void Function({double? topHeight, double? bottomHeight}) updateOverlays) {
-                      return SeriesDataViewContentBuilder(
-                        seriesViewMetaData: seriesViewMetaData,
-                        seriesDataFilter: filter,
-                        seriesDataViewOverlays: seriesDataViewOverlays,
-                        builder: (Widget Function() seriesDataViewBuilder, List<SeriesDataValue> seriesDataValues) {
-                          return OrientationBuilder(builder: (BuildContext context, Orientation orientation) {
-                            var isLandscape = orientation == Orientation.landscape;
-                            return _ScreenBuilder(
-                              seriesViewMetaData: seriesViewMetaData,
-                              seriesDataViewBuilder: seriesDataViewBuilder,
-                              seriesDataValues: seriesDataValues,
-                              filter: filter,
-                              updateFilter: updateFilter,
-                              seriesDataViewOverlays: seriesDataViewOverlays,
-                              updateOverlays: updateOverlays,
-                              isLandScape: isLandscape,
-                            );
-                          });
-                        },
-                      );
-                    },
-                  );
-                },
-              ),
-            );
-          },
-        ),
+          return DataProviderLoader(
+            obtainDataProviderFuture: context.read<SeriesDataProvider>().fetchDataIfNotYetLoaded(seriesViewMetaData.seriesDef),
+            child: _SeriesDataFilterWrapper(
+              seriesViewMetaData: seriesViewMetaData,
+              builder: (SeriesDataFilter filter, VoidCallback updateFilter) {
+                return _SeriesDataViewOverlaysWrapper(
+                  builder: (SeriesDataViewOverlays seriesDataViewOverlays, void Function({double? topHeight, double? bottomHeight}) updateOverlays) {
+                    return SeriesDataViewContentBuilder(
+                      seriesViewMetaData: seriesViewMetaData,
+                      seriesDataFilter: filter,
+                      seriesDataViewOverlays: seriesDataViewOverlays,
+                      builder: (Widget Function() seriesDataViewBuilder, List<SeriesDataValue> seriesDataValues) {
+                        return OrientationBuilder(builder: (BuildContext context, Orientation orientation) {
+                          var isLandscape = orientation == Orientation.landscape;
+                          return _ScreenBuilder(
+                            seriesViewMetaData: seriesViewMetaData,
+                            seriesDataViewBuilder: seriesDataViewBuilder,
+                            seriesDataValues: seriesDataValues,
+                            filter: filter,
+                            updateFilter: updateFilter,
+                            seriesDataViewOverlays: seriesDataViewOverlays,
+                            updateOverlays: updateOverlays,
+                            isLandScape: isLandscape,
+                          );
+                        });
+                      },
+                    );
+                  },
+                );
+              },
+            ),
+          );
+        },
       ),
     );
   }
@@ -186,19 +186,16 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
   }
 
   void _showSeriesDataAnalytics(BuildContext context) async {
-    final themeData = Theme.of(context);
     await showDialog(
-        context: context,
-        builder: (context) {
-          return Dialog.fullscreen(
-            backgroundColor: themeData.scaffoldBackgroundColor,
-            child: HideBottomNavigationBar(
-              child: SeriesDataAnalyticsView(
-                seriesViewMetaData: widget.seriesViewMetaData,
-              ),
-            ),
-          );
-        });
+      context: context,
+      builder: (context) {
+        return Dialog.fullscreen(
+          child: SeriesDataAnalyticsView(
+            seriesViewMetaData: widget.seriesViewMetaData,
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -214,7 +211,12 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
 
     Widget view;
     if (hasNoData) {
-      view = SeriesDataNoData(seriesViewMetaData: metaData);
+      view = Column(
+        children: [
+          SeriesTitle(seriesViewMetaData: widget.seriesViewMetaData),
+          Expanded(child: SeriesDataNoData(seriesViewMetaData: metaData)),
+        ],
+      );
     } else {
       view = SeriesDataView(
         seriesViewMetaData: widget.seriesViewMetaData,
@@ -377,10 +379,12 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(child: view),
-          SizedBox(
+          Container(
+            decoration: AppBottomNavigationBar.buildBottomNavigationBarDecoration(context),
             height: kBottomNavigationBarHeight,
             child: Material(
-              color: themeData.cardTheme.color,
+              // color: themeData.bottomNavigationBarTheme.backgroundColor,
+              color: Colors.transparent,
               child: HCenteredScrollView(
                 // mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: bottomBarActions,
@@ -395,6 +399,7 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
       navItem: navItem,
       appBarBuilder: (context) => GradientAppBar.build(context, addLeadingBackBtn: true, title: title, actions: actions),
       bodyBuilder: (context) => view,
+      hideBottomNavigationBar: true,
     );
   }
 

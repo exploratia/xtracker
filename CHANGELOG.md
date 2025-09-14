@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.2.1] - 2025-09-11
+
+### Fixes
+
+- datetime slider date calculation
+- silent save value abort
+
 ## [1.2.0] - 2025-09-10
 
 ### Features

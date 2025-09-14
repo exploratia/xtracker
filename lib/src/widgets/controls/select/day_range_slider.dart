@@ -12,30 +12,34 @@ import '../../../util/tooltip_utils.dart';
 import '../animation/reverse_progress.dart';
 import '../layout/h_centered_scroll_view.dart';
 
-/// ... -2 -1 0
 class DayRangeSlider extends StatefulWidget {
-  final DateTime dateRangeFrom;
-  final DateTime dateRangeTill;
+  final DateTime _dateRangeFrom;
+  final DateTime _dateRangeTill;
   final int maxSpan;
-  final DateTime? selectedDateRangeFrom;
-  final DateTime? selectedDateRangeTill;
+  final DateTime? _selectedDateRangeFrom;
+  final DateTime? _selectedDateRangeTill;
 
   final Function(DayRange) rangeCallback;
   final Function(bool)? sliderVisibleCallback;
   final bool sliderInitialVisible;
 
-  /// [rangeCallback] receives a RangeValues
-  const DayRangeSlider({
+  /// For all dateTimes only the day part is used
+  ///
+  /// - [rangeCallback] receives a DayRange (till is EndOfDay)
+  DayRangeSlider({
     super.key,
+    required DateTime dateRangeFrom,
+    required DateTime dateRangeTill,
+    DateTime? selectedDateRangeFrom,
+    DateTime? selectedDateRangeTill,
     required this.rangeCallback,
-    required this.dateRangeFrom,
-    required this.dateRangeTill,
-    this.maxSpan = 366 + 31,
-    this.selectedDateRangeFrom,
-    this.selectedDateRangeTill,
     this.sliderVisibleCallback,
+    this.maxSpan = 366 + 31,
     this.sliderInitialVisible = true,
-  });
+  })  : _dateRangeFrom = DateTimeUtils.truncateToDay(dateRangeFrom),
+        _dateRangeTill = DateTimeUtils.truncateToDay(dateRangeTill),
+        _selectedDateRangeFrom = selectedDateRangeFrom != null ? DateTimeUtils.truncateToDay(selectedDateRangeFrom) : null,
+        _selectedDateRangeTill = selectedDateRangeTill != null ? DateTimeUtils.truncateToDay(selectedDateRangeTill) : null;
 
   @override
   State<DayRangeSlider> createState() => _DayRangeSliderState();
@@ -43,20 +47,16 @@ class DayRangeSlider extends StatefulWidget {
   static double calcAdditionalHeightByTextScale() {
     return MediaQueryUtils.calcAdditionalHeightByTextScale(ThemeUtils.fontSizeBodyM);
   }
-
-  static int _calcNumFilterableDates(List<DateTime> dates) {
-    dates.sort((a, b) => a.compareTo(b));
-    return DateTimeUtils.truncateToDay(dates.last).add(const Duration(hours: 12)).difference(DateTimeUtils.truncateToDay(dates.first)).inDays.abs();
-  }
 }
 
 class _DayRangeSliderState extends State<DayRangeSlider> {
   final _reverseProgressKey = GlobalKey<ReverseProgressState>();
 
-  // slider values from 0 to _sliderRange = max days possible
-  late int _sliderRange;
   late DateTime _dateRangeFrom;
   late DateTime _dateRangeTill;
+
+  // slider values from 0 to _sliderRange = max days possible
+  late int _sliderRange;
 
   late RangeValues _values;
 
@@ -68,15 +68,15 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
   @override
   void initState() {
     _sliderVisible = widget.sliderInitialVisible;
-    _calcVars();
+    _initVars();
 
     // selected range given?
-    if (widget.selectedDateRangeFrom != null) {
+    if (widget._selectedDateRangeFrom != null) {
       DayRange selectedDayRange = DayRange(
-        DateTimeUtils.truncateToDay(widget.selectedDateRangeFrom!),
-        DateTimeUtils.truncateToDay(widget.selectedDateRangeTill ?? DateTimeUtils.dayAfter(DateTime.now())),
+        widget._selectedDateRangeFrom!,
+        // if no till filter is set use today or future date if there is already a series data value
+        widget._selectedDateRangeTill ?? DateTimeUtils.truncateToDay(DateTimeUtils.maxDate(widget._dateRangeTill, DateTime.now())),
       );
-
       _setValuesFromDayRange(selectedDayRange);
     }
     // otherwise start range at the end (the newest date) if maxSpan < maxDays
@@ -101,25 +101,26 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
     if (till.isAfter(_dateRangeTill) || till.isBefore(_dateRangeFrom)) {
       till = _dateRangeTill;
     }
-    _values = RangeValues(_dateRangeFrom.difference(from).inDays.abs().toDouble(), _dateRangeFrom.difference(till).inDays.abs().toDouble());
+    // build difference to midday to ensure all full days are included (because of daylight saving)
+    _values = RangeValues(_dateRangeFrom.difference(DateTimeUtils.truncateToMidDay(from)).inDays.abs().toDouble(),
+        _dateRangeFrom.difference(DateTimeUtils.truncateToMidDay(till)).inDays.abs().toDouble());
   }
 
-  void _calcVars() {
-    _dateRangeFrom = DateTimeUtils.truncateToDay(widget.dateRangeFrom);
-    _dateRangeTill = DateTimeUtils.truncateToDay(widget.dateRangeTill);
-    _sliderRange = min(widget.maxSpan, DayRangeSlider._calcNumFilterableDates([widget.dateRangeFrom, widget.dateRangeTill]));
-    // start range at the end (the newest date) if maxSpan < maxDays
-    // _values = RangeValues(_sliderRange.toDouble() - min(widget.maxSpan, _sliderRange), _sliderRange.toDouble());
+  void _initVars() {
+    // Widget dates are already truncated
+    _dateRangeFrom = widget._dateRangeFrom;
+    _dateRangeTill = widget._dateRangeTill;
+    _sliderRange = _dateRangeTill.add(const Duration(hours: 12)).difference(_dateRangeFrom).inDays.abs();
   }
 
   @override
   void didUpdateWidget(covariant DayRangeSlider oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (oldWidget.dateRangeFrom != widget.dateRangeFrom || oldWidget.dateRangeTill != widget.dateRangeTill || oldWidget.maxSpan != widget.maxSpan) {
+    if (oldWidget._dateRangeFrom != widget._dateRangeFrom || oldWidget._dateRangeTill != widget._dateRangeTill || oldWidget.maxSpan != widget.maxSpan) {
       setState(() {
         // save act dates to be able to restore
         var actSelectedValues = _buildDayRange(false);
-        _calcVars();
+        _initVars();
         // restore dates
         _setValuesFromDayRange(actSelectedValues);
       });
@@ -153,13 +154,10 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
   }
 
   DayRange _buildDayRange(bool forExternals) {
-    int addDay = forExternals ? 1 : 0; // +1 : next day start
-    int subMicroS = forExternals ? 1 : 0; // -1 : smallest difference to midnight
     DayRange dayRange = DayRange(
       DateTimeUtils.truncateToDay(_dateRangeFrom.add(Duration(days: _values.start.roundToDouble().toInt(), hours: 12))),
-      DateTimeUtils.truncateToDay(_dateRangeFrom.add(Duration(days: _values.end.roundToDouble().toInt() + addDay, hours: 12)))
-          .subtract(Duration(microseconds: subMicroS)),
-    ); // next day start
+      DateTimeUtils.endOfDay(_dateRangeFrom.add(Duration(days: _values.end.roundToDouble().toInt(), hours: 12))),
+    );
     return dayRange;
   }
 
@@ -243,7 +241,7 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
                       child: TextButton(
                         onPressed: () => _selectDate(context, true),
                         child: Text(
-                          DateTimeUtils.formateYYYMMDD(_dateRangeFrom.add(Duration(days: _values.start.toInt(), hours: 12))),
+                          DateTimeUtils.formatYYYYMMDD(_dateRangeFrom.add(Duration(days: _values.start.toInt(), hours: 12))),
                           style: btnTextStyle,
                         ),
                       ),
@@ -257,7 +255,7 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
                       child: TextButton(
                         onPressed: () => _selectDate(context, false),
                         child: Text(
-                          DateTimeUtils.formateYYYMMDD(_dateRangeFrom.add(Duration(days: _values.end.toInt(), hours: 12))),
+                          DateTimeUtils.formatYYYYMMDD(_dateRangeFrom.add(Duration(days: _values.end.toInt(), hours: 12))),
                           style: btnTextStyle,
                         ),
                       ),
@@ -467,6 +465,6 @@ class DayRange {
 
   @override
   String toString() {
-    return 'DayRange{from: $from, till: $till}';
+    return 'DayRange{from: ${DateTimeUtils.formatYYYYMMDD(from)}, till: ${DateTimeUtils.formatYYYYMMDD(till)}}';
   }
 }

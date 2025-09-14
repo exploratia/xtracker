@@ -54,6 +54,14 @@ class SettingsService {
     await DeviceStorage.writeBool(DeviceStorageKeys.layoutHideNavLabels, value);
   }
 
+  Future<bool> hideWallpaper() async {
+    return await DeviceStorage.readBool(DeviceStorageKeys.layoutHideWallpaper);
+  }
+
+  Future<void> updateHideWallpaper(bool value) async {
+    await DeviceStorage.writeBool(DeviceStorageKeys.layoutHideWallpaper, value);
+  }
+
   /// Loads the initial app start and set if not yet exists
   Future<DateTime> initialAppStart() async {
     var strTimestamp = await DeviceStorage.read(DeviceStorageKeys.initialAppStart);

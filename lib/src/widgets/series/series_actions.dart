@@ -9,6 +9,7 @@ import '../../model/series/data/habit/habit_value.dart';
 import '../../model/series/data/series_data.dart';
 import '../../model/series/series_def.dart';
 import '../../model/series/series_type.dart';
+import '../../providers/series_current_value_provider.dart';
 import '../../providers/series_data_provider.dart';
 import '../../screens/series/series_data_screen.dart';
 import '../../util/theme_utils.dart';
@@ -92,7 +93,8 @@ class _DailyCheckBtn extends StatelessWidget {
     return IconButton(
         tooltip: LocaleKeys.seriesDefRenderer_action_addValue_tooltip.tr(),
         onPressed: () {
-          context.read<SeriesDataProvider>().addValue(seriesDef, DailyCheckValue(const Uuid().v4(), DateTime.now()), context);
+          var seriesCurrentValueProvider = context.read<SeriesCurrentValueProvider>();
+          context.read<SeriesDataProvider>().addValue(seriesDef, DailyCheckValue(const Uuid().v4(), DateTime.now()), seriesCurrentValueProvider);
         },
         iconSize: ThemeUtils.iconSizeScaled,
         icon: const Icon(Icons.check_outlined));
@@ -111,7 +113,8 @@ class _HabitBtn extends StatelessWidget {
     return IconButton(
         tooltip: LocaleKeys.seriesDefRenderer_action_addValue_tooltip.tr(),
         onPressed: () {
-          context.read<SeriesDataProvider>().addValue(seriesDef, HabitValue(const Uuid().v4(), DateTime.now()), context);
+          var seriesCurrentValueProvider = context.read<SeriesCurrentValueProvider>();
+          context.read<SeriesDataProvider>().addValue(seriesDef, HabitValue(const Uuid().v4(), DateTime.now()), seriesCurrentValueProvider);
         },
         iconSize: ThemeUtils.iconSizeScaled,
         icon: Icon(seriesDef.iconData()));

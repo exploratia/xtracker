@@ -27,23 +27,23 @@ class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key, required this.settingsController});
 
   void _showSeriesManagement(BuildContext context) async {
-    final themeData = Theme.of(context);
     await showDialog<SeriesDef>(
-        context: context,
-        builder: (context) {
-          return Dialog.fullscreen(
-            backgroundColor: themeData.scaffoldBackgroundColor,
-            child: HideBottomNavigationBar(
-              child: SeriesManagementView(settingsController: settingsController),
-            ),
-          );
-        });
+      context: context,
+      builder: (context) {
+        return Dialog.fullscreen(
+          child: HideBottomNavigationBar(
+            child: SeriesManagementView(settingsController: settingsController),
+          ),
+        );
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return ScreenBuilder.withStandardNavBuilders(
       navItem: navItem,
+      showWallpaper: settingsController.showWallpaper,
       appBarBuilder: (context) {
         return GradientAppBar.build(context,
             title: Row(
