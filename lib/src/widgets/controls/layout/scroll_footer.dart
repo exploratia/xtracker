@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../../../generated/assets.gen.dart';
-import '../../../util/theme_utils.dart';
 
 /// Footer vor scroll views in order to have enough space when bottom nav bar is not visible
 class ScrollFooter extends StatelessWidget {
@@ -16,7 +15,6 @@ class ScrollFooter extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var isDark = ThemeUtils.isDarkMode(context);
     return Column(
       children: [
         SizedBox(
@@ -24,7 +22,7 @@ class ScrollFooter extends StatelessWidget {
         ),
         SizedBox(
           height: 64,
-          child: isDark ? Assets.images.logos.appLogoWhite.image(fit: BoxFit.cover) : Assets.images.logos.appLogo.image(fit: BoxFit.cover),
+          child: Assets.images.logos.appLogo.image(fit: BoxFit.cover),
         ),
         SizedBox(
           height: marginBottom,
