@@ -26,6 +26,7 @@ class GlowingBorderContainer extends StatelessWidget {
     return Container(
       // width: width,
       // height: height,
+      clipBehavior: Clip.antiAlias,
       margin: EdgeInsets.all(blurRadius),
       decoration: createGlowingBoxDecoration(
         glowColor,
