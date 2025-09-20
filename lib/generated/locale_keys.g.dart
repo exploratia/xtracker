@@ -197,6 +197,7 @@ abstract class  LocaleKeys {
   static const seriesEdit_seriesSettings_dailyLifeAttributes_preset_minutesUp_title = 'seriesEdit.seriesSettings.dailyLifeAttributes.preset.minutesUp.title';
   static const seriesEdit_seriesSettings_dailyLifeAttributes_preset_numbersDown_title = 'seriesEdit.seriesSettings.dailyLifeAttributes.preset.numbersDown.title';
   static const seriesEdit_seriesSettings_dailyLifeAttributes_preset_numbersUp_title = 'seriesEdit.seriesSettings.dailyLifeAttributes.preset.numbersUp.title';
+  static const seriesEdit_seriesSettings_dailyLifeAttributes_validation_emptyAttributs = 'seriesEdit.seriesSettings.dailyLifeAttributes.validation.emptyAttributs';
   static const seriesManagement_title = 'seriesManagement.title';
   static const seriesManagement_action_importExport_tooltip = 'seriesManagement.action.importExport.tooltip';
   static const seriesManagement_action_closeSeriesManagement_tooltip = 'seriesManagement.action.closeSeriesManagement.tooltip';
@@ -224,6 +225,8 @@ abstract class  LocaleKeys {
   static const seriesManagement_importExport_snackbar_importSuccessfulXofY = 'seriesManagement.importExport.snackbar.importSuccessfulXofY';
   static const seriesManagement_importExport_alert_unexpectedDataStructure = 'seriesManagement.importExport.alert.unexpectedDataStructure';
   static const seriesManagement_importExport_alert_unexpectedFile = 'seriesManagement.importExport.alert.unexpectedFile';
+  static const seriesManagement_importExport_alert_import_title = 'seriesManagement.importExport.alert.import.title';
+  static const seriesManagement_importExport_validation_dailyLife_emptyAttributes = 'seriesManagement.importExport.validation.dailyLife.emptyAttributes';
   static const seriesValue_action_deleteValue_tooltip = 'seriesValue.action.deleteValue.tooltip';
   static const seriesValue_query_deleteValue = 'seriesValue.query.deleteValue';
   static const seriesValue_bloodPressure_label_diastolic = 'seriesValue.bloodPressure.label.diastolic';

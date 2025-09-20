@@ -93,7 +93,7 @@
       }
     },
     "validator": {
-      "emptyValue": "Bitte Wert eingeben"
+      "emptyValue": "Wert eingeben"
     }
   },
   "controls": {
@@ -531,6 +531,9 @@
           "numbersUp": {
             "title": "Vorlage: Zahlen (△)"
           }
+        },
+        "validation": {
+          "emptyAttributs": "Mindestens ein Attribut anlegen"
         }
       }
     }
@@ -584,7 +587,15 @@
       },
       "alert": {
         "unexpectedDataStructure": "Unerwarteter Dateiinhalt (Datei: '{}').",
-        "unexpectedFile": "Nicht unterstütztes Dateiformat (Datei: '{}')."
+        "unexpectedFile": "Nicht unterstütztes Dateiformat (Datei: '{}').",
+        "import": {
+          "title": "Fehler beim Import"
+        }
+      },
+      "validation": {
+        "dailyLife": {
+          "emptyAttributes": "Keine Attribute definiert"
+        }
       }
     }
   },

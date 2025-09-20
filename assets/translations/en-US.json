@@ -93,7 +93,7 @@
       }
     },
     "validator": {
-      "emptyValue": "Please enter a value"
+      "emptyValue": "Value required"
     }
   },
   "controls": {
@@ -532,6 +532,9 @@
           "numbersUp": {
             "title": "Preset: Numbers (△)"
           }
+        },
+        "validation": {
+          "emptyAttributs": "At least one attribute required"
         }
       }
     }
@@ -585,7 +588,15 @@
       },
       "alert": {
         "unexpectedDataStructure": "Unexpected file content (file: '{}').",
-        "unexpectedFile": "Unsupported file format (file: '{}')."
+        "unexpectedFile": "Unsupported file format (file: '{}').",
+        "import": {
+          "title": "Import failed"
+        }
+      },
+      "validation": {
+        "dailyLife": {
+          "emptyAttributes": "No attributes defined"
+        }
       }
     }
   },

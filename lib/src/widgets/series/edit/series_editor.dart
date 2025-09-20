@@ -5,12 +5,14 @@ import 'package:provider/provider.dart';
 import '../../../../generated/locale_keys.g.dart';
 import '../../../model/series/series_def.dart';
 import '../../../model/series/series_type.dart';
+import '../../../model/series/settings/daily_life/daily_life_attributes_settings.dart';
 import '../../../providers/series_provider.dart';
 import '../../../util/dialogs.dart';
 import '../../../util/logging/flutter_simple_logging.dart';
 import '../../../util/theme_utils.dart';
 import '../../controls/appbar/gradient_app_bar.dart';
 import '../../controls/card/expandable.dart';
+import '../../controls/form/validation_field.dart';
 import '../../controls/layout/scrollable_centered_form_wrapper.dart';
 import '../../controls/select/color_picker.dart';
 import '../../controls/select/icon_map.dart';
@@ -32,6 +34,9 @@ class SeriesEditor extends StatefulWidget {
 
 class _SeriesEditorState extends State<SeriesEditor> {
   late SeriesDef _seriesDef;
+
+  late DailyLifeAttributesSettings? _dailyLifeAttributesSettings;
+
   var _isLoading = false;
 
   final _formKey = GlobalKey<FormState>();
@@ -47,6 +52,10 @@ class _SeriesEditorState extends State<SeriesEditor> {
 
     _nameController.addListener(_validate);
     _nameController.text = _seriesDef.name.toString();
+
+    if (_seriesDef.seriesType == SeriesType.dailyLife) {
+      _dailyLifeAttributesSettings = _seriesDef.dailyLifeAttributesSettingsEditable(_updateState);
+    }
 
     if (widget.goBack == null) {
       _isValid = true;
@@ -149,23 +158,33 @@ class _SeriesEditorState extends State<SeriesEditor> {
         const SizedBox(height: ThemeUtils.verticalSpacing),
         _SeriesSymbolAndColor(_seriesDef, _updateState),
 
-        switch (_seriesDef.seriesType) {
-          SeriesType.bloodPressure => Expandable(
-              initialExpanded: true,
-              icon: Icon(Icons.monitor_heart_outlined, size: ThemeUtils.iconSizeScaled),
-              title: LocaleKeys.seriesEdit_seriesSettings_bloodPressure_title.tr(),
-              child: BloodPressureSeriesEdit(_seriesDef, _updateState),
-            ),
-          SeriesType.dailyCheck => Container(),
-          SeriesType.dailyLife => Expandable(
-              initialExpanded: true,
-              useVerticalSpacingBeforeChild: false /* ListView has own padding */,
-              icon: Icon(Icons.format_list_bulleted_outlined, size: ThemeUtils.iconSizeScaled),
-              title: LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_title.tr(),
-              child: DailyLifeSeriesEditAttributes(_seriesDef, _updateState),
-            ),
-          SeriesType.habit => Container(),
-        },
+        // series type dependent...
+
+        if (_seriesDef.seriesType == SeriesType.bloodPressure)
+          Expandable(
+            initialExpanded: true,
+            icon: Icon(Icons.monitor_heart_outlined, size: ThemeUtils.iconSizeScaled),
+            title: LocaleKeys.seriesEdit_seriesSettings_bloodPressure_title.tr(),
+            child: BloodPressureSeriesEdit(_seriesDef, _updateState),
+          ),
+
+        if (_dailyLifeAttributesSettings != null)
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expandable(
+                initialExpanded: true,
+                useVerticalSpacingBeforeChild: false /* ListView has own padding */,
+                icon: Icon(Icons.format_list_bulleted_outlined, size: ThemeUtils.iconSizeScaled),
+                title: LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_title.tr(),
+                child: DailyLifeSeriesEditAttributes(_seriesDef, _dailyLifeAttributesSettings!),
+              ),
+              ValidationField(
+                validatorCondition: () => _dailyLifeAttributesSettings!.isValid(),
+                errorMessage: LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_validation_emptyAttributs.tr(),
+              ),
+            ],
+          ),
 
         // only show DisplaySettings if there is something for that series type
         if (SeriesEditDisplaySettings.applicableOn(_seriesDef)) SeriesEditDisplaySettings(_seriesDef, _updateState),

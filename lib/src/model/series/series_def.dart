@@ -98,6 +98,7 @@ class SeriesDef {
       settings: json['settings'] as Map<String, dynamic>?,
     );
 
+    // validate settings
     DailyLifeAttributesSettings.validate(seriesDef);
 
     return seriesDef;

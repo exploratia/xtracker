@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import '../../../../../generated/locale_keys.g.dart';
 import '../../../../model/series/series_def.dart';
 import '../../../../model/series/settings/daily_life/daily_life_attribute.dart';
+import '../../../../model/series/settings/daily_life/daily_life_attributes_settings.dart';
 import '../../../../util/color_utils.dart';
 import '../../../../util/dialogs.dart';
 import '../../../../util/media_query_utils.dart';
@@ -18,19 +19,18 @@ import 'daily_life_attribute_input.dart';
 
 class DailyLifeSeriesEditAttributes extends StatelessWidget {
   final SeriesDef seriesDef;
-  final Function() updateStateCB;
+  final DailyLifeAttributesSettings dailyLifeAttributesSettings;
 
-  const DailyLifeSeriesEditAttributes(this.seriesDef, this.updateStateCB, {super.key});
+  const DailyLifeSeriesEditAttributes(this.seriesDef, this.dailyLifeAttributesSettings, {super.key});
 
   @override
   Widget build(BuildContext context) {
     var screenHeight = MediaQueryUtils.of(context).mediaQueryData.size.height;
 
-    var settings = seriesDef.dailyLifeAttributesSettingsEditable(updateStateCB);
-    var attributes = settings.attributes;
+    var attributes = dailyLifeAttributesSettings.attributes;
     List<Widget> listItems = [];
 
-    updateSettings() => settings.attributes = attributes;
+    updateSettings() => dailyLifeAttributesSettings.attributes = attributes;
 
     for (var i = 0; i < attributes.length; ++i) {
       var attribute = attributes[i];

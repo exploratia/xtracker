@@ -1,3 +1,7 @@
+import 'package:easy_localization/easy_localization.dart';
+
+import '../../../../../generated/locale_keys.g.dart';
+import '../../../../util/ex.dart';
 import '../../series_def.dart';
 import '../../series_type.dart';
 import '../series_settings.dart';
@@ -21,10 +25,14 @@ class DailyLifeAttributesSettings extends SeriesSettings {
     _attributes = [...value];
   }
 
+  bool isValid() {
+    return attributes.isNotEmpty;
+  }
+
   /// throws exception if not valid
   static void validate(SeriesDef seriesDef) {
     if (seriesDef.seriesType != SeriesType.dailyLife) return;
     var checkSettings = seriesDef.dailyLifeAttributesSettingsReadonly();
-    checkSettings.attributes;
+    if (checkSettings.attributes.isEmpty) throw Ex(LocaleKeys.seriesManagement_importExport_validation_dailyLife_emptyAttributes.tr());
   }
 }

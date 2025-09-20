@@ -231,7 +231,11 @@ class SeriesImportExport {
     overlay.remove();
 
     if (context.mounted && failures.isNotEmpty) {
-      await Dialogs.simpleOkDialog(failures.join("\n\n"), context);
+      await Dialogs.simpleOkDialog(
+        failures.join("\n\n"),
+        context,
+        title: LocaleKeys.seriesManagement_importExport_alert_import_title.tr(),
+      );
     }
 
     if (successfulImports > 0) {
