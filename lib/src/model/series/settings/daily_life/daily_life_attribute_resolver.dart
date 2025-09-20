@@ -13,9 +13,9 @@ class DailyLifeAttributeResolver {
     if (seriesDef.seriesType != SeriesType.dailyLife) throw Ex("Unexpected series with not allowed series type!");
     var attributes = seriesDef.dailyLifeAttributesSettingsReadonly().attributes;
     for (var attribute in attributes) {
-      _attributeUuid2Color[attribute.uuid] = attribute;
+      _attributeUuid2Color[attribute.aid] = attribute;
     }
-    _fallbackAttribute = DailyLifeAttribute(uuid: "fallback", color: seriesDef.color, name: seriesDef.name);
+    _fallbackAttribute = DailyLifeAttribute(aid: "fallback", color: seriesDef.color, name: seriesDef.name);
   }
 
   DailyLifeAttribute resolve(dynamic attributeOrUuid) {

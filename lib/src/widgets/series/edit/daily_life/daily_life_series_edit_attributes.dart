@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../../../../generated/locale_keys.g.dart';
 import '../../../../model/series/series_def.dart';
@@ -36,18 +35,18 @@ class DailyLifeSeriesEditAttributes extends StatelessWidget {
     for (var i = 0; i < attributes.length; ++i) {
       var attribute = attributes[i];
       var renderer = _AttributeRenderer(
-        key: Key("attribute_list_item_${attribute.uuid}"),
-        dailyLifeAttribute: DailyLifeAttribute(uuid: attribute.uuid, color: attribute.color, name: attribute.name),
+        key: Key("attribute_list_item_${attribute.aid}"),
+        dailyLifeAttribute: DailyLifeAttribute(aid: attribute.aid, color: attribute.color, name: attribute.name),
         index: i,
         updateAttributeCB: (DailyLifeAttribute updatedDailyLifeAttribute) {
-          var idx = attributes.indexWhere((a) => a.uuid == updatedDailyLifeAttribute.uuid);
+          var idx = attributes.indexWhere((a) => a.aid == updatedDailyLifeAttribute.aid);
           if (idx >= 0) {
             attributes.replaceRange(idx, idx + 1, [updatedDailyLifeAttribute]);
             updateSettings();
           }
         },
         deleteAttributeCB: (DailyLifeAttribute deletedDailyLifeAttribute) {
-          attributes.removeWhere((a) => a.uuid == deletedDailyLifeAttribute.uuid);
+          attributes.removeWhere((a) => a.aid == deletedDailyLifeAttribute.aid);
           updateSettings();
         },
       );
@@ -128,6 +127,7 @@ class DailyLifeSeriesEditAttributes extends StatelessWidget {
   }
 
   List<PopupMenuItem<dynamic>> _buildPresets(List<DailyLifeAttribute> attributes, List<DailyLifeAttribute> Function() updateSettings) {
+    int now = DateTime.now().millisecondsSinceEpoch;
     return [
       PopupMenuItem(
         child: Text(LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_preset_feelings_title.tr()),
@@ -181,7 +181,7 @@ class DailyLifeSeriesEditAttributes extends StatelessWidget {
             List<DailyLifeAttribute>.generate(
               5,
               (index) => DailyLifeAttribute(
-                uuid: const Uuid().v4().toString(),
+                aid: DailyLifeAttribute.generateUniqueAttributeId(val: now - index),
                 color: ColorUtils.hue(Colors.red, 30.0 * index),
                 name: "".padLeft(index + 1, '★'),
               ),
@@ -197,7 +197,7 @@ class DailyLifeSeriesEditAttributes extends StatelessWidget {
             List<DailyLifeAttribute>.generate(
               5,
               (index) => DailyLifeAttribute(
-                uuid: const Uuid().v4().toString(),
+                aid: DailyLifeAttribute.generateUniqueAttributeId(val: now - index),
                 color: ColorUtils.hue(Colors.orangeAccent, -30.0 * index),
                 name: "".padLeft(index + 1, '☠'),
               ),
@@ -213,7 +213,7 @@ class DailyLifeSeriesEditAttributes extends StatelessWidget {
             List<DailyLifeAttribute>.generate(
               12,
               (index) => DailyLifeAttribute(
-                uuid: const Uuid().v4().toString(),
+                aid: DailyLifeAttribute.generateUniqueAttributeId(val: now - index),
                 color: ColorUtils.hue(Colors.green, -30.0 * index),
                 name: "",
               ),
@@ -229,7 +229,7 @@ class DailyLifeSeriesEditAttributes extends StatelessWidget {
             List<DailyLifeAttribute>.generate(
               8,
               (index) => DailyLifeAttribute(
-                uuid: const Uuid().v4().toString(),
+                aid: DailyLifeAttribute.generateUniqueAttributeId(val: now - index),
                 color: ColorUtils.hue(Colors.lightBlueAccent, 20.0 * (index)),
                 name: "${index >= 7 ? '>= ' : ''}${index + 1} h",
               ),
@@ -245,7 +245,7 @@ class DailyLifeSeriesEditAttributes extends StatelessWidget {
             List<DailyLifeAttribute>.generate(
               8,
               (index) => DailyLifeAttribute(
-                uuid: const Uuid().v4().toString(),
+                aid: DailyLifeAttribute.generateUniqueAttributeId(val: now - index),
                 color: ColorUtils.hue(Colors.lightBlueAccent, -15.0 * (index)),
                 name: "${index >= 7 ? '>= ' : ''}${index + 1} h",
               ),
@@ -261,7 +261,7 @@ class DailyLifeSeriesEditAttributes extends StatelessWidget {
             List<DailyLifeAttribute>.generate(
               6,
               (index) => DailyLifeAttribute(
-                uuid: const Uuid().v4().toString(),
+                aid: DailyLifeAttribute.generateUniqueAttributeId(val: now - index),
                 color: ColorUtils.hue(Colors.lightBlueAccent, 20.0 * (index)),
                 name: "${index >= 5 ? '>= ' : ''}${(index + 1) * 10} min",
               ),
@@ -277,7 +277,7 @@ class DailyLifeSeriesEditAttributes extends StatelessWidget {
             List<DailyLifeAttribute>.generate(
               6,
               (index) => DailyLifeAttribute(
-                uuid: const Uuid().v4().toString(),
+                aid: DailyLifeAttribute.generateUniqueAttributeId(val: now - index),
                 color: ColorUtils.hue(Colors.lightBlueAccent, -15.0 * (index)),
                 name: "${index >= 5 ? '>= ' : ''}${(index + 1) * 10} min",
               ),
@@ -293,7 +293,7 @@ class DailyLifeSeriesEditAttributes extends StatelessWidget {
             List<DailyLifeAttribute>.generate(
               10,
               (index) => DailyLifeAttribute(
-                uuid: const Uuid().v4().toString(),
+                aid: DailyLifeAttribute.generateUniqueAttributeId(val: now - index),
                 color: ColorUtils.hue(Colors.lightGreenAccent, -20.0 * (index)),
                 name: "${index >= 9 ? '>= ' : ''}${index + 1}",
               ),
@@ -309,7 +309,7 @@ class DailyLifeSeriesEditAttributes extends StatelessWidget {
             List<DailyLifeAttribute>.generate(
               10,
               (index) => DailyLifeAttribute(
-                uuid: const Uuid().v4().toString(),
+                aid: DailyLifeAttribute.generateUniqueAttributeId(val: now - index),
                 color: ColorUtils.hue(Colors.lightGreenAccent, 10.0 * (index)),
                 name: "${index >= 9 ? '>= ' : ''}${index + 1}",
               ),
@@ -322,6 +322,7 @@ class DailyLifeSeriesEditAttributes extends StatelessWidget {
   }
 
   static List<DailyLifeAttribute> _buildFrom(String attributeNames, List<Color> colors) {
+    var now = DateTime.now().millisecondsSinceEpoch;
     List<DailyLifeAttribute> result = [];
 
     var split = attributeNames.split("|");
@@ -329,7 +330,7 @@ class DailyLifeSeriesEditAttributes extends StatelessWidget {
       var attributeName = split[i];
       Color attributeColor = colors.elementAtOrNull(i) ?? ColorUtils.hue(Colors.greenAccent, 17.0 * i);
       result.add(DailyLifeAttribute(
-        uuid: const Uuid().v4().toString(),
+        aid: DailyLifeAttribute.generateUniqueAttributeId(val: now - i),
         color: attributeColor,
         name: attributeName,
       ));

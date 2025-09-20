@@ -4,20 +4,21 @@ import 'dart:ui';
 import '../../../../util/color_utils.dart';
 
 class DailyLifeAttribute {
-  final String uuid;
+  final String aid;
   final Color color;
   final String name;
 
-  DailyLifeAttribute({required this.uuid, required this.color, required this.name});
+  /// [aid] unique (per series) AttributeId
+  DailyLifeAttribute({required this.aid, required this.color, required this.name});
 
   factory DailyLifeAttribute.fromJson(Map<String, dynamic> json) => DailyLifeAttribute(
-        uuid: json['uuid'] as String,
+        aid: json['aid'] as String,
         name: json['name'] as String,
         color: ColorUtils.fromHex(json['color'] as String),
       );
 
   Map<String, dynamic> toJson() => {
-        'uuid': uuid,
+        'aid': aid,
         'name': name,
         'color': ColorUtils.toHex(color),
       };
@@ -39,5 +40,12 @@ class DailyLifeAttribute {
 
   static List<Map<String, dynamic>> toJsonList(List<DailyLifeAttribute> list) {
     return list.map((e) => e.toJson()).toList();
+  }
+
+  /// instead of Uuid creation for saving space we use milliseconds and convert it to base 36 String
+  /// should be enough - attributes have to be
+  static String generateUniqueAttributeId({int? val}) {
+    if (val != null) return val.toRadixString(36);
+    return DateTime.now().millisecondsSinceEpoch.toRadixString(36);
   }
 }

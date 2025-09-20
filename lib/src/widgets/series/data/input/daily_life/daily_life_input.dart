@@ -115,7 +115,7 @@ class _DailyLifeInputState extends State<DailyLifeInput> {
                   .attributes
                   .map(
                     (e) => PopupMenuItem(
-                      onTap: () => _setAttributeUuid(e.uuid),
+                      onTap: () => _setAttributeUuid(e.aid),
                       child: DailyLifeAttributeRenderer(dailyLifeAttribute: e),
                     ),
                   )

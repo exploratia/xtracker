@@ -1,6 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../../../../../generated/locale_keys.g.dart';
 import '../../../../model/series/settings/daily_life/daily_life_attribute.dart';
@@ -41,13 +40,13 @@ class _DailyLifeAttributeInputState extends State<DailyLifeAttributeInput> {
   bool _autoValidate = false;
   bool _isValid = false;
 
-  late final String _uuid;
+  late final String _aid;
   late Color _color;
 
   @override
   initState() {
     var source = widget.dailyLifeAttribute;
-    _uuid = source?.uuid ?? const Uuid().v4();
+    _aid = source?.aid ?? DailyLifeAttribute.generateUniqueAttributeId();
     _color = source?.color ?? widget.newAttributeColor ?? ThemeUtils.primary;
 
     _nameController.addListener(_validate);
@@ -88,7 +87,7 @@ class _DailyLifeAttributeInputState extends State<DailyLifeAttributeInput> {
     });
     _validate();
     if (!_isValid) return;
-    var val = DailyLifeAttribute(uuid: _uuid, color: _color, name: _nameController.text);
+    var val = DailyLifeAttribute(aid: _aid, color: _color, name: _nameController.text);
     Navigator.pop(context, val);
   }
 
