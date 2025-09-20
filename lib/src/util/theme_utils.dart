@@ -13,6 +13,8 @@ class ThemeUtils {
   // e.g. when pulling down | toggle switch:
   static final MaterialColor secondary = ColorUtils.customMaterialColor(const Color(0xff662d8c));
   static final MaterialColor tertiary = ColorUtils.customMaterialColor(const Color(0xffbfff00));
+  static const Color errorColor = Color(0xffed1e1e);
+  static const Color errorFocusedColor = Color(0xffed1e55);
 
   static const double screenPadding = 16;
   static const double cardPadding = 16;
@@ -148,6 +150,21 @@ class ThemeUtils {
       iconTheme: IconThemeData(
         size: iconSize,
         color: textColor,
+      ),
+      inputDecorationTheme: const InputDecorationThemeData(
+        errorBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+            width: 2,
+            color: errorColor,
+          ),
+        ),
+        focusedErrorBorder: UnderlineInputBorder(
+          borderSide: BorderSide(
+            width: 2,
+            color: errorFocusedColor,
+          ),
+        ),
+        errorStyle: TextStyle(color: errorColor, fontSize: fontSizeLabelM, fontWeight: FontWeight.w400),
       ),
       navigationRailTheme: NavigationRailThemeData(
         backgroundColor: backgroundColor,
