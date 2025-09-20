@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../model/series/data/blood_pressure/blood_pressure_value.dart';
 import '../model/series/data/daily_check/daily_check_value.dart';
+import '../model/series/data/daily_life/daily_life_value.dart';
 import '../model/series/data/habit/habit_value.dart';
 import '../model/series/data/series_data.dart';
 import '../model/series/data/series_data_value.dart';
@@ -16,12 +17,14 @@ import 'series_current_value_provider.dart';
 class SeriesDataProvider with ChangeNotifier {
   final Map<String, SeriesData<BloodPressureValue>> _uuid2seriesDataBloodPressure = HashMap();
   final Map<String, SeriesData<DailyCheckValue>> _uuid2seriesDataDailyCheck = HashMap();
+  final Map<String, SeriesData<DailyLifeValue>> _uuid2seriesDataDailyLife = HashMap();
   final Map<String, SeriesData<HabitValue>> _uuid2seriesDataHabit = HashMap();
 
   Future<void> fetchDataIfNotYetLoaded(SeriesDef seriesDef) async {
     var seriesData = switch (seriesDef.seriesType) {
       SeriesType.bloodPressure => _uuid2seriesDataBloodPressure[seriesDef.uuid],
       SeriesType.dailyCheck => _uuid2seriesDataDailyCheck[seriesDef.uuid],
+      SeriesType.dailyLife => _uuid2seriesDataDailyLife[seriesDef.uuid],
       SeriesType.habit => _uuid2seriesDataHabit[seriesDef.uuid],
     };
 
@@ -96,6 +99,16 @@ class SeriesDataProvider with ChangeNotifier {
           seriesData.sort();
           _uuid2seriesDataDailyCheck[seriesDef.uuid] = seriesData;
         }
+      case SeriesType.dailyLife:
+        var seriesData = _uuid2seriesDataDailyLife[seriesDef.uuid];
+        if (seriesData == null) {
+          var store = Stores.getOrCreateSeriesDataStore(seriesDef);
+          var list = await store.getAllSeriesDataValuesAsDailyLifeValue();
+
+          seriesData = SeriesData<DailyLifeValue>(seriesDef.uuid, list);
+          seriesData.sort();
+          _uuid2seriesDataDailyLife[seriesDef.uuid] = seriesData;
+        }
       case SeriesType.habit:
         var seriesData = _uuid2seriesDataHabit[seriesDef.uuid];
         if (seriesData == null) {
@@ -137,6 +150,8 @@ class SeriesDataProvider with ChangeNotifier {
         _uuid2seriesDataBloodPressure.remove(seriesDef.uuid);
       case SeriesType.dailyCheck:
         _uuid2seriesDataDailyCheck.remove(seriesDef.uuid);
+      case SeriesType.dailyLife:
+        _uuid2seriesDataDailyLife.remove(seriesDef.uuid);
       case SeriesType.habit:
         _uuid2seriesDataHabit.remove(seriesDef.uuid);
     }
@@ -148,6 +163,7 @@ class SeriesDataProvider with ChangeNotifier {
     return switch (seriesDef.seriesType) {
       SeriesType.bloodPressure => bloodPressureData(seriesDef),
       SeriesType.dailyCheck => dailyCheckData(seriesDef),
+      SeriesType.dailyLife => dailyLifeData(seriesDef),
       SeriesType.habit => habitData(seriesDef),
     };
   }
@@ -170,6 +186,17 @@ class SeriesDataProvider with ChangeNotifier {
 
   SeriesData<DailyCheckValue> requireDailyCheckData(SeriesDef seriesDef) {
     var seriesData = dailyCheckData(seriesDef);
+    _checkOnSeriesData(seriesData, seriesDef);
+    return seriesData!;
+  }
+
+  SeriesData<DailyLifeValue>? dailyLifeData(SeriesDef seriesDef) {
+    var seriesData = _uuid2seriesDataDailyLife[seriesDef.uuid];
+    return seriesData;
+  }
+
+  SeriesData<DailyLifeValue> requireDailyLifeData(SeriesDef seriesDef) {
+    var seriesData = dailyLifeData(seriesDef);
     _checkOnSeriesData(seriesData, seriesDef);
     return seriesData!;
   }
@@ -210,6 +237,9 @@ class SeriesDataProvider with ChangeNotifier {
       case SeriesType.dailyCheck:
         DailyCheckValue.checkOnDailyCheckValue(value);
         seriesData = requireDailyCheckData(seriesDef);
+      case SeriesType.dailyLife:
+        DailyLifeValue.checkOnDailyLifeValue(value);
+        seriesData = requireDailyLifeData(seriesDef);
       case SeriesType.habit:
         HabitValue.checkOnHabitValue(value);
         seriesData = requireHabitData(seriesDef);
@@ -252,6 +282,12 @@ class SeriesDataProvider with ChangeNotifier {
       case SeriesType.dailyCheck:
         var seriesData = requireDailyCheckData(seriesDef);
         seriesData.insertAll(values.map(DailyCheckValue.checkOnDailyCheckValue));
+        seriesData.sort();
+        await store.saveAll(seriesData.data);
+        latest = seriesData.data.lastOrNull;
+      case SeriesType.dailyLife:
+        var seriesData = requireDailyLifeData(seriesDef);
+        seriesData.insertAll(values.map(DailyLifeValue.checkOnDailyLifeValue));
         seriesData.sort();
         await store.saveAll(seriesData.data);
         latest = seriesData.data.lastOrNull;

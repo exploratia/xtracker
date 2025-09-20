@@ -19,6 +19,14 @@ abstract class SeriesSettings {
     }
   }
 
+  dynamic get(String key) {
+    return _settings[_key(key)];
+  }
+
+  List<dynamic> getList(String key) {
+    return _settings[_key(key)] as List<dynamic>? ?? [];
+  }
+
   bool getBool(String key) {
     return _settings[_key(key)] as bool? ?? false;
   }

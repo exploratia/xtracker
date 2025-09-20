@@ -8,6 +8,7 @@ import '../../widgets/controls/select/icon_map.dart';
 import '../../widgets/series/edit/series_edit.dart';
 import 'series_type.dart';
 import 'settings/blood_pressure_settings.dart';
+import 'settings/daily_life/daily_life_attributes_settings.dart';
 import 'settings/display_settings.dart';
 
 class SeriesDef {
@@ -38,6 +39,12 @@ class SeriesDef {
   /// return BloodPressureSettings read only mode
   BloodPressureSettings bloodPressureSettingsReadonly() => BloodPressureSettings(_settings, null);
 
+  /// return dailyLifeAttributes in edit mode (setters active)
+  DailyLifeAttributesSettings dailyLifeAttributesSettingsEditable(Function() updateStateCB) => DailyLifeAttributesSettings(_settings, updateStateCB);
+
+  /// return dailyLifeAttributes read only mode
+  DailyLifeAttributesSettings dailyLifeAttributesSettingsReadonly() => DailyLifeAttributesSettings(_settings, null);
+
   /// return BloodPressureSettings in edit mode (setters active)
   DisplaySettings displaySettingsEditable(Function() updateStateCB) => DisplaySettings(_settings, updateStateCB);
 
@@ -65,6 +72,7 @@ class SeriesDef {
     return switch (seriesDef.seriesType) {
       SeriesType.bloodPressure => 1,
       SeriesType.dailyCheck => 1,
+      SeriesType.dailyLife => 1,
       SeriesType.habit => 1,
       // SeriesType.monthly => 1,
       // SeriesType.free => 1,

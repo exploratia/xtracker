@@ -1,29 +1,29 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../../model/column_profile/fix_column_profiles.dart';
-import '../../../../../../model/series/data/habit/habit_value.dart';
+import '../../../../../../model/series/data/daily_life/daily_life_value.dart';
 import '../../../../../../model/series/data/series_data_filter.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
+import '../../../../../../model/series/settings/daily_life/daily_life_attribute_resolver.dart';
 import '../../../../../controls/grid/row_per_day/day_row_item.dart';
 import '../../../../../controls/grid/row_per_day/row_per_day_cell_builder.dart';
 import '../../../../../controls/grid/two_dimensional_scrollable_table.dart';
 import '../../series_data_no_data.dart';
 import '../../series_data_view_overlays.dart';
-import 'habit_value_renderer.dart';
+import 'daily_life_value_renderer.dart';
 
-class SeriesDataHabitTableView extends StatelessWidget {
-  final List<HabitValue> seriesData;
+class SeriesDataDailyLifeTableView extends StatelessWidget {
+  final List<DailyLifeValue> seriesData;
   final SeriesViewMetaData seriesViewMetaData;
   final SeriesDataFilter seriesDataFilter;
   final SeriesDataViewOverlays seriesDataViewOverlays;
 
-  const SeriesDataHabitTableView(
+  const SeriesDataDailyLifeTableView(
       {super.key, required this.seriesViewMetaData, required this.seriesData, required this.seriesDataFilter, required this.seriesDataViewOverlays});
 
   @override
   Widget build(BuildContext context) {
-    bool useDateTimeValueColumnProfile = seriesViewMetaData.seriesDef.displaySettingsReadonly().tableViewUseColumnProfileDateTimeValue;
-
+    var dailyLifeAttributeResolver = DailyLifeAttributeResolver(seriesViewMetaData.seriesDef);
     var filteredSeriesData = seriesData.where((value) => seriesDataFilter.filter(value)).toList();
     if (filteredSeriesData.isEmpty) {
       return SeriesDataNoData(
@@ -32,16 +32,17 @@ class SeriesDataHabitTableView extends StatelessWidget {
       );
     }
 
-    List<DayRowItem<HabitValue>> data = DayRowItem.buildTableDataProvider(seriesViewMetaData, filteredSeriesData);
+    List<DayRowItem<DailyLifeValue>> data = DayRowItem.buildTableDataProvider(seriesViewMetaData, filteredSeriesData);
 
-    var rowPerDayCellBuilder = RowPerDayCellBuilder<HabitValue>(
+    var rowPerDayCellBuilder = RowPerDayCellBuilder<DailyLifeValue>(
       data: data,
-      useDateTimeValueColumnProfile: useDateTimeValueColumnProfile,
-      gridCellChildBuilder: (HabitValue value) => HabitValueRenderer(
-        habitValue: value,
+      useDateTimeValueColumnProfile: true,
+      gridCellChildBuilder: (DailyLifeValue value) => DailyLifeValueRenderer(
+        dailyLifeValue: value,
         seriesDef: seriesViewMetaData.seriesDef,
         editMode: seriesViewMetaData.editMode,
-        wrapWithDateTimeTooltip: true,
+        // wrapWithDateTimeTooltip: true, // tooltip not required in date time value column profile
+        dailyLifeAttributeResolver: dailyLifeAttributeResolver,
       ),
     );
 
@@ -54,11 +55,10 @@ class SeriesDataHabitTableView extends StatelessWidget {
         seriesDataViewOverlays.buildTopSpacer(),
         Expanded(
           child: TwoDimensionalScrollableTable(
-            tableColumnProfile:
-                useDateTimeValueColumnProfile ? FixColumnProfiles.columnProfileDateTimeValue : FixColumnProfiles.columnProfileDateMorningMiddayEvening,
+            tableColumnProfile: FixColumnProfiles.columnProfileDateTimeValue,
             lineCount: data.length,
             gridCellBuilder: rowPerDayCellBuilder.gridCellBuilder,
-            lineHeight: HabitValueRenderer.height,
+            lineHeight: DailyLifeValueRenderer.height,
             useFixedFirstColumn: true,
             bottomScrollExtend: seriesDataViewOverlays.bottomHeight,
           ),

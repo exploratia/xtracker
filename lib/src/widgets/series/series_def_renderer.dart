@@ -4,11 +4,11 @@ import '../../model/series/series_def.dart';
 import '../../util/theme_utils.dart';
 import '../administration/settings/settings_controller.dart';
 import '../controls/card/glowing_border_container.dart';
+import '../controls/list/drag_handle.dart';
 import '../controls/select/icon_map.dart';
 import '../controls/text/overflow_text.dart';
 import 'data/view/series_latest_value_renderer.dart';
 import 'management/series_management_actions.dart';
-import 'management/series_management_drag_handle.dart';
 import 'series_actions.dart';
 
 class SeriesDefRenderer extends StatelessWidget {
@@ -59,7 +59,7 @@ class SeriesDefRenderer extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           _SeriesIconAndName(seriesDef: seriesDef),
-                          _LeftBorder(
+                          LeftBorder(
                             color: seriesDef.color,
                             child: seriesManagementActions,
                           ),
@@ -69,7 +69,7 @@ class SeriesDefRenderer extends StatelessWidget {
                   },
                 ),
               ),
-              _LeftBorder(color: seriesDef.color, child: SeriesManagementDragHandle(index: index)),
+              LeftBorder(color: seriesDef.color, child: DragHandle(index: index)),
             ],
           ),
         );
@@ -82,7 +82,7 @@ class SeriesDefRenderer extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 _SeriesIconAndName(seriesDef: seriesDef),
-                _LeftBorder(color: seriesDef.color, child: SeriesActions(seriesDef: seriesDef)),
+                LeftBorder(color: seriesDef.color, child: SeriesActions(seriesDef: seriesDef)),
               ],
             ),
             _HDivider(seriesDef: seriesDef),
@@ -153,8 +153,9 @@ class _SeriesIconAndName extends StatelessWidget {
   }
 }
 
-class _LeftBorder extends StatelessWidget {
-  const _LeftBorder({
+class LeftBorder extends StatelessWidget {
+  const LeftBorder({
+    super.key,
     required this.color,
     required this.child,
   });

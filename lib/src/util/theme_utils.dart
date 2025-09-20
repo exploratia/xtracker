@@ -155,6 +155,10 @@ class ThemeUtils {
         unselectedIconTheme: IconThemeData(color: textColor),
         useIndicator: false,
       ),
+      popupMenuTheme: PopupMenuThemeData(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(ThemeUtils.borderRadius)),
+        color: cardBackgroundColor,
+      ),
       progressIndicatorTheme: ProgressIndicatorThemeData(
         color: primary,
         linearTrackColor: secondary.withAlpha(128),

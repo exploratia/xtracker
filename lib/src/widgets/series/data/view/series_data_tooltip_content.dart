@@ -7,7 +7,10 @@ import '../../../../util/theme_utils.dart';
 import '../../../../util/tooltip_utils.dart';
 
 class SeriesDataTooltipContent {
-  static Widget buildSeriesValueTooltipWidget<T extends SeriesDataValue>(List<T> seriesValues, Widget Function(T dataValue) tooltipValueBuilder) {
+  /// create one tooltip for the given series value(s) which contains the day (of the first value)
+  /// and the times for all values
+  /// and optional for each value Widget behind the time.
+  static Widget buildSeriesValueTooltipWidget<T extends SeriesDataValue>(List<T> seriesValues, Widget? Function(T dataValue)? tooltipValueBuilder) {
     List<Widget> columnChildren = [
       Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -23,10 +26,11 @@ class SeriesDataTooltipContent {
     ];
 
     // bring all times to same length for showing a nice table like tooltip
-    List<Pair<String, Widget>> timeValuePairs = [];
+    List<Pair<String, Widget?>> timeValuePairs = [];
 
     for (var value in seriesValues) {
-      timeValuePairs.add(Pair(DateTimeUtils.formatTime(value.dateTime), tooltipValueBuilder(value)));
+      Widget? valueWidget = tooltipValueBuilder != null ? tooltipValueBuilder(value) : null;
+      timeValuePairs.add(Pair(DateTimeUtils.formatTime(value.dateTime), valueWidget));
     }
 
     final maxLength = timeValuePairs.map((p) => p.k.length).reduce((a, b) => a > b ? a : b);
@@ -43,16 +47,16 @@ class SeriesDataTooltipContent {
     return Column(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: columnChildren);
   }
 
-  static Widget _tooltipValueLineWidget(String time, Widget value) {
+  static Widget _tooltipValueLineWidget(String time, Widget? value) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
       children: [
         const Icon(Icons.access_time_outlined, size: ThemeUtils.fontSizeBodyS),
-        const SizedBox(width: ThemeUtils.verticalSpacingSmall),
+        const SizedBox(width: ThemeUtils.horizontalSpacingSmall),
         Text(time, style: TooltipUtils.tooltipMonospaceStyle),
-        const SizedBox(width: ThemeUtils.horizontalSpacingLarge),
-        Transform.scale(scale: 0.7, child: value),
+        if (value != null) const SizedBox(width: ThemeUtils.horizontalSpacingLarge),
+        if (value != null) value,
       ],
     );
   }

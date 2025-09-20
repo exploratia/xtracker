@@ -72,6 +72,9 @@
     "label": {
       "value": "Value"
     },
+    "list": {
+      "dragTooltip": "Reorder position"
+    },
     "snackbar": {
       "pressBackAgainToExit": "Press BACK again to exit...",
       "saveSuccess": "Saved",
@@ -126,6 +129,10 @@
       "dailyCheck": {
         "title": "Daily check",
         "info": "Track daily habits – e.g. exercise, taking breaks, standing up or eat no sweats."
+      },
+      "dailyLife": {
+        "title": "Daily Life",
+        "info": "Tag each day with an attribute."
       },
       "free": {
         "title": "Free",
@@ -376,9 +383,6 @@
       },
       "deleteSeries": {
         "tooltip": "Delete series"
-      },
-      "dragSeries": {
-        "tooltip": "Reorder series position"
       }
     },
     "currentValue": {
@@ -462,6 +466,71 @@
         "switch": {
           "hideMedicationInput": {
             "label": "Hide medication input in dialog:"
+          }
+        }
+      },
+      "dailyLifeAttributes": {
+        "title": "Attributes",
+        "actions": {
+          "add": {
+            "tooltip": "Add attribute"
+          },
+          "addPreset": {
+            "tooltip": "Add preset attributes"
+          },
+          "delete": {
+            "tooltip": "Delete attribute"
+          },
+          "deleteAll": {
+            "tooltip": "Delete all attributes"
+          },
+          "edit": {
+            "tooltip": "Edit attribute"
+          }
+        },
+        "dlg": {
+          "title": "Attribute"
+        },
+        "info": "Manage series attributes.\nEach value has exactly one attribute.\n\nIf an attribute is deleted while still in use, the value falls back to the series name and color.",
+        "preset": {
+          "feelings": {
+            "title": "Preset: Feelings",
+            "attributeNames": "amazing day|really good, happy day|normal day|exhausted, tired day|depressed, sad day|frustrated, angry day|stressed day|sick day|really horrible day"
+          },
+          "sports": {
+            "title": "Preset: Sports",
+            "attributeNames": "Walking|Jogging|Hiking|Road bike|Mountain bike|Swimming|Workout"
+          },
+          "period": {
+            "title": "Preset: Period",
+            "attributeNames": "None|Spotting|Light|Regular|Heavy"
+          },
+          "stars": {
+            "title": "Preset: Stars (★)"
+          },
+          "stress": {
+            "title": "Preset: Stress (☠)"
+          },
+          "colorWheel": {
+            "title": "Preset: Color wheel"
+          },
+          "hoursDown": {
+            "title": "Preset: Hours (▽)"
+          },
+          "hoursUp": {
+            "title": "Preset: Hours (△)"
+          },
+          "minutesDown": {
+            "title": "Preset: Minutes (▽)"
+          },
+          "minutesUp": {
+            "title": "Preset: Minutes (△)"
+          },
+          "numbersDown": {
+            "title": "Preset: Numbers (▽)"
+          },
+          "numbersUp": {
+            "title": "Preset: Numbers (△)"
           }
         }
       }
@@ -550,6 +619,13 @@
       "btn": {
         "toggleCheck": {
           "tooltip": "Toggle value"
+        }
+      }
+    },
+    "dailyLife": {
+      "btn": {
+        "selectAttribute": {
+          "tooltip": "Select attribute"
         }
       }
     },

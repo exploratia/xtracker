@@ -138,6 +138,8 @@ class SeriesImportExport {
           seriesData = SeriesData.fromJsonBloodPressureData(json["seriesData"] as Map<String, dynamic>);
         case SeriesType.dailyCheck:
           seriesData = SeriesData.fromJsonDailyCheckData(json["seriesData"] as Map<String, dynamic>);
+        case SeriesType.dailyLife:
+          seriesData = SeriesData.fromJsonDailyLifeData(json["seriesData"] as Map<String, dynamic>);
         case SeriesType.habit:
           seriesData = SeriesData.fromJsonHabitData(json["seriesData"] as Map<String, dynamic>);
       }

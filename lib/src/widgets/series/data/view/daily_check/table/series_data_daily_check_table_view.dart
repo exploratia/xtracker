@@ -41,7 +41,6 @@ class SeriesDataDailyCheckTableView extends StatelessWidget {
         dailyCheckValue: value,
         seriesDef: seriesViewMetaData.seriesDef,
         editMode: seriesViewMetaData.editMode,
-        centered: true,
         wrapWithDateTimeTooltip: true,
       ),
     );

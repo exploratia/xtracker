@@ -17,6 +17,7 @@ import '../../controls/select/icon_map.dart';
 import '../../controls/select/icon_picker.dart';
 import '../../controls/text/overflow_text.dart';
 import 'blood_pressure/blood_pressure_series_edit.dart';
+import 'daily_life/daily_life_series_edit_attributes.dart';
 import 'series_edit_display_settings.dart';
 
 class SeriesEditor extends StatefulWidget {
@@ -156,6 +157,13 @@ class _SeriesEditorState extends State<SeriesEditor> {
               child: BloodPressureSeriesEdit(_seriesDef, _updateState),
             ),
           SeriesType.dailyCheck => Container(),
+          SeriesType.dailyLife => Expandable(
+              initialExpanded: true,
+              useVerticalSpacingBeforeChild: false /* ListView has own padding */,
+              icon: Icon(Icons.format_list_bulleted_outlined, size: ThemeUtils.iconSizeScaled),
+              title: LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_title.tr(),
+              child: DailyLifeSeriesEditAttributes(_seriesDef, _updateState),
+            ),
           SeriesType.habit => Container(),
         },
 

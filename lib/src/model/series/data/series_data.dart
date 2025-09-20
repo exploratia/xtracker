@@ -9,12 +9,14 @@ import '../../../util/dialogs.dart';
 import '../../../util/logging/flutter_simple_logging.dart';
 import '../../../widgets/series/data/input/blood_pressure/blood_pressure_input.dart';
 import '../../../widgets/series/data/input/daily_check/daily_check_input.dart';
+import '../../../widgets/series/data/input/daily_life/daily_life_input.dart';
 import '../../../widgets/series/data/input/habit/habit_input.dart';
 import '../../../widgets/series/data/input/input_result.dart';
 import '../series_def.dart';
 import '../series_type.dart';
 import 'blood_pressure/blood_pressure_value.dart';
 import 'daily_check/daily_check_value.dart';
+import 'daily_life/daily_life_value.dart';
 import 'habit/habit_value.dart';
 import 'series_data_value.dart';
 
@@ -41,6 +43,12 @@ class SeriesData<T extends SeriesDataValue> {
   static SeriesData<DailyCheckValue> fromJsonDailyCheckData(Map<String, dynamic> json) => SeriesData(
         json['uuid'] as String,
         [...(json['data'] as List<dynamic>).map((e) => DailyCheckValue.fromJson(e))],
+        // if version is required: json['version'] as int? ?? 1
+      );
+
+  static SeriesData<DailyLifeValue> fromJsonDailyLifeData(Map<String, dynamic> json) => SeriesData(
+        json['uuid'] as String,
+        [...(json['data'] as List<dynamic>).map((e) => DailyLifeValue.fromJson(e))],
         // if version is required: json['version'] as int? ?? 1
       );
 
@@ -106,6 +114,8 @@ class SeriesData<T extends SeriesDataValue> {
         inputResult = await BloodPressureQuickInput.showInputDlg(context, seriesDef, bloodPressureValue: (value is BloodPressureValue) ? value : null);
       case SeriesType.dailyCheck:
         inputResult = await DailyCheckInput.showInputDlg(context, seriesDef, dailyCheckValue: (value is DailyCheckValue) ? value : null);
+      case SeriesType.dailyLife:
+        inputResult = await DailyLifeInput.showInputDlg(context, seriesDef, dailyLifeValue: (value is DailyLifeValue) ? value : null);
       case SeriesType.habit:
         inputResult = await HabitInput.showInputDlg(context, seriesDef, habitValue: (value is HabitValue) ? value : null);
     }

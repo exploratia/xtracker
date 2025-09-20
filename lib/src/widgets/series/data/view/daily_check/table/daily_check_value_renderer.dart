@@ -18,14 +18,12 @@ class DailyCheckValueRenderer extends StatelessWidget {
     required this.dailyCheckValue,
     required this.seriesDef,
     this.editMode = false,
-    this.centered = false,
     this.wrapWithDateTimeTooltip = false,
   });
 
   final DailyCheckValue dailyCheckValue;
   final bool editMode;
   final SeriesDef seriesDef;
-  final bool centered;
   final bool wrapWithDateTimeTooltip;
 
   @override

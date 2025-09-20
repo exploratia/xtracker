@@ -1,6 +1,7 @@
 import '../series_type.dart';
 import 'blood_pressure/blood_pressure_value.dart';
 import 'daily_check/daily_check_value.dart';
+import 'daily_life/daily_life_value.dart';
 import 'datetime_item.dart';
 import 'habit/habit_value.dart';
 
@@ -21,6 +22,7 @@ abstract class SeriesDataValue implements DateTimeItem {
     return switch (seriesType) {
       SeriesType.bloodPressure => BloodPressureValue.fromJson(json),
       SeriesType.dailyCheck => DailyCheckValue.fromJson(json),
+      SeriesType.dailyLife => DailyLifeValue.fromJson(json),
       SeriesType.habit => HabitValue.fromJson(json),
     };
   }
