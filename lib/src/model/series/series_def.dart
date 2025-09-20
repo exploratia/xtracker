@@ -87,15 +87,21 @@ class SeriesDef {
     return IconMap.iconData(iconName);
   }
 
-  factory SeriesDef.fromJson(Map<String, dynamic> json) => SeriesDef(
-        uuid: json['uuid'] as String,
-        seriesType: SeriesType.byTypeName(json['seriesType'] as String),
-        seriesItems: [...(json['seriesItems'] as List<dynamic>).whereType<Map<String, dynamic>>().map((e) => SeriesItem.fromJson(e))],
-        name: json['name'] as String,
-        color: ColorUtils.fromHex(json['color'] as String),
-        iconName: json['iconName'] as String,
-        settings: json['settings'] as Map<String, dynamic>?,
-      );
+  factory SeriesDef.fromJson(Map<String, dynamic> json) {
+    var seriesDef = SeriesDef(
+      uuid: json['uuid'] as String,
+      seriesType: SeriesType.byTypeName(json['seriesType'] as String),
+      seriesItems: [...(json['seriesItems'] as List<dynamic>).whereType<Map<String, dynamic>>().map((e) => SeriesItem.fromJson(e))],
+      name: json['name'] as String,
+      color: ColorUtils.fromHex(json['color'] as String),
+      iconName: json['iconName'] as String,
+      settings: json['settings'] as Map<String, dynamic>?,
+    );
+
+    DailyLifeAttributesSettings.validate(seriesDef);
+
+    return seriesDef;
+  }
 
   Map<String, dynamic> toJson() => {
         'uuid': uuid,
