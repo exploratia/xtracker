@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../model/series/settings/daily_life/daily_life_attribute.dart';
+import '../../../../../util/chart/chart_utils.dart';
 import '../../../../../util/color_utils.dart';
 import '../../../../../util/theme_utils.dart';
 
@@ -13,7 +14,11 @@ class DailyLifeAttributeRenderer extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     return Container(
-      decoration: BoxDecoration(color: dailyLifeAttribute.color, borderRadius: ThemeUtils.borderRadiusCircularSmall),
+      decoration: BoxDecoration(
+        // color: dailyLifeAttribute.color,
+        gradient: ChartUtils.createLeftToRightGradient([dailyLifeAttribute.color, ColorUtils.hue(dailyLifeAttribute.color, 30)]),
+        borderRadius: ThemeUtils.borderRadiusCircularSmall,
+      ),
       child: Padding(
         padding: const EdgeInsets.all(ThemeUtils.paddingSmall),
         child: Text(
