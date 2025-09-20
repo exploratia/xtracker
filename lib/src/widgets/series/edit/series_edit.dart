@@ -77,6 +77,9 @@ class _SeriesTypeSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var seriesTypes = [...SeriesType.values];
+    seriesTypes.sort((a, b) => SeriesType.displayNameOf(a).compareTo(SeriesType.displayNameOf(b)));
+
     return VCenteredSingleChildScrollViewWithScrollbar(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -87,7 +90,7 @@ class _SeriesTypeSelector extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: ThemeUtils.verticalSpacingSmall,
             children: [
-              ...SeriesType.values.map((st) => Row(mainAxisSize: MainAxisSize.min, children: [
+              ...seriesTypes.map((st) => Row(mainAxisSize: MainAxisSize.min, children: [
                     _SeriesTypeInfoBtn(st),
                     ElevatedButton.icon(
                       icon: IconMap.icon(st.iconName, size: ThemeUtils.iconSizeScaled),
