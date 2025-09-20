@@ -33,6 +33,11 @@ class DailyLifeAttributesSettings extends SeriesSettings {
   static void validate(SeriesDef seriesDef) {
     if (seriesDef.seriesType != SeriesType.dailyLife) return;
     var checkSettings = seriesDef.dailyLifeAttributesSettingsReadonly();
-    if (checkSettings.attributes.isEmpty) throw Ex(LocaleKeys.seriesManagement_importExport_validation_dailyLife_emptyAttributes.tr());
+    if (checkSettings.attributes.isEmpty) {
+      throw Ex(
+        "${seriesDef.seriesType} has empty attributes.",
+        localizedMessage: LocaleKeys.seriesManagement_importExport_validation_dailyLife_emptyAttributes.tr(),
+      );
+    }
   }
 }

@@ -595,7 +595,7 @@
       },
       "validation": {
         "dailyLife": {
-          "emptyAttributes": "No attributes defined"
+          "emptyAttributes": "No attributes defined."
         }
       }
     }

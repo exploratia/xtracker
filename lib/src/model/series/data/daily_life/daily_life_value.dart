@@ -1,5 +1,6 @@
 import 'package:uuid/uuid.dart';
 
+import '../../../../util/ex.dart';
 import '../../../../util/globals.dart';
 import '../series_data_value.dart';
 
@@ -28,6 +29,6 @@ class DailyLifeValue extends SeriesDataValue {
   static DailyLifeValue checkOnDailyLifeValue(dynamic value) {
     if (value is DailyLifeValue) return value;
     var errMsg = 'Failure for series value: Type mismatch! Expected: "$DailyLifeValue", got: "${value.runtimeType}"';
-    throw Exception(errMsg);
+    throw Ex(errMsg);
   }
 }

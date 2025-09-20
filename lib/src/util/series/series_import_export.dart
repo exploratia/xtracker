@@ -27,7 +27,7 @@ class SeriesImportExport {
     var seriesDataProvider = context.read<SeriesDataProvider>();
     await seriesDataProvider.fetchDataIfNotYetLoaded(seriesDef);
     var seriesData = seriesDataProvider.seriesData(seriesDef);
-    if (seriesData == null) throw Exception("Failed to export series - no series data found for series '${seriesDef.name}'!"); // should never happen
+    if (seriesData == null) throw Ex("Failed to export series - no series data found for series '${seriesDef.name}'!"); // should never happen
 
     Map<String, dynamic> json = {
       "seriesDef": seriesDef.toJson(),
@@ -152,7 +152,8 @@ class SeriesImportExport {
       SimpleLogging.i("Import for ${seriesDef.toLogString()} finished.");
       return true;
     } else {
-      throw Ex(LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [fileName]));
+      throw Ex("Import failed - unexpected data structure in file: $fileName",
+          localizedMessage: LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [fileName]));
     }
   }
 
@@ -192,7 +193,10 @@ class SeriesImportExport {
     for (var file in result.xFiles) {
       try {
         if (!file.name.endsWith(".json")) {
-          throw Ex(LocaleKeys.seriesManagement_importExport_alert_unexpectedFile.tr(args: [file.name]));
+          throw Ex(
+            "Import failed - unexpected file: ${file.name}",
+            localizedMessage: LocaleKeys.seriesManagement_importExport_alert_unexpectedFile.tr(args: [file.name]),
+          );
         }
 
         SimpleLogging.i("importing ${file.name} ...");
@@ -208,7 +212,8 @@ class SeriesImportExport {
                 successfulImports++;
               }
             } else {
-              throw Ex(LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]));
+              throw Ex("Multi series import failed - unexpected data structure in file: ${file.name}",
+                  localizedMessage: LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]));
             }
           }
         } else if (json["type"] as String == "seriesExport") {
@@ -216,12 +221,13 @@ class SeriesImportExport {
             successfulImports++;
           }
         } else {
-          throw Ex(LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]));
+          throw Ex("Series import failed - unexpected data structure in file: ${file.name}",
+              localizedMessage: LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]));
         }
       } catch (ex, st) {
         SimpleLogging.w(ex.toString(), stackTrace: st);
         if (ex is Ex) {
-          failures.add(ex.toString());
+          failures.add(ex.localizedToString());
         } else {
           failures.add(LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]));
         }

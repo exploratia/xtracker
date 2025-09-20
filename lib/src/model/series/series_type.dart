@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../generated/locale_keys.g.dart';
+import '../../util/ex.dart';
 import '../../widgets/controls/select/icon_map.dart';
 import 'view_type.dart';
 
@@ -25,7 +26,7 @@ enum SeriesType {
   const SeriesType(this.typeName, this.iconName, this.color, this.viewTypes);
 
   static SeriesType byTypeName(String typeName) {
-    return SeriesType.values.firstWhere((element) => element.typeName == typeName, orElse: () => throw Exception("Unexpected SeriesType '$typeName'"));
+    return SeriesType.values.firstWhere((element) => element.typeName == typeName, orElse: () => throw Ex("Unexpected SeriesType '$typeName'"));
   }
 
   static String displayNameOf(SeriesType seriesType) {

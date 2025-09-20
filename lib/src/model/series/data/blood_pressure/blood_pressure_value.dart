@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../util/color_utils.dart';
+import '../../../../util/ex.dart';
 import '../series_data_value.dart';
 
 class BloodPressureValue extends SeriesDataValue {
@@ -60,6 +61,6 @@ class BloodPressureValue extends SeriesDataValue {
   static BloodPressureValue checkOnBloodPressureValue(dynamic value) {
     if (value is BloodPressureValue) return value;
     var errMsg = 'Failure for series value: Type mismatch! Expected: "$BloodPressureValue", got: "${value.runtimeType}"';
-    throw Exception(errMsg);
+    throw Ex(errMsg);
   }
 }

@@ -11,6 +11,7 @@ import '../model/series/data/series_data_value.dart';
 import '../model/series/series_def.dart';
 import '../model/series/series_type.dart';
 import '../store/stores.dart';
+import '../util/ex.dart';
 import '../util/logging/flutter_simple_logging.dart';
 import 'series_current_value_provider.dart';
 
@@ -308,7 +309,7 @@ class SeriesDataProvider with ChangeNotifier {
     if (seriesData == null) {
       var errMsg = "Failed to create/load series data for ${seriesDef.name} (type: ${seriesDef.seriesType.typeName})!";
       SimpleLogging.w(errMsg);
-      throw Exception(errMsg);
+      throw Ex(errMsg);
     }
   }
 }
