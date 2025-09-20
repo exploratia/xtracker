@@ -48,14 +48,14 @@ class _SeriesEditorState extends State<SeriesEditor> {
 
   @override
   void initState() {
-    _seriesDef = widget.seriesDef.clone();
+    // when loading series into the editor ignore invalid once (e.g. new DailyLife without attributes)
+    _seriesDef = widget.seriesDef.clone(ignoreValidation: true);
+    var seriesType = _seriesDef.seriesType;
 
     _nameController.addListener(_validate);
     _nameController.text = _seriesDef.name.toString();
 
-    if (_seriesDef.seriesType == SeriesType.dailyLife) {
-      _dailyLifeAttributesSettings = _seriesDef.dailyLifeAttributesSettingsEditable(_updateState);
-    }
+    _dailyLifeAttributesSettings = (seriesType != SeriesType.dailyLife) ? null : _seriesDef.dailyLifeAttributesSettingsEditable(_updateState);
 
     if (widget.goBack == null) {
       _isValid = true;
