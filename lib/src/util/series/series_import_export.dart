@@ -127,6 +127,9 @@ class SeriesImportExport {
   }
 
   /// import series with data from json
+  ///
+  /// - throws [TypeError] in case of null values or not available properties in json
+  /// - throws [Ex] in case of unexpected json
   static Future<bool> _importSeries(Map<String, dynamic> json, String fileName, SeriesProviders seriesProviders) async {
     if (json["type"] as String == "seriesExport") {
       // check version...
@@ -184,6 +187,8 @@ class SeriesImportExport {
     int successfulImports = 0;
     int numSelectedFiles = result.xFiles.length;
 
+    List<String> failures = [];
+
     for (var file in result.xFiles) {
       try {
         if (!file.name.endsWith(".json")) {
@@ -215,17 +220,19 @@ class SeriesImportExport {
         }
       } catch (ex, st) {
         SimpleLogging.w(ex.toString(), stackTrace: st);
-        if (context.mounted) {
-          if (ex is Ex) {
-            await Dialogs.simpleOkDialog(ex.toString(), context);
-          } else {
-            await Dialogs.simpleOkDialog(LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]), context);
-          }
+        if (ex is Ex) {
+          failures.add(ex.toString());
+        } else {
+          failures.add(LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]));
         }
       }
     }
 
     overlay.remove();
+
+    if (context.mounted && failures.isNotEmpty) {
+      await Dialogs.simpleOkDialog(failures.join("\n\n"), context);
+    }
 
     if (successfulImports > 0) {
       SimpleLogging.i('Successfully imported $successfulImports series.');
