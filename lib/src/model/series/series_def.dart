@@ -61,8 +61,9 @@ class SeriesDef {
   }
 
   /// deep copy / clone by transforming to json string and back
-  SeriesDef clone() {
-    return SeriesDef.fromJson(jsonDecode(jsonEncode(toJson())));
+  /// [ignoreValidation] if set, validation is ignored
+  SeriesDef clone({bool ignoreValidation = false}) {
+    return SeriesDef.fromJson(jsonDecode(jsonEncode(toJson())), ignoreValidation: ignoreValidation);
   }
 
   /// returns act/expected json version per series type (to be able to handle different parsings depending on version)
@@ -87,7 +88,7 @@ class SeriesDef {
     return IconMap.iconData(iconName);
   }
 
-  factory SeriesDef.fromJson(Map<String, dynamic> json) {
+  factory SeriesDef.fromJson(Map<String, dynamic> json, {bool ignoreValidation = false}) {
     var seriesDef = SeriesDef(
       uuid: json['uuid'] as String,
       seriesType: SeriesType.byTypeName(json['seriesType'] as String),
@@ -99,7 +100,9 @@ class SeriesDef {
     );
 
     // validate settings
-    DailyLifeAttributesSettings.validate(seriesDef);
+    if (!ignoreValidation) {
+      DailyLifeAttributesSettings.validate(seriesDef);
+    }
 
     return seriesDef;
   }
