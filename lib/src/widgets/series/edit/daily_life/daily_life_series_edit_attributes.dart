@@ -13,7 +13,7 @@ import '../../../../util/media_query_utils.dart';
 import '../../../../util/theme_utils.dart';
 import '../../../controls/card/glowing_border_container.dart';
 import '../../../controls/list/drag_handle.dart';
-import '../../../controls/text/overflow_text.dart';
+import '../../data/view/daily_life/daily_life_attribute_renderer.dart';
 import '../../series_def_renderer.dart';
 import 'daily_life_attribute_input.dart';
 
@@ -182,7 +182,7 @@ class DailyLifeSeriesEditAttributes extends StatelessWidget {
               5,
               (index) => DailyLifeAttribute(
                 aid: DailyLifeAttribute.generateUniqueAttributeId(val: now - index),
-                color: ColorUtils.hue(Colors.red, 30.0 * index),
+                color: ColorUtils.hue(const Color(0xF5FFAA00), 25.0 * index),
                 name: "".padLeft(index + 1, '★'),
               ),
             ).reversed,
@@ -198,7 +198,7 @@ class DailyLifeSeriesEditAttributes extends StatelessWidget {
               5,
               (index) => DailyLifeAttribute(
                 aid: DailyLifeAttribute.generateUniqueAttributeId(val: now - index),
-                color: ColorUtils.hue(Colors.orangeAccent, -30.0 * index),
+                color: ColorUtils.hue(ColorUtils.fromHex('996726'), -30.0 * index),
                 name: "".padLeft(index + 1, '☠'),
               ),
             ),
@@ -361,8 +361,12 @@ class _AttributeRenderer extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const SizedBox(width: ThemeUtils.verticalSpacing),
-          OverflowText(dailyLifeAttribute.name),
+          const SizedBox(width: ThemeUtils.horizontalSpacing),
+          // OverflowText(dailyLifeAttribute.name),
+          Expanded(
+            child: DailyLifeAttributeRenderer(dailyLifeAttribute: dailyLifeAttribute),
+          ),
+          const SizedBox(width: ThemeUtils.horizontalSpacing),
           LeftBorder(
             color: dailyLifeAttribute.color,
             child: Row(
