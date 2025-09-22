@@ -18,7 +18,7 @@ import '../../../../util/theme_utils.dart';
 import '../../../controls/animation/animated_highlight_container.dart';
 import 'blood_pressure/table/blood_pressure_value_renderer.dart';
 import 'daily_check/table/daily_check_value_renderer.dart';
-import 'daily_life/table/daily_life_value_renderer.dart';
+import 'daily_life/daily_life_attribute_renderer.dart';
 import 'habit/table/habit_value_renderer.dart';
 
 class SeriesLatestValueRenderer extends StatelessWidget {
@@ -32,93 +32,104 @@ class SeriesLatestValueRenderer extends StatelessWidget {
       case SeriesType.bloodPressure:
         {
           return AnimatedHighlightContainer<BloodPressureValue?>(
-              highlightColor: seriesDef.color,
-              valueSelector: (context) => context.read<SeriesCurrentValueProvider>().bloodPressureCurrentValue(seriesDef),
-              builder: (context, currentValue) {
-                if (currentValue != null) {
-                  return _CurrentValueEdit(
-                    seriesDef: seriesDef,
-                    seriesDataValue: currentValue,
-                    child: _LatestValueWrap(
-                      children: [
-                        Text(DateTimeUtils.formatDate(currentValue.dateTime)),
-                        Text(DateTimeUtils.formatTime(currentValue.dateTime)),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            BloodPressureValueRenderer(bloodPressureValue: currentValue, seriesDef: seriesDef),
-                          ],
-                        ),
-                      ],
-                    ),
-                  );
-                }
-                return Center(child: Text(LocaleKeys.seriesDefRenderer_currentValue_label_noValue.tr()));
-              });
+            highlightColor: seriesDef.color,
+            valueSelector: (context) => context.read<SeriesCurrentValueProvider>().bloodPressureCurrentValue(seriesDef),
+            builder: (context, currentValue) {
+              if (currentValue != null) {
+                return _CurrentValueEdit(
+                  seriesDef: seriesDef,
+                  seriesDataValue: currentValue,
+                  child: _LatestValueWrap(
+                    children: [
+                      Text(DateTimeUtils.formatDate(currentValue.dateTime)),
+                      Text(DateTimeUtils.formatTime(currentValue.dateTime)),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          BloodPressureValueRenderer(bloodPressureValue: currentValue, seriesDef: seriesDef),
+                        ],
+                      ),
+                    ],
+                  ),
+                );
+              }
+              return Center(child: Text(LocaleKeys.seriesDefRenderer_currentValue_label_noValue.tr()));
+            },
+          );
         }
       case SeriesType.dailyCheck:
         {
           return AnimatedHighlightContainer<DailyCheckValue?>(
-              highlightColor: seriesDef.color,
-              valueSelector: (context) => context.read<SeriesCurrentValueProvider>().dailyCheckCurrentValue(seriesDef),
-              builder: (context, currentValue) {
-                if (currentValue != null) {
-                  return _CurrentValueEdit(
-                    seriesDef: seriesDef,
-                    seriesDataValue: currentValue,
-                    child: _LatestValueWrap(children: [
+            highlightColor: seriesDef.color,
+            valueSelector: (context) => context.read<SeriesCurrentValueProvider>().dailyCheckCurrentValue(seriesDef),
+            builder: (context, currentValue) {
+              if (currentValue != null) {
+                return _CurrentValueEdit(
+                  seriesDef: seriesDef,
+                  seriesDataValue: currentValue,
+                  child: _LatestValueWrap(
+                    children: [
                       Text(DateTimeUtils.formatDate(currentValue.dateTime)),
                       Text(DateTimeUtils.formatTime(currentValue.dateTime)),
                       DailyCheckValueRenderer(dailyCheckValue: currentValue, seriesDef: seriesDef),
-                    ]),
-                  );
-                }
-                return Center(child: Text(LocaleKeys.seriesDefRenderer_currentValue_label_noValue.tr()));
-              });
+                    ],
+                  ),
+                );
+              }
+              return Center(child: Text(LocaleKeys.seriesDefRenderer_currentValue_label_noValue.tr()));
+            },
+          );
         }
       case SeriesType.dailyLife:
         {
           return AnimatedHighlightContainer<DailyLifeValue?>(
-              highlightColor: seriesDef.color,
-              valueSelector: (context) => context.read<SeriesCurrentValueProvider>().dailyLifeCurrentValue(seriesDef),
-              builder: (context, currentValue) {
-                if (currentValue != null) {
-                  return _CurrentValueEdit(
-                    seriesDef: seriesDef,
-                    seriesDataValue: currentValue,
-                    child: _LatestValueWrap(children: [
+            highlightColor: seriesDef.color,
+            valueSelector: (context) => context.read<SeriesCurrentValueProvider>().dailyLifeCurrentValue(seriesDef),
+            builder: (context, currentValue) {
+              if (currentValue != null) {
+                return _CurrentValueEdit(
+                  seriesDef: seriesDef,
+                  seriesDataValue: currentValue,
+                  child: _LatestValueWrap(
+                    children: [
                       Text(DateTimeUtils.formatDate(currentValue.dateTime)),
                       Text(DateTimeUtils.formatTime(currentValue.dateTime)),
-                      DailyLifeValueRenderer(
-                        dailyLifeValue: currentValue,
-                        seriesDef: seriesDef,
-                        dailyLifeAttributeResolver: DailyLifeAttributeResolver(seriesDef),
+                      Builder(
+                        builder: (context) {
+                          var resolver = DailyLifeAttributeResolver(seriesDef);
+                          return DailyLifeAttributeRenderer(dailyLifeAttribute: resolver.resolve(currentValue.attributeUuid));
+                        },
                       ),
-                    ]),
-                  );
-                }
-                return Center(child: Text(LocaleKeys.seriesDefRenderer_currentValue_label_noValue.tr()));
-              });
+                    ],
+                  ),
+                );
+              }
+              return Center(child: Text(LocaleKeys.seriesDefRenderer_currentValue_label_noValue.tr()));
+            },
+          );
         }
       case SeriesType.habit:
         {
           return AnimatedHighlightContainer<HabitValue?>(
-              highlightColor: seriesDef.color,
-              valueSelector: (context) => context.read<SeriesCurrentValueProvider>().habitCurrentValue(seriesDef),
-              builder: (context, currentValue) {
-                if (currentValue != null) {
-                  return _CurrentValueEdit(
-                    seriesDef: seriesDef,
-                    seriesDataValue: currentValue,
-                    child: _LatestValueWrap(children: [
+            highlightColor: seriesDef.color,
+            valueSelector: (context) => context.read<SeriesCurrentValueProvider>().habitCurrentValue(seriesDef),
+            builder: (context, currentValue) {
+              if (currentValue != null) {
+                return _CurrentValueEdit(
+                  seriesDef: seriesDef,
+                  seriesDataValue: currentValue,
+                  child: _LatestValueWrap(
+                    children: [
                       Text(DateTimeUtils.formatDate(currentValue.dateTime)),
                       Text(DateTimeUtils.formatTime(currentValue.dateTime)),
                       HabitValueRenderer(habitValue: currentValue, seriesDef: seriesDef),
-                    ]),
-                  );
-                }
-                return Center(child: Text(LocaleKeys.seriesDefRenderer_currentValue_label_noValue.tr()));
-              });
+                    ],
+                  ),
+                );
+              }
+              return Center(child: Text(LocaleKeys.seriesDefRenderer_currentValue_label_noValue.tr()));
+            },
+          );
         }
     }
   }
