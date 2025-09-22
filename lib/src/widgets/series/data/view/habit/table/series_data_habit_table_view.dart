@@ -37,7 +37,7 @@ class SeriesDataHabitTableView extends StatelessWidget {
     var rowPerDayCellBuilder = RowPerDayCellBuilder<HabitValue>(
       data: data,
       useDateTimeValueColumnProfile: useDateTimeValueColumnProfile,
-      gridCellChildBuilder: (HabitValue value) => HabitValueRenderer(
+      gridCellChildBuilder: (HabitValue value, Size _) => HabitValueRenderer(
         habitValue: value,
         seriesDef: seriesViewMetaData.seriesDef,
         editMode: seriesViewMetaData.editMode,

@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../../../../../../model/series/data/daily_life/daily_life_value.dart';
@@ -23,6 +25,7 @@ class DailyLifeValueRenderer extends StatelessWidget {
     this.editMode = false,
     this.wrapWithDateTimeTooltip = false,
     required this.dailyLifeAttributeResolver,
+    this.maxContentWidth = 80,
   });
 
   final DailyLifeValue dailyLifeValue;
@@ -30,6 +33,7 @@ class DailyLifeValueRenderer extends StatelessWidget {
   final SeriesDef seriesDef;
   final bool wrapWithDateTimeTooltip;
   final DailyLifeAttributeResolver dailyLifeAttributeResolver;
+  final double maxContentWidth;
 
   @override
   Widget build(BuildContext context) {
@@ -38,19 +42,29 @@ class DailyLifeValueRenderer extends StatelessWidget {
     Widget result = Container(
       decoration: editMode
           ? BoxDecoration(
+              border: Border.all(
+                color: themeData.colorScheme.secondary,
+              ),
+              borderRadius: BorderRadius.circular(ThemeUtils.borderRadiusSmall),
               gradient: ChartUtils.createLeftToRightGradient(
-                [themeData.colorScheme.secondary.withAlpha(0), themeData.colorScheme.secondary, themeData.colorScheme.secondary.withAlpha(0)],
-                stops: [0.1, 0.5, 0.9],
+                [themeData.colorScheme.secondary, themeData.colorScheme.secondary.withAlpha(0), themeData.colorScheme.secondary],
+                stops: [0.0, 0.5, 1.0],
               ),
             )
-          : null,
+          : BoxDecoration(
+              border: Border.all(
+                color: Colors.transparent,
+              ),
+            ),
       margin: const EdgeInsets.all(2),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          DailyLifeAttributeRenderer(dailyLifeAttribute: resolvedAttribute),
-        ],
+      child: Center(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 2),
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: max(maxContentWidth - 8, 20)),
+            child: DailyLifeAttributeRenderer(dailyLifeAttribute: resolvedAttribute),
+          ),
+        ),
       ),
     );
 

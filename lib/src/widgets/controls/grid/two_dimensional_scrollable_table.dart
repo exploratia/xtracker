@@ -19,7 +19,7 @@ class TwoDimensionalScrollableTable extends StatelessWidget {
   });
 
   final ColumnProfile tableColumnProfile;
-  final GridCell Function(BuildContext context, int yIndex, int xIndex) gridCellBuilder;
+  final GridCell Function(BuildContext context, int yIndex, int xIndex, Size cellSize) gridCellBuilder;
   final double tableHeadHeight;
   final int lineHeight;
   final int lineCount;
@@ -67,7 +67,7 @@ class TwoDimensionalScrollableTable extends StatelessWidget {
                 tableDataXIndex++;
               }
 
-              final cellData = gridCellBuilder(context, yIndex, tableDataXIndex);
+              final cellData = gridCellBuilder(context, yIndex, tableDataXIndex, Size(columnWidth, lineHeight.toDouble()));
 
               return Container(
                 color: cellData.backgroundColor,
@@ -125,7 +125,7 @@ class _ScrollableGrid extends StatefulWidget {
 
   final ValueKey<String> viewportSizeKey;
   final TwoDimensionalChildBuilderDelegate twoDimensionalChildBuilderDelegate;
-  final GridCell Function(BuildContext context, int yIndex, int xIndex) gridCellBuilder;
+  final GridCell Function(BuildContext context, int yIndex, int xIndex, Size cellSize) gridCellBuilder;
 
   @override
   State<_ScrollableGrid> createState() => _ScrollableGridState();
@@ -212,7 +212,7 @@ class _ScrollableGridState extends State<_ScrollableGrid> {
                         width: firstColumnWidth,
                       );
                     }
-                    final cellData = widget.gridCellBuilder(context, yIndex, 0);
+                    final cellData = widget.gridCellBuilder(context, yIndex, 0, Size(firstColumnWidth, widget.lineHeight.toDouble()));
 
                     return Container(
                       color: cellData.backgroundColor,

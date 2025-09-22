@@ -37,7 +37,7 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
     var rowPerDayCellBuilder = RowPerDayCellBuilder<BloodPressureValue>(
       data: data,
       useDateTimeValueColumnProfile: useDateTimeValueColumnProfile,
-      gridCellChildBuilder: (BloodPressureValue value) => BloodPressureValueRenderer(
+      gridCellChildBuilder: (BloodPressureValue value, Size _) => BloodPressureValueRenderer(
         bloodPressureValue: value,
         seriesDef: seriesViewMetaData.seriesDef,
         editMode: seriesViewMetaData.editMode,

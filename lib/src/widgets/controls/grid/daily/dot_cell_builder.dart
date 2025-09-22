@@ -17,7 +17,7 @@ class DotCellBuilder<T extends GridDayItem> {
     required this.monthly,
   });
 
-  GridCell gridCellBuilder(BuildContext context, int yIndex, int xIndex) {
+  GridCell gridCellBuilder(BuildContext context, int yIndex, int xIndex, Size cellSize) {
     var rowItem = data[yIndex];
 
     if (xIndex == 0) {

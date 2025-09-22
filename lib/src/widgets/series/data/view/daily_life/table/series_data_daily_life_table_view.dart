@@ -37,12 +37,13 @@ class SeriesDataDailyLifeTableView extends StatelessWidget {
     var rowPerDayCellBuilder = RowPerDayCellBuilder<DailyLifeValue>(
       data: data,
       useDateTimeValueColumnProfile: true,
-      gridCellChildBuilder: (DailyLifeValue value) => DailyLifeValueRenderer(
+      gridCellChildBuilder: (DailyLifeValue value, Size cellSize) => DailyLifeValueRenderer(
         dailyLifeValue: value,
         seriesDef: seriesViewMetaData.seriesDef,
         editMode: seriesViewMetaData.editMode,
         // wrapWithDateTimeTooltip: true, // tooltip not required in date time value column profile
         dailyLifeAttributeResolver: dailyLifeAttributeResolver,
+        maxContentWidth: cellSize.width,
       ),
     );
 

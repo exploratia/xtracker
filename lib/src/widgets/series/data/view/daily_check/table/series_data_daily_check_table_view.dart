@@ -37,7 +37,7 @@ class SeriesDataDailyCheckTableView extends StatelessWidget {
     var rowPerDayCellBuilder = RowPerDayCellBuilder<DailyCheckValue>(
       data: data,
       useDateTimeValueColumnProfile: useDateTimeValueColumnProfile,
-      gridCellChildBuilder: (DailyCheckValue value) => DailyCheckValueRenderer(
+      gridCellChildBuilder: (DailyCheckValue value, Size _) => DailyCheckValueRenderer(
         dailyCheckValue: value,
         seriesDef: seriesViewMetaData.seriesDef,
         editMode: seriesViewMetaData.editMode,

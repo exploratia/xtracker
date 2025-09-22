@@ -7,12 +7,12 @@ import 'day_row_item.dart';
 
 class RowPerDayCellBuilder<T extends SeriesDataValue> {
   final List<DayRowItem<T>> data;
-  final Widget Function(T value) gridCellChildBuilder;
+  final Widget Function(T value, Size cellSize) gridCellChildBuilder;
   final bool useDateTimeValueColumnProfile;
 
   RowPerDayCellBuilder({required this.data, required this.gridCellChildBuilder, required this.useDateTimeValueColumnProfile});
 
-  GridCell gridCellBuilder(BuildContext context, int yIndex, int xIndex) {
+  GridCell gridCellBuilder(BuildContext context, int yIndex, int xIndex, Size cellSize) {
     DayRowItem<T> dayItem = data[yIndex];
 
     if (xIndex == 0) {
@@ -27,7 +27,7 @@ class RowPerDayCellBuilder<T extends SeriesDataValue> {
       if (xIndex == 1 && value != null) {
         gridCellChild = Center(child: Text(DateTimeUtils.formatTime(value.dateTime)));
       } else if (xIndex == 2 && value != null) {
-        gridCellChild = gridCellChildBuilder(value);
+        gridCellChild = gridCellChildBuilder(value, cellSize);
       }
 
       return GridCell(backgroundColor: dayItem.backgroundColor, child: gridCellChild);
@@ -43,7 +43,7 @@ class RowPerDayCellBuilder<T extends SeriesDataValue> {
 
     Widget gridCellChild = Container();
     if (value != null) {
-      gridCellChild = gridCellChildBuilder(value);
+      gridCellChild = gridCellChildBuilder(value, cellSize);
     }
     return GridCell(
       backgroundColor: dayItem.backgroundColor,

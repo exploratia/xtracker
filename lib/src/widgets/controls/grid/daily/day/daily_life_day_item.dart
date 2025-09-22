@@ -24,6 +24,7 @@ class DailyLifeDayItem extends GridDayItem<DailyLifeValue> {
         dailyLifeValue: dataValue,
         seriesDef: seriesDef,
         dailyLifeAttributeResolver: dailyLifeAttributeResolver,
+        maxContentWidth: 120,
       ),
     );
   }
