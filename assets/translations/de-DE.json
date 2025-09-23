@@ -127,8 +127,8 @@
         "info": "Blutdruck-Messung 3x am Tag (Morgens - Mittags - Abends)."
       },
       "dailyCheck": {
-        "title": "Täglicher Check",
-        "info": "Erledige täglich etwas - z.B. Sport oder Pause oder Aufstehen oder keine Süßigkeiten essen."
+        "title": "Tages-Check",
+        "info": "Tagesweise Checks erfassen – auch wenn ein Tag mal leer bleibt. Gut geeignet für Aktivitäten wie Sport, Pausen machen oder Süßigkeiten weglassen."
       },
       "dailyLife": {
         "title": "Tägliches Leben",
@@ -140,7 +140,7 @@
       },
       "habit": {
         "title": "Gewohnheit",
-        "info": "Mehrfach täglich wiederkehrende Gewohnheiten erfassen. Z.B. Kaffeekonsum oder genug Wasser trinken."
+        "info": "Mehrfach tägliche Gewohnheiten erfassen – z. B. Kaffeekonsum oder genug Wasser trinken.\nGut geeignet für Routinen, die man verbessern oder ablegen möchte."
       },
       "monthly": {
         "title": "Monatlich",
@@ -309,7 +309,7 @@
     },
     "label": {
       "noData": "Keine Daten vorhanden...",
-      "noDataBecauseOfFilter": "Keine Daten aufgrund der Filtereinstellungen"
+      "noDataBecauseOfFilter": "Keine Daten mit diesen Filtereinstellungen"
     }
   },
   "seriesDataAnalytics": {
@@ -576,7 +576,7 @@
         "exportSingleSeries": "Messreihe (Konfiguration und Werte) als JSON-Datei speichern.",
         "exportSeriesTip": "Tipp: Einzelne Messreihen über das Export-Symbol der jeweiligen Messreihe speichern.",
         "exportSingleSeriesTip": "Tipp: Alle Messreihen gemeinsam über das Export-Symbol der Messreihenverwaltung speichern.",
-        "importSeries": "JSON-Dateien mit Messreihen zum Import auswählen.\nVorhandene Serien (inklusive Daten) werden anhand ihrer ID überschrieben. Neue Messreihen werden automatisch erstellt.",
+        "importSeries": "JSON-Dateien mit Messreihen zum Import auswählen.\nVorhandene Messreihen (inklusive Daten) werden anhand ihrer ID überschrieben. Neue Messreihen werden automatisch erstellt.",
         "importSeriesTip": "Tipp: Zuerst eine passende Messreihe erstellen und exportieren. Danach Daten in die Datei einfügen und erneut importieren – so passt das Format sicher.",
         "latestSeriesExport": "Zuletzt exportiert: {}",
         "shareSeries": "Alle Messreihen als eine JSON-Datei teilen.",

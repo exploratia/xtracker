@@ -127,8 +127,8 @@
         "info": "Measure blood pressure three times a day."
       },
       "dailyCheck": {
-        "title": "Daily check",
-        "info": "Track daily habits – e.g. exercise, taking breaks, standing up or eat no sweats."
+        "title": "Day Check",
+        "info": "Track per-day checks – even if some days stay empty. Useful for things like exercise, taking breaks or skipping sweets."
       },
       "dailyLife": {
         "title": "Daily Life",
@@ -140,7 +140,7 @@
       },
       "habit": {
         "title": "Habit",
-        "info": "Track habits multiple times a day. E.g. coffee consumption or drinking enough water."
+        "info": "Track habits multiple times a day – e.g. coffee consumption or drinking enough water.\nIdeal for routines you want to build or reduce."
       },
       "monthly": {
         "title": "Monthly",
