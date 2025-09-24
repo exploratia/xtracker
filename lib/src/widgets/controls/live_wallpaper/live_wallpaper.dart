@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../../../util/chart/chart_utils.dart';
 import '../../../util/theme_utils.dart';
+import '../responsive/device_dependent_constrained_box.dart';
 import 'live_wallpaper_hills.dart';
 import 'live_wallpaper_starry_sky.dart';
 
@@ -31,8 +32,9 @@ class LiveWallpaper extends StatelessWidget {
         Color groundColor = Color.lerp(const Color.fromRGBO(51, 21, 74, 1), ThemeUtils.secondary, t2) ?? ThemeUtils.secondary;
 
         List<Widget>? fadeOuts = [];
-        if (width > sceneDim) {
-          var fadeWidth = (width - sceneDim) / 2;
+        double fadeThresholdWidth = DeviceDependentWidthConstrainedBox.tabletMaxWidth * 1.5; // bit more width then max element width
+        if (width > fadeThresholdWidth) {
+          var fadeWidth = (width - DeviceDependentWidthConstrainedBox.tabletMaxWidth) / 2;
           var fadeOutColors = [
             themeData.scaffoldBackgroundColor,
             themeData.scaffoldBackgroundColor.withAlpha(0),
