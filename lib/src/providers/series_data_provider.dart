@@ -269,37 +269,25 @@ class SeriesDataProvider with ChangeNotifier {
   }
 
   Future<void> addValues(SeriesDef seriesDef, List<dynamic> values, SeriesCurrentValueProvider seriesCurrentValueProvider) async {
-    SeriesDataValue? latest;
-
     await fetchDataIfNotYetLoaded(seriesDef);
-    var store = Stores.getOrCreateSeriesDataStore(seriesDef);
+    SeriesData<SeriesDataValue> seriesData;
     switch (seriesDef.seriesType) {
       case SeriesType.bloodPressure:
-        var seriesData = requireBloodPressureData(seriesDef);
-        seriesData.insertAll(values.map(BloodPressureValue.checkOnBloodPressureValue));
-        seriesData.sort();
-        await store.saveAll(seriesData.data);
-        latest = seriesData.data.lastOrNull;
+        seriesData = requireBloodPressureData(seriesDef)..insertAll(values.map(BloodPressureValue.checkOnBloodPressureValue));
       case SeriesType.dailyCheck:
-        var seriesData = requireDailyCheckData(seriesDef);
-        seriesData.insertAll(values.map(DailyCheckValue.checkOnDailyCheckValue));
-        seriesData.sort();
-        await store.saveAll(seriesData.data);
-        latest = seriesData.data.lastOrNull;
+        seriesData = requireDailyCheckData(seriesDef)..insertAll(values.map(DailyCheckValue.checkOnDailyCheckValue));
       case SeriesType.dailyLife:
-        var seriesData = requireDailyLifeData(seriesDef);
-        seriesData.insertAll(values.map(DailyLifeValue.checkOnDailyLifeValue));
-        seriesData.sort();
-        await store.saveAll(seriesData.data);
-        latest = seriesData.data.lastOrNull;
+        seriesData = requireDailyLifeData(seriesDef)..insertAll(values.map(DailyLifeValue.checkOnDailyLifeValue));
       case SeriesType.habit:
-        var seriesData = requireHabitData(seriesDef);
-        seriesData.insertAll(values.map(HabitValue.checkOnHabitValue));
-        seriesData.sort();
-        await store.saveAll(seriesData.data);
-        latest = seriesData.data.lastOrNull;
+        seriesData = requireHabitData(seriesDef)..insertAll(values.map(HabitValue.checkOnHabitValue));
     }
 
+    seriesData.sort();
+
+    var store = Stores.getOrCreateSeriesDataStore(seriesDef);
+    await store.saveAll(seriesData.data);
+
+    SeriesDataValue? latest = seriesData.data.lastOrNull;
     if (latest != null) await seriesCurrentValueProvider.save(seriesDef, latest);
 
     notifyListeners();
