@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +7,6 @@ import '../../../../model/series/settings/daily_life/daily_life_attribute.dart';
 import '../../../../model/series/settings/daily_life/daily_life_attributes_settings.dart';
 import '../../../../util/color_utils.dart';
 import '../../../../util/dialogs.dart';
-import '../../../../util/media_query_utils.dart';
 import '../../../../util/theme_utils.dart';
 import '../../../controls/card/glowing_border_container.dart';
 import '../../../controls/list/drag_handle.dart';
@@ -25,8 +22,6 @@ class DailyLifeSeriesEditAttributes extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var screenHeight = MediaQueryUtils.of(context).mediaQueryData.size.height;
-
     var attributes = dailyLifeAttributesSettings.attributes;
     List<Widget> listItems = [];
 
@@ -53,76 +48,75 @@ class DailyLifeSeriesEditAttributes extends StatelessWidget {
       listItems.add(renderer);
     }
 
-    return SizedBox(
-      height: max(250, min(screenHeight - 200, listItems.length * 64 + 2 * ThemeUtils.cardPadding + 40 * MediaQueryUtils.textScaleFactor) /* +40 Header Size*/),
-      child: ReorderableListView(
-        buildDefaultDragHandles: false,
-        header: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            IconButton(
-              tooltip: LocaleKeys.commons_btn_info_tooltip.tr(),
-              onPressed: () async {
-                Dialogs.simpleOkDialog(
-                  LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_info.tr(),
-                  context,
-                  title: LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_title.tr(),
-                );
-              },
-              icon: const Icon(Icons.info_outline),
-            ),
-            Expanded(child: Container()),
-            IconButton(
-              tooltip: LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_actions_add_tooltip.tr(),
-              onPressed: () async {
-                DailyLifeAttribute? dailyLifeAttribute = await DailyLifeAttributeInput.showInputDlg(context, newAttributeColor: seriesDef.color);
-                if (dailyLifeAttribute != null) {
-                  attributes.insert(0, dailyLifeAttribute);
-                  updateSettings();
-                }
-              },
-              icon: const Icon(Icons.add),
-            ),
-            PopupMenuButton(
-              borderRadius: ThemeUtils.borderRadiusCircular,
-              icon: const Icon(Icons.playlist_add_outlined),
-              tooltip: LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_actions_addPreset_tooltip.tr(),
-              itemBuilder: (context) => _buildPresets(attributes, updateSettings),
-            ),
-            IconButton(
-              tooltip: LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_actions_deleteAll_tooltip.tr(),
-              onPressed: () async {
-                attributes.clear();
+    return ReorderableListView(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      buildDefaultDragHandles: false,
+      header: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          IconButton(
+            tooltip: LocaleKeys.commons_btn_info_tooltip.tr(),
+            onPressed: () async {
+              Dialogs.simpleOkDialog(
+                LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_info.tr(),
+                context,
+                title: LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_title.tr(),
+              );
+            },
+            icon: const Icon(Icons.info_outline),
+          ),
+          Expanded(child: Container()),
+          IconButton(
+            tooltip: LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_actions_add_tooltip.tr(),
+            onPressed: () async {
+              DailyLifeAttribute? dailyLifeAttribute = await DailyLifeAttributeInput.showInputDlg(context, newAttributeColor: seriesDef.color);
+              if (dailyLifeAttribute != null) {
+                attributes.insert(0, dailyLifeAttribute);
                 updateSettings();
-              },
-              icon: const Icon(Icons.playlist_remove_outlined),
-            ),
-          ],
-        ),
-        proxyDecorator: (Widget child, int index, Animation<double> animation) {
-          return Opacity(
-            opacity: 0.6,
-            child: Material(
-              // elevation: ThemeUtils.elevation, // Shadow effect while dragging
-              borderRadius: BorderRadius.circular(ThemeUtils.borderRadiusLarge), // Rounded corners
-              color: Colors.transparent,
-              child: child,
-            ),
-          );
-        },
-        padding: const EdgeInsets.all(ThemeUtils.cardPadding),
-        children: listItems,
-        onReorder: (int oldIndex, int newIndex) {
-          if (oldIndex < newIndex) {
-            newIndex -= 1;
-          }
-          if (attributes.length <= oldIndex || attributes.length <= newIndex) return;
-
-          final item = attributes.removeAt(oldIndex);
-          attributes.insert(newIndex, item);
-          updateSettings();
-        },
+              }
+            },
+            icon: const Icon(Icons.add),
+          ),
+          PopupMenuButton(
+            borderRadius: ThemeUtils.borderRadiusCircular,
+            icon: const Icon(Icons.playlist_add_outlined),
+            tooltip: LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_actions_addPreset_tooltip.tr(),
+            itemBuilder: (context) => _buildPresets(attributes, updateSettings),
+          ),
+          IconButton(
+            tooltip: LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_actions_deleteAll_tooltip.tr(),
+            onPressed: () async {
+              attributes.clear();
+              updateSettings();
+            },
+            icon: const Icon(Icons.playlist_remove_outlined),
+          ),
+        ],
       ),
+      proxyDecorator: (Widget child, int index, Animation<double> animation) {
+        return Opacity(
+          opacity: 0.6,
+          child: Material(
+            // elevation: ThemeUtils.elevation, // Shadow effect while dragging
+            borderRadius: BorderRadius.circular(ThemeUtils.borderRadiusLarge), // Rounded corners
+            color: Colors.transparent,
+            child: child,
+          ),
+        );
+      },
+      padding: const EdgeInsets.all(ThemeUtils.cardPadding),
+      children: listItems,
+      onReorder: (int oldIndex, int newIndex) {
+        if (oldIndex < newIndex) {
+          newIndex -= 1;
+        }
+        if (attributes.length <= oldIndex || attributes.length <= newIndex) return;
+
+        final item = attributes.removeAt(oldIndex);
+        attributes.insert(newIndex, item);
+        updateSettings();
+      },
     );
   }
 
