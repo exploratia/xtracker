@@ -23,7 +23,6 @@ class DailyLifeAttributeRenderer extends StatelessWidget {
       ),
       child: OverflowText(
         expanded: false,
-        // flexible: true ,
         dailyLifeAttribute.name,
         style: themeData.textTheme.labelMedium?.copyWith(color: ColorUtils.getContrastingTextColor(dailyLifeAttribute.color)),
       ),

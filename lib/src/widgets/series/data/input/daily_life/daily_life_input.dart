@@ -115,6 +115,8 @@ class _DailyLifeInputState extends State<DailyLifeInput> {
                   .attributes
                   .map(
                     (e) => PopupMenuItem(
+                      /* Flutter Bug? if right >= 10 a huge wider padding is used. Seems not to work always. If only Text-Widgets are uses as child it has no effect. */
+                      padding: const EdgeInsets.only(right: 9, left: 9, bottom: 0),
                       onTap: () => _setAttributeUuid(e.aid),
                       child: DailyLifeAttributeRenderer(dailyLifeAttribute: e),
                     ),
