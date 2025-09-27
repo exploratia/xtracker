@@ -8,24 +8,20 @@ import '../../../../../generated/locale_keys.g.dart';
 import '../../../../model/series/data/datetime_item.dart';
 import '../../../../model/series/data/series_data_value.dart';
 import '../../../../model/series/series_view_meta_data.dart';
+import '../../../../util/analytics/analytics.dart';
 import '../../../../util/chart/chart_utils.dart';
 import '../../../../util/color_utils.dart';
 import '../../../../util/date_time_utils.dart';
 import '../../../../util/day_item/day_item.dart';
-import '../../../../util/dialogs.dart';
+import '../../../../util/filter/after_date_filter.dart';
 import '../../../../util/media_query_utils.dart';
 import '../../../../util/table_utils.dart';
 import '../../../../util/theme_utils.dart';
-import '../../../controls/card/settings_card.dart';
-import '../../../controls/layout/h_centered_scroll_view.dart';
-import '../../../controls/layout/single_child_scroll_view_with_scrollbar.dart';
-import '../../../controls/progress/progress_bar.dart';
-import '../../../controls/text/overflow_text.dart';
+import '../../../controls/progress/ratio_labeled_progress_bar.dart';
+import 'analytics/analysis_table.dart';
+import 'analytics/analytics_settings_card.dart';
 
 class SeriesDataAnalyticsDaysRecordedView extends StatelessWidget {
-  static const int _allDays = -1;
-  static const List<int> _datasetSizeInDays = [7, 30, 90, 365, _allDays];
-
   const SeriesDataAnalyticsDaysRecordedView({super.key, required this.seriesViewMetaData, required this.seriesDataValues});
 
   final SeriesViewMetaData seriesViewMetaData;
@@ -36,14 +32,15 @@ class SeriesDataAnalyticsDaysRecordedView extends StatelessWidget {
     final themeData = Theme.of(context);
     var dayItems = DayItem.buildDayItems(seriesDataValues, (day) => DayItem(day), includeToday: true);
 
-    var daysRecordedList = _datasetSizeInDays.map((lastXDays) => _DaysRecorded.analyse(dayItems, lastXDays));
+    var daysRecordedList = Analytics.datasetSizeInDays.map((lastXDays) => _DaysRecorded.analyse(dayItems, lastXDays));
 
     Widget recordedDaysTable = _buildRecordedDaysTable(context, daysRecordedList);
 
     Widget recordedDaysWidget = _buildRecordedDaysDistributionChart(daysRecordedList, themeData);
 
-    return _DaysRecordedViewSettingsCard(
-      trendInfoDialogContent: const _DaysRecordedInfoDialogContent(),
+    return AnalyticsSettingsCard(
+      title: LocaleKeys.seriesDataAnalytics_recordedDays_title.tr(),
+      infoDlgContent: SimpleInfoDlgContent(info: LocaleKeys.seriesDataAnalytics_recordedDays_label_recordedDaysInfo.tr()),
       children: [
         recordedDaysTable,
         recordedDaysWidget,
@@ -121,7 +118,7 @@ class SeriesDataAnalyticsDaysRecordedView extends StatelessWidget {
           spacing: ThemeUtils.horizontalSpacing,
           runSpacing: ThemeUtils.verticalSpacingSmall,
           children: [
-            ..._datasetSizeInDays.map(
+            ...Analytics.datasetSizeInDays.map(
               (s) => _buildLegendItem(s, themeData),
             )
           ],
@@ -132,7 +129,7 @@ class SeriesDataAnalyticsDaysRecordedView extends StatelessWidget {
   }
 
   Container _buildLegendItem(int datasetSize, ThemeData themeData) {
-    var gradient = _createBarGradient(seriesViewMetaData.seriesDef.color, _datasetSizeInDays.indexOf(datasetSize));
+    var gradient = _createBarGradient(seriesViewMetaData.seriesDef.color, Analytics.datasetSizeInDays.indexOf(datasetSize));
     var textColor = ColorUtils.getContrastingTextColor(gradient.colors.first);
     return Container(
       decoration: BoxDecoration(
@@ -142,7 +139,7 @@ class SeriesDataAnalyticsDaysRecordedView extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(ThemeUtils.paddingSmall),
         child: Text(
-          (datasetSize == _allDays) ? LocaleKeys.seriesDataAnalytics_label_total.tr() : datasetSize.toString(),
+          (datasetSize == Analytics.allDays) ? LocaleKeys.seriesDataAnalytics_label_total.tr() : datasetSize.toString(),
           style: themeData.textTheme.labelSmall!.copyWith(color: textColor),
         ),
       ),
@@ -195,47 +192,19 @@ class SeriesDataAnalyticsDaysRecordedView extends StatelessWidget {
   }
 
   Widget _buildRecordedDaysTable(BuildContext context, Iterable<_DaysRecorded> daysRecordedList) {
-    List<TableRow> rows = _AnalysisTable.buildKeyValueTableRows(context);
+    List<TableRow> rows = _buildKeyValueTableRows(context);
 
     for (var daysRecorded in daysRecordedList) {
-      String keyColumnText = _buildDatasetSizeString(daysRecorded.dataBasisDays);
+      String keyColumnText = Analytics.buildDatasetSizeString(daysRecorded.dataBasisDays);
       var keyColumnWidget = Text(
         keyColumnText,
         softWrap: false,
       );
 
-      var valueColumnWidget = Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          ProgressBar(
-            value: daysRecorded.percentage,
-            color: seriesViewMetaData.seriesDef.color,
-            padding: const EdgeInsets.only(
-              top: ThemeUtils.verticalSpacingSmall,
-              bottom: ThemeUtils.verticalSpacingSmall,
-              left: ThemeUtils.horizontalSpacing,
-            ),
-          ),
-          Row(
-            spacing: ThemeUtils.horizontalSpacingLarge,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(
-                width: 40,
-                child: Align(
-                  alignment: AlignmentGeometry.centerRight,
-                  child: Text(daysRecorded.percentageTo100),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(right: ThemeUtils.defaultPadding),
-                child: Text(daysRecorded.absoluteRate),
-              ),
-            ],
-          ),
-        ],
+      var valueColumnWidget = RatioLabeledProgressBar(
+        color: seriesViewMetaData.seriesDef.color,
+        value: daysRecorded.recordedDays,
+        total: daysRecorded.countedDays,
       );
 
       rows.add(
@@ -248,106 +217,10 @@ class SeriesDataAnalyticsDaysRecordedView extends StatelessWidget {
       );
     }
 
-    return _AnalysisTable(rows: rows);
+    return AnalysisTable(rows: rows);
   }
 
-  static String _buildDatasetSizeString(int size) {
-    var sizeString = LocaleKeys.seriesDataAnalytics_label_lastVarDays.tr(args: [size.toString()]);
-    if (size == _allDays) {
-      sizeString = LocaleKeys.seriesDataAnalytics_label_total.tr();
-    }
-    return sizeString;
-  }
-}
-
-class _DaysRecordedViewSettingsCard extends StatelessWidget {
-  const _DaysRecordedViewSettingsCard({
-    required this.trendInfoDialogContent,
-    required this.children,
-  });
-
-  final Widget trendInfoDialogContent;
-  final List<Widget> children;
-
-  @override
-  Widget build(BuildContext context) {
-    return SettingsCard(
-      spacing: ThemeUtils.verticalSpacingLarge,
-      title: Row(
-        spacing: ThemeUtils.horizontalSpacing,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          OverflowText(
-            LocaleKeys.seriesDataAnalytics_recordedDays_title.tr(),
-            style: Theme.of(context).textTheme.titleLarge,
-            expanded: false,
-            flexible: true,
-          ),
-          IconButton(
-            tooltip: LocaleKeys.commons_btn_info_tooltip.tr(),
-            onPressed: () => Dialogs.simpleOkDialog(
-              SingleChildScrollViewWithScrollbar(
-                useHorizontalScreenPaddingForScrollbar: true,
-                child: trendInfoDialogContent,
-              ),
-              context,
-              title: LocaleKeys.seriesDataAnalytics_recordedDays_title.tr(),
-            ),
-            icon: const Icon(Icons.info_outline),
-          ),
-        ],
-      ),
-      children: children,
-    );
-  }
-}
-
-class _DaysRecordedInfoDialogContent extends StatelessWidget {
-  const _DaysRecordedInfoDialogContent();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      spacing: ThemeUtils.verticalSpacingLarge,
-      children: [
-        Text(LocaleKeys.seriesDataAnalytics_recordedDays_label_recordedDaysInfo.tr()),
-      ],
-    );
-  }
-}
-
-class _AnalysisTable extends StatelessWidget {
-  const _AnalysisTable({
-    required this.rows,
-  });
-
-  final List<TableRow> rows;
-
-  @override
-  Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
-    return LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) => HCenteredScrollView(
-        children: [
-          Table(
-            columnWidths: <int, TableColumnWidth>{
-              0: const FixedColumnWidth(120),
-              1: FixedColumnWidth(math.max(120, constraints.maxWidth - 120)),
-            },
-            border: TableBorder.symmetric(
-              inside: BorderSide(width: 1, color: themeData.canvasColor),
-            ),
-            defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-            children: rows,
-          ),
-        ],
-      ),
-    );
-  }
-
-  static List<TableRow> buildKeyValueTableRows(BuildContext context) {
+  static List<TableRow> _buildKeyValueTableRows(BuildContext context) {
     List<TableRow> rows = TableUtils.buildKeyValueTableRows(
       context,
       keyColumnTitle: LocaleKeys.seriesDataAnalytics_label_dataset.tr(),
@@ -379,12 +252,13 @@ class _DaysRecorded {
 
   static _DaysRecorded analyse(List<DayItem<DateTimeItem>> dayItems, int datasetSizeInDays) {
     // special case all
-    if (datasetSizeInDays == SeriesDataAnalyticsDaysRecordedView._allDays) {
+    if (datasetSizeInDays == Analytics.allDays) {
       return _DaysRecorded(datasetSizeInDays, dayItems.length, dayItems.where((di) => di.count >= 1).length, _weekDaySpread(dayItems));
     }
 
-    var dateFilter = DateTimeUtils.truncateToDay(DateTimeUtils.truncateToDay(DateTime.now()).subtract(Duration(days: datasetSizeInDays - 1, microseconds: 1)));
-    var dateFiltered = dayItems.where((di) => di.dayDate.isAfter(dateFilter)).toList();
+    AfterDateFilter dateFilter = AfterDateFilter.daysBack(datasetSizeInDays);
+
+    var dateFiltered = dayItems.where((di) => dateFilter.filter(di.dayDate)).toList();
     var recordedDays = dateFiltered.where((di) => di.count >= 1).length;
     var countedDays = datasetSizeInDays; // dateFiltered.length could be not more but less then dateBasisDays -> counted is always datasetSizeInDays
     return _DaysRecorded(datasetSizeInDays, countedDays, recordedDays, _weekDaySpread(dateFiltered));

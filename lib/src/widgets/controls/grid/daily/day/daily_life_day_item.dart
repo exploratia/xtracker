@@ -12,7 +12,7 @@ class DailyLifeDayItem extends GridDayItem<DailyLifeValue> {
   DailyLifeDayItem(super.dateTimeDayStart, super.seriesDef);
 
   Pixel toPixel(bool monthly, DailyLifeAttributeResolver dailyLifeAttributeResolver) {
-    List<Color> colors = dateTimeItems.map((e) => dailyLifeAttributeResolver.resolve(e.attributeUuid).color).toList();
+    List<Color> colors = dateTimeItems.map((e) => dailyLifeAttributeResolver.resolve(e.aid).color).toList();
 
     return Pixel<DailyLifeValue>(
       colors: colors,

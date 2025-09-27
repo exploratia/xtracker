@@ -5,25 +5,26 @@ import '../../../../util/globals.dart';
 import '../series_data_value.dart';
 
 class DailyLifeValue extends SeriesDataValue {
-  final String attributeUuid;
+  final String aid;
 
-  DailyLifeValue(super.uuid, super.dateTime, this.attributeUuid);
+  /// [aid] attribute unique id
+  DailyLifeValue(super.uuid, super.dateTime, this.aid);
 
   DailyLifeValue cloneWith(DateTime dateTime) {
-    return DailyLifeValue(uuid, dateTime, attributeUuid);
+    return DailyLifeValue(uuid, dateTime, aid);
   }
 
   factory DailyLifeValue.fromJson(Map<String, dynamic> json) => DailyLifeValue(
         json['uuid'] as String? ?? const Uuid().v4().toString(),
         DateTime.fromMillisecondsSinceEpoch(json['utcMs'] as int),
-        json['attributeUuid'] as String? ?? Globals.invalid,
+        json['aid'] as String? ?? Globals.invalid,
       );
 
   @override
   Map<String, dynamic> toJson({bool exportUuid = true}) => {
         if (exportUuid) 'uuid': uuid,
         'utcMs': dateTime.millisecondsSinceEpoch,
-        'attributeUuid': attributeUuid,
+        'aid': aid,
       };
 
   static DailyLifeValue checkOnDailyLifeValue(dynamic value) {

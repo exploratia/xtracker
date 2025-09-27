@@ -54,6 +54,7 @@ class _SeriesEditState extends State<SeriesEdit> {
           context,
           title: Text(LocaleKeys.seriesEdit_title.tr()),
           leading: IconButton(
+            iconSize: ThemeUtils.iconSizeScaled,
             tooltip: LocaleKeys.seriesEdit_action_abort_tooltip.tr(),
             onPressed: () => Navigator.pop(context),
             icon: const Icon(Icons.close_outlined),
@@ -116,6 +117,7 @@ class _SeriesTypeInfoBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
+      iconSize: ThemeUtils.iconSizeScaled,
       tooltip: LocaleKeys.seriesEdit_btn_showSeriesTypeInfo.tr(),
       onPressed: () => Dialogs.simpleOkDialog(
         SeriesType.infoOf(st),
@@ -128,7 +130,6 @@ class _SeriesTypeInfoBtn extends StatelessWidget {
           ],
         ),
       ),
-      iconSize: ThemeUtils.iconSizeScaled,
       icon: const Icon(Icons.info_outline),
     );
   }

@@ -41,7 +41,7 @@ class ThemeUtils {
   static const double fontSizeLabelM = 12;
   static const double fontSizeLabelS = 10;
 
-  static double get iconSizeScaled => iconSize * MediaQueryUtils.textScaleFactor;
+  static double get iconSizeScaled => (iconSize * MediaQueryUtils.iconScaleFactor).ceilToDouble();
 
   static const int animationDuration = 300;
   static const int animationDurationShort = 150;
@@ -221,7 +221,7 @@ class ThemeUtils {
           fontSize: fontSizeBodyM,
         ),
         // decoration: GlowingBorderContainer.createGlowingBoxDecoration(secondary, secondary),
-        decoration: GlowingBorderContainer.createGlowingBoxDecoration(secondary, dark ? backgroundColor : cardBackgroundColor),
+        decoration: GlowingBorderContainer.createGlowingBoxDecoration(secondary, backgroundColor: dark ? backgroundColor : cardBackgroundColor),
         waitDuration: const Duration(milliseconds: 500),
         // showDuration: Duration(seconds: 2),
         preferBelow: false,

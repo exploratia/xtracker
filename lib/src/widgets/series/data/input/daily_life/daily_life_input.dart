@@ -48,7 +48,7 @@ class _DailyLifeInputState extends State<DailyLifeInput> {
     var source = widget.dailyLifeValue;
     _uuid = source?.uuid ?? const Uuid().v4();
     _dateTime = source?.dateTime ?? DateTime.now();
-    _attributeUuid = source?.attributeUuid;
+    _attributeUuid = source?.aid;
 
     if (source != null) {
       _isValid = true;

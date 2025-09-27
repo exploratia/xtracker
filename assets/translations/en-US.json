@@ -322,7 +322,6 @@
     "label": {
       "dataset": "Dataset",
       "lastVarDays": "Last {} days",
-      "lastXDays": "Last x days",
       "total": "Total"
     },
     "recordedDays": {
@@ -356,10 +355,23 @@
         }
       }
     },
+    "dailyLife": {
+      "attributesProportions": {
+        "title": "Attribute distribution",
+        "label": {
+          "attributeProportionsInfo": "Overview of attribute frequencies in total and their distribution across different periods of the past year."
+        },
+        "table": {
+          "colAttribute": "Attribute",
+          "colProportions": "Shares",
+          "colTotalShare": "Total share"
+        }
+      }
+    },
     "habit": {
       "trend": {
         "label": {
-          "trendInfo": "A linear trend function is calculated from the series values to forecast future values.\n\nThese forecasts are combined with the probability for each weekday.\n(If the series has no gaps, the probability is 100% for each day.)"
+          "trendInfo": "A linear trend is calculated from the series values to forecast future values.\n\nThe forecast is combined with the probability for each weekday: the lower the probability, the more transparent the day appears.\nIf the series has no gaps, the probability for each day is 100% and they are shown fully."
         }
       }
     }
@@ -491,7 +503,7 @@
         "dlg": {
           "title": "Attribute"
         },
-        "info": "Manage series attributes.\nEach value has exactly one attribute.\n\nIf an attribute is deleted while still in use, the value falls back to the series name and color.",
+        "info": "Manage series attributes.\nEach value has exactly one attribute.\n\nIf a used attribute is deleted, the value automatically gets a fallback color with high contrast to the other attributes.",
         "preset": {
           "feelings": {
             "title": "Preset: Feelings",

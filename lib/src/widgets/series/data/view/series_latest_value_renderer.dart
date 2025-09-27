@@ -97,7 +97,7 @@ class SeriesLatestValueRenderer extends StatelessWidget {
                       Builder(
                         builder: (context) {
                           var resolver = DailyLifeAttributeResolver(seriesDef);
-                          return DailyLifeAttributeRenderer(dailyLifeAttribute: resolver.resolve(currentValue.attributeUuid));
+                          return DailyLifeAttributeRenderer(dailyLifeAttribute: resolver.resolve(currentValue.aid));
                         },
                       ),
                     ],

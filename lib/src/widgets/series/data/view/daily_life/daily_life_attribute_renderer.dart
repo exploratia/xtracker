@@ -18,7 +18,7 @@ class DailyLifeAttributeRenderer extends StatelessWidget {
       padding: const EdgeInsets.all(ThemeUtils.paddingSmall),
       decoration: BoxDecoration(
         // color: dailyLifeAttribute.color,
-        gradient: ChartUtils.createLeftToRightGradient([dailyLifeAttribute.color, ColorUtils.hue(dailyLifeAttribute.color, 30)]),
+        gradient: ChartUtils.createLeftToRightGradient(buildAttributeGradient(dailyLifeAttribute.color)),
         borderRadius: ThemeUtils.borderRadiusCircularSmall,
       ),
       child: OverflowText(
@@ -27,5 +27,9 @@ class DailyLifeAttributeRenderer extends StatelessWidget {
         style: themeData.textTheme.labelMedium?.copyWith(color: ColorUtils.getContrastingTextColor(dailyLifeAttribute.color)),
       ),
     );
+  }
+
+  static List<Color>? buildAttributeGradient(Color color) {
+    return [color, ColorUtils.gradientColor(color)];
   }
 }

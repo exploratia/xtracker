@@ -53,6 +53,7 @@ class LogSettingsView extends StatelessWidget {
                   TableUtils.tableRow([
                     Text(LocaleKeys.logSettings_label_writeTestLogMessages.tr()),
                     IconButton(
+                        iconSize: ThemeUtils.iconSizeScaled,
                         tooltip: LocaleKeys.logSettings_btn_writeTestLogMessages_tooltip.tr(),
                         onPressed: () {
                           SimpleLogging.d('Debug Message');

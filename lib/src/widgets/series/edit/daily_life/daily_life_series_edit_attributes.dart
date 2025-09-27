@@ -56,6 +56,7 @@ class DailyLifeSeriesEditAttributes extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           IconButton(
+            iconSize: ThemeUtils.iconSizeScaled,
             tooltip: LocaleKeys.commons_btn_info_tooltip.tr(),
             onPressed: () async {
               Dialogs.simpleOkDialog(
@@ -68,6 +69,7 @@ class DailyLifeSeriesEditAttributes extends StatelessWidget {
           ),
           Expanded(child: Container()),
           IconButton(
+            iconSize: ThemeUtils.iconSizeScaled,
             tooltip: LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_actions_add_tooltip.tr(),
             onPressed: () async {
               DailyLifeAttribute? dailyLifeAttribute = await DailyLifeAttributeInput.showInputDlg(context, newAttributeColor: seriesDef.color);
@@ -79,12 +81,14 @@ class DailyLifeSeriesEditAttributes extends StatelessWidget {
             icon: const Icon(Icons.add),
           ),
           PopupMenuButton(
+            iconSize: ThemeUtils.iconSizeScaled,
             borderRadius: ThemeUtils.borderRadiusCircular,
             icon: const Icon(Icons.playlist_add_outlined),
             tooltip: LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_actions_addPreset_tooltip.tr(),
             itemBuilder: (context) => _buildPresets(attributes, updateSettings),
           ),
           IconButton(
+            iconSize: ThemeUtils.iconSizeScaled,
             tooltip: LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_actions_deleteAll_tooltip.tr(),
             onPressed: () async {
               attributes.clear();
@@ -367,6 +371,7 @@ class _AttributeRenderer extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 IconButton(
+                  iconSize: ThemeUtils.iconSizeScaled,
                   tooltip: LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_actions_edit_tooltip.tr(),
                   onPressed: () async {
                     DailyLifeAttribute? updatedDailyLifeAttribute =
@@ -375,15 +380,14 @@ class _AttributeRenderer extends StatelessWidget {
                       updateAttributeCB(updatedDailyLifeAttribute);
                     }
                   },
-                  iconSize: ThemeUtils.iconSizeScaled,
                   icon: const Icon(Icons.edit_outlined),
                 ),
                 IconButton(
+                  iconSize: ThemeUtils.iconSizeScaled,
                   tooltip: LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_actions_delete_tooltip.tr(),
                   onPressed: () {
                     deleteAttributeCB(dailyLifeAttribute);
                   },
-                  iconSize: ThemeUtils.iconSizeScaled,
                   icon: const Icon(Icons.close_outlined),
                 ),
               ],

@@ -19,10 +19,12 @@ class SeriesDataAnalyticsView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: GradientAppBar.build(
+        addLeadingBackBtn: true,
         context,
         title: Text(LocaleKeys.seriesDataAnalytics_title.tr()),
         actions: [
           IconButton(
+            iconSize: ThemeUtils.iconSizeScaled,
             tooltip: LocaleKeys.seriesDataAnalytics_action_close_tooltip.tr(),
             onPressed: () => Navigator.pop(context),
             icon: const Icon(Icons.close_outlined),

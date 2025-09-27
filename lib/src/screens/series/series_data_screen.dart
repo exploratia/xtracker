@@ -247,6 +247,7 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
       }
       orientationDependentViewActions.add(
         IconButton(
+          iconSize: ThemeUtils.iconSizeScaled,
           tooltip: LocaleKeys.seriesData_action_analytics_tooltip.tr(),
           onPressed: analyticsPossible ? () => _showSeriesDataAnalytics(context) : null,
           icon: const Icon(Icons.analytics_outlined),
@@ -260,6 +261,7 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
       var editMode = metaData.editMode;
       dataActions.add(
         IconButton(
+          iconSize: ThemeUtils.iconSizeScaled,
           tooltip: editMode ? LocaleKeys.seriesData_action_editMode_disable_tooltip.tr() : LocaleKeys.seriesData_action_editMode_enable_tooltip.tr(),
           onPressed: hasNoData ? null : () => _toggleEditMode(),
           icon: Icon(editMode ? Icons.edit_off_outlined : Icons.edit_outlined),
@@ -281,6 +283,7 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
         }
 
         var iconButtonToggleCompressed = IconButton(
+          iconSize: ThemeUtils.iconSizeScaled,
           tooltip: tooltip,
           onPressed: hasNoData ? null : () => _toggleCompressedMode(),
           icon: Icon(showCompressed ? Icons.calendar_month_outlined : Icons.calendar_today_outlined),
@@ -306,6 +309,7 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
           : LocaleKeys.seriesData_action_filter_show_tooltip.tr(args: [widget.filter.toString()]);
       // if (!dateFilterPossible) tooltip = null;
       var iconButtonToggleShowDateFilter = IconButton(
+        iconSize: ThemeUtils.iconSizeScaled,
         tooltip: tooltip,
         onPressed: dateFilterPossible ? () => _toggleShowDateFilter() : null,
         icon: SizedBox(
@@ -313,15 +317,15 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
           child: Stack(
             alignment: Alignment.center,
             children: [
-              const Positioned(
+              Positioned(
                 top: -4,
                 right: -2,
-                child: Icon(Icons.filter_list_outlined),
+                child: Icon(Icons.filter_list_outlined, size: ThemeUtils.iconSizeScaled),
               ),
               Positioned(
                 left: 0,
                 bottom: -2,
-                child: Icon(showDateFilter ? Icons.visibility_off_outlined : Icons.visibility_outlined, size: 14 * MediaQueryUtils.textScaleFactor),
+                child: Icon(showDateFilter ? Icons.visibility_off_outlined : Icons.visibility_outlined, size: 14 * MediaQueryUtils.iconScaleFactor),
               ),
             ],
           ),
@@ -340,6 +344,7 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
     dataActions.add(
       // add value btn
       IconButton(
+        iconSize: ThemeUtils.iconSizeScaled,
         tooltip: LocaleKeys.seriesData_action_addValue_tooltip.tr(),
         onPressed: () => _addSeriesValueHandler(context),
         icon: const Icon(Icons.add),
@@ -406,18 +411,26 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
   Widget _buildAbbBarTitle(ThemeData themeData, NavigationItem navItem) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        if (constraints.maxWidth < 24) {
+        if (constraints.maxWidth < ThemeUtils.iconSizeScaled) {
           return const SizedBox();
         }
         var viewType = widget.seriesViewMetaData.viewType;
         if (constraints.maxWidth < 55) {
-          return Icon(viewType.iconData, color: themeData.colorScheme.onPrimary);
+          return Icon(
+            viewType.iconData,
+            color: themeData.colorScheme.onPrimary,
+            size: ThemeUtils.iconSizeScaled,
+          );
         }
         return Row(
           spacing: ThemeUtils.horizontalSpacing,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Icon(viewType.iconData, color: themeData.colorScheme.onPrimary),
+            Icon(
+              viewType.iconData,
+              color: themeData.colorScheme.onPrimary,
+              size: ThemeUtils.iconSizeScaled,
+            ),
             OverflowText(ViewType.displayNameOf(viewType)),
           ],
         );

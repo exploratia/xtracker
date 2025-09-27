@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../generated/locale_keys.g.dart';
 import '../../model/series/series_def.dart';
+import '../../util/media_query_utils.dart';
 
 class AddFirstSeries extends StatelessWidget {
   const AddFirstSeries({super.key});
@@ -15,8 +16,8 @@ class AddFirstSeries extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         IconButton(
+            iconSize: 40 * MediaQueryUtils.textScaleFactor,
             tooltip: LocaleKeys.seriesDashboard_btn_addSeries_tooltip.tr(),
-            iconSize: 40,
             color: themeData.colorScheme.primary,
             onPressed: () async {
               /*SeriesDef? s=*/ await SeriesDef.addNewSeries(context);

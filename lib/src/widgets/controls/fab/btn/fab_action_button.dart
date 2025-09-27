@@ -22,6 +22,7 @@ class FabActionButton extends StatelessWidget {
       color: theme.colorScheme.secondary,
       elevation: ThemeUtils.elevation,
       child: IconButton(
+        iconSize: ThemeUtils.iconSizeScaled,
         onPressed: onPressed,
         icon: icon,
         color: theme.colorScheme.onSecondary,

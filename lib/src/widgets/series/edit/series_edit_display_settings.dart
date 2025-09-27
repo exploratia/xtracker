@@ -66,6 +66,7 @@ class SeriesEditDisplaySettings extends StatelessWidget {
                 children: [
                   Text(LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_title.tr()),
                   IconButton(
+                    iconSize: ThemeUtils.iconSizeScaled,
                     tooltip: LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_tooltip.tr(),
                     onPressed: () => Dialogs.simpleOkDialog(
                       SingleChildScrollViewWithScrollbar(

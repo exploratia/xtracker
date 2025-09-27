@@ -17,13 +17,13 @@ class ProgressBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     Color col = color ?? ThemeUtils.secondary;
-    Color gradientColor = ColorUtils.hue(col, -30);
+    Color gradientColor = ColorUtils.gradientColor(col);
     Widget progress = Container(
       height: ThemeUtils.borderRadiusSmall * 2,
       clipBehavior: Clip.antiAlias,
       decoration: GlowingBorderContainer.createGlowingBoxDecoration(
         col,
-        themeData.cardTheme.color,
+        backgroundColor: themeData.cardTheme.color,
         borderRadius: ThemeUtils.borderRadiusSmall,
         blurRadius: ThemeUtils.borderRadiusSmall,
         borderWidth: 1,
@@ -35,7 +35,7 @@ class ProgressBar extends StatelessWidget {
         child: Container(
           decoration: BoxDecoration(
             // color: color ?? ThemeUtils.secondary,
-            gradient: ChartUtils.createLeftToRightGradient([gradientColor, col]),
+            gradient: ChartUtils.createLeftToRightGradient([col, gradientColor]),
             borderRadius: BorderRadius.circular(ThemeUtils.borderRadiusSmall),
           ),
         ),

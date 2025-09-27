@@ -56,12 +56,14 @@ class HomeScreen extends StatelessWidget {
             ),
             actions: [
               IconButton(
+                  iconSize: ThemeUtils.iconSizeScaled,
                   tooltip: LocaleKeys.seriesDashboard_action_addSeries_tooltip.tr(),
                   onPressed: () async {
                     /*SeriesDef? s=*/ await SeriesDef.addNewSeries(context);
                   },
                   icon: const Icon(Icons.add_chart_outlined)),
               IconButton(
+                iconSize: ThemeUtils.iconSizeScaled,
                 tooltip: LocaleKeys.seriesDashboard_action_manageSeries_tooltip.tr(),
                 onPressed: () => _showSeriesManagement(context),
                 icon: const Icon(Icons.edit_outlined),

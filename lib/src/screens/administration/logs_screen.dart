@@ -54,6 +54,7 @@ class _LogsScreenState extends State<LogsScreen> {
         title: Text(LogsScreen.navItem.titleBuilder()),
         actions: [
           IconButton(
+            iconSize: ThemeUtils.iconSizeScaled,
             tooltip: LocaleKeys.logs_action_logSettings_tooltip.tr(),
             onPressed: () async {
               Navigator.restorablePushNamed(context, LogSettingsScreen.navItem.routeName);
@@ -71,6 +72,7 @@ class _LogsScreenState extends State<LogsScreen> {
             ),
           ),
           IconButton(
+            iconSize: ThemeUtils.iconSizeScaled,
             tooltip: LocaleKeys.logs_action_deleteLogs_tooltip.tr(),
             onPressed: () async {
               bool? res = await Dialogs.simpleYesNoDialog(

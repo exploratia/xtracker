@@ -25,10 +25,12 @@ class SeriesManagementView extends StatelessWidget {
     var scaffold = Scaffold(
       backgroundColor: settingsController.showWallpaper ? Colors.transparent : null,
       appBar: GradientAppBar.build(
+        addLeadingBackBtn: true,
         context,
         title: Text(LocaleKeys.seriesManagement_title.tr()),
         actions: [
           IconButton(
+            iconSize: ThemeUtils.iconSizeScaled,
             tooltip: LocaleKeys.seriesDashboard_action_addSeries_tooltip.tr(),
             onPressed: () async {
               /*SeriesDef? s=*/ await SeriesDef.addNewSeries(context);
@@ -36,11 +38,13 @@ class SeriesManagementView extends StatelessWidget {
             icon: const Icon(Icons.add_chart_outlined),
           ),
           IconButton(
+            iconSize: ThemeUtils.iconSizeScaled,
             tooltip: LocaleKeys.seriesManagement_action_importExport_tooltip.tr(),
             onPressed: () async => SeriesImportExport.showImportExportDlg(context, settingsController: settingsController),
             icon: const Icon(Icons.import_export_outlined),
           ),
           IconButton(
+            iconSize: ThemeUtils.iconSizeScaled,
             tooltip: LocaleKeys.seriesManagement_action_closeSeriesManagement_tooltip.tr(),
             onPressed: () => Navigator.pop(context),
             icon: const Icon(Icons.edit_off_outlined),

@@ -128,6 +128,7 @@ class _SeriesEditorState extends State<SeriesEditor> {
         if (widget.goBack != null)
           Row(children: [
             IconButton(
+              iconSize: ThemeUtils.iconSizeScaled,
               tooltip: LocaleKeys.seriesEdit_btn_backToSeriesTypeSelection.tr(),
               onPressed: widget.goBack,
               icon: const Icon(Icons.arrow_back_outlined),
@@ -196,12 +197,14 @@ class _SeriesEditorState extends State<SeriesEditor> {
         context,
         title: Text(LocaleKeys.seriesEdit_title.tr()),
         leading: IconButton(
+          iconSize: ThemeUtils.iconSizeScaled,
           tooltip: LocaleKeys.seriesEdit_action_abort_tooltip.tr(),
           onPressed: () => Navigator.pop(context),
           icon: const Icon(Icons.close_outlined),
         ),
         actions: [
           IconButton(
+            iconSize: ThemeUtils.iconSizeScaled,
             tooltip: LocaleKeys.seriesEdit_action_save_tooltip.tr(),
             onPressed: _saveHandler,
             icon: const Icon(Icons.save_outlined),

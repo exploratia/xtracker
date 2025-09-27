@@ -53,6 +53,7 @@ class LogScreen extends StatelessWidget {
             ),
           ),
           IconButton(
+            iconSize: ThemeUtils.iconSizeScaled,
             tooltip: LocaleKeys.log_action_deleteLog_tooltip.tr(),
             onPressed: () async {
               bool? res = await Dialogs.simpleYesNoDialog(
