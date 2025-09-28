@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../../model/column_profile/fix_column_profiles.dart';
+import '../../../../../../model/column_profile/fix_column_profile.dart';
 import '../../../../../../model/series/data/blood_pressure/blood_pressure_value.dart';
 import '../../../../../../model/series/data/series_data_filter.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
@@ -55,7 +55,7 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
         Expanded(
           child: TwoDimensionalScrollableTable(
             tableColumnProfile:
-                useDateTimeValueColumnProfile ? FixColumnProfiles.columnProfileDateTimeValue : FixColumnProfiles.columnProfileDateMorningMiddayEvening,
+                useDateTimeValueColumnProfile ? FixColumnProfile.columnProfileDateTimeValue : FixColumnProfile.columnProfileDateMorningMiddayEvening,
             lineCount: data.length,
             gridCellBuilder: rowPerDayCellBuilder.gridCellBuilder,
             lineHeight: BloodPressureValueRenderer.height,

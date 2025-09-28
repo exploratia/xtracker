@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../../model/column_profile/fix_column_profiles.dart';
+import '../../../../../../model/column_profile/fix_column_profile.dart';
 import '../../../../../../model/series/data/daily_life/daily_life_value.dart';
 import '../../../../../../model/series/data/series_data_filter.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
@@ -56,7 +56,7 @@ class SeriesDataDailyLifeTableView extends StatelessWidget {
         seriesDataViewOverlays.buildTopSpacer(),
         Expanded(
           child: TwoDimensionalScrollableTable(
-            tableColumnProfile: FixColumnProfiles.columnProfileDateTimeValue,
+            tableColumnProfile: FixColumnProfile.columnProfileDateTimeValue,
             lineCount: data.length,
             gridCellBuilder: rowPerDayCellBuilder.gridCellBuilder,
             lineHeight: DailyLifeValueRenderer.height,
