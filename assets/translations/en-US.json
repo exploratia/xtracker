@@ -448,19 +448,19 @@
         "preview": {
           "title": "Pixel preview",
           "pixelViewSettingsInfo": {
-            "tooltip": "Pixel view settings",
+            "tooltip": "Pixel view settings info",
             "title": "Adjust pixel view",
-            "text": "Configure the pixel view coloring here – depending on whether 'more' of the habit is positive or negative for you.\nValue 1 uses the series color."
+            "text": "Adjust the pixel coloring – depending on whether 'more' of the habit is positive or negative.\nThe smallest value (once per day) uses the series color.\n\nHigher values are calculated using the color wheel. With the slider you set how far the wheel is traversed up to the maximum value. The direction can be inverted."
           }
         },
         "switch": {
           "invertHueDirection": {
-            "label": "Reverse hue wheel direction"
+            "label": "Color wheel counterclockwise"
           }
         },
         "slider": {
           "hueFactor": {
-            "label": "Set color for highest value"
+            "label": "Color for max value"
           }
         }
       },

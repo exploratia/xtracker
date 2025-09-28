@@ -450,17 +450,17 @@
           "pixelViewSettingsInfo": {
             "tooltip": "Info zu Pixelanzeige-Einstellungen",
             "title": "Pixelanzeige anpassen",
-            "text": "Hier lässt sich die Farbgebung der Pixelanzeige konfigurieren – je nachdem, ob ein „Mehr“ bei der Gewohnheit positiv oder eher negativ bewertet wird.\nDer Wert 1 verwendet die Farbe der Messreihe."
+            "text": "Hier die Farbgebung der Pixelanzeige anpassen – je nachdem, ob „mehr“ bei der Gewohnheit positiv oder negativ ist.\nDer kleinste Wert (einmal am Tag) nutzt die Farbe der Messreihe.\n\nFür höhere Werte werden die Farben über das Farbrad berechnet. Mit dem Slider wird festgelegt, wie weit das Farbrad bis zum Höchstwert durchlaufen wird. Die Richtung lässt sich umkehren."
           }
         },
         "switch": {
           "invertHueDirection": {
-            "label": "Richtung des Farbrads umkehren"
+            "label": "Farbrad gegen den Uhrzeigersinn"
           }
         },
         "slider": {
           "hueFactor": {
-            "label": "Farbe für den Höchstwert festlegen"
+            "label": "Farbe für Höchstwert"
           }
         }
       },

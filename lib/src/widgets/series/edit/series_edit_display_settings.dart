@@ -85,28 +85,28 @@ class SeriesEditDisplaySettings extends StatelessWidget {
                 ],
               ),
             ),
-            SwitchListTile(
-              title: Text(LocaleKeys.seriesEdit_displaySettings_pixelsView_switch_invertHueDirection_label.tr()),
-              value: settings.pixelsViewInvertHueDirection,
-              onChanged: (value) => settings.pixelsViewInvertHueDirection = value,
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.cardPadding),
-              child: Wrap(
-                spacing: ThemeUtils.horizontalSpacing,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                children: [
-                  Text(LocaleKeys.seriesEdit_displaySettings_pixelsView_slider_hueFactor_label.tr()),
-                  Slider(
-                    min: 0,
-                    max: 360,
-                    divisions: 36,
-                    label: "${settings.pixelsViewHueFactor.toInt()}",
-                    value: settings.pixelsViewHueFactor,
-                    onChanged: (value) => settings.pixelsViewHueFactor = value,
-                  ),
-                ],
-              ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: 0,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: ThemeUtils.cardPadding, right: ThemeUtils.cardPadding, top: ThemeUtils.verticalSpacing),
+                  child: Text(LocaleKeys.seriesEdit_displaySettings_pixelsView_slider_hueFactor_label.tr()),
+                ),
+                Slider(
+                  min: 0,
+                  max: 360,
+                  divisions: 36,
+                  label: "${settings.pixelsViewHueFactor.toInt()}",
+                  value: settings.pixelsViewHueFactor,
+                  onChanged: (value) => settings.pixelsViewHueFactor = value,
+                ),
+                SwitchListTile(
+                  title: Text(LocaleKeys.seriesEdit_displaySettings_pixelsView_switch_invertHueDirection_label.tr()),
+                  value: settings.pixelsViewInvertHueDirection,
+                  onChanged: (value) => settings.pixelsViewInvertHueDirection = value,
+                ),
+              ],
             ),
           ],
         ],
