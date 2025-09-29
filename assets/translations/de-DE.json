@@ -28,6 +28,14 @@
       "hideMenu": "Navigationsmenü schließen",
       "openMenu": "Navigationsmenü öffnen"
     },
+    "columnProfile": {
+      "name": {
+        "dateMorningMiddayEvening": "Datum | Morgen | Mittag | Abend",
+        "dateTimeValue": "Datum | Uhrzeit | Wert",
+        "dateWeekdays": "Datum | Wochentage (Mo–So)",
+        "dateMonthDays": "Datum | Monatstage (1–31)"
+      }
+    },
     "date": {
       "shortWeekday": {
         "monday": "Mo",
@@ -303,6 +311,9 @@
           "tooltip": "Filter ausblenden"
         }
       },
+      "selectColumnProfile": {
+        "tooltip": "Spaltenprofil auswählen"
+      },
       "viewTypeMenu": {
         "tooltip": "Weitere verfügbare Anzeige-Modi"
       }
@@ -465,10 +476,8 @@
         }
       },
       "tableView": {
-        "switch": {
-          "useColumnProfileDateTimeValue": {
-            "label": "Spaltenprofil Datum|Zeit|Wert in Tabellenansicht verwenden:"
-          }
+        "label": {
+          "standardColumnProfile": "Standard-Spaltenprofil (Tabelle)"
         }
       }
     },

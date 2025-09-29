@@ -1,3 +1,5 @@
+import '../../column_profile/fix_column_profile.dart';
+import '../../column_profile/fix_column_profile_type.dart';
 import 'series_settings.dart';
 
 class DisplaySettings extends SeriesSettings {
@@ -5,7 +7,7 @@ class DisplaySettings extends SeriesSettings {
   final String _dotsViewHideCount = 'DotsViewHideCount';
   final String _pixelsViewInvertHueDirection = 'PixelsViewInvertHueDirection';
   final String _pixelsViewHueFactor = 'PixelsViewHueFactor';
-  final String _tableViewUseColumnProfileDateTimeValue = 'TableViewUseColumnProfileDateTimeValue';
+  final String _tableViewColumnProfile = 'TableViewColumnProfile';
 
   /// [updateStateCB] optional callback which is called when the settings map is changed. If not set readonly.
   DisplaySettings(Map<String, dynamic> settings, Function()? updateStateCB) : super(_prefix, settings, updateStateCB);
@@ -34,11 +36,11 @@ class DisplaySettings extends SeriesSettings {
     set(_pixelsViewHueFactor, value);
   }
 
-  bool get tableViewUseColumnProfileDateTimeValue {
-    return getBool(_tableViewUseColumnProfileDateTimeValue);
+  FixColumnProfile? getTableViewColumnProfile(FixColumnProfileType? defaultValue) {
+    return FixColumnProfile.resolveByType(FixColumnProfileType.resolveByTypeName(optString(_tableViewColumnProfile, defaultValue: defaultValue?.typeName)));
   }
 
-  set tableViewUseColumnProfileDateTimeValue(bool value) {
-    set(_tableViewUseColumnProfileDateTimeValue, value);
+  set tableViewColumnProfile(FixColumnProfileType? value) {
+    set(_tableViewColumnProfile, value?.typeName);
   }
 }

@@ -23,6 +23,14 @@ abstract class SeriesSettings {
     return _settings[_key(key)];
   }
 
+  String getString(String key, {String defaultValue = ""}) {
+    return _settings[_key(key)] as String? ?? defaultValue;
+  }
+
+  String? optString(String key, {String? defaultValue}) {
+    return _settings[_key(key)] as String? ?? defaultValue;
+  }
+
   List<dynamic> getList(String key) {
     return _settings[_key(key)] as List<dynamic>? ?? [];
   }

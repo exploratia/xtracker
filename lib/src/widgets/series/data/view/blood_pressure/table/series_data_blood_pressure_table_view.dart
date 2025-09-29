@@ -22,7 +22,7 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool useDateTimeValueColumnProfile = seriesViewMetaData.seriesDef.displaySettingsReadonly().tableViewUseColumnProfileDateTimeValue;
+    FixColumnProfile columnProfile = seriesViewMetaData.tableFixColumnProfile!;
 
     var filteredSeriesData = seriesData.where((value) => seriesDataFilter.filter(value)).toList();
     if (filteredSeriesData.isEmpty) {
@@ -36,7 +36,7 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
 
     var rowPerDayCellBuilder = RowPerDayCellBuilder<BloodPressureValue>(
       data: data,
-      useDateTimeValueColumnProfile: useDateTimeValueColumnProfile,
+      fixColumnProfile: columnProfile,
       gridCellChildBuilder: (BloodPressureValue value, Size _) => BloodPressureValueRenderer(
         bloodPressureValue: value,
         seriesDef: seriesViewMetaData.seriesDef,
@@ -54,8 +54,7 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
         seriesDataViewOverlays.buildTopSpacer(),
         Expanded(
           child: TwoDimensionalScrollableTable(
-            tableColumnProfile:
-                useDateTimeValueColumnProfile ? FixColumnProfile.columnProfileDateTimeValue : FixColumnProfile.columnProfileDateMorningMiddayEvening,
+            tableColumnProfile: columnProfile,
             lineCount: data.length,
             gridCellBuilder: rowPerDayCellBuilder.gridCellBuilder,
             lineHeight: BloodPressureValueRenderer.height,

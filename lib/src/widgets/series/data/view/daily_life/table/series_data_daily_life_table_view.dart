@@ -23,6 +23,8 @@ class SeriesDataDailyLifeTableView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FixColumnProfile columnProfile = seriesViewMetaData.tableFixColumnProfile!;
+
     var dailyLifeAttributeResolver = DailyLifeAttributeResolver(seriesViewMetaData.seriesDef);
     var filteredSeriesData = seriesData.where((value) => seriesDataFilter.filter(value)).toList();
     if (filteredSeriesData.isEmpty) {
@@ -36,7 +38,7 @@ class SeriesDataDailyLifeTableView extends StatelessWidget {
 
     var rowPerDayCellBuilder = RowPerDayCellBuilder<DailyLifeValue>(
       data: data,
-      useDateTimeValueColumnProfile: true,
+      fixColumnProfile: columnProfile,
       gridCellChildBuilder: (DailyLifeValue value, Size cellSize) => DailyLifeValueRenderer(
         dailyLifeValue: value,
         seriesDef: seriesViewMetaData.seriesDef,
@@ -56,7 +58,7 @@ class SeriesDataDailyLifeTableView extends StatelessWidget {
         seriesDataViewOverlays.buildTopSpacer(),
         Expanded(
           child: TwoDimensionalScrollableTable(
-            tableColumnProfile: FixColumnProfile.columnProfileDateTimeValue,
+            tableColumnProfile: columnProfile,
             lineCount: data.length,
             gridCellBuilder: rowPerDayCellBuilder.gridCellBuilder,
             lineHeight: DailyLifeValueRenderer.height,

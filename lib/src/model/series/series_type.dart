@@ -4,13 +4,38 @@ import 'package:flutter/material.dart';
 import '../../../generated/locale_keys.g.dart';
 import '../../util/ex.dart';
 import '../../widgets/controls/select/icon_map.dart';
+import '../column_profile/fix_column_profile_type.dart';
 import 'view_type.dart';
 
 enum SeriesType {
-  bloodPressure('bloodPressure', 'monitor_heart_outlined', Colors.red, [ViewType.dots, ViewType.lineChart, ViewType.table]),
-  dailyCheck("dailyCheck", 'check_box_outlined', Colors.blue, [ViewType.barChart, ViewType.table, ViewType.dots]),
-  habit("habit", 'repeat_outlined', Color.fromRGBO(255, 154, 0, 1.0), [ViewType.barChart, ViewType.table, ViewType.pixels]),
-  dailyLife("dailyLife", 'account_circle_outlined', Color.fromRGBO(0, 255, 50, 1.0), [ViewType.table, ViewType.pixels]);
+  bloodPressure(
+    'bloodPressure',
+    'monitor_heart_outlined',
+    Colors.red,
+    [ViewType.dots, ViewType.lineChart, ViewType.table],
+    [FixColumnProfileType.dateTimeValue, FixColumnProfileType.dateMorningMiddayEvening],
+  ),
+  dailyCheck(
+    "dailyCheck",
+    'check_box_outlined',
+    Colors.blue,
+    [ViewType.barChart, ViewType.table, ViewType.dots],
+    [FixColumnProfileType.dateTimeValue, FixColumnProfileType.dateMorningMiddayEvening],
+  ),
+  habit(
+    "habit",
+    'repeat_outlined',
+    Color.fromRGBO(255, 154, 0, 1.0),
+    [ViewType.barChart, ViewType.table, ViewType.pixels],
+    [FixColumnProfileType.dateTimeValue, FixColumnProfileType.dateMorningMiddayEvening],
+  ),
+  dailyLife(
+    "dailyLife",
+    'account_circle_outlined',
+    Color.fromRGBO(0, 255, 50, 1.0),
+    [ViewType.table, ViewType.pixels],
+    [FixColumnProfileType.dateTimeValue],
+  );
   // monthly("monthly", 'calendar_month_outlined', Colors.deepPurple, [ViewType.table, ViewType.lineChart]),
   // free("free", 'calendar_today_outlined', Colors.green, [ViewType.lineChart, ViewType.table]);
   // TODO TimeTracker
@@ -21,9 +46,19 @@ enum SeriesType {
 
   /// order is used in AppBar actions and last one is used as default/first view
   final List<ViewType> viewTypes;
+  final List<FixColumnProfileType> tableFixColumnProfileTypes;
 
   /// [iconName] one of [IconMap]
-  const SeriesType(this.typeName, this.iconName, this.color, this.viewTypes);
+  const SeriesType(this.typeName, this.iconName, this.color, this.viewTypes, this.tableFixColumnProfileTypes);
+
+  ViewType get defaultViewType {
+    return viewTypes.last;
+  }
+
+  FixColumnProfileType? get defaultFixTableColumnProfileType {
+    if (tableFixColumnProfileTypes.isEmpty) return null;
+    return tableFixColumnProfileTypes.last;
+  }
 
   static SeriesType byTypeName(String typeName) {
     return SeriesType.values.firstWhere((element) => element.typeName == typeName, orElse: () => throw Ex("Unexpected SeriesType '$typeName'"));

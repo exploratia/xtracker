@@ -22,7 +22,7 @@ class SeriesDataHabitTableView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool useDateTimeValueColumnProfile = seriesViewMetaData.seriesDef.displaySettingsReadonly().tableViewUseColumnProfileDateTimeValue;
+    FixColumnProfile columnProfile = seriesViewMetaData.tableFixColumnProfile!;
 
     var filteredSeriesData = seriesData.where((value) => seriesDataFilter.filter(value)).toList();
     if (filteredSeriesData.isEmpty) {
@@ -36,7 +36,7 @@ class SeriesDataHabitTableView extends StatelessWidget {
 
     var rowPerDayCellBuilder = RowPerDayCellBuilder<HabitValue>(
       data: data,
-      useDateTimeValueColumnProfile: useDateTimeValueColumnProfile,
+      fixColumnProfile: columnProfile,
       gridCellChildBuilder: (HabitValue value, Size _) => HabitValueRenderer(
         habitValue: value,
         seriesDef: seriesViewMetaData.seriesDef,
@@ -54,8 +54,7 @@ class SeriesDataHabitTableView extends StatelessWidget {
         seriesDataViewOverlays.buildTopSpacer(),
         Expanded(
           child: TwoDimensionalScrollableTable(
-            tableColumnProfile:
-                useDateTimeValueColumnProfile ? FixColumnProfile.columnProfileDateTimeValue : FixColumnProfile.columnProfileDateMorningMiddayEvening,
+            tableColumnProfile: columnProfile,
             lineCount: data.length,
             gridCellBuilder: rowPerDayCellBuilder.gridCellBuilder,
             lineHeight: HabitValueRenderer.height,

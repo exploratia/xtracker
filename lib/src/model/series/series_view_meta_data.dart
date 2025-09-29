@@ -1,3 +1,4 @@
+import '../column_profile/fix_column_profile.dart';
 import 'series_def.dart';
 import 'view_type.dart';
 
@@ -7,9 +8,11 @@ class SeriesViewMetaData {
   bool editMode = false;
   bool showCompressed = false;
   bool showDateFilter = false;
+  FixColumnProfile? tableFixColumnProfile;
 
   SeriesViewMetaData({required this.seriesDef}) {
-    viewType = seriesDef.seriesType.viewTypes.last;
+    viewType = seriesDef.seriesType.defaultViewType;
+    tableFixColumnProfile = seriesDef.determineFixTableColumnProfile;
   }
 
   void toggleEditMode() => editMode = !editMode;

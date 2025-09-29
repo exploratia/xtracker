@@ -1,8 +1,8 @@
 import 'dart:math' as math;
 import 'dart:ui';
 
+import '../../../../model/column_profile/fix_column_profile.dart';
 import '../../../../model/series/data/series_data_value.dart';
-import '../../../../model/series/series_type.dart';
 import '../../../../model/series/series_view_meta_data.dart';
 import '../../../../util/date_time_utils.dart';
 import '../../../../util/globals.dart';
@@ -18,10 +18,7 @@ class DayRowItem<T extends SeriesDataValue> {
   DayRowItem(this.date, this.backgroundColor);
 
   static List<DayRowItem<T>> buildTableDataProvider<T extends SeriesDataValue>(SeriesViewMetaData seriesViewMetaData, List<T> seriesData) {
-    bool useDateTimeValueColumnProfile = true; // default
-    if ([SeriesType.bloodPressure, SeriesType.habit, SeriesType.dailyCheck].contains(seriesViewMetaData.seriesDef.seriesType)) {
-      useDateTimeValueColumnProfile = seriesViewMetaData.seriesDef.displaySettingsReadonly().tableViewUseColumnProfileDateTimeValue;
-    }
+    bool useDateTimeValueColumnProfile = FixColumnProfile.columnProfileDateMorningMiddayEvening != seriesViewMetaData.tableFixColumnProfile;
     List<DayRowItem<T>> list = [];
 
     var emptyDate = '';

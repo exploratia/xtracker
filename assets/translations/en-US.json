@@ -28,6 +28,14 @@
       "hideMenu": "Close navigation menu",
       "openMenu": "Open navigation menu"
     },
+    "columnProfile": {
+      "name": {
+        "dateMorningMiddayEvening": "Date | Morning | Midday | Evening",
+        "dateTimeValue": "Date | Time | Value",
+        "dateWeekdays": "Date | Weekdays (Mon–Sun)",
+        "dateMonthDays": "Date | Month days (1–31)"
+      }
+    },
     "date": {
       "shortWeekday": {
         "monday": "Mon",
@@ -303,6 +311,9 @@
           "tooltip": "Hide filter"
         }
       },
+      "selectColumnProfile": {
+        "tooltip": "Select column profile"
+      },
       "viewTypeMenu": {
         "tooltip": "Available view types"
       }
@@ -465,10 +476,8 @@
         }
       },
       "tableView": {
-        "switch": {
-          "useColumnProfileDateTimeValue": {
-            "label": "Use column profile Date|Time|Value in table view:"
-          }
+        "label": {
+          "standardColumnProfile": "Default column profile (table)"
         }
       }
     },

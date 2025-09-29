@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../generated/locale_keys.g.dart';
+import '../../model/column_profile/fix_column_profile.dart';
+import '../../model/column_profile/fix_column_profile_type.dart';
 import '../../model/navigation/navigation_item.dart';
 import '../../model/series/data/series_data.dart';
 import '../../model/series/data/series_data_filter.dart';
@@ -180,6 +182,13 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
     });
   }
 
+  void _setTableFixColumnProfile(FixColumnProfileType fixColumnProfileType) {
+    setState(() {
+      widget.seriesViewMetaData.tableFixColumnProfile = FixColumnProfile.resolveByType(fixColumnProfileType);
+      if (!widget.seriesViewMetaData.showDateFilter) widget.updateOverlays(bottomHeight: 0);
+    });
+  }
+
   void _addSeriesValueHandler(BuildContext context) async {
     await SeriesData.showSeriesDataInputDlg(context, widget.seriesViewMetaData.seriesDef);
     setState(() {});
@@ -290,6 +299,12 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
         );
         orientationDependentViewActions.add(iconButtonToggleCompressed);
       }
+    }
+
+    // in table view some series support multiple column profiles
+    if (viewType == ViewType.table && seriesType.tableFixColumnProfileTypes.length > 1) {
+      var columnProfileSelect = _SelectColumnProfile(metaData, _setTableFixColumnProfile);
+      orientationDependentViewActions.add(columnProfileSelect);
     }
 
     // date filter - so far all views support date filter
@@ -457,6 +472,63 @@ class _SeriesDefLoader extends StatelessWidget {
     }
 
     return builder(seriesViewMetaData);
+  }
+}
+
+class _SelectColumnProfile extends StatelessWidget {
+  const _SelectColumnProfile(this.seriesViewMetaData, this._setTableFixColumnProfile);
+
+  final SeriesViewMetaData seriesViewMetaData;
+  final Function(FixColumnProfileType fixColumnProfileType) _setTableFixColumnProfile;
+
+  Future<void> _openMenu(BuildContext context, RenderBox overlay, Offset position) async {
+    var initialValue = seriesViewMetaData.tableFixColumnProfile?.type;
+    var seriesType = seriesViewMetaData.seriesDef.seriesType;
+
+    await showMenu<FixColumnProfileType>(
+      context: context,
+      position: RelativeRect.fromLTRB(
+        position.dx,
+        position.dy,
+        overlay.size.width - position.dx,
+        overlay.size.height - position.dy,
+      ),
+      items: [
+        ...seriesType.tableFixColumnProfileTypes.map(
+          (type) => PopupMenuItem(
+            onTap: () => _setTableFixColumnProfile(type),
+            child: Row(
+              spacing: ThemeUtils.horizontalSpacing,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                OverflowText(type.displayName),
+                if (type == initialValue)
+                  Icon(
+                    Icons.check,
+                    size: ThemeUtils.iconSizeScaled,
+                  ),
+              ],
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      tooltip: LocaleKeys.seriesData_action_selectColumnProfile_tooltip.tr(),
+      icon: const Icon(Icons.view_column_outlined),
+      iconSize: ThemeUtils.iconSizeScaled,
+      onPressed: () async {
+        final RenderBox button = context.findRenderObject() as RenderBox;
+        final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+        final Offset position = button.localToGlobal(button.size.bottomRight(Offset.zero), ancestor: overlay);
+        await _openMenu(context, overlay, position);
+      },
+    );
   }
 }
 

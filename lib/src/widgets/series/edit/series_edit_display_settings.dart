@@ -2,11 +2,14 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../generated/locale_keys.g.dart';
+import '../../../model/column_profile/fix_column_profile_type.dart';
 import '../../../model/series/series_def.dart';
 import '../../../model/series/series_type.dart';
 import '../../../util/dialogs.dart';
+import '../../../util/media_query_utils.dart';
 import '../../../util/theme_utils.dart';
 import '../../controls/card/expandable.dart';
+import '../../controls/layout/drop_down_menu_item_child.dart';
 import '../../controls/layout/single_child_scroll_view_with_scrollbar.dart';
 import 'pixel_view_preview.dart';
 
@@ -27,6 +30,48 @@ class SeriesEditDisplaySettings extends StatelessWidget {
     var settings = seriesDef.displaySettingsEditable(updateStateCB);
     var seriesType = seriesDef.seriesType;
 
+    // TableViewColumProfile: >1 FixColumnProfiles available?
+    Widget? tableViewColumnProfileSelect;
+    if (seriesType.tableFixColumnProfileTypes.length > 1) {
+      FixColumnProfileType defaultValue = seriesType.defaultFixTableColumnProfileType!;
+      List<FixColumnProfileType> possibleColumnProfiles = seriesType.tableFixColumnProfileTypes;
+      FixColumnProfileType? actValue = settings.getTableViewColumnProfile(defaultValue)?.type;
+      tableViewColumnProfileSelect = Padding(
+        padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.cardPadding),
+        child: Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
+          spacing: ThemeUtils.horizontalSpacingSmall,
+          children: [
+            Icon(Icons.view_column_outlined, size: ThemeUtils.iconSizeScaled),
+            Text(LocaleKeys.seriesEdit_displaySettings_tableView_label_standardColumnProfile.tr()),
+            ConstrainedBox(
+              constraints: BoxConstraints(maxWidth: 300 * MediaQueryUtils.textScaleWidthFactor),
+              child: DropdownButton<FixColumnProfileType>(
+                key: const Key('displaySettingsColumnProfileSelect'),
+                isExpanded: true,
+                borderRadius: ThemeUtils.cardBorderRadius,
+                value: actValue,
+                onChanged: (value) => settings.tableViewColumnProfile = (value != null && value != defaultValue) ? value : null,
+                items: possibleColumnProfiles.map((type) {
+                  var text = type.displayName;
+                  var value = type;
+                  var selected = type == actValue;
+                  return DropdownMenuItem<FixColumnProfileType>(
+                    key: Key('displaySettingsColumnProfileSelect_$type'),
+                    value: value,
+                    child: DropDownMenuItemChild(
+                      selected: selected,
+                      child: Text(text),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     return Expandable(
       icon: Icon(Icons.settings_outlined, size: ThemeUtils.iconSizeScaled),
       title: LocaleKeys.seriesEdit_common_displaySettings_title.tr(),
@@ -36,16 +81,8 @@ class SeriesEditDisplaySettings extends StatelessWidget {
         spacing: ThemeUtils.verticalSpacing,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          // Table use Date|Time|Value Column profile
-          if (seriesType == SeriesType.dailyCheck || seriesType == SeriesType.habit || seriesType == SeriesType.bloodPressure)
-            SwitchListTile(
-              title: Text(
-                LocaleKeys.seriesEdit_displaySettings_tableView_switch_useColumnProfileDateTimeValue_label.tr(),
-              ),
-              value: settings.tableViewUseColumnProfileDateTimeValue,
-              onChanged: (value) => settings.tableViewUseColumnProfileDateTimeValue = value,
-              secondary: Icon(Icons.view_column_outlined, size: ThemeUtils.iconSizeScaled),
-            ),
+          if (tableViewColumnProfileSelect != null) tableViewColumnProfileSelect,
+
           // Dots show count
           if (seriesType == SeriesType.dailyCheck || seriesType == SeriesType.bloodPressure)
             SwitchListTile(

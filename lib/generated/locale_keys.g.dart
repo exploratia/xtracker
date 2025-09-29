@@ -15,6 +15,10 @@ abstract class  LocaleKeys {
   static const appSupport_multipleYearsMsg = 'appSupport.multipleYearsMsg';
   static const commons_nav_hideMenu = 'commons.nav.hideMenu';
   static const commons_nav_openMenu = 'commons.nav.openMenu';
+  static const commons_columnProfile_name_dateMorningMiddayEvening = 'commons.columnProfile.name.dateMorningMiddayEvening';
+  static const commons_columnProfile_name_dateTimeValue = 'commons.columnProfile.name.dateTimeValue';
+  static const commons_columnProfile_name_dateWeekdays = 'commons.columnProfile.name.dateWeekdays';
+  static const commons_columnProfile_name_dateMonthDays = 'commons.columnProfile.name.dateMonthDays';
   static const commons_date_shortWeekday_monday = 'commons.date.shortWeekday.monday';
   static const commons_date_shortWeekday_tuesday = 'commons.date.shortWeekday.tuesday';
   static const commons_date_shortWeekday_wednesday = 'commons.date.shortWeekday.wednesday';
@@ -121,6 +125,7 @@ abstract class  LocaleKeys {
   static const seriesData_action_editMode_disable_tooltip = 'seriesData.action.editMode.disable.tooltip';
   static const seriesData_action_filter_show_tooltip = 'seriesData.action.filter.show.tooltip';
   static const seriesData_action_filter_hide_tooltip = 'seriesData.action.filter.hide.tooltip';
+  static const seriesData_action_selectColumnProfile_tooltip = 'seriesData.action.selectColumnProfile.tooltip';
   static const seriesData_action_viewTypeMenu_tooltip = 'seriesData.action.viewTypeMenu.tooltip';
   static const seriesData_label_noData = 'seriesData.label.noData';
   static const seriesData_label_noDataBecauseOfFilter = 'seriesData.label.noDataBecauseOfFilter';
@@ -176,7 +181,7 @@ abstract class  LocaleKeys {
   static const seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_text = 'seriesEdit.displaySettings.pixelsView.preview.pixelViewSettingsInfo.text';
   static const seriesEdit_displaySettings_pixelsView_switch_invertHueDirection_label = 'seriesEdit.displaySettings.pixelsView.switch.invertHueDirection.label';
   static const seriesEdit_displaySettings_pixelsView_slider_hueFactor_label = 'seriesEdit.displaySettings.pixelsView.slider.hueFactor.label';
-  static const seriesEdit_displaySettings_tableView_switch_useColumnProfileDateTimeValue_label = 'seriesEdit.displaySettings.tableView.switch.useColumnProfileDateTimeValue.label';
+  static const seriesEdit_displaySettings_tableView_label_standardColumnProfile = 'seriesEdit.displaySettings.tableView.label.standardColumnProfile';
   static const seriesEdit_seriesSettings_bloodPressure_title = 'seriesEdit.seriesSettings.bloodPressure.title';
   static const seriesEdit_seriesSettings_bloodPressure_switch_hideMedicationInput_label = 'seriesEdit.seriesSettings.bloodPressure.switch.hideMedicationInput.label';
   static const seriesEdit_seriesSettings_dailyLifeAttributes_title = 'seriesEdit.seriesSettings.dailyLifeAttributes.title';
