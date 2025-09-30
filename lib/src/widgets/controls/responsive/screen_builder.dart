@@ -16,7 +16,7 @@ class ScreenBuilder extends StatelessWidget {
   final PreferredSizeWidget Function(BuildContext context)? appBarBuilder;
   final Widget Function(BuildContext context) bodyBuilder;
 
-  /// Builder-Funktionen, damit nur erzeugt wird, falls auch benoetigt.
+  /// Builder functions to build only what is required.
   final Widget Function(BuildContext context)? drawerBuilder;
   final Widget Function(BuildContext context)? bottomNavigationBarBuilder;
   final Widget Function(BuildContext context)? navigationRailBuilder;
@@ -68,6 +68,7 @@ class ScreenBuilder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // debugPrintStack(label: 'Screen build triggered here');
     final mediaQueryInfo = MediaQueryUtils.of(context, calcTextScale: true);
 
     if (mediaQueryInfo.isSmallScreen) {

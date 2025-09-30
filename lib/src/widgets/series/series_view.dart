@@ -56,7 +56,6 @@ class _SeriesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    context.watch<SeriesCurrentValueProvider>();
     var series = context.watch<SeriesProvider>().series;
     if (series.isEmpty) {
       return const FadeIn(child: AddFirstSeries());

@@ -28,12 +28,17 @@ class SeriesLatestValueRenderer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    context.watch<SeriesCurrentValueProvider>();
     switch (seriesDef.seriesType) {
       case SeriesType.bloodPressure:
         {
           return AnimatedHighlightContainer<BloodPressureValue?>(
             highlightColor: seriesDef.color,
             valueSelector: (context) => context.read<SeriesCurrentValueProvider>().bloodPressureCurrentValue(seriesDef),
+            // highlight initial if recently updated current value is the same type.
+            // necessary, because of the onscreen keyboard shown up in the input dialog the whole series view is rebuild
+            // without highlight initial the animation could never be seen
+            highlightInitial: context.read<SeriesCurrentValueProvider>().recentlyUpdated() == seriesDef.seriesType,
             builder: (context, currentValue) {
               if (currentValue != null) {
                 return _CurrentValueEdit(

@@ -15,6 +15,8 @@ import 'src/widgets/administration/settings/settings_service.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // debugPrintRebuildDirtyWidgets = true; // Show which widgets rebuild.
+ 
   // EasyLocalization only show > warning
   EasyLocalization.logger.enableLevels = EasyLocalization.logger.enableLevels.sublist(2);
   await EasyLocalization.ensureInitialized();
