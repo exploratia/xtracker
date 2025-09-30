@@ -258,14 +258,19 @@ class SeriesDataProvider with ChangeNotifier {
     }
     seriesData.sort();
 
-    // #45 always update currentValue with the last value
-    if (seriesData.isEmpty()) {
-      await seriesCurrentValueProvider.delete(seriesDef);
-    } else {
-      await seriesCurrentValueProvider.save(seriesDef, seriesData.data.last);
-    }
-
     notifyListeners();
+
+    // #45 always update currentValue with the last value
+    // but a bit delayed to allow series view to be rendered before the current value highlight starts
+    if (seriesData.isEmpty()) {
+      Future.delayed(const Duration(milliseconds: 100), () {
+        seriesCurrentValueProvider.delete(seriesDef);
+      });
+    } else {
+      Future.delayed(const Duration(milliseconds: 100), () {
+        seriesCurrentValueProvider.save(seriesDef, seriesData.data.last);
+      });
+    }
   }
 
   Future<void> addValues(SeriesDef seriesDef, List<dynamic> values, SeriesCurrentValueProvider seriesCurrentValueProvider) async {
