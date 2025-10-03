@@ -173,7 +173,8 @@ abstract class  LocaleKeys {
   static const seriesEdit_common_label_seriesName = 'seriesEdit.common.label.seriesName';
   static const seriesEdit_common_label_seriesIcon = 'seriesEdit.common.label.seriesIcon';
   static const seriesEdit_common_label_seriesColor = 'seriesEdit.common.label.seriesColor';
-  static const seriesEdit_common_displaySettings_title = 'seriesEdit.common.displaySettings.title';
+  static const seriesEdit_displaySettings_title = 'seriesEdit.displaySettings.title';
+  static const seriesEdit_displaySettings_label_initialView = 'seriesEdit.displaySettings.label.initialView';
   static const seriesEdit_displaySettings_dotsView_switch_dotsViewShowCount_label = 'seriesEdit.displaySettings.dotsView.switch.dotsViewShowCount.label';
   static const seriesEdit_displaySettings_pixelsView_preview_title = 'seriesEdit.displaySettings.pixelsView.preview.title';
   static const seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_tooltip = 'seriesEdit.displaySettings.pixelsView.preview.pixelViewSettingsInfo.tooltip';

@@ -14,7 +14,11 @@ abstract class SeriesSettings {
   void set(String key, dynamic value) {
     // update callback available?
     if (_updateStateCB != null) {
-      _settings[_key(key)] = value;
+      if (value == null) {
+        _settings.remove(_key(key));
+      } else {
+        _settings[_key(key)] = value;
+      }
       _updateStateCB();
     }
   }

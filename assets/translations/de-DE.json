@@ -30,7 +30,7 @@
     },
     "columnProfile": {
       "name": {
-        "dateMorningMiddayEvening": "Datum | Morgen | Mittag | Abend",
+        "dateMorningMiddayEvening": "Datum | Morgens | Mittags | Abends",
         "dateTimeValue": "Datum | Uhrzeit | Wert",
         "dateWeekdays": "Datum | Wochentage (Mo–So)",
         "dateMonthDays": "Datum | Monatstage (1–31)"
@@ -442,12 +442,13 @@
         "seriesName": "Name",
         "seriesIcon": "Symbol",
         "seriesColor": "Farbe"
-      },
-      "displaySettings": {
-        "title": "Anzeigeeinstellungen"
       }
     },
     "displaySettings": {
+      "title": "Anzeige-Einstellungen",
+      "label": {
+        "initialView": "Startansicht"
+      },
       "dotsView": {
         "switch": {
           "dotsViewShowCount": {
@@ -457,11 +458,11 @@
       },
       "pixelsView": {
         "preview": {
-          "title": "Pixel-Vorschau",
+          "title": "Pixelansicht",
           "pixelViewSettingsInfo": {
-            "tooltip": "Info zu Pixelanzeige-Einstellungen",
-            "title": "Pixelanzeige anpassen",
-            "text": "Hier die Farbgebung der Pixelanzeige anpassen – je nachdem, ob „mehr“ bei der Gewohnheit positiv oder negativ ist.\nDer kleinste Wert (einmal am Tag) nutzt die Farbe der Messreihe.\n\nFür höhere Werte werden die Farben über das Farbrad berechnet. Mit dem Slider wird festgelegt, wie weit das Farbrad bis zum Höchstwert durchlaufen wird. Die Richtung lässt sich umkehren."
+            "tooltip": "Info zu Pixelansicht-Einstellungen",
+            "title": "Pixelansicht anpassen",
+            "text": "Hier die Farbgebung der Pixelansicht anpassen – je nachdem, ob „mehr“ bei der Gewohnheit positiv oder negativ ist.\nDer kleinste Wert (einmal am Tag) nutzt die Farbe der Messreihe.\n\nFür höhere Werte werden die Farben über das Farbrad berechnet. Mit dem Slider wird festgelegt, wie weit das Farbrad bis zum Höchstwert durchlaufen wird. Die Richtung lässt sich umkehren."
           }
         },
         "switch": {
@@ -477,7 +478,7 @@
       },
       "tableView": {
         "label": {
-          "standardColumnProfile": "Standard-Spaltenprofil (Tabelle)"
+          "standardColumnProfile": "Tabellenansicht"
         }
       }
     },

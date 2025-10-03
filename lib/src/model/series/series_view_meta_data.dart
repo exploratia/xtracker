@@ -11,7 +11,7 @@ class SeriesViewMetaData {
   FixColumnProfile? tableFixColumnProfile;
 
   SeriesViewMetaData({required this.seriesDef}) {
-    viewType = seriesDef.seriesType.defaultViewType;
+    viewType = seriesDef.determineViewType;
     tableFixColumnProfile = seriesDef.determineFixTableColumnProfile;
   }
 

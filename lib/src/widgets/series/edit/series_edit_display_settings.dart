@@ -5,12 +5,14 @@ import '../../../../../generated/locale_keys.g.dart';
 import '../../../model/column_profile/fix_column_profile_type.dart';
 import '../../../model/series/series_def.dart';
 import '../../../model/series/series_type.dart';
+import '../../../model/series/view_type.dart';
 import '../../../util/dialogs.dart';
 import '../../../util/media_query_utils.dart';
 import '../../../util/theme_utils.dart';
 import '../../controls/card/expandable.dart';
 import '../../controls/layout/drop_down_menu_item_child.dart';
 import '../../controls/layout/single_child_scroll_view_with_scrollbar.dart';
+import '../../controls/text/overflow_text.dart';
 import 'pixel_view_preview.dart';
 
 class SeriesEditDisplaySettings extends StatelessWidget {
@@ -30,6 +32,65 @@ class SeriesEditDisplaySettings extends StatelessWidget {
     var settings = seriesDef.displaySettingsEditable(updateStateCB);
     var seriesType = seriesDef.seriesType;
 
+    // initial ViewType
+    Widget viewTypeSelect;
+    {
+      ViewType defaultValue = seriesType.defaultViewType;
+      List<ViewType> possibleViewTypes = seriesType.viewTypes;
+      ViewType actValue = settings.getInitialViewType(defaultValue);
+      viewTypeSelect = Padding(
+        padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.cardPadding),
+        child: Wrap(
+          crossAxisAlignment: WrapCrossAlignment.center,
+          spacing: ThemeUtils.horizontalSpacingSmall,
+          children: [
+            SizedBox(
+              width: 220,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                spacing: ThemeUtils.horizontalSpacingSmall,
+                children: [
+                  Icon(Icons.view_carousel_outlined, size: ThemeUtils.iconSizeScaled),
+                  OverflowText(LocaleKeys.seriesEdit_displaySettings_label_initialView.tr()),
+                ],
+              ),
+            ),
+            SizedBox(
+              width: 180 * MediaQueryUtils.textScaleWidthFactor,
+              child: DropdownButton<ViewType>(
+                iconSize: ThemeUtils.iconSizeScaled,
+                menuWidth: 200 * MediaQueryUtils.textScaleWidthFactor,
+                key: const Key('displaySettingsViewTypeSelect'),
+                isExpanded: true,
+                borderRadius: ThemeUtils.cardBorderRadius,
+                value: actValue,
+                onChanged: (value) => settings.initialViewType = (value != null && value != defaultValue) ? value : null,
+                items: possibleViewTypes.map((type) {
+                  return DropdownMenuItem<ViewType>(
+                    key: Key('displaySettingsViewTypeSelect_$type'),
+                    value: type,
+                    child: DropDownMenuItemChild(
+                      selected: type == actValue,
+                      child: Row(
+                        spacing: ThemeUtils.horizontalSpacingSmall,
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Icon(type.iconData, size: ThemeUtils.iconSizeScaled),
+                          Text(type.displayName()),
+                        ],
+                      ),
+                    ),
+                  );
+                }).toList(),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     // TableViewColumProfile: >1 FixColumnProfiles available?
     Widget? tableViewColumnProfileSelect;
     if (seriesType.tableFixColumnProfileTypes.length > 1) {
@@ -42,11 +103,22 @@ class SeriesEditDisplaySettings extends StatelessWidget {
           crossAxisAlignment: WrapCrossAlignment.center,
           spacing: ThemeUtils.horizontalSpacingSmall,
           children: [
-            Icon(Icons.view_column_outlined, size: ThemeUtils.iconSizeScaled),
-            Text(LocaleKeys.seriesEdit_displaySettings_tableView_label_standardColumnProfile.tr()),
-            ConstrainedBox(
-              constraints: BoxConstraints(maxWidth: 300 * MediaQueryUtils.textScaleWidthFactor),
+            SizedBox(
+              width: 220,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                spacing: ThemeUtils.horizontalSpacingSmall,
+                children: [
+                  Icon(ViewType.table.iconData, size: ThemeUtils.iconSizeScaled),
+                  Text(LocaleKeys.seriesEdit_displaySettings_tableView_label_standardColumnProfile.tr()),
+                ],
+              ),
+            ),
+            SizedBox(
+              width: 320 * MediaQueryUtils.textScaleWidthFactor,
               child: DropdownButton<FixColumnProfileType>(
+                iconSize: ThemeUtils.iconSizeScaled,
                 key: const Key('displaySettingsColumnProfileSelect'),
                 isExpanded: true,
                 borderRadius: ThemeUtils.cardBorderRadius,
@@ -74,13 +146,17 @@ class SeriesEditDisplaySettings extends StatelessWidget {
 
     return Expandable(
       icon: Icon(Icons.settings_outlined, size: ThemeUtils.iconSizeScaled),
-      title: LocaleKeys.seriesEdit_common_displaySettings_title.tr(),
+      title: LocaleKeys.seriesEdit_displaySettings_title.tr(),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         spacing: ThemeUtils.verticalSpacing,
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
+          // ViewType select
+          viewTypeSelect,
+
+          // ColumnProfile? select
           if (tableViewColumnProfileSelect != null) tableViewColumnProfileSelect,
 
           // Dots show count
@@ -101,7 +177,14 @@ class SeriesEditDisplaySettings extends StatelessWidget {
                 spacing: ThemeUtils.horizontalSpacing,
                 crossAxisAlignment: WrapCrossAlignment.center,
                 children: [
-                  Text(LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_title.tr()),
+                  Row(
+                    mainAxisSize: MainAxisSize.min,
+                    spacing: ThemeUtils.horizontalSpacingSmall,
+                    children: [
+                      Icon(ViewType.pixels.iconData, size: ThemeUtils.iconSizeScaled),
+                      Text(LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_title.tr()),
+                    ],
+                  ),
                   IconButton(
                     iconSize: ThemeUtils.iconSizeScaled,
                     tooltip: LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_tooltip.tr(),

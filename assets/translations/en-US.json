@@ -442,12 +442,13 @@
         "seriesName": "Name",
         "seriesIcon": "Icon",
         "seriesColor": "Color"
-      },
-      "displaySettings": {
-        "title": "Display settings"
       }
     },
     "displaySettings": {
+      "title": "Display settings",
+      "label": {
+        "initialView": "Initial view"
+      },
       "dotsView": {
         "switch": {
           "dotsViewShowCount": {
@@ -457,7 +458,7 @@
       },
       "pixelsView": {
         "preview": {
-          "title": "Pixel preview",
+          "title": "Pixel view",
           "pixelViewSettingsInfo": {
             "tooltip": "Pixel view settings info",
             "title": "Adjust pixel view",
@@ -477,7 +478,7 @@
       },
       "tableView": {
         "label": {
-          "standardColumnProfile": "Default column profile (table)"
+          "standardColumnProfile": "Table view"
         }
       }
     },

@@ -11,6 +11,7 @@ import 'series_type.dart';
 import 'settings/blood_pressure_settings.dart';
 import 'settings/daily_life/daily_life_attributes_settings.dart';
 import 'settings/display_settings.dart';
+import 'view_type.dart';
 
 class SeriesDef {
   final String uuid;
@@ -55,6 +56,11 @@ class SeriesDef {
   /// return FixColumnProfile from display settings or default for the series type (or null if the series has no fix column profile)
   FixColumnProfile? get determineFixTableColumnProfile {
     return displaySettingsReadonly().getTableViewColumnProfile(seriesType.defaultFixTableColumnProfileType);
+  }
+
+  /// return ViewType from display settings or default for the series type
+  ViewType get determineViewType {
+    return displaySettingsReadonly().getInitialViewType(seriesType.defaultViewType);
   }
 
   @override

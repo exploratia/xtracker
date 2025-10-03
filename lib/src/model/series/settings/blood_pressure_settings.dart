@@ -12,6 +12,6 @@ class BloodPressureSettings extends SeriesSettings {
   }
 
   set hideMedicationInput(bool value) {
-    set(_hideMedicationInput, value);
+    set(_hideMedicationInput, value == true ? true : null);
   }
 }
