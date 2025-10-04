@@ -22,9 +22,9 @@ class FutureBuilderWithProgressIndicator<T> extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Column(
             children: [
-              if (waitingWidget != null) waitingWidget!,
               if (marginTop > 0) SizedBox(height: marginTop),
               const LinearProgressIndicator(),
+              if (waitingWidget != null) waitingWidget!,
             ],
           );
         } else if (snapshot.hasError) {

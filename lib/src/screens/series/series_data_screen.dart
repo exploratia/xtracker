@@ -69,6 +69,7 @@ class SeriesDataScreen extends StatelessWidget {
 
     return DataProviderLoader(
       obtainDataProviderFuture: context.read<SeriesProvider>().fetchDataIfNotYetLoaded(),
+      waitingWidget: _WaitingHero(seriesDef, seriesUuid),
       child: _SeriesDefLoader(
         seriesUuid: seriesUuid,
         seriesDef: seriesDef,
@@ -81,6 +82,7 @@ class SeriesDataScreen extends StatelessWidget {
 
           return DataProviderLoader(
             obtainDataProviderFuture: context.read<SeriesDataProvider>().fetchDataIfNotYetLoaded(seriesViewMetaData.seriesDef),
+            waitingWidget: _WaitingHero(seriesDef, seriesUuid),
             child: _SeriesDataFilterWrapper(
               seriesViewMetaData: seriesViewMetaData,
               builder: (SeriesDataFilter filter, VoidCallback updateFilter) {
@@ -112,6 +114,36 @@ class SeriesDataScreen extends StatelessWidget {
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+class _WaitingHero extends StatelessWidget {
+  const _WaitingHero(
+    this.seriesDef,
+    this.seriesUuid,
+  );
+
+  final SeriesDef? seriesDef;
+  final String seriesUuid;
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: AlignmentGeometry.topCenter,
+      child: Padding(
+        padding: const EdgeInsets.all(ThemeUtils.defaultPadding),
+        child: Hero(
+          tag: 'seriesDef_$seriesUuid',
+          child: seriesDef != null
+              ? seriesDef!.icon(size: ThemeUtils.iconSizeScaled)
+              : Icon(
+                  Icons.help_outline_outlined,
+                  size: ThemeUtils.iconSizeScaled,
+                  color: ThemeUtils.primary,
+                ),
+        ),
       ),
     );
   }
