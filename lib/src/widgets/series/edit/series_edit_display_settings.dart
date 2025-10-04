@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
@@ -32,204 +34,208 @@ class SeriesEditDisplaySettings extends StatelessWidget {
     var settings = seriesDef.displaySettingsEditable(updateStateCB);
     var seriesType = seriesDef.seriesType;
 
-    // initial ViewType
-    Widget viewTypeSelect;
-    {
-      ViewType defaultValue = seriesType.defaultViewType;
-      List<ViewType> possibleViewTypes = seriesType.viewTypes;
-      ViewType actValue = settings.getInitialViewType(defaultValue);
-      viewTypeSelect = Padding(
-        padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.cardPadding),
-        child: Wrap(
-          crossAxisAlignment: WrapCrossAlignment.center,
-          spacing: ThemeUtils.horizontalSpacingSmall,
-          children: [
-            SizedBox(
-              width: 220,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                spacing: ThemeUtils.horizontalSpacingSmall,
-                children: [
-                  Icon(Icons.view_carousel_outlined, size: ThemeUtils.iconSizeScaled),
-                  OverflowText(LocaleKeys.seriesEdit_displaySettings_label_initialView.tr()),
-                ],
-              ),
-            ),
-            SizedBox(
-              width: 180 * MediaQueryUtils.textScaleWidthFactor,
-              child: DropdownButton<ViewType>(
-                iconSize: ThemeUtils.iconSizeScaled,
-                menuWidth: 200 * MediaQueryUtils.textScaleWidthFactor,
-                key: const Key('displaySettingsViewTypeSelect'),
-                isExpanded: true,
-                borderRadius: ThemeUtils.cardBorderRadius,
-                value: actValue,
-                onChanged: (value) => settings.initialViewType = (value != null && value != defaultValue) ? value : null,
-                items: possibleViewTypes.map((type) {
-                  return DropdownMenuItem<ViewType>(
-                    key: Key('displaySettingsViewTypeSelect_$type'),
-                    value: type,
-                    child: DropDownMenuItemChild(
-                      selected: type == actValue,
-                      child: Row(
-                        spacing: ThemeUtils.horizontalSpacingSmall,
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Icon(type.iconData, size: ThemeUtils.iconSizeScaled),
-                          Text(type.displayName()),
-                        ],
-                      ),
-                    ),
-                  );
-                }).toList(),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
-    // TableViewColumProfile: >1 FixColumnProfiles available?
-    Widget? tableViewColumnProfileSelect;
-    if (seriesType.tableFixColumnProfileTypes.length > 1) {
-      FixColumnProfileType defaultValue = seriesType.defaultFixTableColumnProfileType!;
-      List<FixColumnProfileType> possibleColumnProfiles = seriesType.tableFixColumnProfileTypes;
-      FixColumnProfileType? actValue = settings.getTableViewColumnProfile(defaultValue)?.type;
-      tableViewColumnProfileSelect = Padding(
-        padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.cardPadding),
-        child: Wrap(
-          crossAxisAlignment: WrapCrossAlignment.center,
-          spacing: ThemeUtils.horizontalSpacingSmall,
-          children: [
-            SizedBox(
-              width: 220,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                spacing: ThemeUtils.horizontalSpacingSmall,
-                children: [
-                  Icon(ViewType.table.iconData, size: ThemeUtils.iconSizeScaled),
-                  Text(LocaleKeys.seriesEdit_displaySettings_tableView_label_standardColumnProfile.tr()),
-                ],
-              ),
-            ),
-            SizedBox(
-              width: 320 * MediaQueryUtils.textScaleWidthFactor,
-              child: DropdownButton<FixColumnProfileType>(
-                iconSize: ThemeUtils.iconSizeScaled,
-                key: const Key('displaySettingsColumnProfileSelect'),
-                isExpanded: true,
-                borderRadius: ThemeUtils.cardBorderRadius,
-                value: actValue,
-                onChanged: (value) => settings.tableViewColumnProfile = (value != null && value != defaultValue) ? value : null,
-                items: possibleColumnProfiles.map((type) {
-                  var text = type.displayName;
-                  var value = type;
-                  var selected = type == actValue;
-                  return DropdownMenuItem<FixColumnProfileType>(
-                    key: Key('displaySettingsColumnProfileSelect_$type'),
-                    value: value,
-                    child: DropDownMenuItemChild(
-                      selected: selected,
-                      child: Text(text),
-                    ),
-                  );
-                }).toList(),
-              ),
-            ),
-          ],
-        ),
-      );
-    }
-
     return Expandable(
       icon: Icon(Icons.settings_outlined, size: ThemeUtils.iconSizeScaled),
       title: LocaleKeys.seriesEdit_displaySettings_title.tr(),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        spacing: ThemeUtils.verticalSpacing,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          // ViewType select
-          viewTypeSelect,
-
-          // ColumnProfile? select
-          if (tableViewColumnProfileSelect != null) tableViewColumnProfileSelect,
-
-          // Dots show count
-          if (seriesType == SeriesType.dailyCheck || seriesType == SeriesType.bloodPressure)
-            SwitchListTile(
-              title: Text(
-                LocaleKeys.seriesEdit_displaySettings_dotsView_switch_dotsViewShowCount_label.tr(),
-              ),
-              value: settings.dotsViewShowCount,
-              onChanged: (value) => settings.dotsViewShowCount = value,
-              secondary: Icon(Icons.numbers_outlined, size: ThemeUtils.iconSizeScaled),
-            ),
-          // Pixel Preview
-          if (PixelViewPreview.applicableOn(seriesDef)) ...[
-            Padding(
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          // initial ViewType
+          Widget viewTypeSelect;
+          {
+            ViewType defaultValue = seriesType.defaultViewType;
+            List<ViewType> possibleViewTypes = seriesType.viewTypes;
+            ViewType actValue = settings.getInitialViewType(defaultValue);
+            viewTypeSelect = Padding(
               padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.cardPadding),
               child: Wrap(
-                spacing: ThemeUtils.horizontalSpacing,
                 crossAxisAlignment: WrapCrossAlignment.center,
+                spacing: ThemeUtils.horizontalSpacingSmall,
                 children: [
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    spacing: ThemeUtils.horizontalSpacingSmall,
-                    children: [
-                      Icon(ViewType.pixels.iconData, size: ThemeUtils.iconSizeScaled),
-                      Text(LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_title.tr()),
-                    ],
-                  ),
-                  IconButton(
-                    iconSize: ThemeUtils.iconSizeScaled,
-                    tooltip: LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_tooltip.tr(),
-                    onPressed: () => Dialogs.simpleOkDialog(
-                      SingleChildScrollViewWithScrollbar(
-                        child: Text(LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_text.tr()),
-                      ),
-                      context,
-                      title: Text(LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_title.tr()),
+                  SizedBox(
+                    width: max(130 * MediaQueryUtils.textScaleWidthFactor, constraints.maxWidth / 3),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      spacing: ThemeUtils.horizontalSpacingSmall,
+                      children: [
+                        Icon(Icons.view_carousel_outlined, size: ThemeUtils.iconSizeScaled),
+                        OverflowText(LocaleKeys.seriesEdit_displaySettings_label_initialView.tr()),
+                      ],
                     ),
-                    icon: const Icon(Icons.info_outline),
                   ),
-                  PixelViewPreview(
-                    color: seriesDef.color,
-                    invertHueDirection: settings.pixelsViewInvertHueDirection,
-                    hueFactor: settings.pixelsViewHueFactor,
+                  SizedBox(
+                    width: 160 * MediaQueryUtils.textScaleWidthFactor,
+                    child: DropdownButton<ViewType>(
+                      iconSize: ThemeUtils.iconSizeScaled,
+                      menuWidth: 180 * MediaQueryUtils.textScaleWidthFactor,
+                      key: const Key('displaySettingsViewTypeSelect'),
+                      isExpanded: true,
+                      borderRadius: ThemeUtils.cardBorderRadius,
+                      value: actValue,
+                      onChanged: (value) => settings.initialViewType = (value != null && value != defaultValue) ? value : null,
+                      items: possibleViewTypes.map((type) {
+                        return DropdownMenuItem<ViewType>(
+                          key: Key('displaySettingsViewTypeSelect_$type'),
+                          value: type,
+                          child: DropDownMenuItemChild(
+                            selected: type == actValue,
+                            child: Row(
+                              spacing: ThemeUtils.horizontalSpacingSmall,
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Icon(type.iconData, size: ThemeUtils.iconSizeScaled),
+                                OverflowText(type.displayName(), expanded: false),
+                              ],
+                            ),
+                          ),
+                        );
+                      }).toList(),
+                    ),
                   ),
                 ],
               ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              spacing: 0,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: ThemeUtils.cardPadding, right: ThemeUtils.cardPadding, top: ThemeUtils.verticalSpacing),
-                  child: Text(LocaleKeys.seriesEdit_displaySettings_pixelsView_slider_hueFactor_label.tr()),
-                ),
-                Slider(
-                  min: 0,
-                  max: 360,
-                  divisions: 36,
-                  label: "${settings.pixelsViewHueFactor.toInt()}",
-                  value: settings.pixelsViewHueFactor,
-                  onChanged: (value) => settings.pixelsViewHueFactor = value,
-                ),
+            );
+          }
+
+          // TableViewColumProfile: >1 FixColumnProfiles available?
+          Widget? tableViewColumnProfileSelect;
+          if (seriesType.tableFixColumnProfileTypes.length > 1) {
+            FixColumnProfileType defaultValue = seriesType.defaultFixTableColumnProfileType!;
+            List<FixColumnProfileType> possibleColumnProfiles = seriesType.tableFixColumnProfileTypes;
+            FixColumnProfileType? actValue = settings.getTableViewColumnProfile(defaultValue)?.type;
+            tableViewColumnProfileSelect = Padding(
+              padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.cardPadding),
+              child: Wrap(
+                crossAxisAlignment: WrapCrossAlignment.center,
+                spacing: ThemeUtils.horizontalSpacingSmall,
+                children: [
+                  SizedBox(
+                    width: max(130 * MediaQueryUtils.textScaleWidthFactor, constraints.maxWidth / 3),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      spacing: ThemeUtils.horizontalSpacingSmall,
+                      children: [
+                        Icon(ViewType.table.iconData, size: ThemeUtils.iconSizeScaled),
+                        OverflowText(LocaleKeys.seriesEdit_displaySettings_tableView_label_standardColumnProfile.tr()),
+                      ],
+                    ),
+                  ),
+                  SizedBox(
+                    width: 320 * MediaQueryUtils.textScaleWidthFactor,
+                    child: DropdownButton<FixColumnProfileType>(
+                      iconSize: ThemeUtils.iconSizeScaled,
+                      key: const Key('displaySettingsColumnProfileSelect'),
+                      isExpanded: true,
+                      borderRadius: ThemeUtils.cardBorderRadius,
+                      value: actValue,
+                      onChanged: (value) => settings.tableViewColumnProfile = (value != null && value != defaultValue) ? value : null,
+                      items: possibleColumnProfiles.map((type) {
+                        var text = type.displayName;
+                        var value = type;
+                        var selected = type == actValue;
+                        return DropdownMenuItem<FixColumnProfileType>(
+                          key: Key('displaySettingsColumnProfileSelect_$type'),
+                          value: value,
+                          child: DropDownMenuItemChild(
+                            selected: selected,
+                            child: OverflowText(text, expanded: false),
+                          ),
+                        );
+                      }).toList(),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }
+
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            spacing: ThemeUtils.verticalSpacing,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              // ViewType select
+              viewTypeSelect,
+
+              // ColumnProfile? select
+              if (tableViewColumnProfileSelect != null) tableViewColumnProfileSelect,
+
+              // Dots show count
+              if (seriesType == SeriesType.dailyCheck || seriesType == SeriesType.bloodPressure)
                 SwitchListTile(
-                  title: Text(LocaleKeys.seriesEdit_displaySettings_pixelsView_switch_invertHueDirection_label.tr()),
-                  value: settings.pixelsViewInvertHueDirection,
-                  onChanged: (value) => settings.pixelsViewInvertHueDirection = value,
+                  title: Text(
+                    LocaleKeys.seriesEdit_displaySettings_dotsView_switch_dotsViewShowCount_label.tr(),
+                  ),
+                  value: settings.dotsViewShowCount,
+                  onChanged: (value) => settings.dotsViewShowCount = value,
+                  secondary: Icon(Icons.numbers_outlined, size: ThemeUtils.iconSizeScaled),
+                ),
+              // Pixel Preview
+              if (PixelViewPreview.applicableOn(seriesDef)) ...[
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.cardPadding),
+                  child: Wrap(
+                    spacing: ThemeUtils.horizontalSpacing,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        spacing: ThemeUtils.horizontalSpacingSmall,
+                        children: [
+                          Icon(ViewType.pixels.iconData, size: ThemeUtils.iconSizeScaled),
+                          Text(LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_title.tr()),
+                        ],
+                      ),
+                      IconButton(
+                        iconSize: ThemeUtils.iconSizeScaled,
+                        tooltip: LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_tooltip.tr(),
+                        onPressed: () => Dialogs.simpleOkDialog(
+                          SingleChildScrollViewWithScrollbar(
+                            child: Text(LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_text.tr()),
+                          ),
+                          context,
+                          title: Text(LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_title.tr()),
+                        ),
+                        icon: const Icon(Icons.info_outline),
+                      ),
+                      PixelViewPreview(
+                        color: seriesDef.color,
+                        invertHueDirection: settings.pixelsViewInvertHueDirection,
+                        hueFactor: settings.pixelsViewHueFactor,
+                      ),
+                    ],
+                  ),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 0,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: ThemeUtils.cardPadding, right: ThemeUtils.cardPadding, top: ThemeUtils.verticalSpacing),
+                      child: Text(LocaleKeys.seriesEdit_displaySettings_pixelsView_slider_hueFactor_label.tr()),
+                    ),
+                    Slider(
+                      min: 0,
+                      max: 360,
+                      divisions: 36,
+                      label: "${settings.pixelsViewHueFactor.toInt()}",
+                      value: settings.pixelsViewHueFactor,
+                      onChanged: (value) => settings.pixelsViewHueFactor = value,
+                    ),
+                    SwitchListTile(
+                      title: Text(LocaleKeys.seriesEdit_displaySettings_pixelsView_switch_invertHueDirection_label.tr()),
+                      value: settings.pixelsViewInvertHueDirection,
+                      onChanged: (value) => settings.pixelsViewInvertHueDirection = value,
+                    ),
+                  ],
                 ),
               ],
-            ),
-          ],
-        ],
+            ],
+          );
+        },
       ),
     );
   }
