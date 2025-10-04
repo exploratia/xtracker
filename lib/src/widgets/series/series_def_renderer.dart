@@ -141,7 +141,7 @@ class _SeriesIconAndName extends StatelessWidget {
               tag: 'seriesDef_${seriesDef.uuid}',
               child: Icon(
                 size: ThemeUtils.iconSizeScaled,
-                IconMap.iconData(seriesDef.iconName),
+                IconMap.iconData(seriesDef.iconName, seriesDef.seriesType.iconData),
                 color: seriesDef.color,
               ),
             ),

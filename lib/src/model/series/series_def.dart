@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../util/color_utils.dart';
 import '../../widgets/controls/navigation/hide_bottom_navigation_bar.dart';
@@ -20,7 +21,8 @@ class SeriesDef {
   final List<SeriesItem> seriesItems;
   String name = "";
   Color color = Colors.red;
-  String iconName = "";
+  String? iconName;
+
   final Map<String, dynamic> _settings;
 
   SeriesDef({
@@ -28,11 +30,10 @@ class SeriesDef {
     required this.seriesType,
     this.name = "",
     Color? color,
-    String? iconName,
+    this.iconName,
     required this.seriesItems,
     Map<String, dynamic>? settings,
   })  : color = color ?? seriesType.color,
-        iconName = iconName ?? seriesType.iconName,
         _settings = settings ?? {};
 
   /// return BloodPressureSettings in edit mode (setters active)
@@ -97,17 +98,17 @@ class SeriesDef {
   }
 
   IconData iconData() {
-    return IconMap.iconData(iconName);
+    return IconMap.iconData(iconName, seriesType.iconData);
   }
 
   factory SeriesDef.fromJson(Map<String, dynamic> json, {bool ignoreValidation = false}) {
     var seriesDef = SeriesDef(
-      uuid: json['uuid'] as String,
+      uuid: json['uuid'] as String? ?? const Uuid().v4(),
       seriesType: SeriesType.byTypeName(json['seriesType'] as String),
       seriesItems: [...(json['seriesItems'] as List<dynamic>).whereType<Map<String, dynamic>>().map((e) => SeriesItem.fromJson(e))],
       name: json['name'] as String,
       color: ColorUtils.fromHex(json['color'] as String),
-      iconName: json['iconName'] as String,
+      iconName: json['iconName'] as String?,
       settings: json['settings'] as Map<String, dynamic>?,
     );
 

@@ -245,7 +245,7 @@ class _SeriesTypeHeadline extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        IconMap.icon(seriesDef.iconName, size: ThemeUtils.iconSizeScaled),
+        IconMap.icon(seriesDef.iconName, seriesDef.seriesType.iconData, size: ThemeUtils.iconSizeScaled),
         OverflowText(
           SeriesType.displayNameOf(seriesDef.seriesType),
           style: themeData.textTheme.titleLarge,
@@ -274,7 +274,7 @@ class _SeriesSymbolAndColor extends StatelessWidget {
           children: [
             Text(LocaleKeys.seriesEdit_common_label_seriesIcon.tr()),
             IconPicker(
-                icoName: seriesDef.iconName,
+                icoName: seriesDef.iconName ?? IconMap.resolveNameByIconData(seriesDef.seriesType.iconData),
                 icoSelected: (icoName) {
                   seriesDef.iconName = icoName;
                   updateStateCB();

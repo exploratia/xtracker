@@ -155,14 +155,21 @@ class IconMap {
     return map;
   }
 
-  static IconData iconData(String iconName) {
+  static IconData iconData(String? iconName, IconData fallback) {
     var iconData = icons[iconName];
-    iconData ??= Icons.question_mark_outlined;
+    iconData ??= fallback;
     return iconData;
   }
 
-  static Icon icon(String iconName, {double? size}) {
-    return Icon(iconData(iconName), size: size);
+  static Icon icon(String? iconName, IconData fallback, {double? size}) {
+    return Icon(iconData(iconName, fallback), size: size);
+  }
+
+  static String resolveNameByIconData(IconData iconData) {
+    for (var entry in icons.entries) {
+      if (entry.value == iconData) return entry.key;
+    }
+    return "help_outline";
   }
 
 // static IconData _materialIconData(int codePoint) {

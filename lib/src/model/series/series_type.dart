@@ -10,46 +10,46 @@ import 'view_type.dart';
 enum SeriesType {
   bloodPressure(
     'bloodPressure',
-    'monitor_heart_outlined',
+    Icons.monitor_heart_outlined,
     Colors.red,
     [ViewType.dots, ViewType.lineChart, ViewType.table],
     [FixColumnProfileType.dateTimeValue, FixColumnProfileType.dateMorningMiddayEvening],
   ),
   dailyCheck(
     "dailyCheck",
-    'check_box_outlined',
+    Icons.check_box_outlined,
     Colors.blue,
     [ViewType.barChart, ViewType.table, ViewType.dots],
     [FixColumnProfileType.dateTimeValue, FixColumnProfileType.dateMorningMiddayEvening],
   ),
   habit(
     "habit",
-    'repeat_outlined',
+    Icons.repeat_outlined,
     Color.fromRGBO(255, 154, 0, 1.0),
     [ViewType.barChart, ViewType.table, ViewType.pixels],
     [FixColumnProfileType.dateTimeValue, FixColumnProfileType.dateMorningMiddayEvening],
   ),
   dailyLife(
     "dailyLife",
-    'account_circle_outlined',
+    Icons.account_circle_outlined,
     Color.fromRGBO(0, 255, 50, 1.0),
     [ViewType.table, ViewType.pixels],
     [FixColumnProfileType.dateTimeValue],
   );
-  // monthly("monthly", 'calendar_month_outlined', Colors.deepPurple, [ViewType.table, ViewType.lineChart]),
-  // free("free", 'calendar_today_outlined', Colors.green, [ViewType.lineChart, ViewType.table]);
+  // monthly("monthly", Icons.calendar_month_outlined, Colors.deepPurple, [ViewType.table, ViewType.lineChart]),
+  // free("free", Icons.calendar_today_outlined, Colors.green, [ViewType.lineChart, ViewType.table]);
   // TODO TimeTracker
 
   final String typeName;
-  final String iconName;
+  final IconData iconData;
   final Color color;
 
   /// order is used in AppBar actions and last one is used as default/first view
   final List<ViewType> viewTypes;
   final List<FixColumnProfileType> tableFixColumnProfileTypes;
 
-  /// [iconName] one of [IconMap]
-  const SeriesType(this.typeName, this.iconName, this.color, this.viewTypes, this.tableFixColumnProfileTypes);
+  /// [iconData] one of [IconMap]
+  const SeriesType(this.typeName, this.iconData, this.color, this.viewTypes, this.tableFixColumnProfileTypes);
 
   ViewType get defaultViewType {
     return viewTypes.last;

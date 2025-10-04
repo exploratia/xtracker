@@ -9,7 +9,6 @@ import '../../../util/dialogs.dart';
 import '../../../util/theme_utils.dart';
 import '../../controls/appbar/gradient_app_bar.dart';
 import '../../controls/layout/v_centered_single_child_scroll_view_with_scrollbar.dart';
-import '../../controls/select/icon_map.dart';
 import 'series_editor.dart';
 
 class SeriesEdit extends StatefulWidget {
@@ -94,7 +93,7 @@ class _SeriesTypeSelector extends StatelessWidget {
               ...seriesTypes.map((st) => Row(mainAxisSize: MainAxisSize.min, children: [
                     _SeriesTypeInfoBtn(st),
                     ElevatedButton.icon(
-                      icon: IconMap.icon(st.iconName, size: ThemeUtils.iconSizeScaled),
+                      icon: Icon(st.iconData, size: ThemeUtils.iconSizeScaled),
                       label: Text(SeriesType.displayNameOf(st)),
                       onPressed: () => createSeriesDef(st),
                     )
@@ -125,7 +124,7 @@ class _SeriesTypeInfoBtn extends StatelessWidget {
         title: Row(
           spacing: ThemeUtils.horizontalSpacing,
           children: [
-            IconMap.icon(st.iconName, size: ThemeUtils.iconSizeScaled),
+            Icon(st.iconData, size: ThemeUtils.iconSizeScaled),
             Text(SeriesType.displayNameOf(st)),
           ],
         ),
