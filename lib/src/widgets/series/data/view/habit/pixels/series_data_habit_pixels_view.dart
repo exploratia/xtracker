@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import '../../../../../../model/column_profile/fix_column_profiles.dart';
+import '../../../../../../model/column_profile/fix_column_profile.dart';
 import '../../../../../../model/series/data/habit/habit_value.dart';
 import '../../../../../../model/series/data/series_data_filter.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
@@ -49,7 +49,7 @@ class SeriesDataHabitPixelsView extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        bool monthly = constraints.maxWidth > FixColumnProfiles.columnProfileDateMonthDays.minWidthScaled();
+        bool monthly = constraints.maxWidth > FixColumnProfile.columnProfileDateMonthDays.minWidthScaled();
 
         List<RowItem<HabitDayItem>> data = monthly ? RowItem.buildMonthRowItems(dayItems) : RowItem.buildWeekRowItems(dayItems);
 
@@ -73,7 +73,7 @@ class SeriesDataHabitPixelsView extends StatelessWidget {
             seriesDataViewOverlays.buildTopSpacer(),
             Expanded(
               child: TwoDimensionalScrollableTable(
-                tableColumnProfile: monthly ? FixColumnProfiles.columnProfileDateMonthDays : FixColumnProfiles.columnProfileDateWeekdays,
+                tableColumnProfile: monthly ? FixColumnProfile.columnProfileDateMonthDays : FixColumnProfile.columnProfileDateWeekdays,
                 lineCount: data.length,
                 gridCellBuilder: pixelCellBuilder.gridCellBuilder,
                 lineHeight: Pixel.pixelHeight,

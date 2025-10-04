@@ -28,6 +28,14 @@
       "hideMenu": "Navigationsmenü schließen",
       "openMenu": "Navigationsmenü öffnen"
     },
+    "columnProfile": {
+      "name": {
+        "dateMorningMiddayEvening": "Datum | Morgens | Mittags | Abends",
+        "dateTimeValue": "Datum | Uhrzeit | Wert",
+        "dateWeekdays": "Datum | Wochentage (Mo–So)",
+        "dateMonthDays": "Datum | Monatstage (1–31)"
+      }
+    },
     "date": {
       "shortWeekday": {
         "monday": "Mo",
@@ -72,6 +80,9 @@
     "label": {
       "value": "Wert"
     },
+    "list": {
+      "dragTooltip": "Position anpassen"
+    },
     "snackbar": {
       "pressBackAgainToExit": "Zum Beenden nochmal drücken...",
       "saveSuccess": "Gespeichert",
@@ -90,7 +101,7 @@
       }
     },
     "validator": {
-      "emptyValue": "Bitte Wert eingeben"
+      "emptyValue": "Wert eingeben"
     }
   },
   "controls": {
@@ -124,8 +135,12 @@
         "info": "Blutdruck-Messung 3x am Tag (Morgens - Mittags - Abends)."
       },
       "dailyCheck": {
-        "title": "Täglicher Check",
-        "info": "Erledige täglich etwas - z.B. Sport oder Pause oder Aufstehen oder keine Süßigkeiten essen."
+        "title": "Tages-Check",
+        "info": "Tagesweise Checks erfassen – auch wenn ein Tag mal leer bleibt. Gut geeignet für Aktivitäten wie Sport, Pausen machen oder Süßigkeiten weglassen."
+      },
+      "dailyLife": {
+        "title": "Tägliches Leben",
+        "info": "Jeden Tag mit einem Attribut markieren – z. B. Sportart oder Stimmung.\n\nSo lässt sich der Tag reflektieren und langfristig ein Überblick über Muster und Verhältnisse gewinnen."
       },
       "free": {
         "title": "Frei",
@@ -133,7 +148,7 @@
       },
       "habit": {
         "title": "Gewohnheit",
-        "info": "Mehrfach täglich wiederkehrende Gewohnheiten erfassen. Z.B. Kaffeekonsum oder genug Wasser trinken."
+        "info": "Mehrfach tägliche Gewohnheiten erfassen – z. B. Kaffeekonsum oder genug Wasser trinken.\nGut geeignet für Routinen, die man verbessern oder ablegen möchte."
       },
       "monthly": {
         "title": "Monatlich",
@@ -296,13 +311,16 @@
           "tooltip": "Filter ausblenden"
         }
       },
+      "selectColumnProfile": {
+        "tooltip": "Spaltenprofil auswählen"
+      },
       "viewTypeMenu": {
         "tooltip": "Weitere verfügbare Anzeige-Modi"
       }
     },
     "label": {
       "noData": "Keine Daten vorhanden...",
-      "noDataBecauseOfFilter": "Keine Daten aufgrund der Filtereinstellungen"
+      "noDataBecauseOfFilter": "Keine Daten mit diesen Filtereinstellungen"
     }
   },
   "seriesDataAnalytics": {
@@ -348,10 +366,23 @@
         }
       }
     },
+    "dailyLife": {
+      "attributesProportions": {
+        "title": "Attribut-Verteilung",
+        "label": {
+          "attributeProportionsInfo": "Übersicht über die Häufigkeit der Attribute insgesamt und ihre Verteilung in verschiedenen Zeiträumen des letzten Jahres."
+        },
+        "table": {
+          "colAttribute": "Attribut",
+          "colProportions": "Anteile",
+          "colTotalShare": "Gesamtanteil"
+        }
+      }
+    },
     "habit": {
       "trend": {
         "label": {
-          "trendInfo": "Aus den Werten der Messreihe wird eine lineare Trendfunktion berechnet, um künftige Werte vorherzusagen.\n\nDiese Prognosen werden mit der Wahrscheinlichkeit für den jeweiligen Wochentag kombiniert.\n(Wenn die Messreihe keine Lücken hat, liegt die Wahrscheinlichkeit für jeden Tag bei 100%.)"
+          "trendInfo": "Aus den Messreihenwerten wird eine lineare Trendfunktion berechnet, um künftige Werte zu prognostizieren.\n\nDie Prognose wird mit der Wahrscheinlichkeit für den jeweiligen Wochentag kombiniert: je geringer die Wahrscheinlichkeit, desto transparenter wird der Tag angezeigt.\nOhne Lücken in der Messreihe liegt die Wahrscheinlichkeit für jeden Tag bei 100% und diese werden vollständig dargestellt."
         }
       }
     }
@@ -375,9 +406,6 @@
       },
       "deleteSeries": {
         "tooltip": "Messreihe löschen"
-      },
-      "dragSeries": {
-        "tooltip": "Position der Messreihe anpassen"
       }
     },
     "currentValue": {
@@ -414,12 +442,13 @@
         "seriesName": "Name",
         "seriesIcon": "Symbol",
         "seriesColor": "Farbe"
-      },
-      "displaySettings": {
-        "title": "Anzeigeeinstellungen"
       }
     },
     "displaySettings": {
+      "title": "Anzeige-Einstellungen",
+      "label": {
+        "initialView": "Startansicht"
+      },
       "dotsView": {
         "switch": {
           "dotsViewShowCount": {
@@ -429,29 +458,27 @@
       },
       "pixelsView": {
         "preview": {
-          "title": "Pixel-Vorschau",
+          "title": "Pixelansicht",
           "pixelViewSettingsInfo": {
-            "tooltip": "Info zu Pixelanzeige-Einstellungen",
-            "title": "Pixelanzeige anpassen",
-            "text": "Hier lässt sich die Farbgebung der Pixelanzeige konfigurieren – je nachdem, ob ein „Mehr“ bei der Gewohnheit positiv oder eher negativ bewertet wird.\nDer Wert 1 verwendet die Farbe der Messreihe."
+            "tooltip": "Info zu Pixelansicht-Einstellungen",
+            "title": "Pixelansicht anpassen",
+            "text": "Hier die Farbgebung der Pixelansicht anpassen – je nachdem, ob „mehr“ bei der Gewohnheit positiv oder negativ ist.\nDer kleinste Wert (einmal am Tag) nutzt die Farbe der Messreihe.\n\nFür höhere Werte werden die Farben über das Farbrad berechnet. Mit dem Slider wird festgelegt, wie weit das Farbrad bis zum Höchstwert durchlaufen wird. Die Richtung lässt sich umkehren."
           }
         },
         "switch": {
           "invertHueDirection": {
-            "label": "Richtung des Farbrads umkehren"
+            "label": "Farbrad gegen den Uhrzeigersinn"
           }
         },
         "slider": {
           "hueFactor": {
-            "label": "Farbe für den Höchstwert festlegen"
+            "label": "Farbe für Höchstwert"
           }
         }
       },
       "tableView": {
-        "switch": {
-          "useColumnProfileDateTimeValue": {
-            "label": "Spaltenprofil Datum|Zeit|Wert in Tabellenansicht verwenden:"
-          }
+        "label": {
+          "standardColumnProfile": "Tabellenansicht"
         }
       }
     },
@@ -462,6 +489,74 @@
           "hideMedicationInput": {
             "label": "Medikamenteneinnahme im Eingabedialog ausblenden:"
           }
+        }
+      },
+      "dailyLifeAttributes": {
+        "title": "Attribute",
+        "actions": {
+          "add": {
+            "tooltip": "Attribut hinzufügen"
+          },
+          "addPreset": {
+            "tooltip": "Vordefinierte Attribute hinzufügen"
+          },
+          "delete": {
+            "tooltip": "Attribut löschen"
+          },
+          "deleteAll": {
+            "tooltip": "Alle Attribute löschen"
+          },
+          "edit": {
+            "tooltip": "Attribut bearbeiten"
+          }
+        },
+        "dlg": {
+          "title": "Attribut"
+        },
+        "info": "Attribute der Messreihe verwalten.\nJeder Wert hat genau ein Attribut.\n\nWird ein Attribut gelöscht, das bereits genutzt wird, erhält der Wert als Fallback eine Farbe die in großem Kontrast zu den restlichen Attributen steht.",
+        "preset": {
+          "feelings": {
+            "title": "Vorlage: Gefühle",
+            "attributeNames": "fantastischer Tag|sehr guter, glücklicher Tag|normaler Tag|erschöpft, müder Tag|trauriger, deprimierter Tag|frustrierter, wütender Tag|gestresster Tag|krank|wirklich schlimmer Tag"
+          },
+          "sports": {
+            "title": "Vorlage: Sport",
+            "attributeNames": "Walken|Joggen|Wandern|Rennrad|Mountainbike|Schwimmen|Workout"
+          },
+          "period": {
+            "title": "Vorlage: Periode",
+            "attributeNames": "Keine|Schmierblutung|Leicht|Normal|Stark"
+          },
+          "stars": {
+            "title": "Vorlage: Sterne (★)"
+          },
+          "stress": {
+            "title": "Vorlage: Stress (☠)"
+          },
+          "colorWheel": {
+            "title": "Vorlage: Farbkreis"
+          },
+          "hoursDown": {
+            "title": "Vorlage: Stunden (▽)"
+          },
+          "hoursUp": {
+            "title": "Vorlage: Stunden (△)"
+          },
+          "minutesDown": {
+            "title": "Vorlage: Minuten (▽)"
+          },
+          "minutesUp": {
+            "title": "Vorlage: Minuten (△)"
+          },
+          "numbersDown": {
+            "title": "Vorlage: Zahlen (▽)"
+          },
+          "numbersUp": {
+            "title": "Vorlage: Zahlen (△)"
+          }
+        },
+        "validation": {
+          "emptyAttributs": "Mindestens ein Attribut anlegen"
         }
       }
     }
@@ -504,7 +599,7 @@
         "exportSingleSeries": "Messreihe (Konfiguration und Werte) als JSON-Datei speichern.",
         "exportSeriesTip": "Tipp: Einzelne Messreihen über das Export-Symbol der jeweiligen Messreihe speichern.",
         "exportSingleSeriesTip": "Tipp: Alle Messreihen gemeinsam über das Export-Symbol der Messreihenverwaltung speichern.",
-        "importSeries": "JSON-Dateien mit Messreihen zum Import auswählen.\nVorhandene Serien (inklusive Daten) werden anhand ihrer ID überschrieben. Neue Messreihen werden automatisch erstellt.",
+        "importSeries": "JSON-Dateien mit Messreihen zum Import auswählen.\nVorhandene Messreihen (inklusive Daten) werden anhand ihrer ID überschrieben. Neue Messreihen werden automatisch erstellt.",
         "importSeriesTip": "Tipp: Zuerst eine passende Messreihe erstellen und exportieren. Danach Daten in die Datei einfügen und erneut importieren – so passt das Format sicher.",
         "latestSeriesExport": "Zuletzt exportiert: {}",
         "shareSeries": "Alle Messreihen als eine JSON-Datei teilen.",
@@ -515,7 +610,15 @@
       },
       "alert": {
         "unexpectedDataStructure": "Unerwarteter Dateiinhalt (Datei: '{}').",
-        "unexpectedFile": "Nicht unterstütztes Dateiformat (Datei: '{}')."
+        "unexpectedFile": "Nicht unterstütztes Dateiformat (Datei: '{}').",
+        "import": {
+          "title": "Fehler beim Import"
+        }
+      },
+      "validation": {
+        "dailyLife": {
+          "emptyAttributes": "Keine Attribute definiert."
+        }
       }
     }
   },
@@ -552,6 +655,13 @@
         }
       }
     },
+    "dailyLife": {
+      "btn": {
+        "selectAttribute": {
+          "tooltip": "Attribut auswählen"
+        }
+      }
+    },
     "habit": {
       "btn": {
         "toggleValue": {
@@ -574,7 +684,8 @@
     "general": {
       "title": "Allgemeine Einstellungen",
       "label": {
-        "hideNavigationLabels": "Navigationslabels verstecken (Menü & Navigationsleiste):",
+        "hideNavigationLabels": "Navigationslabels ausblenden (Menü & Navigationsleiste):",
+        "hideWallpaper": "Hintergrundbild ausblenden:",
         "seriesExportDisableReminder": "Erinnerung für Messreihenexport deaktivieren (30 Tage nach letztem Export):",
         "lang": "Sprache:",
         "theme": "Theme:"

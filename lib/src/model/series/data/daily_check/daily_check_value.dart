@@ -1,5 +1,6 @@
 import 'package:uuid/uuid.dart';
 
+import '../../../../util/ex.dart';
 import '../series_data_value.dart';
 
 class DailyCheckValue extends SeriesDataValue {
@@ -25,6 +26,6 @@ class DailyCheckValue extends SeriesDataValue {
   static DailyCheckValue checkOnDailyCheckValue(dynamic value) {
     if (value is DailyCheckValue) return value;
     var errMsg = 'Failure for series value: Type mismatch! Expected: "$DailyCheckValue", got: "${value.runtimeType}"';
-    throw Exception(errMsg);
+    throw Ex(errMsg);
   }
 }

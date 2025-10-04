@@ -16,6 +16,7 @@ import '../../util/logging/flutter_simple_logging.dart';
 import '../../util/navigation/generic_route.dart';
 import '../../util/theme_utils.dart';
 import '../../widgets/administration/logging/logs_view.dart';
+import '../../widgets/administration/settings/settings_controller.dart';
 import '../../widgets/controls/appbar/gradient_app_bar.dart';
 import '../../widgets/controls/popupmenu/icon_popup_menu.dart';
 import '../../widgets/controls/responsive/screen_builder.dart';
@@ -29,7 +30,9 @@ class LogsScreen extends StatefulWidget {
     titleBuilder: () => LocaleKeys.logs_title.tr(),
   );
 
-  const LogsScreen({super.key});
+  final SettingsController settingsController;
+
+  const LogsScreen({super.key, required this.settingsController});
 
   @override
   State<LogsScreen> createState() => _LogsScreenState();
@@ -44,12 +47,14 @@ class _LogsScreenState extends State<LogsScreen> {
   Widget build(BuildContext context) {
     return ScreenBuilder.withStandardNavBuilders(
       navItem: LogsScreen.navItem,
+      showWallpaper: widget.settingsController.showWallpaper,
       appBarBuilder: (context) => GradientAppBar.build(
         context,
         addLeadingBackBtn: true,
         title: Text(LogsScreen.navItem.titleBuilder()),
         actions: [
           IconButton(
+            iconSize: ThemeUtils.iconSizeScaled,
             tooltip: LocaleKeys.logs_action_logSettings_tooltip.tr(),
             onPressed: () async {
               Navigator.restorablePushNamed(context, LogSettingsScreen.navItem.routeName);
@@ -67,6 +72,7 @@ class _LogsScreenState extends State<LogsScreen> {
             ),
           ),
           IconButton(
+            iconSize: ThemeUtils.iconSizeScaled,
             tooltip: LocaleKeys.logs_action_deleteLogs_tooltip.tr(),
             onPressed: () async {
               bool? res = await Dialogs.simpleYesNoDialog(

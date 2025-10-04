@@ -18,14 +18,12 @@ class HabitValueRenderer extends StatelessWidget {
     required this.habitValue,
     required this.seriesDef,
     this.editMode = false,
-    this.centered = false,
     this.wrapWithDateTimeTooltip = false,
   });
 
   final HabitValue habitValue;
   final bool editMode;
   final SeriesDef seriesDef;
-  final bool centered;
   final bool wrapWithDateTimeTooltip;
 
   @override

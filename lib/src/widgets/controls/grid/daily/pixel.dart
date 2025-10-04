@@ -8,12 +8,13 @@ import '../../../series/data/view/series_data_tooltip_content.dart';
 import '../../tooltip/lazy_tooltip.dart';
 
 class Pixel<T extends SeriesDataValue> extends StatelessWidget {
+  /// - [tooltipValueBuilder] called for every data value
   const Pixel({super.key, required this.colors, this.pixelText, this.seriesValues, this.isStartMarker = false, this.backgroundColor, this.tooltipValueBuilder});
 
   final List<Color> colors;
   final String? pixelText;
   final List<T>? seriesValues;
-  final Widget Function(T dataValue)? tooltipValueBuilder;
+  final Widget? Function(T dataValue)? tooltipValueBuilder;
   final bool isStartMarker;
   final Color? backgroundColor;
 
@@ -93,8 +94,7 @@ class Pixel<T extends SeriesDataValue> extends StatelessWidget {
     );
 
     if (seriesValues != null && seriesValues!.isNotEmpty && tooltipValueBuilder != null) {
-      return LazyTooltip(
-          child: pixelRender, tooltipBuilder: (_) => SeriesDataTooltipContent.buildSeriesValueTooltipWidget(seriesValues!, tooltipValueBuilder!));
+      return LazyTooltip(child: pixelRender, tooltipBuilder: (_) => SeriesDataTooltipContent.buildSeriesValueTooltipWidget(seriesValues!, tooltipValueBuilder));
     }
     return pixelRender;
   }

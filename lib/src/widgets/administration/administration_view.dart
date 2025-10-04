@@ -119,7 +119,9 @@ class _AppInfoCard extends StatelessWidget {
                 SizedBox(
                   height: 32,
                   width: 32,
-                  child: Assets.images.logos.appLogo.image(fit: BoxFit.cover),
+                  child: ThemeUtils.isDarkMode(themeData)
+                      ? Assets.images.logos.appLogoWhite.image(fit: BoxFit.cover)
+                      : Assets.images.logos.appLogo.image(fit: BoxFit.cover),
                 ),
               ],
             ),

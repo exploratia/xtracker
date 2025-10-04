@@ -179,17 +179,22 @@ https://pub.dev/packages/url_launcher
 
 https://pub.dev/packages/simple_html_css
 
-## App/Launcher Icon
-
-Export app_logo.svg to android\app\src\main subfolders matching the sizes.
-
 ## Splashscreen
 
 https://pub.dev/packages/flutter_native_splash
 
+Image source files are defined in pubspec.yaml.
+
 ```shell
 dart run flutter_native_splash:create
 ```
+
+Unfortunately, the splash.png files are not perfect quality. They have to be resized manually.
+
+## App/Launcher Icon
+
+Export app_logo.svg to android\app\src\main\res mipmap subfolders matching the sizes.
+Use https://compresspng.com/ to compress the png files.
 
 ## Build apk (Android)
 

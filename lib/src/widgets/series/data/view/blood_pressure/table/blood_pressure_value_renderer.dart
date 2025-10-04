@@ -83,13 +83,16 @@ class _Value extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     double scale = MediaQueryUtils.textScaleFactor;
+    double scaleW = MediaQueryUtils.textScaleWidthFactor;
     return Padding(
       padding: const EdgeInsets.all(3.0),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          SizedBox(width: 30 * scale, child: Text('${bloodPressureValue.high}', style: const TextStyle(color: Colors.white), textAlign: TextAlign.center)),
+          SizedBox(
+              width: (30 * scaleW).ceilToDouble(),
+              child: Text('${bloodPressureValue.high}', style: const TextStyle(color: Colors.white), textAlign: TextAlign.center)),
           bloodPressureValue.medication
               ? Icon(
                   Icons.medication_outlined,
@@ -97,7 +100,9 @@ class _Value extends StatelessWidget {
                   color: Colors.white,
                 )
               : SizedBox(height: 15 * scale, child: VerticalDivider(thickness: 1 * scale, width: ThemeUtils.horizontalSpacing, color: Colors.white)),
-          SizedBox(width: 30 * scale, child: Text('${bloodPressureValue.low}', style: const TextStyle(color: Colors.white), textAlign: TextAlign.center)),
+          SizedBox(
+              width: (30 * scaleW).ceilToDouble(),
+              child: Text('${bloodPressureValue.low}', style: const TextStyle(color: Colors.white), textAlign: TextAlign.center)),
         ],
       ),
     );

@@ -20,6 +20,7 @@ class _IconPopupMenuState extends State<IconPopupMenu> {
     final themeData = Theme.of(context);
     final GlobalKey menuButtonKey = GlobalKey();
     return IconButton(
+      iconSize: ThemeUtils.iconSizeScaled,
       key: menuButtonKey,
       icon: widget.icon,
       onPressed: () => _showCustomPopupMenu(context, menuButtonKey, themeData),
@@ -165,6 +166,7 @@ class _MenuItemIconButton extends StatelessWidget {
       color: themeData.colorScheme.secondary,
       elevation: ThemeUtils.elevation,
       child: IconButton(
+        iconSize: ThemeUtils.iconSizeScaled,
         tooltip: menuEntry.tooltip,
         hoverColor: themeData.colorScheme.primary,
         onPressed: () {

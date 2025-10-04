@@ -5,6 +5,8 @@ import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../generated/locale_keys.g.dart';
+import '../../model/column_profile/fix_column_profile.dart';
+import '../../model/column_profile/fix_column_profile_type.dart';
 import '../../model/navigation/navigation_item.dart';
 import '../../model/series/data/series_data.dart';
 import '../../model/series/data/series_data_filter.dart';
@@ -19,11 +21,12 @@ import '../../util/date_time_utils.dart';
 import '../../util/globals.dart';
 import '../../util/media_query_utils.dart';
 import '../../util/theme_utils.dart';
+import '../../util/tooltip_utils.dart';
 import '../../widgets/controls/appbar/app_bar_actions_divider.dart';
 import '../../widgets/controls/appbar/gradient_app_bar.dart';
 import '../../widgets/controls/layout/centered_message.dart';
 import '../../widgets/controls/layout/h_centered_scroll_view.dart';
-import '../../widgets/controls/navigation/hide_bottom_navigation_bar.dart';
+import '../../widgets/controls/navigation/app_bottom_navigation_bar.dart';
 import '../../widgets/controls/popupmenu/icon_popup_menu.dart';
 import '../../widgets/controls/provider/data_provider_loader.dart';
 import '../../widgets/controls/responsive/screen_builder.dart';
@@ -49,6 +52,7 @@ class SeriesDataScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TooltipUtils.updateTooltipMonospaceStyle(context);
     String seriesUuid = Globals.invalid;
     SeriesDef? seriesDef;
     var seriesParameterValue = args['series'];
@@ -63,52 +67,82 @@ class SeriesDataScreen extends StatelessWidget {
       seriesUuid = seriesDef.uuid;
     }
 
-    return HideBottomNavigationBar(
-      child: DataProviderLoader(
-        obtainDataProviderFuture: context.read<SeriesProvider>().fetchDataIfNotYetLoaded(),
-        child: _SeriesDefLoader(
-          seriesUuid: seriesUuid,
-          seriesDef: seriesDef,
-          builder: (SeriesViewMetaData? seriesViewMetaData) {
-            if (seriesViewMetaData == null) {
-              // pop screen if no series is available.
-              WidgetsBinding.instance.addPostFrameCallback((_) => Navigator.pop(context));
-              return const CenteredMessage(message: 'Invalid series!');
-            }
+    return DataProviderLoader(
+      obtainDataProviderFuture: context.read<SeriesProvider>().fetchDataIfNotYetLoaded(),
+      waitingWidget: _WaitingHero(seriesDef, seriesUuid),
+      child: _SeriesDefLoader(
+        seriesUuid: seriesUuid,
+        seriesDef: seriesDef,
+        builder: (SeriesViewMetaData? seriesViewMetaData) {
+          if (seriesViewMetaData == null) {
+            // pop screen if no series is available.
+            WidgetsBinding.instance.addPostFrameCallback((_) => Navigator.pop(context));
+            return const CenteredMessage(message: 'Invalid series!');
+          }
 
-            return DataProviderLoader(
-              obtainDataProviderFuture: context.read<SeriesDataProvider>().fetchDataIfNotYetLoaded(seriesViewMetaData.seriesDef),
-              child: _SeriesDataFilterWrapper(
-                seriesViewMetaData: seriesViewMetaData,
-                builder: (SeriesDataFilter filter, VoidCallback updateFilter) {
-                  return _SeriesDataViewOverlaysWrapper(
-                    builder: (SeriesDataViewOverlays seriesDataViewOverlays, void Function({double? topHeight, double? bottomHeight}) updateOverlays) {
-                      return SeriesDataViewContentBuilder(
-                        seriesViewMetaData: seriesViewMetaData,
-                        seriesDataFilter: filter,
-                        seriesDataViewOverlays: seriesDataViewOverlays,
-                        builder: (Widget Function() seriesDataViewBuilder, List<SeriesDataValue> seriesDataValues) {
-                          return OrientationBuilder(builder: (BuildContext context, Orientation orientation) {
-                            var isLandscape = orientation == Orientation.landscape;
-                            return _ScreenBuilder(
-                              seriesViewMetaData: seriesViewMetaData,
-                              seriesDataViewBuilder: seriesDataViewBuilder,
-                              seriesDataValues: seriesDataValues,
-                              filter: filter,
-                              updateFilter: updateFilter,
-                              seriesDataViewOverlays: seriesDataViewOverlays,
-                              updateOverlays: updateOverlays,
-                              isLandScape: isLandscape,
-                            );
-                          });
-                        },
-                      );
-                    },
-                  );
-                },
-              ),
-            );
-          },
+          return DataProviderLoader(
+            obtainDataProviderFuture: context.read<SeriesDataProvider>().fetchDataIfNotYetLoaded(seriesViewMetaData.seriesDef),
+            waitingWidget: _WaitingHero(seriesDef, seriesUuid),
+            child: _SeriesDataFilterWrapper(
+              seriesViewMetaData: seriesViewMetaData,
+              builder: (SeriesDataFilter filter, VoidCallback updateFilter) {
+                return _SeriesDataViewOverlaysWrapper(
+                  builder: (SeriesDataViewOverlays seriesDataViewOverlays, void Function({double? topHeight, double? bottomHeight}) updateOverlays) {
+                    return SeriesDataViewContentBuilder(
+                      seriesViewMetaData: seriesViewMetaData,
+                      seriesDataFilter: filter,
+                      seriesDataViewOverlays: seriesDataViewOverlays,
+                      builder: (Widget Function() seriesDataViewBuilder, List<SeriesDataValue> seriesDataValues) {
+                        return OrientationBuilder(builder: (BuildContext context, Orientation orientation) {
+                          var isLandscape = orientation == Orientation.landscape;
+                          return _ScreenBuilder(
+                            seriesViewMetaData: seriesViewMetaData,
+                            seriesDataViewBuilder: seriesDataViewBuilder,
+                            seriesDataValues: seriesDataValues,
+                            filter: filter,
+                            updateFilter: updateFilter,
+                            seriesDataViewOverlays: seriesDataViewOverlays,
+                            updateOverlays: updateOverlays,
+                            isLandScape: isLandscape,
+                          );
+                        });
+                      },
+                    );
+                  },
+                );
+              },
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _WaitingHero extends StatelessWidget {
+  const _WaitingHero(
+    this.seriesDef,
+    this.seriesUuid,
+  );
+
+  final SeriesDef? seriesDef;
+  final String seriesUuid;
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: AlignmentGeometry.topCenter,
+      child: Padding(
+        padding: const EdgeInsets.all(ThemeUtils.defaultPadding),
+        child: Hero(
+          tag: 'seriesDef_$seriesUuid',
+          child: seriesDef != null
+              ? seriesDef!.icon(size: ThemeUtils.iconSizeScaled)
+              : Icon(
+                  Icons.help_outline_outlined,
+                  size: ThemeUtils.iconSizeScaled,
+                  color: ThemeUtils.primary,
+                ),
         ),
       ),
     );
@@ -180,25 +214,29 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
     });
   }
 
+  void _setTableFixColumnProfile(FixColumnProfileType fixColumnProfileType) {
+    setState(() {
+      widget.seriesViewMetaData.tableFixColumnProfile = FixColumnProfile.resolveByType(fixColumnProfileType);
+      if (!widget.seriesViewMetaData.showDateFilter) widget.updateOverlays(bottomHeight: 0);
+    });
+  }
+
   void _addSeriesValueHandler(BuildContext context) async {
     await SeriesData.showSeriesDataInputDlg(context, widget.seriesViewMetaData.seriesDef);
     setState(() {});
   }
 
   void _showSeriesDataAnalytics(BuildContext context) async {
-    final themeData = Theme.of(context);
     await showDialog(
-        context: context,
-        builder: (context) {
-          return Dialog.fullscreen(
-            backgroundColor: themeData.scaffoldBackgroundColor,
-            child: HideBottomNavigationBar(
-              child: SeriesDataAnalyticsView(
-                seriesViewMetaData: widget.seriesViewMetaData,
-              ),
-            ),
-          );
-        });
+      context: context,
+      builder: (context) {
+        return Dialog.fullscreen(
+          child: SeriesDataAnalyticsView(
+            seriesViewMetaData: widget.seriesViewMetaData,
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -214,7 +252,12 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
 
     Widget view;
     if (hasNoData) {
-      view = SeriesDataNoData(seriesViewMetaData: metaData);
+      view = Column(
+        children: [
+          SeriesTitle(seriesViewMetaData: widget.seriesViewMetaData),
+          Expanded(child: SeriesDataNoData(seriesViewMetaData: metaData)),
+        ],
+      );
     } else {
       view = SeriesDataView(
         seriesViewMetaData: widget.seriesViewMetaData,
@@ -245,6 +288,7 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
       }
       orientationDependentViewActions.add(
         IconButton(
+          iconSize: ThemeUtils.iconSizeScaled,
           tooltip: LocaleKeys.seriesData_action_analytics_tooltip.tr(),
           onPressed: analyticsPossible ? () => _showSeriesDataAnalytics(context) : null,
           icon: const Icon(Icons.analytics_outlined),
@@ -258,6 +302,7 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
       var editMode = metaData.editMode;
       dataActions.add(
         IconButton(
+          iconSize: ThemeUtils.iconSizeScaled,
           tooltip: editMode ? LocaleKeys.seriesData_action_editMode_disable_tooltip.tr() : LocaleKeys.seriesData_action_editMode_enable_tooltip.tr(),
           onPressed: hasNoData ? null : () => _toggleEditMode(),
           icon: Icon(editMode ? Icons.edit_off_outlined : Icons.edit_outlined),
@@ -279,12 +324,19 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
         }
 
         var iconButtonToggleCompressed = IconButton(
+          iconSize: ThemeUtils.iconSizeScaled,
           tooltip: tooltip,
           onPressed: hasNoData ? null : () => _toggleCompressedMode(),
           icon: Icon(showCompressed ? Icons.calendar_month_outlined : Icons.calendar_today_outlined),
         );
         orientationDependentViewActions.add(iconButtonToggleCompressed);
       }
+    }
+
+    // in table view some series support multiple column profiles
+    if (viewType == ViewType.table && seriesType.tableFixColumnProfileTypes.length > 1) {
+      var columnProfileSelect = _SelectColumnProfile(metaData, _setTableFixColumnProfile);
+      orientationDependentViewActions.add(columnProfileSelect);
     }
 
     // date filter - so far all views support date filter
@@ -304,6 +356,7 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
           : LocaleKeys.seriesData_action_filter_show_tooltip.tr(args: [widget.filter.toString()]);
       // if (!dateFilterPossible) tooltip = null;
       var iconButtonToggleShowDateFilter = IconButton(
+        iconSize: ThemeUtils.iconSizeScaled,
         tooltip: tooltip,
         onPressed: dateFilterPossible ? () => _toggleShowDateFilter() : null,
         icon: SizedBox(
@@ -311,15 +364,15 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
           child: Stack(
             alignment: Alignment.center,
             children: [
-              const Positioned(
+              Positioned(
                 top: -4,
                 right: -2,
-                child: Icon(Icons.filter_list_outlined),
+                child: Icon(Icons.filter_list_outlined, size: ThemeUtils.iconSizeScaled),
               ),
               Positioned(
                 left: 0,
                 bottom: -2,
-                child: Icon(showDateFilter ? Icons.visibility_off_outlined : Icons.visibility_outlined, size: 14 * MediaQueryUtils.textScaleFactor),
+                child: Icon(showDateFilter ? Icons.visibility_off_outlined : Icons.visibility_outlined, size: 14 * MediaQueryUtils.iconScaleFactor),
               ),
             ],
           ),
@@ -338,6 +391,7 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
     dataActions.add(
       // add value btn
       IconButton(
+        iconSize: ThemeUtils.iconSizeScaled,
         tooltip: LocaleKeys.seriesData_action_addValue_tooltip.tr(),
         onPressed: () => _addSeriesValueHandler(context),
         icon: const Icon(Icons.add),
@@ -377,10 +431,12 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Expanded(child: view),
-          SizedBox(
+          Container(
+            decoration: AppBottomNavigationBar.buildBottomNavigationBarDecoration(context),
             height: kBottomNavigationBarHeight,
             child: Material(
-              color: themeData.cardTheme.color,
+              // color: themeData.bottomNavigationBarTheme.backgroundColor,
+              color: Colors.transparent,
               child: HCenteredScrollView(
                 // mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: bottomBarActions,
@@ -395,24 +451,33 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
       navItem: navItem,
       appBarBuilder: (context) => GradientAppBar.build(context, addLeadingBackBtn: true, title: title, actions: actions),
       bodyBuilder: (context) => view,
+      hideBottomNavigationBar: true,
     );
   }
 
   Widget _buildAbbBarTitle(ThemeData themeData, NavigationItem navItem) {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
-        if (constraints.maxWidth < 24) {
+        if (constraints.maxWidth < ThemeUtils.iconSizeScaled) {
           return const SizedBox();
         }
         var viewType = widget.seriesViewMetaData.viewType;
         if (constraints.maxWidth < 55) {
-          return Icon(viewType.iconData, color: themeData.colorScheme.onPrimary);
+          return Icon(
+            viewType.iconData,
+            color: themeData.colorScheme.onPrimary,
+            size: ThemeUtils.iconSizeScaled,
+          );
         }
         return Row(
           spacing: ThemeUtils.horizontalSpacing,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Icon(viewType.iconData, color: themeData.colorScheme.onPrimary),
+            Icon(
+              viewType.iconData,
+              color: themeData.colorScheme.onPrimary,
+              size: ThemeUtils.iconSizeScaled,
+            ),
             OverflowText(ViewType.displayNameOf(viewType)),
           ],
         );
@@ -439,6 +504,63 @@ class _SeriesDefLoader extends StatelessWidget {
     }
 
     return builder(seriesViewMetaData);
+  }
+}
+
+class _SelectColumnProfile extends StatelessWidget {
+  const _SelectColumnProfile(this.seriesViewMetaData, this._setTableFixColumnProfile);
+
+  final SeriesViewMetaData seriesViewMetaData;
+  final Function(FixColumnProfileType fixColumnProfileType) _setTableFixColumnProfile;
+
+  Future<void> _openMenu(BuildContext context, RenderBox overlay, Offset position) async {
+    var initialValue = seriesViewMetaData.tableFixColumnProfile?.type;
+    var seriesType = seriesViewMetaData.seriesDef.seriesType;
+
+    await showMenu<FixColumnProfileType>(
+      context: context,
+      position: RelativeRect.fromLTRB(
+        position.dx,
+        position.dy,
+        overlay.size.width - position.dx,
+        overlay.size.height - position.dy,
+      ),
+      items: [
+        ...seriesType.tableFixColumnProfileTypes.map(
+          (type) => PopupMenuItem(
+            onTap: () => _setTableFixColumnProfile(type),
+            child: Row(
+              spacing: ThemeUtils.horizontalSpacing,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                OverflowText(type.displayName),
+                if (type == initialValue)
+                  Icon(
+                    Icons.check,
+                    size: ThemeUtils.iconSizeScaled,
+                  ),
+              ],
+            ),
+          ),
+        )
+      ],
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      tooltip: LocaleKeys.seriesData_action_selectColumnProfile_tooltip.tr(),
+      icon: const Icon(Icons.view_column_outlined),
+      iconSize: ThemeUtils.iconSizeScaled,
+      onPressed: () async {
+        final RenderBox button = context.findRenderObject() as RenderBox;
+        final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+        final Offset position = button.localToGlobal(button.size.bottomRight(Offset.zero), ancestor: overlay);
+        await _openMenu(context, overlay, position);
+      },
+    );
   }
 }
 

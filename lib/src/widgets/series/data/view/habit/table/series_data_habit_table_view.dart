@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../../model/column_profile/fix_column_profiles.dart';
+import '../../../../../../model/column_profile/fix_column_profile.dart';
 import '../../../../../../model/series/data/habit/habit_value.dart';
 import '../../../../../../model/series/data/series_data_filter.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
@@ -22,7 +22,7 @@ class SeriesDataHabitTableView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool useDateTimeValueColumnProfile = seriesViewMetaData.seriesDef.displaySettingsReadonly().tableViewUseColumnProfileDateTimeValue;
+    FixColumnProfile columnProfile = seriesViewMetaData.tableFixColumnProfile!;
 
     var filteredSeriesData = seriesData.where((value) => seriesDataFilter.filter(value)).toList();
     if (filteredSeriesData.isEmpty) {
@@ -36,12 +36,11 @@ class SeriesDataHabitTableView extends StatelessWidget {
 
     var rowPerDayCellBuilder = RowPerDayCellBuilder<HabitValue>(
       data: data,
-      useDateTimeValueColumnProfile: useDateTimeValueColumnProfile,
-      gridCellChildBuilder: (HabitValue value) => HabitValueRenderer(
+      fixColumnProfile: columnProfile,
+      gridCellChildBuilder: (HabitValue value, Size _) => HabitValueRenderer(
         habitValue: value,
         seriesDef: seriesViewMetaData.seriesDef,
         editMode: seriesViewMetaData.editMode,
-        centered: true,
         wrapWithDateTimeTooltip: true,
       ),
     );
@@ -55,8 +54,7 @@ class SeriesDataHabitTableView extends StatelessWidget {
         seriesDataViewOverlays.buildTopSpacer(),
         Expanded(
           child: TwoDimensionalScrollableTable(
-            tableColumnProfile:
-                useDateTimeValueColumnProfile ? FixColumnProfiles.columnProfileDateTimeValue : FixColumnProfiles.columnProfileDateMorningMiddayEvening,
+            tableColumnProfile: columnProfile,
             lineCount: data.length,
             gridCellBuilder: rowPerDayCellBuilder.gridCellBuilder,
             lineHeight: HabitValueRenderer.height,

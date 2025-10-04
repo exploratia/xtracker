@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../../model/column_profile/fix_column_profiles.dart';
+import '../../../../../../model/column_profile/fix_column_profile.dart';
 import '../../../../../../model/series/data/blood_pressure/blood_pressure_value.dart';
 import '../../../../../../model/series/data/series_data_filter.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
@@ -22,7 +22,7 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool useDateTimeValueColumnProfile = seriesViewMetaData.seriesDef.displaySettingsReadonly().tableViewUseColumnProfileDateTimeValue;
+    FixColumnProfile columnProfile = seriesViewMetaData.tableFixColumnProfile!;
 
     var filteredSeriesData = seriesData.where((value) => seriesDataFilter.filter(value)).toList();
     if (filteredSeriesData.isEmpty) {
@@ -36,8 +36,8 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
 
     var rowPerDayCellBuilder = RowPerDayCellBuilder<BloodPressureValue>(
       data: data,
-      useDateTimeValueColumnProfile: useDateTimeValueColumnProfile,
-      gridCellChildBuilder: (BloodPressureValue value) => BloodPressureValueRenderer(
+      fixColumnProfile: columnProfile,
+      gridCellChildBuilder: (BloodPressureValue value, Size _) => BloodPressureValueRenderer(
         bloodPressureValue: value,
         seriesDef: seriesViewMetaData.seriesDef,
         editMode: seriesViewMetaData.editMode,
@@ -54,8 +54,7 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
         seriesDataViewOverlays.buildTopSpacer(),
         Expanded(
           child: TwoDimensionalScrollableTable(
-            tableColumnProfile:
-                useDateTimeValueColumnProfile ? FixColumnProfiles.columnProfileDateTimeValue : FixColumnProfiles.columnProfileDateMorningMiddayEvening,
+            tableColumnProfile: columnProfile,
             lineCount: data.length,
             gridCellBuilder: rowPerDayCellBuilder.gridCellBuilder,
             lineHeight: BloodPressureValueRenderer.height,

@@ -24,7 +24,7 @@ class Dot<T extends SeriesDataValue> extends StatelessWidget {
   final bool isStartMarker;
   final bool showCount;
   final List<T> seriesValues;
-  final Widget Function(T dataValue)? tooltipValueBuilder;
+  final Widget? Function(T dataValue)? tooltipValueBuilder;
 
   static int get dotHeight => ThemeUtils.iconSizeScaled.ceil();
 
@@ -100,7 +100,7 @@ class Dot<T extends SeriesDataValue> extends StatelessWidget {
     );
 
     if (count > 0 && tooltipValueBuilder != null) {
-      return LazyTooltip(child: dotRender, tooltipBuilder: (_) => SeriesDataTooltipContent.buildSeriesValueTooltipWidget(seriesValues, tooltipValueBuilder!));
+      return LazyTooltip(child: dotRender, tooltipBuilder: (_) => SeriesDataTooltipContent.buildSeriesValueTooltipWidget(seriesValues, tooltipValueBuilder));
     }
     return dotRender;
   }

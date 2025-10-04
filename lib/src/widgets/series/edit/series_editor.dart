@@ -5,17 +5,21 @@ import 'package:provider/provider.dart';
 import '../../../../generated/locale_keys.g.dart';
 import '../../../model/series/series_def.dart';
 import '../../../model/series/series_type.dart';
+import '../../../model/series/settings/daily_life/daily_life_attributes_settings.dart';
 import '../../../providers/series_provider.dart';
 import '../../../util/dialogs.dart';
 import '../../../util/logging/flutter_simple_logging.dart';
 import '../../../util/theme_utils.dart';
+import '../../controls/appbar/gradient_app_bar.dart';
 import '../../controls/card/expandable.dart';
+import '../../controls/form/validation_field.dart';
 import '../../controls/layout/scrollable_centered_form_wrapper.dart';
 import '../../controls/select/color_picker.dart';
 import '../../controls/select/icon_map.dart';
 import '../../controls/select/icon_picker.dart';
 import '../../controls/text/overflow_text.dart';
 import 'blood_pressure/blood_pressure_series_edit.dart';
+import 'daily_life/daily_life_series_edit_attributes.dart';
 import 'series_edit_display_settings.dart';
 
 class SeriesEditor extends StatefulWidget {
@@ -30,6 +34,9 @@ class SeriesEditor extends StatefulWidget {
 
 class _SeriesEditorState extends State<SeriesEditor> {
   late SeriesDef _seriesDef;
+
+  late DailyLifeAttributesSettings? _dailyLifeAttributesSettings;
+
   var _isLoading = false;
 
   final _formKey = GlobalKey<FormState>();
@@ -41,10 +48,14 @@ class _SeriesEditorState extends State<SeriesEditor> {
 
   @override
   void initState() {
-    _seriesDef = widget.seriesDef.clone();
+    // when loading series into the editor ignore invalid once (e.g. new DailyLife without attributes)
+    _seriesDef = widget.seriesDef.clone(ignoreValidation: true);
+    var seriesType = _seriesDef.seriesType;
 
     _nameController.addListener(_validate);
     _nameController.text = _seriesDef.name.toString();
+
+    _dailyLifeAttributesSettings = (seriesType != SeriesType.dailyLife) ? null : _seriesDef.dailyLifeAttributesSettingsEditable(_updateState);
 
     if (widget.goBack == null) {
       _isValid = true;
@@ -107,8 +118,6 @@ class _SeriesEditorState extends State<SeriesEditor> {
 
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
-
     if (_isLoading) return const _Loading();
 
     var formWrapper = ScrollableCenteredFormWrapper(
@@ -119,6 +128,7 @@ class _SeriesEditorState extends State<SeriesEditor> {
         if (widget.goBack != null)
           Row(children: [
             IconButton(
+              iconSize: ThemeUtils.iconSizeScaled,
               tooltip: LocaleKeys.seriesEdit_btn_backToSeriesTypeSelection.tr(),
               onPressed: widget.goBack,
               icon: const Icon(Icons.arrow_back_outlined),
@@ -149,16 +159,33 @@ class _SeriesEditorState extends State<SeriesEditor> {
         const SizedBox(height: ThemeUtils.verticalSpacing),
         _SeriesSymbolAndColor(_seriesDef, _updateState),
 
-        switch (_seriesDef.seriesType) {
-          SeriesType.bloodPressure => Expandable(
-              initialExpanded: true,
-              icon: Icon(Icons.monitor_heart_outlined, size: ThemeUtils.iconSizeScaled),
-              title: LocaleKeys.seriesEdit_seriesSettings_bloodPressure_title.tr(),
-              child: BloodPressureSeriesEdit(_seriesDef, _updateState),
-            ),
-          SeriesType.dailyCheck => Container(),
-          SeriesType.habit => Container(),
-        },
+        // series type dependent...
+
+        if (_seriesDef.seriesType == SeriesType.bloodPressure)
+          Expandable(
+            initialExpanded: true,
+            icon: Icon(Icons.monitor_heart_outlined, size: ThemeUtils.iconSizeScaled),
+            title: LocaleKeys.seriesEdit_seriesSettings_bloodPressure_title.tr(),
+            child: BloodPressureSeriesEdit(_seriesDef, _updateState),
+          ),
+
+        if (_dailyLifeAttributesSettings != null)
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expandable(
+                initialExpanded: true,
+                useVerticalSpacingBeforeChild: false /* ListView has own padding */,
+                icon: Icon(Icons.format_list_bulleted_outlined, size: ThemeUtils.iconSizeScaled),
+                title: LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_title.tr(),
+                child: DailyLifeSeriesEditAttributes(_seriesDef, _dailyLifeAttributesSettings!),
+              ),
+              ValidationField(
+                validatorCondition: () => _dailyLifeAttributesSettings!.isValid(),
+                errorMessage: LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_validation_emptyAttributs.tr(),
+              ),
+            ],
+          ),
 
         // only show DisplaySettings if there is something for that series type
         if (SeriesEditDisplaySettings.applicableOn(_seriesDef)) SeriesEditDisplaySettings(_seriesDef, _updateState),
@@ -166,16 +193,18 @@ class _SeriesEditorState extends State<SeriesEditor> {
     );
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: themeData.colorScheme.secondary,
+      appBar: GradientAppBar.build(
+        context,
         title: Text(LocaleKeys.seriesEdit_title.tr()),
         leading: IconButton(
+          iconSize: ThemeUtils.iconSizeScaled,
           tooltip: LocaleKeys.seriesEdit_action_abort_tooltip.tr(),
           onPressed: () => Navigator.pop(context),
           icon: const Icon(Icons.close_outlined),
         ),
         actions: [
           IconButton(
+            iconSize: ThemeUtils.iconSizeScaled,
             tooltip: LocaleKeys.seriesEdit_action_save_tooltip.tr(),
             onPressed: _saveHandler,
             icon: const Icon(Icons.save_outlined),
@@ -193,10 +222,9 @@ class _Loading extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: themeData.colorScheme.secondary,
+      appBar: GradientAppBar.build(
+        context,
         title: Text(LocaleKeys.seriesEdit_title.tr()),
       ),
       body: const LinearProgressIndicator(),
@@ -217,7 +245,7 @@ class _SeriesTypeHeadline extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        IconMap.icon(seriesDef.iconName, size: ThemeUtils.iconSizeScaled),
+        IconMap.icon(seriesDef.iconName, seriesDef.seriesType.iconData, size: ThemeUtils.iconSizeScaled),
         OverflowText(
           SeriesType.displayNameOf(seriesDef.seriesType),
           style: themeData.textTheme.titleLarge,
@@ -246,7 +274,7 @@ class _SeriesSymbolAndColor extends StatelessWidget {
           children: [
             Text(LocaleKeys.seriesEdit_common_label_seriesIcon.tr()),
             IconPicker(
-                icoName: seriesDef.iconName,
+                icoName: seriesDef.iconName ?? IconMap.resolveNameByIconData(seriesDef.seriesType.iconData),
                 icoSelected: (icoName) {
                   seriesDef.iconName = icoName;
                   updateStateCB();

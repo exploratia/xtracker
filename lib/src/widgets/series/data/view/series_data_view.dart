@@ -63,7 +63,7 @@ class SeriesDataView extends StatelessWidget {
 
     // filter view
     var seriesType = seriesDef.seriesType;
-    if (seriesViewMetaData.showDateFilter && [SeriesType.bloodPressure, SeriesType.dailyCheck, SeriesType.habit].contains(seriesType)) {
+    if (seriesViewMetaData.showDateFilter && [SeriesType.bloodPressure, SeriesType.dailyCheck, SeriesType.dailyLife, SeriesType.habit].contains(seriesType)) {
       stackChildren.add(Positioned.fill(
         child: _SeriesDataFilterView(
           seriesViewMetaData: seriesViewMetaData,

@@ -5,6 +5,7 @@ import 'package:logger/logger.dart';
 import '../../../../generated/locale_keys.g.dart';
 import '../../../util/logging/flutter_simple_logging.dart';
 import '../../../util/table_utils.dart';
+import '../../../util/theme_utils.dart';
 import '../../controls/card/settings_card.dart';
 import '../../controls/layout/drop_down_menu_item_child.dart';
 import '../../controls/layout/scroll_footer.dart';
@@ -52,6 +53,7 @@ class LogSettingsView extends StatelessWidget {
                   TableUtils.tableRow([
                     Text(LocaleKeys.logSettings_label_writeTestLogMessages.tr()),
                     IconButton(
+                        iconSize: ThemeUtils.iconSizeScaled,
                         tooltip: LocaleKeys.logSettings_btn_writeTestLogMessages_tooltip.tr(),
                         onPressed: () {
                           SimpleLogging.d('Debug Message');
@@ -85,18 +87,20 @@ class _LogLevelSelector extends StatefulWidget {
 class _LogLevelSelectorState extends State<_LogLevelSelector> {
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
-
     return DropdownButton<Level>(
         key: const Key('logSettingsLogLevelSelect'),
-        dropdownColor: themeData.cardColor,
+        borderRadius: ThemeUtils.cardBorderRadius,
         value: SimpleLogging.logLevel,
         items: SimpleLogging.getKnownLevels().map<DropdownMenuItem<Level>>((logLevel) {
           var selected = (logLevel == SimpleLogging.logLevel);
           return DropdownMenuItem(
-              key: Key('logSettingsLogLevelSelect_${logLevel.name}'),
-              value: logLevel,
-              child: DropDownMenuItemChild(selected: selected, child: Text(logLevel.name.toUpperCase())));
+            key: Key('logSettingsLogLevelSelect_${logLevel.name}'),
+            value: logLevel,
+            child: DropDownMenuItemChild(
+              selected: selected,
+              child: Text(logLevel.name.toUpperCase()),
+            ),
+          );
         }).toList(),
         onChanged: (value) {
           if (value != null) {

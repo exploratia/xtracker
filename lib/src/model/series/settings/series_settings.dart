@@ -14,9 +14,29 @@ abstract class SeriesSettings {
   void set(String key, dynamic value) {
     // update callback available?
     if (_updateStateCB != null) {
-      _settings[_key(key)] = value;
+      if (value == null) {
+        _settings.remove(_key(key));
+      } else {
+        _settings[_key(key)] = value;
+      }
       _updateStateCB();
     }
+  }
+
+  dynamic get(String key) {
+    return _settings[_key(key)];
+  }
+
+  String getString(String key, {String defaultValue = ""}) {
+    return _settings[_key(key)] as String? ?? defaultValue;
+  }
+
+  String? optString(String key, {String? defaultValue}) {
+    return _settings[_key(key)] as String? ?? defaultValue;
+  }
+
+  List<dynamic> getList(String key) {
+    return _settings[_key(key)] as List<dynamic>? ?? [];
   }
 
   bool getBool(String key) {

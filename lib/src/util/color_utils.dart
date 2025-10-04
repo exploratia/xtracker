@@ -25,6 +25,11 @@ class ColorUtils {
     return hsl.withHue((hsl.hue + add) % 360).toColor();
   }
 
+  /// returns standard gradient color [hue(30)] for given color
+  static Color gradientColor(Color c) {
+    return hue(c, 30);
+  }
+
   static Color fromHex(String hex) {
     String hexColor = hex.toUpperCase().replaceAll("#", "");
     if (hexColor.length == 6) {

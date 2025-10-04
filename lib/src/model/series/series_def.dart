@@ -1,14 +1,18 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../util/color_utils.dart';
 import '../../widgets/controls/navigation/hide_bottom_navigation_bar.dart';
 import '../../widgets/controls/select/icon_map.dart';
 import '../../widgets/series/edit/series_edit.dart';
+import '../column_profile/fix_column_profile.dart';
 import 'series_type.dart';
 import 'settings/blood_pressure_settings.dart';
+import 'settings/daily_life/daily_life_attributes_settings.dart';
 import 'settings/display_settings.dart';
+import 'view_type.dart';
 
 class SeriesDef {
   final String uuid;
@@ -17,7 +21,8 @@ class SeriesDef {
   final List<SeriesItem> seriesItems;
   String name = "";
   Color color = Colors.red;
-  String iconName = "";
+  String? iconName;
+
   final Map<String, dynamic> _settings;
 
   SeriesDef({
@@ -25,11 +30,10 @@ class SeriesDef {
     required this.seriesType,
     this.name = "",
     Color? color,
-    String? iconName,
+    this.iconName,
     required this.seriesItems,
     Map<String, dynamic>? settings,
   })  : color = color ?? seriesType.color,
-        iconName = iconName ?? seriesType.iconName,
         _settings = settings ?? {};
 
   /// return BloodPressureSettings in edit mode (setters active)
@@ -38,11 +42,27 @@ class SeriesDef {
   /// return BloodPressureSettings read only mode
   BloodPressureSettings bloodPressureSettingsReadonly() => BloodPressureSettings(_settings, null);
 
+  /// return dailyLifeAttributes in edit mode (setters active)
+  DailyLifeAttributesSettings dailyLifeAttributesSettingsEditable(Function() updateStateCB) => DailyLifeAttributesSettings(_settings, updateStateCB);
+
+  /// return dailyLifeAttributes read only mode
+  DailyLifeAttributesSettings dailyLifeAttributesSettingsReadonly() => DailyLifeAttributesSettings(_settings, null);
+
   /// return BloodPressureSettings in edit mode (setters active)
   DisplaySettings displaySettingsEditable(Function() updateStateCB) => DisplaySettings(_settings, updateStateCB);
 
   /// return BloodPressureSettings read only mode
   DisplaySettings displaySettingsReadonly() => DisplaySettings(_settings, null);
+
+  /// return FixColumnProfile from display settings or default for the series type (or null if the series has no fix column profile)
+  FixColumnProfile? get determineFixTableColumnProfile {
+    return displaySettingsReadonly().getTableViewColumnProfile(seriesType.defaultFixTableColumnProfileType);
+  }
+
+  /// return ViewType from display settings or default for the series type
+  ViewType get determineViewType {
+    return displaySettingsReadonly().getInitialViewType(seriesType.defaultViewType);
+  }
 
   @override
   String toString() {
@@ -54,8 +74,9 @@ class SeriesDef {
   }
 
   /// deep copy / clone by transforming to json string and back
-  SeriesDef clone() {
-    return SeriesDef.fromJson(jsonDecode(jsonEncode(toJson())));
+  /// [ignoreValidation] if set, validation is ignored
+  SeriesDef clone({bool ignoreValidation = false}) {
+    return SeriesDef.fromJson(jsonDecode(jsonEncode(toJson())), ignoreValidation: ignoreValidation);
   }
 
   /// returns act/expected json version per series type (to be able to handle different parsings depending on version)
@@ -65,6 +86,7 @@ class SeriesDef {
     return switch (seriesDef.seriesType) {
       SeriesType.bloodPressure => 1,
       SeriesType.dailyCheck => 1,
+      SeriesType.dailyLife => 1,
       SeriesType.habit => 1,
       // SeriesType.monthly => 1,
       // SeriesType.free => 1,
@@ -76,18 +98,27 @@ class SeriesDef {
   }
 
   IconData iconData() {
-    return IconMap.iconData(iconName);
+    return IconMap.iconData(iconName, seriesType.iconData);
   }
 
-  factory SeriesDef.fromJson(Map<String, dynamic> json) => SeriesDef(
-        uuid: json['uuid'] as String,
-        seriesType: SeriesType.byTypeName(json['seriesType'] as String),
-        seriesItems: [...(json['seriesItems'] as List<dynamic>).whereType<Map<String, dynamic>>().map((e) => SeriesItem.fromJson(e))],
-        name: json['name'] as String,
-        color: ColorUtils.fromHex(json['color'] as String),
-        iconName: json['iconName'] as String,
-        settings: json['settings'] as Map<String, dynamic>?,
-      );
+  factory SeriesDef.fromJson(Map<String, dynamic> json, {bool ignoreValidation = false}) {
+    var seriesDef = SeriesDef(
+      uuid: json['uuid'] as String? ?? const Uuid().v4(),
+      seriesType: SeriesType.byTypeName(json['seriesType'] as String),
+      seriesItems: [...(json['seriesItems'] as List<dynamic>).whereType<Map<String, dynamic>>().map((e) => SeriesItem.fromJson(e))],
+      name: json['name'] as String,
+      color: ColorUtils.fromHex(json['color'] as String),
+      iconName: json['iconName'] as String?,
+      settings: json['settings'] as Map<String, dynamic>?,
+    );
+
+    // validate settings
+    if (!ignoreValidation) {
+      DailyLifeAttributesSettings.validate(seriesDef);
+    }
+
+    return seriesDef;
+  }
 
   Map<String, dynamic> toJson() => {
         'uuid': uuid,
@@ -111,15 +142,14 @@ class SeriesDef {
   }
 
   static Future<SeriesDef?> _showSeriesEdit(SeriesDef? seriesDef, BuildContext context) async {
-    final themeData = Theme.of(context);
-
     SeriesDef? editedSeriesDef = await showDialog<SeriesDef>(
-        context: context,
-        builder: (context) => Dialog.fullscreen(
-            backgroundColor: themeData.scaffoldBackgroundColor,
-            child: HideBottomNavigationBar(
-              child: SeriesEdit(seriesDef: seriesDef),
-            )));
+      context: context,
+      builder: (context) => Dialog.fullscreen(
+        child: HideBottomNavigationBar(
+          child: SeriesEdit(seriesDef: seriesDef),
+        ),
+      ),
+    );
     return editedSeriesDef;
   }
 }

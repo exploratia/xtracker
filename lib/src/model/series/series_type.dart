@@ -2,35 +2,73 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../generated/locale_keys.g.dart';
+import '../../util/ex.dart';
 import '../../widgets/controls/select/icon_map.dart';
+import '../column_profile/fix_column_profile_type.dart';
 import 'view_type.dart';
 
 enum SeriesType {
-  bloodPressure('bloodPressure', 'monitor_heart_outlined', Colors.red, [ViewType.dots, ViewType.lineChart, ViewType.table]),
-  dailyCheck("dailyCheck", 'check_box_outlined', Colors.blue, [ViewType.barChart, ViewType.table, ViewType.dots]),
-  habit("habit", 'repeat_outlined', Color.fromRGBO(13, 133, 0, 1), [ViewType.barChart, ViewType.table, ViewType.pixels]);
-  // monthly("monthly", 'calendar_month_outlined', Colors.deepPurple, [ViewType.table, ViewType.lineChart]),
-  // free("free", 'calendar_today_outlined', Colors.green, [ViewType.lineChart, ViewType.table]);
+  bloodPressure(
+    'bloodPressure',
+    Icons.monitor_heart_outlined,
+    Colors.red,
+    [ViewType.dots, ViewType.lineChart, ViewType.table],
+    [FixColumnProfileType.dateTimeValue, FixColumnProfileType.dateMorningMiddayEvening],
+  ),
+  dailyCheck(
+    "dailyCheck",
+    Icons.check_box_outlined,
+    Colors.blue,
+    [ViewType.barChart, ViewType.table, ViewType.dots],
+    [FixColumnProfileType.dateTimeValue, FixColumnProfileType.dateMorningMiddayEvening],
+  ),
+  habit(
+    "habit",
+    Icons.repeat_outlined,
+    Color.fromRGBO(255, 154, 0, 1.0),
+    [ViewType.barChart, ViewType.table, ViewType.pixels],
+    [FixColumnProfileType.dateTimeValue, FixColumnProfileType.dateMorningMiddayEvening],
+  ),
+  dailyLife(
+    "dailyLife",
+    Icons.account_circle_outlined,
+    Color.fromRGBO(0, 255, 50, 1.0),
+    [ViewType.table, ViewType.pixels],
+    [FixColumnProfileType.dateTimeValue],
+  );
+  // monthly("monthly", Icons.calendar_month_outlined, Colors.deepPurple, [ViewType.table, ViewType.lineChart]),
+  // free("free", Icons.calendar_today_outlined, Colors.green, [ViewType.lineChart, ViewType.table]);
   // TODO TimeTracker
 
   final String typeName;
-  final String iconName;
+  final IconData iconData;
   final Color color;
 
   /// order is used in AppBar actions and last one is used as default/first view
   final List<ViewType> viewTypes;
+  final List<FixColumnProfileType> tableFixColumnProfileTypes;
 
-  /// [iconName] one of [IconMap]
-  const SeriesType(this.typeName, this.iconName, this.color, this.viewTypes);
+  /// [iconData] one of [IconMap]
+  const SeriesType(this.typeName, this.iconData, this.color, this.viewTypes, this.tableFixColumnProfileTypes);
+
+  ViewType get defaultViewType {
+    return viewTypes.last;
+  }
+
+  FixColumnProfileType? get defaultFixTableColumnProfileType {
+    if (tableFixColumnProfileTypes.isEmpty) return null;
+    return tableFixColumnProfileTypes.last;
+  }
 
   static SeriesType byTypeName(String typeName) {
-    return SeriesType.values.firstWhere((element) => element.typeName == typeName, orElse: () => throw Exception("Unexpected SeriesType '$typeName'"));
+    return SeriesType.values.firstWhere((element) => element.typeName == typeName, orElse: () => throw Ex("Unexpected SeriesType '$typeName'"));
   }
 
   static String displayNameOf(SeriesType seriesType) {
     return switch (seriesType) {
       SeriesType.bloodPressure => LocaleKeys.enum_seriesType_bloodPressure_title.tr(),
       SeriesType.dailyCheck => LocaleKeys.enum_seriesType_dailyCheck_title.tr(),
+      SeriesType.dailyLife => LocaleKeys.enum_seriesType_dailyLife_title.tr(),
       SeriesType.habit => LocaleKeys.enum_seriesType_habit_title.tr(),
       // SeriesType.monthly => LocaleKeys.series_seriesType_monthly_title.tr(),
       // SeriesType.free => LocaleKeys.series_seriesType_free_title.tr(),
@@ -41,6 +79,7 @@ enum SeriesType {
     return switch (seriesType) {
       SeriesType.bloodPressure => LocaleKeys.enum_seriesType_bloodPressure_info.tr(),
       SeriesType.dailyCheck => LocaleKeys.enum_seriesType_dailyCheck_info.tr(),
+      SeriesType.dailyLife => LocaleKeys.enum_seriesType_dailyLife_info.tr(),
       SeriesType.habit => LocaleKeys.enum_seriesType_habit_info.tr(),
       // SeriesType.monthly => LocaleKeys.series_seriesType_monthly_info.tr(),
       // SeriesType.free => LocaleKeys.series_seriesType_free_info.tr(),

@@ -18,7 +18,7 @@ class DailyCheckDayItem extends GridDayItem<DailyCheckValue> {
   /// set statics (colors,...) for Dot
   static void updateValuesFromSeries(SeriesDef seriesDef) {
     _color1 = seriesDef.color;
-    _color2 = ColorUtils.hue(_color1, 30);
+    _color2 = ColorUtils.gradientColor(_color1);
     _showCount = seriesDef.displaySettingsReadonly().dotsViewShowCount;
   }
 

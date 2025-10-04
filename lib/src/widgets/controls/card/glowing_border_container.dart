@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../util/chart/chart_utils.dart';
+import '../../../util/theme_utils.dart';
+
 class GlowingBorderContainer extends StatelessWidget {
   // final double width;
   // final double height;
@@ -24,21 +27,30 @@ class GlowingBorderContainer extends StatelessWidget {
     return Container(
       // width: width,
       // height: height,
+      clipBehavior: Clip.antiAlias,
       margin: EdgeInsets.all(blurRadius),
-      decoration: createGlowingBoxDecoration(glowColor, themeData.scaffoldBackgroundColor, borderWidth: borderWidth, blurRadius: blurRadius),
+      decoration: createGlowingBoxDecoration(
+        glowColor,
+        backgroundColor: ThemeUtils.isDarkMode(themeData) ? themeData.scaffoldBackgroundColor : themeData.cardTheme.color,
+        borderWidth: borderWidth,
+        blurRadius: blurRadius,
+      ),
       child: Center(child: child),
     );
   }
 
   static BoxDecoration createGlowingBoxDecoration(
-    Color glowColor,
-    Color? backgroundColor, {
+    Color glowColor, {
+    Color? backgroundColor,
+    List<Color>? backgroundGradientColors,
     double borderRadius = 12,
     double borderWidth = 2,
     double blurRadius = 10,
   }) {
     return BoxDecoration(
-      color: backgroundColor, // Inner background color
+      color: backgroundColor,
+      // Inner background color
+      gradient: ChartUtils.createLeftToRightGradient(backgroundGradientColors),
       borderRadius: BorderRadius.circular(borderRadius),
       border: Border.all(color: glowColor, width: borderWidth),
       boxShadow: [

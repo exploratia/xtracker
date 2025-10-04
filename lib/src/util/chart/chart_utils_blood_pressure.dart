@@ -162,9 +162,15 @@ class ChartUtilsBloodPressure {
   }
 
   static Pair<List<Color>, List<double>> buildGradient(double startValue, double endValue, double optimum, Color Function(int val) colorBuilder) {
-    final double mid = optimum;
-    final double low = optimum - 40;
-    final double high = optimum + 40;
+    // final double mid = optimum;
+    // final double low = optimum - 40;
+    // final double high = optimum + 40;
+
+    List<double> possibleSteps = [];
+    for (var i = -4; i <= 4; ++i) {
+      double step = optimum + i * 10;
+      possibleSteps.add(step);
+    }
 
     // helper: check for approximate equality (avoid floating-point issues)
     bool approxEq(double a, double b, [double eps = 1e-9]) => (a - b).abs() <= eps;
@@ -185,10 +191,15 @@ class ChartUtilsBloodPressure {
     final double minV = math.min(startValue, endValue);
     final double maxV = math.max(startValue, endValue);
     final thresholdsInRange = <double>[
-      if (low > minV && low < maxV) low,
-      if (mid > minV && mid < maxV) mid,
-      if (high > minV && high < maxV) high,
-    ]..sort((a, b) => descending ? b.compareTo(a) : a.compareTo(b));
+      // if (low > minV && low < maxV) low,
+      // if (mid > minV && mid < maxV) mid,
+      // if (high > minV && high < maxV) high,
+    ];
+    for (var step in possibleSteps) {
+      if (step > minV && step < maxV) thresholdsInRange.add(step);
+    }
+
+    thresholdsInRange.sort((a, b) => descending ? b.compareTo(a) : a.compareTo(b));
 
     // build knots: start → possible thresholds → end (in direction order)
     final knots = <double>[startValue, ...thresholdsInRange, endValue];

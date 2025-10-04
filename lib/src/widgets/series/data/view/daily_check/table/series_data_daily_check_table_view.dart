@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../../model/column_profile/fix_column_profiles.dart';
+import '../../../../../../model/column_profile/fix_column_profile.dart';
 import '../../../../../../model/series/data/daily_check/daily_check_value.dart';
 import '../../../../../../model/series/data/series_data_filter.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
@@ -12,6 +12,12 @@ import '../../series_data_view_overlays.dart';
 import 'daily_check_value_renderer.dart';
 
 class SeriesDataDailyCheckTableView extends StatelessWidget {
+  static final FixColumnProfile standardColumnProfile = FixColumnProfile.columnProfileDateMorningMiddayEvening;
+  static final List<FixColumnProfile> possibleColumnProfiles = [
+    FixColumnProfile.columnProfileDateMorningMiddayEvening,
+    FixColumnProfile.columnProfileDateTimeValue
+  ];
+
   final List<DailyCheckValue> seriesData;
   final SeriesViewMetaData seriesViewMetaData;
   final SeriesDataFilter seriesDataFilter;
@@ -22,7 +28,7 @@ class SeriesDataDailyCheckTableView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool useDateTimeValueColumnProfile = seriesViewMetaData.seriesDef.displaySettingsReadonly().tableViewUseColumnProfileDateTimeValue;
+    FixColumnProfile columnProfile = seriesViewMetaData.tableFixColumnProfile!;
 
     var filteredSeriesData = seriesData.where((value) => seriesDataFilter.filter(value)).toList();
     if (filteredSeriesData.isEmpty) {
@@ -36,12 +42,11 @@ class SeriesDataDailyCheckTableView extends StatelessWidget {
 
     var rowPerDayCellBuilder = RowPerDayCellBuilder<DailyCheckValue>(
       data: data,
-      useDateTimeValueColumnProfile: useDateTimeValueColumnProfile,
-      gridCellChildBuilder: (DailyCheckValue value) => DailyCheckValueRenderer(
+      fixColumnProfile: columnProfile,
+      gridCellChildBuilder: (DailyCheckValue value, Size _) => DailyCheckValueRenderer(
         dailyCheckValue: value,
         seriesDef: seriesViewMetaData.seriesDef,
         editMode: seriesViewMetaData.editMode,
-        centered: true,
         wrapWithDateTimeTooltip: true,
       ),
     );
@@ -55,8 +60,7 @@ class SeriesDataDailyCheckTableView extends StatelessWidget {
         seriesDataViewOverlays.buildTopSpacer(),
         Expanded(
           child: TwoDimensionalScrollableTable(
-            tableColumnProfile:
-                useDateTimeValueColumnProfile ? FixColumnProfiles.columnProfileDateTimeValue : FixColumnProfiles.columnProfileDateMorningMiddayEvening,
+            tableColumnProfile: columnProfile,
             lineCount: data.length,
             gridCellBuilder: rowPerDayCellBuilder.gridCellBuilder,
             lineHeight: DailyCheckValueRenderer.height,

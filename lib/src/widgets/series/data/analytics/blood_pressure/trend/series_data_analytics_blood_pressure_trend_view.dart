@@ -19,6 +19,7 @@ import '../../../../../../util/pair.dart';
 import '../../../../../../util/table_utils.dart';
 import '../../../../../../util/theme_utils.dart';
 import '../../../../../controls/future/future_builder_with_progress_indicator.dart';
+import '../../analytics/analytics_settings_card.dart';
 import '../../habit/trend/series_data_analytics_habit_trend_view.dart';
 
 class SeriesDataAnalyticsBloodPressureTrendView extends StatefulWidget {
@@ -175,9 +176,7 @@ class _TrendInfoDialogContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      spacing: ThemeUtils.verticalSpacingLarge,
+    return SimpleInfoDlgContent(
       children: [
         Text(LocaleKeys.seriesDataAnalytics_bloodPressure_trend_label_trendInfo.tr()),
         Image(

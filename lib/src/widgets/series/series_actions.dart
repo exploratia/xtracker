@@ -55,9 +55,9 @@ class _ShowSeriesDataBtn extends StatelessWidget {
     }
 
     return IconButton(
+      iconSize: ThemeUtils.iconSizeScaled,
       tooltip: LocaleKeys.seriesDefRenderer_action_showSeriesValues_tooltip.tr(),
       onPressed: showDataHandler,
-      iconSize: ThemeUtils.iconSizeScaled,
       icon: const Icon(Icons.remove_red_eye_outlined),
     );
   }
@@ -73,9 +73,9 @@ class _ShowSeriesDataInputDlgBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
+      iconSize: ThemeUtils.iconSizeScaled,
       tooltip: LocaleKeys.seriesDefRenderer_action_addValue_tooltip.tr(),
       onPressed: () => SeriesData.showSeriesDataInputDlg(context, seriesDef),
-      iconSize: ThemeUtils.iconSizeScaled,
       icon: const Icon(Icons.add),
     );
   }
@@ -91,12 +91,12 @@ class _DailyCheckBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
+        iconSize: ThemeUtils.iconSizeScaled,
         tooltip: LocaleKeys.seriesDefRenderer_action_addValue_tooltip.tr(),
         onPressed: () {
           var seriesCurrentValueProvider = context.read<SeriesCurrentValueProvider>();
           context.read<SeriesDataProvider>().addValue(seriesDef, DailyCheckValue(const Uuid().v4(), DateTime.now()), seriesCurrentValueProvider);
         },
-        iconSize: ThemeUtils.iconSizeScaled,
         icon: const Icon(Icons.check_outlined));
   }
 }
@@ -111,12 +111,12 @@ class _HabitBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
+        iconSize: ThemeUtils.iconSizeScaled,
         tooltip: LocaleKeys.seriesDefRenderer_action_addValue_tooltip.tr(),
         onPressed: () {
           var seriesCurrentValueProvider = context.read<SeriesCurrentValueProvider>();
           context.read<SeriesDataProvider>().addValue(seriesDef, HabitValue(const Uuid().v4(), DateTime.now()), seriesCurrentValueProvider);
         },
-        iconSize: ThemeUtils.iconSizeScaled,
         icon: Icon(seriesDef.iconData()));
   }
 }

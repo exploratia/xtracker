@@ -7,8 +7,8 @@ import '../../../model/series/series_def.dart';
 import '../../../model/series/series_type.dart';
 import '../../../util/dialogs.dart';
 import '../../../util/theme_utils.dart';
+import '../../controls/appbar/gradient_app_bar.dart';
 import '../../controls/layout/v_centered_single_child_scroll_view_with_scrollbar.dart';
-import '../../controls/select/icon_map.dart';
 import 'series_editor.dart';
 
 class SeriesEdit extends StatefulWidget {
@@ -47,14 +47,13 @@ class _SeriesEditState extends State<SeriesEdit> {
 
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
-
     if (_seriesDef == null) {
       return Scaffold(
-        appBar: AppBar(
-          backgroundColor: themeData.colorScheme.secondary,
+        appBar: GradientAppBar.build(
+          context,
           title: Text(LocaleKeys.seriesEdit_title.tr()),
           leading: IconButton(
+            iconSize: ThemeUtils.iconSizeScaled,
             tooltip: LocaleKeys.seriesEdit_action_abort_tooltip.tr(),
             onPressed: () => Navigator.pop(context),
             icon: const Icon(Icons.close_outlined),
@@ -78,6 +77,9 @@ class _SeriesTypeSelector extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var seriesTypes = [...SeriesType.values];
+    seriesTypes.sort((a, b) => SeriesType.displayNameOf(a).compareTo(SeriesType.displayNameOf(b)));
+
     return VCenteredSingleChildScrollViewWithScrollbar(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -88,10 +90,10 @@ class _SeriesTypeSelector extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: ThemeUtils.verticalSpacingSmall,
             children: [
-              ...SeriesType.values.map((st) => Row(mainAxisSize: MainAxisSize.min, children: [
+              ...seriesTypes.map((st) => Row(mainAxisSize: MainAxisSize.min, children: [
                     _SeriesTypeInfoBtn(st),
                     ElevatedButton.icon(
-                      icon: IconMap.icon(st.iconName, size: ThemeUtils.iconSizeScaled),
+                      icon: Icon(st.iconData, size: ThemeUtils.iconSizeScaled),
                       label: Text(SeriesType.displayNameOf(st)),
                       onPressed: () => createSeriesDef(st),
                     )
@@ -114,6 +116,7 @@ class _SeriesTypeInfoBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
+      iconSize: ThemeUtils.iconSizeScaled,
       tooltip: LocaleKeys.seriesEdit_btn_showSeriesTypeInfo.tr(),
       onPressed: () => Dialogs.simpleOkDialog(
         SeriesType.infoOf(st),
@@ -121,12 +124,11 @@ class _SeriesTypeInfoBtn extends StatelessWidget {
         title: Row(
           spacing: ThemeUtils.horizontalSpacing,
           children: [
-            IconMap.icon(st.iconName, size: ThemeUtils.iconSizeScaled),
+            Icon(st.iconData, size: ThemeUtils.iconSizeScaled),
             Text(SeriesType.displayNameOf(st)),
           ],
         ),
       ),
-      iconSize: ThemeUtils.iconSizeScaled,
       icon: const Icon(Icons.info_outline),
     );
   }

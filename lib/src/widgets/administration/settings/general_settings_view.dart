@@ -6,6 +6,7 @@ import '../../../util/navigation/hide_navigation_labels.dart';
 import '../../../util/table_utils.dart';
 import '../../../util/theme_utils.dart';
 import '../../controls/layout/drop_down_menu_item_child.dart';
+import '../../controls/live_wallpaper/live_wallpaper_refresh.dart';
 import './settings_controller.dart';
 import 'settings_service.dart';
 
@@ -69,7 +70,13 @@ class GeneralSettingsView extends StatelessWidget {
                   var value = i["v"] as ThemeMode;
                   var selected = actTheme == value;
                   return DropdownMenuItem<ThemeMode>(
-                      key: Key('settingsThemeSelect_$i'), value: value, child: DropDownMenuItemChild(selected: selected, child: text));
+                    key: Key('settingsThemeSelect_$i'),
+                    value: value,
+                    child: DropDownMenuItemChild(
+                      selected: selected,
+                      child: text,
+                    ),
+                  );
                 }).toList(),
               )
             ]),
@@ -107,12 +114,32 @@ class GeneralSettingsView extends StatelessWidget {
         ),
         SwitchListTile(
           contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: ThemeUtils.defaultPadding),
+          value: controller.hideWallpaper,
+          onChanged: (bool value) {
+            controller.updateHideWallpaper(value);
+          },
+          title: Text(LocaleKeys.settings_general_label_hideWallpaper.tr()),
+        ),
+        Container(
+          clipBehavior: Clip.antiAlias,
+          margin: const EdgeInsets.only(bottom: ThemeUtils.verticalSpacing),
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(ThemeUtils.borderRadiusLarge)),
+          ),
+          height: 150,
+          child: const LiveWallpaperRefresh(
+            intervalInSeconds: 1,
+            speedFactor: 1000,
+          ),
+        ),
+        SwitchListTile(
+          contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: ThemeUtils.defaultPadding),
           value: controller.seriesExportDisableReminder,
           onChanged: (bool value) {
             controller.updateSeriesExportDisableReminder(value);
           },
           title: Text(LocaleKeys.settings_general_label_seriesExportDisableReminder.tr()),
-        )
+        ),
       ],
     );
   }

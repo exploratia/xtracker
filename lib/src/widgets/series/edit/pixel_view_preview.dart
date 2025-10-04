@@ -38,7 +38,6 @@ class PixelViewPreview extends StatelessWidget {
                 width: pixelWidth,
                 child: Pixel(
                   colors: [Pixel.pixelColor(color, e.toDouble(), 1, numPixels, hueFactor: hueFactor, invertHueDirection: invertHueDirection)],
-                  pixelText: "$e",
                 ),
               ),
             ),

@@ -28,6 +28,14 @@
       "hideMenu": "Close navigation menu",
       "openMenu": "Open navigation menu"
     },
+    "columnProfile": {
+      "name": {
+        "dateMorningMiddayEvening": "Date | Morning | Midday | Evening",
+        "dateTimeValue": "Date | Time | Value",
+        "dateWeekdays": "Date | Weekdays (Mon–Sun)",
+        "dateMonthDays": "Date | Month days (1–31)"
+      }
+    },
     "date": {
       "shortWeekday": {
         "monday": "Mon",
@@ -72,6 +80,9 @@
     "label": {
       "value": "Value"
     },
+    "list": {
+      "dragTooltip": "Reorder position"
+    },
     "snackbar": {
       "pressBackAgainToExit": "Press BACK again to exit...",
       "saveSuccess": "Saved",
@@ -90,7 +101,7 @@
       }
     },
     "validator": {
-      "emptyValue": "Please enter a value"
+      "emptyValue": "Value required"
     }
   },
   "controls": {
@@ -124,8 +135,12 @@
         "info": "Measure blood pressure three times a day."
       },
       "dailyCheck": {
-        "title": "Daily check",
-        "info": "Track daily habits – e.g. exercise, taking breaks, standing up or eat no sweats."
+        "title": "Day Check",
+        "info": "Track per-day checks – even if some days stay empty. Useful for things like exercise, taking breaks or skipping sweets."
+      },
+      "dailyLife": {
+        "title": "Daily Life",
+        "info": "Tag each day with an attribute – e.g. type of sport or mood.\n\nThis helps reflect on the day and gives an overview of patterns and ratios over time."
       },
       "free": {
         "title": "Free",
@@ -133,7 +148,7 @@
       },
       "habit": {
         "title": "Habit",
-        "info": "Track habits multiple times a day. E.g. coffee consumption or drinking enough water."
+        "info": "Track habits multiple times a day – e.g. coffee consumption or drinking enough water.\nIdeal for routines you want to build or reduce."
       },
       "monthly": {
         "title": "Monthly",
@@ -296,6 +311,9 @@
           "tooltip": "Hide filter"
         }
       },
+      "selectColumnProfile": {
+        "tooltip": "Select column profile"
+      },
       "viewTypeMenu": {
         "tooltip": "Available view types"
       }
@@ -315,7 +333,6 @@
     "label": {
       "dataset": "Dataset",
       "lastVarDays": "Last {} days",
-      "lastXDays": "Last x days",
       "total": "Total"
     },
     "recordedDays": {
@@ -349,10 +366,23 @@
         }
       }
     },
+    "dailyLife": {
+      "attributesProportions": {
+        "title": "Attribute distribution",
+        "label": {
+          "attributeProportionsInfo": "Overview of attribute frequencies in total and their distribution across different periods of the past year."
+        },
+        "table": {
+          "colAttribute": "Attribute",
+          "colProportions": "Shares",
+          "colTotalShare": "Total share"
+        }
+      }
+    },
     "habit": {
       "trend": {
         "label": {
-          "trendInfo": "A linear trend function is calculated from the series values to forecast future values.\n\nThese forecasts are combined with the probability for each weekday.\n(If the series has no gaps, the probability is 100% for each day.)"
+          "trendInfo": "A linear trend is calculated from the series values to forecast future values.\n\nThe forecast is combined with the probability for each weekday: the lower the probability, the more transparent the day appears.\nIf the series has no gaps, the probability for each day is 100% and they are shown fully."
         }
       }
     }
@@ -376,9 +406,6 @@
       },
       "deleteSeries": {
         "tooltip": "Delete series"
-      },
-      "dragSeries": {
-        "tooltip": "Reorder series position"
       }
     },
     "currentValue": {
@@ -415,12 +442,13 @@
         "seriesName": "Name",
         "seriesIcon": "Icon",
         "seriesColor": "Color"
-      },
-      "displaySettings": {
-        "title": "Display settings"
       }
     },
     "displaySettings": {
+      "title": "Display settings",
+      "label": {
+        "initialView": "Initial view"
+      },
       "dotsView": {
         "switch": {
           "dotsViewShowCount": {
@@ -430,29 +458,27 @@
       },
       "pixelsView": {
         "preview": {
-          "title": "Pixel preview",
+          "title": "Pixel view",
           "pixelViewSettingsInfo": {
-            "tooltip": "Pixel view settings",
+            "tooltip": "Pixel view settings info",
             "title": "Adjust pixel view",
-            "text": "Configure the pixel view coloring here – depending on whether 'more' of the habit is positive or negative for you.\nValue 1 uses the series color."
+            "text": "Adjust the pixel coloring – depending on whether 'more' of the habit is positive or negative.\nThe smallest value (once per day) uses the series color.\n\nHigher values are calculated using the color wheel. With the slider you set how far the wheel is traversed up to the maximum value. The direction can be inverted."
           }
         },
         "switch": {
           "invertHueDirection": {
-            "label": "Reverse hue wheel direction"
+            "label": "Color wheel counterclockwise"
           }
         },
         "slider": {
           "hueFactor": {
-            "label": "Set color for highest value"
+            "label": "Color for max value"
           }
         }
       },
       "tableView": {
-        "switch": {
-          "useColumnProfileDateTimeValue": {
-            "label": "Use column profile Date|Time|Value in table view:"
-          }
+        "label": {
+          "standardColumnProfile": "Table view"
         }
       }
     },
@@ -463,6 +489,74 @@
           "hideMedicationInput": {
             "label": "Hide medication input in dialog:"
           }
+        }
+      },
+      "dailyLifeAttributes": {
+        "title": "Attributes",
+        "actions": {
+          "add": {
+            "tooltip": "Add attribute"
+          },
+          "addPreset": {
+            "tooltip": "Add preset attributes"
+          },
+          "delete": {
+            "tooltip": "Delete attribute"
+          },
+          "deleteAll": {
+            "tooltip": "Delete all attributes"
+          },
+          "edit": {
+            "tooltip": "Edit attribute"
+          }
+        },
+        "dlg": {
+          "title": "Attribute"
+        },
+        "info": "Manage series attributes.\nEach value has exactly one attribute.\n\nIf a used attribute is deleted, the value automatically gets a fallback color with high contrast to the other attributes.",
+        "preset": {
+          "feelings": {
+            "title": "Preset: Feelings",
+            "attributeNames": "amazing day|really good, happy day|normal day|exhausted, tired day|depressed, sad day|frustrated, angry day|stressed day|sick day|really horrible day"
+          },
+          "sports": {
+            "title": "Preset: Sports",
+            "attributeNames": "Walking|Jogging|Hiking|Road bike|Mountain bike|Swimming|Workout"
+          },
+          "period": {
+            "title": "Preset: Period",
+            "attributeNames": "None|Spotting|Light|Regular|Heavy"
+          },
+          "stars": {
+            "title": "Preset: Stars (★)"
+          },
+          "stress": {
+            "title": "Preset: Stress (☠)"
+          },
+          "colorWheel": {
+            "title": "Preset: Color wheel"
+          },
+          "hoursDown": {
+            "title": "Preset: Hours (▽)"
+          },
+          "hoursUp": {
+            "title": "Preset: Hours (△)"
+          },
+          "minutesDown": {
+            "title": "Preset: Minutes (▽)"
+          },
+          "minutesUp": {
+            "title": "Preset: Minutes (△)"
+          },
+          "numbersDown": {
+            "title": "Preset: Numbers (▽)"
+          },
+          "numbersUp": {
+            "title": "Preset: Numbers (△)"
+          }
+        },
+        "validation": {
+          "emptyAttributs": "At least one attribute required"
         }
       }
     }
@@ -516,7 +610,15 @@
       },
       "alert": {
         "unexpectedDataStructure": "Unexpected file content (file: '{}').",
-        "unexpectedFile": "Unsupported file format (file: '{}')."
+        "unexpectedFile": "Unsupported file format (file: '{}').",
+        "import": {
+          "title": "Import failed"
+        }
+      },
+      "validation": {
+        "dailyLife": {
+          "emptyAttributes": "No attributes defined."
+        }
       }
     }
   },
@@ -553,6 +655,13 @@
         }
       }
     },
+    "dailyLife": {
+      "btn": {
+        "selectAttribute": {
+          "tooltip": "Select attribute"
+        }
+      }
+    },
     "habit": {
       "btn": {
         "toggleValue": {
@@ -576,6 +685,7 @@
       "title": "General settings",
       "label": {
         "hideNavigationLabels": "Hide navigation labels (menu & bottom navigation):",
+        "hideWallpaper": "Hide wallpaper:",
         "seriesExportDisableReminder": "Disable series export reminder (30 days after last export):",
         "lang": "Language:",
         "theme": "Theme:"

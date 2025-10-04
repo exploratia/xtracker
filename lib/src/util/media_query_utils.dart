@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 class MediaQueryUtils {
   static double textScaleFactor = 1;
+  static double textScaleWidthFactor = 1;
+  static double iconScaleFactor = 1;
 
   /// returns the height by which a text is larger by the actual text scale
   static double calcAdditionalHeightByTextScale(double fontSize) {
@@ -21,7 +23,12 @@ class MediaQueryUtils {
 
     if (calcTextScale) {
       // might not be correct in all case (for larger font sizes it scales not linear)
-      textScaleFactor = mediaQueryData.textScaler.scale(1);
+      // round (ceil) scales to the first decimal
+      textScaleFactor = ((mediaQueryData.textScaler.scale(1) * 10).ceil()) / 10;
+      textScaleWidthFactor = ((1 + (textScaleFactor - 1) * 0.5) * 10).ceil() / 10;
+      iconScaleFactor = textScaleFactor.clamp(1, 1.3);
+      // print("textScaleFactor: $textScaleFactor");
+      // print('textScaleWidthFactor: $textScaleWidthFactor');
     }
   }
 

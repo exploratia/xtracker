@@ -34,6 +34,12 @@ class SettingsController with ChangeNotifier {
 
   bool get hideNavigationLabels => _hideNavigationLabels;
 
+  bool _hideWallpaper = true;
+
+  bool get hideWallpaper => _hideWallpaper;
+
+  bool get showWallpaper => !_hideWallpaper;
+
   DateTime? _seriesExportDate;
 
   DateTime? get seriesExportDate => _seriesExportDate;
@@ -62,6 +68,7 @@ class SettingsController with ChangeNotifier {
     _locale = await _settingsService.locale();
     _hideNavigationLabels = await _settingsService.hideNavigationLabels();
     HideNavigationLabels.setVisible(!_hideNavigationLabels);
+    _hideWallpaper = await _settingsService.hideWallpaper();
     _seriesExportDate = await _settingsService.seriesExportDate();
     _seriesExportDisableReminder = await _settingsService.seriesExportDisableReminder();
     _seriesExportReminderDate = await _settingsService.seriesExportReminderDate();
@@ -134,6 +141,13 @@ class SettingsController with ChangeNotifier {
 
     // Persist the changes to a local database or the internet using the SettingService.
     await _settingsService.updateHideNavigationLabels(value);
+  }
+
+  Future<void> updateHideWallpaper(bool value) async {
+    if (value == _hideWallpaper) return;
+    _hideWallpaper = value;
+    notifyListeners();
+    await _settingsService.updateHideWallpaper(value);
   }
 
   /// Update and persist

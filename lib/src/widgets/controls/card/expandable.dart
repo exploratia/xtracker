@@ -4,12 +4,22 @@ import '../../../util/theme_utils.dart';
 import '../text/overflow_text.dart';
 
 class Expandable extends StatefulWidget {
-  const Expandable({super.key, required this.child, this.icon, this.title, this.initialExpanded = false});
+  const Expandable({
+    super.key,
+    required this.child,
+    this.icon,
+    this.title,
+    this.initialExpanded = false,
+    this.useVerticalSpacingBeforeChild = true,
+    this.useVerticalSpacingAfterChild = true,
+  });
 
   final Icon? icon;
   final String? title;
   final Widget child;
   final bool initialExpanded;
+  final bool useVerticalSpacingBeforeChild;
+  final bool useVerticalSpacingAfterChild;
 
   @override
   State<Expandable> createState() => _ExpandableState();
@@ -83,10 +93,9 @@ class _ExpandableState extends State<Expandable> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Divider(),
-                const SizedBox(height: ThemeUtils.verticalSpacing),
+                if (widget.useVerticalSpacingBeforeChild) const SizedBox(height: ThemeUtils.verticalSpacing),
                 widget.child,
-                const SizedBox(height: ThemeUtils.verticalSpacing),
-                // const Divider(),
+                if (widget.useVerticalSpacingAfterChild) const SizedBox(height: ThemeUtils.verticalSpacing),
               ],
             ),
           ),

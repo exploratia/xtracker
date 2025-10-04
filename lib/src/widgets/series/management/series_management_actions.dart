@@ -32,9 +32,9 @@ class SeriesManagementActions extends StatelessWidget {
           children: [
             _EditSeriesBtn(seriesDef: seriesDef),
             IconButton(
+              iconSize: ThemeUtils.iconSizeScaled,
               tooltip: LocaleKeys.seriesDefRenderer_action_importExportSeries_tooltip.tr(),
               onPressed: () async => SeriesImportExport.showImportExportDlg(context, seriesDef: seriesDef, settingsController: settingsController),
-              iconSize: ThemeUtils.iconSizeScaled,
               icon: const Icon(Icons.import_export_outlined),
             ),
             _ClearSeriesDataBtn(seriesDef: seriesDef),
@@ -76,9 +76,9 @@ class _DeleteSeriesBtn extends StatelessWidget {
     }
 
     return IconButton(
+      iconSize: ThemeUtils.iconSizeScaled,
       tooltip: LocaleKeys.seriesDefRenderer_action_deleteSeries_tooltip.tr(),
       onPressed: deleteHandler,
-      iconSize: ThemeUtils.iconSizeScaled,
       icon: const Icon(Icons.close_outlined),
     );
   }
@@ -99,9 +99,9 @@ class _EditSeriesBtn extends StatelessWidget {
     }
 
     return IconButton(
+      iconSize: ThemeUtils.iconSizeScaled,
       tooltip: LocaleKeys.seriesDefRenderer_action_editSeries_tooltip.tr(),
       onPressed: editHandler,
-      iconSize: ThemeUtils.iconSizeScaled,
       icon: const Icon(Icons.edit_outlined),
     );
   }
@@ -131,9 +131,9 @@ class _ClearSeriesDataBtn extends StatelessWidget {
     }
 
     return IconButton(
+      iconSize: ThemeUtils.iconSizeScaled,
       tooltip: LocaleKeys.seriesDefRenderer_action_deleteSeriesValues_tooltip.tr(),
       onPressed: handler,
-      iconSize: ThemeUtils.iconSizeScaled,
       icon: const Icon(Icons.highlight_remove_outlined),
     );
   }

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../model/series/data/blood_pressure/blood_pressure_value.dart';
 import '../../../../model/series/data/daily_check/daily_check_value.dart';
+import '../../../../model/series/data/daily_life/daily_life_value.dart';
 import '../../../../model/series/data/habit/habit_value.dart';
 import '../../../../model/series/data/series_data_filter.dart';
 import '../../../../model/series/data/series_data_value.dart';
@@ -12,6 +13,7 @@ import '../../../../model/series/series_view_meta_data.dart';
 import '../../../../providers/series_data_provider.dart';
 import 'blood_pressure/series_data_blood_pressure_view.dart';
 import 'daily_check/series_data_daily_check_view.dart';
+import 'daily_life/series_data_daily_life_view.dart';
 import 'habit/series_data_habit_view.dart';
 import 'series_data_view_overlays.dart';
 
@@ -53,6 +55,19 @@ class SeriesDataViewContentBuilder extends StatelessWidget {
         List<DailyCheckValue> values = seriesData?.data ?? [];
         return builder(
           () => SeriesDataDailyCheckView(
+            seriesViewMetaData: seriesViewMetaData,
+            seriesData: values,
+            seriesDataFilter: seriesDataFilter,
+            seriesDataViewOverlays: seriesDataViewOverlays,
+          ),
+          values,
+        );
+
+      case SeriesType.dailyLife:
+        var seriesData = seriesDataProvider.dailyLifeData(seriesDef);
+        List<DailyLifeValue> values = seriesData?.data ?? [];
+        return builder(
+          () => SeriesDataDailyLifeView(
             seriesViewMetaData: seriesViewMetaData,
             seriesData: values,
             seriesDataFilter: seriesDataFilter,

@@ -15,14 +15,18 @@ class SettingsScreen extends StatelessWidget {
     titleBuilder: () => LocaleKeys.settings_title.tr(),
   );
 
-  const SettingsScreen({super.key, required this.controller});
+  const SettingsScreen({super.key, required this.settingsController});
 
-  final SettingsController controller;
+  final SettingsController settingsController;
 
   @override
   Widget build(BuildContext context) {
     return ScreenBuilder.withStandardNavBuilders(
       navItem: navItem,
+      // special case in settings screen. Wallpaper has to be always false!
+      // Otherwise the full screen is rebuild (because of the stack) and the settings card collapses.
+      // SettingsView has the stack additionally but always.
+      showWallpaper: false /* settingsController.showWallpaper */,
       appBarBuilder: (context) => GradientAppBar.build(
         context,
         addLeadingBackBtn: true,
@@ -30,7 +34,7 @@ class SettingsScreen extends StatelessWidget {
           navItem.titleBuilder(),
         ),
       ),
-      bodyBuilder: (context) => SettingsView(controller: controller),
+      bodyBuilder: (context) => SettingsView(settingsController: settingsController),
     );
   }
 }

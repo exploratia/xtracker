@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:sembast/sembast.dart';
 
 import '../model/series/series_def.dart';
@@ -25,17 +24,22 @@ class StoreSeriesDef {
   Future<List<SeriesDef>> getAllSeries() async {
     List<SeriesDef> result = [];
     var records = await _store.find(_db, finder: Finder()); // find all
-    if (kDebugMode) {
-      print('Loaded SeriesDef count: ${records.length}');
-    }
+    SimpleLogging.i("loaded series records: ${records.length}");
     for (var value in records.values) {
-      result.add(SeriesDef.fromJson(value as Map<String, dynamic>));
+      try {
+        var seriesDef = SeriesDef.fromJson(value as Map<String, dynamic>);
+        SimpleLogging.i("Instantiated series: ${seriesDef.name} (${seriesDef.seriesType})");
+        result.add(seriesDef);
+      } catch (err) {
+        SimpleLogging.w("Failed to instantiate series! $value", error: err);
+      }
     }
+    SimpleLogging.i("loaded series: done");
 
     if (records.isNotEmpty) {
       result.sort((a, b) => a.name.compareTo(b.name));
       var logSeries = result.map((e) => e.toLogString()).reduce((value, element) => '$value,${SimpleLogging.nl}$element');
-      SimpleLogging.i('Successfully loaded ${records.length} series:${SimpleLogging.nl}$logSeries');
+      SimpleLogging.i('Successfully loaded ${result.length} series:${SimpleLogging.nl}$logSeries');
     }
     return result;
   }

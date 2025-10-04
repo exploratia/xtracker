@@ -48,7 +48,7 @@ class ChartUtilsSimpleValue {
               // color: seriesViewMetaData.seriesDef.color,
               strokeWidth: 5,
               gradient: ChartUtils.createTopToBottomGradient([
-                ColorUtils.hue(seriesViewMetaData.seriesDef.color, 30),
+                ColorUtils.gradientColor(seriesViewMetaData.seriesDef.color),
                 seriesViewMetaData.seriesDef.color,
               ]),
             ),

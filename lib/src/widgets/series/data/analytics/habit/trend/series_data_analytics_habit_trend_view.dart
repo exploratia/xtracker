@@ -12,7 +12,6 @@ import '../../../../../../model/series/series_def.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
 import '../../../../../../util/date_time_utils.dart';
 import '../../../../../../util/day_item/day_item.dart';
-import '../../../../../../util/dialogs.dart';
 import '../../../../../../util/forecast/forecast.dart';
 import '../../../../../../util/forecast/trend/result/fit_result.dart';
 import '../../../../../../util/forecast/trend/trend_analytics.dart';
@@ -22,12 +21,10 @@ import '../../../../../../util/forecast/weekday_probability_forecaster.dart';
 import '../../../../../../util/media_query_utils.dart';
 import '../../../../../../util/table_utils.dart';
 import '../../../../../../util/theme_utils.dart';
-import '../../../../../controls/card/settings_card.dart';
 import '../../../../../controls/future/future_builder_with_progress_indicator.dart';
 import '../../../../../controls/grid/daily/pixel.dart';
 import '../../../../../controls/layout/h_centered_scroll_view.dart';
-import '../../../../../controls/layout/single_child_scroll_view_with_scrollbar.dart';
-import '../../../../../controls/text/overflow_text.dart';
+import '../../analytics/analytics_settings_card.dart';
 
 class SeriesDataAnalyticsHabitTrendView extends StatefulWidget {
   /// pixel and short day in headline width
@@ -156,49 +153,6 @@ class _SeriesDataAnalyticsHabitTrendViewState extends State<SeriesDataAnalyticsH
         },
       ),
     ]);
-  }
-}
-
-class TrendViewSettingsCard extends StatelessWidget {
-  const TrendViewSettingsCard({
-    super.key,
-    required this.trendInfoDialogContent,
-    required this.children,
-  });
-
-  final Widget trendInfoDialogContent;
-  final List<Widget> children;
-
-  @override
-  Widget build(BuildContext context) {
-    return SettingsCard(
-      title: Row(
-        spacing: ThemeUtils.horizontalSpacing,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          OverflowText(
-            LocaleKeys.seriesDataAnalytics_trend_title.tr(),
-            style: Theme.of(context).textTheme.titleLarge,
-            expanded: false,
-            flexible: true,
-          ),
-          IconButton(
-            tooltip: LocaleKeys.commons_btn_info_tooltip.tr(),
-            onPressed: () => Dialogs.simpleOkDialog(
-              SingleChildScrollViewWithScrollbar(
-                useHorizontalScreenPaddingForScrollbar: true,
-                child: trendInfoDialogContent,
-              ),
-              context,
-              title: LocaleKeys.seriesDataAnalytics_trend_title.tr(),
-            ),
-            icon: const Icon(Icons.info_outline),
-          ),
-        ],
-      ),
-      children: children,
-    );
   }
 }
 

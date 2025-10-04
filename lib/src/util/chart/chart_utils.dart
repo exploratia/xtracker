@@ -76,7 +76,7 @@ class ChartUtils {
           color: color,
           radius: 3,
           strokeWidth: 1,
-          strokeColor: ColorUtils.hue(color, 30), // Colors.white,
+          strokeColor: ColorUtils.gradientColor(color), // Colors.white,
         );
       },
     );

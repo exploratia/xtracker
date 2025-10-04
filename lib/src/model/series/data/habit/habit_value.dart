@@ -1,5 +1,6 @@
 import 'package:uuid/uuid.dart';
 
+import '../../../../util/ex.dart';
 import '../series_data_value.dart';
 
 class HabitValue extends SeriesDataValue {
@@ -25,6 +26,6 @@ class HabitValue extends SeriesDataValue {
   static HabitValue checkOnHabitValue(dynamic value) {
     if (value is HabitValue) return value;
     var errMsg = 'Failure for series value: Type mismatch! Expected: "$HabitValue", got: "${value.runtimeType}"';
-    throw Exception(errMsg);
+    throw Ex(errMsg);
   }
 }

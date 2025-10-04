@@ -5,6 +5,7 @@ import '../../util/media_query_utils.dart';
 import '../../util/theme_utils.dart';
 import '../../widgets/controls/text/overflow_text.dart';
 
+// TODO for later series if column profiles have to be saved: Introduce new UIAdjustedColumnProfile which inherits ColumnProfile. In ColumnProfile toJson has one required info
 class ColumnProfile {
   final List<ColumnDef> columns;
   final bool hasHorizontalMarginColumns;

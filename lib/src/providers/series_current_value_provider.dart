@@ -5,15 +5,20 @@ import 'package:flutter/material.dart';
 import '../model/series/current_value/series_current_value.dart';
 import '../model/series/data/blood_pressure/blood_pressure_value.dart';
 import '../model/series/data/daily_check/daily_check_value.dart';
+import '../model/series/data/daily_life/daily_life_value.dart';
 import '../model/series/data/habit/habit_value.dart';
 import '../model/series/data/series_data_value.dart';
 import '../model/series/series_def.dart';
+import '../model/series/series_type.dart';
 import '../store/stores.dart';
 
 class SeriesCurrentValueProvider with ChangeNotifier {
   final _storeSeriesCurrentValue = Stores.storeSeriesCurrentValue;
   final Map<String, SeriesCurrentValue> _uuid2seriesCurrentValue = HashMap();
   bool _valuesLoaded = false;
+
+  DateTime _lastUpdated = DateTime(0);
+  SeriesType _lastUpdatedType = SeriesType.bloodPressure;
 
   Future<void> fetchDataIfNotYetLoaded() async {
     if (!_valuesLoaded) {
@@ -41,6 +46,9 @@ class SeriesCurrentValueProvider with ChangeNotifier {
     await _storeSeriesCurrentValue.save(seriesCurrentValue);
     _uuid2seriesCurrentValue[seriesDef.uuid] = seriesCurrentValue;
 
+    _lastUpdatedType = seriesDef.seriesType;
+    _lastUpdated = DateTime.now();
+
     notifyListeners();
   }
 
@@ -60,6 +68,11 @@ class SeriesCurrentValueProvider with ChangeNotifier {
     return null;
   }
 
+  SeriesType? recentlyUpdated() {
+    if (DateTime.now().difference(_lastUpdated).inMilliseconds > 2000) return null;
+    return _lastUpdatedType;
+  }
+
   BloodPressureValue? bloodPressureCurrentValue(SeriesDef seriesDef) {
     var seriesCurrentValue = get(seriesDef);
     if (seriesCurrentValue != null && seriesCurrentValue is BloodPressureValue) {
@@ -71,6 +84,14 @@ class SeriesCurrentValueProvider with ChangeNotifier {
   DailyCheckValue? dailyCheckCurrentValue(SeriesDef seriesDef) {
     var seriesCurrentValue = get(seriesDef);
     if (seriesCurrentValue != null && seriesCurrentValue is DailyCheckValue) {
+      return seriesCurrentValue;
+    }
+    return null;
+  }
+
+  DailyLifeValue? dailyLifeCurrentValue(SeriesDef seriesDef) {
+    var seriesCurrentValue = get(seriesDef);
+    if (seriesCurrentValue != null && seriesCurrentValue is DailyLifeValue) {
       return seriesCurrentValue;
     }
     return null;
