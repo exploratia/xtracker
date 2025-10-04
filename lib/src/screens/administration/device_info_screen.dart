@@ -117,6 +117,7 @@ class _DeviceInfoScreenState extends State<DeviceInfoScreen> {
       'version.incremental': build.version.incremental,
       'version.codename': build.version.codename,
       'version.baseOS': build.version.baseOS,
+      'availableRamSize': build.availableRamSize,
       'board': build.board,
       'bootloader': build.bootloader,
       'brand': build.brand,
@@ -139,10 +140,9 @@ class _DeviceInfoScreenState extends State<DeviceInfoScreen> {
       'freeDiskSize': build.freeDiskSize,
       'totalDiskSize': build.totalDiskSize,
       'systemFeatures': build.systemFeatures,
-      'serialNumber': build.serialNumber,
       'isLowRamDevice': build.isLowRamDevice,
       'physicalRamSize': build.physicalRamSize,
-      'availableRamSize': build.availableRamSize,
+      'version': build.version,
     };
   }
 
