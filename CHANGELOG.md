@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.0] - 2025-10-04
+
+### Features
+
+- add the possibility to change the standard view per series
+- add the possibility to change column profile in series table view
+- implement daily life series
+- implement wallpaper behind (some) screens
+
+### Fixes
+
+- datetime slider date calculation
+
 ## [1.2.1] - 2025-09-11
 
 ### Fixes
@@ -98,7 +111,7 @@ All notable changes to this project will be documented in this file.
 
 ## [1.0.0] - 2025-07-26
 
-First published version
+First tested version
 
 ### Features
 

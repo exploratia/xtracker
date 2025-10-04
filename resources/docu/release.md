@@ -8,12 +8,7 @@ Create and checkout a release branch from main when all features/bugs are includ
 
 Upload files to AI-Chatbot...
 
-Prompt:
-
-````aiprompt
-Die beiden Dateien sind die Sprach-Dateien in deutsch und englisch einer Smartphone-App. Der User soll freundlich, modern und per "du" (nicht per "Sie") angesprochen werden - wenn möglich sogar ganz ohne "du". D.h. eher mit z.B. "exportiere" statt mit "du kannst hier exportieren".
-Prüfe die Dateien auf Fehler und optimiere wenn möglich.
-````
+Prompt: improve_language_files
 
 ## Changelog
 
