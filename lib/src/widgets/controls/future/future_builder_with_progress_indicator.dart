@@ -4,12 +4,15 @@ import '../../../util/logging/flutter_simple_logging.dart';
 import '../../../util/theme_utils.dart';
 
 class FutureBuilderWithProgressIndicator<T> extends StatelessWidget {
-  const FutureBuilderWithProgressIndicator({super.key, required this.future, this.errorBuilder, required this.widgetBuilder, this.marginTop = 0});
+  /// [waitingWidget] optional Widget which is shown while waiting additional to progress indicator
+  const FutureBuilderWithProgressIndicator(
+      {super.key, required this.future, this.errorBuilder, required this.widgetBuilder, this.marginTop = 0, this.waitingWidget});
 
   final Future<T> future;
   final dynamic Function(Object error)? errorBuilder;
   final Widget Function(T data, BuildContext context) widgetBuilder;
   final double marginTop;
+  final Widget? waitingWidget;
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +22,7 @@ class FutureBuilderWithProgressIndicator<T> extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Column(
             children: [
+              if (waitingWidget != null) waitingWidget!,
               if (marginTop > 0) SizedBox(height: marginTop),
               const LinearProgressIndicator(),
             ],
@@ -47,7 +51,9 @@ class FutureBuilderWithProgressIndicator<T> extends StatelessWidget {
 }
 
 class VoidFutureBuilderWithProgressIndicator extends StatelessWidget {
-  VoidFutureBuilderWithProgressIndicator({super.key, required this.future, this.errorBuilder, required this.widgetBuilder, this.marginTop = 0}) {
+  /// [waitingWidget] optional Widget which is shown while waiting additional to progress indicator
+  VoidFutureBuilderWithProgressIndicator(
+      {super.key, required this.future, this.errorBuilder, required this.widgetBuilder, this.marginTop = 0, this.waitingWidget}) {
     futureWrapper = Future(() async {
       await future;
       return true;
@@ -58,6 +64,7 @@ class VoidFutureBuilderWithProgressIndicator extends StatelessWidget {
   final dynamic Function(Object error)? errorBuilder;
   final Widget Function(BuildContext context) widgetBuilder;
   final double marginTop;
+  final Widget? waitingWidget;
 
   late final Future<bool> futureWrapper;
 
@@ -68,6 +75,7 @@ class VoidFutureBuilderWithProgressIndicator extends StatelessWidget {
       errorBuilder: errorBuilder,
       marginTop: marginTop,
       widgetBuilder: (_, context) => widgetBuilder(context),
+      waitingWidget: waitingWidget,
     );
   }
 }

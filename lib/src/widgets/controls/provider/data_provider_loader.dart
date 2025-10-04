@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import '../future/future_builder_with_progress_indicator.dart';
 
 class DataProviderLoader extends StatefulWidget {
-  const DataProviderLoader({super.key, required this.child, required this.obtainDataProviderFuture, this.progressIndicatorMarginTop = 0});
+  /// [waitingWidget] optional Widget which is shown while waiting additional to progress indicator
+  const DataProviderLoader({super.key, required this.child, required this.obtainDataProviderFuture, this.progressIndicatorMarginTop = 0, this.waitingWidget});
 
   final Widget child;
   final Future obtainDataProviderFuture;
   final double progressIndicatorMarginTop;
+  final Widget? waitingWidget;
 
   @override
   State<DataProviderLoader> createState() => _DataProviderLoaderState();
@@ -30,6 +32,7 @@ class _DataProviderLoaderState extends State<DataProviderLoader> {
       errorBuilder: (error) => 'Failed to load data...',
       widgetBuilder: (_) => widget.child,
       marginTop: widget.progressIndicatorMarginTop,
+      waitingWidget: widget.waitingWidget,
     );
   }
 }
