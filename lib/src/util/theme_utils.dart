@@ -73,7 +73,7 @@ class ThemeUtils {
     final canvasColor = dark ? const Color(0xff38364c) : const Color.fromRGBO(240, 240, 240, 1);
 
     final shadowColor = dark ? backgroundColor : Colors.black45;
-    final textColor = dark ? Colors.white : Colors.black;
+    final textColor = textColorByBrightness(dark);
 
     var themeData = ThemeData(
       useMaterial3: false,
@@ -259,5 +259,13 @@ class ThemeUtils {
       return false;
     }
     return themeData.brightness == Brightness.dark;
+  }
+
+  static Color textColorByBrightness(bool dark) {
+    return dark ? Colors.white : Colors.black;
+  }
+
+  static Color textColor(dynamic contextOrThemeData) {
+    return textColorByBrightness(isDarkMode(contextOrThemeData));
   }
 }
