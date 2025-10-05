@@ -138,11 +138,22 @@ class SeriesDataAnalyticsDailyLifeAttributesProportionsView extends StatelessWid
       var flTitlesData = FlTitlesData(
         bottomTitles: AxisTitles(
           sideTitles: SideTitles(
-            // interval: 1,
+            // interval is always often not as expected :(
+            // only int values should be shown -> 1 but not to much as well -> null and it is depending on the width :/
+            // https://www.reddit.com/r/flutterhelp/comments/rhb7iu/fl_chart_set_time_series_interval_in_linechart/
+            interval: xTitles.length > 5 ? xTitles.length / 5 : 1,
             showTitles: true,
             maxIncluded: false,
+            minIncluded: false,
             getTitlesWidget: (value, meta) {
-              return SideTitleWidget(meta: meta, child: Text(xTitles[value.toInt()]));
+              return SideTitleWidget(
+                meta: meta,
+                fitInside: SideTitleFitInsideData.fromTitleMeta(meta),
+                // angle: 0.5,
+                child: Text(
+                  xTitles[value.toInt()],
+                ),
+              );
             },
           ),
         ),
