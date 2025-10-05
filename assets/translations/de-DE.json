@@ -346,6 +346,15 @@
         "legendTitle": "Datenbasis (letzte x Tage)"
       }
     },
+    "recordedHours": {
+      "title": "Aufgezeichnete Stunden",
+      "label": {
+        "recordedHoursInfo": "Zeigt an, zu welchen Tageszeiten Messwerte erfasst wurden."
+      },
+      "chart": {
+        "chartTitle": "Verteilung nach Tageszeiten"
+      }
+    },
     "trend": {
       "title": "Trend-Analyse",
       "label": {

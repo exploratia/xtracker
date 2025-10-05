@@ -346,6 +346,15 @@
         "legendTitle": "Dataset (last x days)"
       }
     },
+    "recordedHours": {
+      "title": "Recorded hours",
+      "label": {
+        "recordedHoursInfo": "Shows at which times of day measurements were recorded."
+      },
+      "chart": {
+        "chartTitle": "Distribution by time of day"
+      }
+    },
     "trend": {
       "title": "Trend Analysis",
       "label": {

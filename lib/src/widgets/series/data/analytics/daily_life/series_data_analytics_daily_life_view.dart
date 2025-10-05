@@ -4,6 +4,7 @@ import '../../../../../model/series/data/daily_life/daily_life_value.dart';
 import '../../../../../model/series/series_view_meta_data.dart';
 import '../../../../../util/theme_utils.dart';
 import '../series_data_analytics_days_recorded_view.dart';
+import '../series_data_analytics_hours_recorded_view.dart';
 import 'series_data_analytics_daily_life_attributes_proportions_view.dart';
 
 class SeriesDataAnalyticsDailyLifeView extends StatelessWidget {
@@ -22,6 +23,10 @@ class SeriesDataAnalyticsDailyLifeView extends StatelessWidget {
           seriesDataValues: seriesDataValues,
         ),
         SeriesDataAnalyticsDaysRecordedView(
+          seriesViewMetaData: seriesViewMetaData,
+          seriesDataValues: seriesDataValues,
+        ),
+        SeriesDataAnalyticsHoursRecordedView(
           seriesViewMetaData: seriesViewMetaData,
           seriesDataValues: seriesDataValues,
         ),

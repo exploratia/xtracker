@@ -139,6 +139,9 @@ abstract class  LocaleKeys {
   static const seriesDataAnalytics_recordedDays_label_recordedDaysInfo = 'seriesDataAnalytics.recordedDays.label.recordedDaysInfo';
   static const seriesDataAnalytics_recordedDays_chart_chartTitle = 'seriesDataAnalytics.recordedDays.chart.chartTitle';
   static const seriesDataAnalytics_recordedDays_chart_legendTitle = 'seriesDataAnalytics.recordedDays.chart.legendTitle';
+  static const seriesDataAnalytics_recordedHours_title = 'seriesDataAnalytics.recordedHours.title';
+  static const seriesDataAnalytics_recordedHours_label_recordedHoursInfo = 'seriesDataAnalytics.recordedHours.label.recordedHoursInfo';
+  static const seriesDataAnalytics_recordedHours_chart_chartTitle = 'seriesDataAnalytics.recordedHours.chart.chartTitle';
   static const seriesDataAnalytics_trend_title = 'seriesDataAnalytics.trend.title';
   static const seriesDataAnalytics_trend_label_forecast = 'seriesDataAnalytics.trend.label.forecast';
   static const seriesDataAnalytics_trend_label_failedToCalculateTrend = 'seriesDataAnalytics.trend.label.failedToCalculateTrend';
