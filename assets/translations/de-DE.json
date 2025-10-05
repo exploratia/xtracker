@@ -369,6 +369,9 @@
     "dailyLife": {
       "attributesProportions": {
         "title": "Attribut-Verteilung",
+        "subTitles": {
+          "monthlyDistribution": "Monatsverteilung"
+        },
         "label": {
           "attributeProportionsInfo": "Übersicht über die Häufigkeit der Attribute insgesamt und ihre Verteilung in verschiedenen Zeiträumen des letzten Jahres."
         },

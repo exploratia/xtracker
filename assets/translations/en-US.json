@@ -369,6 +369,9 @@
     "dailyLife": {
       "attributesProportions": {
         "title": "Attribute distribution",
+        "subTitles": {
+          "monthlyDistribution": "Monthly distribution"
+        },
         "label": {
           "attributeProportionsInfo": "Overview of attribute frequencies in total and their distribution across different periods of the past year."
         },
