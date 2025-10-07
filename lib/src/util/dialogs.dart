@@ -2,7 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../generated/locale_keys.g.dart';
+import '../widgets/controls/layout/single_child_scroll_view_with_scrollbar.dart';
 import '../widgets/controls/responsive/device_dependent_constrained_box.dart';
+import 'theme_utils.dart';
 
 class Dialogs {
   /// Dismiss | hide | remove OnScreenKeyboard
@@ -75,6 +77,56 @@ class Dialogs {
           ),
         ],
       ),
+    );
+  }
+
+  /// Shows a generic selection dialog.
+  ///
+  /// [context] - BuildContext
+  /// [title] - Title of the dialog
+  /// [values] - List of possible values
+  /// [itemBuilder] - Function that creates a widget for each value
+  ///
+  /// Returns the selected value or `null` if canceled.
+  static Future<T?> showSelectionDialog<T>({
+    required BuildContext context,
+    required dynamic title,
+    required List<T> values,
+    required Widget Function(BuildContext context, T value) itemBuilder,
+  }) async {
+    return showDialog<T>(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: _titleWidget(title),
+          content: ConstrainedBox(
+            constraints: const BoxConstraints(maxHeight: 400),
+            child: SingleChildScrollViewWithScrollbar(
+              child: Column(
+                spacing: ThemeUtils.verticalSpacingSmall,
+                children: [
+                  ...values.map(
+                    (value) => InkWell(
+                      borderRadius: ThemeUtils.borderRadiusCircularSmall,
+                      onTap: () => Navigator.of(context).pop(value),
+                      child: Padding(
+                        padding: const EdgeInsets.all(ThemeUtils.paddingSmall),
+                        child: itemBuilder(context, value),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(null),
+              child: Text(LocaleKeys.commons_dialog_btn_cancel.tr()),
+            ),
+          ],
+        );
+      },
     );
   }
 

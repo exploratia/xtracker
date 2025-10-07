@@ -11,15 +11,10 @@ import '../../../../model/series/data/series_data.dart';
 import '../../../../model/series/data/series_data_value.dart';
 import '../../../../model/series/series_def.dart';
 import '../../../../model/series/series_type.dart';
-import '../../../../model/series/settings/daily_life/daily_life_attribute_resolver.dart';
 import '../../../../providers/series_current_value_provider.dart';
-import '../../../../util/date_time_utils.dart';
 import '../../../../util/theme_utils.dart';
 import '../../../controls/animation/animated_highlight_container.dart';
-import 'blood_pressure/table/blood_pressure_value_renderer.dart';
-import 'daily_check/table/daily_check_value_renderer.dart';
-import 'daily_life/daily_life_attribute_renderer.dart';
-import 'habit/table/habit_value_renderer.dart';
+import 'series_value_renderer.dart';
 
 class SeriesLatestValueRenderer extends StatelessWidget {
   const SeriesLatestValueRenderer({super.key, required this.seriesDef});
@@ -44,18 +39,7 @@ class SeriesLatestValueRenderer extends StatelessWidget {
                 return _CurrentValueEdit(
                   seriesDef: seriesDef,
                   seriesDataValue: currentValue,
-                  child: _LatestValueWrap(
-                    children: [
-                      Text(DateTimeUtils.formatDate(currentValue.dateTime)),
-                      Text(DateTimeUtils.formatTime(currentValue.dateTime)),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          BloodPressureValueRenderer(bloodPressureValue: currentValue, seriesDef: seriesDef),
-                        ],
-                      ),
-                    ],
-                  ),
+                  child: SeriesValueRenderer(currentValue, seriesDef: seriesDef),
                 );
               }
               return Center(child: Text(LocaleKeys.seriesDefRenderer_currentValue_label_noValue.tr()));
@@ -72,13 +56,7 @@ class SeriesLatestValueRenderer extends StatelessWidget {
                 return _CurrentValueEdit(
                   seriesDef: seriesDef,
                   seriesDataValue: currentValue,
-                  child: _LatestValueWrap(
-                    children: [
-                      Text(DateTimeUtils.formatDate(currentValue.dateTime)),
-                      Text(DateTimeUtils.formatTime(currentValue.dateTime)),
-                      DailyCheckValueRenderer(dailyCheckValue: currentValue, seriesDef: seriesDef),
-                    ],
-                  ),
+                  child: SeriesValueRenderer(currentValue, seriesDef: seriesDef),
                 );
               }
               return Center(child: Text(LocaleKeys.seriesDefRenderer_currentValue_label_noValue.tr()));
@@ -95,18 +73,7 @@ class SeriesLatestValueRenderer extends StatelessWidget {
                 return _CurrentValueEdit(
                   seriesDef: seriesDef,
                   seriesDataValue: currentValue,
-                  child: _LatestValueWrap(
-                    children: [
-                      Text(DateTimeUtils.formatDate(currentValue.dateTime)),
-                      Text(DateTimeUtils.formatTime(currentValue.dateTime)),
-                      Builder(
-                        builder: (context) {
-                          var resolver = DailyLifeAttributeResolver(seriesDef);
-                          return DailyLifeAttributeRenderer(dailyLifeAttribute: resolver.resolve(currentValue.aid));
-                        },
-                      ),
-                    ],
-                  ),
+                  child: SeriesValueRenderer(currentValue, seriesDef: seriesDef),
                 );
               }
               return Center(child: Text(LocaleKeys.seriesDefRenderer_currentValue_label_noValue.tr()));
@@ -123,13 +90,7 @@ class SeriesLatestValueRenderer extends StatelessWidget {
                 return _CurrentValueEdit(
                   seriesDef: seriesDef,
                   seriesDataValue: currentValue,
-                  child: _LatestValueWrap(
-                    children: [
-                      Text(DateTimeUtils.formatDate(currentValue.dateTime)),
-                      Text(DateTimeUtils.formatTime(currentValue.dateTime)),
-                      HabitValueRenderer(habitValue: currentValue, seriesDef: seriesDef),
-                    ],
-                  ),
+                  child: SeriesValueRenderer(currentValue, seriesDef: seriesDef),
                 );
               }
               return Center(child: Text(LocaleKeys.seriesDefRenderer_currentValue_label_noValue.tr()));
@@ -148,7 +109,7 @@ class _CurrentValueEdit extends StatelessWidget {
   });
 
   final SeriesDef seriesDef;
-  final _LatestValueWrap child;
+  final SeriesValueRenderer child;
   final SeriesDataValue seriesDataValue;
 
   @override
@@ -166,26 +127,6 @@ class _CurrentValueEdit extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-}
-
-class _LatestValueWrap extends StatelessWidget {
-  const _LatestValueWrap({
-    required this.children,
-  });
-
-  final List<Widget> children;
-
-  @override
-  Widget build(BuildContext context) {
-    return Wrap(
-      spacing: ThemeUtils.horizontalSpacing,
-      runSpacing: ThemeUtils.verticalSpacingSmall,
-      alignment: WrapAlignment.center,
-      runAlignment: WrapAlignment.center,
-      crossAxisAlignment: WrapCrossAlignment.center,
-      children: children,
     );
   }
 }

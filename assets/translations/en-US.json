@@ -32,8 +32,14 @@
       "name": {
         "dateMorningMiddayEvening": "Date | Morning | Midday | Evening",
         "dateTimeValue": "Date | Time | Value",
+        "dateDayRange": "Date | Day overview",
+        "dateHourlyOverview": "Date | Hourly overview",
         "dateWeekdays": "Date | Weekdays (Mon–Sun)",
         "dateMonthDays": "Date | Month days (1–31)"
+      },
+      "columns": {
+        "dayRange": "Day overview",
+        "hourlyOverview": "Hourly overview"
       }
     },
     "date": {

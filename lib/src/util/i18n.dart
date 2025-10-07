@@ -6,6 +6,8 @@ class I18N {
   static const String bloodPressureSeriesItemTitleDiastolic = 'bloodPressureSeriesItemTitleDiastolic';
   static const String bloodPressureSeriesItemTitleSystolic = 'bloodPressureSeriesItemTitleSystolic';
 
+  static const String commonsColumnDayRange = 'commonsColumnDayRange';
+  static const String commonsColumnHourlyOverview = 'commonsColumnHourlyOverview';
   static const String commonsDateDate = 'commonsDateDate';
   static const String commonsDateTime = 'commonsDateTime';
   static const String commonsDateMorning = 'commonsDateMorning';
@@ -26,6 +28,9 @@ class I18N {
       // blood pressure
       bloodPressureSeriesItemTitleDiastolic => LocaleKeys.seriesValue_bloodPressure_label_diastolic.tr(),
       bloodPressureSeriesItemTitleSystolic => LocaleKeys.seriesValue_bloodPressure_label_systolic.tr(),
+      // column profile
+      commonsColumnDayRange => LocaleKeys.commons_columnProfile_columns_dayRange.tr(),
+      commonsColumnHourlyOverview => LocaleKeys.commons_columnProfile_columns_hourlyOverview.tr(),
       // date
       commonsDateDate => LocaleKeys.commons_date_date.tr(),
       commonsDateTime => LocaleKeys.commons_date_time.tr(),

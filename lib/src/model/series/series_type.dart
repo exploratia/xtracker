@@ -12,29 +12,57 @@ enum SeriesType {
     'bloodPressure',
     Icons.monitor_heart_outlined,
     Colors.red,
-    [ViewType.dots, ViewType.lineChart, ViewType.table],
-    [FixColumnProfileType.dateTimeValue, FixColumnProfileType.dateMorningMiddayEvening],
+    [
+      ViewType.dots,
+      ViewType.lineChart,
+      ViewType.table,
+    ],
+    [
+      FixColumnProfileType.dateTimeValue,
+      FixColumnProfileType.dateMorningMiddayEvening,
+    ],
   ),
   dailyCheck(
     "dailyCheck",
     Icons.check_box_outlined,
     Colors.blue,
-    [ViewType.barChart, ViewType.table, ViewType.dots],
-    [FixColumnProfileType.dateTimeValue, FixColumnProfileType.dateMorningMiddayEvening],
+    [
+      ViewType.barChart,
+      ViewType.table,
+      ViewType.dots,
+    ],
+    [
+      FixColumnProfileType.dateTimeValue,
+      FixColumnProfileType.dateMorningMiddayEvening,
+    ],
   ),
   habit(
     "habit",
     Icons.repeat_outlined,
     Color.fromRGBO(255, 154, 0, 1.0),
-    [ViewType.barChart, ViewType.table, ViewType.pixels],
-    [FixColumnProfileType.dateTimeValue, FixColumnProfileType.dateMorningMiddayEvening],
+    [
+      ViewType.barChart,
+      ViewType.table,
+      ViewType.pixels,
+    ],
+    [
+      FixColumnProfileType.dateTimeValue,
+      FixColumnProfileType.dateDayRange,
+      FixColumnProfileType.dateHourlyOverview,
+      FixColumnProfileType.dateMorningMiddayEvening,
+    ],
   ),
   dailyLife(
     "dailyLife",
     Icons.account_circle_outlined,
     Color.fromRGBO(0, 255, 50, 1.0),
-    [ViewType.table, ViewType.pixels],
-    [FixColumnProfileType.dateTimeValue],
+    [
+      ViewType.table,
+      ViewType.pixels,
+    ],
+    [
+      FixColumnProfileType.dateTimeValue,
+    ],
   );
   // monthly("monthly", Icons.calendar_month_outlined, Colors.deepPurple, [ViewType.table, ViewType.lineChart]),
   // free("free", Icons.calendar_today_outlined, Colors.green, [ViewType.lineChart, ViewType.table]);

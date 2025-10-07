@@ -32,8 +32,14 @@
       "name": {
         "dateMorningMiddayEvening": "Datum | Morgens | Mittags | Abends",
         "dateTimeValue": "Datum | Uhrzeit | Wert",
+        "dateDayRange": "Datum | Tagesübersicht",
+        "dateHourlyOverview": "Datum | Stundenübersicht",
         "dateWeekdays": "Datum | Wochentage (Mo–So)",
         "dateMonthDays": "Datum | Monatstage (1–31)"
+      },
+      "columns": {
+        "dayRange": "Tagesübersicht",
+        "hourlyOverview": "Stundenübersicht"
       }
     },
     "date": {

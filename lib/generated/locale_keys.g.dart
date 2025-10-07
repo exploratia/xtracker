@@ -17,8 +17,12 @@ abstract class  LocaleKeys {
   static const commons_nav_openMenu = 'commons.nav.openMenu';
   static const commons_columnProfile_name_dateMorningMiddayEvening = 'commons.columnProfile.name.dateMorningMiddayEvening';
   static const commons_columnProfile_name_dateTimeValue = 'commons.columnProfile.name.dateTimeValue';
+  static const commons_columnProfile_name_dateDayRange = 'commons.columnProfile.name.dateDayRange';
+  static const commons_columnProfile_name_dateHourlyOverview = 'commons.columnProfile.name.dateHourlyOverview';
   static const commons_columnProfile_name_dateWeekdays = 'commons.columnProfile.name.dateWeekdays';
   static const commons_columnProfile_name_dateMonthDays = 'commons.columnProfile.name.dateMonthDays';
+  static const commons_columnProfile_columns_dayRange = 'commons.columnProfile.columns.dayRange';
+  static const commons_columnProfile_columns_hourlyOverview = 'commons.columnProfile.columns.hourlyOverview';
   static const commons_date_shortWeekday_monday = 'commons.date.shortWeekday.monday';
   static const commons_date_shortWeekday_tuesday = 'commons.date.shortWeekday.tuesday';
   static const commons_date_shortWeekday_wednesday = 'commons.date.shortWeekday.wednesday';

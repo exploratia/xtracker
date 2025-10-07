@@ -33,6 +33,20 @@ class FixColumnProfile extends ColumnProfile {
       ColumnDef(minWidth: 80, title: '-', msgId: I18N.commonsLabelValue),
     ],
   );
+  static final FixColumnProfile columnProfileDateDayRange = FixColumnProfile(
+    FixColumnProfileType.dateDayRange,
+    columns: [
+      ColumnDef(minWidth: 80, title: '-', msgId: I18N.commonsDateDate),
+      ColumnDef(minWidth: 160, title: '-', msgId: I18N.commonsColumnDayRange),
+    ],
+  );
+  static final FixColumnProfile columnProfileDateHourlyOverview = FixColumnProfile(
+    FixColumnProfileType.dateHourlyOverview,
+    columns: [
+      ColumnDef(minWidth: 80, title: '-', msgId: I18N.commonsDateDate),
+      ColumnDef(minWidth: 160, title: '-', msgId: I18N.commonsColumnHourlyOverview),
+    ],
+  );
 
   static final FixColumnProfile columnProfileDateWeekdays = FixColumnProfile(
     FixColumnProfileType.dateWeekdays,
@@ -59,11 +73,17 @@ class FixColumnProfile extends ColumnProfile {
   );
 
   static FixColumnProfile? resolveByType(FixColumnProfileType? type) {
-    return [
-      columnProfileDateMorningMiddayEvening,
-      columnProfileDateTimeValue,
-      columnProfileDateMonthDays,
-      columnProfileDateWeekdays,
-    ].where((cp) => cp.type == type).firstOrNull;
+    if (type == null) return null;
+    return switch (type) {
+      FixColumnProfileType.dateMorningMiddayEvening => columnProfileDateMorningMiddayEvening,
+      FixColumnProfileType.dateTimeValue => columnProfileDateTimeValue,
+      FixColumnProfileType.dateDayRange => columnProfileDateDayRange,
+      FixColumnProfileType.dateHourlyOverview => columnProfileDateHourlyOverview,
+      FixColumnProfileType.dateWeekdays => columnProfileDateWeekdays,
+      FixColumnProfileType.dateMonthDays => columnProfileDateMonthDays,
+    };
   }
+
+  static bool isMultiValueDayProfile(FixColumnProfile fixColumnProfile) =>
+      fixColumnProfile == FixColumnProfile.columnProfileDateDayRange || fixColumnProfile == FixColumnProfile.columnProfileDateHourlyOverview;
 }
