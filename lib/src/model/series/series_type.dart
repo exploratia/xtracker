@@ -19,6 +19,8 @@ enum SeriesType {
     ],
     [
       FixColumnProfileType.dateTimeValue,
+      FixColumnProfileType.dateDayRange,
+      FixColumnProfileType.dateHourlyOverview,
       FixColumnProfileType.dateMorningMiddayEvening,
     ],
   ),
@@ -33,6 +35,8 @@ enum SeriesType {
     ],
     [
       FixColumnProfileType.dateTimeValue,
+      FixColumnProfileType.dateDayRange,
+      FixColumnProfileType.dateHourlyOverview,
       FixColumnProfileType.dateMorningMiddayEvening,
     ],
   ),
@@ -61,6 +65,8 @@ enum SeriesType {
       ViewType.pixels,
     ],
     [
+      FixColumnProfileType.dateDayRange,
+      FixColumnProfileType.dateHourlyOverview,
       FixColumnProfileType.dateTimeValue,
     ],
   );

@@ -5,6 +5,9 @@ import '../../../../../../model/series/data/blood_pressure/blood_pressure_value.
 import '../../../../../../model/series/data/series_data_filter.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
 import '../../../../../controls/grid/row_per_day/day_row_item.dart';
+import '../../../../../controls/grid/row_per_day/multi_value_day_row_cell_builder.dart';
+import '../../../../../controls/grid/row_per_day/multi_value_day_row_item.dart';
+import '../../../../../controls/grid/row_per_day/multi_value_day_row_item_renderer.dart';
 import '../../../../../controls/grid/row_per_day/row_per_day_cell_builder.dart';
 import '../../../../../controls/grid/two_dimensional_scrollable_table.dart';
 import '../../series_data_no_data.dart';
@@ -32,18 +35,41 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
       );
     }
 
-    List<DayRowItem<BloodPressureValue>> data = DayRowItem.buildTableDataProvider(seriesViewMetaData, filteredSeriesData);
+    int lineCount = 0;
+    GridCell Function(BuildContext context, int yIndex, int xIndex, Size cellSize) gridCellBuilder =
+        (context, yIndex, xIndex, cellSize) => GridCell(child: Container());
 
-    var rowPerDayCellBuilder = RowPerDayCellBuilder<BloodPressureValue>(
-      data: data,
-      fixColumnProfile: columnProfile,
-      gridCellChildBuilder: (BloodPressureValue value, Size _) => BloodPressureValueRenderer(
-        bloodPressureValue: value,
-        seriesDef: seriesViewMetaData.seriesDef,
-        editMode: seriesViewMetaData.editMode,
-        wrapWithDateTimeTooltip: true,
-      ),
-    );
+    if (FixColumnProfile.isMultiValueDayProfile(columnProfile)) {
+      List<MultiValueDayRowItem<BloodPressureValue>> data = MultiValueDayRowItem.buildTableDataProvider(seriesViewMetaData, filteredSeriesData);
+
+      var builder = MultiValueDayRowCellBuilder<BloodPressureValue>(
+        data: data,
+        fixColumnProfile: columnProfile,
+        gridCellChildBuilder: (multiValueDayRowItem, Size _) => MultiValueDayRowItemRenderer(
+          hourly: columnProfile == FixColumnProfile.columnProfileDateHourlyOverview,
+          multiValueDayRowItem: multiValueDayRowItem,
+          seriesViewMetaData: seriesViewMetaData,
+          tooltipValueBuilder: (dataValue) => BloodPressureValueRenderer(bloodPressureValue: dataValue, seriesDef: seriesViewMetaData.seriesDef),
+        ),
+      );
+      lineCount = data.length;
+      gridCellBuilder = builder.gridCellBuilder;
+    } else {
+      List<DayRowItem<BloodPressureValue>> data = DayRowItem.buildTableDataProvider(seriesViewMetaData, filteredSeriesData);
+
+      var builder = RowPerDayCellBuilder<BloodPressureValue>(
+        data: data,
+        fixColumnProfile: columnProfile,
+        gridCellChildBuilder: (BloodPressureValue value, Size _) => BloodPressureValueRenderer(
+          bloodPressureValue: value,
+          seriesDef: seriesViewMetaData.seriesDef,
+          editMode: seriesViewMetaData.editMode,
+          wrapWithDateTimeTooltip: true,
+        ),
+      );
+      lineCount = data.length;
+      gridCellBuilder = builder.gridCellBuilder;
+    }
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -55,8 +81,8 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
         Expanded(
           child: TwoDimensionalScrollableTable(
             tableColumnProfile: columnProfile,
-            lineCount: data.length,
-            gridCellBuilder: rowPerDayCellBuilder.gridCellBuilder,
+            lineCount: lineCount,
+            gridCellBuilder: gridCellBuilder,
             lineHeight: BloodPressureValueRenderer.height,
             useFixedFirstColumn: true,
             bottomScrollExtend: seriesDataViewOverlays.bottomHeight,
