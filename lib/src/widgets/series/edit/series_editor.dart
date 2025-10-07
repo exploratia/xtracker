@@ -142,7 +142,7 @@ class _SeriesEditorState extends State<SeriesEditor> {
           controller: _nameController,
           decoration: InputDecoration(
             labelText: LocaleKeys.seriesEdit_common_label_seriesName.tr(),
-            hintText: SeriesType.displayNameOf(_seriesDef.seriesType),
+            hintText: _seriesDef.seriesType.displayName,
           ),
           textInputAction: TextInputAction.next,
           // unicode is possible - e.g. from https://www.compart.com/de/unicode/block/U+1F600
@@ -247,7 +247,7 @@ class _SeriesTypeHeadline extends StatelessWidget {
       children: [
         IconMap.icon(seriesDef.iconName, seriesDef.seriesType.iconData, size: ThemeUtils.iconSizeScaled),
         OverflowText(
-          SeriesType.displayNameOf(seriesDef.seriesType),
+          seriesDef.seriesType.displayName,
           style: themeData.textTheme.titleLarge,
         ),
       ],

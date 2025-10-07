@@ -102,7 +102,7 @@ class SeriesEditDisplaySettings extends StatelessWidget {
           Widget? tableViewColumnProfileSelect;
           if (seriesType.tableFixColumnProfileTypes.length > 1) {
             FixColumnProfileType defaultValue = seriesType.defaultFixTableColumnProfileType!;
-            List<FixColumnProfileType> possibleColumnProfiles = seriesType.tableFixColumnProfileTypes;
+            List<FixColumnProfileType> possibleColumnProfiles = seriesType.sortedTableFixColumnProfileTypes;
             FixColumnProfileType? actValue = settings.getTableViewColumnProfile(defaultValue)?.type;
             tableViewColumnProfileSelect = Padding(
               padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.cardPadding),

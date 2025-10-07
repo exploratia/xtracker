@@ -148,6 +148,15 @@ class DateTimeUtils {
     return (date1.isAfter(date2)) ? date1 : date2;
   }
 
+  /// returns the date with min utc timestamp
+  static DateTime minDate(DateTime date1, DateTime date2) {
+    return (date1.isBefore(date2)) ? date1 : date2;
+  }
+
+  static int minutesOfDay(DateTime dateTime) {
+    return dateTime.hour * 60 + dateTime.minute;
+  }
+
   static Color? backgroundColor(DateTime dateTime) {
     if (dateTime.weekday == DateTime.sunday) {
       return Globals.backgroundColorSunday;

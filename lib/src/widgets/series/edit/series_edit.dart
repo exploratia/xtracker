@@ -78,7 +78,7 @@ class _SeriesTypeSelector extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var seriesTypes = [...SeriesType.values];
-    seriesTypes.sort((a, b) => SeriesType.displayNameOf(a).compareTo(SeriesType.displayNameOf(b)));
+    seriesTypes.sort((a, b) => a.displayName.compareTo(b.displayName));
 
     return VCenteredSingleChildScrollViewWithScrollbar(
       child: Column(
@@ -94,7 +94,7 @@ class _SeriesTypeSelector extends StatelessWidget {
                     _SeriesTypeInfoBtn(st),
                     ElevatedButton.icon(
                       icon: Icon(st.iconData, size: ThemeUtils.iconSizeScaled),
-                      label: Text(SeriesType.displayNameOf(st)),
+                      label: Text(st.displayName),
                       onPressed: () => createSeriesDef(st),
                     )
                   ])),
@@ -125,7 +125,7 @@ class _SeriesTypeInfoBtn extends StatelessWidget {
           spacing: ThemeUtils.horizontalSpacing,
           children: [
             Icon(st.iconData, size: ThemeUtils.iconSizeScaled),
-            Text(SeriesType.displayNameOf(st)),
+            Text(st.displayName),
           ],
         ),
       ),

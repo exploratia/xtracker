@@ -46,6 +46,8 @@ enum SeriesType {
 
   /// order is used in AppBar actions and last one is used as default/first view
   final List<ViewType> viewTypes;
+
+  /// last one is used as default
   final List<FixColumnProfileType> tableFixColumnProfileTypes;
 
   /// [iconData] one of [IconMap]
@@ -58,6 +60,12 @@ enum SeriesType {
   FixColumnProfileType? get defaultFixTableColumnProfileType {
     if (tableFixColumnProfileTypes.isEmpty) return null;
     return tableFixColumnProfileTypes.last;
+  }
+
+  String get displayName => displayNameOf(this);
+
+  List<FixColumnProfileType> get sortedTableFixColumnProfileTypes {
+    return [...tableFixColumnProfileTypes]..sort((a, b) => a.displayName.compareTo(b.displayName));
   }
 
   static SeriesType byTypeName(String typeName) {
