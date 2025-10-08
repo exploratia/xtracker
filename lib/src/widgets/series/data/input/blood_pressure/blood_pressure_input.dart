@@ -116,7 +116,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
     }
   }
 
-  void _saveHandler() {
+  void _saveHandler() async {
     bool insert = widget.bloodPressureValue == null;
     setState(() {
       _autoValidate = true;
@@ -124,7 +124,13 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
     _validate();
     if (!_isValid) return;
     var val = BloodPressureValue(_uuid, _dateTime, int.parse(_highController.text), int.parse(_lowController.text), _tablet);
-    Navigator.pop(context, InputResult(val, insert ? InputResultAction.insert : InputResultAction.update));
+    // First dismiss keyboard to trigger series view rebuild (-> series view animation)
+    // and after a small delay pop the dialog with the return value - which then triggers the current value animation
+    Dialogs.dismissKeyboard(context);
+    await Future.delayed(const Duration(milliseconds: 300), () {});
+    if (mounted) {
+      Navigator.pop(context, InputResult(val, insert ? InputResultAction.insert : InputResultAction.update));
+    }
   }
 
   void _deleteHandler(BloodPressureValue bloodPressureValue) async {
