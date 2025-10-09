@@ -355,10 +355,11 @@
     "recordedHours": {
       "title": "Aufgezeichnete Stunden",
       "label": {
-        "recordedHoursInfo": "Zeigt an, zu welchen Tageszeiten Messwerte erfasst wurden."
+        "recordedHoursInfo": "Zeigt, zu welchen Tageszeiten Messwerte erfasst wurden."
       },
       "chart": {
-        "chartTitle": "Verteilung nach Tageszeiten"
+        "chartTitle": "Verteilung nach Tageszeiten",
+        "chartTitleDailyLife": "Verteilung nach Tageszeiten je Attribut"
       }
     },
     "trend": {

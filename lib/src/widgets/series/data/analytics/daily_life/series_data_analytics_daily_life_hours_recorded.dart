@@ -4,21 +4,20 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../generated/locale_keys.g.dart';
-import '../../../../model/series/data/series_data_value.dart';
-import '../../../../model/series/series_view_meta_data.dart';
-import '../../../../util/chart/chart_utils.dart';
-import '../../../../util/color_utils.dart';
-import '../../../../util/media_query_utils.dart';
-import '../../../../util/theme_utils.dart';
-import 'analytics/analytics_settings_card.dart';
+import '../../../../../../generated/locale_keys.g.dart';
+import '../../../../../model/series/data/daily_life/daily_life_value.dart';
+import '../../../../../model/series/series_view_meta_data.dart';
+import '../../../../../model/series/settings/daily_life/daily_life_attribute_resolver.dart';
+import '../../../../../util/chart/chart_utils.dart';
+import '../../../../../util/color_utils.dart';
+import '../../../../../util/media_query_utils.dart';
+import '../../../../../util/theme_utils.dart';
 
-class SeriesDataAnalyticsHoursRecordedView extends StatelessWidget {
-  const SeriesDataAnalyticsHoursRecordedView({super.key, required this.seriesViewMetaData, required this.seriesDataValues, this.child});
+class SeriesDataAnalyticsDailyLifeHoursRecorded extends StatelessWidget {
+  const SeriesDataAnalyticsDailyLifeHoursRecorded({super.key, required this.seriesViewMetaData, required this.seriesDataValues});
 
   final SeriesViewMetaData seriesViewMetaData;
-  final List<SeriesDataValue> seriesDataValues;
-  final Widget? child;
+  final List<DailyLifeValue> seriesDataValues;
 
   @override
   Widget build(BuildContext context) {
@@ -26,34 +25,46 @@ class SeriesDataAnalyticsHoursRecordedView extends StatelessWidget {
 
     Widget recordedDaysWidget = _buildRecordedDaysDistributionChart(themeData);
 
-    return AnalyticsSettingsCard(
-      title: LocaleKeys.seriesDataAnalytics_recordedHours_title.tr(),
-      infoDlgContent: SimpleInfoDlgContent(info: LocaleKeys.seriesDataAnalytics_recordedHours_label_recordedHoursInfo.tr()),
-      children: [
-        recordedDaysWidget,
-        if (child != null) child!,
-      ],
-    );
+    return recordedDaysWidget;
   }
 
   Column _buildRecordedDaysDistributionChart(ThemeData themeData) {
-    List<int> hours = List.generate(24, (index) => 0);
-    for (var v in seriesDataValues) {
-      var h = v.dateTime.hour;
-      hours[h] += 1;
-    }
-    hours.add(hours.first);
+    var attributeResolver = DailyLifeAttributeResolver(seriesViewMetaData.seriesDef);
 
     var axisTitlesTheme = themeData.textTheme.labelLarge!;
     Widget chart = LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         var chartWidth = math.max(280.0, constraints.maxWidth);
 
-        var baseColor = seriesViewMetaData.seriesDef.color;
-        var gradientColor = ColorUtils.gradientColor(baseColor);
-        var gradient = ChartUtils.createTopToBottomGradient([baseColor, gradientColor]);
+        List<LineChartBarData> lineChartBarDataList = [];
 
-        var spots = hours.asMap().entries.map((e) => FlSpot(e.key.toDouble(), e.value.toDouble())).toList();
+        for (var attributeId in attributeResolver.attributeIds) {
+          List<int> hours = List.generate(24, (index) => 0);
+          for (var v in seriesDataValues) {
+            if (v.aid == attributeId) {
+              var h = v.dateTime.hour;
+              hours[h] += 1;
+            }
+          }
+          hours.add(hours.first);
+
+          var baseColor = attributeResolver.resolve(attributeId).color;
+          var gradientColor = ColorUtils.gradientColor(baseColor);
+          var gradient = ChartUtils.createTopToBottomGradient([baseColor, gradientColor]);
+
+          var spots = hours.asMap().entries.map((e) => FlSpot(e.key.toDouble(), e.value.toDouble())).toList();
+
+          lineChartBarDataList.add(LineChartBarData(
+            gradient: gradient,
+            dotData: const FlDotData(show: false),
+            preventCurveOverShooting: true,
+            curveSmoothness: 0.7,
+            isCurved: true,
+            isStrokeCapRound: true,
+            isStrokeJoinRound: true,
+            spots: spots,
+          ));
+        }
 
         return SingleChildScrollView(
           scrollDirection: Axis.horizontal,
@@ -62,18 +73,7 @@ class SeriesDataAnalyticsHoursRecordedView extends StatelessWidget {
             height: 120,
             child: LineChart(
               LineChartData(
-                lineBarsData: [
-                  LineChartBarData(
-                    gradient: gradient,
-                    dotData: const FlDotData(show: false),
-                    preventCurveOverShooting: true,
-                    curveSmoothness: 0.7,
-                    isCurved: true,
-                    isStrokeCapRound: true,
-                    isStrokeJoinRound: true,
-                    spots: spots,
-                  ),
-                ],
+                lineBarsData: lineChartBarDataList,
                 // maxY: 1,
                 minY: 0,
                 borderData: FlBorderData(show: false),
@@ -106,7 +106,7 @@ class SeriesDataAnalyticsHoursRecordedView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
-          LocaleKeys.seriesDataAnalytics_recordedHours_chart_chartTitle.tr(),
+          LocaleKeys.seriesDataAnalytics_recordedHours_chart_chartTitleDailyLife.tr(),
           style: themeData.textTheme.titleMedium,
         ),
         chart,

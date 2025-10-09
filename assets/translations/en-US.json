@@ -358,7 +358,8 @@
         "recordedHoursInfo": "Shows at which times of day measurements were recorded."
       },
       "chart": {
-        "chartTitle": "Distribution by time of day"
+        "chartTitle": "Distribution by time of day",
+        "chartTitleDailyLife": "Distribution by time of day per attribute"
       }
     },
     "trend": {
