@@ -1,6 +1,6 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-import '../../util/i18n.dart';
 import '../../util/media_query_utils.dart';
 import '../../util/theme_utils.dart';
 import '../../widgets/controls/text/overflow_text.dart';
@@ -119,7 +119,7 @@ class ColumnDef {
     if (titleWidget != null) {
       return titleWidget!;
     }
-    var txt = I18N.compose(msgId) ?? title ?? "";
+    var txt = msgId?.tr() ?? title ?? "";
     if (txt.isEmpty) return Container();
 
     if (disablePadding) {
