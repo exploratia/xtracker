@@ -206,4 +206,8 @@ class DateTimeBuilder {
 
   /// end of day is next day start -1ys
   DateTimeBuilder get endOfDay => DateTimeBuilder(DateTimeUtils.endOfDay(_dateTime));
+
+  DateTimeBuilder subtract(Duration duration) => DateTimeBuilder(_dateTime.subtract(duration));
+
+  DateTimeBuilder add(Duration duration) => DateTimeBuilder(_dateTime.add(duration));
 }

@@ -11,7 +11,7 @@ class AfterDateFilter {
     if (days <= Analytics.allDays) {
       filterDateTime = DateTime(0);
     } else {
-      filterDateTime = DateTimeUtils.truncateToDay(DateTimeUtils.truncateToDay(DateTime.now()).subtract(Duration(days: days - 1, microseconds: 1)));
+      filterDateTime = DateTimeBuilder.now().truncateToMidDay.subtract(Duration(days: days + 1)).endOfDay.dateTime;
     }
   }
 

@@ -34,7 +34,7 @@ class SeriesDataAnalyticsBloodPressureMedicationDaysRecorded {
   static Widget _buildLastMedicationDays(ThemeData themeData, List<BloodPressureValue> medicationDays, SeriesViewMetaData seriesViewMetaData) {
     var now = DateTime.now();
     int daysBack = 28;
-    var dateFilter = DateTimeUtils.truncateToDay(DateTimeUtils.truncateToMidDay(DateTime.now()).subtract(Duration(days: daysBack)));
+    var dateFilter = DateTimeBuilder.now().truncateToMidDay.subtract(Duration(days: daysBack + 1)).endOfDay.dateTime;
     var medicationDaysFilteredDates = medicationDays.where((v) => v.datetime.isAfter(dateFilter) && v.datetime.isBefore(now)).map((e) => e.datetime).toList();
     var list = List.generate(daysBack + 1, (index) => 0);
     for (var medicationDay in medicationDaysFilteredDates) {
