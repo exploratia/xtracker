@@ -27,19 +27,21 @@ class AvailableTextStyles extends StatelessWidget {
       "labelSmall": textTheme.labelSmall,
     };
 
-    return SettingsCard(
-      children: styles.entries.map((entry) {
-        final style = entry.value;
-        return ListTile(
-          title: Text(
-            entry.key,
-            style: style,
-          ),
-          subtitle: Text(
-            "fontSize: ${style?.fontSize?.toStringAsFixed(1) ?? 'null'}, fontWeight: ${style?.fontWeight ?? 'null'} ",
-          ),
-        );
-      }).toList(),
+    return SettingsCard.singleEntry(
+      content: Column(
+        children: styles.entries.map((entry) {
+          final style = entry.value;
+          return ListTile(
+            title: Text(
+              entry.key,
+              style: style,
+            ),
+            subtitle: Text(
+              "fontSize: ${style?.fontSize?.toStringAsFixed(1) ?? 'null'}, fontWeight: ${style?.fontWeight ?? 'null'} ",
+            ),
+          );
+        }).toList(),
+      ),
     );
   }
 }

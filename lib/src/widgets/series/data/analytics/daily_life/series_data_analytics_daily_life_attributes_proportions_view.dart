@@ -54,14 +54,16 @@ class SeriesDataAnalyticsDailyLifeAttributesProportionsView extends StatelessWid
     // monthly chart
     Widget? monthlyChart = _buildMonthlyChart(sorted, themeData);
 
-    return AnalyticsSettingsCard(
+    return AnalyticsSettingsCard.singleEntry(
       title: LocaleKeys.seriesDataAnalytics_dailyLife_attributesProportions_title.tr(),
       infoDlgContent: SimpleInfoDlgContent(info: LocaleKeys.seriesDataAnalytics_dailyLife_attributesProportions_label_attributeProportionsInfo.tr()),
-      children: [
-        totalTable,
-        chartTable,
-        if (monthlyChart != null) monthlyChart,
-      ],
+      content: Column(
+        children: [
+          totalTable,
+          chartTable,
+          if (monthlyChart != null) monthlyChart,
+        ],
+      ),
     );
   }
 

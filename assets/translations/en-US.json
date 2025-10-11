@@ -376,6 +376,12 @@
       }
     },
     "bloodPressure": {
+      "recordedDaysMedication": {
+        "title": "Medication intake",
+        "label": {
+          "medicationLastDays": "Medication intake in the last 28 days"
+        }
+      },
       "trend": {
         "label": {
           "trendInfo": "A linear trend is calculated for both systolic (△) and diastolic (▽) values to forecast future values.\n\nBy using different time ranges (last x days), short- and long-term changes can be seen."

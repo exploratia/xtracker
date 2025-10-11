@@ -4,7 +4,6 @@ import '../../../../model/series/data/series_data.dart';
 import '../../../../model/series/data/series_data_value.dart';
 import '../../../../model/series/series_view_meta_data.dart';
 import '../../../../util/chart/chart_utils.dart';
-import '../../../../util/color_utils.dart';
 import '../../../../util/date_time_utils.dart';
 import '../../../../util/dialogs.dart';
 import '../../../../util/range.dart';
@@ -12,6 +11,7 @@ import '../../../../util/theme_utils.dart';
 import '../../../series/data/view/series_data_tooltip_content.dart';
 import '../../../series/data/view/series_value_renderer.dart';
 import '../../range/range_bar.dart';
+import '../../renderer/number_gradient_renderer.dart';
 import '../../tooltip/lazy_tooltip.dart';
 import 'multi_value_day_row_item.dart';
 
@@ -36,20 +36,11 @@ class MultiValueDayRowItemRenderer<T extends SeriesDataValue> extends StatelessW
 
     Widget result;
     if (hourly) {
-      Color baseColor = seriesDef.color;
       var countPerHour = multiValueDayRowItem.countPerHour();
       result = Center(
-        child: Container(
-          height: 8,
-          decoration: BoxDecoration(
-            gradient: ChartUtils.createLeftToRightGradient(
-              countPerHour
-                  .map((e) => e < 1 ? Colors.transparent : ColorUtils.hue(baseColor, (e.clamp(1, 4) - 1) * 15))
-                  .expand((c) => [c, c, Colors.transparent])
-                  .toList()
-                ..insert(0, Colors.transparent),
-            ),
-          ),
+        child: NumberGradientRenderer(
+          numbers: countPerHour,
+          baseColor: seriesDef.color,
         ),
       );
     } else {

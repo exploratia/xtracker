@@ -73,8 +73,9 @@ class _SeriesDataAnalyticsHabitTrendViewState extends State<SeriesDataAnalyticsH
 
   @override
   Widget build(BuildContext context) {
-    return TrendViewSettingsCard(trendInfoDialogContent: const _TrendInfoDialogContent(), children: [
-      FutureBuilderWithProgressIndicator(
+    return TrendViewSettingsCard(
+      trendInfoDialogContent: const _TrendInfoDialogContent(),
+      child: FutureBuilderWithProgressIndicator(
         future: _calcTrendsFuture,
         errorBuilder: (error) => LocaleKeys.seriesDataAnalytics_trend_label_failedToCalculateTrend.tr(),
         widgetBuilder: (fitResultWrappers, BuildContext context) {
@@ -152,7 +153,7 @@ class _SeriesDataAnalyticsHabitTrendViewState extends State<SeriesDataAnalyticsH
           return TrendTable(rows: rows);
         },
       ),
-    ]);
+    );
   }
 }
 

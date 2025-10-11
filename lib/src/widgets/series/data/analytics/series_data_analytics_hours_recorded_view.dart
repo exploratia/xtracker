@@ -26,13 +26,15 @@ class SeriesDataAnalyticsHoursRecordedView extends StatelessWidget {
 
     Widget recordedDaysWidget = _buildRecordedDaysDistributionChart(themeData);
 
-    return AnalyticsSettingsCard(
+    return AnalyticsSettingsCard.singleEntry(
       title: LocaleKeys.seriesDataAnalytics_recordedHours_title.tr(),
       infoDlgContent: SimpleInfoDlgContent(info: LocaleKeys.seriesDataAnalytics_recordedHours_label_recordedHoursInfo.tr()),
-      children: [
-        recordedDaysWidget,
-        if (child != null) child!,
-      ],
+      content: Column(
+        children: [
+          recordedDaysWidget,
+          if (child != null) child!,
+        ],
+      ),
     );
   }
 

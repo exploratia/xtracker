@@ -23,52 +23,55 @@ class LogSettingsView extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SettingsCard(
+          SettingsCard.singleEntry(
             showDivider: false,
-            children: [
-              Row(
-                children: [
-                  Text(LocaleKeys.logSettings_label_logLevel.tr()),
-                  const _LogLevelSelector(),
-                ],
-              ),
-              const Divider(),
-              Table(
-                defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                // https://api.flutter.dev/flutter/widgets/Table-class.html
-                columnWidths: const <int, TableColumnWidth>{
-                  // 0: FixedColumnWidth(128),
-                  0: IntrinsicColumnWidth(),
-                  1: IntrinsicColumnWidth(),
-                  // 1: FlexColumnWidth(),
-                },
-                // border: TableBorder.symmetric(
-                //   inside: const BorderSide(width: 1, color: Colors.black12),
-                // ),
-                children: [
-                  TableUtils.tableRow([
-                    Text(LocaleKeys.logSettings_label_logFullStack.tr()),
-                    const _FullStackSwitch(),
-                  ]),
-                  TableUtils.tableRow([
-                    Text(LocaleKeys.logSettings_label_writeTestLogMessages.tr()),
-                    IconButton(
-                        iconSize: ThemeUtils.iconSizeScaled,
-                        tooltip: LocaleKeys.logSettings_btn_writeTestLogMessages_tooltip.tr(),
-                        onPressed: () {
-                          SimpleLogging.d('Debug Message');
-                          SimpleLogging.i('Info Message');
-                          SimpleLogging.w('Warning Message');
-                          SimpleLogging.e('Error Message');
-                          // logger.wtf('WTF Message');
-                        },
-                        icon: const Icon(
-                          Icons.short_text_rounded,
-                        )),
-                  ]),
-                ],
-              ),
-            ],
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Text(LocaleKeys.logSettings_label_logLevel.tr()),
+                    const _LogLevelSelector(),
+                  ],
+                ),
+                const Divider(),
+                Table(
+                  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+                  // https://api.flutter.dev/flutter/widgets/Table-class.html
+                  columnWidths: const <int, TableColumnWidth>{
+                    // 0: FixedColumnWidth(128),
+                    0: IntrinsicColumnWidth(),
+                    1: IntrinsicColumnWidth(),
+                    // 1: FlexColumnWidth(),
+                  },
+                  // border: TableBorder.symmetric(
+                  //   inside: const BorderSide(width: 1, color: Colors.black12),
+                  // ),
+                  children: [
+                    TableUtils.tableRow([
+                      Text(LocaleKeys.logSettings_label_logFullStack.tr()),
+                      const _FullStackSwitch(),
+                    ]),
+                    TableUtils.tableRow([
+                      Text(LocaleKeys.logSettings_label_writeTestLogMessages.tr()),
+                      IconButton(
+                          iconSize: ThemeUtils.iconSizeScaled,
+                          tooltip: LocaleKeys.logSettings_btn_writeTestLogMessages_tooltip.tr(),
+                          onPressed: () {
+                            SimpleLogging.d('Debug Message');
+                            SimpleLogging.i('Info Message');
+                            SimpleLogging.w('Warning Message');
+                            SimpleLogging.e('Error Message');
+                            // logger.wtf('WTF Message');
+                          },
+                          icon: const Icon(
+                            Icons.short_text_rounded,
+                          )),
+                    ]),
+                  ],
+                ),
+              ],
+            ),
           ),
           const ScrollFooter(),
         ],

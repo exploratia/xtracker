@@ -154,6 +154,8 @@ abstract class  LocaleKeys {
   static const seriesDataAnalytics_trend_tendency_none = 'seriesDataAnalytics.trend.tendency.none';
   static const seriesDataAnalytics_trend_tendency_up = 'seriesDataAnalytics.trend.tendency.up';
   static const seriesDataAnalytics_trend_tendency_down = 'seriesDataAnalytics.trend.tendency.down';
+  static const seriesDataAnalytics_bloodPressure_recordedDaysMedication_title = 'seriesDataAnalytics.bloodPressure.recordedDaysMedication.title';
+  static const seriesDataAnalytics_bloodPressure_recordedDaysMedication_label_medicationLastDays = 'seriesDataAnalytics.bloodPressure.recordedDaysMedication.label.medicationLastDays';
   static const seriesDataAnalytics_bloodPressure_trend_label_trendInfo = 'seriesDataAnalytics.bloodPressure.trend.label.trendInfo';
   static const seriesDataAnalytics_dailyLife_attributesProportions_title = 'seriesDataAnalytics.dailyLife.attributesProportions.title';
   static const seriesDataAnalytics_dailyLife_attributesProportions_subTitles_monthlyDistribution = 'seriesDataAnalytics.dailyLife.attributesProportions.subTitles.monthlyDistribution';

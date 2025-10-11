@@ -376,6 +376,12 @@
       }
     },
     "bloodPressure": {
+      "recordedDaysMedication": {
+        "title": "Medikamenteneinnahme",
+        "label": {
+          "medicationLastDays": "Medikamenteneinnahme der letzten 28 Tage"
+        }
+      },
       "trend": {
         "label": {
           "trendInfo": "Für systolische (△) und diastolische (▽) Werte wird je eine lineare Trendfunktion berechnet, um künftige Werte vorherzusagen.\n\nÜber die Betrachtung verschiedener Zeiträume (letzte x Tage) lassen sich kurz- und langfristige Entwicklungen erkennen."
