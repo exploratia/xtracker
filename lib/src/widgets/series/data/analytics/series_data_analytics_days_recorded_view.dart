@@ -22,41 +22,58 @@ import 'analytics/analysis_table.dart';
 import 'analytics/analytics_settings_card.dart';
 
 class SeriesDataAnalyticsDaysRecordedView extends StatelessWidget {
-  const SeriesDataAnalyticsDaysRecordedView({super.key, required this.seriesViewMetaData, required this.seriesDataValues});
+  const SeriesDataAnalyticsDaysRecordedView({super.key, required this.seriesViewMetaData, required this.seriesDataValues, this.additionalEntries});
 
   final SeriesViewMetaData seriesViewMetaData;
   final List<SeriesDataValue> seriesDataValues;
+  final List<AnalyticsSettingsCardEntry>? additionalEntries;
 
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    var dayItems = DayItem.buildDayItems(seriesDataValues, (day) => DayItem(day), includeToday: true);
-
-    var daysRecordedList = Analytics.datasetSizeInDays.map((lastXDays) => _DaysRecorded.analyse(dayItems, lastXDays));
-
-    Widget recordedDaysTable = _buildRecordedDaysTable(context, daysRecordedList);
-
-    Widget recordedDaysWidget = _buildRecordedDaysDistributionChart(daysRecordedList, themeData);
+    List<Widget> widgets = buildDaysRecordedWidgets(context, themeData, seriesViewMetaData, seriesDataValues);
 
     return AnalyticsSettingsCard(
-      title: LocaleKeys.seriesDataAnalytics_recordedDays_title.tr(),
-      infoDlgContent: SimpleInfoDlgContent(info: LocaleKeys.seriesDataAnalytics_recordedDays_label_recordedDaysInfo.tr()),
-      children: [
-        recordedDaysTable,
-        recordedDaysWidget,
+      analyticsSettingsCardEntries: [
+        AnalyticsSettingsCardEntry(
+          title: LocaleKeys.seriesDataAnalytics_recordedDays_title.tr(),
+          infoDlgContent: SimpleInfoDlgContent(info: LocaleKeys.seriesDataAnalytics_recordedDays_label_recordedDaysInfo.tr()),
+          content: Column(
+            spacing: ThemeUtils.verticalSpacingLarge,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: widgets,
+          ),
+        ),
+        if (additionalEntries != null) ...additionalEntries!,
       ],
     );
   }
 
-  Column _buildRecordedDaysDistributionChart(Iterable<_DaysRecorded> daysRecordedList, ThemeData themeData) {
+  static List<Widget> buildDaysRecordedWidgets(
+      BuildContext context, ThemeData themeData, SeriesViewMetaData seriesViewMetaData, List<SeriesDataValue> seriesDataValues) {
+    var dayItems = DayItem.buildDayItems(seriesDataValues, (day) => DayItem(day), includeToday: true);
+
+    var daysRecordedList = Analytics.datasetSizeInDays.map((lastXDays) => _DaysRecorded.analyse(dayItems, lastXDays));
+
+    Widget recordedDaysTable = _buildRecordedDaysTable(context, seriesViewMetaData, daysRecordedList);
+
+    Widget recordedDaysWidget = _buildRecordedDaysDistributionChart(daysRecordedList, seriesViewMetaData, themeData);
+
+    List<Widget> children = [recordedDaysTable, recordedDaysWidget];
+    return children;
+  }
+
+  static Column _buildRecordedDaysDistributionChart(Iterable<_DaysRecorded> daysRecordedList, SeriesViewMetaData seriesViewMetaData, ThemeData themeData) {
     var axisTitlesTheme = themeData.textTheme.labelLarge!;
     Widget chart = LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
+        double maxValue = 0;
         var chartWidth = math.max(280.0, constraints.maxWidth);
         List<BarChartGroupData> barGroups = [];
         for (int wd = 1; wd <= 7; wd++) {
           // for each weekday (1...7) calc the ratio weekday/recordedDays per dataset
           List<double> weekdayPerDataset = daysRecordedList.map((e) => (e.recordedDays == 0 ? 0.0 : e.weekDaySpread[wd] / e.recordedDays)).toList();
+          maxValue = math.max(maxValue, weekdayPerDataset.fold(0, (previousValue, val) => previousValue + val));
           final barGroup = _makeGroupData(wd - 1, weekdayPerDataset, seriesViewMetaData.seriesDef.color, chartWidth > 550);
           barGroups.add(barGroup);
         }
@@ -69,7 +86,7 @@ class SeriesDataAnalyticsDaysRecordedView extends StatelessWidget {
             child: BarChart(
               BarChartData(
                 alignment: BarChartAlignment.spaceBetween /* use full width */,
-                // maxY: 1,
+                maxY: maxValue > 0 ? null : 1,
                 minY: 0,
                 borderData: FlBorderData(show: false),
                 barTouchData: const BarTouchData(enabled: false),
@@ -119,7 +136,7 @@ class SeriesDataAnalyticsDaysRecordedView extends StatelessWidget {
           runSpacing: ThemeUtils.verticalSpacingSmall,
           children: [
             ...Analytics.datasetSizeInDays.map(
-              (s) => _buildLegendItem(s, themeData),
+              (s) => _buildLegendItem(s, seriesViewMetaData, themeData),
             )
           ],
         ),
@@ -128,7 +145,7 @@ class SeriesDataAnalyticsDaysRecordedView extends StatelessWidget {
     return chartWidget;
   }
 
-  Container _buildLegendItem(int datasetSize, ThemeData themeData) {
+  static Container _buildLegendItem(int datasetSize, SeriesViewMetaData seriesViewMetaData, ThemeData themeData) {
     var gradient = _createBarGradient(seriesViewMetaData.seriesDef.color, Analytics.datasetSizeInDays.indexOf(datasetSize));
     var textColor = ColorUtils.getContrastingTextColor(gradient.colors.first);
     return Container(
@@ -146,7 +163,7 @@ class SeriesDataAnalyticsDaysRecordedView extends StatelessWidget {
     );
   }
 
-  Widget bottomTitles(double value, TitleMeta meta, TextStyle axisTitlesTheme) {
+  static Widget bottomTitles(double value, TitleMeta meta, TextStyle axisTitlesTheme) {
     // 2025-9-1 is a monday. Add x value (0-6) to get the weekday label
     var weekdayDay = DateTimeUtils.formatShortDay(DateTime(2025, 9, 1, 12).add(Duration(days: value.toInt())));
     final Widget text = Text(
@@ -163,7 +180,7 @@ class SeriesDataAnalyticsDaysRecordedView extends StatelessWidget {
 
   /// - [x] = weekday-1
   /// - [weekDayForDataset] list of values for a certain weekday (x) for each dataset
-  BarChartGroupData _makeGroupData(int x, List<double> weekDayForDataset, Color baseColor, bool wideChart) {
+  static BarChartGroupData _makeGroupData(int x, List<double> weekDayForDataset, Color baseColor, bool wideChart) {
     double barWidth = wideChart ? 6 : 4;
     int idx = -1;
     return BarChartGroupData(
@@ -185,13 +202,13 @@ class SeriesDataAnalyticsDaysRecordedView extends StatelessWidget {
   }
 
   /// create gradient for bars and legend
-  LinearGradient _createBarGradient(Color baseColor, int idx) {
+  static LinearGradient _createBarGradient(Color baseColor, int idx) {
     var barColor = ColorUtils.hue(baseColor, idx * 30);
     var gradientColor = ColorUtils.hue(barColor, -10);
     return ChartUtils.createTopToBottomGradient([barColor, gradientColor])!;
   }
 
-  Widget _buildRecordedDaysTable(BuildContext context, Iterable<_DaysRecorded> daysRecordedList) {
+  static Widget _buildRecordedDaysTable(BuildContext context, SeriesViewMetaData seriesViewMetaData, Iterable<_DaysRecorded> daysRecordedList) {
     List<TableRow> rows = _buildKeyValueTableRows(context);
 
     for (var daysRecorded in daysRecordedList) {

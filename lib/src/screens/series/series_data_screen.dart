@@ -526,7 +526,7 @@ class _SelectColumnProfile extends StatelessWidget {
         overlay.size.height - position.dy,
       ),
       items: [
-        ...seriesType.tableFixColumnProfileTypes.map(
+        ...seriesType.sortedTableFixColumnProfileTypes.map(
           (type) => PopupMenuItem(
             onTap: () => _setTableFixColumnProfile(type),
             child: Row(

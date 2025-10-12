@@ -17,8 +17,12 @@ abstract class  LocaleKeys {
   static const commons_nav_openMenu = 'commons.nav.openMenu';
   static const commons_columnProfile_name_dateMorningMiddayEvening = 'commons.columnProfile.name.dateMorningMiddayEvening';
   static const commons_columnProfile_name_dateTimeValue = 'commons.columnProfile.name.dateTimeValue';
+  static const commons_columnProfile_name_dateDayRange = 'commons.columnProfile.name.dateDayRange';
+  static const commons_columnProfile_name_dateHourlyOverview = 'commons.columnProfile.name.dateHourlyOverview';
   static const commons_columnProfile_name_dateWeekdays = 'commons.columnProfile.name.dateWeekdays';
   static const commons_columnProfile_name_dateMonthDays = 'commons.columnProfile.name.dateMonthDays';
+  static const commons_columnProfile_columns_dayRange = 'commons.columnProfile.columns.dayRange';
+  static const commons_columnProfile_columns_hourlyOverview = 'commons.columnProfile.columns.hourlyOverview';
   static const commons_date_shortWeekday_monday = 'commons.date.shortWeekday.monday';
   static const commons_date_shortWeekday_tuesday = 'commons.date.shortWeekday.tuesday';
   static const commons_date_shortWeekday_wednesday = 'commons.date.shortWeekday.wednesday';
@@ -139,6 +143,10 @@ abstract class  LocaleKeys {
   static const seriesDataAnalytics_recordedDays_label_recordedDaysInfo = 'seriesDataAnalytics.recordedDays.label.recordedDaysInfo';
   static const seriesDataAnalytics_recordedDays_chart_chartTitle = 'seriesDataAnalytics.recordedDays.chart.chartTitle';
   static const seriesDataAnalytics_recordedDays_chart_legendTitle = 'seriesDataAnalytics.recordedDays.chart.legendTitle';
+  static const seriesDataAnalytics_recordedHours_title = 'seriesDataAnalytics.recordedHours.title';
+  static const seriesDataAnalytics_recordedHours_label_recordedHoursInfo = 'seriesDataAnalytics.recordedHours.label.recordedHoursInfo';
+  static const seriesDataAnalytics_recordedHours_chart_chartTitle = 'seriesDataAnalytics.recordedHours.chart.chartTitle';
+  static const seriesDataAnalytics_recordedHours_chart_chartTitleDailyLife = 'seriesDataAnalytics.recordedHours.chart.chartTitleDailyLife';
   static const seriesDataAnalytics_trend_title = 'seriesDataAnalytics.trend.title';
   static const seriesDataAnalytics_trend_label_forecast = 'seriesDataAnalytics.trend.label.forecast';
   static const seriesDataAnalytics_trend_label_failedToCalculateTrend = 'seriesDataAnalytics.trend.label.failedToCalculateTrend';
@@ -146,8 +154,11 @@ abstract class  LocaleKeys {
   static const seriesDataAnalytics_trend_tendency_none = 'seriesDataAnalytics.trend.tendency.none';
   static const seriesDataAnalytics_trend_tendency_up = 'seriesDataAnalytics.trend.tendency.up';
   static const seriesDataAnalytics_trend_tendency_down = 'seriesDataAnalytics.trend.tendency.down';
+  static const seriesDataAnalytics_bloodPressure_recordedDaysMedication_title = 'seriesDataAnalytics.bloodPressure.recordedDaysMedication.title';
+  static const seriesDataAnalytics_bloodPressure_recordedDaysMedication_label_medicationLastDays = 'seriesDataAnalytics.bloodPressure.recordedDaysMedication.label.medicationLastDays';
   static const seriesDataAnalytics_bloodPressure_trend_label_trendInfo = 'seriesDataAnalytics.bloodPressure.trend.label.trendInfo';
   static const seriesDataAnalytics_dailyLife_attributesProportions_title = 'seriesDataAnalytics.dailyLife.attributesProportions.title';
+  static const seriesDataAnalytics_dailyLife_attributesProportions_subTitles_monthlyDistribution = 'seriesDataAnalytics.dailyLife.attributesProportions.subTitles.monthlyDistribution';
   static const seriesDataAnalytics_dailyLife_attributesProportions_label_attributeProportionsInfo = 'seriesDataAnalytics.dailyLife.attributesProportions.label.attributeProportionsInfo';
   static const seriesDataAnalytics_dailyLife_attributesProportions_table_colAttribute = 'seriesDataAnalytics.dailyLife.attributesProportions.table.colAttribute';
   static const seriesDataAnalytics_dailyLife_attributesProportions_table_colProportions = 'seriesDataAnalytics.dailyLife.attributesProportions.table.colProportions';

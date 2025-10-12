@@ -9,60 +9,77 @@ import '../../../../controls/layout/single_child_scroll_view_with_scrollbar.dart
 import '../../../../controls/text/overflow_text.dart';
 
 class AnalyticsSettingsCard extends StatelessWidget {
-  const AnalyticsSettingsCard({super.key, required this.infoDlgContent, required this.title, required this.children});
+  const AnalyticsSettingsCard({
+    super.key,
+    required this.analyticsSettingsCardEntries,
+  });
 
-  final Widget infoDlgContent;
-  final String title;
-  final List<Widget> children;
+  AnalyticsSettingsCard.singleEntry({super.key, required String title, Widget? infoDlgContent, required Widget content})
+      : analyticsSettingsCardEntries = [AnalyticsSettingsCardEntry(title: title, infoDlgContent: infoDlgContent, content: content)];
+
+  final List<AnalyticsSettingsCardEntry> analyticsSettingsCardEntries;
 
   @override
   Widget build(BuildContext context) {
     return SettingsCard(
-      spacing: ThemeUtils.verticalSpacingLarge,
-      title: Row(
-        spacing: ThemeUtils.horizontalSpacing,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          OverflowText(
-            title,
-            style: Theme.of(context).textTheme.titleLarge,
-            expanded: false,
-            flexible: true,
-          ),
-          IconButton(
-            iconSize: ThemeUtils.iconSizeScaled,
-            tooltip: LocaleKeys.commons_btn_info_tooltip.tr(),
-            onPressed: () => Dialogs.simpleOkDialog(
-              SingleChildScrollViewWithScrollbar(
-                useHorizontalScreenPaddingForScrollbar: true,
-                child: infoDlgContent,
-              ),
-              context,
-              title: title,
-            ),
-            icon: const Icon(Icons.info_outline),
-          ),
-        ],
-      ),
-      children: children,
+      settingCardEntries: analyticsSettingsCardEntries
+          .map(
+            (e) => SettingsCardEntry(
+                title: Row(
+                  spacing: ThemeUtils.horizontalSpacing,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    OverflowText(
+                      e.title,
+                      style: Theme.of(context).textTheme.titleLarge,
+                      expanded: false,
+                      flexible: true,
+                    ),
+                    if (e.infoDlgContent != null)
+                      IconButton(
+                        iconSize: ThemeUtils.iconSizeScaled,
+                        tooltip: LocaleKeys.commons_btn_info_tooltip.tr(),
+                        onPressed: () => Dialogs.simpleOkDialog(
+                          SingleChildScrollViewWithScrollbar(
+                            useHorizontalScreenPaddingForScrollbar: true,
+                            child: e.infoDlgContent!,
+                          ),
+                          context,
+                          title: e.title,
+                        ),
+                        icon: const Icon(Icons.info_outline),
+                      ),
+                  ],
+                ),
+                content: e.content),
+          )
+          .toList(),
     );
   }
+}
+
+class AnalyticsSettingsCardEntry {
+  final String title;
+  final Widget? infoDlgContent;
+  final Widget content;
+
+  AnalyticsSettingsCardEntry({required this.title, required this.content, this.infoDlgContent});
 }
 
 class TrendViewSettingsCard extends StatelessWidget {
   const TrendViewSettingsCard({
     super.key,
     required this.trendInfoDialogContent,
-    required this.children,
+    required this.child,
   });
 
   final Widget trendInfoDialogContent;
-  final List<Widget> children;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
-    return AnalyticsSettingsCard(infoDlgContent: trendInfoDialogContent, title: LocaleKeys.seriesDataAnalytics_trend_title.tr(), children: children);
+    return AnalyticsSettingsCard.singleEntry(infoDlgContent: trendInfoDialogContent, title: LocaleKeys.seriesDataAnalytics_trend_title.tr(), content: child);
   }
 }
 

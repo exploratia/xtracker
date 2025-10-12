@@ -148,6 +148,15 @@ class DateTimeUtils {
     return (date1.isAfter(date2)) ? date1 : date2;
   }
 
+  /// returns the date with min utc timestamp
+  static DateTime minDate(DateTime date1, DateTime date2) {
+    return (date1.isBefore(date2)) ? date1 : date2;
+  }
+
+  static int minutesOfDay(DateTime dateTime) {
+    return dateTime.hour * 60 + dateTime.minute;
+  }
+
   static Color? backgroundColor(DateTime dateTime) {
     if (dateTime.weekday == DateTime.sunday) {
       return Globals.backgroundColorSunday;
@@ -156,4 +165,49 @@ class DateTimeUtils {
     }
     return null;
   }
+}
+
+class DateTimeBuilder {
+  late DateTime _dateTime;
+
+  DateTimeBuilder(DateTime? dateTime) {
+    _dateTime = dateTime ?? DateTime.now();
+  }
+
+  DateTimeBuilder.now() {
+    _dateTime = DateTime.now();
+  }
+
+  DateTime get dateTime => _dateTime;
+
+  DateTimeBuilder get clone => DateTimeBuilder(_dateTime);
+
+  DateTimeBuilder get mondayOfSameWeek => DateTimeBuilder(DateTimeUtils.mondayOfSameWeek(_dateTime));
+
+  DateTimeBuilder get lastDayOfMonth => DateTimeBuilder(DateTimeUtils.lastDayOfMonth(_dateTime));
+
+  DateTimeBuilder get firstDayOfNextMonth => DateTimeBuilder(DateTimeUtils.firstDayOfNextMonth(_dateTime));
+
+  DateTimeBuilder get firstDayOfPreviousMonth => DateTimeBuilder(DateTimeUtils.firstDayOfPreviousMonth(_dateTime));
+
+  /// first day of month 00:00:00.000
+  DateTimeBuilder get firstDayOfMonth => DateTimeBuilder(DateTimeUtils.firstDayOfMonth(_dateTime));
+
+  /// yyyy-01-01 00:00:00.000
+  DateTimeBuilder get firstDayOfYear => DateTimeBuilder(DateTimeUtils.firstDayOfYear(_dateTime));
+
+  DateTimeBuilder get dayBefore => DateTimeBuilder(DateTimeUtils.dayBefore(_dateTime));
+
+  DateTimeBuilder get dayAfter => DateTimeBuilder(DateTimeUtils.dayAfter(_dateTime));
+
+  DateTimeBuilder get truncateToDay => DateTimeBuilder(DateTimeUtils.truncateToDay(_dateTime));
+
+  DateTimeBuilder get truncateToMidDay => DateTimeBuilder(DateTimeUtils.truncateToMidDay(_dateTime));
+
+  /// end of day is next day start -1ys
+  DateTimeBuilder get endOfDay => DateTimeBuilder(DateTimeUtils.endOfDay(_dateTime));
+
+  DateTimeBuilder subtract(Duration duration) => DateTimeBuilder(_dateTime.subtract(duration));
+
+  DateTimeBuilder add(Duration duration) => DateTimeBuilder(_dateTime.add(duration));
 }

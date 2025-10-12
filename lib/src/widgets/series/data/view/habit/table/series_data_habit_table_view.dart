@@ -5,6 +5,9 @@ import '../../../../../../model/series/data/habit/habit_value.dart';
 import '../../../../../../model/series/data/series_data_filter.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
 import '../../../../../controls/grid/row_per_day/day_row_item.dart';
+import '../../../../../controls/grid/row_per_day/multi_value_day_row_cell_builder.dart';
+import '../../../../../controls/grid/row_per_day/multi_value_day_row_item.dart';
+import '../../../../../controls/grid/row_per_day/multi_value_day_row_item_renderer.dart';
 import '../../../../../controls/grid/row_per_day/row_per_day_cell_builder.dart';
 import '../../../../../controls/grid/two_dimensional_scrollable_table.dart';
 import '../../series_data_no_data.dart';
@@ -32,18 +35,41 @@ class SeriesDataHabitTableView extends StatelessWidget {
       );
     }
 
-    List<DayRowItem<HabitValue>> data = DayRowItem.buildTableDataProvider(seriesViewMetaData, filteredSeriesData);
+    int lineCount = 0;
+    GridCell Function(BuildContext context, int yIndex, int xIndex, Size cellSize) gridCellBuilder =
+        (context, yIndex, xIndex, cellSize) => GridCell(child: Container());
 
-    var rowPerDayCellBuilder = RowPerDayCellBuilder<HabitValue>(
-      data: data,
-      fixColumnProfile: columnProfile,
-      gridCellChildBuilder: (HabitValue value, Size _) => HabitValueRenderer(
-        habitValue: value,
-        seriesDef: seriesViewMetaData.seriesDef,
-        editMode: seriesViewMetaData.editMode,
-        wrapWithDateTimeTooltip: true,
-      ),
-    );
+    if (FixColumnProfile.isMultiValueDayProfile(columnProfile)) {
+      List<MultiValueDayRowItem<HabitValue>> data = MultiValueDayRowItem.buildTableDataProvider(seriesViewMetaData, filteredSeriesData);
+
+      var builder = MultiValueDayRowCellBuilder<HabitValue>(
+        data: data,
+        fixColumnProfile: columnProfile,
+        gridCellChildBuilder: (multiValueDayRowItem, Size _) => MultiValueDayRowItemRenderer(
+          hourly: columnProfile == FixColumnProfile.columnProfileDateHourlyOverview,
+          multiValueDayRowItem: multiValueDayRowItem,
+          seriesViewMetaData: seriesViewMetaData,
+          tooltipValueBuilder: (dataValue) => HabitValueRenderer(habitValue: dataValue, seriesDef: seriesViewMetaData.seriesDef),
+        ),
+      );
+      lineCount = data.length;
+      gridCellBuilder = builder.gridCellBuilder;
+    } else {
+      List<DayRowItem<HabitValue>> data = DayRowItem.buildTableDataProvider(seriesViewMetaData, filteredSeriesData);
+
+      var builder = RowPerDayCellBuilder<HabitValue>(
+        data: data,
+        fixColumnProfile: columnProfile,
+        gridCellChildBuilder: (HabitValue value, Size _) => HabitValueRenderer(
+          habitValue: value,
+          seriesDef: seriesViewMetaData.seriesDef,
+          editMode: seriesViewMetaData.editMode,
+          wrapWithDateTimeTooltip: true,
+        ),
+      );
+      lineCount = data.length;
+      gridCellBuilder = builder.gridCellBuilder;
+    }
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -55,8 +81,8 @@ class SeriesDataHabitTableView extends StatelessWidget {
         Expanded(
           child: TwoDimensionalScrollableTable(
             tableColumnProfile: columnProfile,
-            lineCount: data.length,
-            gridCellBuilder: rowPerDayCellBuilder.gridCellBuilder,
+            lineCount: lineCount,
+            gridCellBuilder: gridCellBuilder,
             lineHeight: HabitValueRenderer.height,
             useFixedFirstColumn: true,
             bottomScrollExtend: seriesDataViewOverlays.bottomHeight,

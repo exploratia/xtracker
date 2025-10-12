@@ -74,99 +74,97 @@ class _SeriesDataAnalyticsBloodPressureTrendViewState extends State<SeriesDataAn
   Widget build(BuildContext context) {
     return TrendViewSettingsCard(
       trendInfoDialogContent: const _TrendInfoDialogContent(),
-      children: [
-        FutureBuilderWithProgressIndicator(
-          future: _calcTrendsFuture,
-          errorBuilder: (error) => LocaleKeys.seriesDataAnalytics_trend_label_failedToCalculateTrend.tr(),
-          widgetBuilder: (fitResultWrappersPairs, BuildContext context) {
-            var mediaQueryUtils = MediaQueryUtils.of(context);
-            int forecastDays = mediaQueryUtils.isTablet || mediaQueryUtils.isLandscape ? 14 : 7;
+      child: FutureBuilderWithProgressIndicator(
+        future: _calcTrendsFuture,
+        errorBuilder: (error) => LocaleKeys.seriesDataAnalytics_trend_label_failedToCalculateTrend.tr(),
+        widgetBuilder: (fitResultWrappersPairs, BuildContext context) {
+          var mediaQueryUtils = MediaQueryUtils.of(context);
+          int forecastDays = mediaQueryUtils.isTablet || mediaQueryUtils.isLandscape ? 14 : 7;
 
-            List<TableRow> rows = TrendTable.buildKeyValueTableRowsWithForecastHeader(
-              forecastDays,
-              SeriesDataAnalyticsBloodPressureTrendView._bloodPressureRendererWidth,
-              context,
+          List<TableRow> rows = TrendTable.buildKeyValueTableRowsWithForecastHeader(
+            forecastDays,
+            SeriesDataAnalyticsBloodPressureTrendView._bloodPressureRendererWidth,
+            context,
+          );
+
+          for (var fitResultWrapperPair in fitResultWrappersPairs) {
+            var fitResultWrapperHigh = fitResultWrapperPair.k;
+            var fitResultHigh = fitResultWrapperHigh.fitResult;
+            var fitResultLow = fitResultWrapperPair.v.fitResult;
+
+            var keyWidget = Text(
+              LocaleKeys.seriesDataAnalytics_label_lastVarDays.tr(args: [fitResultWrapperHigh.dataBasisInDays.toString()]),
+              softWrap: false,
             );
 
-            for (var fitResultWrapperPair in fitResultWrappersPairs) {
-              var fitResultWrapperHigh = fitResultWrapperPair.k;
-              var fitResultHigh = fitResultWrapperHigh.fitResult;
-              var fitResultLow = fitResultWrapperPair.v.fitResult;
-
-              var keyWidget = Text(
-                LocaleKeys.seriesDataAnalytics_label_lastVarDays.tr(args: [fitResultWrapperHigh.dataBasisInDays.toString()]),
-                softWrap: false,
+            Widget valueWidget;
+            if (fitResultHigh.solvable) {
+              valueWidget = Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    spacing: ThemeUtils.horizontalSpacing,
+                    children: [
+                      // Tendency arrow
+                      SizedBox(
+                        width: SeriesDataAnalyticsBloodPressureTrendView._tendencyArrowWidth,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisSize: MainAxisSize.min,
+                          spacing: ThemeUtils.verticalSpacingSmall,
+                          children: [
+                            Tooltip(
+                              message: fitResultHigh.getTendency().tooltip,
+                              child: Icon(
+                                fitResultHigh.getTendency().arrow,
+                                size: SeriesDataAnalyticsBloodPressureTrendView._tendencyArrowWidth,
+                              ),
+                            ),
+                            Tooltip(
+                              message: fitResultLow.getTendency().tooltip,
+                              child: Icon(
+                                fitResultLow.getTendency().arrow,
+                                size: SeriesDataAnalyticsBloodPressureTrendView._tendencyArrowWidth,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // Preview
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: ThemeUtils.verticalSpacingSmall),
+                        child: _TrendBloodPressurePreview(
+                          seriesViewMetaData: widget.seriesViewMetaData,
+                          forecastDays: forecastDays,
+                          fitResultHigh: fitResultHigh,
+                          fitResultLow: fitResultLow,
+                        ),
+                      ),
+                    ],
+                  ),
+                  // Text(fitResultHigh.formula()),
+                  // Text(fitResultLow.formula()),
+                ],
               );
-
-              Widget valueWidget;
-              if (fitResultHigh.solvable) {
-                valueWidget = Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisSize: MainAxisSize.min,
-                      spacing: ThemeUtils.horizontalSpacing,
-                      children: [
-                        // Tendency arrow
-                        SizedBox(
-                          width: SeriesDataAnalyticsBloodPressureTrendView._tendencyArrowWidth,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
-                            spacing: ThemeUtils.verticalSpacingSmall,
-                            children: [
-                              Tooltip(
-                                message: fitResultHigh.getTendency().tooltip,
-                                child: Icon(
-                                  fitResultHigh.getTendency().arrow,
-                                  size: SeriesDataAnalyticsBloodPressureTrendView._tendencyArrowWidth,
-                                ),
-                              ),
-                              Tooltip(
-                                message: fitResultLow.getTendency().tooltip,
-                                child: Icon(
-                                  fitResultLow.getTendency().arrow,
-                                  size: SeriesDataAnalyticsBloodPressureTrendView._tendencyArrowWidth,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        // Preview
-                        Padding(
-                          padding: const EdgeInsets.symmetric(vertical: ThemeUtils.verticalSpacingSmall),
-                          child: _TrendBloodPressurePreview(
-                            seriesViewMetaData: widget.seriesViewMetaData,
-                            forecastDays: forecastDays,
-                            fitResultHigh: fitResultHigh,
-                            fitResultLow: fitResultLow,
-                          ),
-                        ),
-                      ],
-                    ),
-                    // Text(fitResultHigh.formula()),
-                    // Text(fitResultLow.formula()),
-                  ],
-                );
-              } else {
-                valueWidget = Padding(
-                  padding: const EdgeInsets.symmetric(vertical: ThemeUtils.verticalSpacingSmall),
-                  child: Text(LocaleKeys.seriesDataAnalytics_trend_label_trendCalculationNotPossible.tr()),
-                );
-              }
-
-              rows.add(TableUtils.tableRow([
-                keyWidget,
-                valueWidget,
-              ]));
+            } else {
+              valueWidget = Padding(
+                padding: const EdgeInsets.symmetric(vertical: ThemeUtils.verticalSpacingSmall),
+                child: Text(LocaleKeys.seriesDataAnalytics_trend_label_trendCalculationNotPossible.tr()),
+              );
             }
 
-            return TrendTable(rows: rows);
-          },
-        ),
-      ],
+            rows.add(TableUtils.tableRow([
+              keyWidget,
+              valueWidget,
+            ]));
+          }
+
+          return TrendTable(rows: rows);
+        },
+      ),
     );
   }
 }

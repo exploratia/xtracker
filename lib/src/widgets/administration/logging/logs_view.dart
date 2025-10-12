@@ -36,22 +36,20 @@ class _LogsViewState extends State<LogsView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SettingsCard(
+          SettingsCard.singleEntry(
             showDivider: false,
-            children: [
-              FutureBuilderWithProgressIndicator(
-                future: DailyFiles.listLogFileNames(),
-                errorBuilder: (error) => 'No log files found!',
-                widgetBuilder: (logFiles, _) {
-                  return Center(
-                    child: Wrap(
-                      spacing: ThemeUtils.horizontalSpacing,
-                      children: [...logFiles.map((logFile) => _Chip(logFile, () => widget.logSelectHandler(logFile, _rebuild)))],
-                    ),
-                  );
-                },
-              ),
-            ],
+            content: FutureBuilderWithProgressIndicator(
+              future: DailyFiles.listLogFileNames(),
+              errorBuilder: (error) => 'No log files found!',
+              widgetBuilder: (logFiles, _) {
+                return Center(
+                  child: Wrap(
+                    spacing: ThemeUtils.horizontalSpacing,
+                    children: [...logFiles.map((logFile) => _Chip(logFile, () => widget.logSelectHandler(logFile, _rebuild)))],
+                  ),
+                );
+              },
+            ),
           ),
           const Center(child: ScrollFooter()),
         ],

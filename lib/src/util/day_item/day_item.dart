@@ -21,6 +21,26 @@ class DayItem<T extends DateTimeItem> {
     return dateTimeItems.length;
   }
 
+  DateTime get minDateTime {
+    var c = count;
+    if (c == 0) return dayDate;
+    if (c == 1) return dateTimeItems.first.datetime;
+
+    var d1 = dateTimeItems.first.datetime;
+    var d2 = dateTimeItems.last.datetime;
+    return (d1.isBefore(d2)) ? d1 : d2;
+  }
+
+  DateTime get maxDateTime {
+    var c = count;
+    if (c == 0) return dayDate;
+    if (c == 1) return dateTimeItems.first.datetime;
+
+    var d1 = dateTimeItems.first.datetime;
+    var d2 = dateTimeItems.last.datetime;
+    return (d1.isBefore(d2)) ? d1 : d2;
+  }
+
   /// combines a list of DayTimeItems to a list of DayItems (one for each day) which contain the originals in their internal list.
   /// - [reversed] if true the returned list is in reverse order
   static List<I> buildDayItems<I extends DayItem, T extends DateTimeItem>(

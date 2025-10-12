@@ -8,23 +8,18 @@ class SettingsCard extends StatelessWidget {
   /// Damit die Card die Device-Constraints einhalten kann, muss umschliessende Column z.B. center sein.
   const SettingsCard({
     super.key,
-    this.title,
-    required this.children,
-    this.showDivider = true,
-    this.childrenColumnCrossAxisAlignment = CrossAxisAlignment.start,
-    this.spacing = 0,
+    required this.settingCardEntries,
   });
 
-  final dynamic title;
-  final List<Widget> children;
-  final bool showDivider;
-  final CrossAxisAlignment childrenColumnCrossAxisAlignment;
-  final double spacing;
+  SettingsCard.singleEntry({super.key, dynamic title, bool showDivider = true, required Widget content})
+      : settingCardEntries = [SettingsCardEntry(content: content, showDivider: showDivider, title: title)];
 
-  Widget _buildTitle(BuildContext context) {
+  final List<SettingsCardEntry> settingCardEntries;
+
+  Widget _buildTitle(BuildContext context, dynamic title) {
     if (title == null) return Container(height: 0);
     if (title is Widget) {
-      return title as Widget;
+      return title;
     }
     var titleText = title.toString();
     return Text(titleText, style: Theme.of(context).textTheme.titleLarge);
@@ -39,14 +34,18 @@ class SettingsCard extends StatelessWidget {
             padding: ThemeUtils.cardPaddingAll,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
+              spacing: ThemeUtils.verticalSpacingLarge * 2,
               children: [
-                _buildTitle(context),
-                if (showDivider) const Divider(height: ThemeUtils.verticalSpacingLarge),
-                Column(
-                  crossAxisAlignment: childrenColumnCrossAxisAlignment,
-                  spacing: spacing,
-                  children: [...children],
-                )
+                ...settingCardEntries.map(
+                  (entry) => Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildTitle(context, entry.title),
+                      if (entry.showDivider) const Divider(height: ThemeUtils.verticalSpacingLarge),
+                      entry.content,
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -54,4 +53,12 @@ class SettingsCard extends StatelessWidget {
       ),
     );
   }
+}
+
+class SettingsCardEntry {
+  final dynamic title;
+  final bool showDivider;
+  final Widget content;
+
+  SettingsCardEntry({this.title, required this.content, this.showDivider = true});
 }

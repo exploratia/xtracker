@@ -32,8 +32,14 @@
       "name": {
         "dateMorningMiddayEvening": "Date | Morning | Midday | Evening",
         "dateTimeValue": "Date | Time | Value",
+        "dateDayRange": "Date | Day overview",
+        "dateHourlyOverview": "Date | Hourly overview",
         "dateWeekdays": "Date | Weekdays (Mon–Sun)",
         "dateMonthDays": "Date | Month days (1–31)"
+      },
+      "columns": {
+        "dayRange": "Day overview",
+        "hourlyOverview": "Hourly overview"
       }
     },
     "date": {
@@ -346,6 +352,16 @@
         "legendTitle": "Dataset (last x days)"
       }
     },
+    "recordedHours": {
+      "title": "Recorded hours",
+      "label": {
+        "recordedHoursInfo": "Shows at which times of day measurements were recorded."
+      },
+      "chart": {
+        "chartTitle": "Distribution by time of day",
+        "chartTitleDailyLife": "Distribution by time of day per attribute"
+      }
+    },
     "trend": {
       "title": "Trend Analysis",
       "label": {
@@ -360,6 +376,12 @@
       }
     },
     "bloodPressure": {
+      "recordedDaysMedication": {
+        "title": "Medication intake",
+        "label": {
+          "medicationLastDays": "Medication intake in the last 28 days"
+        }
+      },
       "trend": {
         "label": {
           "trendInfo": "A linear trend is calculated for both systolic (△) and diastolic (▽) values to forecast future values.\n\nBy using different time ranges (last x days), short- and long-term changes can be seen."
@@ -369,6 +391,9 @@
     "dailyLife": {
       "attributesProportions": {
         "title": "Attribute distribution",
+        "subTitles": {
+          "monthlyDistribution": "Monthly distribution"
+        },
         "label": {
           "attributeProportionsInfo": "Overview of attribute frequencies in total and their distribution across different periods of the past year."
         },

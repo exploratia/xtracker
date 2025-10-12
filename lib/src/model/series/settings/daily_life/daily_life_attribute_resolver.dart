@@ -26,22 +26,22 @@ class DailyLifeAttributeResolver {
         name: seriesDef.name);
   }
 
-  DailyLifeAttribute resolve(dynamic attributeOrUuid) {
+  DailyLifeAttribute resolve(dynamic attributeOrAid) {
     String uuid = Globals.invalid;
-    if (attributeOrUuid is String) {
-      uuid = attributeOrUuid;
-    } else if (attributeOrUuid is DailyLifeValue) {
-      uuid = attributeOrUuid.aid;
-    } else if (attributeOrUuid is DailyLifeAttribute) {
-      uuid = attributeOrUuid.aid;
+    if (attributeOrAid is String) {
+      uuid = attributeOrAid;
+    } else if (attributeOrAid is DailyLifeValue) {
+      uuid = attributeOrAid.aid;
+    } else if (attributeOrAid is DailyLifeAttribute) {
+      uuid = attributeOrAid.aid;
     }
     return _attributeUuid2Color[uuid] ?? _fallbackAttribute;
   }
 
   /// compare two attributes by order in series def
-  int compare(dynamic attributeOrUuid1, dynamic attributeOrUuid2) {
-    String aid1 = resolve(attributeOrUuid1).aid;
-    String aid2 = resolve(attributeOrUuid2).aid;
+  int compare(dynamic attributeOrAid1, dynamic attributeOrAid2) {
+    String aid1 = resolve(attributeOrAid1).aid;
+    String aid2 = resolve(attributeOrAid2).aid;
     return attributeIds.indexOf(aid1).compareTo(attributeIds.indexOf(aid2));
   }
 }

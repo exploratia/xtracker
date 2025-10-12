@@ -204,4 +204,78 @@ void main() {
       expect(0, datetime.microsecond);
     });
   });
+  group('Date Time Builder', () {
+    test('test mondayOfSameWeek', () {
+      var datetime = DateTimeBuilder(DateTime(2025, 8, 31)).mondayOfSameWeek.dateTime;
+      expect(2025, datetime.year);
+      expect(8, datetime.month);
+      expect(25, datetime.day);
+    });
+
+    test('test firstDayOfMonth', () {
+      var datetime = DateTimeBuilder(DateTime(2025, 8, 31)).firstDayOfMonth.dateTime;
+      expect(2025, datetime.year);
+      expect(8, datetime.month);
+      expect(1, datetime.day);
+    });
+
+    test('test lastDayOfMonth', () {
+      var datetime = DateTimeBuilder(DateTime(2025, 8, 31)).lastDayOfMonth.dateTime;
+      expect(2025, datetime.year);
+      expect(8, datetime.month);
+      expect(31, datetime.day);
+    });
+
+    test('test firstDayOfNextMonth', () {
+      var datetime = DateTimeBuilder(DateTime(2025, 8, 31)).firstDayOfNextMonth.dateTime;
+      expect(2025, datetime.year);
+      expect(9, datetime.month);
+      expect(1, datetime.day);
+    });
+
+    test('test firstDayOfPreviousMonth', () {
+      var datetime = DateTimeBuilder(DateTime(2025, 8, 31)).firstDayOfPreviousMonth.dateTime;
+      expect(2025, datetime.year);
+      expect(7, datetime.month);
+      expect(1, datetime.day);
+    });
+
+    test('test firstDayOfYear', () {
+      var datetime = DateTimeBuilder(DateTime(2025, 8, 31)).firstDayOfYear.dateTime;
+      expect(2025, datetime.year);
+      expect(1, datetime.month);
+      expect(1, datetime.day);
+    });
+
+    test('test dayBefore', () {
+      var datetime = DateTimeBuilder(DateTime(2025, 8, 31)).dayBefore.dateTime;
+      expect(2025, datetime.year);
+      expect(8, datetime.month);
+      expect(30, datetime.day);
+    });
+
+    test('test dayAfter', () {
+      var datetime = DateTimeBuilder(DateTime(2025, 8, 31)).dayAfter.dateTime;
+      expect(2025, datetime.year);
+      expect(9, datetime.month);
+      expect(1, datetime.day);
+    });
+
+    test('test truncateToDay', () {
+      var datetime = DateTimeBuilder.now().truncateToDay.dateTime;
+      expect(0, datetime.hour);
+      expect(0, datetime.minute);
+      expect(0, datetime.second);
+      expect(0, datetime.millisecond);
+      expect(0, datetime.microsecond);
+    });
+
+    test('test concat', () {
+      var datetime = DateTimeBuilder(DateTime(2025, 8, 31)).dayAfter.lastDayOfMonth.firstDayOfNextMonth.dayBefore.firstDayOfMonth.truncateToMidDay.dateTime;
+      expect(2025, datetime.year);
+      expect(9, datetime.month);
+      expect(1, datetime.day);
+      expect(12, datetime.hour);
+    });
+  });
 }

@@ -41,21 +41,24 @@ class AdministrationView extends StatelessWidget {
         spacing: ThemeUtils.cardPadding,
         mainAxisSize: MainAxisSize.min,
         children: [
-          SettingsCard(
-            spacing: ThemeUtils.verticalSpacing,
+          SettingsCard.singleEntry(
             showDivider: false,
-            children: [
-              ...links.map((lnk) => ListTile(
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(ThemeUtils.borderRadius)),
-                    leading: lnk['ico'] as Widget,
-                    title: Text(lnk['title'] as String),
-                    trailing: Icon(
-                      Icons.navigate_next,
-                      color: themeData.colorScheme.primary,
-                    ),
-                    onTap: () => Navigator.restorablePushNamed(context, lnk['routeName'] as String),
-                  )),
-            ],
+            content: Column(
+              spacing: ThemeUtils.verticalSpacing,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ...links.map((lnk) => ListTile(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(ThemeUtils.borderRadius)),
+                      leading: lnk['ico'] as Widget,
+                      title: Text(lnk['title'] as String),
+                      trailing: Icon(
+                        Icons.navigate_next,
+                        color: themeData.colorScheme.primary,
+                      ),
+                      onTap: () => Navigator.restorablePushNamed(context, lnk['routeName'] as String),
+                    )),
+              ],
+            ),
           ),
           const _SupportTheApp(),
           const _AppInfoCard(),
@@ -108,24 +111,26 @@ class _AppInfoCard extends StatelessWidget {
           ]);
         }
 
-        return SettingsCard(
-            title: Wrap(
-              spacing: ThemeUtils.horizontalSpacing,
-              runSpacing: ThemeUtils.verticalSpacingSmall,
-              alignment: WrapAlignment.spaceBetween,
-              crossAxisAlignment: WrapCrossAlignment.center,
-              children: [
-                Text(/*AppInfo.appName*/ LocaleKeys.appTitle.tr(), style: Theme.of(context).textTheme.titleLarge),
-                SizedBox(
-                  height: 32,
-                  width: 32,
-                  child: ThemeUtils.isDarkMode(themeData)
-                      ? Assets.images.logos.appLogoWhite.image(fit: BoxFit.cover)
-                      : Assets.images.logos.appLogo.image(fit: BoxFit.cover),
-                ),
-              ],
-            ),
+        return SettingsCard.singleEntry(
+          title: Wrap(
+            spacing: ThemeUtils.horizontalSpacing,
+            runSpacing: ThemeUtils.verticalSpacingSmall,
+            alignment: WrapAlignment.spaceBetween,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              Text(/*AppInfo.appName*/ LocaleKeys.appTitle.tr(), style: Theme.of(context).textTheme.titleLarge),
+              SizedBox(
+                height: 32,
+                width: 32,
+                child: ThemeUtils.isDarkMode(themeData)
+                    ? Assets.images.logos.appLogoWhite.image(fit: BoxFit.cover)
+                    : Assets.images.logos.appLogo.image(fit: BoxFit.cover),
+              ),
+            ],
+          ),
+          content: Column(
             spacing: ThemeUtils.verticalSpacing,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // legals buttons
               Wrap(
@@ -164,12 +169,16 @@ class _AppInfoCard extends StatelessWidget {
                 ],
               ),
               const Divider(height: ThemeUtils.verticalSpacingLarge),
-              ...rows.map((r) => Wrap(
-                    spacing: ThemeUtils.horizontalSpacing,
-                    crossAxisAlignment: WrapCrossAlignment.center,
-                    children: [...r],
-                  )),
-            ]);
+              ...rows.map(
+                (r) => Wrap(
+                  spacing: ThemeUtils.horizontalSpacing,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [...r],
+                ),
+              ),
+            ],
+          ),
+        );
       },
     );
   }
@@ -180,17 +189,25 @@ class _SupportTheApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SettingsCard(spacing: ThemeUtils.verticalSpacing, title: LocaleKeys.administration_supportApp_title.tr(), showDivider: true, children: [
-      Text(LocaleKeys.administration_supportApp_label_buyMeACoffee.tr()),
-      ImgLnk(uri: Globals.urlCoffeeExploratia, imageProvider: Assets.images.bmc.bmcButton.provider(), height: 48, width: 171),
-      const SizedBox(height: ThemeUtils.verticalSpacing),
-      Wrap(
-        crossAxisAlignment: WrapCrossAlignment.center,
+    return SettingsCard.singleEntry(
+      title: LocaleKeys.administration_supportApp_title.tr(),
+      showDivider: true,
+      content: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        spacing: ThemeUtils.verticalSpacing,
         children: [
-          Text(LocaleKeys.administration_supportApp_label_reportABug.tr()),
-          TextButton(onPressed: () => LaunchUri.launchUri(Globals.uriGithubXtrackerIssues), child: Text("${Globals.uriGithubXtrackerIssues}")),
+          Text(LocaleKeys.administration_supportApp_label_buyMeACoffee.tr()),
+          ImgLnk(uri: Globals.urlCoffeeExploratia, imageProvider: Assets.images.bmc.bmcButton.provider(), height: 48, width: 171),
+          const SizedBox(height: ThemeUtils.verticalSpacing),
+          Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              Text(LocaleKeys.administration_supportApp_label_reportABug.tr()),
+              TextButton(onPressed: () => LaunchUri.launchUri(Globals.uriGithubXtrackerIssues), child: Text("${Globals.uriGithubXtrackerIssues}")),
+            ],
+          )
         ],
-      )
-    ]);
+      ),
+    );
   }
 }

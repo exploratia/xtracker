@@ -6,6 +6,9 @@ import '../../../../../../model/series/data/series_data_filter.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
 import '../../../../../../model/series/settings/daily_life/daily_life_attribute_resolver.dart';
 import '../../../../../controls/grid/row_per_day/day_row_item.dart';
+import '../../../../../controls/grid/row_per_day/multi_value_day_row_cell_builder.dart';
+import '../../../../../controls/grid/row_per_day/multi_value_day_row_item.dart';
+import '../../../../../controls/grid/row_per_day/multi_value_day_row_item_renderer.dart';
 import '../../../../../controls/grid/row_per_day/row_per_day_cell_builder.dart';
 import '../../../../../controls/grid/two_dimensional_scrollable_table.dart';
 import '../../series_data_no_data.dart';
@@ -34,20 +37,45 @@ class SeriesDataDailyLifeTableView extends StatelessWidget {
       );
     }
 
-    List<DayRowItem<DailyLifeValue>> data = DayRowItem.buildTableDataProvider(seriesViewMetaData, filteredSeriesData);
+    int lineCount = 0;
+    GridCell Function(BuildContext context, int yIndex, int xIndex, Size cellSize) gridCellBuilder =
+        (context, yIndex, xIndex, cellSize) => GridCell(child: Container());
 
-    var rowPerDayCellBuilder = RowPerDayCellBuilder<DailyLifeValue>(
-      data: data,
-      fixColumnProfile: columnProfile,
-      gridCellChildBuilder: (DailyLifeValue value, Size cellSize) => DailyLifeValueRenderer(
-        dailyLifeValue: value,
-        seriesDef: seriesViewMetaData.seriesDef,
-        editMode: seriesViewMetaData.editMode,
-        // wrapWithDateTimeTooltip: true, // tooltip not required in date time value column profile
-        dailyLifeAttributeResolver: dailyLifeAttributeResolver,
-        maxContentWidth: cellSize.width,
-      ),
-    );
+    if (FixColumnProfile.isMultiValueDayProfile(columnProfile)) {
+      List<MultiValueDayRowItem<DailyLifeValue>> data = MultiValueDayRowItem.buildTableDataProvider(seriesViewMetaData, filteredSeriesData);
+      var dailyLifeAttributeResolver = DailyLifeAttributeResolver(seriesViewMetaData.seriesDef);
+      var builder = MultiValueDayRowCellBuilder<DailyLifeValue>(
+        data: data,
+        fixColumnProfile: columnProfile,
+        gridCellChildBuilder: (multiValueDayRowItem, Size _) => MultiValueDayRowItemRenderer(
+          hourly: columnProfile == FixColumnProfile.columnProfileDateHourlyOverview,
+          multiValueDayRowItem: multiValueDayRowItem,
+          seriesViewMetaData: seriesViewMetaData,
+          tooltipValueBuilder: (dataValue) => DailyLifeValueRenderer(
+              dailyLifeValue: dataValue, seriesDef: seriesViewMetaData.seriesDef, dailyLifeAttributeResolver: dailyLifeAttributeResolver),
+        ),
+      );
+      lineCount = data.length;
+      gridCellBuilder = builder.gridCellBuilder;
+    } else {
+      List<DayRowItem<DailyLifeValue>> data = DayRowItem.buildTableDataProvider(seriesViewMetaData, filteredSeriesData);
+
+      var builder = RowPerDayCellBuilder<DailyLifeValue>(
+        data: data,
+        fixColumnProfile: columnProfile,
+        gridCellChildBuilder: (DailyLifeValue value, Size cellSize) => DailyLifeValueRenderer(
+          dailyLifeValue: value,
+          seriesDef: seriesViewMetaData.seriesDef,
+          editMode: seriesViewMetaData.editMode,
+          // wrapWithDateTimeTooltip: true, // tooltip not required in date time value column profile
+          dailyLifeAttributeResolver: dailyLifeAttributeResolver,
+          maxContentWidth: cellSize.width,
+        ),
+      );
+
+      lineCount = data.length;
+      gridCellBuilder = builder.gridCellBuilder;
+    }
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -59,8 +87,8 @@ class SeriesDataDailyLifeTableView extends StatelessWidget {
         Expanded(
           child: TwoDimensionalScrollableTable(
             tableColumnProfile: columnProfile,
-            lineCount: data.length,
-            gridCellBuilder: rowPerDayCellBuilder.gridCellBuilder,
+            lineCount: lineCount,
+            gridCellBuilder: gridCellBuilder,
             lineHeight: DailyLifeValueRenderer.height,
             useFixedFirstColumn: true,
             bottomScrollExtend: seriesDataViewOverlays.bottomHeight,

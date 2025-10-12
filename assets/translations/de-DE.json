@@ -32,8 +32,14 @@
       "name": {
         "dateMorningMiddayEvening": "Datum | Morgens | Mittags | Abends",
         "dateTimeValue": "Datum | Uhrzeit | Wert",
+        "dateDayRange": "Datum | Tagesübersicht",
+        "dateHourlyOverview": "Datum | Stundenübersicht",
         "dateWeekdays": "Datum | Wochentage (Mo–So)",
         "dateMonthDays": "Datum | Monatstage (1–31)"
+      },
+      "columns": {
+        "dayRange": "Tagesübersicht",
+        "hourlyOverview": "Stundenübersicht"
       }
     },
     "date": {
@@ -346,6 +352,16 @@
         "legendTitle": "Datenbasis (letzte x Tage)"
       }
     },
+    "recordedHours": {
+      "title": "Aufgezeichnete Stunden",
+      "label": {
+        "recordedHoursInfo": "Zeigt, zu welchen Tageszeiten Messwerte erfasst wurden."
+      },
+      "chart": {
+        "chartTitle": "Verteilung nach Tageszeiten",
+        "chartTitleDailyLife": "Verteilung nach Tageszeiten je Attribut"
+      }
+    },
     "trend": {
       "title": "Trend-Analyse",
       "label": {
@@ -360,6 +376,12 @@
       }
     },
     "bloodPressure": {
+      "recordedDaysMedication": {
+        "title": "Medikamenteneinnahme",
+        "label": {
+          "medicationLastDays": "Medikamenteneinnahme der letzten 28 Tage"
+        }
+      },
       "trend": {
         "label": {
           "trendInfo": "Für systolische (△) und diastolische (▽) Werte wird je eine lineare Trendfunktion berechnet, um künftige Werte vorherzusagen.\n\nÜber die Betrachtung verschiedener Zeiträume (letzte x Tage) lassen sich kurz- und langfristige Entwicklungen erkennen."
@@ -369,6 +391,9 @@
     "dailyLife": {
       "attributesProportions": {
         "title": "Attribut-Verteilung",
+        "subTitles": {
+          "monthlyDistribution": "Monatsverteilung"
+        },
         "label": {
           "attributeProportionsInfo": "Übersicht über die Häufigkeit der Attribute insgesamt und ihre Verteilung in verschiedenen Zeiträumen des letzten Jahres."
         },

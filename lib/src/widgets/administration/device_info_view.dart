@@ -42,13 +42,13 @@ class DeviceInfoView extends StatelessWidget {
       child: Column(
         spacing: ThemeUtils.screenPadding,
         children: [
-          SettingsCard(
+          SettingsCard.singleEntry(
             showDivider: false,
-            children: [tableDevice],
+            content: tableDevice,
           ),
-          SettingsCard(
+          SettingsCard.singleEntry(
             showDivider: false,
-            children: [tableScreen],
+            content: tableScreen,
           ),
           const ScrollFooter(),
         ],
