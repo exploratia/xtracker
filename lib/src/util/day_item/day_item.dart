@@ -35,7 +35,7 @@ class DayItem<T extends DateTimeItem> {
     var c = count;
     if (c == 0) return dayDate;
     if (c == 1) return dateTimeItems.first.datetime;
-     
+
     var d1 = dateTimeItems.first.datetime;
     var d2 = dateTimeItems.last.datetime;
     return (d1.isBefore(d2)) ? d1 : d2;
