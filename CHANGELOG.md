@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.3.1] - 2025-10-12
+
+### Features
+
+- add hourly distribution for daily life attributes in analysis
+- implement single-row, multi-value-per-day table column profiles
+- add hourly distribution chart in analysis
+- add monthly distribution chart in habit analysis
+
 ## [1.3.0] - 2025-10-04
 
 ### Features
