@@ -4,7 +4,9 @@ import 'package:sembast/sembast.dart';
 import '../model/series/data/blood_pressure/blood_pressure_value.dart';
 import '../model/series/data/daily_check/daily_check_value.dart';
 import '../model/series/data/daily_life/daily_life_value.dart';
+import '../model/series/data/free/free_value.dart';
 import '../model/series/data/habit/habit_value.dart';
+import '../model/series/data/monthly/monthly_value.dart';
 import '../model/series/data/series_data_value.dart';
 import '../model/series/series_def.dart';
 import '../model/series/series_type.dart';
@@ -97,6 +99,26 @@ class StoreSeriesData {
     List<RecordSnapshot<Object?, Object?>> records = await _findAllSeriesDataValues();
     for (var value in records.values) {
       result.add(HabitValue.fromJson(value as Map<String, dynamic>));
+    }
+    return result;
+  }
+
+  /// returns unsorted list of SeriesDataValues
+  Future<List<FreeValue>> getAllSeriesDataValuesAsFreeValue() async {
+    List<FreeValue> result = [];
+    List<RecordSnapshot<Object?, Object?>> records = await _findAllSeriesDataValues();
+    for (var value in records.values) {
+      result.add(FreeValue.fromJson(value as Map<String, dynamic>));
+    }
+    return result;
+  }
+
+  /// returns unsorted list of SeriesDataValues
+  Future<List<MonthlyValue>> getAllSeriesDataValuesAsMonthlyValue() async {
+    List<MonthlyValue> result = [];
+    List<RecordSnapshot<Object?, Object?>> records = await _findAllSeriesDataValues();
+    for (var value in records.values) {
+      result.add(MonthlyValue.fromJson(value as Map<String, dynamic>));
     }
     return result;
   }

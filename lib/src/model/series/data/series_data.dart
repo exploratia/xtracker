@@ -10,14 +10,18 @@ import '../../../util/logging/flutter_simple_logging.dart';
 import '../../../widgets/series/data/input/blood_pressure/blood_pressure_input.dart';
 import '../../../widgets/series/data/input/daily_check/daily_check_input.dart';
 import '../../../widgets/series/data/input/daily_life/daily_life_input.dart';
+import '../../../widgets/series/data/input/free/free_input.dart';
 import '../../../widgets/series/data/input/habit/habit_input.dart';
 import '../../../widgets/series/data/input/input_result.dart';
+import '../../../widgets/series/data/input/monthly/monthly_input.dart';
 import '../series_def.dart';
 import '../series_type.dart';
 import 'blood_pressure/blood_pressure_value.dart';
 import 'daily_check/daily_check_value.dart';
 import 'daily_life/daily_life_value.dart';
+import 'free/free_value.dart';
 import 'habit/habit_value.dart';
+import 'monthly/monthly_value.dart';
 import 'series_data_value.dart';
 
 class SeriesData<T extends SeriesDataValue> {
@@ -55,6 +59,18 @@ class SeriesData<T extends SeriesDataValue> {
   static SeriesData<HabitValue> fromJsonHabitData(Map<String, dynamic> json) => SeriesData(
         json['uuid'] as String,
         [...(json['data'] as List<dynamic>).map((e) => HabitValue.fromJson(e))],
+        // if version is required: json['version'] as int? ?? 1
+      );
+
+  static SeriesData<FreeValue> fromJsonFreeData(Map<String, dynamic> json) => SeriesData(
+        json['uuid'] as String,
+        [...(json['data'] as List<dynamic>).map((e) => FreeValue.fromJson(e))],
+        // if version is required: json['version'] as int? ?? 1
+      );
+
+  static SeriesData<MonthlyValue> fromJsonMonthlyData(Map<String, dynamic> json) => SeriesData(
+        json['uuid'] as String,
+        [...(json['data'] as List<dynamic>).map((e) => MonthlyValue.fromJson(e))],
         // if version is required: json['version'] as int? ?? 1
       );
 
@@ -118,6 +134,10 @@ class SeriesData<T extends SeriesDataValue> {
         inputResult = await DailyLifeInput.showInputDlg(context, seriesDef, dailyLifeValue: (value is DailyLifeValue) ? value : null);
       case SeriesType.habit:
         inputResult = await HabitInput.showInputDlg(context, seriesDef, habitValue: (value is HabitValue) ? value : null);
+      case SeriesType.free:
+        inputResult = await FreeInput.showInputDlg(context, seriesDef, freeValue: (value is FreeValue) ? value : null);
+      case SeriesType.monthly:
+        inputResult = await MonthlyInput.showInputDlg(context, seriesDef, monthlyValue: (value is MonthlyValue) ? value : null);
     }
 
     if (inputResult == null) return; // canceled

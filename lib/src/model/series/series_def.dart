@@ -88,8 +88,8 @@ class SeriesDef {
       SeriesType.dailyCheck => 1,
       SeriesType.dailyLife => 1,
       SeriesType.habit => 1,
-      // SeriesType.monthly => 1,
-      // SeriesType.free => 1,
+      SeriesType.monthly => 1,
+      SeriesType.free => 1,
     };
   }
 
@@ -155,48 +155,29 @@ class SeriesDef {
 }
 
 class SeriesItem {
-  final String uuid;
+  final String siid;
   final String title;
-  final String unit;
-  final double tableColumnMinWidth;
+  final String? unit;
+  final Color color;
 
-  SeriesItem({required this.uuid, required this.title, required this.unit, required this.tableColumnMinWidth});
-
-  String getTitle() {
-    // if special case blood pressure is necessary:
-    // if(uuid=='00000000-0000-0000-0000-000000000001') return I18N.bloodPressureSeriesItemTitleDiastolic.tr();
-    // if(uuid=='00000000-0000-0000-0000-000000000002') return I18N.bloodPressureSeriesItemTitleSystolic.tr();
-    return title;
-  }
+  SeriesItem({
+    required this.siid,
+    required this.title,
+    required this.unit,
+    required this.color,
+  });
 
   factory SeriesItem.fromJson(Map<String, dynamic> json) => SeriesItem(
-        uuid: json['uuid'] as String,
+        siid: json['siid'] as String,
         title: json['title'] as String,
-        unit: json['unit'] as String,
-        tableColumnMinWidth: json['tableColumnMinWidth'] as double,
+        unit: json['unit'] as String?,
+        color: ColorUtils.fromHex(json['color'] as String),
       );
 
   Map<String, dynamic> toJson() => {
-        'uuid': uuid,
+        'siid': siid,
         'title': title,
         'unit': unit,
-        'tableColumnMinWidth': tableColumnMinWidth,
+        'color': ColorUtils.toHex(color),
       };
-
-  static List<SeriesItem> bloodPressureSeriesItems() {
-    return [
-      SeriesItem(
-        uuid: '00000000-0000-0000-0000-000000000001',
-        title: 'Diastolic',
-        unit: 'mmHg',
-        tableColumnMinWidth: 80,
-      ),
-      SeriesItem(
-        uuid: '00000000-0000-0000-0000-000000000002',
-        title: 'Systolic',
-        unit: 'mmHg',
-        tableColumnMinWidth: 80,
-      )
-    ];
-  }
 }

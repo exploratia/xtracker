@@ -69,10 +69,21 @@ enum SeriesType {
       FixColumnProfileType.dateHourlyOverview,
       FixColumnProfileType.dateTimeValue,
     ],
+  ),
+  monthly(
+    "monthly",
+    Icons.calendar_month_outlined,
+    Colors.deepPurple,
+    [ViewType.table],
+    [], // no fix table column profiles
+  ),
+  free(
+    "free",
+    Icons.calendar_today_outlined,
+    Colors.yellow,
+    [ViewType.table],
+    [],
   );
-  // monthly("monthly", Icons.calendar_month_outlined, Colors.deepPurple, [ViewType.table, ViewType.lineChart]),
-  // free("free", Icons.calendar_today_outlined, Colors.green, [ViewType.lineChart, ViewType.table]);
-  // TODO TimeTracker
 
   final String typeName;
   final IconData iconData;
@@ -112,8 +123,8 @@ enum SeriesType {
       SeriesType.dailyCheck => LocaleKeys.enum_seriesType_dailyCheck_title.tr(),
       SeriesType.dailyLife => LocaleKeys.enum_seriesType_dailyLife_title.tr(),
       SeriesType.habit => LocaleKeys.enum_seriesType_habit_title.tr(),
-      // SeriesType.monthly => LocaleKeys.series_seriesType_monthly_title.tr(),
-      // SeriesType.free => LocaleKeys.series_seriesType_free_title.tr(),
+      SeriesType.monthly => LocaleKeys.enum_seriesType_monthly_title.tr(),
+      SeriesType.free => LocaleKeys.enum_seriesType_free_title.tr(),
     };
   }
 
@@ -123,8 +134,8 @@ enum SeriesType {
       SeriesType.dailyCheck => LocaleKeys.enum_seriesType_dailyCheck_info.tr(),
       SeriesType.dailyLife => LocaleKeys.enum_seriesType_dailyLife_info.tr(),
       SeriesType.habit => LocaleKeys.enum_seriesType_habit_info.tr(),
-      // SeriesType.monthly => LocaleKeys.series_seriesType_monthly_info.tr(),
-      // SeriesType.free => LocaleKeys.series_seriesType_free_info.tr(),
+      SeriesType.monthly => LocaleKeys.enum_seriesType_monthly_info.tr(),
+      SeriesType.free => LocaleKeys.enum_seriesType_free_info.tr(),
     };
   }
 }

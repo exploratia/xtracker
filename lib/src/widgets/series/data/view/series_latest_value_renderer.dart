@@ -6,6 +6,7 @@ import '../../../../../generated/locale_keys.g.dart';
 import '../../../../model/series/data/blood_pressure/blood_pressure_value.dart';
 import '../../../../model/series/data/daily_check/daily_check_value.dart';
 import '../../../../model/series/data/daily_life/daily_life_value.dart';
+import '../../../../model/series/data/free/multi_value.dart';
 import '../../../../model/series/data/habit/habit_value.dart';
 import '../../../../model/series/data/series_data.dart';
 import '../../../../model/series/data/series_data_value.dart';
@@ -85,6 +86,24 @@ class SeriesLatestValueRenderer extends StatelessWidget {
           return AnimatedHighlightContainer<HabitValue?>(
             highlightColor: seriesDef.color,
             valueSelector: (context) => context.read<SeriesCurrentValueProvider>().habitCurrentValue(seriesDef),
+            builder: (context, currentValue) {
+              if (currentValue != null) {
+                return _CurrentValueEdit(
+                  seriesDef: seriesDef,
+                  seriesDataValue: currentValue,
+                  child: SeriesValueRenderer(currentValue, seriesDef: seriesDef),
+                );
+              }
+              return Center(child: Text(LocaleKeys.seriesDefRenderer_currentValue_label_noValue.tr()));
+            },
+          );
+        }
+      case SeriesType.monthly:
+      case SeriesType.free:
+        {
+          return AnimatedHighlightContainer<MultiValue?>(
+            highlightColor: seriesDef.color,
+            valueSelector: (context) => context.read<SeriesCurrentValueProvider>().multiCurrentValue(seriesDef),
             builder: (context, currentValue) {
               if (currentValue != null) {
                 return _CurrentValueEdit(

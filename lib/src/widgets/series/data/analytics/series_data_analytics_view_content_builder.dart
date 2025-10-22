@@ -69,6 +69,16 @@ class SeriesDataAnalyticsViewContentBuilder extends StatelessWidget {
             seriesDataValues: values,
           ),
         );
+      case SeriesType.monthly:
+        // TODO: Handle this case.
+        return builder(
+          () => const Placeholder(),
+        );
+      case SeriesType.free:
+        // TODO: Handle this case.
+        return builder(
+          () => const Placeholder(),
+        );
     }
   }
 }

@@ -12,7 +12,10 @@ class SeriesCurrentValue {
   factory SeriesCurrentValue.fromJson(Map<String, dynamic> json) => SeriesCurrentValue(
         json['seriesDefUuid'] as String,
         SeriesType.byTypeName(json['seriesType'] as String),
-        SeriesDataValue.fromJson(json['seriesDataValue'] as Map<String, dynamic>, SeriesType.byTypeName(json['seriesType'] as String)),
+        SeriesDataValue.fromJson(
+          json['seriesDataValue'] as Map<String, dynamic>,
+          SeriesType.byTypeName(json['seriesType'] as String),
+        ),
       );
 
   Map<String, dynamic> toJson() => {
