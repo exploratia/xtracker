@@ -223,7 +223,7 @@ class _SeriesItemData {
   late final TextEditingController textEditingController;
 
   _SeriesItemData(this.seriesItem) {
-    title = seriesItem.title;
+    title = seriesItem.name;
     unit = seriesItem.unit ?? '';
     textEditingController = TextEditingController();
   }

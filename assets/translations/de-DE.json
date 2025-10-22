@@ -465,6 +465,8 @@
     "common": {
       "label": {
         "seriesName": "Name",
+        "seriesItemName": "Name",
+        "seriesItemUnit": "Einheit",
         "seriesIcon": "Symbol",
         "seriesColor": "Farbe"
       }
@@ -509,10 +511,10 @@
     },
     "seriesSettings": {
       "bloodPressure": {
-        "title": "Blutdruckeinstellungen",
+        "title": "Blutdruck-Einstellungen",
         "switch": {
           "hideMedicationInput": {
-            "label": "Medikamenteneinnahme im Eingabedialog ausblenden:"
+            "label": "Medikamenteneinnahme-Option im Eingabedialog ausblenden:"
           }
         }
       },
@@ -538,11 +540,11 @@
         "dlg": {
           "title": "Attribut"
         },
-        "info": "Attribute der Messreihe verwalten.\nJeder Wert hat genau ein Attribut.\n\nWird ein Attribut gelöscht, das bereits genutzt wird, erhält der Wert als Fallback eine Farbe die in großem Kontrast zu den restlichen Attributen steht.",
+        "info": "Attribute der Messreihe verwalten.\nJeder Wert besitzt genau ein Attribut.\n\nWird ein Attribut gelöscht, das bereits genutzt wird, erhält der Wert als Fallback eine Farbe die in großem Kontrast zu den restlichen Attributen steht.",
         "preset": {
           "feelings": {
             "title": "Vorlage: Gefühle",
-            "attributeNames": "fantastischer Tag|sehr guter, glücklicher Tag|normaler Tag|erschöpft, müder Tag|trauriger, deprimierter Tag|frustrierter, wütender Tag|gestresster Tag|krank|wirklich schlimmer Tag"
+            "attributeNames": "fantastischer Tag|sehr guter, glücklicher Tag|normaler Tag|erschöpfter, müder Tag|trauriger, deprimierter Tag|frustrierter, wütender Tag|gestresster Tag|krank|wirklich schlimmer Tag"
           },
           "sports": {
             "title": "Vorlage: Sport",
@@ -581,8 +583,29 @@
           }
         },
         "validation": {
-          "emptyAttributs": "Mindestens ein Attribut anlegen"
+          "emptyAttributs": "Mindestens ein Attribut erforderlich"
         }
+      },
+      "seriesItems": {
+        "title": "Parameter",
+        "actions": {
+          "add": {
+            "tooltip": "Parameter hinzufügen"
+          },
+          "delete": {
+            "tooltip": "Parameter löschen"
+          },
+          "deleteAll": {
+            "tooltip": "Alle Parameter löschen"
+          },
+          "edit": {
+            "tooltip": "Parameter bearbeiten"
+          }
+        },
+        "dlg": {
+          "title": "Parameter"
+        },
+        "info": "Parameter der Messreihe verwalten.\nJeder Parameter hat einen Namen, eine Einheit und eine Farbe.\n\nWird ein bereits genutzter Parameter gelöscht, werden dessen Werte nicht mehr angezeigt."
       }
     }
   },

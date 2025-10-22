@@ -509,7 +509,7 @@
     },
     "seriesSettings": {
       "bloodPressure": {
-        "title": "Blood pressure settings",
+        "title": "Blood Pressure Settings",
         "switch": {
           "hideMedicationInput": {
             "label": "Hide medication input in dialog:"
@@ -538,7 +538,7 @@
         "dlg": {
           "title": "Attribute"
         },
-        "info": "Manage series attributes.\nEach value has exactly one attribute.\n\nIf a used attribute is deleted, the value automatically gets a fallback color with high contrast to the other attributes.",
+        "info": "Manage the attributes of this series.\nEach value has exactly one attribute.\n\nIf a used attribute is deleted, the value automatically gets a fallback color that strongly contrasts with the remaining attributes.",
         "preset": {
           "feelings": {
             "title": "Preset: Feelings",
@@ -584,6 +584,27 @@
           "emptyAttributs": "At least one attribute required"
         }
       }
+    },
+    "seriesItems": {
+      "title": "Parameters",
+      "actions": {
+        "add": {
+          "tooltip": "Add parameter"
+        },
+        "delete": {
+          "tooltip": "Delete parameter"
+        },
+        "deleteAll": {
+          "tooltip": "Delete all parameters"
+        },
+        "edit": {
+          "tooltip": "Edit parameter"
+        }
+      },
+      "dlg": {
+        "title": "Parameter"
+      },
+      "info": "Manage the parameters of the series.\nEach parameter has a name, unit, and color.\n\nIf a parameter already in use is deleted, its values will no longer be shown."
     }
   },
   "seriesManagement": {

@@ -43,7 +43,7 @@ class DailyLifeAttribute {
   }
 
   /// instead of Uuid creation for saving space we use milliseconds and convert it to base 36 String
-  /// should be enough - attributes have to be
+  /// should be enough - attributes have to be unique only per series
   static String generateUniqueAttributeId({int? val}) {
     if (val != null) return val.toRadixString(36);
     return DateTime.now().millisecondsSinceEpoch.toRadixString(36);

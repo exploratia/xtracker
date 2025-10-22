@@ -156,27 +156,32 @@ class SeriesDef {
 
 class SeriesItem {
   final String siid;
-  final String title;
+  final String name;
   final String? unit;
   final Color color;
 
   SeriesItem({
     required this.siid,
-    required this.title,
+    required this.name,
     required this.unit,
     required this.color,
   });
 
+  /// deep copy / clone by transforming to json string and back
+  SeriesItem clone() {
+    return SeriesItem.fromJson(jsonDecode(jsonEncode(toJson())));
+  }
+
   factory SeriesItem.fromJson(Map<String, dynamic> json) => SeriesItem(
         siid: json['siid'] as String,
-        title: json['title'] as String,
+        name: json['name'] as String,
         unit: json['unit'] as String?,
         color: ColorUtils.fromHex(json['color'] as String),
       );
 
   Map<String, dynamic> toJson() => {
         'siid': siid,
-        'title': title,
+        'name': name,
         'unit': unit,
         'color': ColorUtils.toHex(color),
       };

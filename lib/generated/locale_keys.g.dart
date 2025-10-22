@@ -182,6 +182,8 @@ abstract class  LocaleKeys {
   static const seriesEdit_btn_showSeriesTypeInfo = 'seriesEdit.btn.showSeriesTypeInfo';
   static const seriesEdit_btn_backToSeriesTypeSelection = 'seriesEdit.btn.backToSeriesTypeSelection';
   static const seriesEdit_common_label_seriesName = 'seriesEdit.common.label.seriesName';
+  static const seriesEdit_common_label_seriesItemName = 'seriesEdit.common.label.seriesItemName';
+  static const seriesEdit_common_label_seriesItemUnit = 'seriesEdit.common.label.seriesItemUnit';
   static const seriesEdit_common_label_seriesIcon = 'seriesEdit.common.label.seriesIcon';
   static const seriesEdit_common_label_seriesColor = 'seriesEdit.common.label.seriesColor';
   static const seriesEdit_displaySettings_title = 'seriesEdit.displaySettings.title';
@@ -220,6 +222,13 @@ abstract class  LocaleKeys {
   static const seriesEdit_seriesSettings_dailyLifeAttributes_preset_numbersDown_title = 'seriesEdit.seriesSettings.dailyLifeAttributes.preset.numbersDown.title';
   static const seriesEdit_seriesSettings_dailyLifeAttributes_preset_numbersUp_title = 'seriesEdit.seriesSettings.dailyLifeAttributes.preset.numbersUp.title';
   static const seriesEdit_seriesSettings_dailyLifeAttributes_validation_emptyAttributs = 'seriesEdit.seriesSettings.dailyLifeAttributes.validation.emptyAttributs';
+  static const seriesEdit_seriesSettings_seriesItems_title = 'seriesEdit.seriesSettings.seriesItems.title';
+  static const seriesEdit_seriesSettings_seriesItems_actions_add_tooltip = 'seriesEdit.seriesSettings.seriesItems.actions.add.tooltip';
+  static const seriesEdit_seriesSettings_seriesItems_actions_delete_tooltip = 'seriesEdit.seriesSettings.seriesItems.actions.delete.tooltip';
+  static const seriesEdit_seriesSettings_seriesItems_actions_deleteAll_tooltip = 'seriesEdit.seriesSettings.seriesItems.actions.deleteAll.tooltip';
+  static const seriesEdit_seriesSettings_seriesItems_actions_edit_tooltip = 'seriesEdit.seriesSettings.seriesItems.actions.edit.tooltip';
+  static const seriesEdit_seriesSettings_seriesItems_dlg_title = 'seriesEdit.seriesSettings.seriesItems.dlg.title';
+  static const seriesEdit_seriesSettings_seriesItems_info = 'seriesEdit.seriesSettings.seriesItems.info';
   static const seriesManagement_title = 'seriesManagement.title';
   static const seriesManagement_action_importExport_tooltip = 'seriesManagement.action.importExport.tooltip';
   static const seriesManagement_action_closeSeriesManagement_tooltip = 'seriesManagement.action.closeSeriesManagement.tooltip';

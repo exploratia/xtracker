@@ -21,6 +21,7 @@ import '../../controls/text/overflow_text.dart';
 import 'blood_pressure/blood_pressure_series_edit.dart';
 import 'daily_life/daily_life_series_edit_attributes.dart';
 import 'series_edit_display_settings.dart';
+import 'series_items/series_items_edit.dart';
 
 class SeriesEditor extends StatefulWidget {
   const SeriesEditor({super.key, required this.seriesDef, required this.goBack});
@@ -160,6 +161,14 @@ class _SeriesEditorState extends State<SeriesEditor> {
         _SeriesSymbolAndColor(_seriesDef, _updateState),
 
         // series type dependent...
+
+        if (_seriesDef.seriesType == SeriesType.free || _seriesDef.seriesType == SeriesType.monthly)
+          Expandable(
+            initialExpanded: true,
+            icon: Icon(Icons.format_list_numbered_outlined, size: ThemeUtils.iconSizeScaled),
+            title: LocaleKeys.seriesEdit_seriesSettings_seriesItems_title.tr(),
+            child: SeriesItemsEdit(_seriesDef, _updateState),
+          ),
 
         if (_seriesDef.seriesType == SeriesType.bloodPressure)
           Expandable(
