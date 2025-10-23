@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../../../model/series/data/blood_pressure/blood_pressure_value.dart';
+import '../../../../model/series/data/custom/custom_value.dart';
 import '../../../../model/series/data/daily_check/daily_check_value.dart';
 import '../../../../model/series/data/daily_life/daily_life_value.dart';
-import '../../../../model/series/data/free/multi_value.dart';
 import '../../../../model/series/data/habit/habit_value.dart';
 import '../../../../model/series/data/series_data_value.dart';
 import '../../../../model/series/series_def.dart';
@@ -13,9 +13,9 @@ import '../../../../util/date_time_utils.dart';
 import '../../../../util/logging/flutter_simple_logging.dart';
 import '../../../../util/theme_utils.dart';
 import 'blood_pressure/table/blood_pressure_value_renderer.dart';
+import 'custom/table/custom_value_renderer.dart';
 import 'daily_check/table/daily_check_value_renderer.dart';
 import 'daily_life/daily_life_attribute_renderer.dart';
-import 'free/table/multi_value_renderer.dart';
 import 'habit/table/habit_value_renderer.dart';
 
 class SeriesValueRenderer<T extends SeriesDataValue> extends StatelessWidget {
@@ -64,10 +64,9 @@ class SeriesValueRenderer<T extends SeriesDataValue> extends StatelessWidget {
             },
           );
         }
-      case SeriesType.free:
-      case SeriesType.monthly:
-        if (_seriesDataValue is MultiValue) {
-          valueRenderer = MultiValueRenderer(multiValue: _seriesDataValue, seriesDef: seriesDef);
+      case SeriesType.custom:
+        if (_seriesDataValue is CustomValue) {
+          valueRenderer = CustomValueRenderer(customValue: _seriesDataValue, seriesDef: seriesDef);
         }
     }
 

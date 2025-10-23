@@ -100,8 +100,6 @@ class _SeriesTypeSelector extends StatelessWidget {
                   ])),
             ],
           ),
-          const SizedBox(height: ThemeUtils.verticalSpacingLarge),
-          Text(LocaleKeys.seriesEdit_label_moreSeriesToCome.tr()),
         ],
       ),
     );

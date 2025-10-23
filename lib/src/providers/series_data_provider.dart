@@ -3,11 +3,10 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 
 import '../model/series/data/blood_pressure/blood_pressure_value.dart';
+import '../model/series/data/custom/custom_value.dart';
 import '../model/series/data/daily_check/daily_check_value.dart';
 import '../model/series/data/daily_life/daily_life_value.dart';
-import '../model/series/data/free/free_value.dart';
 import '../model/series/data/habit/habit_value.dart';
-import '../model/series/data/monthly/monthly_value.dart';
 import '../model/series/data/series_data.dart';
 import '../model/series/data/series_data_value.dart';
 import '../model/series/series_def.dart';
@@ -22,8 +21,7 @@ class SeriesDataProvider with ChangeNotifier {
   final Map<String, SeriesData<DailyCheckValue>> _uuid2seriesDataDailyCheck = HashMap();
   final Map<String, SeriesData<DailyLifeValue>> _uuid2seriesDataDailyLife = HashMap();
   final Map<String, SeriesData<HabitValue>> _uuid2seriesDataHabit = HashMap();
-  final Map<String, SeriesData<FreeValue>> _uuid2seriesDataFree = HashMap();
-  final Map<String, SeriesData<MonthlyValue>> _uuid2seriesDataMonthly = HashMap();
+  final Map<String, SeriesData<CustomValue>> _uuid2seriesDataCustom = HashMap();
 
   Future<void> fetchDataIfNotYetLoaded(SeriesDef seriesDef) async {
     var seriesData = switch (seriesDef.seriesType) {
@@ -31,8 +29,7 @@ class SeriesDataProvider with ChangeNotifier {
       SeriesType.dailyCheck => _uuid2seriesDataDailyCheck[seriesDef.uuid],
       SeriesType.dailyLife => _uuid2seriesDataDailyLife[seriesDef.uuid],
       SeriesType.habit => _uuid2seriesDataHabit[seriesDef.uuid],
-      SeriesType.free => _uuid2seriesDataFree[seriesDef.uuid],
-      SeriesType.monthly => _uuid2seriesDataMonthly[seriesDef.uuid],
+      SeriesType.custom => _uuid2seriesDataCustom[seriesDef.uuid],
     };
 
     if (seriesData == null) {
@@ -142,25 +139,15 @@ class SeriesDataProvider with ChangeNotifier {
           seriesData.sort();
           _uuid2seriesDataHabit[seriesDef.uuid] = seriesData;
         }
-      case SeriesType.free:
-        var seriesData = _uuid2seriesDataFree[seriesDef.uuid];
+      case SeriesType.custom:
+        var seriesData = _uuid2seriesDataCustom[seriesDef.uuid];
         if (seriesData == null) {
           var store = Stores.getOrCreateSeriesDataStore(seriesDef);
-          var list = await store.getAllSeriesDataValuesAsFreeValue();
+          var list = await store.getAllSeriesDataValuesAsCustomValue();
 
-          seriesData = SeriesData<FreeValue>(seriesDef.uuid, list);
+          seriesData = SeriesData<CustomValue>(seriesDef.uuid, list);
           seriesData.sort();
-          _uuid2seriesDataFree[seriesDef.uuid] = seriesData;
-        }
-      case SeriesType.monthly:
-        var seriesData = _uuid2seriesDataMonthly[seriesDef.uuid];
-        if (seriesData == null) {
-          var store = Stores.getOrCreateSeriesDataStore(seriesDef);
-          var list = await store.getAllSeriesDataValuesAsMonthlyValue();
-
-          seriesData = SeriesData<MonthlyValue>(seriesDef.uuid, list);
-          seriesData.sort();
-          _uuid2seriesDataMonthly[seriesDef.uuid] = seriesData;
+          _uuid2seriesDataCustom[seriesDef.uuid] = seriesData;
         }
     }
   }
@@ -181,10 +168,8 @@ class SeriesDataProvider with ChangeNotifier {
         _uuid2seriesDataDailyLife.remove(seriesDef.uuid);
       case SeriesType.habit:
         _uuid2seriesDataHabit.remove(seriesDef.uuid);
-      case SeriesType.free:
-        _uuid2seriesDataFree.remove(seriesDef.uuid);
-      case SeriesType.monthly:
-        _uuid2seriesDataMonthly.remove(seriesDef.uuid);
+      case SeriesType.custom:
+        _uuid2seriesDataCustom.remove(seriesDef.uuid);
     }
 
     notifyListeners();
@@ -196,8 +181,7 @@ class SeriesDataProvider with ChangeNotifier {
       SeriesType.dailyCheck => dailyCheckData(seriesDef),
       SeriesType.dailyLife => dailyLifeData(seriesDef),
       SeriesType.habit => habitData(seriesDef),
-      SeriesType.free => freeData(seriesDef),
-      SeriesType.monthly => monthlyData(seriesDef),
+      SeriesType.custom => customData(seriesDef),
     };
   }
 
@@ -245,24 +229,13 @@ class SeriesDataProvider with ChangeNotifier {
     return seriesData!;
   }
 
-  SeriesData<FreeValue>? freeData(SeriesDef seriesDef) {
-    var seriesData = _uuid2seriesDataFree[seriesDef.uuid];
+  SeriesData<CustomValue>? customData(SeriesDef seriesDef) {
+    var seriesData = _uuid2seriesDataCustom[seriesDef.uuid];
     return seriesData;
   }
 
-  SeriesData<FreeValue> requireFreeData(SeriesDef seriesDef) {
-    var seriesData = freeData(seriesDef);
-    _checkOnSeriesData(seriesData, seriesDef);
-    return seriesData!;
-  }
-
-  SeriesData<MonthlyValue>? monthlyData(SeriesDef seriesDef) {
-    var seriesData = _uuid2seriesDataMonthly[seriesDef.uuid];
-    return seriesData;
-  }
-
-  SeriesData<MonthlyValue> requireMonthlyData(SeriesDef seriesDef) {
-    var seriesData = monthlyData(seriesDef);
+  SeriesData<CustomValue> requireCustomData(SeriesDef seriesDef) {
+    var seriesData = customData(seriesDef);
     _checkOnSeriesData(seriesData, seriesDef);
     return seriesData!;
   }
@@ -298,12 +271,9 @@ class SeriesDataProvider with ChangeNotifier {
       case SeriesType.habit:
         HabitValue.checkOnHabitValue(value);
         seriesData = requireHabitData(seriesDef);
-      case SeriesType.free:
-        FreeValue.checkOnFreeValue(value);
-        seriesData = requireFreeData(seriesDef);
-      case SeriesType.monthly:
-        MonthlyValue.checkOnMonthlyValue(value);
-        seriesData = requireMonthlyData(seriesDef);
+      case SeriesType.custom:
+        CustomValue.checkOnCustomValue(value);
+        seriesData = requireCustomData(seriesDef);
     }
 
     if (action == _Action.insert) {
@@ -340,10 +310,8 @@ class SeriesDataProvider with ChangeNotifier {
         seriesData = requireDailyLifeData(seriesDef)..insertAll(values.map(DailyLifeValue.checkOnDailyLifeValue));
       case SeriesType.habit:
         seriesData = requireHabitData(seriesDef)..insertAll(values.map(HabitValue.checkOnHabitValue));
-      case SeriesType.free:
-        seriesData = requireFreeData(seriesDef)..insertAll(values.map(FreeValue.checkOnFreeValue));
-      case SeriesType.monthly:
-        seriesData = requireMonthlyData(seriesDef)..insertAll(values.map(MonthlyValue.checkOnMonthlyValue));
+      case SeriesType.custom:
+        seriesData = requireCustomData(seriesDef)..insertAll(values.map(CustomValue.checkOnCustomValue));
     }
 
     seriesData.sort();

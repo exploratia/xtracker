@@ -148,17 +148,13 @@
         "title": "Daily Life",
         "info": "Tag each day with an attribute – e.g. type of sport or mood.\n\nThis helps reflect on the day and gives an overview of patterns and ratios over time."
       },
-      "free": {
-        "title": "Free",
-        "info": "Track things without a fixed interval. E.g. car refuel distance and costs."
-      },
       "habit": {
         "title": "Habit",
         "info": "Track habits multiple times a day – e.g. coffee consumption or drinking enough water.\nIdeal for routines you want to build or reduce."
       },
-      "monthly": {
-        "title": "Monthly",
-        "info": "Track monthly values - e.g. water or current consumption to see the yearly progress."
+      "custom": {
+        "title": "Custom",
+        "info": "Track custom data with one or multiple parameters per entry – e.g. refueling distance and cost, or water and electricity consumption to see yearly trends."
       }
     },
     "viewType": {
@@ -455,8 +451,7 @@
       }
     },
     "label": {
-      "selectSeriesType": "Select series type:",
-      "moreSeriesToCome": "More to come ..."
+      "selectSeriesType": "Select series type:"
     },
     "btn": {
       "showSeriesTypeInfo": "Series type info",
@@ -466,6 +461,8 @@
       "label": {
         "seriesName": "Name",
         "seriesIcon": "Icon",
+        "seriesItemName": "Name",
+        "seriesItemUnit": "Unit",
         "seriesColor": "Color"
       }
     },
@@ -583,28 +580,31 @@
         "validation": {
           "emptyAttributs": "At least one attribute required"
         }
-      }
-    },
-    "seriesItems": {
-      "title": "Parameters",
-      "actions": {
-        "add": {
-          "tooltip": "Add parameter"
+      },
+      "seriesItems": {
+        "title": "Parameters",
+        "actions": {
+          "add": {
+            "tooltip": "Add parameter"
+          },
+          "delete": {
+            "tooltip": "Delete parameter"
+          },
+          "deleteAll": {
+            "tooltip": "Delete all parameters"
+          },
+          "edit": {
+            "tooltip": "Edit parameter"
+          }
         },
-        "delete": {
-          "tooltip": "Delete parameter"
+        "dlg": {
+          "title": "Parameter"
         },
-        "deleteAll": {
-          "tooltip": "Delete all parameters"
-        },
-        "edit": {
-          "tooltip": "Edit parameter"
+        "info": "Manage the parameters of the series.\nEach parameter has a name, unit, and color.\n\nIf a parameter already in use is deleted, its values will no longer be shown.",
+        "validation": {
+          "emptyAttributs": "At least one parameter required"
         }
-      },
-      "dlg": {
-        "title": "Parameter"
-      },
-      "info": "Manage the parameters of the series.\nEach parameter has a name, unit, and color.\n\nIf a parameter already in use is deleted, its values will no longer be shown."
+      }
     }
   },
   "seriesManagement": {

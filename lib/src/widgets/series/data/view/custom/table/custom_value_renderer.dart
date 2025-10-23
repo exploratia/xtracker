@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../../model/series/data/free/multi_value.dart';
+import '../../../../../../model/series/data/custom/custom_value.dart';
 import '../../../../../../model/series/data/series_data.dart';
 import '../../../../../../model/series/series_def.dart';
 import '../../../../../../util/date_time_utils.dart';
@@ -8,20 +8,20 @@ import '../../../../../../util/media_query_utils.dart';
 import '../../../../../../util/theme_utils.dart';
 import '../../../../../../util/tooltip_utils.dart';
 
-class MultiValueRenderer extends StatelessWidget {
+class CustomValueRenderer extends StatelessWidget {
   static int get height {
     return (28 * MediaQueryUtils.textScaleFactor).ceil();
   }
 
-  const MultiValueRenderer({
+  const CustomValueRenderer({
     super.key,
-    required this.multiValue,
+    required this.customValue,
     required this.seriesDef,
     this.editMode = false,
     this.wrapWithDateTimeTooltip = false,
   });
 
-  final MultiValue multiValue;
+  final CustomValue customValue;
   final bool editMode;
   final SeriesDef seriesDef;
   final bool wrapWithDateTimeTooltip;
@@ -41,14 +41,14 @@ class MultiValueRenderer extends StatelessWidget {
     if (editMode) {
       result = InkWell(
         borderRadius: ThemeUtils.borderRadiusCircularSmall,
-        onTap: () => SeriesData.showSeriesDataInputDlg(context, seriesDef, value: multiValue),
+        onTap: () => SeriesData.showSeriesDataInputDlg(context, seriesDef, value: customValue),
         child: result,
       );
     }
 
     if (wrapWithDateTimeTooltip) {
       result = Tooltip(
-        message: '${DateTimeUtils.formatDate(multiValue.dateTime)}   ${DateTimeUtils.formatTime(multiValue.dateTime)}',
+        message: '${DateTimeUtils.formatDate(customValue.dateTime)}   ${DateTimeUtils.formatTime(customValue.dateTime)}',
         textStyle: TooltipUtils.tooltipMonospaceStyle,
         child: result,
       );

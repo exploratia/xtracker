@@ -145,10 +145,8 @@ class SeriesImportExport {
           seriesData = SeriesData.fromJsonDailyLifeData(json["seriesData"] as Map<String, dynamic>);
         case SeriesType.habit:
           seriesData = SeriesData.fromJsonHabitData(json["seriesData"] as Map<String, dynamic>);
-        case SeriesType.free:
-          seriesData = SeriesData.fromJsonFreeData(json["seriesData"] as Map<String, dynamic>);
-        case SeriesType.monthly:
-          seriesData = SeriesData.fromJsonMonthlyData(json["seriesData"] as Map<String, dynamic>);
+        case SeriesType.custom:
+          seriesData = SeriesData.fromJsonCustomData(json["seriesData"] as Map<String, dynamic>);
       }
       await seriesProviders.seriesProvider.delete(seriesDef, seriesProviders);
       await seriesProviders.seriesProvider.save(seriesDef);

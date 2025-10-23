@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../../model/column_profile/fix_column_profile.dart';
-import '../../../../../../model/series/data/free/multi_value.dart';
+import '../../../../../../model/series/data/custom/custom_value.dart';
 import '../../../../../../model/series/data/series_data_filter.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
 import '../../../../../controls/grid/row_per_day/day_row_item.dart';
@@ -9,15 +9,15 @@ import '../../../../../controls/grid/row_per_day/row_per_day_cell_builder.dart';
 import '../../../../../controls/grid/two_dimensional_scrollable_table.dart';
 import '../../series_data_no_data.dart';
 import '../../series_data_view_overlays.dart';
-import 'multi_value_renderer.dart';
+import 'custom_value_renderer.dart';
 
-abstract class SeriesDataMultiValueTableView<V extends MultiValue> extends StatelessWidget {
-  final List<V> seriesData;
+class SeriesDataCustomTableView extends StatelessWidget {
+  final List<CustomValue> seriesData;
   final SeriesViewMetaData seriesViewMetaData;
   final SeriesDataFilter seriesDataFilter;
   final SeriesDataViewOverlays seriesDataViewOverlays;
 
-  const SeriesDataMultiValueTableView(
+  const SeriesDataCustomTableView(
       {super.key, required this.seriesViewMetaData, required this.seriesData, required this.seriesDataFilter, required this.seriesDataViewOverlays});
 
   @override
@@ -37,13 +37,13 @@ abstract class SeriesDataMultiValueTableView<V extends MultiValue> extends State
         (context, yIndex, xIndex, cellSize) => GridCell(child: Container());
 
     {
-      List<DayRowItem<V>> data = DayRowItem.buildTableDataProvider(seriesViewMetaData, filteredSeriesData);
+      List<DayRowItem<CustomValue>> data = DayRowItem.buildTableDataProvider(seriesViewMetaData, filteredSeriesData);
 
-      var builder = RowPerDayCellBuilder<V>(
+      var builder = RowPerDayCellBuilder<CustomValue>(
         data: data,
         fixColumnProfile: columnProfile,
-        gridCellChildBuilder: (V value, Size _) => MultiValueRenderer(
-          multiValue: value,
+        gridCellChildBuilder: (CustomValue value, Size _) => CustomValueRenderer(
+          customValue: value,
           seriesDef: seriesViewMetaData.seriesDef,
           editMode: seriesViewMetaData.editMode,
           wrapWithDateTimeTooltip: true,
@@ -65,7 +65,7 @@ abstract class SeriesDataMultiValueTableView<V extends MultiValue> extends State
             tableColumnProfile: columnProfile,
             lineCount: lineCount,
             gridCellBuilder: gridCellBuilder,
-            lineHeight: MultiValueRenderer.height,
+            lineHeight: CustomValueRenderer.height,
             useFixedFirstColumn: true,
             bottomScrollExtend: seriesDataViewOverlays.bottomHeight,
           ),

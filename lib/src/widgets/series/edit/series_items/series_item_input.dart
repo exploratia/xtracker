@@ -112,7 +112,7 @@ class _SeriesItemInputState extends State<SeriesItemInput> {
             autofocus: true,
             controller: _nameController,
             decoration: InputDecoration(
-              labelText: LocaleKeys.seriesEdit_common_label_seriesName.tr(), // TODO
+              labelText: LocaleKeys.seriesEdit_common_label_seriesItemName.tr(),
               // hintText: "hint text",
             ),
             textInputAction: TextInputAction.next,
@@ -128,7 +128,7 @@ class _SeriesItemInputState extends State<SeriesItemInput> {
             autofocus: true,
             controller: _unitController,
             decoration: InputDecoration(
-              labelText: LocaleKeys.seriesEdit_common_label_seriesName.tr(), // TODO
+              labelText: LocaleKeys.seriesEdit_common_label_seriesItemUnit.tr(),
               // hintText: "hint text",
             ),
             textInputAction: TextInputAction.next,

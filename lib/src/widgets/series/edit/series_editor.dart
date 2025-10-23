@@ -162,12 +162,22 @@ class _SeriesEditorState extends State<SeriesEditor> {
 
         // series type dependent...
 
-        if (_seriesDef.seriesType == SeriesType.free || _seriesDef.seriesType == SeriesType.monthly)
-          Expandable(
-            initialExpanded: true,
-            icon: Icon(Icons.format_list_numbered_outlined, size: ThemeUtils.iconSizeScaled),
-            title: LocaleKeys.seriesEdit_seriesSettings_seriesItems_title.tr(),
-            child: SeriesItemsEdit(_seriesDef, _updateState),
+        if (_seriesDef.seriesType == SeriesType.custom)
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expandable(
+                initialExpanded: true,
+                useVerticalSpacingBeforeChild: false /* ListView has own padding */,
+                icon: Icon(Icons.format_list_numbered_outlined, size: ThemeUtils.iconSizeScaled),
+                title: LocaleKeys.seriesEdit_seriesSettings_seriesItems_title.tr(),
+                child: SeriesItemsEdit(_seriesDef, _updateState),
+              ),
+              ValidationField(
+                validatorCondition: () => _seriesDef.seriesItems.isNotEmpty,
+                errorMessage: LocaleKeys.seriesEdit_seriesSettings_seriesItems_validation_emptyParameters.tr(),
+              ),
+            ],
           ),
 
         if (_seriesDef.seriesType == SeriesType.bloodPressure)

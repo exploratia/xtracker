@@ -148,17 +148,13 @@
         "title": "Tägliches Leben",
         "info": "Jeden Tag mit einem Attribut markieren – z. B. Sportart oder Stimmung.\n\nSo lässt sich der Tag reflektieren und langfristig ein Überblick über Muster und Verhältnisse gewinnen."
       },
-      "free": {
-        "title": "Frei",
-        "info": "Dinge ohne festen Rhythmus aufzeichnen. Z.B. Auto betanken (Kosten und gefahrene Distanz)."
-      },
       "habit": {
         "title": "Gewohnheit",
         "info": "Mehrfach tägliche Gewohnheiten erfassen – z. B. Kaffeekonsum oder genug Wasser trinken.\nGut geeignet für Routinen, die man verbessern oder ablegen möchte."
       },
-      "monthly": {
-        "title": "Monatlich",
-        "info": "Monatliche Werte aufzeichnen um diese über das Jahr oder Jahre zu verfolgen. Z.B. Wasser- oder Stromverbrauch."
+      "custom": {
+        "title": "Individuell",
+        "info": "Eigene Daten mit einem oder mehreren Parametern pro Eintrag erfassen – z. B. Tankabstand und Kosten oder Wasser- und Stromverbrauch, um Jahresverläufe zu sehen."
       }
     },
     "viewType": {
@@ -455,8 +451,7 @@
       }
     },
     "label": {
-      "selectSeriesType": "Wähle den Messreihen-Typ",
-      "moreSeriesToCome": "Weitere folgen bald..."
+      "selectSeriesType": "Wähle den Messreihen-Typ"
     },
     "btn": {
       "showSeriesTypeInfo": "Info zum Messreihen-Typ",
@@ -465,9 +460,9 @@
     "common": {
       "label": {
         "seriesName": "Name",
+        "seriesIcon": "Symbol",
         "seriesItemName": "Name",
         "seriesItemUnit": "Einheit",
-        "seriesIcon": "Symbol",
         "seriesColor": "Farbe"
       }
     },
@@ -605,7 +600,10 @@
         "dlg": {
           "title": "Parameter"
         },
-        "info": "Parameter der Messreihe verwalten.\nJeder Parameter hat einen Namen, eine Einheit und eine Farbe.\n\nWird ein bereits genutzter Parameter gelöscht, werden dessen Werte nicht mehr angezeigt."
+        "info": "Parameter der Messreihe verwalten.\nJeder Parameter hat einen Namen, eine Einheit und eine Farbe.\n\nWird ein bereits genutzter Parameter gelöscht, werden dessen Werte nicht mehr angezeigt.",
+        "validation": {
+          "emptyParameters": "Mindestens ein Parameter erforderlich"
+        }
       }
     }
   },

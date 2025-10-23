@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 
 import '../model/series/current_value/series_current_value.dart';
 import '../model/series/data/blood_pressure/blood_pressure_value.dart';
+import '../model/series/data/custom/custom_value.dart';
 import '../model/series/data/daily_check/daily_check_value.dart';
 import '../model/series/data/daily_life/daily_life_value.dart';
-import '../model/series/data/free/multi_value.dart';
 import '../model/series/data/habit/habit_value.dart';
 import '../model/series/data/series_data_value.dart';
 import '../model/series/series_def.dart';
@@ -106,9 +106,9 @@ class SeriesCurrentValueProvider with ChangeNotifier {
     return null;
   }
 
-  MultiValue? multiCurrentValue(SeriesDef seriesDef) {
+  CustomValue? customCurrentValue(SeriesDef seriesDef) {
     var seriesCurrentValue = get(seriesDef);
-    if (seriesCurrentValue != null && seriesCurrentValue is MultiValue) {
+    if (seriesCurrentValue != null && seriesCurrentValue is CustomValue) {
       return seriesCurrentValue;
     }
     return null;

@@ -1,11 +1,10 @@
 import '../series_type.dart';
 import 'blood_pressure/blood_pressure_value.dart';
+import 'custom/custom_value.dart';
 import 'daily_check/daily_check_value.dart';
 import 'daily_life/daily_life_value.dart';
 import 'datetime_item.dart';
-import 'free/free_value.dart';
 import 'habit/habit_value.dart';
-import 'monthly/monthly_value.dart';
 
 abstract class SeriesDataValue implements DateTimeItem {
   final String uuid;
@@ -26,8 +25,7 @@ abstract class SeriesDataValue implements DateTimeItem {
       SeriesType.dailyCheck => DailyCheckValue.fromJson(json),
       SeriesType.dailyLife => DailyLifeValue.fromJson(json),
       SeriesType.habit => HabitValue.fromJson(json),
-      SeriesType.free => FreeValue.fromJson(json),
-      SeriesType.monthly => MonthlyValue.fromJson(json),
+      SeriesType.custom => CustomValue.fromJson(json),
     };
   }
 }

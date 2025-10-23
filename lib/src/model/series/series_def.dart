@@ -88,8 +88,7 @@ class SeriesDef {
       SeriesType.dailyCheck => 1,
       SeriesType.dailyLife => 1,
       SeriesType.habit => 1,
-      SeriesType.monthly => 1,
-      SeriesType.free => 1,
+      SeriesType.custom => 1,
     };
   }
 

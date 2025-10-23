@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../../../generated/locale_keys.g.dart';
-import '../../../../../model/series/data/free/multi_value.dart';
+import '../../../../../model/series/data/custom/custom_value.dart';
 import '../../../../../model/series/series_def.dart';
 import '../../../../../util/dialogs.dart';
 import '../../../../../util/formatter/decimal_input_formatter.dart';
@@ -16,23 +16,31 @@ import '../../../../controls/text/overflow_text.dart';
 import '../input_header.dart';
 import '../input_result.dart';
 
-abstract class MultiValueInput<V extends MultiValue> extends StatefulWidget {
-  const MultiValueInput({
+class CustomInput extends StatefulWidget {
+  const CustomInput({
     super.key,
-    this.multiValue,
+    this.customValue,
     required this.seriesDef,
-    required this.valueBuilder,
   });
 
   final SeriesDef seriesDef;
-  final V? multiValue;
-  final V Function(String uuid, DateTime dateTime, Map<String, double> values) valueBuilder;
+  final CustomValue? customValue;
+
+  static Future<InputResult<CustomValue>?> showInputDlg(BuildContext context, SeriesDef seriesDef, {CustomValue? customValue}) async {
+    return await showDialog<InputResult<CustomValue>>(
+      context: context,
+      builder: (_) => CustomInput(
+        seriesDef: seriesDef,
+        customValue: customValue,
+      ),
+    );
+  }
 
   @override
-  State<MultiValueInput> createState() => _MultiValueInputState<V>();
+  State<CustomInput> createState() => _CustomInputState();
 }
 
-class _MultiValueInputState<V extends MultiValue> extends State<MultiValueInput<V>> {
+class _CustomInputState extends State<CustomInput> {
   final _formKey = GlobalKey<FormState>();
   final Map<String, _SeriesItemData> _seriesItemsData = {};
 
@@ -45,7 +53,7 @@ class _MultiValueInputState<V extends MultiValue> extends State<MultiValueInput<
 
   @override
   initState() {
-    V? source = widget.multiValue;
+    CustomValue? source = widget.customValue;
     _uuid = source?.uuid ?? const Uuid().v4();
     _dateTime = source?.dateTime ?? DateTime.now();
 
@@ -95,7 +103,7 @@ class _MultiValueInputState<V extends MultiValue> extends State<MultiValueInput<
   }
 
   void _saveHandler() async {
-    bool insert = widget.multiValue == null;
+    bool insert = widget.customValue == null;
     setState(() {
       _autoValidate = true;
     });
@@ -109,7 +117,7 @@ class _MultiValueInputState<V extends MultiValue> extends State<MultiValueInput<
         values[seriesItemData.seriesItem.siid] = val;
       }
     }
-    V val = widget.valueBuilder(_uuid, _dateTime, values);
+    var val = CustomValue(_uuid, _dateTime, values);
     // First dismiss keyboard to trigger series view rebuild (-> series view animation)
     // and after a small delay pop the dialog with the return value - which then triggers the current value animation
     Dialogs.dismissKeyboard(context);
@@ -119,14 +127,14 @@ class _MultiValueInputState<V extends MultiValue> extends State<MultiValueInput<
     }
   }
 
-  void _deleteHandler(MultiValue multiValue) async {
+  void _deleteHandler(CustomValue customValue) async {
     bool? res = await Dialogs.simpleYesNoDialog(
       LocaleKeys.seriesValue_query_deleteValue.tr(),
       context,
       title: LocaleKeys.commons_dialog_title_areYouSure.tr(),
     );
     if (res == true && mounted) {
-      Navigator.pop(context, InputResult(multiValue, InputResultAction.delete));
+      Navigator.pop(context, InputResult(customValue, InputResultAction.delete));
     }
   }
 
@@ -184,12 +192,12 @@ class _MultiValueInputState<V extends MultiValue> extends State<MultiValueInput<
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            widget.multiValue == null ? Icon(Icons.add_outlined, size: iconSize) : Icon(Icons.edit_outlined, size: iconSize),
+            widget.customValue == null ? Icon(Icons.add_outlined, size: iconSize) : Icon(Icons.edit_outlined, size: iconSize),
             OverflowText(widget.seriesDef.name),
-            if (widget.multiValue != null)
+            if (widget.customValue != null)
               IconButton(
                 tooltip: LocaleKeys.seriesValue_action_deleteValue_tooltip.tr(),
-                onPressed: () => _deleteHandler(widget.multiValue!),
+                onPressed: () => _deleteHandler(widget.customValue!),
                 color: themeData.colorScheme.secondary,
                 iconSize: iconSize,
                 icon: const Icon(Icons.delete_outlined),

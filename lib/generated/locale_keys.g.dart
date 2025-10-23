@@ -72,12 +72,10 @@ abstract class  LocaleKeys {
   static const enum_seriesType_dailyCheck_info = 'enum.seriesType.dailyCheck.info';
   static const enum_seriesType_dailyLife_title = 'enum.seriesType.dailyLife.title';
   static const enum_seriesType_dailyLife_info = 'enum.seriesType.dailyLife.info';
-  static const enum_seriesType_free_title = 'enum.seriesType.free.title';
-  static const enum_seriesType_free_info = 'enum.seriesType.free.info';
   static const enum_seriesType_habit_title = 'enum.seriesType.habit.title';
   static const enum_seriesType_habit_info = 'enum.seriesType.habit.info';
-  static const enum_seriesType_monthly_title = 'enum.seriesType.monthly.title';
-  static const enum_seriesType_monthly_info = 'enum.seriesType.monthly.info';
+  static const enum_seriesType_custom_title = 'enum.seriesType.custom.title';
+  static const enum_seriesType_custom_info = 'enum.seriesType.custom.info';
   static const enum_viewType_lineChart_title = 'enum.viewType.lineChart.title';
   static const enum_viewType_lineChart_tooltip = 'enum.viewType.lineChart.tooltip';
   static const enum_viewType_barChart_title = 'enum.viewType.barChart.title';
@@ -178,13 +176,12 @@ abstract class  LocaleKeys {
   static const seriesEdit_action_abort_tooltip = 'seriesEdit.action.abort.tooltip';
   static const seriesEdit_action_save_tooltip = 'seriesEdit.action.save.tooltip';
   static const seriesEdit_label_selectSeriesType = 'seriesEdit.label.selectSeriesType';
-  static const seriesEdit_label_moreSeriesToCome = 'seriesEdit.label.moreSeriesToCome';
   static const seriesEdit_btn_showSeriesTypeInfo = 'seriesEdit.btn.showSeriesTypeInfo';
   static const seriesEdit_btn_backToSeriesTypeSelection = 'seriesEdit.btn.backToSeriesTypeSelection';
   static const seriesEdit_common_label_seriesName = 'seriesEdit.common.label.seriesName';
+  static const seriesEdit_common_label_seriesIcon = 'seriesEdit.common.label.seriesIcon';
   static const seriesEdit_common_label_seriesItemName = 'seriesEdit.common.label.seriesItemName';
   static const seriesEdit_common_label_seriesItemUnit = 'seriesEdit.common.label.seriesItemUnit';
-  static const seriesEdit_common_label_seriesIcon = 'seriesEdit.common.label.seriesIcon';
   static const seriesEdit_common_label_seriesColor = 'seriesEdit.common.label.seriesColor';
   static const seriesEdit_displaySettings_title = 'seriesEdit.displaySettings.title';
   static const seriesEdit_displaySettings_label_initialView = 'seriesEdit.displaySettings.label.initialView';
@@ -229,6 +226,7 @@ abstract class  LocaleKeys {
   static const seriesEdit_seriesSettings_seriesItems_actions_edit_tooltip = 'seriesEdit.seriesSettings.seriesItems.actions.edit.tooltip';
   static const seriesEdit_seriesSettings_seriesItems_dlg_title = 'seriesEdit.seriesSettings.seriesItems.dlg.title';
   static const seriesEdit_seriesSettings_seriesItems_info = 'seriesEdit.seriesSettings.seriesItems.info';
+  static const seriesEdit_seriesSettings_seriesItems_validation_emptyParameters = 'seriesEdit.seriesSettings.seriesItems.validation.emptyParameters';
   static const seriesManagement_title = 'seriesManagement.title';
   static const seriesManagement_action_importExport_tooltip = 'seriesManagement.action.importExport.tooltip';
   static const seriesManagement_action_closeSeriesManagement_tooltip = 'seriesManagement.action.closeSeriesManagement.tooltip';
