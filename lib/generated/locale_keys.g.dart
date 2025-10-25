@@ -195,6 +195,7 @@ abstract class  LocaleKeys {
   static const seriesEdit_displaySettings_tableView_label_standardColumnProfile = 'seriesEdit.displaySettings.tableView.label.standardColumnProfile';
   static const seriesEdit_seriesSettings_bloodPressure_title = 'seriesEdit.seriesSettings.bloodPressure.title';
   static const seriesEdit_seriesSettings_bloodPressure_switch_hideMedicationInput_label = 'seriesEdit.seriesSettings.bloodPressure.switch.hideMedicationInput.label';
+  static const seriesEdit_seriesSettings_custom_title = 'seriesEdit.seriesSettings.custom.title';
   static const seriesEdit_seriesSettings_dailyLifeAttributes_title = 'seriesEdit.seriesSettings.dailyLifeAttributes.title';
   static const seriesEdit_seriesSettings_dailyLifeAttributes_actions_add_tooltip = 'seriesEdit.seriesSettings.dailyLifeAttributes.actions.add.tooltip';
   static const seriesEdit_seriesSettings_dailyLifeAttributes_actions_addPreset_tooltip = 'seriesEdit.seriesSettings.dailyLifeAttributes.actions.addPreset.tooltip';

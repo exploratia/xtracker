@@ -513,6 +513,9 @@
           }
         }
       },
+      "custom": {
+        "title": "Individuell-Einstellungen"
+      },
       "dailyLifeAttributes": {
         "title": "Attribute",
         "actions": {

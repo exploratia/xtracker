@@ -10,6 +10,7 @@ import '../../widgets/series/edit/series_edit.dart';
 import '../column_profile/fix_column_profile.dart';
 import 'series_type.dart';
 import 'settings/blood_pressure_settings.dart';
+import 'settings/custom_settings.dart';
 import 'settings/daily_life/daily_life_attributes_settings.dart';
 import 'settings/display_settings.dart';
 import 'view_type.dart';
@@ -42,16 +43,22 @@ class SeriesDef {
   /// return BloodPressureSettings read only mode
   BloodPressureSettings bloodPressureSettingsReadonly() => BloodPressureSettings(_settings, null);
 
+  /// return CustomSettings in edit mode (setters active)
+  CustomSettings customSettingsEditable(Function() updateStateCB) => CustomSettings(_settings, updateStateCB);
+
+  /// return CustomSettings read only mode
+  CustomSettings customSettingsReadonly() => CustomSettings(_settings, null);
+
   /// return dailyLifeAttributes in edit mode (setters active)
   DailyLifeAttributesSettings dailyLifeAttributesSettingsEditable(Function() updateStateCB) => DailyLifeAttributesSettings(_settings, updateStateCB);
 
   /// return dailyLifeAttributes read only mode
   DailyLifeAttributesSettings dailyLifeAttributesSettingsReadonly() => DailyLifeAttributesSettings(_settings, null);
 
-  /// return BloodPressureSettings in edit mode (setters active)
+  /// return DisplaySettings in edit mode (setters active)
   DisplaySettings displaySettingsEditable(Function() updateStateCB) => DisplaySettings(_settings, updateStateCB);
 
-  /// return BloodPressureSettings read only mode
+  /// return DisplaySettings read only mode
   DisplaySettings displaySettingsReadonly() => DisplaySettings(_settings, null);
 
   /// return FixColumnProfile from display settings or default for the series type (or null if the series has no fix column profile)

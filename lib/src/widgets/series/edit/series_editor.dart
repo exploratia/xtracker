@@ -180,6 +180,14 @@ class _SeriesEditorState extends State<SeriesEditor> {
             ],
           ),
 
+        // if (_seriesDef.seriesType == SeriesType.custom)
+        //   Expandable(
+        //     initialExpanded: false,
+        //     icon: Icon(Icons.line_axis_outlined, size: ThemeUtils.iconSizeScaled),
+        //     title: LocaleKeys.seriesEdit_seriesSettings_custom_title.tr(),
+        //     child: CustomSeriesEdit(_seriesDef, _updateState),
+        //   ),
+
         if (_seriesDef.seriesType == SeriesType.bloodPressure)
           Expandable(
             initialExpanded: true,
