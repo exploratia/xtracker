@@ -130,7 +130,7 @@ class _SeriesItemRenderer extends StatelessWidget {
         children: [
           const SizedBox(width: ThemeUtils.horizontalSpacing),
           Expanded(
-            child: OverflowText('${seriesItem.name} [${seriesItem.unit}]', expanded: false),
+            child: OverflowText('${seriesItem.name}${seriesItem.unitInBrackets()}', expanded: false),
           ),
           const SizedBox(width: ThemeUtils.horizontalSpacing),
           LeftBorder(

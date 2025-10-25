@@ -5,6 +5,7 @@ import 'daily_check/daily_check_value.dart';
 import 'daily_life/daily_life_value.dart';
 import 'datetime_item.dart';
 import 'habit/habit_value.dart';
+import 'monthly/monthly_value.dart';
 
 abstract class SeriesDataValue implements DateTimeItem {
   final String uuid;
@@ -26,6 +27,7 @@ abstract class SeriesDataValue implements DateTimeItem {
       SeriesType.dailyLife => DailyLifeValue.fromJson(json),
       SeriesType.habit => HabitValue.fromJson(json),
       SeriesType.custom => CustomValue.fromJson(json),
+      SeriesType.monthly => MonthlyValue.fromJson(json),
     };
   }
 }

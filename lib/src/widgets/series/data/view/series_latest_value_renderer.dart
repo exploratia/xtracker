@@ -99,6 +99,7 @@ class SeriesLatestValueRenderer extends StatelessWidget {
           );
         }
       case SeriesType.custom:
+      case SeriesType.monthly:
         {
           return AnimatedHighlightContainer<CustomValue?>(
             highlightColor: seriesDef.color,

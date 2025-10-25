@@ -154,7 +154,11 @@
       },
       "custom": {
         "title": "Custom",
-        "info": "Track custom data with one or multiple parameters per entry – e.g. refueling distance and cost, or water and electricity consumption to see yearly trends."
+        "info": "Track custom data with one or multiple parameters per entry – e.g. refueling distance and cost."
+      },
+      "monthly": {
+        "title": "Monthly",
+        "info": "Track custom monthly data with one or multiple parameters per entry – e.g. water or current consumption to see the yearly progress.\n\nIn monthly mode, only one value per month is stored. If multiple entries are made in the same month, the last one is kept.\n\nEntries made before mid-month still count for the previous month. Example: Water consumption for January can only be read at the beginning of February – maybe even on February 4 if you're not home earlier."
       }
     },
     "viewType": {

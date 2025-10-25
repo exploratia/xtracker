@@ -6,41 +6,42 @@ import 'package:flutter/services.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../../../generated/locale_keys.g.dart';
-import '../../../../../model/series/data/custom/custom_value.dart';
+import '../../../../../model/series/data/monthly/monthly_value.dart';
 import '../../../../../model/series/series_def.dart';
 import '../../../../../util/dialogs.dart';
 import '../../../../../util/formatter/decimal_input_formatter.dart';
 import '../../../../../util/theme_utils.dart';
 import '../../../../controls/layout/single_child_scroll_view_with_scrollbar.dart';
 import '../../../../controls/text/overflow_text.dart';
+import '../custom/custom_input.dart';
 import '../input_header.dart';
 import '../input_result.dart';
 
-class CustomInput extends StatefulWidget {
-  const CustomInput({
+class MonthlyInput extends StatefulWidget {
+  const MonthlyInput({
     super.key,
-    this.customValue,
+    this.monthlyValue,
     required this.seriesDef,
   });
 
   final SeriesDef seriesDef;
-  final CustomValue? customValue;
+  final MonthlyValue? monthlyValue;
 
-  static Future<InputResult<CustomValue>?> showInputDlg(BuildContext context, SeriesDef seriesDef, {CustomValue? customValue}) async {
-    return await showDialog<InputResult<CustomValue>>(
+  static Future<InputResult<MonthlyValue>?> showInputDlg(BuildContext context, SeriesDef seriesDef, {MonthlyValue? monthlyValue}) async {
+    return await showDialog<InputResult<MonthlyValue>>(
       context: context,
-      builder: (_) => CustomInput(
+      builder: (_) => MonthlyInput(
         seriesDef: seriesDef,
-        customValue: customValue,
+        monthlyValue: monthlyValue,
       ),
     );
   }
 
   @override
-  State<CustomInput> createState() => _CustomInputState();
+  State<MonthlyInput> createState() => _MonthlyInputState();
 }
 
-class _CustomInputState extends State<CustomInput> {
+class _MonthlyInputState extends State<MonthlyInput> {
   final _formKey = GlobalKey<FormState>();
   final Map<String, SeriesItemData> _seriesItemsData = {};
 
@@ -53,7 +54,7 @@ class _CustomInputState extends State<CustomInput> {
 
   @override
   initState() {
-    CustomValue? source = widget.customValue;
+    MonthlyValue? source = widget.monthlyValue;
     _uuid = source?.uuid ?? const Uuid().v4();
     _dateTime = source?.dateTime ?? DateTime.now();
 
@@ -103,7 +104,7 @@ class _CustomInputState extends State<CustomInput> {
   }
 
   void _saveHandler() async {
-    bool insert = widget.customValue == null;
+    bool insert = widget.monthlyValue == null;
     setState(() {
       _autoValidate = true;
     });
@@ -117,7 +118,7 @@ class _CustomInputState extends State<CustomInput> {
         values[seriesItemData.seriesItem.siid] = val;
       }
     }
-    var val = CustomValue(_uuid, _dateTime, values);
+    var val = MonthlyValue(_uuid, _dateTime, values);
     // First dismiss keyboard to trigger series view rebuild (-> series view animation)
     // and after a small delay pop the dialog with the return value - which then triggers the current value animation
     Dialogs.dismissKeyboard(context);
@@ -127,14 +128,14 @@ class _CustomInputState extends State<CustomInput> {
     }
   }
 
-  void _deleteHandler(CustomValue customValue) async {
+  void _deleteHandler(MonthlyValue monthlyValue) async {
     bool? res = await Dialogs.simpleYesNoDialog(
       LocaleKeys.seriesValue_query_deleteValue.tr(),
       context,
       title: LocaleKeys.commons_dialog_title_areYouSure.tr(),
     );
     if (res == true && mounted) {
-      Navigator.pop(context, InputResult(customValue, InputResultAction.delete));
+      Navigator.pop(context, InputResult(monthlyValue, InputResultAction.delete));
     }
   }
 
@@ -192,12 +193,12 @@ class _CustomInputState extends State<CustomInput> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            widget.customValue == null ? Icon(Icons.add_outlined, size: iconSize) : Icon(Icons.edit_outlined, size: iconSize),
+            widget.monthlyValue == null ? Icon(Icons.add_outlined, size: iconSize) : Icon(Icons.edit_outlined, size: iconSize),
             OverflowText(widget.seriesDef.name),
-            if (widget.customValue != null)
+            if (widget.monthlyValue != null)
               IconButton(
                 tooltip: LocaleKeys.seriesValue_action_deleteValue_tooltip.tr(),
-                onPressed: () => _deleteHandler(widget.customValue!),
+                onPressed: () => _deleteHandler(widget.monthlyValue!),
                 color: themeData.colorScheme.secondary,
                 iconSize: iconSize,
                 icon: const Icon(Icons.delete_outlined),
@@ -221,22 +222,5 @@ class _CustomInputState extends State<CustomInput> {
         ),
       ],
     );
-  }
-}
-
-class SeriesItemData {
-  final SeriesItem seriesItem;
-  late final String title;
-  late final String unit;
-  late final TextEditingController textEditingController;
-
-  SeriesItemData(this.seriesItem) {
-    title = seriesItem.name;
-    unit = seriesItem.unit ?? '';
-    textEditingController = TextEditingController();
-  }
-
-  void dispose() {
-    textEditingController.dispose();
   }
 }

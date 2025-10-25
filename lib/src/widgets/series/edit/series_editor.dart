@@ -162,7 +162,7 @@ class _SeriesEditorState extends State<SeriesEditor> {
 
         // series type dependent...
 
-        if (_seriesDef.seriesType == SeriesType.custom)
+        if (_seriesDef.seriesType == SeriesType.custom || _seriesDef.seriesType == SeriesType.monthly)
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [

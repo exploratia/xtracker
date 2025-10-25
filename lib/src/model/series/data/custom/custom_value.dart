@@ -23,7 +23,7 @@ class CustomValue extends SeriesDataValue {
 
   @override
   String toString() {
-    return 'MultiValue{...}';
+    return 'CustomValue{...}';
   }
 
   static CustomValue checkOnCustomValue(dynamic value) {

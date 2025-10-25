@@ -76,6 +76,8 @@ abstract class  LocaleKeys {
   static const enum_seriesType_habit_info = 'enum.seriesType.habit.info';
   static const enum_seriesType_custom_title = 'enum.seriesType.custom.title';
   static const enum_seriesType_custom_info = 'enum.seriesType.custom.info';
+  static const enum_seriesType_monthly_title = 'enum.seriesType.monthly.title';
+  static const enum_seriesType_monthly_info = 'enum.seriesType.monthly.info';
   static const enum_viewType_lineChart_title = 'enum.viewType.lineChart.title';
   static const enum_viewType_lineChart_tooltip = 'enum.viewType.lineChart.tooltip';
   static const enum_viewType_barChart_title = 'enum.viewType.barChart.title';

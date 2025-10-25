@@ -65,6 +65,7 @@ class SeriesValueRenderer<T extends SeriesDataValue> extends StatelessWidget {
           );
         }
       case SeriesType.custom:
+      case SeriesType.monthly:
         if (_seriesDataValue is CustomValue) {
           valueRenderer = CustomValueRenderer(customValue: _seriesDataValue, seriesDef: seriesDef);
         }

@@ -78,6 +78,13 @@ enum SeriesType {
     [ViewType.table],
     [], // no fix table column profiles
   ),
+  monthly(
+    "monthly",
+    Icons.calendar_month_outlined,
+    ThemeUtils.secondaryColor,
+    [ViewType.table],
+    [], // no fix table column profiles
+  ),
   ;
 
   final String typeName;
@@ -119,6 +126,7 @@ enum SeriesType {
       SeriesType.dailyLife => LocaleKeys.enum_seriesType_dailyLife_title.tr(),
       SeriesType.habit => LocaleKeys.enum_seriesType_habit_title.tr(),
       SeriesType.custom => LocaleKeys.enum_seriesType_custom_title.tr(),
+      SeriesType.monthly => LocaleKeys.enum_seriesType_monthly_title.tr(),
     };
   }
 
@@ -129,6 +137,7 @@ enum SeriesType {
       SeriesType.dailyLife => LocaleKeys.enum_seriesType_dailyLife_info.tr(),
       SeriesType.habit => LocaleKeys.enum_seriesType_habit_info.tr(),
       SeriesType.custom => LocaleKeys.enum_seriesType_custom_info.tr(),
+      SeriesType.monthly => LocaleKeys.enum_seriesType_monthly_info.tr(),
     };
   }
 }

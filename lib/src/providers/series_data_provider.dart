@@ -7,6 +7,7 @@ import '../model/series/data/custom/custom_value.dart';
 import '../model/series/data/daily_check/daily_check_value.dart';
 import '../model/series/data/daily_life/daily_life_value.dart';
 import '../model/series/data/habit/habit_value.dart';
+import '../model/series/data/monthly/monthly_value.dart';
 import '../model/series/data/series_data.dart';
 import '../model/series/data/series_data_value.dart';
 import '../model/series/series_def.dart';
@@ -22,6 +23,7 @@ class SeriesDataProvider with ChangeNotifier {
   final Map<String, SeriesData<DailyLifeValue>> _uuid2seriesDataDailyLife = HashMap();
   final Map<String, SeriesData<HabitValue>> _uuid2seriesDataHabit = HashMap();
   final Map<String, SeriesData<CustomValue>> _uuid2seriesDataCustom = HashMap();
+  final Map<String, SeriesData<MonthlyValue>> _uuid2seriesDataMonthly = HashMap();
 
   Future<void> fetchDataIfNotYetLoaded(SeriesDef seriesDef) async {
     var seriesData = switch (seriesDef.seriesType) {
@@ -30,6 +32,7 @@ class SeriesDataProvider with ChangeNotifier {
       SeriesType.dailyLife => _uuid2seriesDataDailyLife[seriesDef.uuid],
       SeriesType.habit => _uuid2seriesDataHabit[seriesDef.uuid],
       SeriesType.custom => _uuid2seriesDataCustom[seriesDef.uuid],
+      SeriesType.monthly => _uuid2seriesDataMonthly[seriesDef.uuid],
     };
 
     if (seriesData == null) {
@@ -149,6 +152,16 @@ class SeriesDataProvider with ChangeNotifier {
           seriesData.sort();
           _uuid2seriesDataCustom[seriesDef.uuid] = seriesData;
         }
+      case SeriesType.monthly:
+        var seriesData = _uuid2seriesDataMonthly[seriesDef.uuid];
+        if (seriesData == null) {
+          var store = Stores.getOrCreateSeriesDataStore(seriesDef);
+          var list = await store.getAllSeriesDataValuesAsMonthlyValue();
+
+          seriesData = SeriesData<MonthlyValue>(seriesDef.uuid, list);
+          seriesData.sort();
+          _uuid2seriesDataMonthly[seriesDef.uuid] = seriesData;
+        }
     }
   }
 
@@ -170,6 +183,8 @@ class SeriesDataProvider with ChangeNotifier {
         _uuid2seriesDataHabit.remove(seriesDef.uuid);
       case SeriesType.custom:
         _uuid2seriesDataCustom.remove(seriesDef.uuid);
+      case SeriesType.monthly:
+        _uuid2seriesDataMonthly.remove(seriesDef.uuid);
     }
 
     notifyListeners();
@@ -182,6 +197,7 @@ class SeriesDataProvider with ChangeNotifier {
       SeriesType.dailyLife => dailyLifeData(seriesDef),
       SeriesType.habit => habitData(seriesDef),
       SeriesType.custom => customData(seriesDef),
+      SeriesType.monthly => monthlyData(seriesDef),
     };
   }
 
@@ -240,6 +256,17 @@ class SeriesDataProvider with ChangeNotifier {
     return seriesData!;
   }
 
+  SeriesData<MonthlyValue>? monthlyData(SeriesDef seriesDef) {
+    var seriesData = _uuid2seriesDataMonthly[seriesDef.uuid];
+    return seriesData;
+  }
+
+  SeriesData<MonthlyValue> requireMonthlyData(SeriesDef seriesDef) {
+    var seriesData = monthlyData(seriesDef);
+    _checkOnSeriesData(seriesData, seriesDef);
+    return seriesData!;
+  }
+
   Future<void> addValue(SeriesDef seriesDef, SeriesDataValue value, SeriesCurrentValueProvider seriesCurrentValueProvider) async {
     await _handleValue(seriesDef, value, _Action.insert, seriesCurrentValueProvider);
   }
@@ -274,6 +301,9 @@ class SeriesDataProvider with ChangeNotifier {
       case SeriesType.custom:
         CustomValue.checkOnCustomValue(value);
         seriesData = requireCustomData(seriesDef);
+      case SeriesType.monthly:
+        MonthlyValue.checkOnMonthlyValue(value);
+        seriesData = requireMonthlyData(seriesDef);
     }
 
     if (action == _Action.insert) {
@@ -312,6 +342,8 @@ class SeriesDataProvider with ChangeNotifier {
         seriesData = requireHabitData(seriesDef)..insertAll(values.map(HabitValue.checkOnHabitValue));
       case SeriesType.custom:
         seriesData = requireCustomData(seriesDef)..insertAll(values.map(CustomValue.checkOnCustomValue));
+      case SeriesType.monthly:
+        seriesData = requireMonthlyData(seriesDef)..insertAll(values.map(MonthlyValue.checkOnMonthlyValue));
     }
 
     seriesData.sort();

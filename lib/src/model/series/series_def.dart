@@ -96,6 +96,7 @@ class SeriesDef {
       SeriesType.dailyLife => 1,
       SeriesType.habit => 1,
       SeriesType.custom => 1,
+      SeriesType.monthly => 1,
     };
   }
 
@@ -172,6 +173,14 @@ class SeriesItem {
     required this.unit,
     required this.color,
   });
+
+  String unitInBrackets({bool emptyStringIfNullOrEmpty = false, String prefix = ' '}) {
+    if (unit == null || unit != null && unit!.isEmpty) {
+      if (emptyStringIfNullOrEmpty) return '';
+      return "$prefix( )";
+    }
+    return '$prefix($unit)';
+  }
 
   /// deep copy / clone by transforming to json string and back
   SeriesItem clone() {

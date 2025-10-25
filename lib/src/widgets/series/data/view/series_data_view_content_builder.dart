@@ -6,6 +6,7 @@ import '../../../../model/series/data/custom/custom_value.dart';
 import '../../../../model/series/data/daily_check/daily_check_value.dart';
 import '../../../../model/series/data/daily_life/daily_life_value.dart';
 import '../../../../model/series/data/habit/habit_value.dart';
+import '../../../../model/series/data/monthly/monthly_value.dart';
 import '../../../../model/series/data/series_data_filter.dart';
 import '../../../../model/series/data/series_data_value.dart';
 import '../../../../model/series/series_def.dart';
@@ -17,6 +18,7 @@ import 'custom/series_data_custom_view.dart';
 import 'daily_check/series_data_daily_check_view.dart';
 import 'daily_life/series_data_daily_life_view.dart';
 import 'habit/series_data_habit_view.dart';
+import 'monthly/series_data_monthly_view.dart';
 import 'series_data_view_overlays.dart';
 
 class SeriesDataViewContentBuilder extends StatelessWidget {
@@ -90,11 +92,25 @@ class SeriesDataViewContentBuilder extends StatelessWidget {
           ),
           values,
         );
+
       case SeriesType.custom:
         var seriesData = seriesDataProvider.customData(seriesDef);
         List<CustomValue> values = seriesData?.data ?? [];
         return builder(
           () => SeriesDataCustomView(
+            seriesViewMetaData: seriesViewMetaData,
+            seriesData: values,
+            seriesDataFilter: seriesDataFilter,
+            seriesDataViewOverlays: seriesDataViewOverlays,
+          ),
+          values,
+        );
+
+      case SeriesType.monthly:
+        var seriesData = seriesDataProvider.monthlyData(seriesDef);
+        List<MonthlyValue> values = seriesData?.data ?? [];
+        return builder(
+          () => SeriesDataMonthlyView(
             seriesViewMetaData: seriesViewMetaData,
             seriesData: values,
             seriesDataFilter: seriesDataFilter,
