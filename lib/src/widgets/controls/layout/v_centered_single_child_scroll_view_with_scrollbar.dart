@@ -3,7 +3,6 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../../../util/theme_utils.dart';
-import '../navigation/hide_bottom_navigation_bar.dart';
 import 'single_child_scroll_view_with_scrollbar.dart';
 
 class VCenteredSingleChildScrollViewWithScrollbar extends StatelessWidget {
@@ -11,10 +10,12 @@ class VCenteredSingleChildScrollViewWithScrollbar extends StatelessWidget {
     super.key,
     required this.child,
     this.onRefreshCallback,
+    this.scrollPositionHandler,
   });
 
   final Widget child;
   final Future<void> Function()? onRefreshCallback;
+  final void Function(ScrollPosition value)? scrollPositionHandler;
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +25,7 @@ class VCenteredSingleChildScrollViewWithScrollbar extends StatelessWidget {
           child: LayoutBuilder(
             builder: (context, constraints) => SingleChildScrollViewWithScrollbar(
               useScreenPadding: true,
-              scrollPositionHandler: HideBottomNavigationBar.setScrollPosition,
+              scrollPositionHandler: scrollPositionHandler,
               onRefreshCallback: onRefreshCallback,
               child: Container(
                 constraints: BoxConstraints(minHeight: math.max(20, constraints.maxHeight - 2 * ThemeUtils.screenPadding)),

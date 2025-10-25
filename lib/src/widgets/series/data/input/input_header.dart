@@ -49,6 +49,7 @@ class _DateTimeHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
+    var textStyle = themeData.textTheme.titleMedium?.copyWith(color: themeData.colorScheme.primary);
     return Wrap(
       runAlignment: WrapAlignment.center,
       spacing: 20,
@@ -60,7 +61,7 @@ class _DateTimeHeader extends StatelessWidget {
             padding: const EdgeInsets.all(2.0),
             child: Text(
               DateTimeUtils.formatDate(dateTime),
-              style: TextStyle(inherit: true, color: themeData.colorScheme.primary),
+              style: textStyle,
             ),
           ),
         ),
@@ -71,7 +72,7 @@ class _DateTimeHeader extends StatelessWidget {
             padding: const EdgeInsets.all(2.0),
             child: Text(
               DateTimeUtils.formatTime(dateTime),
-              style: TextStyle(inherit: true, color: themeData.colorScheme.primary),
+              style: textStyle,
             ),
           ),
         ),

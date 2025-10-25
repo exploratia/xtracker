@@ -12,6 +12,7 @@ import '../administration/settings/settings_controller.dart';
 import '../controls/animation/animate_in.dart';
 import '../controls/animation/fade_in.dart';
 import '../controls/layout/v_centered_single_child_scroll_view_with_scrollbar.dart';
+import '../controls/navigation/hide_bottom_navigation_bar.dart';
 import '../controls/provider/data_provider_loader.dart';
 import '../controls/responsive/device_dependent_constrained_box.dart';
 import 'add_first_series.dart';
@@ -43,6 +44,7 @@ class SeriesView extends StatelessWidget {
       ]),
       child: VCenteredSingleChildScrollViewWithScrollbar(
         onRefreshCallback: () => onRefresh(context),
+        scrollPositionHandler: HideBottomNavigationBar.setScrollPosition,
         child: _SeriesList(settingsController),
       ),
     );
