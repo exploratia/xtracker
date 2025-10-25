@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../generated/locale_keys.g.dart';
 import '../../util/ex.dart';
+import '../../util/theme_utils.dart';
 import '../../widgets/controls/select/icon_map.dart';
 import '../column_profile/fix_column_profile_type.dart';
 import 'view_type.dart';
@@ -73,7 +74,7 @@ enum SeriesType {
   custom(
     "custom",
     Icons.line_axis_outlined,
-    Colors.deepPurple,
+    ThemeUtils.primaryColor,
     [ViewType.table],
     [], // no fix table column profiles
   ),
