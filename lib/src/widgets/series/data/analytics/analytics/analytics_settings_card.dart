@@ -2,10 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../../generated/locale_keys.g.dart';
-import '../../../../../util/dialogs.dart';
 import '../../../../../util/theme_utils.dart';
+import '../../../../controls/btn/info_btn.dart';
 import '../../../../controls/card/settings_card.dart';
-import '../../../../controls/layout/single_child_scroll_view_with_scrollbar.dart';
 import '../../../../controls/text/overflow_text.dart';
 
 class AnalyticsSettingsCard extends StatelessWidget {
@@ -36,20 +35,7 @@ class AnalyticsSettingsCard extends StatelessWidget {
                       expanded: false,
                       flexible: true,
                     ),
-                    if (e.infoDlgContent != null)
-                      IconButton(
-                        iconSize: ThemeUtils.iconSizeScaled,
-                        tooltip: LocaleKeys.commons_btn_info_tooltip.tr(),
-                        onPressed: () => Dialogs.simpleOkDialog(
-                          SingleChildScrollViewWithScrollbar(
-                            useHorizontalScreenPaddingForScrollbar: true,
-                            child: e.infoDlgContent!,
-                          ),
-                          context,
-                          title: e.title,
-                        ),
-                        icon: const Icon(Icons.info_outline),
-                      ),
+                    if (e.infoDlgContent != null) InfoBtn(title: e.title, content: e.infoDlgContent!),
                   ],
                 ),
                 content: e.content),

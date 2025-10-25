@@ -6,8 +6,8 @@ import '../../../../model/series/series_def.dart';
 import '../../../../model/series/settings/daily_life/daily_life_attribute.dart';
 import '../../../../model/series/settings/daily_life/daily_life_attributes_settings.dart';
 import '../../../../util/color_utils.dart';
-import '../../../../util/dialogs.dart';
 import '../../../../util/theme_utils.dart';
+import '../../../controls/btn/info_btn.dart';
 import '../../../controls/card/glowing_border_container.dart';
 import '../../../controls/list/drag_handle.dart';
 import '../../data/view/daily_life/daily_life_attribute_renderer.dart';
@@ -55,17 +55,9 @@ class DailyLifeSeriesEditAttributes extends StatelessWidget {
       header: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          IconButton(
-            iconSize: ThemeUtils.iconSizeScaled,
-            tooltip: LocaleKeys.commons_btn_info_tooltip.tr(),
-            onPressed: () async {
-              Dialogs.simpleOkDialog(
-                LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_info.tr(),
-                context,
-                title: LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_title.tr(),
-              );
-            },
-            icon: const Icon(Icons.info_outline),
+          InfoBtn(
+            title: LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_title.tr(),
+            content: LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_info.tr(),
           ),
           Expanded(child: Container()),
           IconButton(

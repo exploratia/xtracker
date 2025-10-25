@@ -8,12 +8,11 @@ import '../../../model/column_profile/fix_column_profile_type.dart';
 import '../../../model/series/series_def.dart';
 import '../../../model/series/series_type.dart';
 import '../../../model/series/view_type.dart';
-import '../../../util/dialogs.dart';
 import '../../../util/media_query_utils.dart';
 import '../../../util/theme_utils.dart';
+import '../../controls/btn/info_btn.dart';
 import '../../controls/card/expandable.dart';
 import '../../controls/layout/drop_down_menu_item_child.dart';
-import '../../controls/layout/single_child_scroll_view_with_scrollbar.dart';
 import '../../controls/text/overflow_text.dart';
 import 'pixel_view_preview.dart';
 
@@ -189,17 +188,10 @@ class SeriesEditDisplaySettings extends StatelessWidget {
                           Text(LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_title.tr()),
                         ],
                       ),
-                      IconButton(
-                        iconSize: ThemeUtils.iconSizeScaled,
+                      InfoBtn(
+                        title: LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_title.tr(),
+                        content: LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_text.tr(),
                         tooltip: LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_tooltip.tr(),
-                        onPressed: () => Dialogs.simpleOkDialog(
-                          SingleChildScrollViewWithScrollbar(
-                            child: Text(LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_text.tr()),
-                          ),
-                          context,
-                          title: Text(LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_title.tr()),
-                        ),
-                        icon: const Icon(Icons.info_outline),
                       ),
                       PixelViewPreview(
                         color: seriesDef.color,
