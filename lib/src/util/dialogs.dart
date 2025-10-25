@@ -20,7 +20,7 @@ class Dialogs {
   }) async {
     Widget? titleWidget = _titleWidget(title);
 
-    Widget? contentWidget = _contentWidget(content);
+    Widget contentWidget = buildContentWidget(content);
 
     return showDialog<void>(
       context: context,
@@ -55,7 +55,7 @@ class Dialogs {
   }) async {
     Widget? titleWidget = _titleWidget(title);
 
-    Widget? contentWidget = _contentWidget(content);
+    Widget contentWidget = buildContentWidget(content);
 
     return await showDialog<bool>(
       context: context,
@@ -158,8 +158,8 @@ class Dialogs {
     showSnackBar('⚠  $content', context, color: Colors.orange, duration: duration);
   }
 
-  static Widget? _contentWidget(dynamic content) {
-    Widget? contentWidget;
+  static Widget buildContentWidget(dynamic content) {
+    Widget contentWidget;
     if (content != null) {
       if (content is String) {
         contentWidget = DeviceDependentWidthConstrainedBox(child: Text(content));
@@ -168,6 +168,8 @@ class Dialogs {
       } else {
         contentWidget = const Icon(Icons.question_mark_outlined);
       }
+    } else {
+      contentWidget = const SizedBox();
     }
     return contentWidget;
   }
