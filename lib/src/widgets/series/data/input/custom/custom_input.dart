@@ -8,6 +8,7 @@ import 'package:uuid/uuid.dart';
 import '../../../../../../generated/locale_keys.g.dart';
 import '../../../../../model/series/data/custom/custom_value.dart';
 import '../../../../../model/series/series_def.dart';
+import '../../../../../util/date_time_utils.dart';
 import '../../../../../util/dialogs.dart';
 import '../../../../../util/formatter/decimal_input_formatter.dart';
 import '../fullscreen_input.dart';
@@ -49,11 +50,13 @@ class SeriesItemsInput<V extends CustomValue> extends StatefulWidget {
     this.val,
     required this.seriesDef,
     required this.resultBuilder,
+    this.monthly = false,
   });
 
   final SeriesDef seriesDef;
   final V? val;
   final InputResult<V> Function(String uuid, DateTime dateTime, Map<String, double> values, InputResultAction inputResultAction) resultBuilder;
+  final bool monthly;
 
   @override
   State<SeriesItemsInput> createState() => _SeriesItemsInputState();
@@ -75,6 +78,10 @@ class _SeriesItemsInputState<V extends CustomValue> extends State<SeriesItemsInp
     V? source = widget.val;
     _uuid = source?.uuid ?? const Uuid().v4();
     _dateTime = source?.dateTime ?? DateTime.now();
+    // "correct" month in monthly if no dateTime is given
+    if (widget.monthly && source == null) {
+      _dateTime = _dateTime.day < 15 ? DateTimeUtils.firstDayOfPreviousMonth(_dateTime) : DateTimeUtils.firstDayOfMonth(_dateTime);
+    }
 
     for (var seriesItem in widget.seriesDef.seriesItems) {
       var seriesItemData = SeriesItemData(seriesItem);
@@ -196,6 +203,7 @@ class _SeriesItemsInputState<V extends CustomValue> extends State<SeriesItemsInp
       seriesDef: widget.seriesDef,
       dateTime: _dateTime,
       setDateTime: _setDateTime,
+      monthly: widget.monthly,
       saveHandler: _saveHandler,
       deleteHandler: _deleteHandler,
     );

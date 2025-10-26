@@ -12,17 +12,19 @@ import '../../../controls/text/overflow_text.dart';
 import 'input_header.dart';
 
 class FullscreenInput extends StatelessWidget {
-  const FullscreenInput(
-      {super.key,
-      required this.saveHandler,
-      required this.formChildren,
-      required this.formKey,
-      required this.autoValidate,
-      required this.dateTime,
-      required this.deleteHandler,
-      required this.setDateTime,
-      required this.seriesDef,
-      required this.isEdit});
+  const FullscreenInput({
+    super.key,
+    required this.saveHandler,
+    required this.formChildren,
+    required this.formKey,
+    required this.autoValidate,
+    required this.dateTime,
+    required this.deleteHandler,
+    required this.setDateTime,
+    required this.seriesDef,
+    required this.isEdit,
+    this.monthly = false,
+  });
 
   final GlobalKey<FormState> formKey;
   final bool isEdit;
@@ -30,6 +32,7 @@ class FullscreenInput extends StatelessWidget {
   final SeriesDef seriesDef;
   final DateTime dateTime;
   final Function(DateTime value) setDateTime;
+  final bool monthly;
   final VoidCallback saveHandler;
   final VoidCallback deleteHandler;
   final List<Widget> formChildren;
@@ -58,7 +61,11 @@ class FullscreenInput extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(bottom: ThemeUtils.verticalSpacing),
-          child: InputHeader(dateTime: dateTime, setDateTime: setDateTime),
+          child: InputHeader(
+            dateTime: dateTime,
+            setDateTime: setDateTime,
+            monthly: monthly,
+          ),
         ),
         const Divider(height: 1),
         ...formChildren

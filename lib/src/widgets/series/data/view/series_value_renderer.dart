@@ -5,6 +5,7 @@ import '../../../../model/series/data/custom/custom_value.dart';
 import '../../../../model/series/data/daily_check/daily_check_value.dart';
 import '../../../../model/series/data/daily_life/daily_life_value.dart';
 import '../../../../model/series/data/habit/habit_value.dart';
+import '../../../../model/series/data/monthly/monthly_value.dart';
 import '../../../../model/series/data/series_data_value.dart';
 import '../../../../model/series/series_def.dart';
 import '../../../../model/series/series_type.dart';
@@ -72,12 +73,19 @@ class SeriesValueRenderer<T extends SeriesDataValue> extends StatelessWidget {
     }
 
     if (valueRenderer != null) {
-      return ValueWrap(
-        children: [
+      List<Widget> children = [];
+      if (_seriesDataValue is MonthlyValue) {
+        children.add(Text(DateTimeUtils.formatMonthYear(_seriesDataValue.dateTime)));
+      } else {
+        children.addAll([
           Text(DateTimeUtils.formatDate(_seriesDataValue.dateTime)),
           Text(DateTimeUtils.formatTime(_seriesDataValue.dateTime)),
-          valueRenderer,
-        ],
+        ]);
+      }
+      children.add(valueRenderer);
+
+      return ValueWrap(
+        children: children,
       );
     }
 

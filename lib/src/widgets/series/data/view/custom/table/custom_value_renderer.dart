@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../../model/series/data/custom/custom_value.dart';
+import '../../../../../../model/series/data/monthly/monthly_value.dart';
 import '../../../../../../model/series/data/series_data.dart';
 import '../../../../../../model/series/series_def.dart';
 import '../../../../../../util/date_time_utils.dart';
@@ -47,11 +48,15 @@ class CustomValueRenderer extends StatelessWidget {
     }
 
     if (wrapWithDateTimeTooltip) {
-      result = Tooltip(
-        message: '${DateTimeUtils.formatDate(customValue.dateTime)}   ${DateTimeUtils.formatTime(customValue.dateTime)}',
+      var msg = (customValue is MonthlyValue)
+          ? DateTimeUtils.formatMonthYear(customValue.dateTime)
+          : '${DateTimeUtils.formatDate(customValue.dateTime)}   ${DateTimeUtils.formatTime(customValue.dateTime)}';
+      var tooltip = Tooltip(
+        message: msg,
         textStyle: TooltipUtils.tooltipMonospaceStyle,
         child: result,
       );
+      result = tooltip;
     }
 
     return result;

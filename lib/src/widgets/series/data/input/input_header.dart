@@ -2,27 +2,14 @@ import 'package:flutter/material.dart';
 
 import '../../../../util/date_time_utils.dart';
 import '../../../../util/theme_utils.dart';
+import '../../../controls/select/month_switcher.dart';
 
 class InputHeader extends StatelessWidget {
   final DateTime dateTime;
   final Function(DateTime value) setDateTime;
+  final bool monthly;
 
-  const InputHeader({super.key, required this.dateTime, required this.setDateTime});
-
-  @override
-  Widget build(BuildContext context) {
-    return _DateTimeHeader(dateTime: dateTime, setDateTime: setDateTime);
-  }
-}
-
-class _DateTimeHeader extends StatelessWidget {
-  const _DateTimeHeader({
-    required this.dateTime,
-    required this.setDateTime,
-  });
-
-  final DateTime dateTime;
-  final Function(DateTime value) setDateTime;
+  const InputHeader({super.key, required this.dateTime, required this.setDateTime, this.monthly = false});
 
   Future<void> _selectDate(BuildContext context, DateTime dateTime) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -47,7 +34,16 @@ class _DateTimeHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    var textStyle = themeData.textTheme.titleMedium?.copyWith(color: themeData.colorScheme.primary);
+    var textStyle = themeData.textTheme.titleMedium;
+
+    if (monthly) {
+      return MonthSwitcher(
+        initialDate: dateTime,
+        monthCallback: setDateTime,
+      );
+    }
+
+    textStyle = textStyle?.copyWith(color: themeData.colorScheme.primary);
     return Wrap(
       runAlignment: WrapAlignment.center,
       spacing: 20,

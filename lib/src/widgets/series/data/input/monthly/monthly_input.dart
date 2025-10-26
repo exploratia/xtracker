@@ -28,6 +28,7 @@ class MonthlyInput extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SeriesItemsInput<MonthlyValue>(
+      monthly: true,
       seriesDef: seriesDef,
       val: monthlyValue,
       resultBuilder: (uuid, dateTime, values, action) => InputResult(MonthlyValue(uuid, dateTime, values), action),
