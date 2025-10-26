@@ -163,6 +163,8 @@ class _SeriesItemsInputState<V extends CustomValue> extends State<SeriesItemsInp
             controller: seriesItemData.textEditingController,
             decoration: InputDecoration(
               labelText: seriesItem.name + seriesItem.unitInBrackets(emptyStringIfNullOrEmpty: true),
+              prefixIcon: Icon(widget.seriesDef.iconData()),
+              prefixIconColor: seriesItem.color,
             ),
             // Only numbers can be entered:
             inputFormatters: <TextInputFormatter>[DecimalInputFormatter()],
