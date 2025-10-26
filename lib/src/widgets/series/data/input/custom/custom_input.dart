@@ -35,35 +35,31 @@ class CustomInput extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SeriesItemsInput(seriesDef: seriesDef);
+    return SeriesItemsInput<CustomValue>(
+      seriesDef: seriesDef,
+      val: customValue,
+      resultBuilder: (uuid, dateTime, values, action) => InputResult(CustomValue(uuid, dateTime, values), action),
+    );
   }
 }
 
-class SeriesItemsInput extends StatefulWidget {
+class SeriesItemsInput<V extends CustomValue> extends StatefulWidget {
   const SeriesItemsInput({
     super.key,
-    this.customValue,
+    this.val,
     required this.seriesDef,
+    required this.resultBuilder,
   });
 
   final SeriesDef seriesDef;
-  final CustomValue? customValue;
-
-  static Future<InputResult<CustomValue>?> showInputDlg(BuildContext context, SeriesDef seriesDef, {CustomValue? customValue}) async {
-    return await showDialog<InputResult<CustomValue>>(
-      context: context,
-      builder: (context) => SeriesItemsInput(
-        seriesDef: seriesDef,
-        customValue: customValue,
-      ),
-    );
-  }
+  final V? val;
+  final InputResult<V> Function(String uuid, DateTime dateTime, Map<String, double> values, InputResultAction inputResultAction) resultBuilder;
 
   @override
   State<SeriesItemsInput> createState() => _SeriesItemsInputState();
 }
 
-class _SeriesItemsInputState extends State<SeriesItemsInput> {
+class _SeriesItemsInputState<V extends CustomValue> extends State<SeriesItemsInput<V>> {
   final _formKey = GlobalKey<FormState>();
   final Map<String, SeriesItemData> _seriesItemsData = {};
 
@@ -76,7 +72,7 @@ class _SeriesItemsInputState extends State<SeriesItemsInput> {
 
   @override
   initState() {
-    CustomValue? source = widget.customValue;
+    V? source = widget.val;
     _uuid = source?.uuid ?? const Uuid().v4();
     _dateTime = source?.dateTime ?? DateTime.now();
 
@@ -126,7 +122,7 @@ class _SeriesItemsInputState extends State<SeriesItemsInput> {
   }
 
   void _saveHandler() async {
-    bool insert = widget.customValue == null;
+    bool insert = widget.val == null;
     setState(() {
       _autoValidate = true;
     });
@@ -140,19 +136,19 @@ class _SeriesItemsInputState extends State<SeriesItemsInput> {
         values[seriesItemData.seriesItem.siid] = val;
       }
     }
-    var val = CustomValue(_uuid, _dateTime, values);
+    var inputResult = widget.resultBuilder(_uuid, _dateTime, values, insert ? InputResultAction.insert : InputResultAction.update);
     // First dismiss keyboard to trigger series view rebuild (-> series view animation)
     // and after a small delay pop the dialog with the return value - which then triggers the current value animation
     Dialogs.dismissKeyboard(context);
     await Future.delayed(const Duration(milliseconds: 300), () {});
     if (mounted) {
-      Navigator.pop(context, InputResult(val, insert ? InputResultAction.insert : InputResultAction.update));
+      Navigator.pop<InputResult<V>>(context, inputResult);
     }
   }
 
   void _deleteHandler() {
-    if (widget.customValue != null && mounted) {
-      Navigator.pop(context, InputResult(widget.customValue!, InputResultAction.delete));
+    if (widget.val != null && mounted) {
+      Navigator.pop(context, InputResult<V>(widget.val!, InputResultAction.delete));
     }
   }
 
@@ -178,8 +174,8 @@ class _SeriesItemsInputState extends State<SeriesItemsInput> {
                 // return LocaleKeys.commons_validator_emptyValue.tr();
               }
               final normalized = value.replaceAll(',', '.');
-              var val = double.tryParse(normalized);
-              if (val == null) {
+              var dVal = double.tryParse(normalized);
+              if (dVal == null) {
                 return LocaleKeys.commons_validator_emptyValue.tr();
               }
 
@@ -194,7 +190,7 @@ class _SeriesItemsInputState extends State<SeriesItemsInput> {
       formKey: _formKey,
       formChildren: formChildren,
       autoValidate: _autoValidate,
-      isEdit: widget.customValue != null,
+      isEdit: widget.val != null,
       seriesDef: widget.seriesDef,
       dateTime: _dateTime,
       setDateTime: _setDateTime,
