@@ -167,6 +167,10 @@ https://pub.dev/packages/sembast_sqflite)
 
 https://pub.dev/packages/file_picker
 
+### Color Picker
+
+https://pub.dev/packages/flutter_colorpicker
+
 #### Setup
 
 https://github.com/miguelpruivo/flutter_file_picker/wiki/Setup
