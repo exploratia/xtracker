@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 
-import '../../../../model/series/series_def.dart';
 import '../../../../util/date_time_utils.dart';
 import '../../../../util/theme_utils.dart';
 
 class InputHeader extends StatelessWidget {
   final DateTime dateTime;
-  final SeriesDef seriesDef;
   final Function(DateTime value) setDateTime;
 
-  const InputHeader({super.key, required this.dateTime, required this.seriesDef, required this.setDateTime});
+  const InputHeader({super.key, required this.dateTime, required this.setDateTime});
 
   @override
   Widget build(BuildContext context) {

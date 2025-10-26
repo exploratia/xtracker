@@ -151,7 +151,7 @@ class _MonthlyInputState extends State<MonthlyInput> {
         mainAxisSize: MainAxisSize.min,
         spacing: ThemeUtils.verticalSpacing,
         children: [
-          InputHeader(dateTime: _dateTime, seriesDef: widget.seriesDef, setDateTime: _setDateTime),
+          InputHeader(dateTime: _dateTime, setDateTime: _setDateTime),
           const Divider(height: 1),
           ...widget.seriesDef.seriesItems.map((seriesItem) {
             var seriesItemData = _seriesItemsData[seriesItem.siid]!;
@@ -159,8 +159,7 @@ class _MonthlyInputState extends State<MonthlyInput> {
               autofocus: seriesItem.siid == widget.seriesDef.seriesItems.first.siid,
               controller: seriesItemData.textEditingController,
               decoration: InputDecoration(
-                labelText: seriesItemData.title,
-                // hintText: "hint text",
+                labelText: seriesItem.name + seriesItem.unitInBrackets(emptyStringIfNullOrEmpty: true),
               ),
               // Only numbers can be entered:
               inputFormatters: <TextInputFormatter>[DecimalInputFormatter()],

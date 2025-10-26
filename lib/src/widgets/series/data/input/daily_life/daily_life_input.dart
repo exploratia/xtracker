@@ -101,7 +101,7 @@ class _DailyLifeInputState extends State<DailyLifeInput> {
       mainAxisSize: MainAxisSize.min,
       spacing: ThemeUtils.verticalSpacing,
       children: [
-        InputHeader(dateTime: _dateTime, seriesDef: widget.seriesDef, setDateTime: _setDateTime),
+        InputHeader(dateTime: _dateTime, setDateTime: _setDateTime),
         const Divider(height: 1),
         ConstrainedBox(
           constraints: BoxConstraints(minHeight: 40 * MediaQueryUtils.textScaleFactor),

@@ -95,7 +95,7 @@ class _DailyCheckInputState extends State<DailyCheckInput> {
       mainAxisSize: MainAxisSize.min,
       spacing: ThemeUtils.verticalSpacing,
       children: [
-        InputHeader(dateTime: _dateTime, seriesDef: widget.seriesDef, setDateTime: _setDateTime),
+        InputHeader(dateTime: _dateTime, setDateTime: _setDateTime),
         const Divider(height: 1),
         IconButton(
           tooltip: LocaleKeys.seriesValue_dailyCheck_btn_toggleCheck_tooltip.tr(),

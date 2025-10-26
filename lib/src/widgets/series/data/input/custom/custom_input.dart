@@ -10,16 +10,10 @@ import '../../../../../model/series/data/custom/custom_value.dart';
 import '../../../../../model/series/series_def.dart';
 import '../../../../../util/dialogs.dart';
 import '../../../../../util/formatter/decimal_input_formatter.dart';
-import '../../../../../util/theme_utils.dart';
-import '../../../../controls/appbar/gradient_app_bar.dart';
-import '../../../../controls/layout/scrollable_centered_form_wrapper.dart';
-import '../../../../controls/navigation/hide_bottom_navigation_bar.dart';
-import '../../../../controls/responsive/device_dependent_constrained_box.dart';
-import '../../../../controls/text/overflow_text.dart';
-import '../input_header.dart';
+import '../fullscreen_input.dart';
 import '../input_result.dart';
 
-class CustomInput extends StatefulWidget {
+class CustomInput extends StatelessWidget {
   const CustomInput({
     super.key,
     this.customValue,
@@ -32,22 +26,44 @@ class CustomInput extends StatefulWidget {
   static Future<InputResult<CustomValue>?> showInputDlg(BuildContext context, SeriesDef seriesDef, {CustomValue? customValue}) async {
     return await showDialog<InputResult<CustomValue>>(
       context: context,
-      builder: (context) => Dialog.fullscreen(
-        child: HideBottomNavigationBar(
-          child: CustomInput(
-            seriesDef: seriesDef,
-            customValue: customValue,
-          ),
-        ),
+      builder: (context) => CustomInput(
+        seriesDef: seriesDef,
+        customValue: customValue,
       ),
     );
   }
 
   @override
-  State<CustomInput> createState() => _CustomInputState();
+  Widget build(BuildContext context) {
+    return SeriesItemsInput(seriesDef: seriesDef);
+  }
 }
 
-class _CustomInputState extends State<CustomInput> {
+class SeriesItemsInput extends StatefulWidget {
+  const SeriesItemsInput({
+    super.key,
+    this.customValue,
+    required this.seriesDef,
+  });
+
+  final SeriesDef seriesDef;
+  final CustomValue? customValue;
+
+  static Future<InputResult<CustomValue>?> showInputDlg(BuildContext context, SeriesDef seriesDef, {CustomValue? customValue}) async {
+    return await showDialog<InputResult<CustomValue>>(
+      context: context,
+      builder: (context) => SeriesItemsInput(
+        seriesDef: seriesDef,
+        customValue: customValue,
+      ),
+    );
+  }
+
+  @override
+  State<SeriesItemsInput> createState() => _SeriesItemsInputState();
+}
+
+class _SeriesItemsInputState extends State<SeriesItemsInput> {
   final _formKey = GlobalKey<FormState>();
   final Map<String, SeriesItemData> _seriesItemsData = {};
 
@@ -134,27 +150,15 @@ class _CustomInputState extends State<CustomInput> {
     }
   }
 
-  void _deleteHandler(CustomValue customValue) async {
-    bool? res = await Dialogs.simpleYesNoDialog(
-      LocaleKeys.seriesValue_query_deleteValue.tr(),
-      context,
-      title: LocaleKeys.commons_dialog_title_areYouSure.tr(),
-    );
-    if (res == true && mounted) {
-      Navigator.pop(context, InputResult(customValue, InputResultAction.delete));
+  void _deleteHandler() {
+    if (widget.customValue != null && mounted) {
+      Navigator.pop(context, InputResult(widget.customValue!, InputResultAction.delete));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    var iconSize = ThemeUtils.iconSizeScaled;
-
     List<Widget> formChildren = [
-      Padding(
-        padding: const EdgeInsets.only(bottom: ThemeUtils.verticalSpacing),
-        child: InputHeader(dateTime: _dateTime, seriesDef: widget.seriesDef, setDateTime: _setDateTime),
-      ),
-      const Divider(height: 1),
       ...widget.seriesDef.seriesItems.map(
         (seriesItem) {
           var seriesItemData = _seriesItemsData[seriesItem.siid]!;
@@ -162,7 +166,7 @@ class _CustomInputState extends State<CustomInput> {
             autofocus: seriesItem.siid == widget.seriesDef.seriesItems.first.siid,
             controller: seriesItemData.textEditingController,
             decoration: InputDecoration(
-              labelText: seriesItemData.title + seriesItem.unitInBrackets(emptyStringIfNullOrEmpty: true),
+              labelText: seriesItem.name + seriesItem.unitInBrackets(emptyStringIfNullOrEmpty: true),
             ),
             // Only numbers can be entered:
             inputFormatters: <TextInputFormatter>[DecimalInputFormatter()],
@@ -186,86 +190,25 @@ class _CustomInputState extends State<CustomInput> {
       ),
     ];
 
-    var edit = ScrollableCenteredFormWrapper(
+    return FullscreenInput(
       formKey: _formKey,
-      autovalidateMode: _autoValidate ? AutovalidateMode.always : AutovalidateMode.disabled,
-      vCentered: true,
-      spacing: ThemeUtils.verticalSpacingSmall,
-      useSeriesDataInputDlgWidth: true,
-      children: formChildren,
-    );
-
-    return Scaffold(
-      appBar: GradientAppBar.build(
-        context,
-        title: Row(
-          spacing: ThemeUtils.horizontalSpacing,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            widget.customValue == null ? Icon(Icons.add_outlined, size: iconSize) : Icon(Icons.edit_outlined, size: iconSize),
-            OverflowText(widget.seriesDef.name),
-            if (widget.customValue != null)
-              IconButton(
-                tooltip: LocaleKeys.seriesValue_action_deleteValue_tooltip.tr(),
-                onPressed: () => _deleteHandler(widget.customValue!),
-                color: ThemeUtils.onPrimary,
-                // themeData.colorScheme.secondary,
-                iconSize: iconSize,
-                icon: const Icon(Icons.delete_outlined),
-              ),
-          ],
-        ),
-        leading: IconButton(
-          iconSize: ThemeUtils.iconSizeScaled,
-          tooltip: LocaleKeys.seriesEdit_action_abort_tooltip.tr(),
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.close_outlined),
-        ),
-      ),
-      body: Column(
-        mainAxisSize: MainAxisSize.max,
-        children: [
-          Expanded(
-            child: edit,
-          ),
-          SizedBox(
-            height: kBottomNavigationBarHeight,
-            child: DeviceDependentWidthConstrainedBox(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.end,
-                spacing: ThemeUtils.horizontalSpacing,
-                children: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context, null);
-                    },
-                    child: Text(LocaleKeys.commons_dialog_btn_cancel.tr()),
-                  ),
-                  TextButton(
-                    onPressed: _saveHandler,
-                    child: Text(LocaleKeys.commons_dialog_btn_okay.tr()),
-                  ),
-                ],
-              ),
-            ),
-          )
-        ],
-      ),
+      formChildren: formChildren,
+      autoValidate: _autoValidate,
+      isEdit: widget.customValue != null,
+      seriesDef: widget.seriesDef,
+      dateTime: _dateTime,
+      setDateTime: _setDateTime,
+      saveHandler: _saveHandler,
+      deleteHandler: _deleteHandler,
     );
   }
 }
 
 class SeriesItemData {
   final SeriesItem seriesItem;
-  late final String title;
-  late final String unit;
   late final TextEditingController textEditingController;
 
   SeriesItemData(this.seriesItem) {
-    title = seriesItem.name;
-    unit = seriesItem.unit ?? '';
     textEditingController = TextEditingController();
   }
 

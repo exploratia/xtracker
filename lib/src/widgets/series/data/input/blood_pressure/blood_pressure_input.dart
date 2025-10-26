@@ -157,7 +157,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
         mainAxisSize: MainAxisSize.min,
         spacing: ThemeUtils.verticalSpacing,
         children: [
-          InputHeader(dateTime: _dateTime, seriesDef: widget.seriesDef, setDateTime: _setDateTime),
+          InputHeader(dateTime: _dateTime, setDateTime: _setDateTime),
           const Divider(height: 1),
           Row(
             spacing: ThemeUtils.horizontalSpacing,
