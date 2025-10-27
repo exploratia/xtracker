@@ -11,6 +11,7 @@ import '../../../../../model/series/series_def.dart';
 import '../../../../../util/date_time_utils.dart';
 import '../../../../../util/dialogs.dart';
 import '../../../../../util/formatter/decimal_input_formatter.dart';
+import '../../../../../util/number_utils.dart';
 import '../fullscreen_input.dart';
 import '../input_result.dart';
 
@@ -96,7 +97,7 @@ class _SeriesItemsInputState<V extends CustomValue> extends State<SeriesItemsInp
         var siid = valueEntry.key;
         var seriesItemData = _seriesItemsData[siid];
         if (seriesItemData != null) {
-          seriesItemData.textEditingController.text = valueEntry.value.toString();
+          seriesItemData.textEditingController.text = NumberUtils.formatNumber(valueEntry.value);
         }
       }
     }
