@@ -278,8 +278,8 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
     List<Widget> viewActions = [];
     List<Widget> orientationDependentViewActions = [];
 
-    // for all views analysis dialog
-    {
+    // data analysis - what could be valuable for monthly?
+    if (seriesType != SeriesType.monthly) {
       bool analyticsPossible = !hasNoData;
       if (analyticsPossible) {
         var d1 = widget.seriesDataValues.first.dateTime;
