@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../../../../model/series/data/series_data_filter.dart';
 import '../../../../model/series/data/series_data_value.dart';
-import '../../../../model/series/series_type.dart';
 import '../../../../model/series/series_view_meta_data.dart';
 import '../../../../model/series/view_type.dart';
 import '../../../../util/date_time_utils.dart';
@@ -36,7 +35,7 @@ class SeriesDataView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var seriesDef = seriesViewMetaData.seriesDef;
+    // var seriesDef = seriesViewMetaData.seriesDef;
 
     List<Widget> stackChildren = [];
 
@@ -62,8 +61,11 @@ class SeriesDataView extends StatelessWidget {
     }
 
     // filter view
-    var seriesType = seriesDef.seriesType;
-    if (seriesViewMetaData.showDateFilter && [SeriesType.bloodPressure, SeriesType.dailyCheck, SeriesType.dailyLife, SeriesType.habit].contains(seriesType)) {
+    // var seriesType = seriesDef.seriesType;
+    if (seriesViewMetaData.showDateFilter
+        // at the moment all series types support date filtering
+        // && [SeriesType.bloodPressure, SeriesType.dailyCheck, SeriesType.dailyLife, SeriesType.habit].contains(seriesType)
+        ) {
       stackChildren.add(Positioned.fill(
         child: _SeriesDataFilterView(
           seriesViewMetaData: seriesViewMetaData,
