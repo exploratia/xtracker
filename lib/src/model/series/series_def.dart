@@ -7,7 +7,7 @@ import '../../util/color_utils.dart';
 import '../../widgets/controls/navigation/hide_bottom_navigation_bar.dart';
 import '../../widgets/controls/select/icon_map.dart';
 import '../../widgets/series/edit/series_edit.dart';
-import '../column_profile/fix_column_profile.dart';
+import '../column_profile/column_profile.dart';
 import 'series_type.dart';
 import 'settings/blood_pressure_settings.dart';
 import 'settings/custom_settings.dart';
@@ -62,7 +62,11 @@ class SeriesDef {
   DisplaySettings displaySettingsReadonly() => DisplaySettings(_settings, null);
 
   /// return FixColumnProfile from display settings or default for the series type (or null if the series has no fix column profile)
-  FixColumnProfile? get determineFixTableColumnProfile {
+  ColumnProfile? get determineTableColumnProfile {
+    // custom or monthly?
+    if (seriesItems.isNotEmpty) {
+      return ColumnProfile.fromSeriesItems(this);
+    }
     return displaySettingsReadonly().getTableViewColumnProfile(seriesType.defaultFixTableColumnProfileType);
   }
 

@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../../model/column_profile/fix_column_profile.dart';
+import '../../../../../../model/column_profile/column_profile.dart';
 import '../../../../../../model/series/data/custom/custom_value.dart';
 import '../../../../../../model/series/data/series_data_filter.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
-import '../../../../../controls/grid/row_per_day/day_row_item.dart';
-import '../../../../../controls/grid/row_per_day/row_per_day_cell_builder.dart';
+import '../../../../../../util/logging/flutter_simple_logging.dart';
+import '../../../../../../util/number_utils.dart';
+import '../../../../../controls/grid/series/series_data_value_cell_builder.dart';
+import '../../../../../controls/grid/series/series_data_value_grid_item.dart';
 import '../../../../../controls/grid/two_dimensional_scrollable_table.dart';
+import '../../../../../controls/text/overflow_text.dart';
 import '../../series_data_no_data.dart';
 import '../../series_data_view_overlays.dart';
 import 'custom_value_renderer.dart';
@@ -22,7 +25,7 @@ class SeriesDataCustomTableView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    FixColumnProfile columnProfile = FixColumnProfile.columnProfileDateTimeValue;
+    ColumnProfile columnProfile = seriesViewMetaData.columnProfile!;
 
     var filteredSeriesData = seriesData.where((value) => seriesDataFilter.filter(value)).toList();
     if (filteredSeriesData.isEmpty) {
@@ -32,26 +35,25 @@ class SeriesDataCustomTableView extends StatelessWidget {
       );
     }
 
-    int lineCount = 0;
-    GridCell Function(BuildContext context, int yIndex, int xIndex, Size cellSize) gridCellBuilder =
-        (context, yIndex, xIndex, cellSize) => GridCell(child: Container());
+    GridCell Function(BuildContext context, int yIndex, int xIndex, Size cellSize) gridCellBuilder = SeriesDataValueCellBuilder(
+      data: SeriesDataValueGridItem.buildTableDataProvider(seriesViewMetaData, filteredSeriesData),
+      columnProfile: columnProfile,
+      editMode: seriesViewMetaData.editMode,
+      gridCellChildBuilder: (value, cellSize, columnDef) {
+        if (columnDef.siid != null) {
+          var val = value.values[columnDef.siid];
+          if (val != null) {
+            return Center(child: OverflowText(expanded: false, NumberUtils.formatNumber(val)));
+          } else {
+            return const Center(child: Text("-"));
+          }
+        }
 
-    {
-      List<DayRowItem<CustomValue>> data = DayRowItem.buildTableDataProvider(seriesViewMetaData, filteredSeriesData);
-
-      var builder = RowPerDayCellBuilder<CustomValue>(
-        data: data,
-        fixColumnProfile: columnProfile,
-        gridCellChildBuilder: (CustomValue value, Size _) => CustomValueRenderer(
-          customValue: value,
-          seriesDef: seriesViewMetaData.seriesDef,
-          editMode: seriesViewMetaData.editMode,
-          wrapWithDateTimeTooltip: true,
-        ),
-      );
-      lineCount = data.length;
-      gridCellBuilder = builder.gridCellBuilder;
-    }
+        // Fallback
+        SimpleLogging.w("Unexpected call to gridCellBuilder in SeriesDataValueCellBuilder!");
+        return Container(height: 2, width: 2, color: Colors.red);
+      },
+    ).gridCellBuilder;
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -63,7 +65,7 @@ class SeriesDataCustomTableView extends StatelessWidget {
         Expanded(
           child: TwoDimensionalScrollableTable(
             tableColumnProfile: columnProfile,
-            lineCount: lineCount,
+            lineCount: filteredSeriesData.length,
             gridCellBuilder: gridCellBuilder,
             lineHeight: CustomValueRenderer.height,
             useFixedFirstColumn: true,

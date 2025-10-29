@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'globals.dart';
+
 class ColorUtils {
   // https://stackoverflow.com/questions/58360989/programmatically-lighten-or-darken-a-hex-color-in-dart
   static const int hexRadix = 16;
@@ -79,5 +81,14 @@ class ColorUtils {
   static bool isContrastingColorDark(Color background) {
     final brightness = ThemeData.estimateBrightnessForColor(background);
     return brightness != Brightness.dark;
+  }
+
+  static Color? weekdayBackgroundColor(DateTime dateTime) {
+    if (dateTime.weekday == DateTime.sunday) {
+      return Globals.backgroundColorSunday;
+    } else if (dateTime.weekday == DateTime.saturday) {
+      return Globals.backgroundColorSaturday;
+    }
+    return null;
   }
 }

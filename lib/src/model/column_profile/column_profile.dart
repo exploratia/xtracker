@@ -1,19 +1,38 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
+import '../../../generated/locale_keys.g.dart';
+import '../../util/chart/chart_utils.dart';
 import '../../util/media_query_utils.dart';
 import '../../util/theme_utils.dart';
 import '../../widgets/controls/text/overflow_text.dart';
+import '../series/series_def.dart';
+import '../series/series_type.dart';
 
-// TODO for later series if column profiles have to be saved: Introduce new UIAdjustedColumnProfile which inherits ColumnProfile. In ColumnProfile toJson has one required info
 class ColumnProfile {
-  final List<ColumnDef> columns;
-  final bool hasHorizontalMarginColumns;
+  late final List<ColumnDef> columns;
+  late final bool hasHorizontalMarginColumns;
 
   ColumnProfile({
     required this.columns,
     this.hasHorizontalMarginColumns = false,
   });
+
+  ColumnProfile.fromSeriesItems(SeriesDef seriesDef) {
+    hasHorizontalMarginColumns = false;
+    columns = [];
+    var msgId = seriesDef.seriesType == SeriesType.monthly ? LocaleKeys.commons_date_date : LocaleKeys.commons_date_dateTime;
+    columns.add(ColumnDef(minWidth: 160, title: '-', msgId: msgId, dateTimeColumn: true));
+    // series items
+    columns.addAll(seriesDef.seriesItems
+        .map((e) => ColumnDef(
+              minWidth: 80,
+              title: '${e.name}${e.unitInBrackets(emptyStringIfNullOrEmpty: true)}',
+              siid: e.siid,
+              color: e.color,
+            ))
+        .toList());
+  }
 
   double minWidth() {
     return columns.fold(0, (previousValue, element) => previousValue + element.minWidth);
@@ -83,13 +102,46 @@ class ColumnDef {
   final TextAlign? textAlign;
   final bool disablePadding;
   final Widget? titleWidget;
+  final bool dateColumn;
+  final bool timeColumn;
+  final bool dateTimeColumn;
+
+  /// optional in case of ColumnProfile from Series: seriesItemId
+  final String? siid;
+
+  /// optional in case of ColumnProfile from Series
+  final Color? color;
 
   /// [disablePadding] could be set, if every second column has an empty title or column width is big enough.
-  ColumnDef({required this.minWidth, this.isMarginColumn = false, this.title, this.msgId, this.textAlign, this.disablePadding = false, this.titleWidget});
+  ColumnDef({
+    required this.minWidth,
+    this.dateColumn = false,
+    this.timeColumn = false,
+    this.dateTimeColumn = false,
+    this.isMarginColumn = false,
+    this.title,
+    this.msgId,
+    this.textAlign,
+    this.disablePadding = false,
+    this.titleWidget,
+    this.siid,
+    this.color,
+  });
 
   ColumnDef copyWithWidthFactor(double widthFactor) {
     return ColumnDef(
-        minWidth: (minWidth * widthFactor), title: title, msgId: msgId, textAlign: textAlign, titleWidget: titleWidget, disablePadding: disablePadding);
+      minWidth: (minWidth * widthFactor),
+      title: title,
+      msgId: msgId,
+      textAlign: textAlign,
+      titleWidget: titleWidget,
+      disablePadding: disablePadding,
+      dateColumn: dateColumn,
+      timeColumn: timeColumn,
+      dateTimeColumn: dateTimeColumn,
+      siid: siid,
+      color: color,
+    );
   }
 
   double get minWidthScaled {
@@ -131,13 +183,31 @@ class ColumnDef {
       );
     }
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.paddingSmall),
-      child: OverflowText(
-        txt,
-        expanded: false,
-        textAlign: textAlign ?? TextAlign.center,
-      ),
+    Widget widget = OverflowText(
+      txt,
+      expanded: false,
+      textAlign: textAlign ?? TextAlign.center,
     );
+
+    if (color != null) {
+      widget = Column(
+        mainAxisSize: MainAxisSize.max,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const SizedBox(height: 2),
+          Expanded(child: Center(child: widget)),
+          Container(
+            height: 2,
+            decoration: BoxDecoration(gradient: ChartUtils.createLeftToRightGradient([color!.withAlpha(0), color!, color!.withAlpha(0)])),
+          ),
+        ],
+      );
+    }
+
+    widget = Padding(
+      padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.paddingSmall),
+      child: widget,
+    );
+    return widget;
   }
 }

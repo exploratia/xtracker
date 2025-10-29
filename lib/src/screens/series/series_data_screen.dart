@@ -216,7 +216,7 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
 
   void _setTableFixColumnProfile(FixColumnProfileType fixColumnProfileType) {
     setState(() {
-      widget.seriesViewMetaData.tableFixColumnProfile = FixColumnProfile.resolveByType(fixColumnProfileType);
+      widget.seriesViewMetaData.columnProfile = FixColumnProfile.resolveByType(fixColumnProfileType);
       if (!widget.seriesViewMetaData.showDateFilter) widget.updateOverlays(bottomHeight: 0);
     });
   }

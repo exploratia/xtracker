@@ -31,6 +31,7 @@ abstract class  LocaleKeys {
   static const commons_date_shortWeekday_saturday = 'commons.date.shortWeekday.saturday';
   static const commons_date_shortWeekday_sunday = 'commons.date.shortWeekday.sunday';
   static const commons_date_date = 'commons.date.date';
+  static const commons_date_dateTime = 'commons.date.dateTime';
   static const commons_date_time = 'commons.date.time';
   static const commons_date_morning = 'commons.date.morning';
   static const commons_date_midday = 'commons.date.midday';

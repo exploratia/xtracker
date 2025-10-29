@@ -53,6 +53,7 @@
         "sunday": "So"
       },
       "date": "Datum",
+      "dateTime": "Datum  /  Uhrzeit",
       "time": "Uhrzeit",
       "morning": "Morgens",
       "midday": "Mittags",

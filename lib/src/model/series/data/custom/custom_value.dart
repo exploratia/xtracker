@@ -15,11 +15,22 @@ class CustomValue extends SeriesDataValue {
         'values': values,
       };
 
-  factory CustomValue.fromJson(Map<String, dynamic> json) => CustomValue(
-        json['uuid'] as String? ?? const Uuid().v4().toString(),
-        DateTime.fromMillisecondsSinceEpoch(json['utcMs'] as int),
-        json['values'] as Map<String, double>,
-      );
+  factory CustomValue.fromJson(Map<String, dynamic> json) {
+    Map<String, double> values = {};
+    var jValues = json['values'] as Map?;
+    if (jValues != null) {
+      for (var entry in jValues.entries) {
+        if (entry.key is String && entry.value is double) {
+          values[entry.key] = entry.value;
+        }
+      }
+    }
+    return CustomValue(
+      json['uuid'] as String? ?? const Uuid().v4().toString(),
+      DateTime.fromMillisecondsSinceEpoch(json['utcMs'] as int),
+      values,
+    );
+  }
 
   @override
   String toString() {

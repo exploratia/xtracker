@@ -3,7 +3,18 @@ import 'package:intl/intl.dart';
 class NumberUtils {
   /// format double value in active locale
   static String formatNumber(double value) {
+    final locale = Intl.getCurrentLocale();
+
+    final format = NumberFormat.decimalPattern(locale)
+      ..turnOffGrouping()
+      ..maximumFractionDigits = 6; // if required this could be a setting per series
+
+    return format.format(value);
+  }
+
+  /// parse double value in active locale
+  static double? tryParse(String value) {
     var nf = NumberFormat();
-    return nf.format(value);
+    return nf.tryParse(value)?.toDouble();
   }
 }

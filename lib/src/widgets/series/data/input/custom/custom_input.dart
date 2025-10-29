@@ -138,8 +138,7 @@ class _SeriesItemsInputState<V extends CustomValue> extends State<SeriesItemsInp
     if (!_isValid) return;
     Map<String, double> values = {};
     for (var seriesItemData in _seriesItemsData.values) {
-      final normalized = seriesItemData.textEditingController.text.replaceAll(',', '.');
-      var val = double.tryParse(normalized);
+      var val = NumberUtils.tryParse(seriesItemData.textEditingController.text);
       if (val != null) {
         values[seriesItemData.seriesItem.siid] = val;
       }
@@ -183,8 +182,7 @@ class _SeriesItemsInputState<V extends CustomValue> extends State<SeriesItemsInp
                 return null; // no value is allowed
                 // return LocaleKeys.commons_validator_emptyValue.tr();
               }
-              final normalized = value.replaceAll(',', '.');
-              var dVal = double.tryParse(normalized);
+              var dVal = NumberUtils.tryParse(value);
               if (dVal == null) {
                 return LocaleKeys.commons_validator_emptyValue.tr();
               }
