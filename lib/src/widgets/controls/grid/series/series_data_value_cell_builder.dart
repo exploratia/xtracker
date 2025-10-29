@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../model/column_profile/column_profile.dart';
+import '../../../../model/column_profile/column_type.dart';
 import '../../../../model/series/data/series_data.dart';
 import '../../../../model/series/data/series_data_value.dart';
 import '../../../../util/theme_utils.dart';
@@ -25,15 +26,15 @@ class SeriesDataValueCellBuilder<T extends SeriesDataValue> {
     var columnDef = columnProfile.columns[xIndex];
 
     Widget? child;
-    if (columnDef.dateColumn) {
+    if (columnDef.columnType == ColumnType.date) {
       if (gridItem.date != null) {
         child = Center(child: Text(gridItem.date!));
       }
-    } else if (columnDef.timeColumn) {
+    } else if (columnDef.columnType == ColumnType.time) {
       if (gridItem.time != null) {
         child = Center(child: Text(gridItem.time!));
       }
-    } else if (columnDef.dateTimeColumn) {
+    } else if (columnDef.columnType == ColumnType.dateTime) {
       child = Row(
         mainAxisAlignment: MainAxisAlignment.center,
         spacing: ThemeUtils.horizontalSpacingLarge,

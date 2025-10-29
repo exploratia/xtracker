@@ -8,6 +8,7 @@ import '../../util/theme_utils.dart';
 import '../../widgets/controls/text/overflow_text.dart';
 import '../series/series_def.dart';
 import '../series/series_type.dart';
+import 'column_type.dart';
 
 class ColumnProfile {
   late final List<ColumnDef> columns;
@@ -22,7 +23,12 @@ class ColumnProfile {
     hasHorizontalMarginColumns = false;
     columns = [];
     var msgId = seriesDef.seriesType == SeriesType.monthly ? LocaleKeys.commons_date_date : LocaleKeys.commons_date_dateTime;
-    columns.add(ColumnDef(minWidth: 160, title: '-', msgId: msgId, dateTimeColumn: true));
+    columns.add(ColumnDef(
+      minWidth: 160,
+      title: '-',
+      msgId: msgId,
+      columnType: ColumnType.dateTime,
+    ));
     // series items
     columns.addAll(seriesDef.seriesItems
         .map((e) => ColumnDef(
@@ -30,6 +36,7 @@ class ColumnProfile {
               title: '${e.name}${e.unitInBrackets(emptyStringIfNullOrEmpty: true)}',
               siid: e.siid,
               color: e.color,
+              columnType: ColumnType.number,
             ))
         .toList());
   }
@@ -52,7 +59,7 @@ class ColumnProfile {
     }
 
     // fallback - should never happen
-    return ColumnDef(minWidth: 200, title: '-?-');
+    return ColumnDef(minWidth: 200, title: '-?-', columnType: ColumnType.text);
   }
 
   /// stretch to given width
@@ -79,9 +86,9 @@ class ColumnProfile {
       double adjustedWidthScaled = adjustedColumns.fold(0.toDouble(), (previousValue, element) => previousValue + element.minWidthScaled);
       horizontalMargin = (width - adjustedWidthScaled) / 2;
       adjustedColumns = [
-        ColumnDef(minWidth: horizontalMargin, isMarginColumn: true, title: ''),
+        ColumnDef(minWidth: horizontalMargin, columnType: ColumnType.margin, title: ''),
         ...adjustedColumns,
-        ColumnDef(minWidth: horizontalMargin, isMarginColumn: true, title: ''),
+        ColumnDef(minWidth: horizontalMargin, columnType: ColumnType.margin, title: ''),
       ];
     }
 
@@ -95,16 +102,13 @@ class ColumnProfile {
 }
 
 class ColumnDef {
-  final bool isMarginColumn;
+  final ColumnType columnType;
   final double minWidth;
   final String? title;
   final String? msgId;
   final TextAlign? textAlign;
   final bool disablePadding;
   final Widget? titleWidget;
-  final bool dateColumn;
-  final bool timeColumn;
-  final bool dateTimeColumn;
 
   /// optional in case of ColumnProfile from Series: seriesItemId
   final String? siid;
@@ -114,11 +118,8 @@ class ColumnDef {
 
   /// [disablePadding] could be set, if every second column has an empty title or column width is big enough.
   ColumnDef({
+    required this.columnType,
     required this.minWidth,
-    this.dateColumn = false,
-    this.timeColumn = false,
-    this.dateTimeColumn = false,
-    this.isMarginColumn = false,
     this.title,
     this.msgId,
     this.textAlign,
@@ -136,9 +137,7 @@ class ColumnDef {
       textAlign: textAlign,
       titleWidget: titleWidget,
       disablePadding: disablePadding,
-      dateColumn: dateColumn,
-      timeColumn: timeColumn,
-      dateTimeColumn: dateTimeColumn,
+      columnType: columnType,
       siid: siid,
       color: color,
     );
@@ -149,6 +148,8 @@ class ColumnDef {
     if (isMarginColumn) return minWidth;
     return minWidth * MediaQueryUtils.textScaleFactor;
   }
+
+  bool get isMarginColumn => columnType == ColumnType.margin;
 
   MainAxisAlignment determineMainAxisAlignmentFromTextAlign() {
     var mainAxisAlignment = MainAxisAlignment.center;
