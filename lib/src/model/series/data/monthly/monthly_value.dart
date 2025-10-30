@@ -6,11 +6,22 @@ import '../custom/custom_value.dart';
 class MonthlyValue extends CustomValue {
   MonthlyValue(super.uuid, super.dateTime, super.values);
 
-  factory MonthlyValue.fromJson(Map<String, dynamic> json) => MonthlyValue(
-        json['uuid'] as String? ?? const Uuid().v4().toString(),
-        DateTime.fromMillisecondsSinceEpoch(json['utcMs'] as int),
-        json['values'] as Map<String, double>,
-      );
+  factory MonthlyValue.fromJson(Map<String, dynamic> json) {
+    Map<String, double> values = {};
+    var jValues = json['values'] as Map?;
+    if (jValues != null) {
+      for (var entry in jValues.entries) {
+        if (entry.key is String && entry.value is double) {
+          values[entry.key] = entry.value;
+        }
+      }
+    }
+    return MonthlyValue(
+      json['uuid'] as String? ?? const Uuid().v4().toString(),
+      DateTime.fromMillisecondsSinceEpoch(json['utcMs'] as int),
+      values,
+    );
+  }
 
   @override
   String toString() {
