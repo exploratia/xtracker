@@ -1,30 +1,29 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../../model/column_profile/fix_column_profile.dart';
-import '../../../../../../model/series/data/daily_check/daily_check_value.dart';
+import '../../../../../../model/series/data/blood_pressure/blood_pressure_value.dart';
 import '../../../../../../model/series/data/series_data_filter.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
-import '../../../../../controls/grid/daily/day/daily_check_day_item.dart';
-import '../../../../../controls/grid/daily/dot.dart';
-import '../../../../../controls/grid/daily/dot_cell_builder.dart';
+import '../../../../../controls/grid/daily/day/blood_pressure_day_item.dart';
+import '../../../../../controls/grid/daily/pixel.dart';
+import '../../../../../controls/grid/daily/pixel_cell_builder.dart';
 import '../../../../../controls/grid/daily/row/row_item.dart';
 import '../../../../../controls/grid/two_dimensional_scrollable_table.dart';
 import '../../series_data_no_data.dart';
 import '../../series_data_view_overlays.dart';
 
-class SeriesDataDailyCheckDotsView extends StatelessWidget {
-  final List<DailyCheckValue> seriesData;
+class SeriesDataBloodPressurePixelsView extends StatelessWidget {
+  final List<BloodPressureValue> seriesData;
   final SeriesViewMetaData seriesViewMetaData;
   final SeriesDataFilter seriesDataFilter;
   final SeriesDataViewOverlays seriesDataViewOverlays;
 
-  const SeriesDataDailyCheckDotsView(
+  const SeriesDataBloodPressurePixelsView(
       {super.key, required this.seriesViewMetaData, required this.seriesData, required this.seriesDataFilter, required this.seriesDataViewOverlays});
 
   @override
   Widget build(BuildContext context) {
-    Dot.updateDotStyles(context);
-    DailyCheckDayItem.updateValuesFromSeries(seriesViewMetaData.seriesDef);
+    Pixel.updatePixelStyles(context);
 
     var filteredSeriesData = seriesData.where((value) => seriesDataFilter.filter(value)).toList();
     if (filteredSeriesData.isEmpty) {
@@ -34,15 +33,15 @@ class SeriesDataDailyCheckDotsView extends StatelessWidget {
       );
     }
 
-    var dayItems = DailyCheckDayItem.buildDayItems(filteredSeriesData, seriesViewMetaData.seriesDef);
+    var dayItems = BloodPressureDayItem.buildDayItems(filteredSeriesData, seriesViewMetaData.seriesDef);
 
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         bool monthly = constraints.maxWidth > FixColumnProfile.columnProfileDateMonthDays.minWidthScaled();
 
-        List<RowItem<DailyCheckDayItem>> data = monthly ? RowItem.buildMonthRowItems(dayItems) : RowItem.buildWeekRowItems(dayItems);
+        List<RowItem<BloodPressureDayItem>> data = monthly ? RowItem.buildMonthRowItems(dayItems) : RowItem.buildWeekRowItems(dayItems);
 
-        var dotCellBuilder = DotCellBuilder(data: data, monthly: monthly, gridCellChildBuilder: (dayItem) => dayItem.toDot(monthly));
+        var pixelCellBuilder = PixelCellBuilder(data: data, monthly: monthly, gridCellChildBuilder: (dayItem) => dayItem.toPixel(monthly));
 
         return Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -55,8 +54,8 @@ class SeriesDataDailyCheckDotsView extends StatelessWidget {
               child: TwoDimensionalScrollableTable(
                 tableColumnProfile: monthly ? FixColumnProfile.columnProfileDateMonthDays : FixColumnProfile.columnProfileDateWeekdays,
                 lineCount: data.length,
-                gridCellBuilder: dotCellBuilder.gridCellBuilder,
-                lineHeight: Dot.dotHeight,
+                gridCellBuilder: pixelCellBuilder.gridCellBuilder,
+                lineHeight: Pixel.pixelHeight,
                 useFixedFirstColumn: true,
                 bottomScrollExtend: seriesDataViewOverlays.bottomHeight,
               ),

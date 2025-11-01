@@ -170,10 +170,6 @@
         "title": "Diagramm",
         "tooltip": "Anzeige als Balkendiagramm"
       },
-      "dots": {
-        "title": "Übersicht",
-        "tooltip": "Anzeige als Punkt-Kalender-Übersicht"
-      },
       "pixels": {
         "title": "Pixel",
         "tooltip": "Anzeige als Pixel-Kalender"
@@ -473,13 +469,6 @@
       "title": "Anzeige-Einstellungen",
       "label": {
         "initialView": "Startansicht"
-      },
-      "dotsView": {
-        "switch": {
-          "dotsViewShowCount": {
-            "label": "Anzahl in Übersicht anzeigen, wenn ein Datenpunkt mehrere Werte repräsentiert."
-          }
-        }
       },
       "pixelsView": {
         "preview": {

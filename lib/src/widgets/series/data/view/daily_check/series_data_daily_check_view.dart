@@ -6,7 +6,7 @@ import '../../../../../model/series/series_view_meta_data.dart';
 import '../../../../../model/series/view_type.dart';
 import '../series_data_view_overlays.dart';
 import 'chart/series_data_daily_check_chart_view.dart';
-import 'dots/series_data_daily_check_dots_view.dart';
+import 'pixels/series_data_daily_check_pixels_view.dart';
 import 'table/series_data_daily_check_table_view.dart';
 
 class SeriesDataDailyCheckView extends StatelessWidget {
@@ -37,15 +37,13 @@ class SeriesDataDailyCheckView extends StatelessWidget {
           seriesDataFilter: seriesDataFilter,
           seriesDataViewOverlays: seriesDataViewOverlays,
         );
-      case ViewType.dots:
-        return SeriesDataDailyCheckDotsView(
+      case ViewType.pixels:
+        return SeriesDataDailyCheckPixelsView(
           seriesViewMetaData: seriesViewMetaData,
           seriesData: seriesData,
           seriesDataFilter: seriesDataFilter,
           seriesDataViewOverlays: seriesDataViewOverlays,
         );
-      case ViewType.pixels:
-        throw UnimplementedError();
     }
   }
 }

@@ -1,35 +1,26 @@
-import 'package:flutter/material.dart';
-
 import '../../../../../model/series/data/daily_check/daily_check_value.dart';
 import '../../../../../model/series/series_def.dart';
 import '../../../../../util/color_utils.dart';
 import '../../../../../util/day_item/day_item.dart';
 import '../../../../series/data/view/daily_check/table/daily_check_value_renderer.dart';
-import '../dot.dart';
+import '../pixel.dart';
 import 'grid_day_item.dart';
 
 class DailyCheckDayItem extends GridDayItem<DailyCheckValue> {
   DailyCheckDayItem(super.dateTimeDayStart, super.seriesDef);
 
-  static Color _color1 = Colors.blue;
-  static Color _color2 = Colors.blue;
-  static bool _showCount = false;
-
-  /// set statics (colors,...) for Dot
-  static void updateValuesFromSeries(SeriesDef seriesDef) {
-    _color1 = seriesDef.color;
-    _color2 = ColorUtils.gradientColor(_color1);
-    _showCount = seriesDef.displaySettingsReadonly().dotsViewShowCount;
-  }
-
-  Dot toDot(bool monthly) {
-    return Dot(
-      dotColor1: _color1,
-      dotColor2: _color2,
-      showCount: _showCount,
+  Pixel toPixel(bool monthly) {
+    var colors = [seriesDef.color];
+    if (count > 1) {
+      colors[0] = ColorUtils.gradientColor(colors[0]);
+    }
+    return Pixel<DailyCheckValue>(
+      colors: colors,
+      backgroundColor: backgroundColor,
+      pixelText: count > 1 ? '$count' : null,
       isStartMarker: monthly ? false : dayDate.day == 1,
       seriesValues: dateTimeItems,
-      tooltipValueBuilder: (dataValue) => DailyCheckValueRenderer(dailyCheckValue: dataValue as DailyCheckValue, seriesDef: seriesDef),
+      tooltipValueBuilder: (dataValue) => DailyCheckValueRenderer(dailyCheckValue: dataValue, seriesDef: seriesDef),
     );
   }
 

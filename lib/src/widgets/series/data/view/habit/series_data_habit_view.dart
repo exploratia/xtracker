@@ -37,8 +37,6 @@ class SeriesDataHabitView extends StatelessWidget {
           seriesDataFilter: seriesDataFilter,
           seriesDataViewOverlays: seriesDataViewOverlays,
         );
-      case ViewType.dots:
-        throw UnimplementedError();
       case ViewType.pixels:
         return SeriesDataHabitPixelsView(
           seriesViewMetaData: seriesViewMetaData,

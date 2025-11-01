@@ -7,12 +7,7 @@ enum ViewType {
   lineChart("lineChart", Icons.area_chart_outlined),
   barChart("barChart", Icons.bar_chart_outlined),
   table("table", Icons.grid_on_outlined),
-  // table(Icons.table_chart_outlined),
-  // dots(Icons.margin_outlined);
-  // dots(Icons.drag_indicator_outlined);
-  // dots(Icons.dataset_outlined);
-  pixels("pixels", Icons.blur_linear_outlined),
-  dots("dots", Icons.apps_rounded);
+  pixels("pixels", Icons.apps_rounded);
 
   final String typeName;
   final IconData iconData;
@@ -28,7 +23,6 @@ enum ViewType {
       ViewType.lineChart => LocaleKeys.enum_viewType_lineChart_title.tr(),
       ViewType.barChart => LocaleKeys.enum_viewType_barChart_title.tr(),
       ViewType.table => LocaleKeys.enum_viewType_table_title.tr(),
-      ViewType.dots => LocaleKeys.enum_viewType_dots_title.tr(),
       ViewType.pixels => LocaleKeys.enum_viewType_pixels_title.tr(),
     };
   }
