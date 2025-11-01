@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file.
 
+## [1.4.0] - 2025-11-01
+
+First public release version
+
+### Features
+
+- implement rounded corners pixels
+- unify dots to pixels view
+
 ## [1.3.1] - 2025-10-12
 
 ### Features
