@@ -29,7 +29,6 @@ class SeriesDataCustomView extends StatelessWidget {
       case ViewType.lineChart:
       case ViewType.barChart:
       case ViewType.pixels:
-      case ViewType.dots:
         throw UnimplementedError();
     }
   }
