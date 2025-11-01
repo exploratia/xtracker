@@ -82,8 +82,6 @@ abstract class  LocaleKeys {
   static const enum_viewType_lineChart_tooltip = 'enum.viewType.lineChart.tooltip';
   static const enum_viewType_barChart_title = 'enum.viewType.barChart.title';
   static const enum_viewType_barChart_tooltip = 'enum.viewType.barChart.tooltip';
-  static const enum_viewType_dots_title = 'enum.viewType.dots.title';
-  static const enum_viewType_dots_tooltip = 'enum.viewType.dots.tooltip';
   static const enum_viewType_pixels_title = 'enum.viewType.pixels.title';
   static const enum_viewType_pixels_tooltip = 'enum.viewType.pixels.tooltip';
   static const enum_viewType_table_title = 'enum.viewType.table.title';
@@ -186,7 +184,6 @@ abstract class  LocaleKeys {
   static const seriesEdit_common_label_seriesColor = 'seriesEdit.common.label.seriesColor';
   static const seriesEdit_displaySettings_title = 'seriesEdit.displaySettings.title';
   static const seriesEdit_displaySettings_label_initialView = 'seriesEdit.displaySettings.label.initialView';
-  static const seriesEdit_displaySettings_dotsView_switch_dotsViewShowCount_label = 'seriesEdit.displaySettings.dotsView.switch.dotsViewShowCount.label';
   static const seriesEdit_displaySettings_pixelsView_preview_title = 'seriesEdit.displaySettings.pixelsView.preview.title';
   static const seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_tooltip = 'seriesEdit.displaySettings.pixelsView.preview.pixelViewSettingsInfo.tooltip';
   static const seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_title = 'seriesEdit.displaySettings.pixelsView.preview.pixelViewSettingsInfo.title';
