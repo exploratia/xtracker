@@ -118,6 +118,11 @@
           "showSlider": "Datum-Slider anzeigen",
           "hideSlider": "Datum-Slider ausblenden"
         }
+      },
+      "monthSwitcher": {
+        "label": {
+          "selectMonth": "Monat auswählen"
+        }
       }
     }
   },

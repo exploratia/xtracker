@@ -171,6 +171,10 @@ https://pub.dev/packages/file_picker
 
 https://pub.dev/packages/flutter_colorpicker
 
+### Month Picker
+
+https://pub.dev/packages/month_picker_dialog
+
 #### Setup
 
 https://github.com/miguelpruivo/flutter_file_picker/wiki/Setup

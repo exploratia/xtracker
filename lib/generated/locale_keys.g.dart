@@ -63,6 +63,7 @@ abstract class  LocaleKeys {
   static const commons_validator_emptyValue = 'commons.validator.emptyValue';
   static const controls_select_dayRangeSlider_btn_showSlider = 'controls.select.dayRangeSlider.btn.showSlider';
   static const controls_select_dayRangeSlider_btn_hideSlider = 'controls.select.dayRangeSlider.btn.hideSlider';
+  static const controls_select_monthSwitcher_label_selectMonth = 'controls.select.monthSwitcher.label.selectMonth';
   static const deviceInfo_title = 'deviceInfo.title';
   static const deviceInfo_action_exportOrShare_tooltip = 'deviceInfo.action.exportOrShare.tooltip';
   static const deviceInfo_action_export_tooltip = 'deviceInfo.action.export.tooltip';

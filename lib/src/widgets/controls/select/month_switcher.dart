@@ -1,5 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:month_picker_dialog/month_picker_dialog.dart';
 
+import '../../../../generated/locale_keys.g.dart';
 import '../../../util/date_time_utils.dart';
 import '../../../util/theme_utils.dart';
 
@@ -19,14 +22,70 @@ class _MonthSwitcherState extends State<MonthSwitcher> {
   bool _isForward = true; // true: next month, false: prev month
   late Widget _animatedWidget;
 
+  Future<void> _selectMonth(BuildContext context, DateTime dateTime) async {
+    final themeData = Theme.of(context);
+    final DateTime? pickedDate = await showMonthPicker(
+      context: context,
+      initialDate: dateTime,
+      firstDate: DateTime(2000),
+      lastDate: DateTime.now().add(const Duration(days: 366 * 10)),
+      headerTitle: Text(LocaleKeys.controls_select_monthSwitcher_label_selectMonth.tr()),
+      monthPickerDialogSettings: MonthPickerDialogSettings(
+        headerSettings: PickerHeaderSettings(
+          headerIconsColor: ThemeUtils.onPrimary,
+          headerPadding: const EdgeInsets.all(ThemeUtils.defaultPadding),
+          titleSpacing: ThemeUtils.verticalSpacing,
+          headerBackgroundColor: themeData.cardTheme.color,
+        ),
+        dialogSettings: PickerDialogSettings(
+          dialogBackgroundColor: themeData.badgeTheme.backgroundColor,
+          dismissible: true,
+          dialogRoundedCornersRadius: ThemeUtils.borderRadiusLarge,
+        ),
+        dateButtonsSettings: const PickerDateButtonsSettings(
+          currentMonthTextColor: ThemeUtils.primaryColor,
+          currentYearTextColor: ThemeUtils.primaryColor,
+          selectedDateRadius: 10,
+          selectedMonthTextColor: ThemeUtils.onPrimary,
+          selectedYearTextColor: ThemeUtils.onPrimary,
+          selectedMonthBackgroundColor: ThemeUtils.primaryColor,
+          unselectedMonthsTextColor: ThemeUtils.onPrimary,
+          unselectedYearsTextColor: ThemeUtils.onPrimary,
+        ),
+        actionBarSettings: const PickerActionBarSettings(
+          actionBarPadding: EdgeInsets.all(ThemeUtils.screenPadding),
+        ),
+      ),
+    );
+
+    if (pickedDate != null) {
+      setState(() {
+        _currentDate = pickedDate.copyWith(hour: dateTime.hour, minute: dateTime.minute);
+        widget.monthCallback(_currentDate);
+        var curDateStr = DateTimeUtils.formatMonthYear(_currentDate);
+        _animatedWidget = InkWell(
+          key: Key(curDateStr),
+          borderRadius: ThemeUtils.borderRadiusCircularSmall,
+          onTap: () => _selectMonth(context, _currentDate),
+          child: Text(
+            curDateStr,
+          ),
+        );
+      });
+    }
+  }
+
   @override
   void initState() {
     _currentDate = widget.initialDate ?? DateTime.now();
     var curDateStr = DateTimeUtils.formatMonthYear(_currentDate);
-    _animatedWidget = Text(
-      curDateStr,
+    _animatedWidget = InkWell(
       key: Key(curDateStr),
-      textAlign: TextAlign.center,
+      borderRadius: ThemeUtils.borderRadiusCircularSmall,
+      onTap: () => _selectMonth(context, _currentDate),
+      child: Text(
+        curDateStr,
+      ),
     );
     super.initState();
   }
@@ -37,10 +96,13 @@ class _MonthSwitcherState extends State<MonthSwitcher> {
       _currentDate = DateTime(_currentDate.year, _currentDate.month + delta);
       widget.monthCallback(_currentDate);
       var curDateStr = DateTimeUtils.formatMonthYear(_currentDate);
-      _animatedWidget = Text(
-        curDateStr,
+      _animatedWidget = InkWell(
         key: Key(curDateStr),
-        textAlign: TextAlign.center,
+        borderRadius: ThemeUtils.borderRadiusCircularSmall,
+        onTap: () => _selectMonth(context, _currentDate),
+        child: Text(
+          curDateStr,
+        ),
       );
     });
   }
