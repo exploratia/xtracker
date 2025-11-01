@@ -24,7 +24,7 @@ class ColumnProfile {
     columns = [];
     var msgId = seriesDef.seriesType == SeriesType.monthly ? LocaleKeys.commons_date_date : LocaleKeys.commons_date_dateTime;
     columns.add(ColumnDef(
-      minWidth: 160,
+      minWidth: seriesDef.seriesType == SeriesType.monthly ? 80 : 160,
       title: '-',
       msgId: msgId,
       columnType: ColumnType.dateTime,
