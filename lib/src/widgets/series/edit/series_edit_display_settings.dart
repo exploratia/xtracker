@@ -162,16 +162,6 @@ class SeriesEditDisplaySettings extends StatelessWidget {
               // ColumnProfile? select
               if (tableViewColumnProfileSelect != null) tableViewColumnProfileSelect,
 
-              // Dots show count
-              if (seriesType == SeriesType.dailyCheck || seriesType == SeriesType.bloodPressure)
-                SwitchListTile(
-                  title: Text(
-                    LocaleKeys.seriesEdit_displaySettings_dotsView_switch_dotsViewShowCount_label.tr(),
-                  ),
-                  value: settings.dotsViewShowCount,
-                  onChanged: (value) => settings.dotsViewShowCount = value,
-                  secondary: Icon(Icons.numbers_outlined, size: ThemeUtils.iconSizeScaled),
-                ),
               // Pixel Preview
               if (PixelViewPreview.applicableOn(seriesDef)) ...[
                 Padding(

@@ -108,7 +108,7 @@ class _SeriesDataFilterView extends StatelessWidget {
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         // range slider date filter
-        if ([ViewType.dots, ViewType.pixels, ViewType.table, ViewType.lineChart, ViewType.barChart].contains(seriesViewMetaData.viewType)) {
+        if ([ViewType.pixels, ViewType.table, ViewType.lineChart, ViewType.barChart].contains(seriesViewMetaData.viewType)) {
           WidgetsBinding.instance.addPostFrameCallback((_) {
             double addHeightForTextScale = DayRangeSlider.calcAdditionalHeightByTextScale();
             updateOverlays(bottomHeight: ThemeUtils.seriesDataBottomFilterViewHeight + addHeightForTextScale);

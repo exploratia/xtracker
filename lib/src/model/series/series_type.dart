@@ -14,7 +14,7 @@ enum SeriesType {
     Icons.monitor_heart_outlined,
     Colors.red,
     [
-      ViewType.dots,
+      ViewType.pixels,
       ViewType.lineChart,
       ViewType.table,
     ],
@@ -32,7 +32,7 @@ enum SeriesType {
     [
       ViewType.barChart,
       ViewType.table,
-      ViewType.dots,
+      ViewType.pixels,
     ],
     [
       FixColumnProfileType.dateTimeValue,

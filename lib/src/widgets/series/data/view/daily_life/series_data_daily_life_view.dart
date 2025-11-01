@@ -31,8 +31,6 @@ class SeriesDataDailyLifeView extends StatelessWidget {
         throw UnimplementedError();
       case ViewType.barChart:
         throw UnimplementedError();
-      case ViewType.dots:
-        throw UnimplementedError();
       case ViewType.pixels:
         return SeriesDataDailyLifePixelsView(
           seriesViewMetaData: seriesViewMetaData,

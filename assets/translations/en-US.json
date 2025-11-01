@@ -176,10 +176,6 @@
         "title": "Chart",
         "tooltip": "View as bar chart"
       },
-      "dots": {
-        "title": "Overview",
-        "tooltip": "View as daily dots overview"
-      },
       "pixels": {
         "title": "Pixels",
         "tooltip": "View as daily pixels"
@@ -480,13 +476,6 @@
       "title": "Display settings",
       "label": {
         "initialView": "Initial view"
-      },
-      "dotsView": {
-        "switch": {
-          "dotsViewShowCount": {
-            "label": "In dots view, show count if a data point represents multiple values:"
-          }
-        }
       },
       "pixelsView": {
         "preview": {
