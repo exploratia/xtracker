@@ -21,8 +21,13 @@ class CustomValue extends SeriesDataValue {
     var jValues = json['values'] as Map?;
     if (jValues != null) {
       for (var entry in jValues.entries) {
-        if (entry.key is String && entry.value is double) {
-          values[entry.key] = entry.value;
+        if (entry.key is String) {
+          if (entry.value is double) {
+            values[entry.key] = entry.value;
+          } else if (entry.value is int) {
+            int intVal = entry.value;
+            values[entry.key] = intVal.toDouble();
+          }
         }
       }
     }
@@ -51,6 +56,8 @@ class CustomValue extends SeriesDataValue {
         var val = csv[idx];
         if (val is double) {
           values[seriesItem.siid] = val;
+        } else if (val is int) {
+          values[seriesItem.siid] = val.toDouble();
         }
       }
     }
