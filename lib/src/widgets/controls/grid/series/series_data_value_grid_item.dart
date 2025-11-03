@@ -6,6 +6,7 @@ import '../../../../model/series/series_type.dart';
 import '../../../../model/series/series_view_meta_data.dart';
 import '../../../../util/color_utils.dart';
 import '../../../../util/date_time_utils.dart';
+import '../../../../util/globals.dart';
 
 class SeriesDataValueGridItem<V extends SeriesDataValue> {
   final SeriesDef seriesDef;
@@ -15,7 +16,11 @@ class SeriesDataValueGridItem<V extends SeriesDataValue> {
   late final Color? backgroundColor;
 
   SeriesDataValueGridItem(this.seriesDef, this.value, this.date, this.time) {
-    backgroundColor = ColorUtils.weekdayBackgroundColor(value.dateTime);
+    if (seriesDef.seriesType == SeriesType.monthly) {
+      backgroundColor = (value.dateTime.month % 2 == 0) ? Globals.backgroundColorSaturday : null;
+    } else {
+      backgroundColor = ColorUtils.weekdayBackgroundColor(value.dateTime);
+    }
   }
 
   static List<SeriesDataValueGridItem<T>> buildTableDataProvider<T extends SeriesDataValue>(SeriesViewMetaData seriesViewMetaData, List<T> seriesData) {
