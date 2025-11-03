@@ -33,7 +33,8 @@ class ColumnProfile {
     columns.addAll(seriesDef.seriesItems
         .map((e) => ColumnDef(
               minWidth: 80,
-              title: '${e.name}${e.unitInBrackets(emptyStringIfNullOrEmpty: true)}',
+              title: e.name,
+              // title: '${e.name}${e.unitInBrackets(emptyStringIfNullOrEmpty: true)}',
               siid: e.siid,
               color: e.color,
               columnType: ColumnType.number,
