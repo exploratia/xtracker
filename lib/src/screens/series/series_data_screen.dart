@@ -581,6 +581,9 @@ class _SeriesDataFilterWrapperState extends State<_SeriesDataFilterWrapper> {
   @override
   void initState() {
     var filterStart = DateTimeUtils.firstDayOfMonth(DateTime.now().subtract(const Duration(days: 365)));
+    if (widget.seriesViewMetaData.seriesDef.seriesType == SeriesType.monthly) {
+      filterStart = DateTime(filterStart.year - 4);
+    }
     var seriesData = context.read<SeriesDataProvider>().seriesData(widget.seriesViewMetaData.seriesDef);
     if (seriesData != null && !seriesData.isEmpty()) {
       var firstValueDateTime = seriesData.data.first.dateTime;

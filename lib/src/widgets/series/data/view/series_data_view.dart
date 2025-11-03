@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../model/series/data/series_data_filter.dart';
 import '../../../../model/series/data/series_data_value.dart';
+import '../../../../model/series/series_type.dart';
 import '../../../../model/series/series_view_meta_data.dart';
 import '../../../../model/series/view_type.dart';
 import '../../../../util/date_time_utils.dart';
@@ -117,8 +118,9 @@ class _SeriesDataFilterView extends StatelessWidget {
           int maxSpan = 366 * 2;
 
           // for charts wider maxSpan
-          if ([ViewType.lineChart, ViewType.barChart].contains(seriesViewMetaData.viewType)) {
-            maxSpan = 365 * 5;
+          // for monthly wider maxSpan
+          if ([ViewType.lineChart, ViewType.barChart].contains(seriesViewMetaData.viewType) || seriesViewMetaData.seriesDef.seriesType == SeriesType.monthly) {
+            maxSpan = 365 * 5 + 2;
           }
 
           return _StackedRangeSliderView(
