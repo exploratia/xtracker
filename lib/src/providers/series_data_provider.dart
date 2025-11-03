@@ -323,7 +323,7 @@ class SeriesDataProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addValues(SeriesDef seriesDef, List<dynamic> values, SeriesCurrentValueProvider seriesCurrentValueProvider) async {
+  Future<void> addValues(SeriesDef seriesDef, List<SeriesDataValue> values, SeriesCurrentValueProvider seriesCurrentValueProvider) async {
     await fetchDataIfNotYetLoaded(seriesDef);
     SeriesData<SeriesDataValue> seriesData;
     switch (seriesDef.seriesType) {
