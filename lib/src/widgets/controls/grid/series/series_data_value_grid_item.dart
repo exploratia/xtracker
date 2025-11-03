@@ -29,7 +29,7 @@ class SeriesDataValueGridItem<V extends SeriesDataValue> {
 
     List<SeriesDataValueGridItem<T>> list = [];
     String prevDate = "";
-    for (var sd in seriesData) {
+    for (var sd in seriesData.reversed) {
       String? time = DateTimeUtils.formatTime(sd.dateTime);
 
       String date = "";
