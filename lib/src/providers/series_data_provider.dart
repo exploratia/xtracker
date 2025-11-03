@@ -308,7 +308,7 @@ class SeriesDataProvider with ChangeNotifier {
       seriesData.update(value);
       await store.save(value);
     } else if (action == _Action.delete) {
-      seriesData.delete(value);
+      seriesData.deleteById(value.uuid); // .delete(value);
       await store.delete(value);
     }
     seriesData.sort();

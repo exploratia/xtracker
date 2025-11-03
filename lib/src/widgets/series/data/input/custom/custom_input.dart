@@ -155,7 +155,9 @@ class _SeriesItemsInputState<V extends CustomValue> extends State<SeriesItemsInp
 
   void _deleteHandler() {
     if (widget.val != null && mounted) {
-      Navigator.pop(context, InputResult<V>(widget.val!, InputResultAction.delete));
+      var val = widget.val!;
+      var delResult = widget.resultBuilder(val.uuid, val.dateTime, val.values, InputResultAction.delete);
+      Navigator.pop<InputResult<V>>(context, delResult);
     }
   }
 

@@ -142,7 +142,7 @@ class SeriesData<T extends SeriesDataValue> {
   }
 
   void delete(T value) {
-    data.remove(value);
+    deleteById(value.uuid);
   }
 
   void deleteById(String uuid) {
