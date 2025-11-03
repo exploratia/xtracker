@@ -638,17 +638,23 @@
       "btn": {
         "exportSeries": "Export all series",
         "exportSingleSeries": "Export series",
+        "exportSingleSeriesCSV": "Export series values (csv)",
         "importSeries": "Import series",
+        "importSeriesCSV": "Import series values (csv)",
         "shareSeries": "Share all series",
         "shareSingleSeries": "Share series"
       },
       "label": {
         "exportSeries": "Export all series as one JSON file.",
         "exportSingleSeries": "Export series (definition and values) as JSON file.",
+        "exportSingleSeriesCSV": "Export series (values only) as CSV file",
         "exportSeriesTip": "Tip: To save separate measurement series, use the export icon of the respective series.",
+        "exportSeriesCSVTip": "Tip: CSV export is available per series.",
         "exportSingleSeriesTip": "Tip: To save all measurement series in one file, use the export icon of the management view.",
         "importSeries": "Select series JSON files to import.\nExisting series (and their data) will be overwritten (identified by their unique id). New series will be created if they don't already exist.",
         "importSeriesTip": "Tip: Create and export a matching series first. Then insert your data into the exported file and re-import it. That way the format will be correct.",
+        "importSeriesCSV": "Import values for the series “{}” from a CSV file. Existing data will be overwritten.\nThe file must contain one line per entry in exactly these columns:\n{}",
+        "importSeriesCSVTip": "Tip: CSV import is available per series.",
         "latestSeriesExport": "Last exported: {}",
         "shareSeries": "Share all series as one JSON file.",
         "shareSingleSeries": "Share series (definition and values) as JSON file."

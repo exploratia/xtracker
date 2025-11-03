@@ -45,11 +45,6 @@ class SeriesDataProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> add(SeriesDef seriesDef) async {
-    await _createSeriesDataIfNotExists(seriesDef);
-    notifyListeners();
-  }
-
   Future<void> _createSeriesDataIfNotExists(SeriesDef seriesDef) async {
     //  await Future.delayed(const Duration(seconds: 10)); // for testing
 

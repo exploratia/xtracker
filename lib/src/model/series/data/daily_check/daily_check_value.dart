@@ -1,6 +1,7 @@
 import 'package:uuid/uuid.dart';
 
 import '../../../../util/ex.dart';
+import '../../series_def.dart';
 import '../series_data_value.dart';
 
 class DailyCheckValue extends SeriesDataValue {
@@ -22,6 +23,16 @@ class DailyCheckValue extends SeriesDataValue {
         if (exportUuid) 'uuid': uuid,
         'utcMs': dateTime.millisecondsSinceEpoch,
       };
+
+  factory DailyCheckValue.fromCSVList(List<dynamic> csv) => DailyCheckValue(
+        const Uuid().v4().toString(),
+        DateTime.fromMillisecondsSinceEpoch(csv[0] as int),
+      );
+
+  @override
+  List<dynamic> toCSVList(SeriesDef seriesDef) {
+    return [dateTime.millisecondsSinceEpoch];
+  }
 
   static DailyCheckValue checkOnDailyCheckValue(dynamic value) {
     if (value is DailyCheckValue) return value;

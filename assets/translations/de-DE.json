@@ -638,17 +638,23 @@
       "btn": {
         "exportSeries": "Alle Messreihen exportieren",
         "exportSingleSeries": "Messreihe exportieren",
+        "exportSingleSeriesCSV": "Messreihe exportieren (csv)",
         "importSeries": "Messreihen importieren",
+        "importSeriesCSV": "Messreihe importieren (csv)",
         "shareSeries": "Alle Messreihen teilen",
         "shareSingleSeries": "Messreihe teilen"
       },
       "label": {
         "exportSeries": "Alle Messreihen als eine JSON-Datei speichern.",
         "exportSingleSeries": "Messreihe (Konfiguration und Werte) als JSON-Datei speichern.",
+        "exportSingleSeriesCSV": "Messreihe (nur Werte) als CSV-Datei speichern.",
         "exportSeriesTip": "Tipp: Einzelne Messreihen über das Export-Symbol der jeweiligen Messreihe speichern.",
+        "exportSeriesCSVTip": "Tipp: CSV-Export ist für einzelne Messreihen über das Export-Symbol der jeweiligen Messreihe möglich.",
         "exportSingleSeriesTip": "Tipp: Alle Messreihen gemeinsam über das Export-Symbol der Messreihenverwaltung speichern.",
         "importSeries": "JSON-Dateien mit Messreihen zum Import auswählen.\nVorhandene Messreihen (inklusive Daten) werden anhand ihrer ID überschrieben. Neue Messreihen werden automatisch erstellt.",
         "importSeriesTip": "Tipp: Zuerst eine passende Messreihe erstellen und exportieren. Danach Daten in die Datei einfügen und erneut importieren – so passt das Format sicher.",
+        "importSeriesCSV": "Werte für die Messreihe „{}“ aus einer CSV-Datei importieren. Bereits vorhandene Daten werden überschrieben.\nDie Datei muss exakt folgende Spalten und pro Eintrag eine entsprechende Zeile enthalten:\n{}",
+        "importSeriesCSVTip": "Tipp: CSV-Import ist für einzelne Messreihen über das Export-Symbol der jeweiligen Messreihe möglich.",
         "latestSeriesExport": "Zuletzt exportiert: {}",
         "shareSeries": "Alle Messreihen als eine JSON-Datei teilen.",
         "shareSingleSeries": "Messreihe (Konfiguration und Werte) als JSON-Datei teilen."

@@ -1,6 +1,7 @@
 import 'package:uuid/uuid.dart';
 
 import '../../../../util/ex.dart';
+import '../../series_def.dart';
 import '../custom/custom_value.dart';
 
 class MonthlyValue extends CustomValue {
@@ -19,6 +20,25 @@ class MonthlyValue extends CustomValue {
     return MonthlyValue(
       json['uuid'] as String? ?? const Uuid().v4().toString(),
       DateTime.fromMillisecondsSinceEpoch(json['utcMs'] as int),
+      values,
+    );
+  }
+
+  factory MonthlyValue.fromCSVList(List<dynamic> csv, SeriesDef seriesDef) {
+    Map<String, double> values = {};
+    int idx = 0;
+    for (var seriesItem in seriesDef.seriesItems) {
+      idx++;
+      if (csv.length > idx) {
+        var val = csv[idx];
+        if (val is double) {
+          values[seriesItem.siid] = val;
+        }
+      }
+    }
+    return MonthlyValue(
+      const Uuid().v4().toString(),
+      DateTime.fromMillisecondsSinceEpoch(csv[0] as int),
       values,
     );
   }

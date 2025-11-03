@@ -1,6 +1,7 @@
 import 'package:uuid/uuid.dart';
 
 import '../../../../util/ex.dart';
+import '../../series_def.dart';
 import '../series_data_value.dart';
 
 class CustomValue extends SeriesDataValue {
@@ -28,6 +29,34 @@ class CustomValue extends SeriesDataValue {
     return CustomValue(
       json['uuid'] as String? ?? const Uuid().v4().toString(),
       DateTime.fromMillisecondsSinceEpoch(json['utcMs'] as int),
+      values,
+    );
+  }
+
+  @override
+  List<dynamic> toCSVList(SeriesDef seriesDef) {
+    List<dynamic> list = [dateTime.millisecondsSinceEpoch];
+    for (var seriesItem in seriesDef.seriesItems) {
+      list.add(values[seriesItem.siid]);
+    }
+    return list;
+  }
+
+  factory CustomValue.fromCSVList(List<dynamic> csv, SeriesDef seriesDef) {
+    Map<String, double> values = {};
+    int idx = 0;
+    for (var seriesItem in seriesDef.seriesItems) {
+      idx++;
+      if (csv.length > idx) {
+        var val = csv[idx];
+        if (val is double) {
+          values[seriesItem.siid] = val;
+        }
+      }
+    }
+    return CustomValue(
+      const Uuid().v4().toString(),
+      DateTime.fromMillisecondsSinceEpoch(csv[0] as int),
       values,
     );
   }

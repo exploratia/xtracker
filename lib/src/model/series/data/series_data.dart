@@ -74,6 +74,46 @@ class SeriesData<T extends SeriesDataValue> {
         // if version is required: json['version'] as int? ?? 1
       );
 
+  List<List<dynamic>> toCSVLists(SeriesDef seriesDef) => [...data.map((e) => e.toCSVList(seriesDef))];
+
+  static SeriesData<BloodPressureValue> fromCSVBloodPressureData(SeriesDef seriesDef, List<List<dynamic>> csv) => SeriesData(
+        seriesDef.uuid,
+        [...csv.map((e) => BloodPressureValue.fromCSVList(e))],
+      );
+
+  static SeriesData<DailyCheckValue> fromCSVDailyCheckData(SeriesDef seriesDef, List<List<dynamic>> csv) => SeriesData(
+        seriesDef.uuid,
+        [...csv.map((e) => DailyCheckValue.fromCSVList(e))],
+      );
+
+  static SeriesData<DailyLifeValue> fromCSVDailyLifeData(SeriesDef seriesDef, List<List<dynamic>> csv) {
+    // build resolver map
+    var attributes = seriesDef.dailyLifeAttributesSettingsReadonly().attributes;
+    Map<String, String> attributeName2Aid = {};
+    for (var attribute in attributes) {
+      attributeName2Aid[attribute.name] = attribute.aid;
+    }
+    return SeriesData(
+      seriesDef.uuid,
+      [...csv.map((e) => DailyLifeValue.fromCSVList(e, attributeName2Aid))],
+    );
+  }
+
+  static SeriesData<HabitValue> fromCSVHabitData(SeriesDef seriesDef, List<List<dynamic>> csv) => SeriesData(
+        seriesDef.uuid,
+        [...csv.map((e) => HabitValue.fromCSVList(e))],
+      );
+
+  static SeriesData<CustomValue> fromCSVCustomData(SeriesDef seriesDef, List<List<dynamic>> csv) => SeriesData(
+        seriesDef.uuid,
+        [...csv.map((e) => CustomValue.fromCSVList(e, seriesDef))],
+      );
+
+  static SeriesData<MonthlyValue> fromCSVMonthlyData(SeriesDef seriesDef, List<List<dynamic>> csv) => SeriesData(
+        seriesDef.uuid,
+        [...csv.map((e) => MonthlyValue.fromCSVList(e, seriesDef))],
+      );
+
   bool isEmpty() {
     return data.isEmpty;
   }

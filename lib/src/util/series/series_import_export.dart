@@ -1,7 +1,9 @@
 import 'dart:convert';
 
+import 'package:csv/csv.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -23,6 +25,19 @@ import '../logging/flutter_simple_logging.dart';
 import '../theme_utils.dart';
 
 class SeriesImportExport {
+  static Future<String> _buildSeriesExportCSV(SeriesDef seriesDef, BuildContext context) async {
+    var seriesDataProvider = context.read<SeriesDataProvider>();
+    await seriesDataProvider.fetchDataIfNotYetLoaded(seriesDef);
+    var seriesData = seriesDataProvider.seriesData(seriesDef);
+    if (seriesData == null) throw Ex("Failed to export series - no series data found for series '${seriesDef.name}'!"); // should never happen
+
+    List<List<dynamic>> exportList = [];
+    exportList.add(seriesDef.toCSVHeaderList());
+    exportList.addAll(seriesData.toCSVLists(seriesDef));
+    final csv = const ListToCsvConverter().convert(exportList);
+    return csv;
+  }
+
   static Future<Map<String, dynamic>> _buildSeriesExportJson(SeriesDef seriesDef, BuildContext context) async {
     var seriesDataProvider = context.read<SeriesDataProvider>();
     await seriesDataProvider.fetchDataIfNotYetLoaded(seriesDef);
@@ -63,10 +78,42 @@ class SeriesImportExport {
     return json;
   }
 
+  static String _clearSeriesNameForExport(SeriesDef seriesDef) {
+    var res = seriesDef.name.replaceAll(RegExp(r'[^a-zA-Z0-9]+'), '_').replaceAll(RegExp(r'^_+|_+$'), ''); //remove underscore at start/end
+    // fallback uuid
+    if (res.isEmpty) res = seriesDef.uuid;
+    return res;
+  }
+
   static Future<void> _exportSeriesDef(SeriesDef seriesDef, BuildContext context) async {
     Map<String, dynamic>? json = await _buildSeriesExportJson(seriesDef, context);
     try {
-      bool exported = await JsonUtils.exportJsonFile(json, 'xtracker_series_export_${seriesDef.uuid}_${DateTimeUtils.formatExportDateTime()}.json');
+      bool exported =
+          await JsonUtils.exportJsonFile(json, 'xtracker_series_export_${_clearSeriesNameForExport(seriesDef)}_${DateTimeUtils.formatExportDateTime()}.json');
+      if (exported) {
+        SimpleLogging.i('Successfully exported ${seriesDef.toLogString()}');
+        if (context.mounted) Dialogs.showSnackBar(LocaleKeys.commons_snackbar_exportSuccess.tr(), context);
+      }
+    } catch (ex) {
+      SimpleLogging.w("Failed to export ${seriesDef.toLogString()}.", error: ex);
+      if (context.mounted) Dialogs.showSnackBarWarning(LocaleKeys.commons_snackbar_exportFailed, context);
+    }
+    if (context.mounted) Navigator.of(context).pop();
+  }
+
+  static Future<void> _exportSeriesDefCSV(SeriesDef seriesDef, BuildContext context) async {
+    String json = await _buildSeriesExportCSV(seriesDef, context);
+    try {
+      var enc = const Utf8Encoder();
+      Uint8List bytes = enc.convert(json);
+      // https://pub.dev/packages/file_picker
+      var selectedFile = await FilePicker.platform.saveFile(
+          dialogTitle: 'Please select an output file:',
+          fileName: 'xtracker_series_export_${_clearSeriesNameForExport(seriesDef)}_${DateTimeUtils.formatExportDateTime()}.csv',
+          type: FileType.custom,
+          allowedExtensions: ["csv"],
+          bytes: bytes);
+      var exported = selectedFile != null || kIsWeb; // in web no file select - just download
       if (exported) {
         SimpleLogging.i('Successfully exported ${seriesDef.toLogString()}');
         if (context.mounted) Dialogs.showSnackBar(LocaleKeys.commons_snackbar_exportSuccess.tr(), context);
@@ -81,7 +128,8 @@ class SeriesImportExport {
   static Future<void> _shareSeriesDef(SeriesDef seriesDef, BuildContext context) async {
     Map<String, dynamic>? json = await _buildSeriesExportJson(seriesDef, context);
     try {
-      bool shared = await JsonUtils.shareJsonFile(json, 'xtracker_series_export_${seriesDef.uuid}_${DateTimeUtils.formatExportDateTime()}.json');
+      bool shared =
+          await JsonUtils.shareJsonFile(json, 'xtracker_series_export_${_clearSeriesNameForExport(seriesDef)}_${DateTimeUtils.formatExportDateTime()}.json');
       if (shared) {
         SimpleLogging.i('Successfully shared ${seriesDef.toLogString()}');
         if (context.mounted) Dialogs.showSnackBar(LocaleKeys.commons_snackbar_shareSuccess.tr(), context);
@@ -203,7 +251,7 @@ class SeriesImportExport {
           );
         }
 
-        SimpleLogging.i("importing ${file.name} ...");
+        SimpleLogging.i("importing '${file.name}' ...");
         var fileContent = await file.readAsString(); // utf8
         var json = jsonDecode(fileContent) as Map<String, dynamic>;
 
@@ -228,6 +276,145 @@ class SeriesImportExport {
           throw Ex("Series import failed - unexpected data structure in file: ${file.name}",
               localizedMessage: LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]));
         }
+      } catch (ex, st) {
+        SimpleLogging.w(ex.toString(), stackTrace: st);
+        if (ex is Ex) {
+          failures.add(ex.localizedToString());
+        } else {
+          failures.add(LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]));
+        }
+      }
+    }
+
+    overlay.remove();
+
+    if (context.mounted && failures.isNotEmpty) {
+      await Dialogs.simpleOkDialog(
+        failures.join("\n\n"),
+        context,
+        title: LocaleKeys.seriesManagement_importExport_alert_import_title.tr(),
+      );
+    }
+
+    if (successfulImports > 0) {
+      SimpleLogging.i('Successfully imported $successfulImports series.');
+      if (context.mounted) {
+        Dialogs.showSnackBar(
+            LocaleKeys.seriesManagement_importExport_snackbar_importSuccessfulXofY.tr(args: [successfulImports.toString(), numSelectedFiles.toString()]),
+            context);
+      }
+    }
+  }
+
+  /// import series with data from csv list
+  /// - csv list with only data lists (header has to be removed)
+  /// - throws [Ex] in case of unexpected data
+  static Future<void> _importSeriesCSV(List<List<dynamic>> csv, String fileName, SeriesDef seriesDef, SeriesProviders seriesProviders) async {
+    SimpleLogging.i("Importing series and data for ${seriesDef.toLogString()} ...");
+    SeriesData seriesData;
+    switch (seriesDef.seriesType) {
+      case SeriesType.bloodPressure:
+        seriesData = SeriesData.fromCSVBloodPressureData(seriesDef, csv);
+      case SeriesType.dailyCheck:
+        seriesData = SeriesData.fromCSVDailyCheckData(seriesDef, csv);
+      case SeriesType.dailyLife:
+        seriesData = SeriesData.fromCSVDailyLifeData(seriesDef, csv);
+      case SeriesType.habit:
+        seriesData = SeriesData.fromCSVHabitData(seriesDef, csv);
+      case SeriesType.custom:
+        seriesData = SeriesData.fromCSVCustomData(seriesDef, csv);
+      case SeriesType.monthly:
+        seriesData = SeriesData.fromCSVMonthlyData(seriesDef, csv);
+    }
+
+    await seriesProviders.seriesDataProvider.delete(seriesDef, seriesProviders.seriesCurrentValueProvider);
+    await seriesProviders.seriesDataProvider.fetchData(seriesDef);
+    await seriesProviders.seriesDataProvider.addValues(seriesDef, seriesData.data, seriesProviders.seriesCurrentValueProvider);
+    SimpleLogging.i("Import for ${seriesDef.toLogString()} finished.");
+  }
+
+  // import series data from csv
+  static Future<void> _importCSVFile(BuildContext context, SeriesDef seriesDef, SeriesProviders seriesProviders) async {
+    FilePickerResult? result;
+    try {
+      // https://pub.dev/packages/file_picker
+      result = await FilePicker.platform.pickFiles(
+        allowMultiple: false,
+        type: FileType.any,
+        // allowedExtensions: ['json'], // not possible // https://github.com/miguelpruivo/flutter_file_picker/issues/1717
+      );
+    } catch (ex, st) {
+      SimpleLogging.w(ex.toString(), stackTrace: st);
+      if (context.mounted) Dialogs.showSnackBar("Failure while choosing import file.", context);
+    }
+    if (result == null) return; // User canceled the picker
+
+    if (!context.mounted) return;
+    // already hide dialog -> the series could be seen while importing
+    Navigator.of(context).pop();
+
+    // PlatformFile file = result.files.first;
+    // print(file.name);
+    // print(file.bytes);
+    // print(file.size); // check file size?
+    // print(file.extension);
+    // print(file.path);
+
+    final overlay = ProgressOverlay.createAndShowProgressOverlay(context);
+    int successfulImports = 0;
+    int numSelectedFiles = result.xFiles.length;
+
+    List<String> failures = [];
+
+    if (result.xFiles.length != 1) {
+      throw Ex("Invalid amount of selected files");
+    }
+
+    for (var file in result.xFiles) {
+      try {
+        if (!file.name.endsWith(".csv")) {
+          throw Ex(
+            "Import failed - unexpected file: ${file.name}",
+            localizedMessage: LocaleKeys.seriesManagement_importExport_alert_unexpectedFile.tr(args: [file.name]),
+          );
+        }
+
+        SimpleLogging.i("importing '${file.name}' for series '${seriesDef.name}' ...");
+
+        var fileContent = await file.readAsString(); // utf8
+
+        final csv = const CsvToListConverter().convert(fileContent);
+        // remove empty lines
+        csv.removeWhere((line) => line.isEmpty || line.length == 1 && ("" == line[0] || null == line[0]));
+        if (csv.isEmpty) {
+          throw Ex("Series data import failed - unexpected (empty) data in file: ${file.name}",
+              localizedMessage: LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]));
+        }
+        if (csv.length < 2) {
+          throw Ex("Series data import failed - unexpected data (invalid amount of lines) in file: ${file.name}",
+              localizedMessage: LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]));
+        }
+        // check if first line matches series header
+        var headerList = seriesDef.toCSVHeaderList();
+        var csvHeaderList = csv.removeAt(0);
+        bool headerEquals = csvHeaderList.length == headerList.length;
+        if (headerEquals) {
+          for (var i = 0; i < headerList.length; ++i) {
+            var hVal = headerList[i];
+            var csvVal = csvHeaderList[i];
+            if (hVal != csvVal.toString()) {
+              headerEquals = false;
+              break;
+            }
+          }
+        }
+        if (!headerEquals) {
+          throw Ex("Series data import failed - unexpected data (header mismatch) in file: ${file.name}",
+              localizedMessage: LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]));
+        }
+
+        await _importSeriesCSV(csv, file.name, seriesDef, seriesProviders);
+        successfulImports++;
       } catch (ex, st) {
         SimpleLogging.w(ex.toString(), stackTrace: st);
         if (ex is Ex) {
@@ -295,6 +482,7 @@ class SeriesImportExport {
             ),
             _LabelMedium(LocaleKeys.seriesManagement_importExport_label_exportSeries.tr()),
             _LabelMedium(LocaleKeys.seriesManagement_importExport_label_exportSeriesTip.tr()),
+            _LabelMedium(LocaleKeys.seriesManagement_importExport_label_exportSeriesCSVTip.tr()),
             ElevatedButton.icon(
               onPressed: exportPossible
                   ? () async {
@@ -319,6 +507,14 @@ class SeriesImportExport {
             _LabelMedium(LocaleKeys.seriesManagement_importExport_label_exportSingleSeriesTip.tr()),
             ElevatedButton.icon(
               onPressed: () async {
+                await _exportSeriesDefCSV(seriesDef, context);
+              },
+              icon: Icon(Icons.download_outlined, size: ThemeUtils.iconSizeScaled),
+              label: Text(LocaleKeys.seriesManagement_importExport_btn_exportSingleSeriesCSV.tr()),
+            ),
+            _LabelMedium(LocaleKeys.seriesManagement_importExport_label_exportSingleSeriesCSV.tr()),
+            ElevatedButton.icon(
+              onPressed: () async {
                 await _shareSeriesDef(seriesDef, context);
               },
               icon: Icon(Icons.share_outlined, size: ThemeUtils.iconSizeScaled),
@@ -338,6 +534,23 @@ class SeriesImportExport {
           ),
           _LabelMedium(LocaleKeys.seriesManagement_importExport_label_importSeries.tr()),
           _LabelMedium(LocaleKeys.seriesManagement_importExport_label_importSeriesTip.tr()),
+
+          // all series csv tip
+          if (seriesDef == null) _LabelMedium(LocaleKeys.seriesManagement_importExport_label_importSeriesCSVTip.tr()),
+          // import single series csv data
+          if (seriesDef != null) ...[
+            ElevatedButton.icon(
+              onPressed: () async {
+                await _importCSVFile(context, seriesDef, seriesProviders);
+              },
+              icon: Icon(Icons.upload_outlined, size: ThemeUtils.iconSizeScaled),
+              label: Text(LocaleKeys.seriesManagement_importExport_btn_importSeriesCSV.tr()),
+            ),
+            _LabelMedium(LocaleKeys.seriesManagement_importExport_label_importSeriesCSV.tr(args: [
+              seriesDef.name,
+              const ListToCsvConverter().convert([seriesDef.toCSVHeaderList()])
+            ])),
+          ]
         ],
       ),
     );

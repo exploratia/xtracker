@@ -144,6 +144,29 @@ class SeriesDef {
         'version': seriesDefVersionByType(this),
       };
 
+  List<dynamic> toCSVHeaderList() {
+    List<dynamic> headers = ["utc(ms)"];
+    switch (seriesType) {
+      case SeriesType.bloodPressure:
+        headers.addAll(["high", "low", "medication"]);
+      case SeriesType.dailyCheck:
+        {
+          // nothing to do - only timestamp column
+        }
+      case SeriesType.habit:
+        {
+          // nothing to do - only timestamp column
+        }
+      case SeriesType.dailyLife:
+        headers.add("attribute");
+      case SeriesType.custom:
+      case SeriesType.monthly:
+        headers.addAll(seriesItems.map((e) => e.name));
+    }
+
+    return headers;
+  }
+
   static Future<SeriesDef?> addNewSeries(BuildContext context) async {
     return _showSeriesEdit(null, context);
   }

@@ -1,3 +1,4 @@
+import '../series_def.dart';
 import '../series_type.dart';
 import 'blood_pressure/blood_pressure_value.dart';
 import 'custom/custom_value.dart';
@@ -30,4 +31,6 @@ abstract class SeriesDataValue implements DateTimeItem {
       SeriesType.monthly => MonthlyValue.fromJson(json),
     };
   }
+
+  List<dynamic> toCSVList(SeriesDef seriesDef);
 }

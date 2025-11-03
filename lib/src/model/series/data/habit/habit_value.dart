@@ -1,6 +1,7 @@
 import 'package:uuid/uuid.dart';
 
 import '../../../../util/ex.dart';
+import '../../series_def.dart';
 import '../series_data_value.dart';
 
 class HabitValue extends SeriesDataValue {
@@ -22,6 +23,16 @@ class HabitValue extends SeriesDataValue {
         if (exportUuid) 'uuid': uuid,
         'utcMs': dateTime.millisecondsSinceEpoch,
       };
+
+  factory HabitValue.fromCSVList(List<dynamic> csv) => HabitValue(
+        const Uuid().v4().toString(),
+        DateTime.fromMillisecondsSinceEpoch(csv[0] as int),
+      );
+
+  @override
+  List<dynamic> toCSVList(SeriesDef seriesDef) {
+    return [dateTime.millisecondsSinceEpoch];
+  }
 
   static HabitValue checkOnHabitValue(dynamic value) {
     if (value is HabitValue) return value;

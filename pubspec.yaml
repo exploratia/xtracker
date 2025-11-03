@@ -78,6 +78,9 @@ dependencies:
   # display HTML in flutter
   simple_html_css: ^5.0.0
 
+  # csv
+  csv: ^6.0.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

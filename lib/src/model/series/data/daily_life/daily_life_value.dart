@@ -2,6 +2,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../../../util/ex.dart';
 import '../../../../util/globals.dart';
+import '../../series_def.dart';
 import '../series_data_value.dart';
 
 class DailyLifeValue extends SeriesDataValue {
@@ -26,6 +27,23 @@ class DailyLifeValue extends SeriesDataValue {
         'utcMs': dateTime.millisecondsSinceEpoch,
         'aid': aid,
       };
+
+  @override
+  List<dynamic> toCSVList(SeriesDef seriesDef) {
+    var attributes = seriesDef.dailyLifeAttributesSettingsReadonly().attributes;
+    for (var attribute in attributes) {
+      if (attribute.aid == aid) return [dateTime.millisecondsSinceEpoch, attribute.name];
+    }
+    return [];
+  }
+
+  factory DailyLifeValue.fromCSVList(List<dynamic> csv, Map<String, String> attributeName2Aid) {
+    return DailyLifeValue(
+      const Uuid().v4().toString(),
+      DateTime.fromMillisecondsSinceEpoch(csv[0] as int),
+      attributeName2Aid[csv[1]] ?? Globals.invalid,
+    );
+  }
 
   static DailyLifeValue checkOnDailyLifeValue(dynamic value) {
     if (value is DailyLifeValue) return value;

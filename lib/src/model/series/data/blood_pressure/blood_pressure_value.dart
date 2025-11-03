@@ -5,6 +5,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../../../util/color_utils.dart';
 import '../../../../util/ex.dart';
+import '../../series_def.dart';
 import '../series_data_value.dart';
 
 class BloodPressureValue extends SeriesDataValue {
@@ -32,6 +33,19 @@ class BloodPressureValue extends SeriesDataValue {
         'low': low,
         if (medication) 'medication': medication, // only save if true
       };
+
+  factory BloodPressureValue.fromCSVList(List<dynamic> csv) => BloodPressureValue(
+        const Uuid().v4().toString(),
+        DateTime.fromMillisecondsSinceEpoch(csv[0] as int),
+        csv[1] as int,
+        csv[2] as int,
+        csv.length > 3 ? "1" == csv[3].toString() : false,
+      );
+
+  @override
+  List<dynamic> toCSVList(SeriesDef seriesDef) {
+    return [dateTime.millisecondsSinceEpoch, high, low, medication ? 1 : 0];
+  }
 
   @override
   String toString() {
