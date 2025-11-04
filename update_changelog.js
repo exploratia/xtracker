@@ -69,14 +69,15 @@ function getGitCommitsSince(date = null) {
 function groupCommits(commits, githubRepoUrl) {
   const features = [];
   const fixes = [];
+  const others = [];
 
   // Matches: feat #5 (scope): message OR fix #10: message OR feat: message
   // Capture groups:
-  // 1 = type (feat|fix)
+  // 1 = type (feat|fix|other)
   // 2 = issue number (optional)
   // 3 = scope (optional)
   // 4 = message (mandatory)
-  const commitRegex = /^(feat|fix)(?:\s+#(\d+))?(?:\s*\(([^)]+)\))?:\s*(.+)$/i;
+  const commitRegex = /^(feat|fix|other)(?:\s+#(\d+))?(?:\s*\(([^)]+)\))?:\s*(.+)$/i;
 
   for (const commit of commits) {
     const match = commitRegex.exec(commit);
@@ -91,14 +92,16 @@ function groupCommits(commits, githubRepoUrl) {
       features.push(`${formatted}${issueLink}`);
     } else if (type.toLowerCase() === 'fix') {
       fixes.push(`${formatted}${issueLink}`);
+    }else if (type.toLowerCase() === 'other') {
+      others.push(`${formatted}${issueLink}`);
     }
   }
 
-  return { features, fixes };
+  return { features, fixes, others };
 }
 
 // Generate the changelog section in markdown format
-function generateChangelogSection({ features, fixes }, version = 'Unreleased', date = new Date().toISOString().slice(0, 10)) {
+function generateChangelogSection({ features, fixes, others }, version = 'Unreleased', date = new Date().toISOString().slice(0, 10)) {
   let output = `## [${version}] - ${date}\n`;
 
   if (features.length > 0) {
@@ -112,6 +115,13 @@ function generateChangelogSection({ features, fixes }, version = 'Unreleased', d
     output += `\n### Fixes\n`;
     for (const fix of fixes) {
       output += `- ${fix}\n`;
+    }
+  }
+
+  if (others.length > 0) {
+    output += `\n### Others\n`;
+    for (const other of others) {
+      output += `- ${other}\n`;
     }
   }
 
@@ -162,8 +172,8 @@ if (latestDate) {
 const commits = getGitCommitsSince(latestDate);
 const grouped = groupCommits(commits, githubRepoUrl);
 
-if (grouped.features.length === 0 && grouped.fixes.length === 0) {
-  console.log('No feat/fix commits found since last release. Nothing to update.');
+if (grouped.features.length === 0 && grouped.fixes.length === 0 && grouped.others.length === 0) {
+  console.log('No feat/fix/other commits found since last release. Nothing to update.');
   process.exit(0);
 }
 
