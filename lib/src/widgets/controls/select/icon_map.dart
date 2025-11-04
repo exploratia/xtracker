@@ -80,6 +80,7 @@ class IconMap {
     map["bubble_chart_outlined"] = Icons.bubble_chart_outlined;
     map["stacked_bar_chart_outlined"] = Icons.stacked_bar_chart_outlined;
     map["stacked_line_chart_outlined"] = Icons.stacked_line_chart_outlined;
+    map["line_axis_outlined"] = Icons.line_axis_outlined;
     map["timeline_outlined"] = Icons.timeline_outlined;
     map["trending_up_outlined"] = Icons.trending_up_outlined;
     map["monitor_heart_outlined"] = Icons.monitor_heart_outlined;
