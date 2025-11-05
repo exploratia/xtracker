@@ -329,6 +329,9 @@
     "label": {
       "noData": "Keine Daten vorhanden...",
       "noDataBecauseOfFilter": "Keine Daten mit diesen Filtereinstellungen"
+    },
+    "snackbar": {
+      "duplicateDates": "Mehrfach auftretende Messzeitpunkte gefunden: {}"
     }
   },
   "seriesDataAnalytics": {

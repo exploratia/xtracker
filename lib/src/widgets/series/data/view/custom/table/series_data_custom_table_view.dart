@@ -36,7 +36,7 @@ class SeriesDataCustomTableView extends StatelessWidget {
     }
 
     GridCell Function(BuildContext context, int yIndex, int xIndex, Size cellSize) gridCellBuilder = SeriesDataValueCellBuilder(
-      data: SeriesDataValueGridItem.buildTableDataProvider(seriesViewMetaData, filteredSeriesData),
+      data: SeriesDataValueGridItem.buildTableDataProvider(seriesViewMetaData, filteredSeriesData, context),
       columnProfile: columnProfile,
       editMode: seriesViewMetaData.editMode,
       gridCellChildBuilder: (value, cellSize, columnDef) {
