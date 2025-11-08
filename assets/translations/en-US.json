@@ -592,6 +592,9 @@
           "add": {
             "tooltip": "Add parameter"
           },
+          "addCalculated": {
+            "tooltip": "Add calculated parameter"
+          },
           "delete": {
             "tooltip": "Delete parameter"
           },

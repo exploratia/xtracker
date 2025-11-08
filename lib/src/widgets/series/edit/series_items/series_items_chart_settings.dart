@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../../generated/locale_keys.g.dart';
-import '../../../../model/series/series_def.dart';
+import '../../../../model/series/seriesItem/series_item.dart';
 import '../../../../util/theme_utils.dart';
 import '../../../controls/card/glowing_border_container.dart';
 import '../../../controls/layout/single_child_scroll_view_with_scrollbar.dart';
@@ -70,6 +70,7 @@ class _SeriesItemsChartSettingsState extends State<SeriesItemsChartSettings> {
           hideInTable: seriesItem.hideInTable,
           hideInChart: e.hide,
           tableColumnWidth: seriesItem.tableColumnWidth,
+          calculatedItem: seriesItem.calculatedItem,
         );
       },
     ).toList();

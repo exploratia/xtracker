@@ -2,7 +2,9 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../generated/locale_keys.g.dart';
+import '../../../../model/series/seriesItem/series_item.dart';
 import '../../../../model/series/series_def.dart';
+import '../../../../util/media_query_utils.dart';
 import '../../../../util/theme_utils.dart';
 import '../../../controls/appbar/app_bar_actions_divider.dart';
 import '../../../controls/btn/info_btn.dart';
@@ -103,6 +105,36 @@ class SeriesItemsEdit extends StatelessWidget {
               },
               icon: const Icon(Icons.add),
             ),
+            if (seriesItems.isNotEmpty)
+              IconButton(
+                iconSize: ThemeUtils.iconSizeScaled,
+                tooltip: LocaleKeys.seriesEdit_seriesSettings_seriesItems_actions_addCalculated_tooltip.tr(),
+                onPressed: () async {
+                  SeriesItem? seriesItem = await SeriesItemInput.showInputDlg(context, newSeriesItemColor: seriesDef.color, createCalculatedItem: true);
+                  if (seriesItem != null) {
+                    seriesItems.insert(0, seriesItem);
+                    updateSettings();
+                  }
+                },
+                icon: SizedBox(
+                  height: ThemeUtils.iconSizeScaled,
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Positioned(
+                        top: 0,
+                        left: -5,
+                        child: Icon(Icons.add_outlined, size: ThemeUtils.iconSizeScaled),
+                      ),
+                      Positioned(
+                        right: -1,
+                        top: -3,
+                        child: Icon(Icons.link_outlined, size: 15 * MediaQueryUtils.iconScaleFactor),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             IconButton(
               iconSize: ThemeUtils.iconSizeScaled,
               tooltip: LocaleKeys.seriesEdit_seriesSettings_seriesItems_actions_deleteAll_tooltip.tr(),

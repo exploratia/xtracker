@@ -224,6 +224,7 @@ abstract class  LocaleKeys {
   static const seriesEdit_seriesSettings_dailyLifeAttributes_validation_emptyAttributs = 'seriesEdit.seriesSettings.dailyLifeAttributes.validation.emptyAttributs';
   static const seriesEdit_seriesSettings_seriesItems_title = 'seriesEdit.seriesSettings.seriesItems.title';
   static const seriesEdit_seriesSettings_seriesItems_actions_add_tooltip = 'seriesEdit.seriesSettings.seriesItems.actions.add.tooltip';
+  static const seriesEdit_seriesSettings_seriesItems_actions_addCalculated_tooltip = 'seriesEdit.seriesSettings.seriesItems.actions.addCalculated.tooltip';
   static const seriesEdit_seriesSettings_seriesItems_actions_delete_tooltip = 'seriesEdit.seriesSettings.seriesItems.actions.delete.tooltip';
   static const seriesEdit_seriesSettings_seriesItems_actions_deleteAll_tooltip = 'seriesEdit.seriesSettings.seriesItems.actions.deleteAll.tooltip';
   static const seriesEdit_seriesSettings_seriesItems_actions_edit_tooltip = 'seriesEdit.seriesSettings.seriesItems.actions.edit.tooltip';

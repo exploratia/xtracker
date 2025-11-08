@@ -6,7 +6,7 @@ import 'package:flutter/services.dart';
 
 import '../../../../../../generated/locale_keys.g.dart';
 import '../../../../model/column_profile/column_profile.dart';
-import '../../../../model/series/series_def.dart';
+import '../../../../model/series/seriesItem/series_item.dart';
 import '../../../../util/theme_utils.dart';
 import '../../../controls/card/glowing_border_container.dart';
 import '../../../controls/layout/single_child_scroll_view_with_scrollbar.dart';
@@ -83,6 +83,7 @@ class _SeriesItemsTableSettingsState extends State<SeriesItemsTableSettings> {
           hideInTable: e.hide,
           hideInChart: seriesItem.hideInChart,
           tableColumnWidth: int.tryParse(e.textEditingController.text),
+          calculatedItem: seriesItem.calculatedItem,
         );
       },
     ).toList();

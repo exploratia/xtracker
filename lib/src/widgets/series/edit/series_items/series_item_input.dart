@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../../generated/locale_keys.g.dart';
-import '../../../../model/series/series_def.dart';
+import '../../../../model/series/seriesItem/series_item.dart';
 import '../../../../model/series/settings/daily_life/daily_life_attribute.dart';
 import '../../../../util/theme_utils.dart';
 import '../../../controls/layout/single_child_scroll_view_with_scrollbar.dart';
@@ -14,17 +14,20 @@ class SeriesItemInput extends StatefulWidget {
     super.key,
     this.seriesItem,
     this.newSeriesItemColor,
+    required this.calculatedItem,
   });
 
   final SeriesItem? seriesItem;
   final Color? newSeriesItemColor;
+  final bool calculatedItem;
 
-  static Future<SeriesItem?> showInputDlg(BuildContext context, {SeriesItem? seriesItem, Color? newSeriesItemColor}) async {
+  static Future<SeriesItem?> showInputDlg(BuildContext context, {SeriesItem? seriesItem, Color? newSeriesItemColor, bool? createCalculatedItem}) async {
     return await showDialog<SeriesItem>(
       context: context,
       builder: (_) => SeriesItemInput(
         seriesItem: seriesItem,
         newSeriesItemColor: newSeriesItemColor,
+        calculatedItem: seriesItem != null ? seriesItem.calculatedItem : (createCalculatedItem ?? false),
       ),
     );
   }
@@ -114,6 +117,7 @@ class _SeriesItemInputState extends State<SeriesItemInput> {
       hideInTable: hideInTable,
       hideInChart: hideInChart,
       tableColumnWidth: tableColumnWidth,
+      calculatedItem: widget.calculatedItem,
     );
 
     Navigator.pop(context, val);

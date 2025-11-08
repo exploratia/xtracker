@@ -7,6 +7,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../../../../../generated/locale_keys.g.dart';
 import '../../../../../model/series/data/custom/custom_value.dart';
+import '../../../../../model/series/seriesItem/series_item.dart';
 import '../../../../../model/series/series_def.dart';
 import '../../../../../util/date_time_utils.dart';
 import '../../../../../util/dialogs.dart';
