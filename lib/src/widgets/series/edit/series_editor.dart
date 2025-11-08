@@ -177,6 +177,14 @@ class _SeriesEditorState extends State<SeriesEditor> {
                 validatorCondition: () => _seriesDef.seriesItems.isNotEmpty,
                 errorMessage: LocaleKeys.seriesEdit_seriesSettings_seriesItems_validation_emptyParameters.tr(),
               ),
+              ValidationField(
+                validatorCondition: () => _seriesDef.seriesItems.isEmpty || _seriesDef.seriesItems.where((e) => !e.hideInTable).isNotEmpty,
+                errorMessage: LocaleKeys.seriesEdit_seriesSettings_seriesItems_validation_emptyParametersTable.tr(),
+              ),
+              ValidationField(
+                validatorCondition: () => _seriesDef.seriesItems.isEmpty || _seriesDef.seriesItems.where((e) => !e.hideInChart).isNotEmpty,
+                errorMessage: LocaleKeys.seriesEdit_seriesSettings_seriesItems_validation_emptyParametersChart.tr(),
+              ),
             ],
           ),
 

@@ -11,6 +11,8 @@ import '../series/series_type.dart';
 import 'column_type.dart';
 
 class ColumnProfile {
+  static const int defaultColumnWidth = 80;
+
   late final List<ColumnDef> columns;
   late final bool hasHorizontalMarginColumns;
 
@@ -24,15 +26,16 @@ class ColumnProfile {
     columns = [];
     var msgId = seriesDef.seriesType == SeriesType.monthly ? LocaleKeys.commons_date_date : LocaleKeys.commons_date_dateTime;
     columns.add(ColumnDef(
-      minWidth: seriesDef.seriesType == SeriesType.monthly ? 80 : 160,
+      minWidth: seriesDef.seriesType == SeriesType.monthly ? defaultColumnWidth.toDouble() : 160,
       title: '-',
       msgId: msgId,
       columnType: ColumnType.dateTime,
     ));
     // series items
     columns.addAll(seriesDef.seriesItems
+        .where((e) => !e.hideInTable)
         .map((e) => ColumnDef(
-              minWidth: 80,
+              minWidth: e.tableColumnWidth?.toDouble() ?? defaultColumnWidth.toDouble(),
               title: e.name,
               // title: '${e.name}${e.unitInBrackets(emptyStringIfNullOrEmpty: true)}',
               siid: e.siid,

@@ -600,14 +600,39 @@
           },
           "edit": {
             "tooltip": "Edit parameter"
+          },
+          "editChartSettings": {
+            "tooltip": "Edit chart settings"
+          },
+          "editTableSettings": {
+            "tooltip": "Edit table settings"
           }
         },
         "dlg": {
           "title": "Parameter"
         },
-        "info": "Manage the parameters of the series.\nEach parameter has a name, unit, and color.\n\nIf a parameter already in use is deleted, its values will no longer be shown.",
+        "chartSettingsDlg": {
+          "titel": "Chart settings",
+          "tooltip": {
+            "showChart": "Show chart",
+            "hideChart": "Hide chart"
+          }
+        },
+        "tableSettingsDlg": {
+          "title": "Table settings",
+          "label": {
+            "columnWidth": "Column width"
+          },
+          "tooltip": {
+            "showColumn": "Show column",
+            "hideColumn": "Hide column"
+          }
+        },
+        "info": "Manage the parameters of the series.\nEach parameter has a name, unit, and color.\nYou can also configure how it appears in tables and charts.\n\nIf a parameter in use is deleted, its values will no longer be shown.",
         "validation": {
-          "emptyAttributs": "At least one parameter required"
+          "emptyAttributs": "At least one parameter required",
+          "emptyParametersChart": "At least one parameter required for chart view",
+          "emptyParametersTable": "At least one parameter required for table view"
         }
       }
     }

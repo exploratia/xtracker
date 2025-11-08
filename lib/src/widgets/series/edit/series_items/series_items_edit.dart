@@ -4,12 +4,15 @@ import 'package:flutter/material.dart';
 import '../../../../../generated/locale_keys.g.dart';
 import '../../../../model/series/series_def.dart';
 import '../../../../util/theme_utils.dart';
+import '../../../controls/appbar/app_bar_actions_divider.dart';
 import '../../../controls/btn/info_btn.dart';
 import '../../../controls/card/glowing_border_container.dart';
 import '../../../controls/list/drag_handle.dart';
 import '../../../controls/text/overflow_text.dart';
 import '../../series_def_renderer.dart';
 import 'series_item_input.dart';
+import 'series_items_chart_settings.dart';
+import 'series_items_table_settings.dart';
 
 class SeriesItemsEdit extends StatelessWidget {
   final SeriesDef seriesDef;
@@ -25,10 +28,10 @@ class SeriesItemsEdit extends StatelessWidget {
     updateSettings() => updateStateCB();
 
     for (var i = 0; i < seriesItems.length; ++i) {
-      var attribute = seriesItems[i];
+      var seriesItem = seriesItems[i];
       var renderer = _SeriesItemRenderer(
-        key: Key("series_item_${attribute.siid}"),
-        seriesItem: SeriesItem(siid: attribute.siid, color: attribute.color, name: attribute.name, unit: attribute.unit),
+        key: Key("series_item_${seriesItem.siid}"),
+        seriesItem: seriesItem,
         index: i,
         updateSeriesItemCB: (SeriesItem updatedSeriesItem) {
           var idx = seriesItems.indexWhere((a) => a.siid == updatedSeriesItem.siid);
@@ -49,37 +52,93 @@ class SeriesItemsEdit extends StatelessWidget {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       buildDefaultDragHandles: false,
-      header: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          InfoBtn(
-            title: LocaleKeys.seriesEdit_seriesSettings_seriesItems_title.tr(),
-            content: LocaleKeys.seriesEdit_seriesSettings_seriesItems_info.tr(),
-          ),
-          Expanded(child: Container()),
-          IconButton(
-            iconSize: ThemeUtils.iconSizeScaled,
-            tooltip: LocaleKeys.seriesEdit_seriesSettings_seriesItems_actions_add_tooltip.tr(),
-            onPressed: () async {
-              SeriesItem? seriesItem = await SeriesItemInput.showInputDlg(context, newSeriesItemColor: seriesDef.color);
-              if (seriesItem != null) {
-                seriesItems.insert(0, seriesItem);
+      header: LayoutBuilder(builder: (context, constraints) {
+        var infoBtn = InfoBtn(
+          title: LocaleKeys.seriesEdit_seriesSettings_seriesItems_title.tr(),
+          content: LocaleKeys.seriesEdit_seriesSettings_seriesItems_info.tr(),
+        );
+
+        var headerActions = Row(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            if (listItems.isNotEmpty) ...[
+              IconButton(
+                iconSize: ThemeUtils.iconSizeScaled,
+                tooltip: LocaleKeys.seriesEdit_seriesSettings_seriesItems_actions_editChartSettings_tooltip.tr(),
+                onPressed: () async {
+                  var updatedSeriesItems = await SeriesItemsChartSettings.showInputDlg(context, seriesItems: seriesItems);
+                  if (updatedSeriesItems != null) {
+                    seriesItems.clear();
+                    seriesItems.addAll(updatedSeriesItems);
+                    updateSettings();
+                  }
+                },
+                icon: const Icon(Icons.line_axis_outlined),
+              ),
+              IconButton(
+                iconSize: ThemeUtils.iconSizeScaled,
+                tooltip: LocaleKeys.seriesEdit_seriesSettings_seriesItems_actions_editTableSettings_tooltip.tr(),
+                onPressed: () async {
+                  var updatedSeriesItems = await SeriesItemsTableSettings.showInputDlg(context, seriesItems: seriesItems);
+                  if (updatedSeriesItems != null) {
+                    seriesItems.clear();
+                    seriesItems.addAll(updatedSeriesItems);
+                    updateSettings();
+                  }
+                },
+                icon: const Icon(Icons.view_column_outlined),
+              ),
+              const SizedBox(height: 40, child: AppBarActionsDivider()),
+            ],
+            IconButton(
+              iconSize: ThemeUtils.iconSizeScaled,
+              tooltip: LocaleKeys.seriesEdit_seriesSettings_seriesItems_actions_add_tooltip.tr(),
+              onPressed: () async {
+                SeriesItem? seriesItem = await SeriesItemInput.showInputDlg(context, newSeriesItemColor: seriesDef.color);
+                if (seriesItem != null) {
+                  seriesItems.insert(0, seriesItem);
+                  updateSettings();
+                }
+              },
+              icon: const Icon(Icons.add),
+            ),
+            IconButton(
+              iconSize: ThemeUtils.iconSizeScaled,
+              tooltip: LocaleKeys.seriesEdit_seriesSettings_seriesItems_actions_deleteAll_tooltip.tr(),
+              onPressed: () async {
+                seriesItems.clear();
                 updateSettings();
-              }
-            },
-            icon: const Icon(Icons.add),
-          ),
-          IconButton(
-            iconSize: ThemeUtils.iconSizeScaled,
-            tooltip: LocaleKeys.seriesEdit_seriesSettings_seriesItems_actions_deleteAll_tooltip.tr(),
-            onPressed: () async {
-              seriesItems.clear();
-              updateSettings();
-            },
-            icon: const Icon(Icons.playlist_remove_outlined),
-          ),
-        ],
-      ),
+              },
+              icon: const Icon(Icons.playlist_remove_outlined),
+            ),
+          ],
+        );
+
+        if (constraints.maxWidth < 300) {
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            spacing: ThemeUtils.horizontalSpacingLarge,
+            children: [
+              infoBtn,
+              Expanded(
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: headerActions,
+                ),
+              ),
+            ],
+          );
+        }
+        return Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            infoBtn,
+            headerActions,
+          ],
+        );
+      }),
       proxyDecorator: (Widget child, int index, Animation<double> animation) {
         return Opacity(
           opacity: 0.6,

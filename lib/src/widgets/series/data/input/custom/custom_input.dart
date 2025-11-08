@@ -65,7 +65,7 @@ class SeriesItemsInput<V extends CustomValue> extends StatefulWidget {
 
 class _SeriesItemsInputState<V extends CustomValue> extends State<SeriesItemsInput<V>> {
   final _formKey = GlobalKey<FormState>();
-  final Map<String, SeriesItemData> _seriesItemsData = {};
+  final Map<String, _SeriesItemData> _seriesItemsData = {};
 
   // auto validate after first call of save
   bool _autoValidate = false;
@@ -85,7 +85,7 @@ class _SeriesItemsInputState<V extends CustomValue> extends State<SeriesItemsInp
     }
 
     for (var seriesItem in widget.seriesDef.seriesItems) {
-      var seriesItemData = SeriesItemData(seriesItem);
+      var seriesItemData = _SeriesItemData(seriesItem);
       seriesItemData.textEditingController.addListener(_validate);
       _seriesItemsData[seriesItem.siid] = seriesItemData;
     }
@@ -211,11 +211,11 @@ class _SeriesItemsInputState<V extends CustomValue> extends State<SeriesItemsInp
   }
 }
 
-class SeriesItemData {
+class _SeriesItemData {
   final SeriesItem seriesItem;
   late final TextEditingController textEditingController;
 
-  SeriesItemData(this.seriesItem) {
+  _SeriesItemData(this.seriesItem) {
     textEditingController = TextEditingController();
   }
 

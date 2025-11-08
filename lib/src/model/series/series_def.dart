@@ -194,11 +194,20 @@ class SeriesItem {
   final String? unit;
   final Color color;
 
+  // extended settings
+  final bool hideInTable;
+  final bool hideInChart;
+  final int? tableColumnWidth;
+
   SeriesItem({
     required this.siid,
     required this.name,
     required this.unit,
     required this.color,
+    // extended
+    required this.hideInTable,
+    required this.hideInChart,
+    this.tableColumnWidth,
   });
 
   String unitInBrackets({bool emptyStringIfNullOrEmpty = false, String prefix = ' '}) {
@@ -219,12 +228,24 @@ class SeriesItem {
         name: json['name'] as String,
         unit: json['unit'] as String?,
         color: ColorUtils.fromHex(json['color'] as String),
+        // extended
+        hideInTable: json['hideInTable'] as bool? ?? false,
+        hideInChart: json['hideInChart'] as bool? ?? false,
+        tableColumnWidth: json['tableColumnWidth'] as int?,
       );
 
-  Map<String, dynamic> toJson() => {
-        'siid': siid,
-        'name': name,
-        'unit': unit,
-        'color': ColorUtils.toHex(color),
-      };
+  Map<String, dynamic> toJson() {
+    Map<String, dynamic> json = {
+      'siid': siid,
+      'name': name,
+      'unit': unit,
+      'color': ColorUtils.toHex(color),
+    };
+    // extended
+    if (hideInTable) json['hideInTable'] = true;
+    if (hideInChart) json['hideInChart'] = true;
+    if (tableColumnWidth != null) json['tableColumnWidth'] = tableColumnWidth;
+
+    return json;
+  }
 }

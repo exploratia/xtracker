@@ -600,14 +600,39 @@
           },
           "edit": {
             "tooltip": "Parameter bearbeiten"
+          },
+          "editChartSettings": {
+            "tooltip": "Diagrammeinstellungen bearbeiten"
+          },
+          "editTableSettings": {
+            "tooltip": "Tabelleneinstellungen bearbeiten"
           }
         },
         "dlg": {
           "title": "Parameter"
         },
-        "info": "Parameter der Messreihe verwalten.\nJeder Parameter hat einen Namen, eine Einheit und eine Farbe.\n\nWird ein bereits genutzter Parameter gelöscht, werden dessen Werte nicht mehr angezeigt.",
+        "chartSettingsDlg": {
+          "title": "Diagrammeinstellungen",
+          "tooltip": {
+            "showChart": "Diagramm anzeigen",
+            "hideChart": "Diagramm ausblenden"
+          }
+        },
+        "tableSettingsDlg": {
+          "title": "Tabelleneinstellungen",
+          "label": {
+            "columnWidth": "Spaltenbreite"
+          },
+          "tooltip": {
+            "showColumn": "Spalte anzeigen",
+            "hideColumn": "Spalte ausblenden"
+          }
+        },
+        "info": "Parameter der Messreihe verwalten.\nJeder Parameter hat einen Namen, eine Einheit und eine Farbe.\nAußerdem lässt sich die Anzeige in Tabelle und Diagramm konfigurieren.\n\nWird ein genutzter Parameter gelöscht, werden dessen Werte nicht mehr angezeigt.",
         "validation": {
-          "emptyParameters": "Mindestens ein Parameter erforderlich"
+          "emptyParameters": "Mindestens ein Parameter erforderlich",
+          "emptyParametersChart": "Mindestens ein Parameter für die Diagrammansicht erforderlich",
+          "emptyParametersTable": "Mindestens ein Parameter für die Tabellenansicht erforderlich"
         }
       }
     }

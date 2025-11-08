@@ -92,7 +92,30 @@ class _SeriesItemInputState extends State<SeriesItemInput> {
     });
     _validate();
     if (!_isValid) return;
-    var val = SeriesItem(siid: _siid, color: _color, name: _nameController.text, unit: _unitController.text);
+
+    var source = widget.seriesItem;
+
+    // defaults for ext settings
+    var hideInTable = false;
+    var hideInChart = false;
+    int? tableColumnWidth;
+    // source available?
+    if (source != null) {
+      hideInTable = source.hideInTable;
+      hideInChart = source.hideInTable;
+      tableColumnWidth = source.tableColumnWidth;
+    }
+
+    SeriesItem val = SeriesItem(
+      siid: _siid,
+      color: _color,
+      name: _nameController.text,
+      unit: _unitController.text,
+      hideInTable: hideInTable,
+      hideInChart: hideInChart,
+      tableColumnWidth: tableColumnWidth,
+    );
+
     Navigator.pop(context, val);
   }
 
