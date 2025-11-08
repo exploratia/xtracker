@@ -10,6 +10,7 @@ class GlowingBorderContainer extends StatelessWidget {
   final Color glowColor;
   final double borderWidth;
   final double blurRadius;
+  final Color? backgroundColor;
 
   const GlowingBorderContainer({
     super.key,
@@ -19,6 +20,7 @@ class GlowingBorderContainer extends StatelessWidget {
     this.glowColor = Colors.blue,
     this.borderWidth = 2.0,
     this.blurRadius = 10.0,
+    this.backgroundColor,
   });
 
   @override
@@ -31,7 +33,7 @@ class GlowingBorderContainer extends StatelessWidget {
       margin: EdgeInsets.all(blurRadius),
       decoration: createGlowingBoxDecoration(
         glowColor,
-        backgroundColor: ThemeUtils.isDarkMode(themeData) ? themeData.scaffoldBackgroundColor : themeData.cardTheme.color,
+        backgroundColor: backgroundColor ?? (ThemeUtils.isDarkMode(themeData) ? themeData.scaffoldBackgroundColor : themeData.cardTheme.color),
         borderWidth: borderWidth,
         blurRadius: blurRadius,
       ),
