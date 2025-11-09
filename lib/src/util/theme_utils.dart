@@ -168,6 +168,11 @@ class ThemeUtils {
         ),
         errorStyle: TextStyle(color: errorColor, fontSize: fontSizeLabelM, fontWeight: FontWeight.w400),
       ),
+      listTileTheme: ListTileThemeData(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(borderRadius),
+        ),
+      ),
       navigationRailTheme: NavigationRailThemeData(
         backgroundColor: backgroundColor,
         unselectedLabelTextStyle: TextStyle(color: textColor),
