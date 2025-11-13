@@ -141,6 +141,34 @@
     }
   },
   "enum": {
+    "calculationInputType": {
+      "numeric": {
+        "displayName": "Numeric"
+      },
+      "seriesValue": {
+        "displayName": "Series value"
+      }
+    },
+    "operator": {
+      "add": {
+        "longNameInBrackets": " (Addition)"
+      },
+      "subtract": {
+        "longNameInBrackets": " (Subtraction)"
+      },
+      "multiply": {
+        "longNameInBrackets": " (Multiplication)"
+      },
+      "divide": {
+        "longNameInBrackets": " (Division)"
+      },
+      "min": {
+        "longNameInBrackets": " (Minimum)"
+      },
+      "max": {
+        "longNameInBrackets": " (Maximum)"
+      }
+    },
     "seriesType": {
       "bloodPressure": {
         "title": "Blood pressure",
@@ -596,7 +624,10 @@
             "tooltip": "Add calculated parameter"
           },
           "delete": {
-            "tooltip": "Delete parameter"
+            "tooltip": "Delete parameter",
+            "query": {
+              "deleteWithReferencingItems": "This parameter is used by calculated parameters – still delete it and all dependent ones?"
+            }
           },
           "deleteAll": {
             "tooltip": "Delete all parameters"
@@ -636,6 +667,60 @@
           "emptyAttributs": "At least one parameter required",
           "emptyParametersChart": "At least one parameter required for chart view",
           "emptyParametersTable": "At least one parameter required for table view"
+        },
+        "calculation": {
+          "action": {
+            "delete": {
+              "tooltip": "Delete"
+            },
+            "moveUp": {
+              "tooltip": "Move up"
+            },
+            "moveDown": {
+              "tooltip": "Move down"
+            },
+            "edit": {
+              "tooltip": "Edit"
+            }
+          },
+          "btn": {
+            "selectSeriesItem": {
+              "tooltip": "Select parameter"
+            },
+            "selectFirstSeriesItem": {
+              "tooltip": "Select start parameter"
+            },
+            "addCalculation": {
+              "tooltip": "Add calculation"
+            },
+            "selectCalculation": {
+              "tooltip": "Select calculation"
+            },
+            "deselectCalculation": {
+              "tooltip": "Deselect calculation"
+            }
+          },
+          "parameterSettingsDlg": {
+            "title": "Parameter settings"
+          },
+          "calculationItemSettingsDlg": {
+            "title": "Calculation",
+            "label": {
+              "operator": "Operator",
+              "inputType": "Value type",
+              "value": "Value"
+            }
+          },
+          "switch": {
+            "usePreviousValue": {
+              "label": "Previous value",
+              "tooltip": "Uses the previous value of the selected parameter"
+            }
+          },
+          "validation": {
+            "emptyParameter": "Parameter required",
+            "emptyCalculation": "Calculation required"
+          }
         }
       }
     }

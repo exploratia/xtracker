@@ -22,6 +22,17 @@ class CalculationContainer {
     return this;
   }
 
+  /// check recursive if the given series item id is contained
+  bool containsSeriesItem(String siid) {
+    if (sourceSiid == siid) return true;
+    for (var item in calculationItems) {
+      if (item is CalculationItemSeriesValue) {
+        if (item.calculationContainer.containsSeriesItem(siid)) return true;
+      }
+    }
+    return false;
+  }
+
   double calculate(Map<String, double> input, Map<String, double> previousInput) {
     // double? checkValue = input[sourceSiid];
     // if (checkValue == null) {

@@ -2,12 +2,15 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../../generated/locale_keys.g.dart';
+import '../../../../model/series/seriesItem/calculated/calculation_container.dart';
 import '../../../../model/series/seriesItem/series_item.dart';
 import '../../../../model/series/settings/daily_life/daily_life_attribute.dart';
 import '../../../../util/theme_utils.dart';
+import '../../../controls/form/validation_field.dart';
 import '../../../controls/layout/single_child_scroll_view_with_scrollbar.dart';
 import '../../../controls/select/color_picker.dart';
 import '../../../controls/text/overflow_text.dart';
+import 'calculation/series_item_calculation.dart';
 
 class SeriesItemInput extends StatefulWidget {
   const SeriesItemInput({
@@ -15,19 +18,30 @@ class SeriesItemInput extends StatefulWidget {
     this.seriesItem,
     this.newSeriesItemColor,
     required this.calculatedItem,
+    required this.existingSeriesItems,
   });
 
   final SeriesItem? seriesItem;
   final Color? newSeriesItemColor;
   final bool calculatedItem;
+  final List<SeriesItem> existingSeriesItems;
 
-  static Future<SeriesItem?> showInputDlg(BuildContext context, {SeriesItem? seriesItem, Color? newSeriesItemColor, bool? createCalculatedItem}) async {
+  ///
+  /// -[existingSeriesItems] readonly! just to get information
+  static Future<SeriesItem?> showInputDlg(
+    BuildContext context, {
+    SeriesItem? seriesItem,
+    Color? newSeriesItemColor,
+    bool? createCalculatedItem,
+    required List<SeriesItem> existingSeriesItems,
+  }) async {
     return await showDialog<SeriesItem>(
       context: context,
       builder: (_) => SeriesItemInput(
         seriesItem: seriesItem,
         newSeriesItemColor: newSeriesItemColor,
         calculatedItem: seriesItem != null ? seriesItem.calculatedItem : (createCalculatedItem ?? false),
+        existingSeriesItems: existingSeriesItems,
       ),
     );
   }
@@ -48,11 +62,16 @@ class _SeriesItemInputState extends State<SeriesItemInput> {
   late final String _siid;
   late Color _color;
 
+  late final bool _calculatedItem;
+
+  CalculationContainer? _calculationContainer;
+
   @override
   initState() {
     var source = widget.seriesItem;
     _siid = source?.siid ?? DailyLifeAttribute.generateUniqueAttributeId();
     _color = source?.color ?? widget.newSeriesItemColor ?? ThemeUtils.primary;
+    _calculatedItem = widget.calculatedItem;
 
     _nameController.addListener(_validate);
     _unitController.addListener(_validate);
@@ -61,6 +80,8 @@ class _SeriesItemInputState extends State<SeriesItemInput> {
       _autoValidate = true;
       _nameController.text = source.name.toString();
       _unitController.text = source.unit.toString();
+
+      if (_calculatedItem) _calculationContainer = source.calculationContainer;
     }
 
     super.initState();
@@ -79,9 +100,18 @@ class _SeriesItemInputState extends State<SeriesItemInput> {
     });
   }
 
+  void _setCalculationContainer(CalculationContainer value) {
+    setState(() {
+      _calculationContainer = value;
+    });
+  }
+
   void _validate() {
     if (!_autoValidate) return;
     bool valid = _formKey.currentState?.validate() ?? false;
+
+    if (valid && _calculatedItem) valid = _calculationContainer != null;
+
     if (valid != _isValid) {
       setState(() {
         _isValid = valid;
@@ -118,6 +148,7 @@ class _SeriesItemInputState extends State<SeriesItemInput> {
       hideInChart: hideInChart,
       tableColumnWidth: tableColumnWidth,
       calculatedItem: widget.calculatedItem,
+      calculationContainer: widget.calculatedItem ? _calculationContainer : null,
     );
 
     Navigator.pop(context, val);
@@ -127,12 +158,21 @@ class _SeriesItemInputState extends State<SeriesItemInput> {
   Widget build(BuildContext context) {
     var iconSize = ThemeUtils.iconSizeScaled;
 
+    SeriesItemCalculation? calculationInput;
+    if (_calculatedItem) {
+      calculationInput = SeriesItemCalculation(
+        calculationContainer: _calculationContainer,
+        availableSeriesItems: widget.existingSeriesItems.where((i) => !i.calculatedItem).toList(),
+        setCalculationContainer: _setCalculationContainer,
+      );
+    }
+
     var edit = Form(
       key: _formKey,
       autovalidateMode: _autoValidate ? AutovalidateMode.always : AutovalidateMode.disabled,
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         spacing: ThemeUtils.verticalSpacing,
         children: [
           TextFormField(
@@ -165,17 +205,27 @@ class _SeriesItemInputState extends State<SeriesItemInput> {
               return null;
             },
           ),
-          Row(
-            mainAxisSize: MainAxisSize.min,
-            spacing: ThemeUtils.horizontalSpacing,
-            children: [
-              Text(LocaleKeys.seriesEdit_common_label_seriesColor.tr()),
-              ColorPicker(
-                color: _color,
-                colorSelected: _setColor,
-              ),
-            ],
+          Center(
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              spacing: ThemeUtils.horizontalSpacing,
+              children: [
+                Text(LocaleKeys.seriesEdit_common_label_seriesColor.tr()),
+                ColorPicker(
+                  color: _color,
+                  colorSelected: _setColor,
+                ),
+              ],
+            ),
           ),
+          if (calculationInput != null) ...[
+            const Divider(),
+            calculationInput,
+            ValidationField(
+              validatorCondition: () => _calculationContainer != null,
+              errorMessage: LocaleKeys.seriesEdit_seriesSettings_seriesItems_calculation_validation_emptyCalculation.tr(),
+            ),
+          ],
         ],
       ),
     );
@@ -189,6 +239,7 @@ class _SeriesItemInputState extends State<SeriesItemInput> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             widget.seriesItem == null ? Icon(Icons.add_outlined, size: iconSize) : Icon(Icons.edit_outlined, size: iconSize),
+            if (_calculatedItem) Icon(Icons.link_outlined, size: iconSize),
             OverflowText(LocaleKeys.seriesEdit_seriesSettings_seriesItems_dlg_title.tr()),
           ],
         ),

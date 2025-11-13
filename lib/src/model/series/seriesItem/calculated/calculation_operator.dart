@@ -1,5 +1,9 @@
 import 'dart:math' as math;
 
+import 'package:easy_localization/easy_localization.dart';
+
+import '../../../../../generated/locale_keys.g.dart';
+
 enum CalculationOperator {
   add('+'),
   subtract('-'),
@@ -12,6 +16,17 @@ enum CalculationOperator {
   const CalculationOperator(this.displayName);
 
   final String displayName;
+
+  static String toBracketDisplayString(CalculationOperator inputType) {
+    return switch (inputType) {
+      CalculationOperator.add => LocaleKeys.enum_operator_add_longNameInBrackets.tr(),
+      CalculationOperator.subtract => LocaleKeys.enum_operator_subtract_longNameInBrackets.tr(),
+      CalculationOperator.multiply => LocaleKeys.enum_operator_multiply_longNameInBrackets.tr(),
+      CalculationOperator.divide => LocaleKeys.enum_operator_divide_longNameInBrackets.tr(),
+      CalculationOperator.min => LocaleKeys.enum_operator_min_longNameInBrackets.tr(),
+      CalculationOperator.max => LocaleKeys.enum_operator_max_longNameInBrackets.tr(),
+    };
+  }
 
   factory CalculationOperator.fromDisplayName(String displayName) => CalculationOperator.values.firstWhere((element) => element.displayName == displayName);
 

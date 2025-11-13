@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../../../generated/locale_keys.g.dart';
 import '../../../../model/series/seriesItem/series_item.dart';
 import '../../../../model/series/series_def.dart';
+import '../../../../util/dialogs.dart';
 import '../../../../util/media_query_utils.dart';
 import '../../../../util/theme_utils.dart';
 import '../../../controls/appbar/app_bar_actions_divider.dart';
@@ -34,17 +35,36 @@ class SeriesItemsEdit extends StatelessWidget {
       var renderer = _SeriesItemRenderer(
         key: Key("series_item_${seriesItem.siid}"),
         seriesItem: seriesItem,
+        seriesItems: seriesItems,
         index: i,
-        updateSeriesItemCB: (SeriesItem updatedSeriesItem) {
-          var idx = seriesItems.indexWhere((a) => a.siid == updatedSeriesItem.siid);
-          if (idx >= 0) {
-            seriesItems.replaceRange(idx, idx + 1, [updatedSeriesItem]);
-            updateSettings();
+        editSeriesItemCB: () async {
+          SeriesItem? updatedSeriesItem = await SeriesItemInput.showInputDlg(context, seriesItem: seriesItem.clone(), existingSeriesItems: [...seriesItems]);
+          if (updatedSeriesItem != null) {
+            var idx = seriesItems.indexWhere((a) => a.siid == updatedSeriesItem.siid);
+            if (idx >= 0) {
+              seriesItems.replaceRange(idx, idx + 1, [updatedSeriesItem]);
+              updateSettings();
+            }
           }
         },
-        deleteSeriesItemCB: (SeriesItem deletedSeriesItem) {
-          seriesItems.removeWhere((a) => a.siid == deletedSeriesItem.siid);
-          updateSettings();
+        deleteSeriesItemCB: () async {
+          List<String> referencingCalculatedSeriesItems = [];
+          for (var checkItem in seriesItems) {
+            if (checkItem.references(seriesItem.siid)) {
+              referencingCalculatedSeriesItems.add(checkItem.siid);
+            }
+          }
+          if (referencingCalculatedSeriesItems.isEmpty) {
+            seriesItems.removeWhere((si) => si.siid == seriesItem.siid);
+            updateSettings();
+          } else {
+            bool? deleteWithReferences =
+                await Dialogs.simpleYesNoDialog(LocaleKeys.seriesEdit_seriesSettings_seriesItems_actions_delete_query_deleteWithReferencingItems, context);
+            if (deleteWithReferences == true) {
+              seriesItems.removeWhere((si) => si.siid == seriesItem.siid || referencingCalculatedSeriesItems.contains(si.siid));
+              updateSettings();
+            }
+          }
         },
       );
       listItems.add(renderer);
@@ -97,7 +117,8 @@ class SeriesItemsEdit extends StatelessWidget {
               iconSize: ThemeUtils.iconSizeScaled,
               tooltip: LocaleKeys.seriesEdit_seriesSettings_seriesItems_actions_add_tooltip.tr(),
               onPressed: () async {
-                SeriesItem? seriesItem = await SeriesItemInput.showInputDlg(context, newSeriesItemColor: seriesDef.color);
+                SeriesItem? seriesItem =
+                    await SeriesItemInput.showInputDlg(context, newSeriesItemColor: seriesDef.color, existingSeriesItems: [...seriesItems]);
                 if (seriesItem != null) {
                   seriesItems.insert(0, seriesItem);
                   updateSettings();
@@ -110,7 +131,8 @@ class SeriesItemsEdit extends StatelessWidget {
                 iconSize: ThemeUtils.iconSizeScaled,
                 tooltip: LocaleKeys.seriesEdit_seriesSettings_seriesItems_actions_addCalculated_tooltip.tr(),
                 onPressed: () async {
-                  SeriesItem? seriesItem = await SeriesItemInput.showInputDlg(context, newSeriesItemColor: seriesDef.color, createCalculatedItem: true);
+                  SeriesItem? seriesItem = await SeriesItemInput.showInputDlg(context,
+                      newSeriesItemColor: seriesDef.color, createCalculatedItem: true, existingSeriesItems: [...seriesItems]);
                   if (seriesItem != null) {
                     seriesItems.insert(0, seriesItem);
                     updateSettings();
@@ -200,21 +222,24 @@ class SeriesItemsEdit extends StatelessWidget {
 
 class _SeriesItemRenderer extends StatelessWidget {
   final SeriesItem seriesItem;
+  final List<SeriesItem> seriesItems;
   final int index;
-  final void Function(SeriesItem updatedSeriesItem) updateSeriesItemCB;
-  final void Function(SeriesItem deletedSeriesItem) deleteSeriesItemCB;
+  final void Function() editSeriesItemCB;
+  final void Function() deleteSeriesItemCB;
 
+  /// -[seriesItems] readonly!
   const _SeriesItemRenderer({
     super.key,
     required this.seriesItem,
     required this.index,
-    required this.updateSeriesItemCB,
+    required this.editSeriesItemCB,
     required this.deleteSeriesItemCB,
+    required this.seriesItems,
   });
 
   @override
   Widget build(BuildContext context) {
-    return GlowingBorderContainer(
+    Widget widget = GlowingBorderContainer(
       glowColor: seriesItem.color,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -232,20 +257,13 @@ class _SeriesItemRenderer extends StatelessWidget {
                 IconButton(
                   iconSize: ThemeUtils.iconSizeScaled,
                   tooltip: LocaleKeys.seriesEdit_seriesSettings_seriesItems_actions_edit_tooltip.tr(),
-                  onPressed: () async {
-                    SeriesItem? updatedSeriesItem = await SeriesItemInput.showInputDlg(context, seriesItem: seriesItem.clone());
-                    if (updatedSeriesItem != null) {
-                      updateSeriesItemCB(updatedSeriesItem);
-                    }
-                  },
+                  onPressed: editSeriesItemCB,
                   icon: const Icon(Icons.edit_outlined),
                 ),
                 IconButton(
                   iconSize: ThemeUtils.iconSizeScaled,
                   tooltip: LocaleKeys.seriesEdit_seriesSettings_seriesItems_actions_delete_tooltip.tr(),
-                  onPressed: () {
-                    deleteSeriesItemCB(seriesItem);
-                  },
+                  onPressed: deleteSeriesItemCB,
                   icon: const Icon(Icons.close_outlined),
                 ),
               ],
@@ -260,5 +278,23 @@ class _SeriesItemRenderer extends StatelessWidget {
         ],
       ),
     );
+
+    if (seriesItem.calculatedItem) {
+      widget = Row(
+        spacing: ThemeUtils.horizontalSpacingSmall,
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.link_outlined,
+            size: ThemeUtils.iconSizeScaled,
+          ),
+          Expanded(child: widget),
+        ],
+      );
+    }
+
+    return widget;
   }
 }

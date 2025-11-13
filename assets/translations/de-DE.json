@@ -141,6 +141,34 @@
     }
   },
   "enum": {
+    "calculationInputType": {
+      "numeric": {
+        "displayName": "Numerisch"
+      },
+      "seriesValue": {
+        "displayName": "Messwert"
+      }
+    },
+    "operator": {
+      "add": {
+        "longNameInBrackets": " (Addition)"
+      },
+      "subtract": {
+        "longNameInBrackets": " (Subtraktion)"
+      },
+      "multiply": {
+        "longNameInBrackets": " (Multiplikation)"
+      },
+      "divide": {
+        "longNameInBrackets": " (Division)"
+      },
+      "min": {
+        "longNameInBrackets": " (Minimum)"
+      },
+      "max": {
+        "longNameInBrackets": " (Maximum)"
+      }
+    },
     "seriesType": {
       "bloodPressure": {
         "title": "Blutdruck",
@@ -596,7 +624,10 @@
             "tooltip": "Berechneten Parameter hinzufügen"
           },
           "delete": {
-            "tooltip": "Parameter löschen"
+            "tooltip": "Parameter löschen",
+            "query": {
+              "deleteWithReferencingItems": "Dieser Parameter wird von berechneten Parametern verwendet – trotzdem diesen und alle abhängigen löschen?"
+            }
           },
           "deleteAll": {
             "tooltip": "Alle Parameter löschen"
@@ -636,6 +667,60 @@
           "emptyParameters": "Mindestens ein Parameter erforderlich",
           "emptyParametersChart": "Mindestens ein Parameter für die Diagrammansicht erforderlich",
           "emptyParametersTable": "Mindestens ein Parameter für die Tabellenansicht erforderlich"
+        },
+        "calculation": {
+          "action": {
+            "delete": {
+              "tooltip": "Löschen"
+            },
+            "moveUp": {
+              "tooltip": "Nach oben verschieben"
+            },
+            "moveDown": {
+              "tooltip": "Nach unten verschieben"
+            },
+            "edit": {
+              "tooltip": "Bearbeiten"
+            }
+          },
+          "btn": {
+            "selectSeriesItem": {
+              "tooltip": "Parameter auswählen"
+            },
+            "selectFirstSeriesItem": {
+              "tooltip": "Startparameter auswählen"
+            },
+            "addCalculation": {
+              "tooltip": "Berechnung hinzufügen"
+            },
+            "selectCalculation": {
+              "tooltip": "Berechnung auswählen"
+            },
+            "deselectCalculation": {
+              "tooltip": "Berechnung abwählen"
+            }
+          },
+          "parameterSettingsDlg": {
+            "title": "Parameter Einstellungen"
+          },
+          "calculationItemSettingsDlg": {
+            "title": "Berechnung",
+            "label": {
+              "operator": "Operator",
+              "inputType": "Werttyp",
+              "value": "Wert"
+            }
+          },
+          "switch": {
+            "usePreviousValue": {
+              "label": "Vorherigen Wert",
+              "tooltip": "Verwendet den vorherigen Wert des ausgewählten Parameters"
+            }
+          },
+          "validation": {
+            "emptyParameter": "Parameter erforderlich",
+            "emptyCalculation": "Berechnung erforderlich"
+          }
         }
       }
     }
