@@ -16,22 +16,21 @@ class SeriesItem {
   final bool hideInTable;
   final bool hideInChart;
   final int? tableColumnWidth;
-
-  final bool calculatedItem;
   final CalculationContainer? calculationContainer;
 
-  SeriesItem({
-    required this.siid,
-    required this.name,
-    required this.unit,
-    required this.color,
+  SeriesItem(
+    this.siid,
+    this.name,
+    this.unit,
+    this.color,
     // extended
-    required this.hideInTable,
-    required this.hideInChart,
+    this.hideInTable,
+    this.hideInChart,
     this.tableColumnWidth,
-    required this.calculatedItem,
     this.calculationContainer,
-  });
+  );
+
+  bool get isCalculated => calculationContainer != null;
 
   String unitInBrackets({bool emptyStringIfNullOrEmpty = false, String prefix = ' '}) {
     if (unit == null || unit != null && unit!.isEmpty) {
@@ -46,9 +45,19 @@ class SeriesItem {
     return SeriesItem.fromJson(jsonDecode(jsonEncode(toJson())));
   }
 
+  /// copy with given value for hideInTable
+  SeriesItem withHideInTable(bool value) {
+    return SeriesItem(siid, name, unit, color, value, hideInChart, tableColumnWidth, calculationContainer);
+  }
+
+  /// copy with given value for hideInTable
+  SeriesItem withHideInChart(bool value) {
+    return SeriesItem(siid, name, unit, color, hideInTable, value, tableColumnWidth, calculationContainer);
+  }
+
   /// check if this series item is a calculated one and references the given siid.
   bool references(String siid) {
-    if (!calculatedItem || calculationContainer == null) return false;
+    if (calculationContainer == null) return false;
     if (calculationContainer!.sourceSiid == siid) return true;
     List<CalculationItemSeriesValue> worklist = [...calculationContainer!.calculationItems.whereType<CalculationItemSeriesValue>()];
     while (worklist.isNotEmpty) {
@@ -60,18 +69,16 @@ class SeriesItem {
   }
 
   factory SeriesItem.fromJson(Map<String, dynamic> json) {
-    var calculatedItem = json['calculatedItem'] as bool? ?? false;
     return SeriesItem(
-      siid: json['siid'] as String,
-      name: json['name'] as String,
-      unit: json['unit'] as String?,
-      color: ColorUtils.fromHex(json['color'] as String),
+      json['siid'] as String,
+      json['name'] as String,
+      json['unit'] as String?,
+      ColorUtils.fromHex(json['color'] as String),
       // extended
-      hideInTable: json['hideInTable'] as bool? ?? false,
-      hideInChart: json['hideInChart'] as bool? ?? false,
-      tableColumnWidth: json['tableColumnWidth'] as int?,
-      calculatedItem: calculatedItem,
-      calculationContainer: calculatedItem ? CalculationContainer.fromJson(json['seriesValue'] as Map<String, dynamic>) : null,
+      json['hideInTable'] as bool? ?? false,
+      json['hideInChart'] as bool? ?? false,
+      json['tableColumnWidth'] as int?,
+      json.containsKey("calculation") ? CalculationContainer.fromJson(json['calculation'] as Map<String, dynamic>) : null,
     );
   }
 
@@ -86,8 +93,7 @@ class SeriesItem {
     if (hideInTable) json['hideInTable'] = true;
     if (hideInChart) json['hideInChart'] = true;
     if (tableColumnWidth != null) json['tableColumnWidth'] = tableColumnWidth;
-    if (calculatedItem) json['calculatedItem'] = true;
-    if (calculatedItem && calculationContainer != null) json['seriesValue'] = calculationContainer!.toJson();
+    if (calculationContainer != null) json['calculation'] = calculationContainer!.toJson();
 
     return json;
   }

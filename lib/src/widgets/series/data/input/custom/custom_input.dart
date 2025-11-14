@@ -86,7 +86,8 @@ class _SeriesItemsInputState<V extends CustomValue> extends State<SeriesItemsInp
     }
 
     for (var seriesItem in widget.seriesDef.seriesItems) {
-      if (seriesItem.calculatedItem) continue;
+      // skip calculated seriesItems for input
+      if (seriesItem.isCalculated) continue;
       var seriesItemData = _SeriesItemData(seriesItem);
       seriesItemData.textEditingController.addListener(_validate);
       _seriesItemsData[seriesItem.siid] = seriesItemData;
@@ -166,7 +167,7 @@ class _SeriesItemsInputState<V extends CustomValue> extends State<SeriesItemsInp
   @override
   Widget build(BuildContext context) {
     List<Widget> formChildren = [
-      ...widget.seriesDef.seriesItems.where((si) => !si.calculatedItem).map(
+      ...widget.seriesDef.seriesItems.where((si) => !si.isCalculated).map(
         (seriesItem) {
           var seriesItemData = _seriesItemsData[seriesItem.siid]!;
           return TextFormField(

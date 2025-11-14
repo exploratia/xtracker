@@ -58,23 +58,7 @@ class _SeriesItemsChartSettingsState extends State<SeriesItemsChartSettings> {
   void _saveHandler() {
     _validate();
     if (!_isValid) return;
-
-    var result = _seriesItemsData.map(
-      (e) {
-        var seriesItem = e.seriesItem;
-        return SeriesItem(
-          siid: seriesItem.siid,
-          name: seriesItem.name,
-          unit: seriesItem.unit,
-          color: seriesItem.color,
-          hideInTable: seriesItem.hideInTable,
-          hideInChart: e.hide,
-          tableColumnWidth: seriesItem.tableColumnWidth,
-          calculatedItem: seriesItem.calculatedItem,
-        );
-      },
-    ).toList();
-
+    var result = _seriesItemsData.map((e) => e.seriesItem.withHideInChart(e.hide)).toList();
     Navigator.pop<List<SeriesItem>>(context, result);
   }
 

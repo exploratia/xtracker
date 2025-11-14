@@ -71,23 +71,7 @@ class _SeriesItemsTableSettingsState extends State<SeriesItemsTableSettings> {
   void _saveHandler() {
     _validate();
     if (!_isValid) return;
-
-    var result = _seriesItemsData.map(
-      (e) {
-        var seriesItem = e.seriesItem;
-        return SeriesItem(
-          siid: seriesItem.siid,
-          name: seriesItem.name,
-          unit: seriesItem.unit,
-          color: seriesItem.color,
-          hideInTable: e.hide,
-          hideInChart: seriesItem.hideInChart,
-          tableColumnWidth: int.tryParse(e.textEditingController.text),
-          calculatedItem: seriesItem.calculatedItem,
-        );
-      },
-    ).toList();
-
+    var result = _seriesItemsData.map((e) => e.seriesItem.withHideInTable(e.hide)).toList();
     Navigator.pop<List<SeriesItem>>(context, result);
   }
 

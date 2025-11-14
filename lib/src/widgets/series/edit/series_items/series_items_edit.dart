@@ -279,7 +279,7 @@ class _SeriesItemRenderer extends StatelessWidget {
       ),
     );
 
-    if (seriesItem.calculatedItem) {
+    if (seriesItem.isCalculated) {
       widget = Row(
         spacing: ThemeUtils.horizontalSpacingSmall,
         mainAxisSize: MainAxisSize.max,

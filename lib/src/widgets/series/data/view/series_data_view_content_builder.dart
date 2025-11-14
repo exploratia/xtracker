@@ -98,7 +98,7 @@ class SeriesDataViewContentBuilder extends StatelessWidget {
         var seriesData = seriesDataProvider.customData(seriesDef);
         List<CustomValue> values = seriesData?.data ?? [];
         // calc dependent seriesItems
-        var calcSeriesItems = seriesViewMetaData.seriesDef.seriesItems.where((si) => si.calculatedItem);
+        var calcSeriesItems = seriesViewMetaData.seriesDef.seriesItems.where((si) => si.isCalculated);
         if (calcSeriesItems.isNotEmpty) {
           values = _calcValues(calcSeriesItems, values, (uuid, dateTime, valMap) => CustomValue(uuid, dateTime, valMap));
         }
@@ -117,7 +117,7 @@ class SeriesDataViewContentBuilder extends StatelessWidget {
         var seriesData = seriesDataProvider.monthlyData(seriesDef);
         List<MonthlyValue> values = seriesData?.data ?? [];
         // calc dependent seriesItems
-        var calcSeriesItems = seriesViewMetaData.seriesDef.seriesItems.where((si) => si.calculatedItem);
+        var calcSeriesItems = seriesViewMetaData.seriesDef.seriesItems.where((si) => si.isCalculated);
         if (calcSeriesItems.isNotEmpty) {
           values = _calcValues(calcSeriesItems, values, (uuid, dateTime, valMap) => MonthlyValue(uuid, dateTime, valMap));
         }
