@@ -9,6 +9,7 @@ import '../../../../model/series/data/habit/habit_value.dart';
 import '../../../../model/series/data/monthly/monthly_value.dart';
 import '../../../../model/series/data/series_data_filter.dart';
 import '../../../../model/series/data/series_data_value.dart';
+import '../../../../model/series/seriesItem/series_item.dart';
 import '../../../../model/series/series_def.dart';
 import '../../../../model/series/series_type.dart';
 import '../../../../model/series/series_view_meta_data.dart';
@@ -96,6 +97,12 @@ class SeriesDataViewContentBuilder extends StatelessWidget {
       case SeriesType.custom:
         var seriesData = seriesDataProvider.customData(seriesDef);
         List<CustomValue> values = seriesData?.data ?? [];
+        // calc dependent seriesItems
+        var calcSeriesItems = seriesViewMetaData.seriesDef.seriesItems.where((si) => si.calculatedItem);
+        if (calcSeriesItems.isNotEmpty) {
+          values = _calcValues(calcSeriesItems, values, (uuid, dateTime, valMap) => CustomValue(uuid, dateTime, valMap));
+        }
+
         return builder(
           () => SeriesDataCustomView(
             seriesViewMetaData: seriesViewMetaData,
@@ -109,6 +116,12 @@ class SeriesDataViewContentBuilder extends StatelessWidget {
       case SeriesType.monthly:
         var seriesData = seriesDataProvider.monthlyData(seriesDef);
         List<MonthlyValue> values = seriesData?.data ?? [];
+        // calc dependent seriesItems
+        var calcSeriesItems = seriesViewMetaData.seriesDef.seriesItems.where((si) => si.calculatedItem);
+        if (calcSeriesItems.isNotEmpty) {
+          values = _calcValues(calcSeriesItems, values, (uuid, dateTime, valMap) => MonthlyValue(uuid, dateTime, valMap));
+        }
+
         return builder(
           () => SeriesDataMonthlyView(
             seriesViewMetaData: seriesViewMetaData,
@@ -119,5 +132,20 @@ class SeriesDataViewContentBuilder extends StatelessWidget {
           values,
         );
     }
+  }
+
+  static List<V> _calcValues<V extends CustomValue>(
+      Iterable<SeriesItem> calcSeriesItems, List<V> values, V Function(String uuid, DateTime dateTime, Map<String, double> valMap) valBuilder) {
+    List<V> valuesCalculated = [];
+    V prevValue = valBuilder("prev", DateTime(0), {});
+    for (var value in values) {
+      Map<String, double> valMap = {...value.values};
+      for (var si in calcSeriesItems) {
+        valMap[si.siid] = si.calculationContainer!.calculate(value.values, prevValue.values);
+      }
+      valuesCalculated.add(valBuilder(value.uuid, value.dateTime, valMap));
+      prevValue = value;
+    }
+    return valuesCalculated;
   }
 }
