@@ -65,7 +65,7 @@ class SeriesDef {
   /// return FixColumnProfile from display settings or default for the series type (or null if the series has no fix column profile)
   ColumnProfile? get determineTableColumnProfile {
     // custom or monthly?
-    if (seriesItems.isNotEmpty) {
+    if (seriesItems.isNotEmpty || seriesType == SeriesType.custom || seriesType == SeriesType.monthly) {
       return ColumnProfile.fromSeriesItems(this);
     }
     return displaySettingsReadonly().getTableViewColumnProfile(seriesType.defaultFixTableColumnProfileType);
