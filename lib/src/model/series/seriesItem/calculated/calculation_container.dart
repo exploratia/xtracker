@@ -42,7 +42,6 @@ class CalculationContainer {
     // double val = checkValue;
     double val = (usePreviousInput ? previousInput : input)[sourceSiid] ?? double.nan;
     for (var item in calculationItems) {
-      if (val.isNaN) return val;
       val = item.calculate(val, input, previousInput);
     }
     return val;

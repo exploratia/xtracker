@@ -12,6 +12,7 @@ enum CalculationOperator {
   divide(':'),
   min('min'),
   max('max'),
+  nan('NaN'),
   ;
 
   const CalculationOperator(this.displayName);
@@ -26,6 +27,7 @@ enum CalculationOperator {
       CalculationOperator.divide => LocaleKeys.enum_operator_divide_longNameInBrackets.tr(),
       CalculationOperator.min => LocaleKeys.enum_operator_min_longNameInBrackets.tr(),
       CalculationOperator.max => LocaleKeys.enum_operator_max_longNameInBrackets.tr(),
+      CalculationOperator.nan => LocaleKeys.enum_operator_nan_longNameInBrackets.tr(),
     };
   }
 
@@ -51,6 +53,8 @@ enum CalculationOperator {
         return math.min(a, b);
       case max:
         return math.max(a, b);
+      case nan:
+        return a.isNaN ? b : a;
     }
   }
 }

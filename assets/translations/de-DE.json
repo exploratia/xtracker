@@ -167,6 +167,9 @@
       },
       "max": {
         "longNameInBrackets": " (Maximum)"
+      },
+      "nan": {
+        "longNameInBrackets": " (Not a Number)"
       }
     },
     "seriesType": {
