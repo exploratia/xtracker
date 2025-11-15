@@ -28,7 +28,7 @@ enum FixColumnProfileType {
     };
   }
 
-  static FixColumnProfileType? resolveByTypeName(String? typeName) {
+  static FixColumnProfileType? byTypeName(String? typeName) {
     if (typeName == null) return null;
     var columnProfileType = FixColumnProfileType.values.where((element) => element.typeName == typeName).firstOrNull;
     if (columnProfileType == null) SimpleLogging.i("No fix column profile type found for '$typeName'.");

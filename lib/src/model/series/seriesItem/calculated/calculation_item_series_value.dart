@@ -30,7 +30,7 @@ class CalculationItemSeriesValue extends CalculationItem {
     CalculationOperator operator;
     var jInputType = json.at('operator');
     try {
-      operator = CalculationOperator.fromDisplayName(jInputType.getString());
+      operator = CalculationOperator.byDisplayName(jInputType.getString());
     } catch (err) {
       throw JsonParseException('Invalid value at ${jInputType.pathString} - $err');
     }

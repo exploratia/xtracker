@@ -29,7 +29,7 @@ enum CalculationOperator {
     };
   }
 
-  factory CalculationOperator.fromDisplayName(String displayName) => CalculationOperator.values.firstWhere(
+  factory CalculationOperator.byDisplayName(String displayName) => CalculationOperator.values.firstWhere(
         (element) => element.displayName == displayName,
         orElse: () => throw Ex("'$displayName' is no valid calculation operator!"),
       );

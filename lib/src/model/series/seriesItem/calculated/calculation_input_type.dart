@@ -8,7 +8,7 @@ enum CalculationInputType {
   seriesValue,
   ;
 
-  factory CalculationInputType.fromName(String name) => CalculationInputType.values.firstWhere(
+  factory CalculationInputType.byName(String name) => CalculationInputType.values.firstWhere(
         (element) => element.name == name,
         orElse: () => throw Ex("'$name' is no valid calculation input type!"),
       );

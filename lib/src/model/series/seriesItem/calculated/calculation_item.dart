@@ -22,7 +22,7 @@ abstract class CalculationItem {
   static CalculationInputType inputTypeFromJson(JsonReader json) {
     var jInputType = json.at('inputType');
     try {
-      return CalculationInputType.fromName(jInputType.getString());
+      return CalculationInputType.byName(jInputType.getString());
     } catch (err) {
       throw JsonParseException('Invalid value at ${jInputType.pathString} - $err');
     }

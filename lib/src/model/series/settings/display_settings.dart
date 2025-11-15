@@ -30,7 +30,7 @@ class DisplaySettings extends SeriesSettings {
   }
 
   FixColumnProfile? getTableViewColumnProfile(FixColumnProfileType? defaultValue) {
-    return FixColumnProfile.resolveByType(FixColumnProfileType.resolveByTypeName(optString(_tableViewColumnProfile, defaultValue: defaultValue?.typeName)));
+    return FixColumnProfile.resolveByType(FixColumnProfileType.byTypeName(optString(_tableViewColumnProfile, defaultValue: defaultValue?.typeName)));
   }
 
   set tableViewColumnProfile(FixColumnProfileType? value) {
@@ -38,10 +38,10 @@ class DisplaySettings extends SeriesSettings {
   }
 
   ViewType getInitialViewType(ViewType defaultValue) {
-    return ViewType.resolveByTypeName(optString(_initialViewType, defaultValue: defaultValue.typeName));
+    return ViewType.byName(optString(_initialViewType, defaultValue: defaultValue.name));
   }
 
   set initialViewType(ViewType? value) {
-    set(_initialViewType, value?.typeName);
+    set(_initialViewType, value?.name);
   }
 }
