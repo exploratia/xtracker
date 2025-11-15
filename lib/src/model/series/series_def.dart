@@ -203,6 +203,10 @@ class SeriesDef {
   void validate() {
     // validate references
     if (seriesType == SeriesType.custom || seriesType == SeriesType.monthly) {
+      if (seriesItems.isEmpty) throw Ex("Invalid (empty) series items.");
+      if (seriesItems.where((element) => !element.hideInTable).isEmpty) throw Ex("At least one series item must be active for table view.");
+      if (seriesItems.where((element) => !element.hideInChart).isEmpty) throw Ex("At least one series item must be active for chart view.");
+
       var validSiids = seriesItems.where((si) => !si.isCalculated).map((si) => si.siid).toSet();
       for (var seriesItem in seriesItems) {
         if (seriesItem.isCalculated) {
