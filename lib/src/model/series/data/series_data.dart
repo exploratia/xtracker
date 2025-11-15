@@ -192,7 +192,7 @@ class SeriesData<T extends SeriesDataValue> {
             await seriesDataProvider.updateValue(seriesDef, inputResult.seriesDataValue, seriesCurrentValueProvider); // update
           }
         } catch (ex) {
-          SimpleLogging.w('Failed to store ${seriesDef.seriesType.typeName} value.', error: ex);
+          SimpleLogging.w('Failed to store ${seriesDef.seriesType.name} value.', error: ex);
           if (context.mounted) {
             Dialogs.showSnackBarWarning(LocaleKeys.commons_snackbar_saveFailed.tr(), context);
           }
@@ -201,7 +201,7 @@ class SeriesData<T extends SeriesDataValue> {
         try {
           await seriesDataProvider.deleteValue(seriesDef, inputResult.seriesDataValue, seriesCurrentValueProvider);
         } catch (err) {
-          SimpleLogging.w('Failed to delete ${seriesDef.seriesType.typeName} value.', error: err);
+          SimpleLogging.w('Failed to delete ${seriesDef.seriesType.name} value.', error: err);
           if (context.mounted) {
             Dialogs.showSnackBarWarning(LocaleKeys.commons_snackbar_deleteFailed.tr(), context);
           }

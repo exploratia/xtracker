@@ -354,7 +354,7 @@ class SeriesDataProvider with ChangeNotifier {
 
   void _checkOnSeriesData(SeriesData? seriesData, SeriesDef seriesDef) {
     if (seriesData == null) {
-      var errMsg = "Failed to create/load series data for ${seriesDef.name} (type: ${seriesDef.seriesType.typeName})!";
+      var errMsg = "Failed to create/load series data for ${seriesDef.name} (type: ${seriesDef.seriesType.name})!";
       SimpleLogging.w(errMsg);
       throw Ex(errMsg);
     }

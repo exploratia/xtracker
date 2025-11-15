@@ -120,7 +120,7 @@ class SeriesDef {
     SeriesType seriesType;
     var jType = json.at('seriesType');
     try {
-      seriesType = SeriesType.byTypeName(jType.getString());
+      seriesType = SeriesType.byName(jType.getString());
     } catch (err) {
       throw JsonParseException('Invalid value at ${jType.pathString} - $err');
     }
@@ -145,7 +145,7 @@ class SeriesDef {
 
   Map<String, dynamic> toJson() => {
         'uuid': uuid,
-        'seriesType': seriesType.typeName,
+        'seriesType': seriesType.name,
         'seriesItems': [...seriesItems.map((e) => e.toJson())],
         'name': name,
         'color': ColorUtils.toHex(color),

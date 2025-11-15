@@ -14,7 +14,7 @@ class SeriesCurrentValue {
     SeriesType seriesType;
     var jType = json.at('seriesType');
     try {
-      seriesType = SeriesType.byTypeName(jType.getString());
+      seriesType = SeriesType.byName(jType.getString());
     } catch (err) {
       throw JsonParseException('Invalid value at ${jType.pathString} - $err');
     }
@@ -31,7 +31,7 @@ class SeriesCurrentValue {
 
   Map<String, dynamic> toJson() => {
         'seriesDefUuid': seriesDefUuid,
-        'seriesType': seriesType.typeName,
+        'seriesType': seriesType.name,
         'seriesDataValue': seriesDataValue.toJson(),
       };
 }
