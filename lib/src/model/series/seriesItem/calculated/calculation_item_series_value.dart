@@ -1,3 +1,4 @@
+import '../../../../util/json_reader.dart';
 import 'calculation_container.dart';
 import 'calculation_input_type.dart';
 import 'calculation_item.dart';
@@ -25,8 +26,18 @@ class CalculationItemSeriesValue extends CalculationItem {
     return json;
   }
 
-  factory CalculationItemSeriesValue.fromJson(Map<String, dynamic> json) => CalculationItemSeriesValue(
-        operator: CalculationOperator.fromDisplayName(json['operator'] as String),
-        calculationContainer: CalculationContainer.fromJson(json['seriesValue'] as Map<String, dynamic>),
-      );
+  factory CalculationItemSeriesValue.fromJson(JsonReader json) {
+    CalculationOperator operator;
+    var jInputType = json.at('operator');
+    try {
+      operator = CalculationOperator.fromDisplayName(jInputType.getString());
+    } catch (err) {
+      throw JsonParseException('Invalid value at ${jInputType.pathString} - $err');
+    }
+
+    return CalculationItemSeriesValue(
+      operator: operator,
+      calculationContainer: CalculationContainer.fromJson(json.at('seriesValue')),
+    );
+  }
 }

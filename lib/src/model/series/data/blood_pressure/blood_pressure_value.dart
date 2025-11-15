@@ -5,6 +5,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../../../util/color_utils.dart';
 import '../../../../util/ex.dart';
+import '../../../../util/json_reader.dart';
 import '../../series_def.dart';
 import '../series_data_value.dart';
 
@@ -17,12 +18,12 @@ class BloodPressureValue extends SeriesDataValue {
 
   BloodPressureValue(super.uuid, super.dateTime, this.high, this.low, this.medication);
 
-  factory BloodPressureValue.fromJson(Map<String, dynamic> json) => BloodPressureValue(
-        json['uuid'] as String? ?? const Uuid().v4().toString(),
-        DateTime.fromMillisecondsSinceEpoch(json['utcMs'] as int),
-        json['high'] as int,
-        json['low'] as int,
-        json['medication'] as bool? ?? false,
+  factory BloodPressureValue.fromJson(JsonReader json) => BloodPressureValue(
+        json.atAsStringOr('uuid', const Uuid().v4()),
+        DateTime.fromMillisecondsSinceEpoch(json.at('utcMs').getInt()),
+        json.at('high').getInt(),
+        json.at('low').getInt(),
+        json.atAsBoolOr('medication', false),
       );
 
   @override

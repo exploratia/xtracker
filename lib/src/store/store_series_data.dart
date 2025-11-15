@@ -10,6 +10,7 @@ import '../model/series/data/monthly/monthly_value.dart';
 import '../model/series/data/series_data_value.dart';
 import '../model/series/series_def.dart';
 import '../model/series/series_type.dart';
+import '../util/json_reader.dart';
 import 'stores_utils.dart';
 
 class StoreSeriesData {
@@ -58,7 +59,7 @@ class StoreSeriesData {
     List<SeriesDataValue> result = [];
     List<RecordSnapshot<Object?, Object?>> records = await _findAllSeriesDataValues();
     for (var value in records.values) {
-      result.add(SeriesDataValue.fromJson(value as Map<String, dynamic>, seriesType));
+      result.add(SeriesDataValue.fromJson(JsonReader(value), seriesType));
     }
     return result;
   }
@@ -68,7 +69,7 @@ class StoreSeriesData {
     List<BloodPressureValue> result = [];
     List<RecordSnapshot<Object?, Object?>> records = await _findAllSeriesDataValues();
     for (var value in records.values) {
-      result.add(BloodPressureValue.fromJson(value as Map<String, dynamic>));
+      result.add(BloodPressureValue.fromJson(JsonReader(value)));
     }
     return result;
   }
@@ -78,7 +79,7 @@ class StoreSeriesData {
     List<DailyCheckValue> result = [];
     List<RecordSnapshot<Object?, Object?>> records = await _findAllSeriesDataValues();
     for (var value in records.values) {
-      result.add(DailyCheckValue.fromJson(value as Map<String, dynamic>));
+      result.add(DailyCheckValue.fromJson(JsonReader(value)));
     }
     return result;
   }
@@ -88,7 +89,7 @@ class StoreSeriesData {
     List<DailyLifeValue> result = [];
     List<RecordSnapshot<Object?, Object?>> records = await _findAllSeriesDataValues();
     for (var value in records.values) {
-      result.add(DailyLifeValue.fromJson(value as Map<String, dynamic>));
+      result.add(DailyLifeValue.fromJson(JsonReader(value)));
     }
     return result;
   }
@@ -98,7 +99,7 @@ class StoreSeriesData {
     List<HabitValue> result = [];
     List<RecordSnapshot<Object?, Object?>> records = await _findAllSeriesDataValues();
     for (var value in records.values) {
-      result.add(HabitValue.fromJson(value as Map<String, dynamic>));
+      result.add(HabitValue.fromJson(JsonReader(value)));
     }
     return result;
   }
@@ -108,7 +109,7 @@ class StoreSeriesData {
     List<CustomValue> result = [];
     List<RecordSnapshot<Object?, Object?>> records = await _findAllSeriesDataValues();
     for (var value in records.values) {
-      result.add(CustomValue.fromJson(value as Map<String, dynamic>));
+      result.add(CustomValue.fromJson(JsonReader(value)));
     }
     return result;
   }
@@ -118,7 +119,7 @@ class StoreSeriesData {
     List<MonthlyValue> result = [];
     List<RecordSnapshot<Object?, Object?>> records = await _findAllSeriesDataValues();
     for (var value in records.values) {
-      result.add(MonthlyValue.fromJson(value as Map<String, dynamic>));
+      result.add(MonthlyValue.fromJson(JsonReader(value)));
     }
     return result;
   }

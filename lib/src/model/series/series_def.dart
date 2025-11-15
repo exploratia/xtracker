@@ -4,10 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../util/color_utils.dart';
+import '../../util/ex.dart';
+import '../../util/json_reader.dart';
 import '../../widgets/controls/navigation/hide_bottom_navigation_bar.dart';
 import '../../widgets/controls/select/icon_map.dart';
 import '../../widgets/series/edit/series_edit.dart';
 import '../column_profile/column_profile.dart';
+import 'seriesItem/calculated/calculation_item_series_value.dart';
 import 'seriesItem/series_item.dart';
 import 'series_type.dart';
 import 'settings/blood_pressure_settings.dart';
@@ -88,7 +91,7 @@ class SeriesDef {
   /// deep copy / clone by transforming to json string and back
   /// [ignoreValidation] if set, validation is ignored
   SeriesDef clone({bool ignoreValidation = false}) {
-    return SeriesDef.fromJson(jsonDecode(jsonEncode(toJson())), ignoreValidation: ignoreValidation);
+    return SeriesDef.fromJson(JsonReader(jsonDecode(jsonEncode(toJson()))), ignoreValidation: ignoreValidation);
   }
 
   /// returns act/expected json version per series type (to be able to handle different parsings depending on version)
@@ -113,15 +116,23 @@ class SeriesDef {
     return IconMap.iconData(iconName, seriesType.iconData);
   }
 
-  factory SeriesDef.fromJson(Map<String, dynamic> json, {bool ignoreValidation = false}) {
+  factory SeriesDef.fromJson(JsonReader json, {bool ignoreValidation = false}) {
+    SeriesType seriesType;
+    var jType = json.at('seriesType');
+    try {
+      seriesType = SeriesType.byTypeName(jType.getString());
+    } catch (err) {
+      throw JsonParseException('Invalid value at ${jType.pathString} - $err');
+    }
+
     var seriesDef = SeriesDef(
-      uuid: json['uuid'] as String? ?? const Uuid().v4(),
-      seriesType: SeriesType.byTypeName(json['seriesType'] as String),
-      seriesItems: [...(json['seriesItems'] as List<dynamic>).whereType<Map<String, dynamic>>().map((e) => SeriesItem.fromJson(e))],
-      name: json['name'] as String,
-      color: ColorUtils.fromHex(json['color'] as String),
-      iconName: json['iconName'] as String?,
-      settings: json['settings'] as Map<String, dynamic>?,
+      uuid: json.atAsStringOr('uuid', const Uuid().v4()),
+      seriesType: seriesType,
+      seriesItems: [...(json.at('seriesItems').asReaders().map((e) => SeriesItem.fromJson(e)))],
+      name: json.atAsString('name'),
+      color: ColorUtils.fromHex(json.atAsString('color')),
+      iconName: json.atAsStringOrNull('iconName'),
+      settings: json.atAsMapOrNull('settings'),
     );
 
     // validate settings
@@ -186,5 +197,30 @@ class SeriesDef {
       ),
     );
     return editedSeriesDef;
+  }
+
+  /// validates the series (to be called after import)
+  void validate() {
+    // validate references
+    if (seriesType == SeriesType.custom || seriesType == SeriesType.monthly) {
+      var validSiids = seriesItems.where((si) => !si.isCalculated).map((si) => si.siid).toSet();
+      for (var seriesItem in seriesItems) {
+        if (seriesItem.isCalculated) {
+          var sourceSiid = seriesItem.calculationContainer!.sourceSiid;
+          if (!validSiids.contains(sourceSiid)) {
+            throw Ex("Invalid sourceSiid '$sourceSiid' found in series ${seriesItem.name} - valid: $validSiids");
+          }
+          List<CalculationItemSeriesValue> workList = [...seriesItem.calculationContainer!.calculationItems.whereType<CalculationItemSeriesValue>()];
+          while (workList.isNotEmpty) {
+            var calcItem = workList.removeAt(0);
+            sourceSiid = calcItem.calculationContainer.sourceSiid;
+            if (!validSiids.contains(sourceSiid)) {
+              throw Ex("Invalid sourceSiid '$sourceSiid' found in series ${seriesItem.name} - valid: $validSiids");
+            }
+            workList.addAll(calcItem.calculationContainer.calculationItems.whereType<CalculationItemSeriesValue>());
+          }
+        }
+      }
+    }
   }
 }

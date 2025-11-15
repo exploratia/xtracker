@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:easy_localization/easy_localization.dart';
 
 import '../../../../../generated/locale_keys.g.dart';
+import '../../../../util/ex.dart';
 
 enum CalculationOperator {
   add('+'),
@@ -28,7 +29,10 @@ enum CalculationOperator {
     };
   }
 
-  factory CalculationOperator.fromDisplayName(String displayName) => CalculationOperator.values.firstWhere((element) => element.displayName == displayName);
+  factory CalculationOperator.fromDisplayName(String displayName) => CalculationOperator.values.firstWhere(
+        (element) => element.displayName == displayName,
+        orElse: () => throw Ex("'$displayName' is no valid calculation operator!"),
+      );
 
   double calc(double a, double b) {
     switch (this) {

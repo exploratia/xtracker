@@ -1,6 +1,7 @@
 import 'package:uuid/uuid.dart';
 
 import '../../../../util/ex.dart';
+import '../../../../util/json_reader.dart';
 import '../../series_def.dart';
 import '../series_data_value.dart';
 
@@ -13,9 +14,9 @@ class DailyCheckValue extends SeriesDataValue {
     return DailyCheckValue(uuid, dateTime);
   }
 
-  factory DailyCheckValue.fromJson(Map<String, dynamic> json) => DailyCheckValue(
-        json['uuid'] as String? ?? const Uuid().v4().toString(),
-        DateTime.fromMillisecondsSinceEpoch(json['utcMs'] as int),
+  factory DailyCheckValue.fromJson(JsonReader json) => DailyCheckValue(
+        json.atAsStringOr('uuid', const Uuid().v4()),
+        DateTime.fromMillisecondsSinceEpoch(json.at('utcMs').getInt()),
       );
 
   @override

@@ -5,6 +5,7 @@ import 'package:xtracker/src/model/series/seriesItem/calculated/calculation_cont
 import 'package:xtracker/src/model/series/seriesItem/calculated/calculation_item_numeric.dart';
 import 'package:xtracker/src/model/series/seriesItem/calculated/calculation_item_series_value.dart';
 import 'package:xtracker/src/model/series/seriesItem/calculated/calculation_operator.dart';
+import 'package:xtracker/src/util/json_reader.dart';
 
 void main() {
   group('CalcTest', () {
@@ -68,7 +69,7 @@ void main() {
       var serialized = jsonEncode(calcContainer.toJson());
       // print(serialized);
       expect(serialized.contains('{"operator":"*","inputType":"numeric","value":5.0}'), true);
-      var deserialized = CalculationContainer.fromJson(jsonDecode(serialized));
+      var deserialized = CalculationContainer.fromJson(JsonReader(jsonDecode(serialized)));
 
       result = deserialized.calculate(input, previousInput);
       expect(5, result);
@@ -112,7 +113,7 @@ void main() {
 
       // serialize and deserialize and calc afterwards
       var serialized = jsonEncode(calcContainer.toJson());
-      var deserialized = CalculationContainer.fromJson(jsonDecode(serialized));
+      var deserialized = CalculationContainer.fromJson(JsonReader(jsonDecode(serialized)));
 
       result = deserialized.calculate(input, previousInput);
       expect(3, result);

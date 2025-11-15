@@ -1,4 +1,4 @@
-import '../../../../util/logging/flutter_simple_logging.dart';
+import '../../../../util/json_reader.dart';
 import 'calculation_input_type.dart';
 import 'calculation_item.dart';
 import 'calculation_item_numeric.dart';
@@ -48,27 +48,22 @@ class CalculationContainer {
     return val;
   }
 
-  factory CalculationContainer.fromJson(Map<String, dynamic> json) {
+  factory CalculationContainer.fromJson(JsonReader json) {
     List<CalculationItem> calculationItems = [];
-    List<dynamic> calculationItemsJson = json['calculationItems'] as List;
 
-    for (var j in calculationItemsJson) {
-      if (j is Map<String, dynamic>) {
-        var inputType = CalculationItem.inputTypeFromJson(j);
-        switch (inputType) {
-          case CalculationInputType.numeric:
-            calculationItems.add(CalculationItemNumeric.fromJson(j));
-          case CalculationInputType.seriesValue:
-            calculationItems.add(CalculationItemSeriesValue.fromJson(j));
-        }
-      } else {
-        SimpleLogging.w("Unexpected element in calculationItems.");
+    for (var j in json.at('calculationItems').asReaders()) {
+      var inputType = CalculationItem.inputTypeFromJson(j);
+      switch (inputType) {
+        case CalculationInputType.numeric:
+          calculationItems.add(CalculationItemNumeric.fromJson(j));
+        case CalculationInputType.seriesValue:
+          calculationItems.add(CalculationItemSeriesValue.fromJson(j));
       }
     }
 
     return CalculationContainer(
-      sourceSiid: json['sourceSiid'] as String,
-      usePreviousInput: json['usePreviousInput'] as bool? ?? false,
+      sourceSiid: json.at('sourceSiid').getString(),
+      usePreviousInput: json.atOrNull('usePreviousInput')?.getBool() ?? false,
       calculationItems: calculationItems,
     );
   }

@@ -1,6 +1,7 @@
 import 'package:sembast/sembast.dart';
 
 import '../model/series/series_def.dart';
+import '../util/json_reader.dart';
 import '../util/logging/flutter_simple_logging.dart';
 import 'stores.dart';
 import 'stores_utils.dart';
@@ -27,7 +28,7 @@ class StoreSeriesDef {
     SimpleLogging.i("loaded series records: ${records.length}");
     for (var value in records.values) {
       try {
-        var seriesDef = SeriesDef.fromJson(value as Map<String, dynamic>);
+        var seriesDef = SeriesDef.fromJson(JsonReader(value));
         SimpleLogging.i("Instantiated series: ${seriesDef.name} (${seriesDef.seriesType})");
         result.add(seriesDef);
       } catch (err) {

@@ -1,3 +1,4 @@
+import '../../../util/json_reader.dart';
 import '../series_def.dart';
 import '../series_type.dart';
 import 'blood_pressure/blood_pressure_value.dart';
@@ -21,7 +22,7 @@ abstract class SeriesDataValue implements DateTimeItem {
 
   Map<String, dynamic> toJson({bool exportUuid = true});
 
-  static SeriesDataValue fromJson(Map<String, dynamic> json, SeriesType seriesType) {
+  static SeriesDataValue fromJson(JsonReader json, SeriesType seriesType) {
     return switch (seriesType) {
       SeriesType.bloodPressure => BloodPressureValue.fromJson(json),
       SeriesType.dailyCheck => DailyCheckValue.fromJson(json),

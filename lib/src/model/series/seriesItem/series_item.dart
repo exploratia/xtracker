@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 import '../../../util/color_utils.dart';
+import '../../../util/json_reader.dart';
 import 'calculated/calculation_container.dart';
 import 'calculated/calculation_item_series_value.dart';
 
@@ -42,7 +43,7 @@ class SeriesItem {
 
   /// deep copy / clone by transforming to json string and back
   SeriesItem clone() {
-    return SeriesItem.fromJson(jsonDecode(jsonEncode(toJson())));
+    return SeriesItem.fromJson(JsonReader(jsonDecode(jsonEncode(toJson()))));
   }
 
   /// copy with given value for hideInTable
@@ -68,17 +69,18 @@ class SeriesItem {
     return false;
   }
 
-  factory SeriesItem.fromJson(Map<String, dynamic> json) {
+  factory SeriesItem.fromJson(JsonReader json) {
+    var jCalculation = json.atOrNull("calculation");
     return SeriesItem(
-      json['siid'] as String,
-      json['name'] as String,
-      json['unit'] as String?,
-      ColorUtils.fromHex(json['color'] as String),
+      json.at('siid').getString(),
+      json.at('name').getString(),
+      json.atAsStringOrNull('unit'),
+      ColorUtils.fromHex(json.at('color').getString()),
       // extended
-      json['hideInTable'] as bool? ?? false,
-      json['hideInChart'] as bool? ?? false,
-      json['tableColumnWidth'] as int?,
-      json.containsKey("calculation") ? CalculationContainer.fromJson(json['calculation'] as Map<String, dynamic>) : null,
+      json.atAsBoolOr('hideInTable', false),
+      json.atAsBoolOr('hideInChart', false),
+      json.atAsIntOrNull('tableColumnWidth'),
+      jCalculation != null ? CalculationContainer.fromJson(jCalculation) : null,
     );
   }
 

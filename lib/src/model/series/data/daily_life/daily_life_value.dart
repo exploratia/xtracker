@@ -2,6 +2,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../../../util/ex.dart';
 import '../../../../util/globals.dart';
+import '../../../../util/json_reader.dart';
 import '../../series_def.dart';
 import '../series_data_value.dart';
 
@@ -15,10 +16,10 @@ class DailyLifeValue extends SeriesDataValue {
     return DailyLifeValue(uuid, dateTime, aid);
   }
 
-  factory DailyLifeValue.fromJson(Map<String, dynamic> json) => DailyLifeValue(
-        json['uuid'] as String? ?? const Uuid().v4().toString(),
-        DateTime.fromMillisecondsSinceEpoch(json['utcMs'] as int),
-        json['aid'] as String? ?? Globals.invalid,
+  factory DailyLifeValue.fromJson(JsonReader json) => DailyLifeValue(
+        json.atAsStringOr('uuid', const Uuid().v4()),
+        DateTime.fromMillisecondsSinceEpoch(json.at('utcMs').getInt()),
+        json.atAsStringOr('aid', Globals.invalid),
       );
 
   @override

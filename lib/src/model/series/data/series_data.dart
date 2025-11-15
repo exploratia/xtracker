@@ -6,6 +6,7 @@ import '../../../../generated/locale_keys.g.dart';
 import '../../../providers/series_current_value_provider.dart';
 import '../../../providers/series_data_provider.dart';
 import '../../../util/dialogs.dart';
+import '../../../util/json_reader.dart';
 import '../../../util/logging/flutter_simple_logging.dart';
 import '../../../widgets/series/data/input/blood_pressure/blood_pressure_input.dart';
 import '../../../widgets/series/data/input/custom/custom_input.dart';
@@ -38,39 +39,39 @@ class SeriesData<T extends SeriesDataValue> {
         'data': [...data.map((e) => e.toJson(exportUuid: exportUuid))],
       };
 
-  static SeriesData<BloodPressureValue> fromJsonBloodPressureData(Map<String, dynamic> json) => SeriesData(
-        json['uuid'] as String,
-        [...(json['data'] as List<dynamic>).map((e) => BloodPressureValue.fromJson(e))],
+  static SeriesData<BloodPressureValue> fromJsonBloodPressureData(JsonReader json) => SeriesData(
+        json.at('uuid').getString(),
+        [...json.at('data').asReaders().map((e) => BloodPressureValue.fromJson(e))],
         // if version is required: json['version'] as int? ?? 1
       );
 
-  static SeriesData<DailyCheckValue> fromJsonDailyCheckData(Map<String, dynamic> json) => SeriesData(
-        json['uuid'] as String,
-        [...(json['data'] as List<dynamic>).map((e) => DailyCheckValue.fromJson(e))],
+  static SeriesData<DailyCheckValue> fromJsonDailyCheckData(JsonReader json) => SeriesData(
+        json.at('uuid').getString(),
+        [...json.at('data').asReaders().map((e) => DailyCheckValue.fromJson(e))],
         // if version is required: json['version'] as int? ?? 1
       );
 
-  static SeriesData<DailyLifeValue> fromJsonDailyLifeData(Map<String, dynamic> json) => SeriesData(
-        json['uuid'] as String,
-        [...(json['data'] as List<dynamic>).map((e) => DailyLifeValue.fromJson(e))],
+  static SeriesData<DailyLifeValue> fromJsonDailyLifeData(JsonReader json) => SeriesData(
+        json.at('uuid').getString(),
+        [...json.at('data').asReaders().map((e) => DailyLifeValue.fromJson(e))],
         // if version is required: json['version'] as int? ?? 1
       );
 
-  static SeriesData<HabitValue> fromJsonHabitData(Map<String, dynamic> json) => SeriesData(
-        json['uuid'] as String,
-        [...(json['data'] as List<dynamic>).map((e) => HabitValue.fromJson(e))],
+  static SeriesData<HabitValue> fromJsonHabitData(JsonReader json) => SeriesData(
+        json.at('uuid').getString(),
+        [...json.at('data').asReaders().map((e) => HabitValue.fromJson(e))],
         // if version is required: json['version'] as int? ?? 1
       );
 
-  static SeriesData<CustomValue> fromJsonCustomData(Map<String, dynamic> json) => SeriesData(
-        json['uuid'] as String,
-        [...(json['data'] as List<dynamic>).map((e) => CustomValue.fromJson(e))],
+  static SeriesData<CustomValue> fromJsonCustomData(JsonReader json) => SeriesData(
+        json.at('uuid').getString(),
+        [...json.at('data').asReaders().map((e) => CustomValue.fromJson(e))],
         // if version is required: json['version'] as int? ?? 1
       );
 
-  static SeriesData<MonthlyValue> fromJsonMonthlyData(Map<String, dynamic> json) => SeriesData(
-        json['uuid'] as String,
-        [...(json['data'] as List<dynamic>).map((e) => MonthlyValue.fromJson(e))],
+  static SeriesData<MonthlyValue> fromJsonMonthlyData(JsonReader json) => SeriesData(
+        json.at('uuid').getString(),
+        [...json.at('data').asReaders().map((e) => MonthlyValue.fromJson(e))],
         // if version is required: json['version'] as int? ?? 1
       );
 

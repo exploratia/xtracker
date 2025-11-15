@@ -20,6 +20,7 @@ import '../../widgets/controls/overlay/progress_overlay.dart';
 import '../date_time_utils.dart';
 import '../dialogs.dart';
 import '../ex.dart';
+import '../json_reader.dart';
 import '../json_utils.dart';
 import '../logging/flutter_simple_logging.dart';
 import '../theme_utils.dart';
@@ -176,25 +177,27 @@ class SeriesImportExport {
   ///
   /// - throws [TypeError] in case of null values or not available properties in json
   /// - throws [Ex] in case of unexpected json
-  static Future<bool> _importSeries(Map<String, dynamic> json, String fileName, SeriesProviders seriesProviders) async {
-    if (json["type"] as String == "seriesExport") {
+  static Future<bool> _importSeries(JsonReader json, String fileName, SeriesProviders seriesProviders) async {
+    if (json.at("type").getString() == "seriesExport") {
       // check version...
-      var seriesDef = SeriesDef.fromJson(json["seriesDef"] as Map<String, dynamic>);
+      var seriesDef = SeriesDef.fromJson(json.at("seriesDef"));
+      seriesDef.validate();
       SimpleLogging.i("Importing series and data for ${seriesDef.toLogString()} ...");
+      var jSeriesData = json.at("seriesData");
       SeriesData seriesData;
       switch (seriesDef.seriesType) {
         case SeriesType.bloodPressure:
-          seriesData = SeriesData.fromJsonBloodPressureData(json["seriesData"] as Map<String, dynamic>);
+          seriesData = SeriesData.fromJsonBloodPressureData(jSeriesData);
         case SeriesType.dailyCheck:
-          seriesData = SeriesData.fromJsonDailyCheckData(json["seriesData"] as Map<String, dynamic>);
+          seriesData = SeriesData.fromJsonDailyCheckData(jSeriesData);
         case SeriesType.dailyLife:
-          seriesData = SeriesData.fromJsonDailyLifeData(json["seriesData"] as Map<String, dynamic>);
+          seriesData = SeriesData.fromJsonDailyLifeData(jSeriesData);
         case SeriesType.habit:
-          seriesData = SeriesData.fromJsonHabitData(json["seriesData"] as Map<String, dynamic>);
+          seriesData = SeriesData.fromJsonHabitData(jSeriesData);
         case SeriesType.custom:
-          seriesData = SeriesData.fromJsonCustomData(json["seriesData"] as Map<String, dynamic>);
+          seriesData = SeriesData.fromJsonCustomData(jSeriesData);
         case SeriesType.monthly:
-          seriesData = SeriesData.fromJsonMonthlyData(json["seriesData"] as Map<String, dynamic>);
+          seriesData = SeriesData.fromJsonMonthlyData(jSeriesData);
       }
       await seriesProviders.seriesProvider.delete(seriesDef, seriesProviders);
       await seriesProviders.seriesProvider.save(seriesDef);
@@ -251,33 +254,31 @@ class SeriesImportExport {
 
         SimpleLogging.i("importing '${file.name}' ...");
         var fileContent = await file.readAsString(); // utf8
-        var json = jsonDecode(fileContent) as Map<String, dynamic>;
+        var json = JsonReader(jsonDecode(fileContent));
 
-        if (json["type"] as String == "multiSeriesExport") {
+        var jType = json.at("type");
+        if (jType.getString() == "multiSeriesExport") {
           // check version...
-          List<dynamic> seriesList = json["series"] as List<dynamic>;
-          for (var seriesJson in seriesList) {
-            if (seriesJson is Map<String, dynamic>) {
-              if (await _importSeries(seriesJson, file.name, seriesProviders)) {
-                successfulImports++;
-              }
-            } else {
-              throw Ex("Multi series import failed - unexpected data structure in file: ${file.name}",
-                  localizedMessage: LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]));
+          for (var jSeries in json.at("series").asReaders()) {
+            if (await _importSeries(jSeries, file.name, seriesProviders)) {
+              successfulImports++;
             }
           }
-        } else if (json["type"] as String == "seriesExport") {
+        } else if (jType.getString() == "seriesExport") {
           if (await _importSeries(json, file.name, seriesProviders)) {
             successfulImports++;
           }
         } else {
-          throw Ex("Series import failed - unexpected data structure in file: ${file.name}",
-              localizedMessage: LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]));
+          throw JsonParseException("Unexpected property value '${jType.getString()}' at ${jType.pathString}");
         }
       } catch (ex, st) {
-        SimpleLogging.w(ex.toString(), stackTrace: st);
+        SimpleLogging.w("Series import failed - unexpected data structure in file: ${file.name}\n$ex", stackTrace: st);
         if (ex is Ex) {
-          failures.add(ex.localizedToString());
+          if (ex.localizedMessage != null) {
+            failures.add(ex.localizedToString());
+          } else {
+            failures.add(LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]));
+          }
         } else {
           failures.add(LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]));
         }

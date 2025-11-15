@@ -1,6 +1,7 @@
 import 'package:uuid/uuid.dart';
 
 import '../../../../util/ex.dart';
+import '../../../../util/json_reader.dart';
 import '../../series_def.dart';
 import '../series_data_value.dart';
 
@@ -16,24 +17,17 @@ class CustomValue extends SeriesDataValue {
         'values': values,
       };
 
-  factory CustomValue.fromJson(Map<String, dynamic> json) {
+  factory CustomValue.fromJson(JsonReader json) {
     Map<String, double> values = {};
-    var jValues = json['values'] as Map?;
+    var jValues = json.atOrNull('values');
     if (jValues != null) {
-      for (var entry in jValues.entries) {
-        if (entry.key is String) {
-          if (entry.value is double) {
-            values[entry.key] = entry.value;
-          } else if (entry.value is int) {
-            int intVal = entry.value;
-            values[entry.key] = intVal.toDouble();
-          }
-        }
+      for (var entry in jValues.asMapReaders()) {
+        values[entry.key] = entry.value.getDouble();
       }
     }
     return CustomValue(
-      json['uuid'] as String? ?? const Uuid().v4().toString(),
-      DateTime.fromMillisecondsSinceEpoch(json['utcMs'] as int),
+      json.atAsStringOr('uuid', const Uuid().v4()),
+      DateTime.fromMillisecondsSinceEpoch(json.at('utcMs').getInt()),
       values,
     );
   }

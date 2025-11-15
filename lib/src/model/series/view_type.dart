@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../generated/locale_keys.g.dart';
+import '../../util/logging/flutter_simple_logging.dart';
 
 enum ViewType {
   lineChart("lineChart", Icons.area_chart_outlined),
@@ -29,7 +30,10 @@ enum ViewType {
 
   static ViewType resolveByTypeName(String? typeName) {
     var vt = ViewType.values.where((element) => element.typeName == typeName).firstOrNull;
-    if (vt == null) return ViewType.table;
+    if (vt == null) {
+      SimpleLogging.i("No view type found for '$typeName'. Using table...");
+      return ViewType.table;
+    }
     return vt;
   }
 }

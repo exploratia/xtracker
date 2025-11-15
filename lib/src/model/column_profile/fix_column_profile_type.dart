@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 
 import '../../../generated/locale_keys.g.dart';
+import '../../util/logging/flutter_simple_logging.dart';
 
 enum FixColumnProfileType {
   dateMorningMiddayEvening("Date|Morning|Midday|Evening"),
@@ -28,6 +29,9 @@ enum FixColumnProfileType {
   }
 
   static FixColumnProfileType? resolveByTypeName(String? typeName) {
-    return FixColumnProfileType.values.where((element) => element.typeName == typeName).firstOrNull;
+    if (typeName == null) return null;
+    var columnProfileType = FixColumnProfileType.values.where((element) => element.typeName == typeName).firstOrNull;
+    if (columnProfileType == null) SimpleLogging.i("No fix column profile type found for '$typeName'.");
+    return columnProfileType;
   }
 }
