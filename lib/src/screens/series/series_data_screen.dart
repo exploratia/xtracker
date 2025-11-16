@@ -93,19 +93,21 @@ class SeriesDataScreen extends StatelessWidget {
                       seriesDataFilter: filter,
                       seriesDataViewOverlays: seriesDataViewOverlays,
                       builder: (Widget Function() seriesDataViewBuilder, List<SeriesDataValue> seriesDataValues) {
-                        return OrientationBuilder(builder: (BuildContext context, Orientation orientation) {
-                          var isLandscape = orientation == Orientation.landscape;
-                          return _ScreenBuilder(
-                            seriesViewMetaData: seriesViewMetaData,
-                            seriesDataViewBuilder: seriesDataViewBuilder,
-                            seriesDataValues: seriesDataValues,
-                            filter: filter,
-                            updateFilter: updateFilter,
-                            seriesDataViewOverlays: seriesDataViewOverlays,
-                            updateOverlays: updateOverlays,
-                            isLandScape: isLandscape,
-                          );
-                        });
+                        return OrientationBuilder(
+                          builder: (BuildContext context, Orientation orientation) {
+                            var isLandscape = orientation == Orientation.landscape;
+                            return _ScreenBuilder(
+                              seriesViewMetaData: seriesViewMetaData,
+                              seriesDataViewBuilder: seriesDataViewBuilder,
+                              seriesDataValues: seriesDataValues,
+                              filter: filter,
+                              updateFilter: updateFilter,
+                              seriesDataViewOverlays: seriesDataViewOverlays,
+                              updateOverlays: updateOverlays,
+                              isLandScape: isLandscape,
+                            );
+                          },
+                        );
                       },
                     );
                   },
@@ -312,15 +314,17 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
 
     // in charts add depending on series type switch interval (day/month/year) btn
     if (viewType == ViewType.lineChart || viewType == ViewType.barChart) {
-      if (/*seriesType == SeriesType.monthly ||*/ seriesType == SeriesType.dailyCheck || seriesType == SeriesType.habit) {
+      if (seriesType == SeriesType.monthly || seriesType == SeriesType.dailyCheck || seriesType == SeriesType.habit) {
         var showCompressed = metaData.showCompressed;
         // monthly | yearly
-        var tooltip =
-            showCompressed ? LocaleKeys.seriesData_action_compression_monthly_tooltip.tr() : LocaleKeys.seriesData_action_compression_yearly_tooltip.tr();
+        var tooltip = showCompressed
+            ? LocaleKeys.seriesData_action_compression_monthly_tooltip.tr()
+            : LocaleKeys.seriesData_action_compression_yearly_tooltip.tr();
         if (seriesType == SeriesType.habit) {
           // daily | monthly
-          tooltip =
-              showCompressed ? LocaleKeys.seriesData_action_compression_daily_tooltip.tr() : LocaleKeys.seriesData_action_compression_monthly_tooltip.tr();
+          tooltip = showCompressed
+              ? LocaleKeys.seriesData_action_compression_daily_tooltip.tr()
+              : LocaleKeys.seriesData_action_compression_monthly_tooltip.tr();
         }
 
         var iconButtonToggleCompressed = IconButton(
@@ -406,7 +410,9 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
           child: IconPopupMenu(
             icon: const Icon(Icons.remove_red_eye_outlined),
             menuEntries: [
-              ...seriesType.viewTypes.where((vt) => vt != viewType).map(
+              ...seriesType.viewTypes
+                  .where((vt) => vt != viewType)
+                  .map(
                     (vt) => IconPopupMenuEntry(Icon(vt.iconData), () => _setViewType(vt), vt.displayName()),
                   ),
             ],
@@ -442,7 +448,7 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
                 children: bottomBarActions,
               ),
             ),
-          )
+          ),
         ],
       );
     }
@@ -543,7 +549,7 @@ class _SelectColumnProfile extends StatelessWidget {
               ],
             ),
           ),
-        )
+        ),
       ],
     );
   }

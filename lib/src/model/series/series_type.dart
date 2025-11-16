@@ -76,7 +76,7 @@ enum SeriesType {
   monthly(
     Icons.calendar_month_outlined,
     ThemeUtils.secondaryColor,
-    [ViewType.table],
+    [ViewType.table, ViewType.lineChart],
     [], // no fix table column profiles
   ),
   ;
