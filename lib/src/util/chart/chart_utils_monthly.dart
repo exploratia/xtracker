@@ -75,7 +75,7 @@ class ChartUtilsMonthly {
     }
 
     List<ParameterChartData> result = [];
-    for (var seriesItem in seriesViewMetaData.seriesDef.seriesItems) {
+    for (var seriesItem in seriesViewMetaData.seriesDef.seriesItems.where((si) => !si.hideInChart)) {
       result.add(ParameterChartData(seriesDef: seriesViewMetaData.seriesDef, seriesItem: seriesItem, data: siid2values[seriesItem.siid]!));
     }
     return result;
