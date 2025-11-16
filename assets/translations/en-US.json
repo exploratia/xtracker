@@ -665,7 +665,7 @@
             "hideColumn": "Hide column"
           }
         },
-        "info": "Manage the parameters of the series.\nEach parameter has a name, unit, and color.\nYou can also configure how it appears in tables and charts.\n\nIf a parameter in use is deleted, its values will no longer be shown.",
+        "info": "Manage series parameters.\nEach parameter has a name, unit and color. You can adjust how it appears in the table and chart.\n\nYou can also create calculated parameters. They have no input but compute their value from other parameters.\n\nIf a used parameter is deleted, its values are no longer shown.",
         "validation": {
           "emptyAttributs": "At least one parameter required",
           "emptyParametersChart": "At least one parameter required for chart view",

@@ -665,7 +665,7 @@
             "hideColumn": "Spalte ausblenden"
           }
         },
-        "info": "Parameter der Messreihe verwalten.\nJeder Parameter hat einen Namen, eine Einheit und eine Farbe.\nAußerdem lässt sich die Anzeige in Tabelle und Diagramm konfigurieren.\n\nWird ein genutzter Parameter gelöscht, werden dessen Werte nicht mehr angezeigt.",
+        "info": "Parameter der Messreihe verwalten.\nJeder Parameter hat einen Namen, eine Einheit und eine Farbe. Die Anzeige in Tabelle und Diagramm lässt sich anpassen.\n\nZusätzlich können berechnete Parameter angelegt werden. Sie haben keine Eingabe, sondern berechnen ihren Wert aus anderen Parametern.\n\nWird ein genutzter Parameter gelöscht, werden seine Werte nicht mehr angezeigt.",
         "validation": {
           "emptyParameters": "Mindestens ein Parameter erforderlich",
           "emptyParametersChart": "Mindestens ein Parameter für die Diagrammansicht erforderlich",
