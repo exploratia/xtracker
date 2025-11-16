@@ -5,7 +5,6 @@ import '../../../../../../model/series/data/monthly/monthly_value.dart';
 import '../../../../../../model/series/data/series_data_filter.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
 import '../../../../../../util/chart/chart_utils_monthly.dart';
-import '../../../../../../util/chart/chart_utils_simple_value.dart';
 import '../../../../../../util/date_time_utils.dart';
 import '../../../../../../util/ex.dart';
 import '../../../../../../util/logging/flutter_simple_logging.dart';
@@ -63,13 +62,24 @@ class SeriesDataMonthlyChartView extends StatelessWidget {
           for (var parameterChartData in chartDataPerParameterList) {
             charts.add(
               ChartContainer(
-                title: Text(parameterChartData.seriesItem.name + parameterChartData.seriesItem.unitInBrackets(emptyStringIfNullOrEmpty: true)),
+                title: Row(
+                  children: [
+                    Text(parameterChartData.seriesItem.name + parameterChartData.seriesItem.unitInBrackets(emptyStringIfNullOrEmpty: true)),
+                  ],
+                ),
                 showDateTooltip: true,
                 maxVisibleHeight: constraints.maxHeight - seriesDataViewOverlays.height,
                 dateFormatter: dateFormatter,
                 chartWidgetBuilder: (touchCallback) {
                   return LineChart(
-                    ChartUtilsSimpleValue.buildLineChartData(seriesViewMetaData, parameterChartData.data, themeData, dateFormatter, touchCallback),
+                    ChartUtilsMonthly.buildLineChartDataYearly(
+                      seriesViewMetaData,
+                      parameterChartData.seriesItem,
+                      parameterChartData.data,
+                      themeData,
+                      dateFormatter,
+                      null,
+                    ),
                   );
                 },
               ),
@@ -87,7 +97,14 @@ class SeriesDataMonthlyChartView extends StatelessWidget {
                 dateFormatter: dateFormatter,
                 chartWidgetBuilder: (touchCallback) {
                   return LineChart(
-                    ChartUtilsSimpleValue.buildLineChartData(seriesViewMetaData, parameterChartData.data, themeData, dateFormatter, touchCallback),
+                    ChartUtilsMonthly.buildLineChartDataMonthly(
+                      seriesViewMetaData,
+                      parameterChartData.seriesItem,
+                      parameterChartData.data,
+                      themeData,
+                      dateFormatter,
+                      null,
+                    ),
                   );
                 },
               ),
