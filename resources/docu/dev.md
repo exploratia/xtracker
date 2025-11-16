@@ -58,8 +58,11 @@ dart run easy_localization:generate -f keys -S assets/translations -o locale_key
 ##### Auto generate keys when saving translation files with file watcher
 
 ![auto_generate_locale_keys_with_file_watcher.png](auto_generate_locale_keys_with_file_watcher.png)
-![auto_generate_locale_keys_with_file_watcher_scope.png](auto_generate_locale_keys_with_file_watcher_scope.png)  
-scope-pattern:
+![auto_generate_locale_keys_with_file_watcher_scope.png](auto_generate_locale_keys_with_file_watcher_scope.png)
+
+**Troubleshooting:** if it runs and exit code is -1 try only 'flutter' instead of 'dart' path in the command line.
+
+**scope-pattern:**
 
 ```text
 file[xtracker]:assets/translations//*
