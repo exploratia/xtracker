@@ -195,7 +195,7 @@
       },
       "monthly": {
         "title": "Monatlich",
-        "info": "Monatliche Daten mit einem oder mehreren Parametern pro Eintrag erfassen – z. B. Wasser- und Stromverbrauch, um Jahresverläufe zu sehen.\n\nIm Monatsmodus wird nur ein Wert pro Monat gespeichert. Bei mehrfacher Eingabe im selben Monat wird der letzte Wert übernommen.\n\nBis zur Monatsmitte zählt die Eingabe noch für den Vormonat. Beispiel: Der Wasserverbrauch für Januar kann erst Anfang Februar abgelesen werden – eventuell erst am 4. Februar, wenn man am Monatsanfang nicht zu Hause ist."
+        "info": "Monatliche Daten mit einem oder mehreren Parametern pro Eintrag erfassen – z. B. Wasser- und Stromverbrauch, um Jahresverläufe zu sehen.\n\nBis zur Monatsmitte zählt die Eingabe noch für den Vormonat. Beispiel: Der Wasserverbrauch für Januar kann erst Anfang Februar abgelesen werden – eventuell erst am 4. Februar, wenn man am Monatsanfang nicht zu Hause ist."
       }
     },
     "viewType": {
