@@ -26,7 +26,7 @@ dependencies:
   cupertino_icons: ^1.0.8
 
   # EasyLocalization
-  easy_localization: ^3.0.7+1
+  easy_localization: ^3.0.8
 
   # DeviceStorage
   flutter_secure_storage: ^9.2.4
