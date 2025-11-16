@@ -11,8 +11,13 @@ import '../media_query_utils.dart';
 import 'chart_utils.dart';
 
 class ChartUtilsSimpleValue {
-  static LineChartData buildLineChartData(SeriesViewMetaData seriesViewMetaData, List<SimpleValue> simpleValues, ThemeData themeData,
-      String Function(DateTime dateTime) dateFormatter, Function(FlTouchEvent, LineTouchResponse?)? touchCallback) {
+  static LineChartData buildLineChartData(
+    SeriesViewMetaData seriesViewMetaData,
+    List<TimedValue> simpleValues,
+    ThemeData themeData,
+    String Function(DateTime dateTime) dateFormatter,
+    Function(FlTouchEvent, LineTouchResponse?)? touchCallback,
+  ) {
     List<LineChartBarData> lineBarsData = [];
 
     ChartMetaData chartMetaData = ChartMetaData();
@@ -29,7 +34,8 @@ class ChartUtilsSimpleValue {
       values.add(FlSpot(t.toDouble(), value.toDouble()));
     }
 
-    lineBarsData.add(LineChartBarData(
+    lineBarsData.add(
+      LineChartBarData(
         spots: values,
         isCurved: false,
         preventCurveOverShooting: true,
@@ -53,7 +59,9 @@ class ChartUtilsSimpleValue {
               ]),
             ),
           ),
-        )));
+        ),
+      ),
+    );
 
     chartMetaData.calcPadding();
 
@@ -129,13 +137,22 @@ class ChartUtilsSimpleValue {
   }
 }
 
-class SimpleValue {
-  double value = 1;
+class TimedValue {
+  double value = 0;
   final DateTime dateTime;
 
-  SimpleValue(this.dateTime);
+  TimedValue(this.dateTime);
+
+  TimedValue.value(this.dateTime, this.value);
 
   void increment() {
     value++;
+  }
+
+  void add(double? val) => value += (val ?? 0);
+
+  @override
+  String toString() {
+    return 'SimpleValue{value: $value, dateTime: $dateTime}';
   }
 }

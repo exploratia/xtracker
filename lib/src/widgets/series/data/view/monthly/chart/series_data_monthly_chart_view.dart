@@ -1,8 +1,16 @@
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../../model/series/data/monthly/monthly_value.dart';
 import '../../../../../../model/series/data/series_data_filter.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
+import '../../../../../../util/chart/chart_utils_monthly.dart';
+import '../../../../../../util/chart/chart_utils_simple_value.dart';
+import '../../../../../../util/date_time_utils.dart';
+import '../../../../../../util/ex.dart';
+import '../../../../../../util/logging/flutter_simple_logging.dart';
+import '../../../../../../util/theme_utils.dart';
+import '../../../../../controls/chart/chart_container.dart';
 import '../../../../../controls/layout/single_child_scroll_view_with_scrollbar.dart';
 import '../../series_data_no_data.dart';
 import '../../series_data_view_overlays.dart';
@@ -23,6 +31,8 @@ class SeriesDataMonthlyChartView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final themeData = Theme.of(context);
+
     var filteredSeriesData = seriesData.where((value) => seriesDataFilter.filter(value)).toList();
     if (filteredSeriesData.isEmpty) {
       return SeriesDataNoData(
@@ -31,34 +41,80 @@ class SeriesDataMonthlyChartView extends StatelessWidget {
       );
     }
 
+    var dateFormatter = seriesViewMetaData.showCompressed ? DateTimeUtils.formatYear : DateTimeUtils.formatMonthYear;
+
+    List<ParameterChartData> chartDataPerParameterList;
+    try {
+      chartDataPerParameterList = ChartUtilsMonthly.buildDataProviderPerParameter(seriesViewMetaData, seriesData);
+    } catch (ex) {
+      SimpleLogging.w(ex);
+      return SeriesDataNoData(
+        seriesViewMetaData: seriesViewMetaData,
+        msg: (ex is Ex) ? ex.localizedMessage : null,
+      );
+    }
     return LayoutBuilder(
       builder: (BuildContext context, BoxConstraints constraints) {
         List<Widget> charts = [];
 
         if (seriesViewMetaData.showCompressed) {
           charts.add(const Text("compressed"));
+
+          for (var parameterChartData in chartDataPerParameterList) {
+            charts.add(
+              ChartContainer(
+                title: Text(parameterChartData.seriesItem.name + parameterChartData.seriesItem.unitInBrackets(emptyStringIfNullOrEmpty: true)),
+                showDateTooltip: true,
+                maxVisibleHeight: constraints.maxHeight - seriesDataViewOverlays.height,
+                dateFormatter: dateFormatter,
+                chartWidgetBuilder: (touchCallback) {
+                  return LineChart(
+                    ChartUtilsSimpleValue.buildLineChartData(seriesViewMetaData, parameterChartData.data, themeData, dateFormatter, touchCallback),
+                  );
+                },
+              ),
+            );
+          }
         } else {
           charts.add(const Text("not compressed"));
+
+          for (var parameterChartData in chartDataPerParameterList) {
+            charts.add(
+              ChartContainer(
+                title: Text(parameterChartData.seriesItem.name + parameterChartData.seriesItem.unitInBrackets(emptyStringIfNullOrEmpty: true)),
+                showDateTooltip: true,
+                maxVisibleHeight: constraints.maxHeight - seriesDataViewOverlays.height,
+                dateFormatter: dateFormatter,
+                chartWidgetBuilder: (touchCallback) {
+                  return LineChart(
+                    ChartUtilsSimpleValue.buildLineChartData(seriesViewMetaData, parameterChartData.data, themeData, dateFormatter, touchCallback),
+                  );
+                },
+              ),
+            );
+          }
         }
 
-        // charts.add(
-        //   ChartContainer(
-        //     showDateTooltip: true,
-        //     maxVisibleHeight: constraints.maxHeight - seriesDataViewOverlays.height,
-        //     chartWidgetBuilder: (touchCallback) {
-        //       return LineChart(
-        //         ChartUtilsMonthly.buildLineChartData(filteredSeriesData, themeData, touchCallback, context),
-        //       );
-        //     },
-        //   ),
-        // );
+        for (var parameterChartData in chartDataPerParameterList) {
+          charts.add(Text(parameterChartData.seriesItem.name));
+          charts.addAll(
+            parameterChartData.data
+                .map(
+                  (e) => Text(e.toString()),
+                )
+                .toList(),
+          );
+        }
 
         return SingleChildScrollViewWithScrollbar(
           useHorizontalScreenPadding: true,
           child: Column(
             children: [
               seriesDataViewOverlays.buildTopSpacer(),
-              ...charts,
+              Column(
+                spacing: ThemeUtils.verticalSpacing,
+                children: charts,
+              ),
               seriesDataViewOverlays.buildBottomSpacer(),
             ],
           ),

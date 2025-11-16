@@ -363,6 +363,11 @@
     },
     "snackbar": {
       "duplicateDates": "Duplicate timestamps found: {}"
+    },
+    "monthly": {
+      "msg": {
+        "duplicateTimestamp": "Duplicate timestamp found: {}"
+      }
     }
   },
   "seriesDataAnalytics": {

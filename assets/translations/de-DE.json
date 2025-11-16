@@ -363,6 +363,11 @@
     },
     "snackbar": {
       "duplicateDates": "Mehrfach auftretende Messzeitpunkte gefunden: {}"
+    },
+    "monthly": {
+      "msg": {
+        "duplicateTimestamp": "Mehrfach vorkommenden Messzeitpunkt gefunden: {}"
+      }
     }
   },
   "seriesDataAnalytics": {

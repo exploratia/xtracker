@@ -143,6 +143,7 @@ abstract class  LocaleKeys {
   static const seriesData_label_noData = 'seriesData.label.noData';
   static const seriesData_label_noDataBecauseOfFilter = 'seriesData.label.noDataBecauseOfFilter';
   static const seriesData_snackbar_duplicateDates = 'seriesData.snackbar.duplicateDates';
+  static const seriesData_monthly_msg_duplicateTimestamp = 'seriesData.monthly.msg.duplicateTimestamp';
   static const seriesDataAnalytics_title = 'seriesDataAnalytics.title';
   static const seriesDataAnalytics_action_close_tooltip = 'seriesDataAnalytics.action.close.tooltip';
   static const seriesDataAnalytics_label_dataset = 'seriesDataAnalytics.label.dataset';
