@@ -17,17 +17,17 @@ class DailyLifeValue extends SeriesDataValue {
   }
 
   factory DailyLifeValue.fromJson(JsonReader json) => DailyLifeValue(
-        json.atAsStringOr('uuid', const Uuid().v4()),
-        DateTime.fromMillisecondsSinceEpoch(json.at('utcMs').getInt()),
-        json.atAsStringOr('aid', Globals.invalid),
-      );
+    json.asStringOr('uuid', const Uuid().v4()),
+    DateTime.fromMillisecondsSinceEpoch(json.asReader('utcMs').getInt()),
+    json.asStringOr('aid', Globals.invalid),
+  );
 
   @override
   Map<String, dynamic> toJson({bool exportUuid = true}) => {
-        if (exportUuid) 'uuid': uuid,
-        'utcMs': dateTime.millisecondsSinceEpoch,
-        'aid': aid,
-      };
+    if (exportUuid) 'uuid': uuid,
+    'utcMs': dateTime.millisecondsSinceEpoch,
+    'aid': aid,
+  };
 
   @override
   List<dynamic> toCSVList(SeriesDef seriesDef) {

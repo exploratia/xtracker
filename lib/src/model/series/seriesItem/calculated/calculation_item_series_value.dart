@@ -11,8 +11,8 @@ class CalculationItemSeriesValue extends CalculationItem {
     required this.calculationContainer,
     required super.operator,
   }) : super(
-          inputType: CalculationInputType.seriesValue,
-        );
+         inputType: CalculationInputType.seriesValue,
+       );
 
   @override
   double calculate(double val, Map<String, double> input, Map<String, double> previousInput) {
@@ -28,7 +28,7 @@ class CalculationItemSeriesValue extends CalculationItem {
 
   factory CalculationItemSeriesValue.fromJson(JsonReader json) {
     CalculationOperator operator;
-    var jInputType = json.at('operator');
+    var jInputType = json.asReader('operator');
     try {
       operator = CalculationOperator.byDisplayName(jInputType.getString());
     } catch (err) {
@@ -37,7 +37,7 @@ class CalculationItemSeriesValue extends CalculationItem {
 
     return CalculationItemSeriesValue(
       operator: operator,
-      calculationContainer: CalculationContainer.fromJson(json.at('seriesValue')),
+      calculationContainer: CalculationContainer.fromJson(json.asReader('seriesValue')),
     );
   }
 }

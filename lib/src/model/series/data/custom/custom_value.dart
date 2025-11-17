@@ -12,22 +12,22 @@ class CustomValue extends SeriesDataValue {
 
   @override
   Map<String, dynamic> toJson({bool exportUuid = true}) => {
-        if (exportUuid) 'uuid': uuid,
-        'utcMs': dateTime.millisecondsSinceEpoch,
-        'values': values,
-      };
+    if (exportUuid) 'uuid': uuid,
+    'utcMs': dateTime.millisecondsSinceEpoch,
+    'values': values,
+  };
 
   factory CustomValue.fromJson(JsonReader json) {
     Map<String, double> values = {};
-    var jValues = json.atOrNull('values');
+    var jValues = json.asReaderOrNull('values');
     if (jValues != null) {
       for (var entry in jValues.asMapReaders()) {
         values[entry.key] = entry.value.getDouble();
       }
     }
     return CustomValue(
-      json.atAsStringOr('uuid', const Uuid().v4()),
-      DateTime.fromMillisecondsSinceEpoch(json.at('utcMs').getInt()),
+      json.asStringOr('uuid', const Uuid().v4()),
+      DateTime.fromMillisecondsSinceEpoch(json.asReader('utcMs').getInt()),
       values,
     );
   }

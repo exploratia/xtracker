@@ -38,8 +38,8 @@ class SeriesDef {
     this.iconName,
     required this.seriesItems,
     Map<String, dynamic>? settings,
-  })  : color = color ?? seriesType.color,
-        _settings = settings ?? {};
+  }) : color = color ?? seriesType.color,
+       _settings = settings ?? {};
 
   /// return BloodPressureSettings in edit mode (setters active)
   BloodPressureSettings bloodPressureSettingsEditable(Function() updateStateCB) => BloodPressureSettings(_settings, updateStateCB);
@@ -118,7 +118,7 @@ class SeriesDef {
 
   factory SeriesDef.fromJson(JsonReader json, {bool ignoreValidation = false}) {
     SeriesType seriesType;
-    var jType = json.at('seriesType');
+    var jType = json.asReader('seriesType');
     try {
       seriesType = SeriesType.byName(jType.getString());
     } catch (err) {
@@ -126,13 +126,13 @@ class SeriesDef {
     }
 
     var seriesDef = SeriesDef(
-      uuid: json.atAsStringOr('uuid', const Uuid().v4()),
+      uuid: json.asStringOr('uuid', const Uuid().v4()),
       seriesType: seriesType,
-      seriesItems: [...(json.at('seriesItems').asReaders().map((e) => SeriesItem.fromJson(e)))],
-      name: json.atAsString('name'),
-      color: ColorUtils.fromHex(json.atAsString('color')),
-      iconName: json.atAsStringOrNull('iconName'),
-      settings: json.atAsMapOrNull('settings'),
+      seriesItems: [...(json.asReader('seriesItems').asReaders().map((e) => SeriesItem.fromJson(e)))],
+      name: json.asString('name'),
+      color: ColorUtils.fromHex(json.asString('color')),
+      iconName: json.asStringOrNull('iconName'),
+      settings: json.asMapOrNull('settings'),
     );
 
     // validate settings
@@ -144,17 +144,17 @@ class SeriesDef {
   }
 
   Map<String, dynamic> toJson() => {
-        'uuid': uuid,
-        'seriesType': seriesType.name,
-        'seriesItems': [...seriesItems.map((e) => e.toJson())],
-        'name': name,
-        'color': ColorUtils.toHex(color),
-        'iconName': iconName,
-        'settings': _settings,
-        // type & version - could be used for parsing
-        'type': 'seriesDef',
-        'version': seriesDefVersionByType(this),
-      };
+    'uuid': uuid,
+    'seriesType': seriesType.name,
+    'seriesItems': [...seriesItems.map((e) => e.toJson())],
+    'name': name,
+    'color': ColorUtils.toHex(color),
+    'iconName': iconName,
+    'settings': _settings,
+    // type & version - could be used for parsing
+    'type': 'seriesDef',
+    'version': seriesDefVersionByType(this),
+  };
 
   List<dynamic> toCSVHeaderList() {
     List<dynamic> headers = ["utc(ms)"];

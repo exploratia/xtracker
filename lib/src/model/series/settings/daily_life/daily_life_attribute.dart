@@ -13,16 +13,16 @@ class DailyLifeAttribute {
   DailyLifeAttribute({required this.aid, required this.color, required this.name});
 
   factory DailyLifeAttribute.fromJson(JsonReader json) => DailyLifeAttribute(
-        aid: json.atAsString('aid'),
-        name: json.atAsString('name'),
-        color: ColorUtils.fromHex(json.atAsString('color')),
-      );
+    aid: json.asString('aid'),
+    name: json.asString('name'),
+    color: ColorUtils.fromHex(json.asString('color')),
+  );
 
   Map<String, dynamic> toJson() => {
-        'aid': aid,
-        'name': name,
-        'color': ColorUtils.toHex(color),
-      };
+    'aid': aid,
+    'name': name,
+    'color': ColorUtils.toHex(color),
+  };
 
   /// deep copy / clone by transforming to json string and back
   DailyLifeAttribute clone() {

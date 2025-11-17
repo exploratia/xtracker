@@ -34,58 +34,58 @@ class SeriesData<T extends SeriesDataValue> {
   SeriesData(this.seriesDefUuid, this.data);
 
   Map<String, dynamic> toJson({bool exportUuid = true}) => {
-        'uuid': seriesDefUuid,
-        'version': 1,
-        'data': [...data.map((e) => e.toJson(exportUuid: exportUuid))],
-      };
+    'uuid': seriesDefUuid,
+    'version': 1,
+    'data': [...data.map((e) => e.toJson(exportUuid: exportUuid))],
+  };
 
   static SeriesData<BloodPressureValue> fromJsonBloodPressureData(JsonReader json) => SeriesData(
-        json.at('uuid').getString(),
-        [...json.at('data').asReaders().map((e) => BloodPressureValue.fromJson(e))],
-        // if version is required: json['version'] as int? ?? 1
-      );
+    json.asReader('uuid').getString(),
+    [...json.asReader('data').asReaders().map((e) => BloodPressureValue.fromJson(e))],
+    // if version is required: json['version'] as int? ?? 1
+  );
 
   static SeriesData<DailyCheckValue> fromJsonDailyCheckData(JsonReader json) => SeriesData(
-        json.at('uuid').getString(),
-        [...json.at('data').asReaders().map((e) => DailyCheckValue.fromJson(e))],
-        // if version is required: json['version'] as int? ?? 1
-      );
+    json.asReader('uuid').getString(),
+    [...json.asReader('data').asReaders().map((e) => DailyCheckValue.fromJson(e))],
+    // if version is required: json['version'] as int? ?? 1
+  );
 
   static SeriesData<DailyLifeValue> fromJsonDailyLifeData(JsonReader json) => SeriesData(
-        json.at('uuid').getString(),
-        [...json.at('data').asReaders().map((e) => DailyLifeValue.fromJson(e))],
-        // if version is required: json['version'] as int? ?? 1
-      );
+    json.asReader('uuid').getString(),
+    [...json.asReader('data').asReaders().map((e) => DailyLifeValue.fromJson(e))],
+    // if version is required: json['version'] as int? ?? 1
+  );
 
   static SeriesData<HabitValue> fromJsonHabitData(JsonReader json) => SeriesData(
-        json.at('uuid').getString(),
-        [...json.at('data').asReaders().map((e) => HabitValue.fromJson(e))],
-        // if version is required: json['version'] as int? ?? 1
-      );
+    json.asReader('uuid').getString(),
+    [...json.asReader('data').asReaders().map((e) => HabitValue.fromJson(e))],
+    // if version is required: json['version'] as int? ?? 1
+  );
 
   static SeriesData<CustomValue> fromJsonCustomData(JsonReader json) => SeriesData(
-        json.at('uuid').getString(),
-        [...json.at('data').asReaders().map((e) => CustomValue.fromJson(e))],
-        // if version is required: json['version'] as int? ?? 1
-      );
+    json.asReader('uuid').getString(),
+    [...json.asReader('data').asReaders().map((e) => CustomValue.fromJson(e))],
+    // if version is required: json['version'] as int? ?? 1
+  );
 
   static SeriesData<MonthlyValue> fromJsonMonthlyData(JsonReader json) => SeriesData(
-        json.at('uuid').getString(),
-        [...json.at('data').asReaders().map((e) => MonthlyValue.fromJson(e))],
-        // if version is required: json['version'] as int? ?? 1
-      );
+    json.asReader('uuid').getString(),
+    [...json.asReader('data').asReaders().map((e) => MonthlyValue.fromJson(e))],
+    // if version is required: json['version'] as int? ?? 1
+  );
 
   List<List<dynamic>> toCSVLists(SeriesDef seriesDef) => [...data.map((e) => e.toCSVList(seriesDef))];
 
   static SeriesData<BloodPressureValue> fromCSVBloodPressureData(SeriesDef seriesDef, List<List<dynamic>> csv) => SeriesData(
-        seriesDef.uuid,
-        [...csv.map((e) => BloodPressureValue.fromCSVList(e))],
-      );
+    seriesDef.uuid,
+    [...csv.map((e) => BloodPressureValue.fromCSVList(e))],
+  );
 
   static SeriesData<DailyCheckValue> fromCSVDailyCheckData(SeriesDef seriesDef, List<List<dynamic>> csv) => SeriesData(
-        seriesDef.uuid,
-        [...csv.map((e) => DailyCheckValue.fromCSVList(e))],
-      );
+    seriesDef.uuid,
+    [...csv.map((e) => DailyCheckValue.fromCSVList(e))],
+  );
 
   static SeriesData<DailyLifeValue> fromCSVDailyLifeData(SeriesDef seriesDef, List<List<dynamic>> csv) {
     // build resolver map
@@ -101,19 +101,19 @@ class SeriesData<T extends SeriesDataValue> {
   }
 
   static SeriesData<HabitValue> fromCSVHabitData(SeriesDef seriesDef, List<List<dynamic>> csv) => SeriesData(
-        seriesDef.uuid,
-        [...csv.map((e) => HabitValue.fromCSVList(e))],
-      );
+    seriesDef.uuid,
+    [...csv.map((e) => HabitValue.fromCSVList(e))],
+  );
 
   static SeriesData<CustomValue> fromCSVCustomData(SeriesDef seriesDef, List<List<dynamic>> csv) => SeriesData(
-        seriesDef.uuid,
-        [...csv.map((e) => CustomValue.fromCSVList(e, seriesDef))],
-      );
+    seriesDef.uuid,
+    [...csv.map((e) => CustomValue.fromCSVList(e, seriesDef))],
+  );
 
   static SeriesData<MonthlyValue> fromCSVMonthlyData(SeriesDef seriesDef, List<List<dynamic>> csv) => SeriesData(
-        seriesDef.uuid,
-        [...csv.map((e) => MonthlyValue.fromCSVList(e, seriesDef))],
-      );
+    seriesDef.uuid,
+    [...csv.map((e) => MonthlyValue.fromCSVList(e, seriesDef))],
+  );
 
   bool isEmpty() {
     return data.isEmpty;

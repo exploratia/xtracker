@@ -72,17 +72,17 @@ class SeriesItem {
   }
 
   factory SeriesItem.fromJson(JsonReader json) {
-    var jCalculation = json.atOrNull("calculation");
+    var jCalculation = json.asReaderOrNull("calculation");
     return SeriesItem(
-      json.at('siid').getString(),
-      json.at('name').getString(),
-      json.atAsStringOrNull('unit'),
-      ColorUtils.fromHex(json.at('color').getString()),
+      json.asReader('siid').getString(),
+      json.asReader('name').getString(),
+      json.asStringOrNull('unit'),
+      ColorUtils.fromHex(json.asReader('color').getString()),
       // extended
-      json.atAsBoolOr('hideInTable', false),
-      json.atAsBoolOr('hideInChart', false),
-      json.atAsIntOrNull('tableColumnWidth'),
-      json.atAsBoolOr('useDeltaInChart', false),
+      json.asBoolOr('hideInTable', false),
+      json.asBoolOr('hideInChart', false),
+      json.asIntOrNull('tableColumnWidth'),
+      json.asBoolOr('useDeltaInChart', false),
       jCalculation != null ? CalculationContainer.fromJson(jCalculation) : null,
     );
   }

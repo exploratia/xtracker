@@ -26,7 +26,7 @@ class JsonReader {
   // ACCESSORS
   // ------------------------------------------------------------
 
-  JsonReader at(String key) {
+  JsonReader asReader(String key) {
     if (_value is! Map) {
       throw JsonParseException('Expected Map at $pathString but found ${_value.runtimeType}');
     }
@@ -42,13 +42,14 @@ class JsonReader {
     return JsonReader(_value[key], [..._path, key]);
   }
 
-  JsonReader? atOrNull(String key) {
+  JsonReader? asReaderOrNull(String key) {
     if (_value is! Map) return null;
     if (!_value.containsKey(key)) return null;
     if (_value[key] == null) return null;
     return JsonReader(_value[key], [..._path, key]);
   }
 
+  /// index access (expects value to be a list)
   JsonReader index(int i) {
     if (_value is! List) {
       throw JsonParseException('Expected List at $pathString but found ${_value.runtimeType}');
@@ -133,11 +134,7 @@ class JsonReader {
 
   /// Strict: throws if no List
   Iterable<JsonReader> asReaders() {
-    if (_value is! List) {
-      throw JsonParseException('Expected List at $pathString but found ${_value.runtimeType}');
-    }
-
-    final list = _value;
+    final list = getList();
 
     // Lazy generator
     return Iterable.generate(
@@ -214,47 +211,47 @@ class JsonReader {
   // SHORTCUTS: STRICT LEAF ACCESS
   // ------------------------------------------------------------
 
-  String atAsString(String key) => at(key).getString();
+  String asString(String key) => asReader(key).getString();
 
-  int atAsInt(String key) => at(key).getInt();
+  int asInt(String key) => asReader(key).getInt();
 
-  double atAsDouble(String key) => at(key).getDouble();
+  double asDouble(String key) => asReader(key).getDouble();
 
-  bool atAsBool(String key) => at(key).getBool();
+  bool asBool(String key) => asReader(key).getBool();
 
-  Map<String, dynamic> atAsMap(String key) => at(key).getMap();
+  Map<String, dynamic> asMap(String key) => asReader(key).getMap();
 
-  List<dynamic> atAsList(String key) => at(key).getList();
+  List<dynamic> asList(String key) => asReader(key).getList();
 
   // ------------------------------------------------------------
   // SHORTCUTS: OPTIONAL LEAF ACCESS
   // ------------------------------------------------------------
 
-  String? atAsStringOrNull(String key) => atOrNull(key)?.getString();
+  String? asStringOrNull(String key) => asReaderOrNull(key)?.getString();
 
-  int? atAsIntOrNull(String key) => atOrNull(key)?.getInt();
+  int? asIntOrNull(String key) => asReaderOrNull(key)?.getInt();
 
-  double? atAsDoubleOrNull(String key) => atOrNull(key)?.getDouble();
+  double? asDoubleOrNull(String key) => asReaderOrNull(key)?.getDouble();
 
-  bool? atAsBoolOrNull(String key) => atOrNull(key)?.getBool();
+  bool? asBoolOrNull(String key) => asReaderOrNull(key)?.getBool();
 
-  Map<String, dynamic>? atAsMapOrNull(String key) => atOrNull(key)?.getMap();
+  Map<String, dynamic>? asMapOrNull(String key) => asReaderOrNull(key)?.getMap();
 
-  List<dynamic>? atAsListOrNull(String key) => atOrNull(key)?.getList();
+  List<dynamic>? asListOrNull(String key) => asReaderOrNull(key)?.getList();
 
   // ------------------------------------------------------------
   // SHORTCUTS WITH DEFAULT VALUES
   // ------------------------------------------------------------
 
-  String atAsStringOr(String key, String def) => atAsStringOrNull(key) ?? def;
+  String asStringOr(String key, String def) => asStringOrNull(key) ?? def;
 
-  int atAsIntOr(String key, int def) => atAsIntOrNull(key) ?? def;
+  int asIntOr(String key, int def) => asIntOrNull(key) ?? def;
 
-  double atAsDoubleOr(String key, double def) => atAsDoubleOrNull(key) ?? def;
+  double asDoubleOr(String key, double def) => asDoubleOrNull(key) ?? def;
 
-  bool atAsBoolOr(String key, bool def) => atAsBoolOrNull(key) ?? def;
+  bool asBoolOr(String key, bool def) => asBoolOrNull(key) ?? def;
 
-  Map<String, dynamic> atAsMapOr(String key, Map<String, dynamic> def) => atAsMapOrNull(key) ?? def;
+  Map<String, dynamic> asMapOr(String key, Map<String, dynamic> def) => asMapOrNull(key) ?? def;
 
-  List<dynamic> atAsListOr(String key, List<dynamic> def) => atAsListOrNull(key) ?? def;
+  List<dynamic> asListOr(String key, List<dynamic> def) => asListOrNull(key) ?? def;
 }

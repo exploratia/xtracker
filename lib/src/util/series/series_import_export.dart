@@ -108,11 +108,12 @@ class SeriesImportExport {
       Uint8List bytes = enc.convert(json);
       // https://pub.dev/packages/file_picker
       var selectedFile = await FilePicker.platform.saveFile(
-          dialogTitle: 'Please select an output file:',
-          fileName: 'xtracker_${_clearSeriesNameForExport(seriesDef)}_${DateTimeUtils.formatExportDateTime()}.csv',
-          type: FileType.custom,
-          allowedExtensions: ["csv"],
-          bytes: bytes);
+        dialogTitle: 'Please select an output file:',
+        fileName: 'xtracker_${_clearSeriesNameForExport(seriesDef)}_${DateTimeUtils.formatExportDateTime()}.csv',
+        type: FileType.custom,
+        allowedExtensions: ["csv"],
+        bytes: bytes,
+      );
       var exported = selectedFile != null || kIsWeb; // in web no file select - just download
       if (exported) {
         SimpleLogging.i('Successfully exported ${seriesDef.toLogString()}');
@@ -178,12 +179,12 @@ class SeriesImportExport {
   /// - throws [TypeError] in case of null values or not available properties in json
   /// - throws [Ex] in case of unexpected json
   static Future<bool> _importSeries(JsonReader json, String fileName, SeriesProviders seriesProviders) async {
-    if (json.at("type").getString() == "seriesExport") {
+    if (json.asReader("type").getString() == "seriesExport") {
       // check version...
-      var seriesDef = SeriesDef.fromJson(json.at("seriesDef"));
+      var seriesDef = SeriesDef.fromJson(json.asReader("seriesDef"));
       seriesDef.validate();
       SimpleLogging.i("Importing series and data for ${seriesDef.toLogString()} ...");
-      var jSeriesData = json.at("seriesData");
+      var jSeriesData = json.asReader("seriesData");
       SeriesData seriesData;
       switch (seriesDef.seriesType) {
         case SeriesType.bloodPressure:
@@ -205,8 +206,10 @@ class SeriesImportExport {
       SimpleLogging.i("Import for ${seriesDef.toLogString()} finished.");
       return true;
     } else {
-      throw Ex("Import failed - unexpected data structure in file: $fileName",
-          localizedMessage: LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [fileName]));
+      throw Ex(
+        "Import failed - unexpected data structure in file: $fileName",
+        localizedMessage: LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [fileName]),
+      );
     }
   }
 
@@ -256,10 +259,10 @@ class SeriesImportExport {
         var fileContent = await file.readAsString(); // utf8
         var json = JsonReader(jsonDecode(fileContent));
 
-        var jType = json.at("type");
+        var jType = json.asReader("type");
         if (jType.getString() == "multiSeriesExport") {
           // check version...
-          for (var jSeries in json.at("series").asReaders()) {
+          for (var jSeries in json.asReader("series").asReaders()) {
             if (await _importSeries(jSeries, file.name, seriesProviders)) {
               successfulImports++;
             }
@@ -299,8 +302,9 @@ class SeriesImportExport {
       SimpleLogging.i('Successfully imported $successfulImports series.');
       if (context.mounted) {
         Dialogs.showSnackBar(
-            LocaleKeys.seriesManagement_importExport_snackbar_importSuccessfulXofY.tr(args: [successfulImports.toString(), numSelectedFiles.toString()]),
-            context);
+          LocaleKeys.seriesManagement_importExport_snackbar_importSuccessfulXofY.tr(args: [successfulImports.toString(), numSelectedFiles.toString()]),
+          context,
+        );
       }
     }
   }
@@ -386,12 +390,16 @@ class SeriesImportExport {
         // remove empty lines
         csv.removeWhere((line) => line.isEmpty || line.length == 1 && ("" == line[0] || null == line[0]));
         if (csv.isEmpty) {
-          throw Ex("Series data import failed - unexpected (empty) data in file: ${file.name}",
-              localizedMessage: LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]));
+          throw Ex(
+            "Series data import failed - unexpected (empty) data in file: ${file.name}",
+            localizedMessage: LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]),
+          );
         }
         if (csv.length < 2) {
-          throw Ex("Series data import failed - unexpected data (invalid amount of lines) in file: ${file.name}",
-              localizedMessage: LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]));
+          throw Ex(
+            "Series data import failed - unexpected data (invalid amount of lines) in file: ${file.name}",
+            localizedMessage: LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]),
+          );
         }
         // check if first line matches series header
         var headerList = seriesDef.toCSVHeaderList();
@@ -408,8 +416,10 @@ class SeriesImportExport {
           }
         }
         if (!headerEquals) {
-          throw Ex("Series data import failed - unexpected data (header mismatch) in file: ${file.name}",
-              localizedMessage: LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]));
+          throw Ex(
+            "Series data import failed - unexpected data (header mismatch) in file: ${file.name}",
+            localizedMessage: LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]),
+          );
         }
 
         await _importSeriesCSV(csv, file.name, seriesDef, seriesProviders);
@@ -438,8 +448,9 @@ class SeriesImportExport {
       SimpleLogging.i('Successfully imported $successfulImports series.');
       if (context.mounted) {
         Dialogs.showSnackBar(
-            LocaleKeys.seriesManagement_importExport_snackbar_importSuccessfulXofY.tr(args: [successfulImports.toString(), numSelectedFiles.toString()]),
-            context);
+          LocaleKeys.seriesManagement_importExport_snackbar_importSuccessfulXofY.tr(args: [successfulImports.toString(), numSelectedFiles.toString()]),
+          context,
+        );
       }
     }
   }
@@ -545,17 +556,25 @@ class SeriesImportExport {
               icon: Icon(Icons.upload_outlined, size: ThemeUtils.iconSizeScaled),
               label: Text(LocaleKeys.seriesManagement_importExport_btn_importSeriesCSV.tr()),
             ),
-            _LabelMedium(LocaleKeys.seriesManagement_importExport_label_importSeriesCSV.tr(args: [
-              seriesDef.name,
-              const ListToCsvConverter().convert([seriesDef.toCSVHeaderList()])
-            ])),
-          ]
+            _LabelMedium(
+              LocaleKeys.seriesManagement_importExport_label_importSeriesCSV.tr(
+                args: [
+                  seriesDef.name,
+                  const ListToCsvConverter().convert([seriesDef.toCSVHeaderList()]),
+                ],
+              ),
+            ),
+          ],
         ],
       ),
     );
 
-    await Dialogs.simpleOkDialog(dialogContent, context,
-        title: LocaleKeys.seriesManagement_importExport_title.tr(), buttonText: LocaleKeys.commons_dialog_btn_cancel.tr());
+    await Dialogs.simpleOkDialog(
+      dialogContent,
+      context,
+      title: LocaleKeys.seriesManagement_importExport_title.tr(),
+      buttonText: LocaleKeys.commons_dialog_btn_cancel.tr(),
+    );
   }
 
   static String buildLastExportDateStr(SettingsController settingsController) {

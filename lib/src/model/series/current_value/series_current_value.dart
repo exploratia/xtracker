@@ -12,7 +12,7 @@ class SeriesCurrentValue {
 
   factory SeriesCurrentValue.fromJson(JsonReader json) {
     SeriesType seriesType;
-    var jType = json.at('seriesType');
+    var jType = json.asReader('seriesType');
     try {
       seriesType = SeriesType.byName(jType.getString());
     } catch (err) {
@@ -20,18 +20,18 @@ class SeriesCurrentValue {
     }
 
     return SeriesCurrentValue(
-      json.at('seriesDefUuid').getString(),
+      json.asReader('seriesDefUuid').getString(),
       seriesType,
       SeriesDataValue.fromJson(
-        json.at('seriesDataValue'),
+        json.asReader('seriesDataValue'),
         seriesType,
       ),
     );
   }
 
   Map<String, dynamic> toJson() => {
-        'seriesDefUuid': seriesDefUuid,
-        'seriesType': seriesType.name,
-        'seriesDataValue': seriesDataValue.toJson(),
-      };
+    'seriesDefUuid': seriesDefUuid,
+    'seriesType': seriesType.name,
+    'seriesDataValue': seriesDataValue.toJson(),
+  };
 }

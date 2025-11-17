@@ -10,15 +10,15 @@ class MonthlyValue extends CustomValue {
 
   factory MonthlyValue.fromJson(JsonReader json) {
     Map<String, double> values = {};
-    var jValues = json.atOrNull('values');
+    var jValues = json.asReaderOrNull('values');
     if (jValues != null) {
       for (var entry in jValues.asMapReaders()) {
         values[entry.key] = entry.value.getDouble();
       }
     }
     return MonthlyValue(
-      json.atAsStringOr('uuid', const Uuid().v4()),
-      DateTime.fromMillisecondsSinceEpoch(json.at('utcMs').getInt()),
+      json.asStringOr('uuid', const Uuid().v4()),
+      DateTime.fromMillisecondsSinceEpoch(json.asReader('utcMs').getInt()),
       values,
     );
   }

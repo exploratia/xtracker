@@ -15,20 +15,20 @@ class HabitValue extends SeriesDataValue {
   }
 
   factory HabitValue.fromJson(JsonReader json) => HabitValue(
-        json.atAsStringOr('uuid', const Uuid().v4()),
-        DateTime.fromMillisecondsSinceEpoch(json.at('utcMs').getInt()),
-      );
+    json.asStringOr('uuid', const Uuid().v4()),
+    DateTime.fromMillisecondsSinceEpoch(json.asReader('utcMs').getInt()),
+  );
 
   @override
   Map<String, dynamic> toJson({bool exportUuid = true}) => {
-        if (exportUuid) 'uuid': uuid,
-        'utcMs': dateTime.millisecondsSinceEpoch,
-      };
+    if (exportUuid) 'uuid': uuid,
+    'utcMs': dateTime.millisecondsSinceEpoch,
+  };
 
   factory HabitValue.fromCSVList(List<dynamic> csv) => HabitValue(
-        const Uuid().v4().toString(),
-        DateTime.fromMillisecondsSinceEpoch(csv[0] as int),
-      );
+    const Uuid().v4().toString(),
+    DateTime.fromMillisecondsSinceEpoch(csv[0] as int),
+  );
 
   @override
   List<dynamic> toCSVList(SeriesDef seriesDef) {

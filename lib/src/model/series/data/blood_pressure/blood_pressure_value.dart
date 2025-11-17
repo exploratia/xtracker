@@ -19,29 +19,29 @@ class BloodPressureValue extends SeriesDataValue {
   BloodPressureValue(super.uuid, super.dateTime, this.high, this.low, this.medication);
 
   factory BloodPressureValue.fromJson(JsonReader json) => BloodPressureValue(
-        json.atAsStringOr('uuid', const Uuid().v4()),
-        DateTime.fromMillisecondsSinceEpoch(json.at('utcMs').getInt()),
-        json.at('high').getInt(),
-        json.at('low').getInt(),
-        json.atAsBoolOr('medication', false),
-      );
+    json.asStringOr('uuid', const Uuid().v4()),
+    DateTime.fromMillisecondsSinceEpoch(json.asReader('utcMs').getInt()),
+    json.asReader('high').getInt(),
+    json.asReader('low').getInt(),
+    json.asBoolOr('medication', false),
+  );
 
   @override
   Map<String, dynamic> toJson({bool exportUuid = true}) => {
-        if (exportUuid) 'uuid': uuid,
-        'utcMs': dateTime.millisecondsSinceEpoch,
-        'high': high,
-        'low': low,
-        if (medication) 'medication': medication, // only save if true
-      };
+    if (exportUuid) 'uuid': uuid,
+    'utcMs': dateTime.millisecondsSinceEpoch,
+    'high': high,
+    'low': low,
+    if (medication) 'medication': medication, // only save if true
+  };
 
   factory BloodPressureValue.fromCSVList(List<dynamic> csv) => BloodPressureValue(
-        const Uuid().v4().toString(),
-        DateTime.fromMillisecondsSinceEpoch(csv[0] as int),
-        csv[1] as int,
-        csv[2] as int,
-        csv.length > 3 ? "1" == csv[3].toString() : false,
-      );
+    const Uuid().v4().toString(),
+    DateTime.fromMillisecondsSinceEpoch(csv[0] as int),
+    csv[1] as int,
+    csv[2] as int,
+    csv.length > 3 ? "1" == csv[3].toString() : false,
+  );
 
   @override
   List<dynamic> toCSVList(SeriesDef seriesDef) {

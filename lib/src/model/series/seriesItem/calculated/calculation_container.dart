@@ -50,7 +50,7 @@ class CalculationContainer {
   factory CalculationContainer.fromJson(JsonReader json) {
     List<CalculationItem> calculationItems = [];
 
-    for (var j in json.at('calculationItems').asReaders()) {
+    for (var j in json.asReader('calculationItems').asReaders()) {
       var inputType = CalculationItem.inputTypeFromJson(j);
       switch (inputType) {
         case CalculationInputType.numeric:
@@ -61,8 +61,8 @@ class CalculationContainer {
     }
 
     return CalculationContainer(
-      sourceSiid: json.at('sourceSiid').getString(),
-      usePreviousInput: json.atOrNull('usePreviousInput')?.getBool() ?? false,
+      sourceSiid: json.asReader('sourceSiid').getString(),
+      usePreviousInput: json.asReaderOrNull('usePreviousInput')?.getBool() ?? false,
       calculationItems: calculationItems,
     );
   }

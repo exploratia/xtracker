@@ -20,7 +20,7 @@ abstract class CalculationItem {
   }
 
   static CalculationInputType inputTypeFromJson(JsonReader json) {
-    var jInputType = json.at('inputType');
+    var jInputType = json.asReader('inputType');
     try {
       return CalculationInputType.byName(jInputType.getString());
     } catch (err) {
