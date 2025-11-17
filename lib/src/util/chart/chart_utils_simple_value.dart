@@ -151,6 +151,8 @@ class TimedValue {
 
   void add(double? val) => value += (val ?? 0);
 
+  void buildDelta(double prevValue) => value = value - prevValue;
+
   @override
   String toString() {
     return 'SimpleValue{value: $value, dateTime: $dateTime}';

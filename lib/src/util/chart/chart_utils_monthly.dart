@@ -20,11 +20,14 @@ import 'chart_utils_simple_value.dart';
 class ChartUtilsMonthly {
   static List<ParameterChartData> buildDataProviderPerParameter(SeriesViewMetaData seriesViewMetaData, List<MonthlyValue> seriesData) {
     Map<String, List<TimedValue>> siid2values = {};
-    for (var e in seriesViewMetaData.seriesDef.seriesItems) {
-      siid2values[e.siid] = [];
+    Map<String, bool> siid2useDelta = {};
+    for (var si in seriesViewMetaData.seriesDef.seriesItems) {
+      siid2values[si.siid] = [];
+      siid2useDelta[si.siid] = si.useDeltaInChart;
     }
 
     var siids = siid2values.keys;
+    Map<String, double> prevValues = {};
 
     if (seriesViewMetaData.showCompressed) {
       // compress yearly
@@ -33,12 +36,12 @@ class ChartUtilsMonthly {
       for (final dataItem in seriesData) {
         var ts = DateTimeUtils.firstDayOfYear(dataItem.dateTime);
         // check duplicate timestamps for monthly
-        for (final key in siids) {
-          final v = dataItem.values[key];
+        for (final siid in siids) {
+          final v = dataItem.values[siid];
           if (v != null) {
-            var actValue = siid2actValue[key];
+            var actValue = siid2actValue[siid];
             if (actValue == null) {
-              siid2actValue[key] = TimedValue.value(ts, v);
+              siid2actValue[siid] = TimedValue.value(ts, v);
             } else {
               // same timestamp -> update
               if (actValue.dateTime == ts) {
@@ -46,8 +49,15 @@ class ChartUtilsMonthly {
               }
               // otherwise store so far and create new
               else {
-                siid2values[key]!.add(actValue);
-                siid2actValue[key] = TimedValue.value(ts, v);
+                // calc delta?
+                if (siid2useDelta[siid] ?? false) {
+                  var prevValue = prevValues[siid] ?? 0;
+                  prevValues[siid] = actValue.value;
+                  actValue.buildDelta(prevValue);
+                }
+
+                siid2values[siid]!.add(actValue);
+                siid2actValue[siid] = TimedValue.value(ts, v);
               }
             }
           }
@@ -56,7 +66,14 @@ class ChartUtilsMonthly {
 
       // add not yet added to lists
       for (var entry in siid2actValue.entries) {
-        siid2values[entry.key]!.add(entry.value);
+        var siid = entry.key;
+        // calc delta?
+        if (siid2useDelta[siid] ?? false) {
+          var prevValue = prevValues[siid] ?? 0;
+          entry.value.buildDelta(prevValue);
+        }
+
+        siid2values[siid]!.add(entry.value);
       }
     } else {
       DateTime? prevTimestamp;
@@ -69,12 +86,15 @@ class ChartUtilsMonthly {
           );
         }
         prevTimestamp = dataItem.dateTime;
-        for (final key in siids) {
-          final v = dataItem.values[key];
+        for (final siid in siids) {
+          final v = dataItem.values[siid];
           if (v != null) {
-            siid2values[key]!.add(
-              TimedValue.value(dataItem.dateTime, v),
+            var prevValue = prevValues[siid] ?? 0;
+            var val = (siid2useDelta[siid] ?? false) ? v - prevValue : v;
+            siid2values[siid]!.add(
+              TimedValue.value(dataItem.dateTime, val),
             );
+            prevValues[siid] = v;
           }
         }
       }

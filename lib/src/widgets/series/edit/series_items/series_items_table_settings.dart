@@ -68,10 +68,16 @@ class _SeriesItemsTableSettingsState extends State<SeriesItemsTableSettings> {
     }
   }
 
+  int? _determineTableColumnWidth(TextEditingController textController) {
+    var value = textController.text;
+    if (value.isEmpty) return null;
+    return int.tryParse(value);
+  }
+
   void _saveHandler() {
     _validate();
     if (!_isValid) return;
-    var result = _seriesItemsData.map((e) => e.seriesItem.withHideInTable(e.hide)).toList();
+    var result = _seriesItemsData.map((e) => e.seriesItem.withTableSettings(e.hide, _determineTableColumnWidth(e.textEditingController))).toList();
     Navigator.pop<List<SeriesItem>>(context, result);
   }
 
@@ -99,9 +105,11 @@ class _SeriesItemsTableSettingsState extends State<SeriesItemsTableSettings> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   LazyTooltip(
-                    tooltipBuilder: (BuildContext p1) => Text(e.hide
-                        ? LocaleKeys.seriesEdit_seriesSettings_seriesItems_tableSettingsDlg_tooltip_showColumn.tr()
-                        : LocaleKeys.seriesEdit_seriesSettings_seriesItems_tableSettingsDlg_tooltip_hideColumn.tr()),
+                    tooltipBuilder: (BuildContext p1) => Text(
+                      e.hide
+                          ? LocaleKeys.seriesEdit_seriesSettings_seriesItems_tableSettingsDlg_tooltip_showColumn.tr()
+                          : LocaleKeys.seriesEdit_seriesSettings_seriesItems_tableSettingsDlg_tooltip_hideColumn.tr(),
+                    ),
                     child: SwitchListTile(
                       contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: ThemeUtils.defaultPadding),
                       value: !e.hide,

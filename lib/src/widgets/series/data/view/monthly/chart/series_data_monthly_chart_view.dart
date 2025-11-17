@@ -57,8 +57,6 @@ class SeriesDataMonthlyChartView extends StatelessWidget {
         List<Widget> charts = [];
 
         if (seriesViewMetaData.showCompressed) {
-          charts.add(const Text("compressed"));
-
           for (var parameterChartData in chartDataPerParameterList) {
             charts.add(
               ChartContainer(
@@ -86,8 +84,6 @@ class SeriesDataMonthlyChartView extends StatelessWidget {
             );
           }
         } else {
-          charts.add(const Text("not compressed"));
-
           for (var parameterChartData in chartDataPerParameterList) {
             charts.add(
               ChartContainer(
@@ -129,7 +125,7 @@ class SeriesDataMonthlyChartView extends StatelessWidget {
             children: [
               seriesDataViewOverlays.buildTopSpacer(),
               Column(
-                spacing: ThemeUtils.verticalSpacing,
+                spacing: ThemeUtils.verticalSpacingLarge,
                 children: charts,
               ),
               seriesDataViewOverlays.buildBottomSpacer(),

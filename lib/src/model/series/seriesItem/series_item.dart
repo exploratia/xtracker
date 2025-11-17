@@ -17,6 +17,7 @@ class SeriesItem {
   final bool hideInTable;
   final bool hideInChart;
   final int? tableColumnWidth;
+  final bool useDeltaInChart;
   final CalculationContainer? calculationContainer;
 
   SeriesItem(
@@ -28,6 +29,7 @@ class SeriesItem {
     this.hideInTable,
     this.hideInChart,
     this.tableColumnWidth,
+    this.useDeltaInChart,
     this.calculationContainer,
   );
 
@@ -46,14 +48,14 @@ class SeriesItem {
     return SeriesItem.fromJson(JsonReader(jsonDecode(jsonEncode(toJson()))));
   }
 
-  /// copy with given value for hideInTable
-  SeriesItem withHideInTable(bool value) {
-    return SeriesItem(siid, name, unit, color, value, hideInChart, tableColumnWidth, calculationContainer);
+  /// copy with given table settings
+  SeriesItem withTableSettings(bool hideInTable, int? tableColumnWidth) {
+    return SeriesItem(siid, name, unit, color, hideInTable, hideInChart, tableColumnWidth ?? this.tableColumnWidth, useDeltaInChart, calculationContainer);
   }
 
-  /// copy with given value for hideInTable
-  SeriesItem withHideInChart(bool value) {
-    return SeriesItem(siid, name, unit, color, hideInTable, value, tableColumnWidth, calculationContainer);
+  /// copy with given chart settings
+  SeriesItem withChartSettings(bool hideInChart, bool useDeltaInChart) {
+    return SeriesItem(siid, name, unit, color, hideInTable, hideInChart, tableColumnWidth, useDeltaInChart, calculationContainer);
   }
 
   /// check if this series item is a calculated one and references the given siid.
@@ -80,6 +82,7 @@ class SeriesItem {
       json.atAsBoolOr('hideInTable', false),
       json.atAsBoolOr('hideInChart', false),
       json.atAsIntOrNull('tableColumnWidth'),
+      json.atAsBoolOr('useDeltaInChart', false),
       jCalculation != null ? CalculationContainer.fromJson(jCalculation) : null,
     );
   }
@@ -95,6 +98,7 @@ class SeriesItem {
     if (hideInTable) json['hideInTable'] = true;
     if (hideInChart) json['hideInChart'] = true;
     if (tableColumnWidth != null) json['tableColumnWidth'] = tableColumnWidth;
+    if (useDeltaInChart) json['useDeltaInChart'] = true;
     if (calculationContainer != null) json['calculation'] = calculationContainer!.toJson();
 
     return json;

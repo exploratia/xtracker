@@ -58,7 +58,7 @@ class _SeriesItemsChartSettingsState extends State<SeriesItemsChartSettings> {
   void _saveHandler() {
     _validate();
     if (!_isValid) return;
-    var result = _seriesItemsData.map((e) => e.seriesItem.withHideInChart(e.hide)).toList();
+    var result = _seriesItemsData.map((e) => e.seriesItem.withChartSettings(e.hide, e.useDelta)).toList();
     Navigator.pop<List<SeriesItem>>(context, result);
   }
 
@@ -86,9 +86,11 @@ class _SeriesItemsChartSettingsState extends State<SeriesItemsChartSettings> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   LazyTooltip(
-                    tooltipBuilder: (BuildContext p1) => Text(e.hide
-                        ? LocaleKeys.seriesEdit_seriesSettings_seriesItems_chartSettingsDlg_tooltip_showChart.tr()
-                        : LocaleKeys.seriesEdit_seriesSettings_seriesItems_chartSettingsDlg_tooltip_hideChart.tr()),
+                    tooltipBuilder: (BuildContext p1) => Text(
+                      e.hide
+                          ? LocaleKeys.seriesEdit_seriesSettings_seriesItems_chartSettingsDlg_tooltip_showChart.tr()
+                          : LocaleKeys.seriesEdit_seriesSettings_seriesItems_chartSettingsDlg_tooltip_hideChart.tr(),
+                    ),
                     child: SwitchListTile(
                       contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: ThemeUtils.defaultPadding),
                       value: !e.hide,
@@ -98,6 +100,23 @@ class _SeriesItemsChartSettingsState extends State<SeriesItemsChartSettings> {
                         });
                       },
                       title: Text(e.seriesItem.name),
+                    ),
+                  ),
+                  LazyTooltip(
+                    tooltipBuilder: (BuildContext p1) => Text(
+                      e.useDelta
+                          ? LocaleKeys.seriesEdit_seriesSettings_seriesItems_chartSettingsDlg_tooltip_disuseDelta.tr()
+                          : LocaleKeys.seriesEdit_seriesSettings_seriesItems_chartSettingsDlg_tooltip_useDelta.tr(),
+                    ),
+                    child: SwitchListTile(
+                      contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: ThemeUtils.defaultPadding),
+                      value: e.useDelta,
+                      onChanged: (bool value) {
+                        setState(() {
+                          e.useDelta = value;
+                        });
+                      },
+                      title: Text(LocaleKeys.seriesEdit_seriesSettings_seriesItems_chartSettingsDlg_label_useDelta.tr()),
                     ),
                   ),
                 ],
@@ -143,8 +162,10 @@ class _SeriesItemsChartSettingsState extends State<SeriesItemsChartSettings> {
 class _SeriesItemData {
   final SeriesItem seriesItem;
   late bool hide;
+  late bool useDelta;
 
   _SeriesItemData(this.seriesItem) {
     hide = seriesItem.hideInChart;
+    useDelta = seriesItem.useDeltaInChart;
   }
 }

@@ -655,9 +655,14 @@
         },
         "chartSettingsDlg": {
           "title": "Diagrammeinstellungen",
+          "label": {
+            "useDelta": "Delta"
+          },
           "tooltip": {
             "showChart": "Diagramm anzeigen",
-            "hideChart": "Diagramm ausblenden"
+            "hideChart": "Diagramm ausblenden",
+            "useDelta": "Delta zum vorherigen Wert verwenden",
+            "disuseDelta": "Absoluten Wert verwenden"
           }
         },
         "tableSettingsDlg": {

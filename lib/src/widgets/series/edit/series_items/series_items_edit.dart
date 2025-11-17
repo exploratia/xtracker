@@ -38,7 +38,7 @@ class SeriesItemsEdit extends StatelessWidget {
         seriesItems: seriesItems,
         index: i,
         editSeriesItemCB: () async {
-          SeriesItem? updatedSeriesItem = await SeriesItemInput.showInputDlg(context, seriesItem: seriesItem.clone(), existingSeriesItems: [...seriesItems]);
+          SeriesItem? updatedSeriesItem = await SeriesItemInput.showInputDlg(context, seriesItem: seriesItem.clone(), seriesDef: seriesDef);
           if (updatedSeriesItem != null) {
             var idx = seriesItems.indexWhere((a) => a.siid == updatedSeriesItem.siid);
             if (idx >= 0) {
@@ -58,8 +58,10 @@ class SeriesItemsEdit extends StatelessWidget {
             seriesItems.removeWhere((si) => si.siid == seriesItem.siid);
             updateSettings();
           } else {
-            bool? deleteWithReferences =
-                await Dialogs.simpleYesNoDialog(LocaleKeys.seriesEdit_seriesSettings_seriesItems_actions_delete_query_deleteWithReferencingItems, context);
+            bool? deleteWithReferences = await Dialogs.simpleYesNoDialog(
+              LocaleKeys.seriesEdit_seriesSettings_seriesItems_actions_delete_query_deleteWithReferencingItems,
+              context,
+            );
             if (deleteWithReferences == true) {
               seriesItems.removeWhere((si) => si.siid == seriesItem.siid || referencingCalculatedSeriesItems.contains(si.siid));
               updateSettings();
@@ -74,125 +76,125 @@ class SeriesItemsEdit extends StatelessWidget {
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       buildDefaultDragHandles: false,
-      header: LayoutBuilder(builder: (context, constraints) {
-        var infoBtn = InfoBtn(
-          title: LocaleKeys.seriesEdit_seriesSettings_seriesItems_title.tr(),
-          content: LocaleKeys.seriesEdit_seriesSettings_seriesItems_info.tr(),
-        );
+      header: LayoutBuilder(
+        builder: (context, constraints) {
+          var infoBtn = InfoBtn(
+            title: LocaleKeys.seriesEdit_seriesSettings_seriesItems_title.tr(),
+            content: LocaleKeys.seriesEdit_seriesSettings_seriesItems_info.tr(),
+          );
 
-        var headerActions = Row(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            if (listItems.isNotEmpty) ...[
+          var headerActions = Row(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              if (listItems.isNotEmpty) ...[
+                IconButton(
+                  iconSize: ThemeUtils.iconSizeScaled,
+                  tooltip: LocaleKeys.seriesEdit_seriesSettings_seriesItems_actions_editChartSettings_tooltip.tr(),
+                  onPressed: () async {
+                    var updatedSeriesItems = await SeriesItemsChartSettings.showInputDlg(context, seriesItems: seriesItems);
+                    if (updatedSeriesItems != null) {
+                      seriesItems.clear();
+                      seriesItems.addAll(updatedSeriesItems);
+                      updateSettings();
+                    }
+                  },
+                  icon: const Icon(Icons.line_axis_outlined),
+                ),
+                IconButton(
+                  iconSize: ThemeUtils.iconSizeScaled,
+                  tooltip: LocaleKeys.seriesEdit_seriesSettings_seriesItems_actions_editTableSettings_tooltip.tr(),
+                  onPressed: () async {
+                    var updatedSeriesItems = await SeriesItemsTableSettings.showInputDlg(context, seriesItems: seriesItems);
+                    if (updatedSeriesItems != null) {
+                      seriesItems.clear();
+                      seriesItems.addAll(updatedSeriesItems);
+                      updateSettings();
+                    }
+                  },
+                  icon: const Icon(Icons.view_column_outlined),
+                ),
+                const SizedBox(height: 40, child: AppBarActionsDivider()),
+              ],
               IconButton(
                 iconSize: ThemeUtils.iconSizeScaled,
-                tooltip: LocaleKeys.seriesEdit_seriesSettings_seriesItems_actions_editChartSettings_tooltip.tr(),
+                tooltip: LocaleKeys.seriesEdit_seriesSettings_seriesItems_actions_add_tooltip.tr(),
                 onPressed: () async {
-                  var updatedSeriesItems = await SeriesItemsChartSettings.showInputDlg(context, seriesItems: seriesItems);
-                  if (updatedSeriesItems != null) {
-                    seriesItems.clear();
-                    seriesItems.addAll(updatedSeriesItems);
-                    updateSettings();
-                  }
-                },
-                icon: const Icon(Icons.line_axis_outlined),
-              ),
-              IconButton(
-                iconSize: ThemeUtils.iconSizeScaled,
-                tooltip: LocaleKeys.seriesEdit_seriesSettings_seriesItems_actions_editTableSettings_tooltip.tr(),
-                onPressed: () async {
-                  var updatedSeriesItems = await SeriesItemsTableSettings.showInputDlg(context, seriesItems: seriesItems);
-                  if (updatedSeriesItems != null) {
-                    seriesItems.clear();
-                    seriesItems.addAll(updatedSeriesItems);
-                    updateSettings();
-                  }
-                },
-                icon: const Icon(Icons.view_column_outlined),
-              ),
-              const SizedBox(height: 40, child: AppBarActionsDivider()),
-            ],
-            IconButton(
-              iconSize: ThemeUtils.iconSizeScaled,
-              tooltip: LocaleKeys.seriesEdit_seriesSettings_seriesItems_actions_add_tooltip.tr(),
-              onPressed: () async {
-                SeriesItem? seriesItem =
-                    await SeriesItemInput.showInputDlg(context, newSeriesItemColor: seriesDef.color, existingSeriesItems: [...seriesItems]);
-                if (seriesItem != null) {
-                  seriesItems.insert(0, seriesItem);
-                  updateSettings();
-                }
-              },
-              icon: const Icon(Icons.add),
-            ),
-            if (seriesItems.isNotEmpty)
-              IconButton(
-                iconSize: ThemeUtils.iconSizeScaled,
-                tooltip: LocaleKeys.seriesEdit_seriesSettings_seriesItems_actions_addCalculated_tooltip.tr(),
-                onPressed: () async {
-                  SeriesItem? seriesItem = await SeriesItemInput.showInputDlg(context,
-                      newSeriesItemColor: seriesDef.color, createCalculatedItem: true, existingSeriesItems: [...seriesItems]);
+                  SeriesItem? seriesItem = await SeriesItemInput.showInputDlg(context, seriesDef: seriesDef);
                   if (seriesItem != null) {
                     seriesItems.insert(0, seriesItem);
                     updateSettings();
                   }
                 },
-                icon: SizedBox(
-                  height: ThemeUtils.iconSizeScaled,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      Positioned(
-                        top: 0,
-                        left: -5,
-                        child: Icon(Icons.add_outlined, size: ThemeUtils.iconSizeScaled),
-                      ),
-                      Positioned(
-                        right: -1,
-                        top: -3,
-                        child: Icon(Icons.link_outlined, size: 15 * MediaQueryUtils.iconScaleFactor),
-                      ),
-                    ],
+                icon: const Icon(Icons.add),
+              ),
+              if (seriesItems.isNotEmpty)
+                IconButton(
+                  iconSize: ThemeUtils.iconSizeScaled,
+                  tooltip: LocaleKeys.seriesEdit_seriesSettings_seriesItems_actions_addCalculated_tooltip.tr(),
+                  onPressed: () async {
+                    SeriesItem? seriesItem = await SeriesItemInput.showInputDlg(context, createCalculatedItem: true, seriesDef: seriesDef);
+                    if (seriesItem != null) {
+                      seriesItems.insert(0, seriesItem);
+                      updateSettings();
+                    }
+                  },
+                  icon: SizedBox(
+                    height: ThemeUtils.iconSizeScaled,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Positioned(
+                          top: 0,
+                          left: -5,
+                          child: Icon(Icons.add_outlined, size: ThemeUtils.iconSizeScaled),
+                        ),
+                        Positioned(
+                          right: -1,
+                          top: -3,
+                          child: Icon(Icons.link_outlined, size: 15 * MediaQueryUtils.iconScaleFactor),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            IconButton(
-              iconSize: ThemeUtils.iconSizeScaled,
-              tooltip: LocaleKeys.seriesEdit_seriesSettings_seriesItems_actions_deleteAll_tooltip.tr(),
-              onPressed: () async {
-                seriesItems.clear();
-                updateSettings();
-              },
-              icon: const Icon(Icons.playlist_remove_outlined),
-            ),
-          ],
-        );
-
-        if (constraints.maxWidth < 300) {
-          return Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            spacing: ThemeUtils.horizontalSpacingLarge,
-            children: [
-              infoBtn,
-              Expanded(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: headerActions,
-                ),
+              IconButton(
+                iconSize: ThemeUtils.iconSizeScaled,
+                tooltip: LocaleKeys.seriesEdit_seriesSettings_seriesItems_actions_deleteAll_tooltip.tr(),
+                onPressed: () async {
+                  seriesItems.clear();
+                  updateSettings();
+                },
+                icon: const Icon(Icons.playlist_remove_outlined),
               ),
             ],
           );
-        }
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            infoBtn,
-            headerActions,
-          ],
-        );
-      }),
+
+          if (constraints.maxWidth < 300) {
+            return Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              spacing: ThemeUtils.horizontalSpacingLarge,
+              children: [
+                infoBtn,
+                Expanded(
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: headerActions,
+                  ),
+                ),
+              ],
+            );
+          }
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              infoBtn,
+              headerActions,
+            ],
+          );
+        },
+      ),
       proxyDecorator: (Widget child, int index, Animation<double> animation) {
         return Opacity(
           opacity: 0.6,

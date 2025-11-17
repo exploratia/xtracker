@@ -654,10 +654,15 @@
           "title": "Parameter"
         },
         "chartSettingsDlg": {
-          "titel": "Chart settings",
+          "title": "Chart settings",
+          "label": {
+            "useDelta": "Delta"
+          },
           "tooltip": {
             "showChart": "Show chart",
-            "hideChart": "Hide chart"
+            "hideChart": "Hide chart",
+            "useDelta": "Use delta to previous value",
+            "disuseDelta": "Use absolute value"
           }
         },
         "tableSettingsDlg": {

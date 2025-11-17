@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import '../../../../../../generated/locale_keys.g.dart';
 import '../../../../model/series/seriesItem/calculated/calculation_container.dart';
 import '../../../../model/series/seriesItem/series_item.dart';
+import '../../../../model/series/series_def.dart';
+import '../../../../model/series/series_type.dart';
 import '../../../../model/series/settings/daily_life/daily_life_attribute.dart';
 import '../../../../util/theme_utils.dart';
 import '../../../controls/form/validation_field.dart';
@@ -16,32 +18,28 @@ class SeriesItemInput extends StatefulWidget {
   const SeriesItemInput({
     super.key,
     this.seriesItem,
-    this.newSeriesItemColor,
+    required this.seriesDef,
     required this.isCalculated,
-    required this.existingSeriesItems,
   });
 
   final SeriesItem? seriesItem;
-  final Color? newSeriesItemColor;
   final bool isCalculated;
-  final List<SeriesItem> existingSeriesItems;
+  final SeriesDef seriesDef;
 
   ///
   /// -[existingSeriesItems] readonly! just to get information
   static Future<SeriesItem?> showInputDlg(
     BuildContext context, {
     SeriesItem? seriesItem,
-    Color? newSeriesItemColor,
     bool? createCalculatedItem,
-    required List<SeriesItem> existingSeriesItems,
+    required SeriesDef seriesDef,
   }) async {
     return await showDialog<SeriesItem>(
       context: context,
       builder: (_) => SeriesItemInput(
         seriesItem: seriesItem,
-        newSeriesItemColor: newSeriesItemColor,
         isCalculated: seriesItem != null ? seriesItem.isCalculated : (createCalculatedItem ?? false),
-        existingSeriesItems: existingSeriesItems,
+        seriesDef: seriesDef,
       ),
     );
   }
@@ -70,7 +68,7 @@ class _SeriesItemInputState extends State<SeriesItemInput> {
   initState() {
     var source = widget.seriesItem;
     _siid = source?.siid ?? DailyLifeAttribute.generateUniqueAttributeId();
-    _color = source?.color ?? widget.newSeriesItemColor ?? ThemeUtils.primary;
+    _color = source?.color ?? widget.seriesDef.color;
     _isCalculated = widget.isCalculated;
 
     _nameController.addListener(_validate);
@@ -132,11 +130,14 @@ class _SeriesItemInputState extends State<SeriesItemInput> {
     var hideInTable = false;
     var hideInChart = false;
     int? tableColumnWidth;
+    // for monthly series set usDelta true as default
+    var useDeltaInChart = widget.seriesDef.seriesType == SeriesType.monthly;
     // source available?
     if (source != null) {
       hideInTable = source.hideInTable;
       hideInChart = source.hideInTable;
       tableColumnWidth = source.tableColumnWidth;
+      useDeltaInChart = source.useDeltaInChart;
     }
 
     SeriesItem val = SeriesItem(
@@ -147,6 +148,7 @@ class _SeriesItemInputState extends State<SeriesItemInput> {
       hideInTable,
       hideInChart,
       tableColumnWidth,
+      useDeltaInChart,
       _calculationContainer,
     );
 
@@ -161,7 +163,7 @@ class _SeriesItemInputState extends State<SeriesItemInput> {
     if (_isCalculated) {
       calculationInput = SeriesItemCalculation(
         calculationContainer: _calculationContainer,
-        availableSeriesItems: widget.existingSeriesItems.where((i) => !i.isCalculated).toList(),
+        availableSeriesItems: widget.seriesDef.seriesItems.where((i) => !i.isCalculated).toList(),
         setCalculationContainer: _setCalculationContainer,
       );
     }
