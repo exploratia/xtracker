@@ -60,10 +60,9 @@ class SeriesDataMonthlyChartView extends StatelessWidget {
           for (var parameterChartData in chartDataPerParameterList) {
             charts.add(
               ChartContainer(
-                title: Row(
-                  children: [
-                    Text(parameterChartData.seriesItem.name + parameterChartData.seriesItem.unitInBrackets(emptyStringIfNullOrEmpty: true)),
-                  ],
+                title: Align(
+                  alignment: .centerLeft,
+                  child: Text(parameterChartData.seriesItem.name + parameterChartData.seriesItem.unitInBrackets(emptyStringIfNullOrEmpty: true)),
                 ),
                 showDateTooltip: true,
                 maxVisibleHeight: constraints.maxHeight - seriesDataViewOverlays.height,
@@ -75,7 +74,6 @@ class SeriesDataMonthlyChartView extends StatelessWidget {
                       parameterChartData.seriesItem,
                       parameterChartData.data,
                       themeData,
-                      dateFormatter,
                       null,
                     ),
                   );
@@ -87,7 +85,14 @@ class SeriesDataMonthlyChartView extends StatelessWidget {
           for (var parameterChartData in chartDataPerParameterList) {
             charts.add(
               ChartContainer(
-                title: Text(parameterChartData.seriesItem.name + parameterChartData.seriesItem.unitInBrackets(emptyStringIfNullOrEmpty: true)),
+                title: Align(
+                  alignment: .centerLeft,
+                  child: Text(parameterChartData.seriesItem.name + parameterChartData.seriesItem.unitInBrackets(emptyStringIfNullOrEmpty: true)),
+                ),
+                legend: ChartUtilsMonthly.buildMonthlyChartLegend(
+                  parameterChartData.seriesItem,
+                  parameterChartData.data,
+                ),
                 showDateTooltip: true,
                 maxVisibleHeight: constraints.maxHeight - seriesDataViewOverlays.height,
                 dateFormatter: dateFormatter,
@@ -98,7 +103,6 @@ class SeriesDataMonthlyChartView extends StatelessWidget {
                       parameterChartData.seriesItem,
                       parameterChartData.data,
                       themeData,
-                      dateFormatter,
                       null,
                     ),
                   );
@@ -108,16 +112,11 @@ class SeriesDataMonthlyChartView extends StatelessWidget {
           }
         }
 
-        for (var parameterChartData in chartDataPerParameterList) {
-          charts.add(Text(parameterChartData.seriesItem.name));
-          charts.addAll(
-            parameterChartData.data
-                .map(
-                  (e) => Text(e.toString()),
-                )
-                .toList(),
-          );
-        }
+        // Debug: show values as text
+        // for (var parameterChartData in chartDataPerParameterList) {
+        //   charts.add(Text(parameterChartData.seriesItem.name));
+        //   charts.addAll(parameterChartData.data.map((e) => Text(e.toString())).toList());
+        // }
 
         return SingleChildScrollViewWithScrollbar(
           useHorizontalScreenPadding: true,

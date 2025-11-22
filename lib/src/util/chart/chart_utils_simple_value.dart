@@ -151,7 +151,15 @@ class TimedValue {
 
   void add(double? val) => value += (val ?? 0);
 
-  void buildDelta(double prevValue) => value = value - prevValue;
+  void set(double? val) => value = (val ?? 0);
+
+  /// only calculates delta if value is bigger then prevValue.
+  /// otherwise it's counted as a reset (e.g. exchange of water meter)
+  void buildDelta(double prevValue) {
+    if (value > prevValue) {
+      value = value - prevValue;
+    }
+  }
 
   @override
   String toString() {

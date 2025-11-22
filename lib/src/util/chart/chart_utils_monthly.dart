@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +8,13 @@ import '../../model/series/data/monthly/monthly_value.dart';
 import '../../model/series/seriesItem/series_item.dart';
 import '../../model/series/series_def.dart';
 import '../../model/series/series_view_meta_data.dart';
+import '../../widgets/controls/chart/legend_item.dart';
 import '../../widgets/controls/chart/title_bottom_axis.dart';
+import '../color_utils.dart';
 import '../date_time_utils.dart';
 import '../ex.dart';
 import '../media_query_utils.dart';
+import '../theme_utils.dart';
 import 'chart_utils.dart';
 import 'chart_utils_simple_value.dart';
 
@@ -21,80 +22,96 @@ class ChartUtilsMonthly {
   static List<ParameterChartData> buildDataProviderPerParameter(SeriesViewMetaData seriesViewMetaData, List<MonthlyValue> seriesData) {
     Map<String, List<TimedValue>> siid2values = {};
     Map<String, bool> siid2useDelta = {};
-    for (var si in seriesViewMetaData.seriesDef.seriesItems) {
+    for (var si in seriesViewMetaData.seriesDef.seriesItems.where((si) => !si.hideInChart)) {
       siid2values[si.siid] = [];
       siid2useDelta[si.siid] = si.useDeltaInChart;
     }
 
     var siids = siid2values.keys;
-    Map<String, double> prevValues = {};
 
     if (seriesViewMetaData.showCompressed) {
       // compress yearly
-      Map<String, TimedValue> siid2actValue = {};
-
-      for (final dataItem in seriesData) {
-        var ts = DateTimeUtils.firstDayOfYear(dataItem.dateTime);
-        // check duplicate timestamps for monthly
-        for (final siid in siids) {
+      for (final siid in siids) {
+        TimedValue? actValue;
+        double prevValue = 0;
+        double resetValue = 0;
+        for (final dataItem in seriesData) {
           final v = dataItem.values[siid];
           if (v != null) {
-            var actValue = siid2actValue[siid];
+            var ts = DateTimeUtils.firstDayOfYear(dataItem.dateTime);
             if (actValue == null) {
-              siid2actValue[siid] = TimedValue.value(ts, v);
+              actValue = TimedValue.value(ts, v);
             } else {
               // same timestamp -> update
               if (actValue.dateTime == ts) {
-                actValue.add(v);
+                // in case of delta check if we got a reset value (value < prevValue)
+                // save the prev value in reset to be able to add it at the end
+                if (siid2useDelta[siid] ?? false) {
+                  if (v < actValue.value) {
+                    resetValue += actValue.value;
+                  }
+                }
+                actValue.set(v);
               }
               // otherwise store so far and create new
               else {
                 // calc delta?
                 if (siid2useDelta[siid] ?? false) {
-                  var prevValue = prevValues[siid] ?? 0;
-                  prevValues[siid] = actValue.value;
-                  actValue.buildDelta(prevValue);
+                  // get prevValue for delta calculation
+                  var prevVal = prevValue;
+                  // first store value as prevValue (to have the correct value for the next year).
+                  prevValue = actValue.value;
+                  // afterwards add a possible resetValue
+                  actValue.add(resetValue);
+                  // build delta
+                  actValue.buildDelta(prevVal);
                 }
 
                 siid2values[siid]!.add(actValue);
-                siid2actValue[siid] = TimedValue.value(ts, v);
+                actValue = TimedValue.value(ts, v);
+                resetValue = 0;
               }
             }
           }
         }
-      }
+        // add not yet added to lists
+        if (actValue != null) {
+          // calc delta?
+          if (siid2useDelta[siid] ?? false) {
+            actValue.add(resetValue);
+            actValue.buildDelta(prevValue);
+          }
 
-      // add not yet added to lists
-      for (var entry in siid2actValue.entries) {
-        var siid = entry.key;
-        // calc delta?
-        if (siid2useDelta[siid] ?? false) {
-          var prevValue = prevValues[siid] ?? 0;
-          entry.value.buildDelta(prevValue);
+          siid2values[siid]!.add(actValue);
         }
-
-        siid2values[siid]!.add(entry.value);
       }
     } else {
+      // uncompressed = monthly
       DateTime? prevTimestamp;
-      for (final dataItem in seriesData) {
-        // check duplicate timestamps for monthly
-        if (dataItem.dateTime == prevTimestamp) {
-          throw Ex(
-            "Found duplicate timestamp '$prevTimestamp' in monthly data in series '${seriesViewMetaData.seriesDef.name}'!",
-            localizedMessage: LocaleKeys.seriesData_monthly_msg_duplicateTimestamp.tr(args: [DateTimeUtils.formatMonthYear(dataItem.dateTime)]),
-          );
-        }
-        prevTimestamp = dataItem.dateTime;
-        for (final siid in siids) {
+      for (final siid in siids) {
+        double prevValue = 0;
+        for (final dataItem in seriesData) {
+          // check duplicate timestamps for monthly
+          if (dataItem.dateTime == prevTimestamp) {
+            throw Ex(
+              "Found duplicate timestamp '$prevTimestamp' in monthly data in series '${seriesViewMetaData.seriesDef.name}'!",
+              localizedMessage: LocaleKeys.seriesData_monthly_msg_duplicateTimestamp.tr(args: [DateTimeUtils.formatMonthYear(dataItem.dateTime)]),
+            );
+          }
+          prevTimestamp = dataItem.dateTime;
           final v = dataItem.values[siid];
           if (v != null) {
-            var prevValue = prevValues[siid] ?? 0;
-            var val = (siid2useDelta[siid] ?? false) ? v - prevValue : v;
+            var val = v;
+            if (siid2useDelta[siid] ?? false) {
+              val = v - prevValue;
+              // if val < 0 we had a reset...
+              if (val < 0) val = v;
+              prevValue = v;
+            }
+
             siid2values[siid]!.add(
               TimedValue.value(dataItem.dateTime, val),
             );
-            prevValues[siid] = v;
           }
         }
       }
@@ -107,12 +124,46 @@ class ChartUtilsMonthly {
     return result;
   }
 
+  static Widget buildMonthlyChartLegend(
+    SeriesItem seriesItem,
+    List<TimedValue> timedValues,
+  ) {
+    List<LegendItem> legendItems = [];
+
+    var latestValueYear = timedValues.last.dateTime.year;
+    var earliestValueYear = timedValues.first.dateTime.year;
+    double maxHue = 80;
+    double hueStep = latestValueYear == earliestValueYear ? 0 : maxHue / (latestValueYear - earliestValueYear);
+
+    buildLegendItem(int year) {
+      var hueSteps = latestValueYear - year;
+      var color = ColorUtils.hue(seriesItem.color, hueSteps * hueStep);
+      legendItems.add(LegendItem(label: year.toString(), color: color));
+    }
+
+    int actYear = earliestValueYear;
+    for (var item in timedValues) {
+      var year = item.dateTime.year;
+      if (year != actYear) {
+        buildLegendItem(actYear);
+      }
+      actYear = year;
+    }
+    buildLegendItem(actYear);
+
+    var legend = Wrap(
+      spacing: ThemeUtils.horizontalSpacing,
+      runSpacing: ThemeUtils.verticalSpacingSmall,
+      children: legendItems,
+    );
+    return legend;
+  }
+
   static LineChartData buildLineChartDataMonthly(
     SeriesViewMetaData seriesViewMetaData,
     SeriesItem seriesItem,
-    List<TimedValue> simpleValues,
+    List<TimedValue> timedValues,
     ThemeData themeData,
-    String Function(DateTime dateTime) dateFormatter,
     Function(FlTouchEvent, LineTouchResponse?)? touchCallback,
   ) {
     List<LineChartBarData> lineBarsData = [];
@@ -120,29 +171,50 @@ class ChartUtilsMonthly {
     ChartMetaData chartMetaData = ChartMetaData();
     chartMetaData.showDots = false;
 
+    var latestValueYear = timedValues.last.dateTime.year;
+    var earliestValueYear = timedValues.first.dateTime.year;
+    double maxHue = 80;
+    double hueStep = latestValueYear == earliestValueYear ? 0 : maxHue / (latestValueYear - earliestValueYear);
+
+    int actYear = earliestValueYear;
     List<FlSpot> values = [];
 
-    for (var item in simpleValues) {
+    buildLineChartData(int year) {
+      var hueSteps = latestValueYear - year;
+      var lineColor = ColorUtils.hue(seriesItem.color, hueSteps * hueStep);
+      lineBarsData.add(
+        LineChartBarData(
+          spots: [...values],
+          isCurved: true,
+          preventCurveOverShooting: true,
+          barWidth: 2,
+          color: lineColor,
+          dotData: ChartUtils.createDotData(chartMetaData),
+          isStrokeCapRound: true,
+          // dashArray: [5, 5],
+          belowBarData: BarAreaData(show: true, gradient: ChartUtils.createTopToBottomGradient([lineColor.withAlpha(128), lineColor.withAlpha(0)])),
+        ),
+      );
+    }
+
+    for (var item in timedValues) {
       var value = item.value;
-      var t = item.dateTime.millisecondsSinceEpoch;
+      var t = item.dateTime.month;
+
+      var year = item.dateTime.year;
+      if (year != actYear && values.isNotEmpty) {
+        buildLineChartData(actYear);
+        values.clear();
+      }
+      actYear = year;
 
       chartMetaData.evaluateMetaData(t, [value]);
-
       values.add(FlSpot(t.toDouble(), value.toDouble()));
     }
 
-    lineBarsData.add(
-      LineChartBarData(
-        spots: values,
-        isCurved: true,
-        preventCurveOverShooting: true,
-        barWidth: 2,
-        color: seriesItem.color,
-        dotData: ChartUtils.createDotData(chartMetaData),
-        isStrokeCapRound: true,
-        // dashArray: [5, 5],
-      ),
-    );
+    if (values.isNotEmpty) {
+      buildLineChartData(actYear);
+    }
 
     chartMetaData.calcPadding();
 
@@ -165,7 +237,8 @@ class ChartUtilsMonthly {
         showToucheLine: true,
         themeData: themeData,
         touchCallback: touchCallback,
-        provideTooltipTextColor: (x, y, barIdx) => seriesItem.color,
+        // provideTooltipTextColor: (x, y, barIdx) => seriesItem.color,
+        provideTooltipTextColor: (x, y, barIdx) => ColorUtils.hue(seriesItem.color, ((latestValueYear - earliestValueYear) - barIdx) * hueStep),
       ),
       titlesData: FlTitlesData(
         rightTitles: ChartUtils.axisTitlesNoTitles,
@@ -185,26 +258,17 @@ class ChartUtilsMonthly {
           sideTitles: SideTitles(
             reservedSize: bottomTitlesHeight,
             showTitles: true,
-            maxIncluded: true,
-            minIncluded: true,
-            // https://www.reddit.com/r/flutterhelp/comments/rhb7iu/fl_chart_set_time_series_interval_in_linechart/?rdt=36768
-            // interval: (chartMetaData.xMax - chartMetaData.xMin),
-            interval: math.max(1, values.last.x - values.first.x),
+            maxIncluded: false,
+            minIncluded: false,
+            interval: 1,
             getTitlesWidget: (value, meta) {
-              if (value == meta.min) {
+              if (value % 2 == 0) {
                 // use chartMetaData min/max - not the value which has padding!
                 return TitleBottomAxis(
-                  alignment: Alignment.topLeft,
-                  value: chartMetaData.xMin,
-                  dateFormatter: dateFormatter,
-                  height: bottomTitlesHeight,
-                  maxWidth: bottomTitlesMaxWidth,
-                );
-              } else if (value == meta.max) {
-                return TitleBottomAxis(
-                  alignment: Alignment.topRight,
-                  value: chartMetaData.xMax,
-                  dateFormatter: dateFormatter,
+                  alignment: Alignment.topCenter,
+                  value: value,
+                  // dateTime is here only 1...12
+                  dateFormatter: (dateTime) => DateTimeUtils.getMonthShort(dateTime.millisecondsSinceEpoch),
                   height: bottomTitlesHeight,
                   maxWidth: bottomTitlesMaxWidth,
                 );
@@ -220,9 +284,8 @@ class ChartUtilsMonthly {
   static LineChartData buildLineChartDataYearly(
     SeriesViewMetaData seriesViewMetaData,
     SeriesItem seriesItem,
-    List<TimedValue> simpleValues,
+    List<TimedValue> timedValues,
     ThemeData themeData,
-    String Function(DateTime dateTime) dateFormatter,
     Function(FlTouchEvent, LineTouchResponse?)? touchCallback,
   ) {
     List<LineChartBarData> lineBarsData = [];
@@ -232,7 +295,7 @@ class ChartUtilsMonthly {
 
     List<FlSpot> values = [];
 
-    for (var item in simpleValues) {
+    for (var item in timedValues) {
       var value = item.value;
       var t = item.dateTime.year % 1000;
 

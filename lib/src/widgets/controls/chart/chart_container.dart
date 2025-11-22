@@ -11,6 +11,7 @@ class ChartContainer extends StatelessWidget {
   ChartContainer({
     super.key,
     this.title,
+    this.legend,
     this.showDateTooltip = false,
     required this.chartWidgetBuilder,
     this.dateFormatter,
@@ -18,6 +19,7 @@ class ChartContainer extends StatelessWidget {
   });
 
   final Widget? title;
+  final Widget? legend;
   final bool showDateTooltip;
   final Widget Function(Function(FlTouchEvent, LineTouchResponse?)? touchCallback) chartWidgetBuilder;
   final String Function(DateTime dateTime)? dateFormatter;
@@ -51,7 +53,8 @@ class ChartContainer extends StatelessWidget {
           //   aspectRatio: isPortrait ? 3 / 2 : 3 / 1,
           //   child: child,
           // ),
-        )
+        ),
+        if (legend != null) legend!,
       ],
     );
   }
@@ -69,10 +72,12 @@ class _ChartContainerWithDateTooltip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(children: [
-      chartWidgetBuilder((event, touchResponse) => childKey.currentState?.touchCallback(event, touchResponse)),
-      _Tooltip(key: childKey, dateFormatter: dateFormatter),
-    ]);
+    return Stack(
+      children: [
+        chartWidgetBuilder((event, touchResponse) => childKey.currentState?.touchCallback(event, touchResponse)),
+        _Tooltip(key: childKey, dateFormatter: dateFormatter),
+      ],
+    );
   }
 }
 
@@ -116,17 +121,19 @@ class _TooltipState extends State<_Tooltip> {
     final themeData = Theme.of(context);
     if (_xValue != null) {
       return Positioned(
-          left: _tooltipPosition!.dx, // - 40, // Adjust position
-          bottom: 4,
-          child: Container(
-              decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(3)),
-                color: themeData.chipTheme.backgroundColor?.withAlpha(220),
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.defaultPadding, vertical: 1),
-                child: Text(widget.dateFormatter(DateTime.fromMillisecondsSinceEpoch(_xValue!.truncate()))),
-              )));
+        left: _tooltipPosition!.dx, // - 40, // Adjust position
+        bottom: 4,
+        child: Container(
+          decoration: BoxDecoration(
+            borderRadius: const BorderRadius.all(Radius.circular(3)),
+            color: themeData.chipTheme.backgroundColor?.withAlpha(220),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.defaultPadding, vertical: 1),
+            child: Text(widget.dateFormatter(DateTime.fromMillisecondsSinceEpoch(_xValue!.truncate()))),
+          ),
+        ),
+      );
     }
     return Positioned(child: Container());
   }
