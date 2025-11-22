@@ -661,7 +661,7 @@
           "tooltip": {
             "showChart": "Show chart",
             "hideChart": "Hide chart",
-            "useDelta": "Use delta to previous value",
+            "useDelta": "Use delta to the previous value. Useful when values keep rising and the change is more relevant than the current value.",
             "disuseDelta": "Use absolute value"
           }
         },

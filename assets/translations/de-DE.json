@@ -661,7 +661,7 @@
           "tooltip": {
             "showChart": "Diagramm anzeigen",
             "hideChart": "Diagramm ausblenden",
-            "useDelta": "Delta zum vorherigen Wert verwenden",
+            "useDelta": "Delta zum vorherigen Wert verwenden. Nützlich, wenn die Messwerte steigen und die Veränderung interessanter ist als der aktuelle Wert.",
             "disuseDelta": "Absoluten Wert verwenden"
           }
         },
