@@ -32,19 +32,25 @@ class SeriesDataMonthlyChartView extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
 
-    var filteredSeriesData = seriesData.where((value) => seriesDataFilter.filter(value)).toList();
-    if (filteredSeriesData.isEmpty) {
-      return SeriesDataNoData(
-        seriesViewMetaData: seriesViewMetaData,
-        noDataBecauseOfFilter: true,
-      );
+    List<MonthlyValue> filteredSeriesData;
+    // in case of yearly compression ignore any date filter.
+    if (seriesViewMetaData.showCompressed) {
+      filteredSeriesData = seriesData;
+    } else {
+      filteredSeriesData = seriesData.where((value) => seriesDataFilter.filter(value)).toList();
+      if (filteredSeriesData.isEmpty) {
+        return SeriesDataNoData(
+          seriesViewMetaData: seriesViewMetaData,
+          noDataBecauseOfFilter: true,
+        );
+      }
     }
 
     var dateFormatter = seriesViewMetaData.showCompressed ? DateTimeUtils.formatYear : DateTimeUtils.formatMonthYear;
 
     List<ParameterChartData> chartDataPerParameterList;
     try {
-      chartDataPerParameterList = ChartUtilsMonthly.buildDataProviderPerParameter(seriesViewMetaData, seriesData);
+      chartDataPerParameterList = ChartUtilsMonthly.buildDataProviderPerParameter(seriesViewMetaData, filteredSeriesData);
     } catch (ex) {
       SimpleLogging.w(ex);
       return SeriesDataNoData(

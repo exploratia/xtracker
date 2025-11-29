@@ -117,9 +117,12 @@ class _SeriesDataFilterView extends StatelessWidget {
 
           int maxSpan = 366 * 2;
 
-          // for charts wider maxSpan
           // for monthly wider maxSpan
-          if ([ViewType.lineChart, ViewType.barChart].contains(seriesViewMetaData.viewType) || seriesViewMetaData.seriesDef.seriesType == SeriesType.monthly) {
+          if (seriesViewMetaData.seriesDef.seriesType == SeriesType.monthly) {
+            maxSpan = 366 * 5 + 30;
+          }
+          // for charts wider maxSpan
+          else if ([ViewType.lineChart, ViewType.barChart].contains(seriesViewMetaData.viewType)) {
             maxSpan = 365 * 5 + 2;
           }
 

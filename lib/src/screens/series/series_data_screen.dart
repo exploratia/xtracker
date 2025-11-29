@@ -347,6 +347,10 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
     {
       var showDateFilter = metaData.showDateFilter;
       bool dateFilterPossible = !hasNoData;
+      // in case of monthly and compressed (=yearly) no filter possible
+      if (metaData.seriesDef.seriesType == SeriesType.monthly && metaData.showCompressed && metaData.viewType == ViewType.lineChart) {
+        dateFilterPossible = false;
+      }
       if (dateFilterPossible) {
         var d1 = widget.seriesDataValues.first.dateTime;
         var d2 = widget.seriesDataValues.last.dateTime;
