@@ -22,9 +22,23 @@ class ChartUtilsMonthly {
   static List<ParameterChartData> buildDataProviderPerParameter(SeriesViewMetaData seriesViewMetaData, List<MonthlyValue> seriesData) {
     Map<String, List<TimedValue>> siid2values = {};
     Map<String, bool> siid2useDelta = {};
+
+    // first check if delta calculation is possible
+    // if a parameter has no value... this check is not enough :/
+    bool isDeltaPossible = false;
+    if (seriesData.length > 1) {
+      if (seriesViewMetaData.showCompressed) {
+        // compressed we need first and last to be different years
+        isDeltaPossible = seriesData.first.dateTime.year != seriesData.last.dateTime.year;
+      } else {
+        // uncompressed we need at least 2 values for one delta
+        isDeltaPossible = true;
+      }
+    }
+
     for (var si in seriesViewMetaData.seriesDef.seriesItems.where((si) => !si.hideInChart)) {
       siid2values[si.siid] = [];
-      siid2useDelta[si.siid] = si.useDeltaInChart;
+      siid2useDelta[si.siid] = isDeltaPossible && si.useDeltaInChart;
     }
 
     var siids = siid2values.keys;
@@ -119,7 +133,13 @@ class ChartUtilsMonthly {
 
     List<ParameterChartData> result = [];
     for (var seriesItem in seriesViewMetaData.seriesDef.seriesItems.where((si) => !si.hideInChart)) {
-      result.add(ParameterChartData(seriesDef: seriesViewMetaData.seriesDef, seriesItem: seriesItem, data: siid2values[seriesItem.siid]!));
+      var data = siid2values[seriesItem.siid]!;
+      // in case of delta ignore the first value (because it's absolute - there is no delta yet)
+      // except there is only one value (if we hide it we see nothing...)
+      if (data.length > 1 && (siid2useDelta[seriesItem.siid] ?? false)) {
+        data.removeAt(0);
+      }
+      result.add(ParameterChartData(seriesDef: seriesViewMetaData.seriesDef, seriesItem: seriesItem, data: data));
     }
     return result;
   }
