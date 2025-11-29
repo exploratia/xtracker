@@ -41,22 +41,26 @@ class SeriesDataView extends StatelessWidget {
     List<Widget> stackChildren = [];
 
     // content
-    stackChildren.add(Positioned.fill(
-      child: seriesDataViewContentBuilder(),
-    ));
+    stackChildren.add(
+      Positioned.fill(
+        child: seriesDataViewContentBuilder(),
+      ),
+    );
 
     // title
     if (_showTitle) {
       WidgetsBinding.instance.addPostFrameCallback((_) => updateOverlays(topHeight: SeriesTitle.seriesTitleHeight));
-      stackChildren.add(Positioned(
-        top: 0,
-        left: 0,
-        right: 0,
-        height: SeriesTitle.seriesTitleHeight,
-        child: IgnorePointer(
-          child: SeriesTitle(seriesViewMetaData: seriesViewMetaData),
+      stackChildren.add(
+        Positioned(
+          top: 0,
+          left: 0,
+          right: 0,
+          height: SeriesTitle.seriesTitleHeight,
+          child: IgnorePointer(
+            child: SeriesTitle(seriesViewMetaData: seriesViewMetaData),
+          ),
         ),
-      ));
+      );
     } else {
       WidgetsBinding.instance.addPostFrameCallback((_) => updateOverlays(topHeight: 0));
     }
@@ -64,19 +68,21 @@ class SeriesDataView extends StatelessWidget {
     // filter view
     // var seriesType = seriesDef.seriesType;
     if (seriesViewMetaData.showDateFilter
-        // at the moment all series types support date filtering
-        // && [SeriesType.bloodPressure, SeriesType.dailyCheck, SeriesType.dailyLife, SeriesType.habit].contains(seriesType)
-        ) {
-      stackChildren.add(Positioned.fill(
-        child: _SeriesDataFilterView(
-          seriesViewMetaData: seriesViewMetaData,
-          seriesDataValues: seriesDataValues,
-          filter: filter,
-          updateFilter: updateFilter,
-          seriesDataViewOverlays: seriesDataViewOverlays,
-          updateOverlays: updateOverlays,
+    // at the moment all series types support date filtering
+    // && [SeriesType.bloodPressure, SeriesType.dailyCheck, SeriesType.dailyLife, SeriesType.habit].contains(seriesType)
+    ) {
+      stackChildren.add(
+        Positioned.fill(
+          child: _SeriesDataFilterView(
+            seriesViewMetaData: seriesViewMetaData,
+            seriesDataValues: seriesDataValues,
+            filter: filter,
+            updateFilter: updateFilter,
+            seriesDataViewOverlays: seriesDataViewOverlays,
+            updateOverlays: updateOverlays,
+          ),
         ),
-      ));
+      );
     } else {
       WidgetsBinding.instance.addPostFrameCallback((_) => updateOverlays(bottomHeight: 0));
     }
@@ -143,8 +149,13 @@ class _SeriesDataFilterView extends StatelessWidget {
 }
 
 class _StackedRangeSliderView extends StatefulWidget {
-  const _StackedRangeSliderView(
-      {required this.seriesData, required this.seriesViewMetaData, required this.maxSpan, required this.filter, required this.updateFilter});
+  const _StackedRangeSliderView({
+    required this.seriesData,
+    required this.seriesViewMetaData,
+    required this.maxSpan,
+    required this.filter,
+    required this.updateFilter,
+  });
 
   final SeriesViewMetaData seriesViewMetaData;
   final List<SeriesDataValue> seriesData;

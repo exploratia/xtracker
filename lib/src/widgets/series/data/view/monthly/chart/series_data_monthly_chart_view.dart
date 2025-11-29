@@ -119,9 +119,9 @@ class SeriesDataMonthlyChartView extends StatelessWidget {
         }
 
         // Debug: show values as text
-        // for (var parameterChartData in chartDataPerParameterList) {
-        //   charts.add(Text(parameterChartData.seriesItem.name));
-        //   charts.addAll(parameterChartData.data.map((e) => Text(e.toString())).toList());
+        //   for (var parameterChartData in chartDataPerParameterList) {
+        //     charts.add(Text(parameterChartData.seriesItem.name));
+        //     charts.addAll(parameterChartData.data.map((e) => Text(e.toString())).toList());
         // }
 
         return SingleChildScrollViewWithScrollbar(
