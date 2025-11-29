@@ -588,7 +588,7 @@ class _SeriesDataFilterWrapperState extends State<_SeriesDataFilterWrapper> {
   void initState() {
     var filterStart = DateTimeUtils.firstDayOfMonth(DateTime.now().subtract(const Duration(days: 365)));
     if (widget.seriesViewMetaData.seriesDef.seriesType == SeriesType.monthly) {
-      filterStart = DateTime(filterStart.year - 3);
+      filterStart = DateTimeBuilder.now().firstDayOfYear.subtract(const Duration(days: 366 * 4)).firstDayOfMonth.dateTime;
     }
     var seriesData = context.read<SeriesDataProvider>().seriesData(widget.seriesViewMetaData.seriesDef);
     if (seriesData != null && !seriesData.isEmpty()) {
