@@ -259,6 +259,7 @@ class ChartUtilsMonthly {
         touchCallback: touchCallback,
         // provideTooltipTextColor: (x, y, barIdx) => seriesItem.color,
         provideTooltipTextColor: (x, y, barIdx) => ColorUtils.hue(seriesItem.color, ((latestValueYear - earliestValueYear) - barIdx) * hueStep),
+        provideTooltipExt: (x, y, barIndex) => [TextSpan(text: "   (${earliestValueYear + barIndex})", style: themeData.textTheme.labelSmall)],
       ),
       titlesData: FlTitlesData(
         rightTitles: ChartUtils.axisTitlesNoTitles,

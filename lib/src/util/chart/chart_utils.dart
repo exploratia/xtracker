@@ -82,13 +82,14 @@ class ChartUtils {
     );
   }
 
-  static LineTouchData createLineTouchData(
-      {int fractionDigits = 2,
-      required ThemeData themeData,
-      bool showToucheLine = true,
-      List<TextSpan> Function(double, double, int)? provideTooltipExt,
-      Color Function(double, double, int)? provideTooltipTextColor,
-      void Function(FlTouchEvent, LineTouchResponse?)? touchCallback}) {
+  static LineTouchData createLineTouchData({
+    int fractionDigits = 2,
+    required ThemeData themeData,
+    bool showToucheLine = true,
+    List<TextSpan> Function(double, double, int)? provideTooltipExt,
+    Color Function(double, double, int)? provideTooltipTextColor,
+    void Function(FlTouchEvent, LineTouchResponse?)? touchCallback,
+  }) {
     return LineTouchData(
       enabled: true,
       touchSpotThreshold: 30,
@@ -97,25 +98,30 @@ class ChartUtils {
       touchTooltipData: LineTouchTooltipData(
         fitInsideHorizontally: true,
         fitInsideVertically: true,
-        getTooltipColor: (touchedSpot) => themeData.chipTheme.backgroundColor?.withAlpha(220) ?? Colors.white70,
+        getTooltipColor: (touchedSpot) => themeData.scaffoldBackgroundColor.withAlpha(220),
         tooltipBorder: const BorderSide(
-          color: Colors.black26,
-          width: 2,
+          color: Colors.grey,
+          width: 1,
         ),
         getTooltipItems: (touchedSpots) {
           // alles wie default, nur y-Wert gerundet auf <fractionDigits> Stellen
           return touchedSpots.map((touchedSpot) {
+            var ttColor =
+                provideTooltipTextColor?.call(touchedSpot.x, touchedSpot.y, touchedSpot.barIndex) ??
+                touchedSpot.bar.gradient?.colors.first ??
+                touchedSpot.bar.color ??
+                Colors.blueGrey;
             final textStyle = TextStyle(
-              color: provideTooltipTextColor?.call(touchedSpot.x, touchedSpot.y, touchedSpot.barIndex) ??
-                  touchedSpot.bar.gradient?.colors.first ??
-                  touchedSpot.bar.color ??
-                  Colors.blueGrey,
+              color: ttColor,
               fontWeight: FontWeight.bold,
               fontSize: ThemeUtils.fontSizeBodyM,
               shadows: const [Shadow(color: Colors.black, blurRadius: 0, offset: Offset(1, 1))],
             );
-            return LineTooltipItem(touchedSpot.y.toStringAsFixed(fractionDigits), textStyle,
-                children: provideTooltipExt?.call(touchedSpot.x, touchedSpot.y, touchedSpot.barIndex));
+            return LineTooltipItem(
+              touchedSpot.y.toStringAsFixed(fractionDigits),
+              textStyle,
+              children: provideTooltipExt?.call(touchedSpot.x, touchedSpot.y, touchedSpot.barIndex),
+            );
           }).toList();
         },
       ),
@@ -142,10 +148,12 @@ class ChartUtils {
 
     List<TouchedSpotIndicatorData?> result = [];
     for (var _ in spotIndexes) {
-      result.add(TouchedSpotIndicatorData(
-        flLine,
-        flDotData,
-      ));
+      result.add(
+        TouchedSpotIndicatorData(
+          flLine,
+          flDotData,
+        ),
+      );
     }
     return result;
   }
@@ -168,10 +176,12 @@ class ChartUtils {
 
     List<TouchedSpotIndicatorData?> result = [];
     for (var _ in spotIndexes) {
-      result.add(TouchedSpotIndicatorData(
-        flLine,
-        flDotData,
-      ));
+      result.add(
+        TouchedSpotIndicatorData(
+          flLine,
+          flDotData,
+        ),
+      );
     }
     return result;
   }
