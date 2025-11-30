@@ -171,13 +171,10 @@ class ChartUtilsMonthly {
     }
     buildLegendItem(actYear);
 
-    var legend = Padding(
-      padding: const EdgeInsets.only(top: ThemeUtils.verticalSpacingSmall),
-      child: Wrap(
-        spacing: ThemeUtils.horizontalSpacing,
-        runSpacing: ThemeUtils.verticalSpacingSmall,
-        children: legendItems,
-      ),
+    var legend = Wrap(
+      spacing: ThemeUtils.horizontalSpacing,
+      runSpacing: ThemeUtils.verticalSpacingSmall,
+      children: legendItems,
     );
     return legend;
   }

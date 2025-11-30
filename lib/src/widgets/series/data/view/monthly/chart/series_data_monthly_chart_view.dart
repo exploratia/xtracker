@@ -63,6 +63,7 @@ class SeriesDataMonthlyChartView extends StatelessWidget {
         List<Widget> charts = [];
 
         if (seriesViewMetaData.showCompressed) {
+          var subtractAdditionalHeights = 16 + ThemeUtils.verticalSpacing; // Title
           for (var parameterChartData in chartDataPerParameterList) {
             charts.add(
               ChartContainer(
@@ -71,7 +72,7 @@ class SeriesDataMonthlyChartView extends StatelessWidget {
                   child: Text(parameterChartData.seriesItem.name + parameterChartData.seriesItem.unitInBrackets(emptyStringIfNullOrEmpty: true)),
                 ),
                 showDateTooltip: true,
-                maxVisibleHeight: constraints.maxHeight - seriesDataViewOverlays.height,
+                maxVisibleHeight: constraints.maxHeight - seriesDataViewOverlays.height - subtractAdditionalHeights,
                 dateFormatter: dateFormatter,
                 chartWidgetBuilder: (touchCallback) {
                   return LineChart(
@@ -88,6 +89,7 @@ class SeriesDataMonthlyChartView extends StatelessWidget {
             );
           }
         } else {
+          var subtractAdditionalHeights = 16 + ThemeUtils.verticalSpacing; // +12+ ThemeUtils.verticalSpacing; // Title + Legend
           for (var parameterChartData in chartDataPerParameterList) {
             charts.add(
               ChartContainer(
@@ -100,7 +102,7 @@ class SeriesDataMonthlyChartView extends StatelessWidget {
                   parameterChartData.data,
                 ),
                 showDateTooltip: true,
-                maxVisibleHeight: constraints.maxHeight - seriesDataViewOverlays.height,
+                maxVisibleHeight: constraints.maxHeight - seriesDataViewOverlays.height - subtractAdditionalHeights,
                 dateFormatter: dateFormatter,
                 chartWidgetBuilder: (touchCallback) {
                   return LineChart(
