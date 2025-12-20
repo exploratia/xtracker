@@ -29,7 +29,7 @@ dependencies:
   easy_localization: ^3.0.7+1
 
   # DeviceStorage
-  flutter_secure_storage: ^9.2.4
+  flutter_secure_storage: ^10.0.0
 
   # AppInfo
   package_info_plus: ^9.0.0
