@@ -6,7 +6,7 @@ class TitleBottomAxis extends StatelessWidget {
   const TitleBottomAxis({super.key, required this.alignment, required this.value, this.dateFormatter, required this.height, required this.maxWidth});
 
   final Alignment alignment;
-  final double value;
+  final num value;
   final String Function(DateTime dateTime)? dateFormatter;
   final double height;
   final double maxWidth;

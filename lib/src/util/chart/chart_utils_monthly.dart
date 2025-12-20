@@ -158,7 +158,7 @@ class ChartUtilsMonthly {
     buildLegendItem(int year) {
       var hueSteps = latestValueYear - year;
       var color = ColorUtils.hue(seriesItem.color, hueSteps * hueStep);
-      legendItems.add(LegendItem(label: year.toString(), color: color));
+      legendItems.add(LegendItem(label: (year % 1000).toString(), color: color));
     }
 
     int actYear = earliestValueYear;
@@ -388,7 +388,7 @@ class ChartUtilsMonthly {
             getTitlesWidget: (value, meta) {
               return TitleBottomAxis(
                 alignment: Alignment.topCenter,
-                value: value,
+                value: value.toInt(),
                 height: bottomTitlesHeight,
                 maxWidth: bottomTitlesMaxWidth,
               );
