@@ -53,7 +53,17 @@ class SeriesDataDailyCheckChartView extends StatelessWidget {
                 dateFormatter: dateFormatter,
                 chartWidgetBuilder: (touchCallback) {
                   return LineChart(
-                    ChartUtilsSimpleValue.buildLineChartData(seriesViewMetaData, combinedSeriesData, themeData, dateFormatter, touchCallback),
+                    ChartUtilsSimpleValue.buildLineChartData(
+                      seriesViewMetaData,
+                      combinedSeriesData,
+                      themeData,
+                      dateFormatter,
+                      touchCallback,
+                      showSpotLine: true,
+                      lineWidth: 0,
+                      fractionDigits: 0,
+                      showDots: true,
+                    ),
                   );
                 },
               ),

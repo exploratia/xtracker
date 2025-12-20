@@ -16,12 +16,22 @@ class ChartUtilsSimpleValue {
     List<TimedValue> simpleValues,
     ThemeData themeData,
     String Function(DateTime dateTime) dateFormatter,
-    Function(FlTouchEvent, LineTouchResponse?)? touchCallback,
-  ) {
+    Function(FlTouchEvent, LineTouchResponse?)? touchCallback, {
+    Color? lineColor,
+    bool showDots = true,
+    bool isCurved = false,
+    double lineWidth = 5,
+    bool showSpotLine = false,
+    bool showAreaBelowLine = false,
+    bool showToucheLine = false,
+    int fractionDigits = 0,
+  }) {
+    var lineCol = lineColor ?? seriesViewMetaData.seriesDef.color;
+
     List<LineChartBarData> lineBarsData = [];
 
     ChartMetaData chartMetaData = ChartMetaData();
-    chartMetaData.showDots = true;
+    chartMetaData.showDots = showDots;
 
     List<FlSpot> values = [];
 
@@ -37,25 +47,30 @@ class ChartUtilsSimpleValue {
     lineBarsData.add(
       LineChartBarData(
         spots: values,
-        isCurved: false,
+        isCurved: isCurved,
         preventCurveOverShooting: true,
-        // hide bar:
-        barWidth: 0,
-        color: seriesViewMetaData.seriesDef.color,
+        barWidth: lineWidth,
+        color: lineCol,
         dotData: ChartUtils.createDotData(chartMetaData),
         isStrokeCapRound: true,
         // dashArray: [5, 5],
         belowBarData: BarAreaData(
-          show: true,
-          color: Colors.transparent,
+          show: showAreaBelowLine || showSpotLine,
+          color: showAreaBelowLine ? null : Colors.transparent,
+          gradient: showAreaBelowLine
+              ? ChartUtils.createTopToBottomGradient([
+                  lineCol,
+                  Colors.transparent,
+                ])
+              : null,
           spotsLine: BarAreaSpotsLine(
-            show: true,
+            show: showSpotLine,
             flLineStyle: FlLine(
-              // color: seriesViewMetaData.seriesDef.color,
+              // color: lineCol,
               strokeWidth: 5,
               gradient: ChartUtils.createTopToBottomGradient([
-                ColorUtils.gradientColor(seriesViewMetaData.seriesDef.color),
-                seriesViewMetaData.seriesDef.color,
+                ColorUtils.gradientColor(lineCol),
+                lineCol,
               ]),
             ),
           ),
@@ -80,11 +95,11 @@ class ChartUtilsSimpleValue {
       borderData: ChartUtils.borderData,
       gridData: ChartUtils.noGridData,
       lineTouchData: ChartUtils.createLineTouchData(
-        fractionDigits: 0,
-        showToucheLine: false,
+        fractionDigits: fractionDigits,
+        showToucheLine: showToucheLine,
         themeData: themeData,
         touchCallback: touchCallback,
-        provideTooltipTextColor: (x, y, barIdx) => seriesViewMetaData.seriesDef.color,
+        provideTooltipTextColor: (x, y, barIdx) => lineCol,
       ),
       titlesData: FlTitlesData(
         rightTitles: ChartUtils.axisTitlesNoTitles,

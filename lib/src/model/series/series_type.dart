@@ -70,7 +70,7 @@ enum SeriesType {
   custom(
     Icons.line_axis_outlined,
     ThemeUtils.primaryColor,
-    [ViewType.table],
+    [ViewType.table, ViewType.lineChart],
     [], // no fix table column profiles
   ),
   monthly(

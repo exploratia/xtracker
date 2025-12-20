@@ -6,7 +6,6 @@ import '../../../generated/locale_keys.g.dart';
 import '../../model/chart/chart_meta_data.dart';
 import '../../model/series/data/monthly/monthly_value.dart';
 import '../../model/series/seriesItem/series_item.dart';
-import '../../model/series/series_def.dart';
 import '../../model/series/series_view_meta_data.dart';
 import '../../widgets/controls/chart/legend_item.dart';
 import '../../widgets/controls/chart/title_bottom_axis.dart';
@@ -16,6 +15,7 @@ import '../ex.dart';
 import '../media_query_utils.dart';
 import '../theme_utils.dart';
 import 'chart_utils.dart';
+import 'chart_utils_custom.dart';
 import 'chart_utils_simple_value.dart';
 
 class ChartUtilsMonthly {
@@ -398,12 +398,4 @@ class ChartUtilsMonthly {
       ),
     );
   }
-}
-
-class ParameterChartData {
-  final SeriesDef seriesDef;
-  final SeriesItem seriesItem;
-  final List<TimedValue> data;
-
-  ParameterChartData({required this.seriesDef, required this.seriesItem, required this.data});
 }
