@@ -253,7 +253,6 @@ class ChartUtilsMonthly {
       borderData: ChartUtils.borderData,
       gridData: ChartUtils.noGridData,
       lineTouchData: ChartUtils.createLineTouchData(
-        fractionDigits: 0,
         showToucheLine: true,
         themeData: themeData,
         touchCallback: touchCallback,
@@ -356,7 +355,6 @@ class ChartUtilsMonthly {
       borderData: ChartUtils.borderData,
       gridData: ChartUtils.noGridData,
       lineTouchData: ChartUtils.createLineTouchData(
-        fractionDigits: 0,
         showToucheLine: true,
         themeData: themeData,
         touchCallback: touchCallback,

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../../model/chart/chart_meta_data.dart';
 import '../color_utils.dart';
+import '../number_utils.dart';
 import '../theme_utils.dart';
 
 class ChartUtils {
@@ -83,7 +84,6 @@ class ChartUtils {
   }
 
   static LineTouchData createLineTouchData({
-    int fractionDigits = 2,
     required ThemeData themeData,
     bool showToucheLine = true,
     List<TextSpan> Function(double, double, int)? provideTooltipExt,
@@ -106,8 +106,9 @@ class ChartUtils {
         getTooltipItems: (touchedSpots) {
           // alles wie default, nur y-Wert gerundet auf <fractionDigits> Stellen
           return touchedSpots.map((touchedSpot) {
+            var yValue = touchedSpot.y;
             var ttColor =
-                provideTooltipTextColor?.call(touchedSpot.x, touchedSpot.y, touchedSpot.barIndex) ??
+                provideTooltipTextColor?.call(touchedSpot.x, yValue, touchedSpot.barIndex) ??
                 touchedSpot.bar.gradient?.colors.first ??
                 touchedSpot.bar.color ??
                 Colors.blueGrey;
@@ -117,10 +118,11 @@ class ChartUtils {
               fontSize: ThemeUtils.fontSizeBodyM,
               shadows: const [Shadow(color: Colors.black, blurRadius: 0, offset: Offset(1, 1))],
             );
+            final ttText = NumberUtils.numToShortString(yValue);
             return LineTooltipItem(
-              touchedSpot.y.toStringAsFixed(fractionDigits),
+              ttText,
               textStyle,
-              children: provideTooltipExt?.call(touchedSpot.x, touchedSpot.y, touchedSpot.barIndex),
+              children: provideTooltipExt?.call(touchedSpot.x, yValue, touchedSpot.barIndex),
             );
           }).toList();
         },

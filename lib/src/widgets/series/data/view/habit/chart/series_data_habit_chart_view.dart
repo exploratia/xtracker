@@ -61,7 +61,6 @@ class SeriesDataHabitChartView extends StatelessWidget {
                       touchCallback,
                       showSpotLine: true,
                       lineWidth: 0,
-                      fractionDigits: 0,
                       showDots: true,
                     ),
                   );

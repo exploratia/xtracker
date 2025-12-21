@@ -80,8 +80,6 @@ class SeriesDataCustomChartView extends StatelessWidget {
                     lineColor: parameterChartData.seriesItem.color,
                     showDots: false,
                     isCurved: true,
-                    fractionDigits: 2,
-                    // TODO fractionDigits??
                     showAreaBelowLine: true,
                     showToucheLine: true,
                   ),

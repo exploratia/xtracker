@@ -24,7 +24,6 @@ class ChartUtilsSimpleValue {
     bool showSpotLine = false,
     bool showAreaBelowLine = false,
     bool showToucheLine = false,
-    int fractionDigits = 0,
   }) {
     var lineCol = lineColor ?? seriesViewMetaData.seriesDef.color;
 
@@ -95,7 +94,6 @@ class ChartUtilsSimpleValue {
       borderData: ChartUtils.borderData,
       gridData: ChartUtils.noGridData,
       lineTouchData: ChartUtils.createLineTouchData(
-        fractionDigits: fractionDigits,
         showToucheLine: showToucheLine,
         themeData: themeData,
         touchCallback: touchCallback,
