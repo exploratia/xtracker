@@ -41,7 +41,8 @@ class SeriesDataCustomChartView extends StatelessWidget {
       );
     }
 
-    String dateFormatter(dateTime) => "${DateTimeUtils.formatDate(dateTime)}  ${DateTimeUtils.formatTime(dateTime)}";
+    String dateTimeFormatter(dateTime) => "${DateTimeUtils.formatDate(dateTime)}  ${DateTimeUtils.formatTime(dateTime)}";
+    String dateFormatter(dateTime) => DateTimeUtils.formatDate(dateTime);
 
     List<ParameterChartData> chartDataPerParameterList;
     try {
@@ -67,7 +68,7 @@ class SeriesDataCustomChartView extends StatelessWidget {
               ),
               showDateTooltip: true,
               maxVisibleHeight: constraints.maxHeight - seriesDataViewOverlays.height - subtractAdditionalHeights,
-              dateFormatter: dateFormatter,
+              dateFormatter: dateTimeFormatter,
               chartWidgetBuilder: (touchCallback) {
                 return LineChart(
                   ChartUtilsSimpleValue.buildLineChartData(
