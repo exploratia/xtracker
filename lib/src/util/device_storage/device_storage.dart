@@ -4,9 +4,7 @@ class DeviceStorage {
   static const String _symbolChecked = '✓';
 
   static const storage = FlutterSecureStorage(
-    aOptions: AndroidOptions(
-      encryptedSharedPreferences: true,
-    ),
+    aOptions: AndroidOptions(),
   );
 
   /// Read value
