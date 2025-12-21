@@ -4,10 +4,13 @@ import '../../../../../../model/series/data/custom/custom_value.dart';
 import '../../../../../../model/series/data/monthly/monthly_value.dart';
 import '../../../../../../model/series/data/series_data.dart';
 import '../../../../../../model/series/series_def.dart';
+import '../../../../../../util/chart/chart_utils.dart';
+import '../../../../../../util/color_utils.dart';
 import '../../../../../../util/date_time_utils.dart';
 import '../../../../../../util/media_query_utils.dart';
 import '../../../../../../util/theme_utils.dart';
 import '../../../../../../util/tooltip_utils.dart';
+import '../../../../../controls/text/overflow_text.dart';
 
 class CustomValueRenderer extends StatelessWidget {
   static int get height {
@@ -30,14 +33,33 @@ class CustomValueRenderer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    Widget result = Container(
-      margin: const EdgeInsets.all(2),
-      child: Icon(
-        size: ThemeUtils.iconSizeScaled,
-        seriesDef.iconData(),
-        color: editMode ? themeData.colorScheme.secondary : null,
-      ),
-    );
+    Widget result;
+
+    if (customValue.values.length == 1 && !editMode) {
+      var seriesItem = seriesDef.seriesItems.first;
+
+      result = Container(
+        padding: const EdgeInsets.all(ThemeUtils.paddingSmall),
+        decoration: BoxDecoration(
+          gradient: ChartUtils.createLeftToRightGradient(ColorUtils.gradientFromColor(seriesItem.color)),
+          borderRadius: ThemeUtils.borderRadiusCircularSmall,
+        ),
+        child: OverflowText(
+          expanded: false,
+          "${customValue.values.values.first}${seriesDef.seriesItems.first.unitSuffix()}",
+          style: themeData.textTheme.labelMedium?.copyWith(color: ColorUtils.getContrastingTextColor(seriesItem.color)),
+        ),
+      );
+    } else {
+      result = Container(
+        margin: const EdgeInsets.all(2),
+        child: Icon(
+          size: ThemeUtils.iconSizeScaled,
+          seriesDef.iconData(),
+          color: editMode ? themeData.colorScheme.secondary : null,
+        ),
+      );
+    }
 
     if (editMode) {
       result = InkWell(
