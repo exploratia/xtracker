@@ -35,6 +35,13 @@ class SeriesItem {
 
   bool get isCalculated => calculationContainer != null;
 
+  String unitSuffix({String prefix = ' '}) {
+    if (unit == null || unit != null && unit!.isEmpty) {
+      return '';
+    }
+    return '$prefix$unit';
+  }
+
   String unitInBrackets({bool emptyStringIfNullOrEmpty = false, String prefix = ' '}) {
     if (unit == null || unit != null && unit!.isEmpty) {
       if (emptyStringIfNullOrEmpty) return '';
