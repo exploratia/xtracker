@@ -70,13 +70,19 @@ enum SeriesType {
   custom(
     Icons.line_axis_outlined,
     ThemeUtils.primaryColor,
-    [ViewType.table, ViewType.lineChart],
+    [
+      ViewType.table,
+      ViewType.lineChart,
+    ],
     [], // no fix table column profiles
   ),
   monthly(
     Icons.calendar_month_outlined,
     ThemeUtils.secondaryColor,
-    [ViewType.table, ViewType.lineChart],
+    [
+      ViewType.table,
+      ViewType.lineChart,
+    ],
     [], // no fix table column profiles
   ),
   ;

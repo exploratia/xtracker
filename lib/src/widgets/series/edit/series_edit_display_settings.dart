@@ -6,7 +6,6 @@ import 'package:flutter/material.dart';
 import '../../../../../generated/locale_keys.g.dart';
 import '../../../model/column_profile/fix_column_profile_type.dart';
 import '../../../model/series/series_def.dart';
-import '../../../model/series/series_type.dart';
 import '../../../model/series/view_type.dart';
 import '../../../util/media_query_utils.dart';
 import '../../../util/theme_utils.dart';
@@ -17,10 +16,9 @@ import '../../controls/text/overflow_text.dart';
 import 'pixel_view_preview.dart';
 
 class SeriesEditDisplaySettings extends StatelessWidget {
-  static final List<SeriesType> _allowedSeriesTypes = [SeriesType.bloodPressure, SeriesType.dailyCheck, SeriesType.habit];
-
   static bool applicableOn(SeriesDef seriesDef) {
-    return _allowedSeriesTypes.contains(seriesDef.seriesType);
+    var seriesType = seriesDef.seriesType;
+    return seriesType.viewTypes.length > 1 || seriesType.tableFixColumnProfileTypes.length > 1 || PixelViewPreview.applicableOn(seriesDef);
   }
 
   final SeriesDef seriesDef;
@@ -39,8 +37,8 @@ class SeriesEditDisplaySettings extends StatelessWidget {
       child: LayoutBuilder(
         builder: (context, constraints) {
           // initial ViewType
-          Widget viewTypeSelect;
-          {
+          Widget? viewTypeSelect;
+          if (seriesType.viewTypes.length > 1) {
             ViewType defaultValue = seriesType.defaultViewType;
             List<ViewType> possibleViewTypes = seriesType.viewTypes;
             ViewType actValue = settings.getInitialViewType(defaultValue);
@@ -157,7 +155,7 @@ class SeriesEditDisplaySettings extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               // ViewType select
-              viewTypeSelect,
+              if (viewTypeSelect != null) viewTypeSelect,
 
               // ColumnProfile? select
               if (tableViewColumnProfileSelect != null) tableViewColumnProfileSelect,
