@@ -87,7 +87,7 @@ class _DailyLifeInputState extends State<DailyLifeInput> {
   @override
   Widget build(BuildContext context) {
     var edit = ConstrainedBox(
-      constraints: BoxConstraints(minHeight: 40 * MediaQueryUtils.textScaleFactor),
+      constraints: BoxConstraints(minHeight: 48 * MediaQueryUtils.textScaleFactor),
       child: Center(
         child: PopupMenuButton(
           borderRadius: ThemeUtils.borderRadiusCircular,
