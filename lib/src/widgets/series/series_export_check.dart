@@ -10,6 +10,7 @@ import '../controls/layout/single_child_scroll_view_with_scrollbar.dart';
 /// Check if a backup reminder should be displayed.
 class SeriesExportCheck extends StatefulWidget {
   static bool _dialogVisible = false;
+
   final Widget child;
   final SettingsController settingsController;
 
@@ -88,10 +89,11 @@ class _SeriesExportCheckState extends State<SeriesExportCheck> {
           content: dialogContent,
           actions: [
             TextButton(
-                onPressed: () {
-                  Navigator.of(ctx).pop();
-                },
-                child: Text(LocaleKeys.commons_dialog_btn_close.tr()))
+              onPressed: () {
+                Navigator.of(ctx).pop();
+              },
+              child: Text(LocaleKeys.commons_dialog_btn_close.tr()),
+            ),
           ],
         ),
       );
