@@ -73,19 +73,29 @@ class _ChartContainerWithDateTooltip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        chartWidgetBuilder((event, touchResponse) => childKey.currentState?.touchCallback(event, touchResponse)),
-        _Tooltip(key: childKey, dateFormatter: dateFormatter),
-      ],
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final width = constraints.maxWidth;
+        return Stack(
+          children: [
+            chartWidgetBuilder((event, touchResponse) => childKey.currentState?.touchCallback(event, touchResponse)),
+            _Tooltip(
+              key: childKey,
+              dateFormatter: dateFormatter,
+              stackWidth: width,
+            ),
+          ],
+        );
+      },
     );
   }
 }
 
 class _Tooltip extends StatefulWidget {
-  const _Tooltip({super.key, required this.dateFormatter});
+  const _Tooltip({super.key, required this.dateFormatter, required this.stackWidth});
 
   final String Function(DateTime dateTime) dateFormatter;
+  final double stackWidth;
 
   @override
   State<_Tooltip> createState() => _TooltipState();
@@ -121,8 +131,16 @@ class _TooltipState extends State<_Tooltip> {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     if (_xValue != null) {
+      final text = widget.dateFormatter(DateTime.fromMillisecondsSinceEpoch(_xValue!.truncate()));
+      final longTextCorrectValue = text.length > 10 ? 20 : 0;
+
+      var xPos = _tooltipPosition!.dx;
+      final isRightSide = xPos > widget.stackWidth / 2;
+      xPos += longTextCorrectValue * (isRightSide ? 1 : -1);
+      
       return Positioned(
-        left: _tooltipPosition!.dx, // - 40, // Adjust position
+        left: isRightSide ? null : math.max(0, xPos),
+        right: isRightSide ? math.max(0, widget.stackWidth - xPos - 80) : null,
         bottom: 4,
         child: Container(
           decoration: BoxDecoration(
@@ -131,7 +149,7 @@ class _TooltipState extends State<_Tooltip> {
           ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.defaultPadding, vertical: 1),
-            child: Text(widget.dateFormatter(DateTime.fromMillisecondsSinceEpoch(_xValue!.truncate()))),
+            child: Text(text),
           ),
         ),
       );
