@@ -19,10 +19,29 @@ import 'add_first_series.dart';
 import 'series_def_renderer.dart';
 import 'series_export_check.dart';
 
-class SeriesView extends StatelessWidget {
+class SeriesView extends StatefulWidget {
   final SettingsController settingsController;
 
   const SeriesView({super.key, required this.settingsController});
+
+  @override
+  State<SeriesView> createState() => _SeriesViewState();
+}
+
+class _SeriesViewState extends State<SeriesView> {
+  late final ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   Future<void> onRefresh(BuildContext context) async {
     try {
@@ -43,9 +62,10 @@ class SeriesView extends StatelessWidget {
         context.read<SeriesCurrentValueProvider>().fetchDataIfNotYetLoaded(),
       ]),
       child: VCenteredSingleChildScrollViewWithScrollbar(
+        scrollController: _scrollController,
         onRefreshCallback: () => onRefresh(context),
         scrollPositionHandler: HideBottomNavigationBar.setScrollPosition,
-        child: _SeriesList(settingsController),
+        child: _SeriesList(widget.settingsController),
       ),
     );
   }
@@ -66,14 +86,17 @@ class _SeriesList extends StatelessWidget {
     List<Widget> children = [];
     var idx = 0;
     for (var s in series) {
-      children.add(AnimateIn(
+      children.add(
+        AnimateIn(
           durationMS: 1000 + idx * 500,
           slideOffset: const Offset(0, 0.2),
           child: SeriesDefRenderer(
             seriesDef: s,
             index: idx,
             settingsController: settingsController,
-          )));
+          ),
+        ),
+      );
       idx++;
     }
 

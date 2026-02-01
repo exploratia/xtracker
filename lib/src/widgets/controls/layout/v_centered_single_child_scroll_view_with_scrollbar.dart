@@ -9,11 +9,13 @@ class VCenteredSingleChildScrollViewWithScrollbar extends StatelessWidget {
   const VCenteredSingleChildScrollViewWithScrollbar({
     super.key,
     required this.child,
+    this.scrollController,
     this.onRefreshCallback,
     this.scrollPositionHandler,
   });
 
   final Widget child;
+  final ScrollController? scrollController;
   final Future<void> Function()? onRefreshCallback;
   final void Function(ScrollPosition value)? scrollPositionHandler;
 
@@ -24,6 +26,7 @@ class VCenteredSingleChildScrollViewWithScrollbar extends StatelessWidget {
         Expanded(
           child: LayoutBuilder(
             builder: (context, constraints) => SingleChildScrollViewWithScrollbar(
+              scrollController: scrollController,
               useScreenPadding: true,
               scrollPositionHandler: scrollPositionHandler,
               onRefreshCallback: onRefreshCallback,
