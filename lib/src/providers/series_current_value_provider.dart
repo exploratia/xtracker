@@ -10,8 +10,8 @@ import '../model/series/data/daily_life/daily_life_value.dart';
 import '../model/series/data/habit/habit_value.dart';
 import '../model/series/data/series_data_value.dart';
 import '../model/series/series_def.dart';
-import '../model/series/series_type.dart';
 import '../store/stores.dart';
+import '../util/logging/flutter_simple_logging.dart';
 
 class SeriesCurrentValueProvider with ChangeNotifier {
   final _storeSeriesCurrentValue = Stores.storeSeriesCurrentValue;
@@ -19,7 +19,7 @@ class SeriesCurrentValueProvider with ChangeNotifier {
   bool _valuesLoaded = false;
 
   DateTime _lastUpdated = DateTime(0);
-  SeriesType _lastUpdatedType = SeriesType.bloodPressure;
+  String _lastUpdatedSeriesUuid = 'unset';
 
   Future<void> fetchDataIfNotYetLoaded() async {
     if (!_valuesLoaded) {
@@ -38,6 +38,8 @@ class SeriesCurrentValueProvider with ChangeNotifier {
   }
 
   Future<void> save(SeriesDef seriesDef, SeriesDataValue seriesDataValue) async {
+    _storeLastUpdated(seriesDef.uuid);
+
     await fetchDataIfNotYetLoaded();
 
     // #45 so far doesn't matter. If the latest value is deleted or date modified a before older timestamp could now be the newest.
@@ -47,18 +49,34 @@ class SeriesCurrentValueProvider with ChangeNotifier {
     await _storeSeriesCurrentValue.save(seriesCurrentValue);
     _uuid2seriesCurrentValue[seriesDef.uuid] = seriesCurrentValue;
 
-    _lastUpdatedType = seriesDef.seriesType;
-    _lastUpdated = DateTime.now();
-
     notifyListeners();
   }
 
   Future<void> delete(SeriesDef seriesDef) async {
+    _storeLastUpdated(seriesDef.uuid);
+
     await fetchDataIfNotYetLoaded();
     await _storeSeriesCurrentValue.delete(seriesDef.uuid);
     _uuid2seriesCurrentValue.remove(seriesDef.uuid);
 
     notifyListeners();
+  }
+
+  void _storeLastUpdated(String seriesDefUuid) {
+    _lastUpdatedSeriesUuid = seriesDefUuid;
+    SimpleLogging.w("TEST Saved last updated $_lastUpdatedSeriesUuid");
+    _lastUpdated = DateTime.now();
+  }
+
+  void setRecentlyUpdatedSeries(String seriesDefUuid) {
+    _storeLastUpdated(seriesDefUuid);
+    notifyListeners();
+  }
+
+  /// returns the series uuid of the last updated series (if recently updated) - otherwise null.
+  String recentlyUpdatedSeries() {
+    if (DateTime.now().difference(_lastUpdated).inMilliseconds > 2000) return "unset";
+    return _lastUpdatedSeriesUuid;
   }
 
   SeriesDataValue? get(SeriesDef seriesDef) {
@@ -67,11 +85,6 @@ class SeriesCurrentValueProvider with ChangeNotifier {
       return currentValue.seriesDataValue;
     }
     return null;
-  }
-
-  SeriesType? recentlyUpdated() {
-    if (DateTime.now().difference(_lastUpdated).inMilliseconds > 2000) return null;
-    return _lastUpdatedType;
   }
 
   BloodPressureValue? bloodPressureCurrentValue(SeriesDef seriesDef) {

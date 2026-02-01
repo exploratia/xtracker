@@ -181,7 +181,11 @@ class SeriesData<T extends SeriesDataValue> {
         inputResult = await MonthlyInput.showInputDlg(context, seriesDef, monthlyValue: (value is MonthlyValue) ? value : null);
     }
 
-    if (inputResult == null) return; // canceled
+    if (inputResult == null) {
+      // also on canceled set recently updated to ensure scrolling in series view to the act series
+      seriesCurrentValueProvider.setRecentlyUpdatedSeries(seriesDef.uuid);
+      return; // canceled
+    }
     switch (inputResult.action) {
       case InputResultAction.insert:
       case InputResultAction.update:

@@ -364,5 +364,5 @@ class SeriesDataProvider with ChangeNotifier {
 enum _Action {
   insert,
   update,
-  delete;
+  delete,
 }
