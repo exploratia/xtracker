@@ -77,7 +77,7 @@ class DailyFiles {
     }
   }
 
-  /// liefert die Dateinamen unter logs (ohne die Endung .txt)
+  /// liefert die Dateinamen unter logs
   static Future<List<String>> listLogFileNames() async {
     final logs = _logsDir;
     List<String> result = [];
