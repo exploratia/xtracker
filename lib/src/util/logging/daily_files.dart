@@ -178,7 +178,7 @@ class DailyFiles {
     await sink.close();
   }
 
-  static Future<String> readLog(String filename, BuildContext context, bool addNLAfterLogLevel) async {
+  static Future<String> readLog(String filename, bool addNLAfterLogLevel) async {
     final logsDir = _logsDir;
     if (logsDir == null) return 'No logs dir set/found!';
     String fn = filename;
@@ -194,7 +194,7 @@ class DailyFiles {
     return lines.join('\n');
   }
 
-  static Future<List<String>> readLogLines(String filename, BuildContext context, bool addNLAfterLogLevel) async {
+  static Future<List<String>> readLogLines(String filename,  bool addNLAfterLogLevel) async {
     final logsDir = _logsDir;
     if (logsDir == null) return ['No logs dir set/found!'];
     String fn = filename;

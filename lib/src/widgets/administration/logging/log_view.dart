@@ -29,7 +29,7 @@ class _LogViewState extends State<LogView> {
     return SizedBox(
       width: double.infinity,
       child: FutureBuilderWithProgressIndicator(
-        future: DailyFiles.readLogLines(widget.logFileName, context, !MediaQueryUtils.of(context).isTablet),
+        future: DailyFiles.readLogLines(widget.logFileName,  !MediaQueryUtils.of(context).isTablet),
         errorBuilder: (error) => 'Log file "${widget.logFileName}" not found!',
         widgetBuilder: (logFileContent, _) {
           return _LogLines(
