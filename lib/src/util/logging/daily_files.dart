@@ -153,30 +153,31 @@ class DailyFiles {
     var todayLog = '$soFarDate.txt';
     _todayLog = todayLog;
 
-    var logFile = File('${logsDir.path}/$todayLog');
-    var sink = logFile.openWrite(mode: FileMode.append);
+      var logFile = File('${logsDir.path}/$todayLog');
+      var sink = logFile.openWrite(mode: FileMode.append);
 
-    for (var i = 0; i < msgQueueItems.length; ++i) {
-      var msgQueueItem = msgQueueItems[i];
+    try {
+      for (var i = 0; i < msgQueueItems.length; ++i) {
+        var msgQueueItem = msgQueueItems[i];
 
-      // check for new date
-      if (soFarDate != msgQueueItem.date) {
-        await sink.flush();
-        await sink.close();
+        // check for new date
+        if (soFarDate != msgQueueItem.date) {
+          await sink.flush();
+          await sink.close();
 
-        soFarDate = msgQueueItem.date;
-        todayLog = '$soFarDate.txt';
-        _todayLog = todayLog;
+          soFarDate = msgQueueItem.date;
+          todayLog = '$soFarDate.txt';
+          _todayLog = todayLog;
 
-        logFile = File('${logsDir.path}/$todayLog');
-        sink = logFile.openWrite(mode: FileMode.append);
+          logFile = File('${logsDir.path}/$todayLog');
+          sink = logFile.openWrite(mode: FileMode.append);
+        }
+
+        sink.write('[${msgQueueItem.date} ${msgQueueItem.time}] ${msgQueueItem.text}\n');
       }
-
-      sink.write('[${msgQueueItem.date} ${msgQueueItem.time}] ${msgQueueItem.text}\n');
-    }
-
+    }finally{
     await sink.flush();
-    await sink.close();
+    await sink.close();}
   }
 
   static Future<String> readLog(String filename, bool addNLAfterLogLevel) async {
