@@ -42,6 +42,19 @@ class _LogsViewState extends State<LogsView> {
               future: DailyFiles.listLogFileNames(),
               errorBuilder: (error) => 'No log files found!',
               widgetBuilder: (logFiles, _) {
+                // Show hint if there are no logs
+                if (logFiles.isEmpty) {
+                  final available = DailyFiles.logsDirAvailable();
+                  return Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Text(
+                      available
+                          ? 'No log files found yet.'
+                          : 'File logging is not available on this platform.',
+                      textAlign: TextAlign.center,
+                    ),
+                  );
+                }
                 return Center(
                   child: Wrap(
                     spacing: ThemeUtils.horizontalSpacing,
