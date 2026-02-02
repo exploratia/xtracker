@@ -163,7 +163,7 @@ class DailyFiles {
         await sink.flush();
         await sink.close();
 
-        soFarDate = msgQueueItems.first.date;
+        soFarDate = msgQueueItem.date;
         todayLog = '$soFarDate.txt';
         _todayLog = todayLog;
 
