@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../app_info.dart';
+import '../ex.dart';
 import 'flutter_simple_logging.dart';
 
 /// Logging is not working in web!
@@ -233,7 +234,7 @@ class DailyFiles {
 
   static String getFullLogPath(String filename) {
     final logsDir = _logsDir;
-    if (logsDir == null) return 'No logs dir set/found!';
+    if (logsDir == null) throw Ex("No logs dir set/found!");
     String fn = filename;
     return '${logsDir.path}/$fn';
   }
@@ -260,20 +261,20 @@ class DailyFiles {
   static Future<void> _clearTmpDir() async {
     final tmpDir = _tmpDir;
     if (tmpDir == null) return;
-    tmpDir.list(recursive: true).listen((file) async {
-      if (file is File) {
+    await for (final entity in tmpDir.list(recursive: true)) {
+      if (entity is File) {
         if (kDebugMode) {
-          print('del tmp file $file');
+          print('del tmp file $entity');
         }
         try {
-          await file.delete();
+          await entity.delete();
         } catch (err) {
           if (kDebugMode) {
-            print('Failed to del tmp file $file');
+            print('Failed to del tmp file $entity');
           }
         }
       }
-    });
+    }
   }
 
   static Future<void> _clearOldLogs() async {
@@ -292,22 +293,22 @@ class DailyFiles {
       date = date.add(const Duration(days: -1));
     }
 
-    logsDir.list(recursive: false).listen((file) async {
-      if (file is File) {
-        if (!whiteList.contains(file.path)) {
+    await for (final entity in logsDir.list(recursive: false)) {
+      if (entity is File) {
+        if (!whiteList.contains(entity.path)) {
           if (kDebugMode) {
-            print('del old log file $file');
+            print('del old log file $entity');
           }
           try {
-            await file.delete();
+            await entity.delete();
           } catch (err) {
             if (kDebugMode) {
-              print('Failed to del tmp file $file');
+              print('Failed to del tmp file $entity');
             }
           }
         }
       }
-    });
+    }
   }
 
   static Future<File> zipAllLogs() async {
