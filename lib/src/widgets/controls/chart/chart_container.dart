@@ -45,7 +45,7 @@ class ChartContainer extends StatelessWidget {
     return Column(
       spacing: ThemeUtils.verticalSpacing,
       children: [
-        if (title != null) title!,
+        ?title,
         SizedBox(
           width: double.infinity,
           height: chartContainerHeight,
@@ -55,7 +55,7 @@ class ChartContainer extends StatelessWidget {
           //   child: child,
           // ),
         ),
-        if (legend != null) legend!,
+        ?legend,
       ],
     );
   }

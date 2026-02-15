@@ -61,7 +61,7 @@ class SeriesDataAnalyticsDailyLifeAttributesProportionsView extends StatelessWid
         children: [
           totalTable,
           chartTable,
-          if (monthlyChart != null) monthlyChart,
+          ?monthlyChart,
         ],
       ),
     );

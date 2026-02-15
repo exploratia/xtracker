@@ -32,7 +32,7 @@ class SeriesDataAnalyticsHoursRecordedView extends StatelessWidget {
       content: Column(
         children: [
           recordedDaysWidget,
-          if (child != null) child!,
+          ?child,
         ],
       ),
     );

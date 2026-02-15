@@ -155,10 +155,10 @@ class SeriesEditDisplaySettings extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               // ViewType select
-              if (viewTypeSelect != null) viewTypeSelect,
+              ?viewTypeSelect,
 
               // ColumnProfile? select
-              if (tableViewColumnProfileSelect != null) tableViewColumnProfileSelect,
+              ?tableViewColumnProfileSelect,
 
               // Pixel Preview
               if (PixelViewPreview.applicableOn(seriesDef)) ...[

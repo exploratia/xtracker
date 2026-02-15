@@ -24,7 +24,7 @@ class FutureBuilderWithProgressIndicator<T> extends StatelessWidget {
             children: [
               if (marginTop > 0) SizedBox(height: marginTop),
               const LinearProgressIndicator(),
-              if (waitingWidget != null) waitingWidget!,
+              ?waitingWidget,
             ],
           );
         } else if (snapshot.hasError) {

@@ -231,7 +231,7 @@ class _ScrollableGridState extends State<_ScrollableGrid> {
 
     return Row(
       children: [
-        if (firstColumn != null) firstColumn,
+        ?firstColumn,
         Expanded(
           child: Column(
             children: [
