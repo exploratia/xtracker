@@ -32,6 +32,7 @@ class SeriesValueRenderer<T extends SeriesDataValue> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget? valueRenderer;
+    Widget? attributeRenderer;
 
     switch (seriesDef.seriesType) {
       case SeriesType.bloodPressure:
@@ -58,21 +59,21 @@ class SeriesValueRenderer<T extends SeriesDataValue> extends StatelessWidget {
         }
       case SeriesType.dailyLife:
         if (_seriesDataValue is DailyLifeValue) {
-          valueRenderer = Builder(
-            builder: (context) {
-              var resolver = AttributeResolver(seriesDef);
-              return AttributeRenderer(attribute: resolver.resolve(_seriesDataValue.aid));
-            },
-          );
+          var resolver = AttributeResolver(seriesDef);
+          attributeRenderer = AttributeRenderer(attribute: resolver.resolve(_seriesDataValue.aid));
         }
       case SeriesType.custom:
       case SeriesType.monthly:
         if (_seriesDataValue is CustomValue) {
           valueRenderer = CustomValueRenderer(customValue: _seriesDataValue, seriesDef: seriesDef);
+          var resolver = AttributeResolver(seriesDef);
+          if (resolver.isNotEmpty()) {
+            attributeRenderer = AttributeRenderer(attribute: resolver.resolve(_seriesDataValue.aid));
+          }
         }
     }
 
-    if (valueRenderer != null) {
+    if (valueRenderer != null || attributeRenderer != null) {
       List<Widget> children = [];
       if (_seriesDataValue is MonthlyValue) {
         children.add(Text(DateTimeUtils.formatMonthYear(_seriesDataValue.dateTime)));
@@ -82,7 +83,12 @@ class SeriesValueRenderer<T extends SeriesDataValue> extends StatelessWidget {
           Text(DateTimeUtils.formatTime(_seriesDataValue.dateTime)),
         ]);
       }
-      children.add(valueRenderer);
+      if (valueRenderer != null) {
+        children.add(valueRenderer);
+      }
+      if (attributeRenderer != null) {
+        children.add(attributeRenderer);
+      }
 
       return ValueWrap(
         children: children,

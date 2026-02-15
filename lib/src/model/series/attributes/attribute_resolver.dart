@@ -54,4 +54,8 @@ class AttributeResolver {
     String aid2 = resolve(attributeOrAid2).aid;
     return attributeIds.indexOf(aid1).compareTo(attributeIds.indexOf(aid2));
   }
+
+  bool isNotEmpty() {
+    return attributeIds.isNotEmpty;
+  }
 }
