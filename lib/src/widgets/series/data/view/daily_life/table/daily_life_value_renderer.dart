@@ -2,16 +2,16 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import '../../../../../../model/series/attributes/attribute_resolver.dart';
 import '../../../../../../model/series/data/daily_life/daily_life_value.dart';
 import '../../../../../../model/series/data/series_data.dart';
 import '../../../../../../model/series/series_def.dart';
-import '../../../../../../model/series/settings/daily_life/daily_life_attribute_resolver.dart';
 import '../../../../../../util/chart/chart_utils.dart';
 import '../../../../../../util/date_time_utils.dart';
 import '../../../../../../util/media_query_utils.dart';
 import '../../../../../../util/theme_utils.dart';
 import '../../../../../../util/tooltip_utils.dart';
-import '../daily_life_attribute_renderer.dart';
+import '../../../../../controls/attribute/attribute_renderer.dart';
 
 class DailyLifeValueRenderer extends StatelessWidget {
   static int get height {
@@ -32,7 +32,7 @@ class DailyLifeValueRenderer extends StatelessWidget {
   final bool editMode;
   final SeriesDef seriesDef;
   final bool wrapWithDateTimeTooltip;
-  final DailyLifeAttributeResolver dailyLifeAttributeResolver;
+  final AttributeResolver dailyLifeAttributeResolver;
   final double maxContentWidth;
 
   @override
@@ -62,7 +62,7 @@ class DailyLifeValueRenderer extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 2),
           child: ConstrainedBox(
             constraints: BoxConstraints(maxWidth: max(maxContentWidth - 8, 20)),
-            child: DailyLifeAttributeRenderer(dailyLifeAttribute: resolvedAttribute),
+            child: AttributeRenderer(attribute: resolvedAttribute),
           ),
         ),
       ),

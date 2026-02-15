@@ -11,7 +11,6 @@ import '../model/series/data/habit/habit_value.dart';
 import '../model/series/data/series_data_value.dart';
 import '../model/series/series_def.dart';
 import '../store/stores.dart';
-import '../util/logging/flutter_simple_logging.dart';
 
 class SeriesCurrentValueProvider with ChangeNotifier {
   final _storeSeriesCurrentValue = Stores.storeSeriesCurrentValue;
@@ -64,7 +63,6 @@ class SeriesCurrentValueProvider with ChangeNotifier {
 
   void _storeLastUpdated(String seriesDefUuid) {
     _lastUpdatedSeriesUuid = seriesDefUuid;
-    SimpleLogging.w("TEST Saved last updated $_lastUpdatedSeriesUuid");
     _lastUpdated = DateTime.now();
   }
 

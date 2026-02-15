@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../../../../model/series/attributes/attribute_resolver.dart';
 import '../../../../../model/series/data/daily_life/daily_life_value.dart';
 import '../../../../../model/series/series_def.dart';
-import '../../../../../model/series/settings/daily_life/daily_life_attribute_resolver.dart';
 import '../../../../../util/day_item/day_item.dart';
 import '../../../../series/data/view/daily_life/table/daily_life_value_renderer.dart';
 import '../pixel.dart';
@@ -11,7 +11,7 @@ import 'grid_day_item.dart';
 class DailyLifeDayItem extends GridDayItem<DailyLifeValue> {
   DailyLifeDayItem(super.dateTimeDayStart, super.seriesDef);
 
-  Pixel toPixel(bool monthly, DailyLifeAttributeResolver dailyLifeAttributeResolver) {
+  Pixel toPixel(bool monthly, AttributeResolver dailyLifeAttributeResolver) {
     List<Color> colors = dateTimeItems.map((e) => dailyLifeAttributeResolver.resolve(e.aid).color).toList();
 
     return Pixel<DailyLifeValue>(

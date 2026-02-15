@@ -39,7 +39,7 @@ class _IconPopupMenuState extends State<IconPopupMenu> {
       barrierDismissible: true,
       barrierLabel: "PopupMenu",
       barrierColor: Colors.transparent,
-      pageBuilder: (_, __, ___) => _Menu(
+      pageBuilder: (_, _, _) => _Menu(
         position: menuPosition,
         menuEntries: widget.menuEntries,
         animated: widget.animated,
@@ -138,10 +138,12 @@ class _AnimatedMenuState extends State<_AnimatedMenu> with SingleTickerProviderS
     List<Widget> items = [];
     for (var i = 0; i < widget.menuEntries.length; ++i) {
       var mi = widget.menuEntries[i];
-      items.add(_buildAnimatedItem(
-        _MenuItemIconButton(mi),
-        i,
-      ));
+      items.add(
+        _buildAnimatedItem(
+          _MenuItemIconButton(mi),
+          i,
+        ),
+      );
     }
 
     return Column(

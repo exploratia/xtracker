@@ -2,17 +2,14 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../generated/locale_keys.g.dart';
+import '../../../../model/series/attributes/attribute.dart';
 import '../../../../model/series/series_def.dart';
-import '../../../../model/series/settings/daily_life/daily_life_attribute.dart';
 import '../../../../model/series/settings/daily_life/daily_life_attributes_settings.dart';
 import '../../../../util/color_utils.dart';
 import '../../../../util/theme_utils.dart';
+import '../../../controls/attribute/attribute_edit_renderer.dart';
+import '../../../controls/attribute/attribute_input.dart';
 import '../../../controls/btn/info_btn.dart';
-import '../../../controls/card/glowing_border_container.dart';
-import '../../../controls/list/drag_handle.dart';
-import '../../data/view/daily_life/daily_life_attribute_renderer.dart';
-import '../../series_def_renderer.dart';
-import 'daily_life_attribute_input.dart';
 
 class DailyLifeSeriesEditAttributes extends StatelessWidget {
   final SeriesDef seriesDef;
@@ -29,18 +26,18 @@ class DailyLifeSeriesEditAttributes extends StatelessWidget {
 
     for (var i = 0; i < attributes.length; ++i) {
       var attribute = attributes[i];
-      var renderer = _AttributeRenderer(
+      var renderer = AttributeEditRenderer(
         key: Key("attribute_list_item_${attribute.aid}"),
-        dailyLifeAttribute: DailyLifeAttribute(aid: attribute.aid, color: attribute.color, name: attribute.name),
+        attribute: Attribute(aid: attribute.aid, color: attribute.color, name: attribute.name),
         index: i,
-        updateAttributeCB: (DailyLifeAttribute updatedDailyLifeAttribute) {
+        updateAttributeCB: (Attribute updatedDailyLifeAttribute) {
           var idx = attributes.indexWhere((a) => a.aid == updatedDailyLifeAttribute.aid);
           if (idx >= 0) {
             attributes.replaceRange(idx, idx + 1, [updatedDailyLifeAttribute]);
             updateSettings();
           }
         },
-        deleteAttributeCB: (DailyLifeAttribute deletedDailyLifeAttribute) {
+        deleteAttributeCB: (Attribute deletedDailyLifeAttribute) {
           attributes.removeWhere((a) => a.aid == deletedDailyLifeAttribute.aid);
           updateSettings();
         },
@@ -56,15 +53,15 @@ class DailyLifeSeriesEditAttributes extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
           InfoBtn(
-            title: LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_title.tr(),
-            content: LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_info.tr(),
+            title: LocaleKeys.seriesEdit_seriesSettings_attributes_title.tr(),
+            content: LocaleKeys.seriesEdit_seriesSettings_attributes_info.tr(),
           ),
           Expanded(child: Container()),
           IconButton(
             iconSize: ThemeUtils.iconSizeScaled,
-            tooltip: LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_actions_add_tooltip.tr(),
+            tooltip: LocaleKeys.seriesEdit_seriesSettings_attributes_actions_add_tooltip.tr(),
             onPressed: () async {
-              DailyLifeAttribute? dailyLifeAttribute = await DailyLifeAttributeInput.showInputDlg(context, newAttributeColor: seriesDef.color);
+              Attribute? dailyLifeAttribute = await AttributeInput.showInputDlg(context, newAttributeColor: seriesDef.color);
               if (dailyLifeAttribute != null) {
                 attributes.insert(0, dailyLifeAttribute);
                 updateSettings();
@@ -76,12 +73,12 @@ class DailyLifeSeriesEditAttributes extends StatelessWidget {
             iconSize: ThemeUtils.iconSizeScaled,
             borderRadius: ThemeUtils.borderRadiusCircular,
             icon: const Icon(Icons.playlist_add_outlined),
-            tooltip: LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_actions_addPreset_tooltip.tr(),
+            tooltip: LocaleKeys.seriesEdit_seriesSettings_attributes_actions_addPreset_tooltip.tr(),
             itemBuilder: (context) => _buildPresets(attributes, updateSettings),
           ),
           IconButton(
             iconSize: ThemeUtils.iconSizeScaled,
-            tooltip: LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_actions_deleteAll_tooltip.tr(),
+            tooltip: LocaleKeys.seriesEdit_seriesSettings_attributes_actions_deleteAll_tooltip.tr(),
             onPressed: () async {
               attributes.clear();
               updateSettings();
@@ -116,62 +113,68 @@ class DailyLifeSeriesEditAttributes extends StatelessWidget {
     );
   }
 
-  List<PopupMenuItem<dynamic>> _buildPresets(List<DailyLifeAttribute> attributes, List<DailyLifeAttribute> Function() updateSettings) {
+  List<PopupMenuItem<dynamic>> _buildPresets(List<Attribute> attributes, List<Attribute> Function() updateSettings) {
     int now = DateTime.now().millisecondsSinceEpoch;
     return [
       PopupMenuItem(
-        child: Text(LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_preset_feelings_title.tr()),
-        onTap: () {
-          attributes.addAll(_buildFrom(LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_preset_feelings_attributeNames.tr(), [
-            ColorUtils.fromHex("#cb2526"),
-            ColorUtils.fromHex("#ef8110"),
-            ColorUtils.fromHex("#e6ca4a"),
-            ColorUtils.fromHex("#5bab4a"),
-            ColorUtils.fromHex("#557d75"),
-            ColorUtils.fromHex("#649bd8"),
-            ColorUtils.fromHex("#0c155a"),
-            ColorUtils.fromHex("#9a457e"),
-            ColorUtils.fromHex("#303030"),
-          ]));
-          updateSettings();
-        },
-      ),
-      PopupMenuItem(
-        child: Text(LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_preset_sports_title.tr()),
-        onTap: () {
-          attributes.addAll(_buildFrom(LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_preset_sports_attributeNames.tr(), [
-            Colors.orangeAccent,
-            Colors.deepOrange,
-            Colors.lightGreenAccent,
-            Colors.blueGrey,
-            Colors.green,
-            Colors.blueAccent,
-            Colors.purple,
-          ]));
-          updateSettings();
-        },
-      ),
-      PopupMenuItem(
-        child: Text(LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_preset_period_title.tr()),
-        onTap: () {
-          attributes.addAll(_buildFrom(LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_preset_period_attributeNames.tr(), [
-            Colors.white,
-            ColorUtils.fromHex("#ecb0b2"),
-            ColorUtils.fromHex("#f36e71"),
-            ColorUtils.fromHex("#ec3a5a"),
-            ColorUtils.fromHex("#9c1020"),
-          ]));
-          updateSettings();
-        },
-      ),
-      PopupMenuItem(
-        child: Text(LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_preset_stars_title.tr()),
+        child: Text(LocaleKeys.seriesEdit_seriesSettings_attributes_preset_feelings_title.tr()),
         onTap: () {
           attributes.addAll(
-            List<DailyLifeAttribute>.generate(
+            _buildFrom(LocaleKeys.seriesEdit_seriesSettings_attributes_preset_feelings_attributeNames.tr(), [
+              ColorUtils.fromHex("#cb2526"),
+              ColorUtils.fromHex("#ef8110"),
+              ColorUtils.fromHex("#e6ca4a"),
+              ColorUtils.fromHex("#5bab4a"),
+              ColorUtils.fromHex("#557d75"),
+              ColorUtils.fromHex("#649bd8"),
+              ColorUtils.fromHex("#0c155a"),
+              ColorUtils.fromHex("#9a457e"),
+              ColorUtils.fromHex("#303030"),
+            ]),
+          );
+          updateSettings();
+        },
+      ),
+      PopupMenuItem(
+        child: Text(LocaleKeys.seriesEdit_seriesSettings_attributes_preset_sports_title.tr()),
+        onTap: () {
+          attributes.addAll(
+            _buildFrom(LocaleKeys.seriesEdit_seriesSettings_attributes_preset_sports_attributeNames.tr(), [
+              Colors.orangeAccent,
+              Colors.deepOrange,
+              Colors.lightGreenAccent,
+              Colors.blueGrey,
+              Colors.green,
+              Colors.blueAccent,
+              Colors.purple,
+            ]),
+          );
+          updateSettings();
+        },
+      ),
+      PopupMenuItem(
+        child: Text(LocaleKeys.seriesEdit_seriesSettings_attributes_preset_period_title.tr()),
+        onTap: () {
+          attributes.addAll(
+            _buildFrom(LocaleKeys.seriesEdit_seriesSettings_attributes_preset_period_attributeNames.tr(), [
+              Colors.white,
+              ColorUtils.fromHex("#ecb0b2"),
+              ColorUtils.fromHex("#f36e71"),
+              ColorUtils.fromHex("#ec3a5a"),
+              ColorUtils.fromHex("#9c1020"),
+            ]),
+          );
+          updateSettings();
+        },
+      ),
+      PopupMenuItem(
+        child: Text(LocaleKeys.seriesEdit_seriesSettings_attributes_preset_stars_title.tr()),
+        onTap: () {
+          attributes.addAll(
+            List<Attribute>.generate(
               5,
-              (index) => DailyLifeAttribute(
-                aid: DailyLifeAttribute.generateUniqueAttributeId(val: now - index),
+              (index) => Attribute(
+                aid: Attribute.generateUniqueAttributeId(val: now - index),
                 color: ColorUtils.hue(const Color(0xF5FFAA00), 25.0 * index),
                 name: "".padLeft(index + 1, '★'),
               ),
@@ -181,13 +184,13 @@ class DailyLifeSeriesEditAttributes extends StatelessWidget {
         },
       ),
       PopupMenuItem(
-        child: Text(LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_preset_stress_title.tr()),
+        child: Text(LocaleKeys.seriesEdit_seriesSettings_attributes_preset_stress_title.tr()),
         onTap: () {
           attributes.addAll(
-            List<DailyLifeAttribute>.generate(
+            List<Attribute>.generate(
               5,
-              (index) => DailyLifeAttribute(
-                aid: DailyLifeAttribute.generateUniqueAttributeId(val: now - index),
+              (index) => Attribute(
+                aid: Attribute.generateUniqueAttributeId(val: now - index),
                 color: ColorUtils.hue(ColorUtils.fromHex('996726'), -30.0 * index),
                 name: "".padLeft(index + 1, '☠'),
               ),
@@ -197,13 +200,13 @@ class DailyLifeSeriesEditAttributes extends StatelessWidget {
         },
       ),
       PopupMenuItem(
-        child: Text(LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_preset_colorWheel_title.tr()),
+        child: Text(LocaleKeys.seriesEdit_seriesSettings_attributes_preset_colorWheel_title.tr()),
         onTap: () {
           attributes.addAll(
-            List<DailyLifeAttribute>.generate(
+            List<Attribute>.generate(
               12,
-              (index) => DailyLifeAttribute(
-                aid: DailyLifeAttribute.generateUniqueAttributeId(val: now - index),
+              (index) => Attribute(
+                aid: Attribute.generateUniqueAttributeId(val: now - index),
                 color: ColorUtils.hue(Colors.green, -30.0 * index),
                 name: "",
               ),
@@ -213,13 +216,13 @@ class DailyLifeSeriesEditAttributes extends StatelessWidget {
         },
       ),
       PopupMenuItem(
-        child: Text(LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_preset_hoursDown_title.tr()),
+        child: Text(LocaleKeys.seriesEdit_seriesSettings_attributes_preset_hoursDown_title.tr()),
         onTap: () {
           attributes.addAll(
-            List<DailyLifeAttribute>.generate(
+            List<Attribute>.generate(
               8,
-              (index) => DailyLifeAttribute(
-                aid: DailyLifeAttribute.generateUniqueAttributeId(val: now - index),
+              (index) => Attribute(
+                aid: Attribute.generateUniqueAttributeId(val: now - index),
                 color: ColorUtils.hue(Colors.lightBlueAccent, 20.0 * (index)),
                 name: "${index >= 7 ? '>= ' : ''}${index + 1} h",
               ),
@@ -229,13 +232,13 @@ class DailyLifeSeriesEditAttributes extends StatelessWidget {
         },
       ),
       PopupMenuItem(
-        child: Text(LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_preset_hoursUp_title.tr()),
+        child: Text(LocaleKeys.seriesEdit_seriesSettings_attributes_preset_hoursUp_title.tr()),
         onTap: () {
           attributes.addAll(
-            List<DailyLifeAttribute>.generate(
+            List<Attribute>.generate(
               8,
-              (index) => DailyLifeAttribute(
-                aid: DailyLifeAttribute.generateUniqueAttributeId(val: now - index),
+              (index) => Attribute(
+                aid: Attribute.generateUniqueAttributeId(val: now - index),
                 color: ColorUtils.hue(Colors.lightBlueAccent, -15.0 * (index)),
                 name: "${index >= 7 ? '>= ' : ''}${index + 1} h",
               ),
@@ -245,13 +248,13 @@ class DailyLifeSeriesEditAttributes extends StatelessWidget {
         },
       ),
       PopupMenuItem(
-        child: Text(LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_preset_minutesDown_title.tr()),
+        child: Text(LocaleKeys.seriesEdit_seriesSettings_attributes_preset_minutesDown_title.tr()),
         onTap: () {
           attributes.addAll(
-            List<DailyLifeAttribute>.generate(
+            List<Attribute>.generate(
               6,
-              (index) => DailyLifeAttribute(
-                aid: DailyLifeAttribute.generateUniqueAttributeId(val: now - index),
+              (index) => Attribute(
+                aid: Attribute.generateUniqueAttributeId(val: now - index),
                 color: ColorUtils.hue(Colors.lightBlueAccent, 20.0 * (index)),
                 name: "${index >= 5 ? '>= ' : ''}${(index + 1) * 10} min",
               ),
@@ -261,13 +264,13 @@ class DailyLifeSeriesEditAttributes extends StatelessWidget {
         },
       ),
       PopupMenuItem(
-        child: Text(LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_preset_minutesUp_title.tr()),
+        child: Text(LocaleKeys.seriesEdit_seriesSettings_attributes_preset_minutesUp_title.tr()),
         onTap: () {
           attributes.addAll(
-            List<DailyLifeAttribute>.generate(
+            List<Attribute>.generate(
               6,
-              (index) => DailyLifeAttribute(
-                aid: DailyLifeAttribute.generateUniqueAttributeId(val: now - index),
+              (index) => Attribute(
+                aid: Attribute.generateUniqueAttributeId(val: now - index),
                 color: ColorUtils.hue(Colors.lightBlueAccent, -15.0 * (index)),
                 name: "${index >= 5 ? '>= ' : ''}${(index + 1) * 10} min",
               ),
@@ -277,13 +280,13 @@ class DailyLifeSeriesEditAttributes extends StatelessWidget {
         },
       ),
       PopupMenuItem(
-        child: Text(LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_preset_numbersDown_title.tr()),
+        child: Text(LocaleKeys.seriesEdit_seriesSettings_attributes_preset_numbersDown_title.tr()),
         onTap: () {
           attributes.addAll(
-            List<DailyLifeAttribute>.generate(
+            List<Attribute>.generate(
               10,
-              (index) => DailyLifeAttribute(
-                aid: DailyLifeAttribute.generateUniqueAttributeId(val: now - index),
+              (index) => Attribute(
+                aid: Attribute.generateUniqueAttributeId(val: now - index),
                 color: ColorUtils.hue(Colors.lightGreenAccent, -20.0 * (index)),
                 name: "${index >= 9 ? '>= ' : ''}${index + 1}",
               ),
@@ -293,13 +296,13 @@ class DailyLifeSeriesEditAttributes extends StatelessWidget {
         },
       ),
       PopupMenuItem(
-        child: Text(LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_preset_numbersUp_title.tr()),
+        child: Text(LocaleKeys.seriesEdit_seriesSettings_attributes_preset_numbersUp_title.tr()),
         onTap: () {
           attributes.addAll(
-            List<DailyLifeAttribute>.generate(
+            List<Attribute>.generate(
               10,
-              (index) => DailyLifeAttribute(
-                aid: DailyLifeAttribute.generateUniqueAttributeId(val: now - index),
+              (index) => Attribute(
+                aid: Attribute.generateUniqueAttributeId(val: now - index),
                 color: ColorUtils.hue(Colors.lightGreenAccent, 10.0 * (index)),
                 name: "${index >= 9 ? '>= ' : ''}${index + 1}",
               ),
@@ -311,88 +314,23 @@ class DailyLifeSeriesEditAttributes extends StatelessWidget {
     ];
   }
 
-  static List<DailyLifeAttribute> _buildFrom(String attributeNames, List<Color> colors) {
+  static List<Attribute> _buildFrom(String attributeNames, List<Color> colors) {
     var now = DateTime.now().millisecondsSinceEpoch;
-    List<DailyLifeAttribute> result = [];
+    List<Attribute> result = [];
 
     var split = attributeNames.split("|");
     for (var i = 0; i < split.length; ++i) {
       var attributeName = split[i];
       Color attributeColor = colors.elementAtOrNull(i) ?? ColorUtils.hue(Colors.greenAccent, 17.0 * i);
-      result.add(DailyLifeAttribute(
-        aid: DailyLifeAttribute.generateUniqueAttributeId(val: now - i),
-        color: attributeColor,
-        name: attributeName,
-      ));
+      result.add(
+        Attribute(
+          aid: Attribute.generateUniqueAttributeId(val: now - i),
+          color: attributeColor,
+          name: attributeName,
+        ),
+      );
     }
 
     return result;
-  }
-}
-
-class _AttributeRenderer extends StatelessWidget {
-  final DailyLifeAttribute dailyLifeAttribute;
-  final int index;
-  final void Function(DailyLifeAttribute updatedDailyLifeAttribute) updateAttributeCB;
-  final void Function(DailyLifeAttribute deletedDailyLifeAttribute) deleteAttributeCB;
-
-  const _AttributeRenderer({
-    super.key,
-    required this.dailyLifeAttribute,
-    required this.index,
-    required this.updateAttributeCB,
-    required this.deleteAttributeCB,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return GlowingBorderContainer(
-      glowColor: dailyLifeAttribute.color,
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          const SizedBox(width: ThemeUtils.horizontalSpacing),
-          // OverflowText(dailyLifeAttribute.name),
-          Expanded(
-            child: DailyLifeAttributeRenderer(dailyLifeAttribute: dailyLifeAttribute),
-          ),
-          const SizedBox(width: ThemeUtils.horizontalSpacing),
-          LeftBorder(
-            color: dailyLifeAttribute.color,
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                IconButton(
-                  iconSize: ThemeUtils.iconSizeScaled,
-                  tooltip: LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_actions_edit_tooltip.tr(),
-                  onPressed: () async {
-                    DailyLifeAttribute? updatedDailyLifeAttribute =
-                        await DailyLifeAttributeInput.showInputDlg(context, dailyLifeAttribute: dailyLifeAttribute.clone());
-                    if (updatedDailyLifeAttribute != null) {
-                      updateAttributeCB(updatedDailyLifeAttribute);
-                    }
-                  },
-                  icon: const Icon(Icons.edit_outlined),
-                ),
-                IconButton(
-                  iconSize: ThemeUtils.iconSizeScaled,
-                  tooltip: LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_actions_delete_tooltip.tr(),
-                  onPressed: () {
-                    deleteAttributeCB(dailyLifeAttribute);
-                  },
-                  icon: const Icon(Icons.close_outlined),
-                ),
-              ],
-            ),
-          ),
-          LeftBorder(
-            color: dailyLifeAttribute.color,
-            child: Row(
-              children: [DragHandle(index: index)],
-            ),
-          ),
-        ],
-      ),
-    );
   }
 }

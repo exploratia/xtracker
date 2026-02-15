@@ -100,7 +100,7 @@ class SeriesDataViewContentBuilder extends StatelessWidget {
         // calc dependent seriesItems
         var calcSeriesItems = seriesViewMetaData.seriesDef.seriesItems.where((si) => si.isCalculated);
         if (calcSeriesItems.isNotEmpty) {
-          values = _calcValues(calcSeriesItems, values, (uuid, dateTime, valMap) => CustomValue(uuid, dateTime, valMap));
+          values = _calcValues(calcSeriesItems, values, (uuid, dateTime, valMap) => CustomValue(uuid, dateTime, valMap, null));
         }
 
         return builder(
@@ -119,7 +119,7 @@ class SeriesDataViewContentBuilder extends StatelessWidget {
         // calc dependent seriesItems
         var calcSeriesItems = seriesViewMetaData.seriesDef.seriesItems.where((si) => si.isCalculated);
         if (calcSeriesItems.isNotEmpty) {
-          values = _calcValues(calcSeriesItems, values, (uuid, dateTime, valMap) => MonthlyValue(uuid, dateTime, valMap));
+          values = _calcValues(calcSeriesItems, values, (uuid, dateTime, valMap) => MonthlyValue(uuid, dateTime, valMap, null));
         }
 
         return builder(
@@ -135,7 +135,10 @@ class SeriesDataViewContentBuilder extends StatelessWidget {
   }
 
   static List<V> _calcValues<V extends CustomValue>(
-      Iterable<SeriesItem> calcSeriesItems, List<V> values, V Function(String uuid, DateTime dateTime, Map<String, double> valMap) valBuilder) {
+    Iterable<SeriesItem> calcSeriesItems,
+    List<V> values,
+    V Function(String uuid, DateTime dateTime, Map<String, double> valMap) valBuilder,
+  ) {
     List<V> valuesCalculated = [];
     V prevValue = valBuilder("prev", DateTime(0), {});
     for (var value in values) {

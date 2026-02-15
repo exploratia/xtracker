@@ -1,14 +1,10 @@
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../../../../generated/locale_keys.g.dart';
+import '../../../../../model/series/attributes/attribute_resolver.dart';
 import '../../../../../model/series/data/daily_life/daily_life_value.dart';
 import '../../../../../model/series/series_def.dart';
-import '../../../../../model/series/settings/daily_life/daily_life_attribute_resolver.dart';
-import '../../../../../util/media_query_utils.dart';
-import '../../../../../util/theme_utils.dart';
-import '../../view/daily_life/daily_life_attribute_renderer.dart';
+import '../../../../controls/attribute/attribute_selector.dart';
 import '../input_result.dart';
 import '../simple_dialog_input.dart';
 
@@ -38,7 +34,7 @@ class _DailyLifeInputState extends State<DailyLifeInput> {
   late final String _uuid;
   late DateTime _dateTime;
   String? _attributeUuid;
-  late final DailyLifeAttributeResolver _dailyLifeAttributeResolver;
+  late final AttributeResolver _attributeResolver;
 
   @override
   initState() {
@@ -51,7 +47,7 @@ class _DailyLifeInputState extends State<DailyLifeInput> {
       _isValid = true;
     }
 
-    _dailyLifeAttributeResolver = DailyLifeAttributeResolver(widget.seriesDef);
+    _attributeResolver = AttributeResolver(widget.seriesDef);
 
     super.initState();
   }
@@ -86,33 +82,11 @@ class _DailyLifeInputState extends State<DailyLifeInput> {
 
   @override
   Widget build(BuildContext context) {
-    var edit = ConstrainedBox(
-      constraints: BoxConstraints(minHeight: 48 * MediaQueryUtils.textScaleFactor),
-      child: Center(
-        child: PopupMenuButton(
-          borderRadius: ThemeUtils.borderRadiusCircular,
-          icon: _attributeUuid == null ? const Icon(Icons.list) : null,
-          tooltip: LocaleKeys.seriesValue_dailyLife_btn_selectAttribute_tooltip.tr(),
-          itemBuilder: (context) => widget.seriesDef
-              .dailyLifeAttributesSettingsReadonly()
-              .attributes
-              .map(
-                (e) => PopupMenuItem(
-                  /* Flutter Bug? if right >= 10 a huge wider padding is used. Seems not to work always. If only Text-Widgets are uses as child it has no effect. */
-                  padding: const EdgeInsets.only(right: 9, left: 9, bottom: 0),
-                  onTap: () => _setAttributeUuid(e.aid),
-                  child: DailyLifeAttributeRenderer(dailyLifeAttribute: e),
-                ),
-              )
-              .toList(),
-          child: _attributeUuid != null
-              ? Padding(
-                  padding: const EdgeInsets.all(ThemeUtils.paddingSmall),
-                  child: DailyLifeAttributeRenderer(dailyLifeAttribute: _dailyLifeAttributeResolver.resolve(_attributeUuid)),
-                )
-              : null,
-        ),
-      ),
+    var attributeSelector = AttributeSelector(
+      attributeUuid: _attributeUuid,
+      attributes: widget.seriesDef.dailyLifeAttributesSettingsReadonly().attributes,
+      handleAttributeUuid: _setAttributeUuid,
+      attributeResolver: _attributeResolver,
     );
 
     return SimpleDialogInput(
@@ -123,7 +97,7 @@ class _DailyLifeInputState extends State<DailyLifeInput> {
       setDateTime: _setDateTime,
       saveHandler: _saveHandler,
       deleteHandler: _deleteHandler,
-      child: edit,
+      child: attributeSelector,
     );
   }
 }

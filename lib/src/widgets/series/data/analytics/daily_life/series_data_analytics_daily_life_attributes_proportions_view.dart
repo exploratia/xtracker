@@ -3,19 +3,19 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../../generated/locale_keys.g.dart';
+import '../../../../../model/series/attributes/attribute.dart';
+import '../../../../../model/series/attributes/attribute_resolver.dart';
 import '../../../../../model/series/data/daily_life/daily_life_value.dart';
 import '../../../../../model/series/series_view_meta_data.dart';
-import '../../../../../model/series/settings/daily_life/daily_life_attribute.dart';
-import '../../../../../model/series/settings/daily_life/daily_life_attribute_resolver.dart';
 import '../../../../../util/analytics/analytics.dart';
 import '../../../../../util/date_time_utils.dart';
 import '../../../../../util/filter/after_date_filter.dart';
 import '../../../../../util/pair.dart';
 import '../../../../../util/table_utils.dart';
 import '../../../../../util/theme_utils.dart';
+import '../../../../controls/attribute/attribute_renderer.dart';
 import '../../../../controls/card/glowing_border_container.dart';
 import '../../../../controls/progress/ratio_labeled_progress_bar.dart';
-import '../../view/daily_life/daily_life_attribute_renderer.dart';
 import '../analytics/analysis_table.dart';
 import '../analytics/analytics_settings_card.dart';
 
@@ -28,7 +28,7 @@ class SeriesDataAnalyticsDailyLifeAttributesProportionsView extends StatelessWid
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    final attributeResolver = DailyLifeAttributeResolver(seriesViewMetaData.seriesDef);
+    final attributeResolver = AttributeResolver(seriesViewMetaData.seriesDef);
 
     final Map<String, List<DateTime>> aid2dates = {};
     for (var aid in attributeResolver.attributeIds) {
@@ -41,7 +41,7 @@ class SeriesDataAnalyticsDailyLifeAttributesProportionsView extends StatelessWid
       aid2dates[resolvedAttributeId]?.add(value.dateTime);
     }
 
-    List<Pair<DailyLifeAttribute, List<DateTime>>> sorted = [];
+    List<Pair<Attribute, List<DateTime>>> sorted = [];
     for (var entry in aid2dates.entries) {
       sorted.add(Pair(attributeResolver.resolve(entry.key), entry.value));
     }
@@ -67,9 +67,9 @@ class SeriesDataAnalyticsDailyLifeAttributesProportionsView extends StatelessWid
     );
   }
 
-  Widget? _buildMonthlyChart(List<Pair<DailyLifeAttribute, List<DateTime>>> sorted, ThemeData themeData) {
+  Widget? _buildMonthlyChart(List<Pair<Attribute, List<DateTime>>> sorted, ThemeData themeData) {
     // monthly chart
-    List<Pair<DailyLifeAttribute, Map<String, _MonthlyItem>>> attrib2MonthData = [];
+    List<Pair<Attribute, Map<String, _MonthlyItem>>> attrib2MonthData = [];
     for (var pair in sorted) {
       var attribute = pair.k;
       Map<String, _MonthlyItem> map = {};
@@ -85,7 +85,7 @@ class SeriesDataAnalyticsDailyLifeAttributesProportionsView extends StatelessWid
     List<String> xTitles = [];
     bool fillXTitles = true; // for the first attribute fill xTitles list
 
-    List<Pair<DailyLifeAttribute, List<_MonthlyItem>>> attrib2MonthDataList = [];
+    List<Pair<Attribute, List<_MonthlyItem>>> attrib2MonthDataList = [];
     var now = DateTime.now();
     for (var pair in attrib2MonthData) {
       Map<String, _MonthlyItem> monthlyMap = pair.v;
@@ -193,14 +193,14 @@ class SeriesDataAnalyticsDailyLifeAttributesProportionsView extends StatelessWid
     return monthlyChart;
   }
 
-  AnalysisTable _buildChartTable(BuildContext context, List<Pair<DailyLifeAttribute, List<DateTime>>> sorted) {
+  AnalysisTable _buildChartTable(BuildContext context, List<Pair<Attribute, List<DateTime>>> sorted) {
     List<TableRow> rows = TableUtils.buildKeyValueTableRows(
       context,
       keyColumnTitle: LocaleKeys.seriesDataAnalytics_label_dataset.tr(),
       valueColumnTitle: LocaleKeys.seriesDataAnalytics_dailyLife_attributesProportions_table_colProportions.tr(),
     );
 
-    List<Pair<DailyLifeAttribute, List<DateTime>>> reduced = [...sorted];
+    List<Pair<Attribute, List<DateTime>>> reduced = [...sorted];
     for (var days in Analytics.datasetSizeInDays.reversed) {
       String keyColumnText = Analytics.buildDatasetSizeString(days);
       var keyColumnWidget = Text(
@@ -209,7 +209,7 @@ class SeriesDataAnalyticsDailyLifeAttributesProportionsView extends StatelessWid
       );
 
       var filter = AfterDateFilter.daysBack(days);
-      List<Pair<DailyLifeAttribute, List<DateTime>>> reducedTmp = [];
+      List<Pair<Attribute, List<DateTime>>> reducedTmp = [];
       for (var r in reduced) {
         reducedTmp.add(Pair(r.k, r.v.where((e) => filter.filter(e)).toList()));
       }
@@ -236,7 +236,7 @@ class SeriesDataAnalyticsDailyLifeAttributesProportionsView extends StatelessWid
     return AnalysisTable(rows: rows);
   }
 
-  AnalysisTable _buildTotalTable(List<Pair<DailyLifeAttribute, List<DateTime>>> sorted, BuildContext context) {
+  AnalysisTable _buildTotalTable(List<Pair<Attribute, List<DateTime>>> sorted, BuildContext context) {
     var total = sorted.fold(0, (previousValue, p) => previousValue + p.v.length);
 
     List<TableRow> totalRows = TableUtils.buildKeyValueTableRows(
@@ -246,7 +246,7 @@ class SeriesDataAnalyticsDailyLifeAttributesProportionsView extends StatelessWid
     );
 
     for (var p in sorted) {
-      var keyColumnWidget = DailyLifeAttributeRenderer(dailyLifeAttribute: p.k);
+      var keyColumnWidget = AttributeRenderer(attribute: p.k);
 
       var valueColumnWidget = RatioLabeledProgressBar(
         color: p.k.color,
@@ -346,7 +346,7 @@ class _ProportionsChart extends StatelessWidget {
     required this.attributeProportions,
   });
 
-  final Iterable<Pair<DailyLifeAttribute, int>> attributeProportions;
+  final Iterable<Pair<Attribute, int>> attributeProportions;
 
   @override
   Widget build(BuildContext context) {
@@ -354,14 +354,16 @@ class _ProportionsChart extends StatelessWidget {
       height: ThemeUtils.borderRadiusSmall * 2,
       child: Row(
         children: [
-          ...attributeProportions.where((p) => p.v > 0).map(
+          ...attributeProportions
+              .where((p) => p.v > 0)
+              .map(
                 (p) => Expanded(
                   flex: p.v,
                   child: Container(
                     clipBehavior: Clip.antiAlias,
                     decoration: GlowingBorderContainer.createGlowingBoxDecoration(
                       p.k.color,
-                      backgroundGradientColors: DailyLifeAttributeRenderer.buildAttributeGradient(p.k.color),
+                      backgroundGradientColors: AttributeRenderer.buildAttributeGradient(p.k.color),
                       borderRadius: ThemeUtils.borderRadiusSmall,
                       blurRadius: ThemeUtils.borderRadiusSmall,
                       borderWidth: 1,

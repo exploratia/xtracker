@@ -6,7 +6,7 @@ import '../../series_def.dart';
 import '../custom/custom_value.dart';
 
 class MonthlyValue extends CustomValue {
-  MonthlyValue(super.uuid, super.dateTime, super.values);
+  MonthlyValue(super.uuid, super.dateTime, super.values, super.aid);
 
   factory MonthlyValue.fromJson(JsonReader json) {
     Map<String, double> values = {};
@@ -20,6 +20,7 @@ class MonthlyValue extends CustomValue {
       json.asStringOr('uuid', const Uuid().v4()),
       DateTime.fromMillisecondsSinceEpoch(json.asReader('utcMs').getInt()),
       values,
+      json.asStringOrNull("aid"),
     );
   }
 
@@ -37,10 +38,24 @@ class MonthlyValue extends CustomValue {
         }
       }
     }
+
+    String? aid;
+    {
+      // build resolver map
+      var attributes = seriesDef.customAttributesSettingsReadonly().attributes;
+      Map<String, String> attributeName2Aid = {};
+      for (var attribute in attributes) {
+        attributeName2Aid[attribute.name] = attribute.aid;
+      }
+      idx++;
+      aid = attributeName2Aid[csv[idx]];
+    }
+
     return MonthlyValue(
       const Uuid().v4().toString(),
       DateTime.fromMillisecondsSinceEpoch(csv[0] as int),
       values,
+      aid,
     );
   }
 

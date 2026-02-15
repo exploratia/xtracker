@@ -31,7 +31,7 @@ class MonthlyInput extends StatelessWidget {
       monthly: true,
       seriesDef: seriesDef,
       val: monthlyValue,
-      resultBuilder: (uuid, dateTime, values, action) => InputResult(MonthlyValue(uuid, dateTime, values), action),
+      resultBuilder: (uuid, dateTime, values, aid, action) => InputResult(MonthlyValue(uuid, dateTime, values, aid), action),
     );
   }
 }

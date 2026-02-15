@@ -1,4 +1,4 @@
-import 'series_settings.dart';
+import '../series_settings.dart';
 
 class CustomSettings extends SeriesSettings {
   static const String _prefix = 'custom';

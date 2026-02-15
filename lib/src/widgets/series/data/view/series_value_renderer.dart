@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../../model/series/attributes/attribute_resolver.dart';
 import '../../../../model/series/data/blood_pressure/blood_pressure_value.dart';
 import '../../../../model/series/data/custom/custom_value.dart';
 import '../../../../model/series/data/daily_check/daily_check_value.dart';
@@ -9,14 +10,13 @@ import '../../../../model/series/data/monthly/monthly_value.dart';
 import '../../../../model/series/data/series_data_value.dart';
 import '../../../../model/series/series_def.dart';
 import '../../../../model/series/series_type.dart';
-import '../../../../model/series/settings/daily_life/daily_life_attribute_resolver.dart';
 import '../../../../util/date_time_utils.dart';
 import '../../../../util/logging/flutter_simple_logging.dart';
 import '../../../../util/theme_utils.dart';
+import '../../../controls/attribute/attribute_renderer.dart';
 import 'blood_pressure/table/blood_pressure_value_renderer.dart';
 import 'custom/table/custom_value_renderer.dart';
 import 'daily_check/table/daily_check_value_renderer.dart';
-import 'daily_life/daily_life_attribute_renderer.dart';
 import 'habit/table/habit_value_renderer.dart';
 
 class SeriesValueRenderer<T extends SeriesDataValue> extends StatelessWidget {
@@ -60,8 +60,8 @@ class SeriesValueRenderer<T extends SeriesDataValue> extends StatelessWidget {
         if (_seriesDataValue is DailyLifeValue) {
           valueRenderer = Builder(
             builder: (context) {
-              var resolver = DailyLifeAttributeResolver(seriesDef);
-              return DailyLifeAttributeRenderer(dailyLifeAttribute: resolver.resolve(_seriesDataValue.aid));
+              var resolver = AttributeResolver(seriesDef);
+              return AttributeRenderer(attribute: resolver.resolve(_seriesDataValue.aid));
             },
           );
         }
@@ -90,7 +90,8 @@ class SeriesValueRenderer<T extends SeriesDataValue> extends StatelessWidget {
     }
 
     SimpleLogging.w(
-        "Invalid combination of seriesDef ''${seriesDef.seriesType} and seriesDataValue '${_seriesDataValue.runtimeType}' in series value renderer!");
+      "Invalid combination of seriesDef ''${seriesDef.seriesType} and seriesDataValue '${_seriesDataValue.runtimeType}' in series value renderer!",
+    );
     return const Icon(Icons.question_mark_outlined);
   }
 }

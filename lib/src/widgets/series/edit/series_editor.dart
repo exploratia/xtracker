@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../../generated/locale_keys.g.dart';
 import '../../../model/series/series_def.dart';
 import '../../../model/series/series_type.dart';
+import '../../../model/series/settings/custom/custom_attributes_settings.dart';
 import '../../../model/series/settings/daily_life/daily_life_attributes_settings.dart';
 import '../../../providers/series_provider.dart';
 import '../../../util/dialogs.dart';
@@ -19,6 +20,7 @@ import '../../controls/select/icon_map.dart';
 import '../../controls/select/icon_picker.dart';
 import '../../controls/text/overflow_text.dart';
 import 'blood_pressure/blood_pressure_series_edit.dart';
+import 'custom/custom_series_edit_attributes.dart';
 import 'daily_life/daily_life_series_edit_attributes.dart';
 import 'series_edit_display_settings.dart';
 import 'series_items/series_items_edit.dart';
@@ -37,6 +39,7 @@ class _SeriesEditorState extends State<SeriesEditor> {
   late SeriesDef _seriesDef;
 
   late DailyLifeAttributesSettings? _dailyLifeAttributesSettings;
+  late CustomAttributesSettings? _customAttributesSettings;
 
   var _isLoading = false;
 
@@ -57,6 +60,9 @@ class _SeriesEditorState extends State<SeriesEditor> {
     _nameController.text = _seriesDef.name.toString();
 
     _dailyLifeAttributesSettings = (seriesType != SeriesType.dailyLife) ? null : _seriesDef.dailyLifeAttributesSettingsEditable(_updateState);
+    _customAttributesSettings = ([SeriesType.custom, SeriesType.monthly].contains(seriesType))
+        ? _seriesDef.customAttributesSettingsEditable(_updateState)
+        : null;
 
     if (widget.goBack == null) {
       _isValid = true;
@@ -127,14 +133,16 @@ class _SeriesEditorState extends State<SeriesEditor> {
       children: [
         // is new - then go back is allowed
         if (widget.goBack != null)
-          Row(children: [
-            IconButton(
-              iconSize: ThemeUtils.iconSizeScaled,
-              tooltip: LocaleKeys.seriesEdit_btn_backToSeriesTypeSelection.tr(),
-              onPressed: widget.goBack,
-              icon: const Icon(Icons.arrow_back_outlined),
-            ),
-          ]),
+          Row(
+            children: [
+              IconButton(
+                iconSize: ThemeUtils.iconSizeScaled,
+                tooltip: LocaleKeys.seriesEdit_btn_backToSeriesTypeSelection.tr(),
+                onPressed: widget.goBack,
+                icon: const Icon(Icons.arrow_back_outlined),
+              ),
+            ],
+          ),
         _SeriesTypeHeadline(seriesDef: _seriesDef),
         const Divider(),
         // series name:
@@ -154,14 +162,13 @@ class _SeriesEditorState extends State<SeriesEditor> {
             return null;
           },
           onChanged: (value) {
-            _seriesDef.name = value;
+            _seriesDef.name = value.trim();
           },
         ),
         const SizedBox(height: ThemeUtils.verticalSpacing),
         _SeriesSymbolAndColor(_seriesDef, _updateState),
 
         // series type dependent...
-
         if (_seriesDef.seriesType == SeriesType.custom || _seriesDef.seriesType == SeriesType.monthly)
           Column(
             mainAxisSize: MainAxisSize.min,
@@ -195,7 +202,6 @@ class _SeriesEditorState extends State<SeriesEditor> {
         //     title: LocaleKeys.seriesEdit_seriesSettings_custom_title.tr(),
         //     child: CustomSeriesEdit(_seriesDef, _updateState),
         //   ),
-
         if (_seriesDef.seriesType == SeriesType.bloodPressure)
           Expandable(
             initialExpanded: true,
@@ -212,12 +218,30 @@ class _SeriesEditorState extends State<SeriesEditor> {
                 initialExpanded: true,
                 useVerticalSpacingBeforeChild: false /* ListView has own padding */,
                 icon: Icon(Icons.format_list_bulleted_outlined, size: ThemeUtils.iconSizeScaled),
-                title: LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_title.tr(),
+                title: LocaleKeys.seriesEdit_seriesSettings_attributes_title.tr(),
                 child: DailyLifeSeriesEditAttributes(_seriesDef, _dailyLifeAttributesSettings!),
               ),
               ValidationField(
                 validatorCondition: () => _dailyLifeAttributesSettings!.isValid(),
-                errorMessage: LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_validation_emptyAttributs.tr(),
+                errorMessage: LocaleKeys.seriesEdit_seriesSettings_attributes_validation_emptyAttributs.tr(),
+              ),
+            ],
+          ),
+
+        if (_customAttributesSettings != null)
+          Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Expandable(
+                initialExpanded: true,
+                useVerticalSpacingBeforeChild: false /* ListView has own padding */,
+                icon: Icon(Icons.format_list_bulleted_outlined, size: ThemeUtils.iconSizeScaled),
+                title: LocaleKeys.seriesEdit_seriesSettings_attributes_title.tr(),
+                child: CustomSeriesEditAttributes(_seriesDef, _customAttributesSettings!),
+              ),
+              ValidationField(
+                validatorCondition: () => _customAttributesSettings!.isValid(),
+                errorMessage: "unexpected custom attribute validation",
               ),
             ],
           ),
@@ -309,11 +333,12 @@ class _SeriesSymbolAndColor extends StatelessWidget {
           children: [
             Text(LocaleKeys.seriesEdit_common_label_seriesIcon.tr()),
             IconPicker(
-                icoName: seriesDef.iconName ?? IconMap.resolveNameByIconData(seriesDef.seriesType.iconData),
-                icoSelected: (icoName) {
-                  seriesDef.iconName = icoName;
-                  updateStateCB();
-                }),
+              icoName: seriesDef.iconName ?? IconMap.resolveNameByIconData(seriesDef.seriesType.iconData),
+              icoSelected: (icoName) {
+                seriesDef.iconName = icoName;
+                updateStateCB();
+              },
+            ),
           ],
         ),
         Row(

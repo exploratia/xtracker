@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../../model/column_profile/fix_column_profile.dart';
+import '../../../../../../model/series/attributes/attribute_resolver.dart';
 import '../../../../../../model/series/data/daily_life/daily_life_value.dart';
 import '../../../../../../model/series/data/series_data_filter.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
-import '../../../../../../model/series/settings/daily_life/daily_life_attribute_resolver.dart';
 import '../../../../../controls/grid/row_per_day/day_row_item.dart';
 import '../../../../../controls/grid/row_per_day/multi_value_day_row_cell_builder.dart';
 import '../../../../../controls/grid/row_per_day/multi_value_day_row_item.dart';
@@ -21,14 +21,19 @@ class SeriesDataDailyLifeTableView extends StatelessWidget {
   final SeriesDataFilter seriesDataFilter;
   final SeriesDataViewOverlays seriesDataViewOverlays;
 
-  const SeriesDataDailyLifeTableView(
-      {super.key, required this.seriesViewMetaData, required this.seriesData, required this.seriesDataFilter, required this.seriesDataViewOverlays});
+  const SeriesDataDailyLifeTableView({
+    super.key,
+    required this.seriesViewMetaData,
+    required this.seriesData,
+    required this.seriesDataFilter,
+    required this.seriesDataViewOverlays,
+  });
 
   @override
   Widget build(BuildContext context) {
     FixColumnProfile columnProfile = seriesViewMetaData.tableFixColumnProfile!;
 
-    var dailyLifeAttributeResolver = DailyLifeAttributeResolver(seriesViewMetaData.seriesDef);
+    var dailyLifeAttributeResolver = AttributeResolver(seriesViewMetaData.seriesDef);
     var filteredSeriesData = seriesData.where((value) => seriesDataFilter.filter(value)).toList();
     if (filteredSeriesData.isEmpty) {
       return SeriesDataNoData(
@@ -38,12 +43,12 @@ class SeriesDataDailyLifeTableView extends StatelessWidget {
     }
 
     int lineCount = 0;
-    GridCell Function(BuildContext context, int yIndex, int xIndex, Size cellSize) gridCellBuilder =
-        (context, yIndex, xIndex, cellSize) => GridCell(child: Container());
+    GridCell Function(BuildContext context, int yIndex, int xIndex, Size cellSize) gridCellBuilder = (context, yIndex, xIndex, cellSize) =>
+        GridCell(child: Container());
 
     if (FixColumnProfile.isMultiValueDayProfile(columnProfile)) {
       List<MultiValueDayRowItem<DailyLifeValue>> data = MultiValueDayRowItem.buildTableDataProvider(seriesViewMetaData, filteredSeriesData);
-      var dailyLifeAttributeResolver = DailyLifeAttributeResolver(seriesViewMetaData.seriesDef);
+      var dailyLifeAttributeResolver = AttributeResolver(seriesViewMetaData.seriesDef);
       var builder = MultiValueDayRowCellBuilder<DailyLifeValue>(
         data: data,
         fixColumnProfile: columnProfile,
@@ -52,7 +57,10 @@ class SeriesDataDailyLifeTableView extends StatelessWidget {
           multiValueDayRowItem: multiValueDayRowItem,
           seriesViewMetaData: seriesViewMetaData,
           tooltipValueBuilder: (dataValue) => DailyLifeValueRenderer(
-              dailyLifeValue: dataValue, seriesDef: seriesViewMetaData.seriesDef, dailyLifeAttributeResolver: dailyLifeAttributeResolver),
+            dailyLifeValue: dataValue,
+            seriesDef: seriesViewMetaData.seriesDef,
+            dailyLifeAttributeResolver: dailyLifeAttributeResolver,
+          ),
         ),
       );
       lineCount = data.length;

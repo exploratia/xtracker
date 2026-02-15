@@ -14,7 +14,8 @@ import 'seriesItem/calculated/calculation_item_series_value.dart';
 import 'seriesItem/series_item.dart';
 import 'series_type.dart';
 import 'settings/blood_pressure_settings.dart';
-import 'settings/custom_settings.dart';
+import 'settings/custom/custom_attributes_settings.dart';
+import 'settings/custom/custom_settings.dart';
 import 'settings/daily_life/daily_life_attributes_settings.dart';
 import 'settings/display_settings.dart';
 import 'view_type.dart';
@@ -52,6 +53,12 @@ class SeriesDef {
 
   /// return CustomSettings read only mode
   CustomSettings customSettingsReadonly() => CustomSettings(_settings, null);
+
+  /// return customAttributes in edit mode (setters active)
+  CustomAttributesSettings customAttributesSettingsEditable(Function() updateStateCB) => CustomAttributesSettings(_settings, updateStateCB);
+
+  /// return customAttributes read only mode
+  CustomAttributesSettings customAttributesSettingsReadonly() => CustomAttributesSettings(_settings, null);
 
   /// return dailyLifeAttributes in edit mode (setters active)
   DailyLifeAttributesSettings dailyLifeAttributesSettingsEditable(Function() updateStateCB) => DailyLifeAttributesSettings(_settings, updateStateCB);
@@ -174,6 +181,9 @@ class SeriesDef {
       case SeriesType.custom:
       case SeriesType.monthly:
         headers.addAll(seriesItems.map((e) => e.name));
+        if (customAttributesSettingsReadonly().attributes.isNotEmpty) {
+          headers.add("attribute");
+        }
     }
 
     return headers;

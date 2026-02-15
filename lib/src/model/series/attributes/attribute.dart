@@ -1,18 +1,18 @@
 import 'dart:convert';
 import 'dart:ui';
 
-import '../../../../util/color_utils.dart';
-import '../../../../util/json_reader.dart';
+import '../../../util/color_utils.dart';
+import '../../../util/json_reader.dart';
 
-class DailyLifeAttribute {
+class Attribute {
   final String aid;
   final Color color;
   final String name;
 
   /// [aid] unique (per series) AttributeId
-  DailyLifeAttribute({required this.aid, required this.color, required this.name});
+  Attribute({required this.aid, required this.color, required this.name});
 
-  factory DailyLifeAttribute.fromJson(JsonReader json) => DailyLifeAttribute(
+  factory Attribute.fromJson(JsonReader json) => Attribute(
     aid: json.asString('aid'),
     name: json.asString('name'),
     color: ColorUtils.fromHex(json.asString('color')),
@@ -25,19 +25,19 @@ class DailyLifeAttribute {
   };
 
   /// deep copy / clone by transforming to json string and back
-  DailyLifeAttribute clone() {
-    return DailyLifeAttribute.fromJson(JsonReader(jsonDecode(jsonEncode(toJson()))));
+  Attribute clone() {
+    return Attribute.fromJson(JsonReader(jsonDecode(jsonEncode(toJson()))));
   }
 
-  static List<DailyLifeAttribute> parseJsonList(List<dynamic> json) {
-    List<DailyLifeAttribute> attributes = [];
+  static List<Attribute> parseJsonList(List<dynamic> json) {
+    List<Attribute> attributes = [];
     for (var listItem in json) {
-      attributes.add(DailyLifeAttribute.fromJson(JsonReader(listItem)));
+      attributes.add(Attribute.fromJson(JsonReader(listItem)));
     }
     return attributes;
   }
 
-  static List<Map<String, dynamic>> toJsonList(List<DailyLifeAttribute> list) {
+  static List<Map<String, dynamic>> toJsonList(List<Attribute> list) {
     return list.map((e) => e.toJson()).toList();
   }
 

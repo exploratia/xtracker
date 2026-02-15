@@ -554,7 +554,7 @@
       "custom": {
         "title": "Custom settings"
       },
-      "dailyLifeAttributes": {
+      "attributes": {
         "title": "Attributes",
         "actions": {
           "add": {
