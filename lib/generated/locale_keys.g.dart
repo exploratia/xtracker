@@ -64,6 +64,8 @@ abstract class  LocaleKeys {
   static const controls_select_dayRangeSlider_btn_showSlider = 'controls.select.dayRangeSlider.btn.showSlider';
   static const controls_select_dayRangeSlider_btn_hideSlider = 'controls.select.dayRangeSlider.btn.hideSlider';
   static const controls_select_monthSwitcher_label_selectMonth = 'controls.select.monthSwitcher.label.selectMonth';
+  static const controls_select_attribute_action_clear_tooltip = 'controls.select.attribute.action.clear.tooltip';
+  static const controls_select_attribute_action_select_tooltip = 'controls.select.attribute.action.select.tooltip';
   static const deviceInfo_title = 'deviceInfo.title';
   static const deviceInfo_action_exportOrShare_tooltip = 'deviceInfo.action.exportOrShare.tooltip';
   static const deviceInfo_action_export_tooltip = 'deviceInfo.action.export.tooltip';
@@ -319,7 +321,6 @@ abstract class  LocaleKeys {
   static const seriesValue_bloodPressure_validation_diastolicTooHigh = 'seriesValue.bloodPressure.validation.diastolicTooHigh';
   static const seriesValue_bloodPressure_validation_systolicTooLow = 'seriesValue.bloodPressure.validation.systolicTooLow';
   static const seriesValue_dailyCheck_btn_toggleCheck_tooltip = 'seriesValue.dailyCheck.btn.toggleCheck.tooltip';
-  static const seriesValue_dailyLife_btn_selectAttribute_tooltip = 'seriesValue.dailyLife.btn.selectAttribute.tooltip';
   static const seriesValue_habit_btn_toggleValue_tooltip = 'seriesValue.habit.btn.toggleValue.tooltip';
   static const settings_title = 'settings.title';
   static const settings_deviceStorage_title = 'settings.deviceStorage.title';

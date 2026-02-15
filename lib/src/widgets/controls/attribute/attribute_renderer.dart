@@ -17,7 +17,6 @@ class AttributeRenderer extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(ThemeUtils.paddingSmall),
       decoration: BoxDecoration(
-        // color: dailyLifeAttribute.color,
         gradient: ChartUtils.createLeftToRightGradient(buildAttributeGradient(attribute.color)),
         borderRadius: ThemeUtils.borderRadiusCircularSmall,
       ),

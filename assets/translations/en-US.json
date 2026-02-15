@@ -123,6 +123,16 @@
         "label": {
           "selectMonth": "Select month"
         }
+      },
+      "attribute": {
+        "action": {
+          "clear": {
+            "tooltip": "Clear attribute"
+          },
+          "select": {
+            "tooltip": "Select attribute"
+          }
+        }
       }
     }
   },
@@ -835,13 +845,6 @@
       "btn": {
         "toggleCheck": {
           "tooltip": "Toggle value"
-        }
-      }
-    },
-    "dailyLife": {
-      "btn": {
-        "selectAttribute": {
-          "tooltip": "Select attribute"
         }
       }
     },

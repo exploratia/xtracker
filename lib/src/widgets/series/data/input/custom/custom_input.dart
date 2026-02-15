@@ -218,7 +218,7 @@ class _SeriesItemsInputState<V extends CustomValue> extends State<SeriesItemsInp
           attributes: seriesDefAttributes,
           attributeResolver: _attributeResolver,
           handleAttributeUuid: _setAttributeUuid,
-          deleteAttributeUuid: () => _setAttributeUuid(null),
+          deleteAttributeUuid: (_attributeUuid == null ? null : () => _setAttributeUuid(null)),
         ),
     ];
 

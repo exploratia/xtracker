@@ -29,9 +29,9 @@ class AttributeSelector extends StatelessWidget {
     var attributesPopupMenuButton = PopupMenuButton(
       borderRadius: ThemeUtils.borderRadiusCircular,
       icon: attributeUuid == null ? const Icon(Icons.list) : null,
-      tooltip: LocaleKeys.seriesValue_dailyLife_btn_selectAttribute_tooltip.tr(),
+      tooltip: LocaleKeys.controls_select_attribute_action_select_tooltip.tr(),
       itemBuilder: (context) {
-        return attributes
+        var list = attributes
             .map(
               (e) => PopupMenuItem(
                 /* Flutter Bug? if right >= 10 a huge wider padding is used. Seems not to work always. If only Text-Widgets are uses as child it has no effect. */
@@ -41,6 +41,19 @@ class AttributeSelector extends StatelessWidget {
               ),
             )
             .toList();
+        if (deleteAttributeUuid != null) {
+          list.add(
+            PopupMenuItem(
+              padding: const EdgeInsets.only(right: 9, left: 9, bottom: 0),
+              onTap: deleteAttributeUuid,
+              child: Tooltip(
+                message: LocaleKeys.controls_select_attribute_action_clear_tooltip.tr(),
+                child: const Center(child: Icon(Icons.clear_outlined)),
+              ),
+            ),
+          );
+        }
+        return list;
       },
       child: attributeUuid != null
           ? Padding(
@@ -50,28 +63,10 @@ class AttributeSelector extends StatelessWidget {
           : null,
     );
 
-    Widget centerChild;
-    if (deleteAttributeUuid == null || attributeUuid == null) {
-      centerChild = attributesPopupMenuButton;
-    } else {
-      centerChild = Row(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        spacing: ThemeUtils.horizontalSpacing,
-        children: [
-          attributesPopupMenuButton,
-          IconButton(
-            onPressed: deleteAttributeUuid,
-            icon: const Icon(Icons.clear_outlined),
-          ),
-        ],
-      );
-    }
-
     return ConstrainedBox(
       constraints: BoxConstraints(minHeight: 48 * MediaQueryUtils.textScaleFactor),
       child: Center(
-        child: centerChild,
+        child: attributesPopupMenuButton,
       ),
     );
   }

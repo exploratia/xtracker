@@ -123,6 +123,16 @@
         "label": {
           "selectMonth": "Monat auswählen"
         }
+      },
+      "attribute": {
+        "action": {
+          "clear": {
+            "tooltip": "Attribut entfernen"
+          },
+          "select": {
+            "tooltip": "Attribut auswählen"
+          }
+        }
       }
     }
   },
@@ -835,13 +845,6 @@
       "btn": {
         "toggleCheck": {
           "tooltip": "Wert wechseln"
-        }
-      }
-    },
-    "dailyLife": {
-      "btn": {
-        "selectAttribute": {
-          "tooltip": "Attribut auswählen"
         }
       }
     },
