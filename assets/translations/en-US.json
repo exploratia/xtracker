@@ -38,6 +38,7 @@
         "dateMonthDays": "Date | Month days (1–31)"
       },
       "columns": {
+        "attribute": "Attribute",
         "dayRange": "Day overview",
         "hourlyOverview": "Hourly overview"
       }

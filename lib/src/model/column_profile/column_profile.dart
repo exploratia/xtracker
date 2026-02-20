@@ -25,24 +25,40 @@ class ColumnProfile {
     hasHorizontalMarginColumns = false;
     columns = [];
     var msgId = seriesDef.seriesType == SeriesType.monthly ? LocaleKeys.commons_date_date : LocaleKeys.commons_date_dateTime;
-    columns.add(ColumnDef(
-      minWidth: seriesDef.seriesType == SeriesType.monthly ? defaultColumnWidth.toDouble() : 160,
-      title: '-',
-      msgId: msgId,
-      columnType: ColumnType.dateTime,
-    ));
+    columns.add(
+      ColumnDef(
+        minWidth: seriesDef.seriesType == SeriesType.monthly ? defaultColumnWidth.toDouble() : 160,
+        title: '-',
+        msgId: msgId,
+        columnType: ColumnType.dateTime,
+      ),
+    );
     // series items
-    columns.addAll(seriesDef.seriesItems
-        .where((e) => !e.hideInTable)
-        .map((e) => ColumnDef(
+    columns.addAll(
+      seriesDef.seriesItems
+          .where((e) => !e.hideInTable)
+          .map(
+            (e) => ColumnDef(
               minWidth: e.tableColumnWidth?.toDouble() ?? defaultColumnWidth.toDouble(),
               title: e.name,
               // title: '${e.name}${e.unitInBrackets(emptyStringIfNullOrEmpty: true)}',
               siid: e.siid,
               color: e.color,
               columnType: ColumnType.number,
-            ))
-        .toList());
+            ),
+          )
+          .toList(),
+    );
+    var attributeSettings = seriesDef.customAttributesSettingsReadonly();
+    if (attributeSettings.attributes.isNotEmpty) {
+      columns.add(
+        ColumnDef(
+          minWidth: defaultColumnWidth.toDouble(),
+          title: LocaleKeys.commons_columnProfile_columns_attribute,
+          columnType: ColumnType.attribute,
+        ),
+      );
+    }
   }
 
   double minWidth() {

@@ -6,6 +6,7 @@ enum ColumnType {
   dateTime,
   number,
   text,
+  attribute,
 
   /// unspecified value - could be text, number (as text) or own widget
   value,

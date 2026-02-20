@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../../model/column_profile/column_profile.dart';
+import '../../../../../../model/column_profile/column_type.dart';
+import '../../../../../../model/series/attributes/attribute_resolver.dart';
 import '../../../../../../model/series/data/custom/custom_value.dart';
 import '../../../../../../model/series/data/series_data_filter.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
 import '../../../../../../util/logging/flutter_simple_logging.dart';
 import '../../../../../../util/number_utils.dart';
+import '../../../../../controls/attribute/attribute_renderer.dart';
 import '../../../../../controls/grid/series/series_data_value_cell_builder.dart';
 import '../../../../../controls/grid/series/series_data_value_grid_item.dart';
 import '../../../../../controls/grid/two_dimensional_scrollable_table.dart';
@@ -20,12 +23,18 @@ class SeriesDataCustomTableView extends StatelessWidget {
   final SeriesDataFilter seriesDataFilter;
   final SeriesDataViewOverlays seriesDataViewOverlays;
 
-  const SeriesDataCustomTableView(
-      {super.key, required this.seriesViewMetaData, required this.seriesData, required this.seriesDataFilter, required this.seriesDataViewOverlays});
+  const SeriesDataCustomTableView({
+    super.key,
+    required this.seriesViewMetaData,
+    required this.seriesData,
+    required this.seriesDataFilter,
+    required this.seriesDataViewOverlays,
+  });
 
   @override
   Widget build(BuildContext context) {
     ColumnProfile columnProfile = seriesViewMetaData.columnProfile!;
+    var attributeResolver = AttributeResolver(seriesViewMetaData.seriesDef);
 
     var filteredSeriesData = seriesData.where((value) => seriesDataFilter.filter(value)).toList();
     if (filteredSeriesData.isEmpty) {
@@ -44,6 +53,18 @@ class SeriesDataCustomTableView extends StatelessWidget {
           var val = value.values[columnDef.siid];
           if (val != null) {
             return Center(child: OverflowText(expanded: false, NumberUtils.formatNumber(val)));
+          } else {
+            return const Center(child: Text("-"));
+          }
+        } else if (columnDef.columnType == ColumnType.attribute) {
+          if (value.aid != null) {
+            var attribute = attributeResolver.resolve(value.aid);
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 2),
+                child: AttributeRenderer(attribute: attribute),
+              ),
+            );
           } else {
             return const Center(child: Text("-"));
           }
