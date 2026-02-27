@@ -40,8 +40,17 @@ class SeriesEditDisplaySettings extends StatelessWidget {
           Widget? viewTypeSelect;
           if (seriesType.viewTypes.length > 1) {
             ViewType defaultValue = seriesType.defaultViewType;
-            List<ViewType> possibleViewTypes = seriesType.viewTypes;
             ViewType actValue = settings.getInitialViewType(defaultValue);
+
+            List<ViewType> possibleViewTypes = List.from(seriesType.viewTypes, growable: true);
+
+            // special case custom series could have (or no longer have) attributes
+            if (seriesDef.isCustomSeriesWithAttributes()) {
+              possibleViewTypes.add(ViewType.pixels);
+            } else if (actValue == ViewType.pixels) {
+              actValue = defaultValue;
+            }
+
             viewTypeSelect = Padding(
               padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.cardPadding),
               child: Wrap(

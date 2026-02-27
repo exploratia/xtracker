@@ -86,6 +86,15 @@ class SeriesDef {
     return displaySettingsReadonly().getInitialViewType(seriesType.defaultViewType);
   }
 
+  /// return true, if is custom (or monthly) series and has attributes configured
+  bool isCustomSeriesWithAttributes() {
+    if (seriesType.isCustomOrMonthlySeriesType()) {
+      bool isCustomSeriesWithAttributs = customAttributesSettingsReadonly().isNotEmpty();
+      return isCustomSeriesWithAttributs;
+    }
+    return false;
+  }
+
   @override
   String toString() {
     return 'SeriesDef{uuid: $uuid, seriesType: $seriesType, name: $name, color: $color, iconName: $iconName}';

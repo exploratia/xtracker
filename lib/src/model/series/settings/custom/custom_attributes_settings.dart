@@ -24,6 +24,10 @@ class CustomAttributesSettings extends SeriesSettings {
     return true; // attributes.isNotEmpty;
   }
 
+  bool isNotEmpty() {
+    return attributes.isNotEmpty;
+  }
+
   /// throws exception if not valid
   static void validate(SeriesDef seriesDef) {
     // nothing to validate... empty attributes list is allowed for custom/monthly

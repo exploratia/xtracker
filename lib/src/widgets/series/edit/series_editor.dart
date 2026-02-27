@@ -233,7 +233,7 @@ class _SeriesEditorState extends State<SeriesEditor> {
             mainAxisSize: MainAxisSize.min,
             children: [
               Expandable(
-                initialExpanded: true,
+                initialExpanded: false,
                 useVerticalSpacingBeforeChild: false /* ListView has own padding */,
                 icon: Icon(Icons.format_list_bulleted_outlined, size: ThemeUtils.iconSizeScaled),
                 title: LocaleKeys.seriesEdit_seriesSettings_attributes_title.tr(),

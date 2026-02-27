@@ -73,6 +73,7 @@ enum SeriesType {
     [
       ViewType.table,
       ViewType.lineChart,
+      // ViewType.pixels, optional if attributes are configured
     ],
     [], // no fix table column profiles
   ),
@@ -82,6 +83,7 @@ enum SeriesType {
     [
       ViewType.table,
       ViewType.lineChart,
+      // ViewType.pixels, optional if attributes are configured
     ],
     [], // no fix table column profiles
   ),
@@ -112,6 +114,10 @@ enum SeriesType {
 
   List<FixColumnProfileType> get sortedTableFixColumnProfileTypes {
     return [...tableFixColumnProfileTypes]..sort((a, b) => a.displayName.compareTo(b.displayName));
+  }
+
+  bool isCustomOrMonthlySeriesType() {
+    return this == SeriesType.custom || this == SeriesType.monthly;
   }
 
   static SeriesType byName(String name) {

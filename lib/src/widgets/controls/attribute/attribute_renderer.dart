@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 
 import '../../../model/series/attributes/attribute.dart';
@@ -8,14 +10,22 @@ import '../text/overflow_text.dart';
 
 class AttributeRenderer extends StatelessWidget {
   final Attribute attribute;
+  final double maxContentWidth;
+  final EdgeInsetsGeometry? margin;
 
-  const AttributeRenderer({super.key, required this.attribute});
+  const AttributeRenderer({
+    super.key,
+    required this.attribute,
+    this.maxContentWidth = -1,
+    this.margin,
+  });
 
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    return Container(
+    Widget widget = Container(
       padding: const EdgeInsets.all(ThemeUtils.paddingSmall),
+      margin: margin,
       decoration: BoxDecoration(
         gradient: ChartUtils.createLeftToRightGradient(buildAttributeGradient(attribute.color)),
         borderRadius: ThemeUtils.borderRadiusCircularSmall,
@@ -26,6 +36,15 @@ class AttributeRenderer extends StatelessWidget {
         style: themeData.textTheme.labelMedium?.copyWith(color: ColorUtils.getContrastingTextColor(attribute.color)),
       ),
     );
+
+    if (maxContentWidth >= 0) {
+      widget = ConstrainedBox(
+        constraints: BoxConstraints(maxWidth: max(maxContentWidth - 8, 20)),
+        child: widget,
+      );
+    }
+
+    return widget;
   }
 
   static List<Color>? buildAttributeGradient(Color color) {

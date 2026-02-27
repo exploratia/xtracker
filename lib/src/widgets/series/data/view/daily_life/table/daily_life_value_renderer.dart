@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 import '../../../../../../model/series/attributes/attribute_resolver.dart';
@@ -60,9 +58,9 @@ class DailyLifeValueRenderer extends StatelessWidget {
       child: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 2),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(maxWidth: max(maxContentWidth - 8, 20)),
-            child: AttributeRenderer(attribute: resolvedAttribute),
+          child: AttributeRenderer(
+            attribute: resolvedAttribute,
+            maxContentWidth: maxContentWidth,
           ),
         ),
       ),

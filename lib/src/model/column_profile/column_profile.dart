@@ -54,7 +54,8 @@ class ColumnProfile {
       columns.add(
         ColumnDef(
           minWidth: defaultColumnWidth.toDouble(),
-          title: LocaleKeys.commons_columnProfile_columns_attribute,
+          title: '-',
+          msgId: LocaleKeys.commons_columnProfile_columns_attribute,
           columnType: ColumnType.attribute,
         ),
       );

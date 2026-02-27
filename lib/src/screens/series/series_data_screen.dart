@@ -408,13 +408,20 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
 
     // more then one view type? Add view type selection
     if (seriesType.viewTypes.length > 1) {
+      List<ViewType> viewTypes = List.from(seriesType.viewTypes, growable: true);
+
+      // special case custom series could have attributes
+      if (metaData.seriesDef.isCustomSeriesWithAttributes()) {
+        viewTypes.add(ViewType.pixels);
+      }
+
       viewActions.add(
         Tooltip(
           message: LocaleKeys.seriesData_action_viewTypeMenu_tooltip.tr(),
           child: IconPopupMenu(
             icon: const Icon(Icons.remove_red_eye_outlined),
             menuEntries: [
-              ...seriesType.viewTypes
+              ...viewTypes
                   .where((vt) => vt != viewType)
                   .map(
                     (vt) => IconPopupMenuEntry(Icon(vt.iconData), () => _setViewType(vt), vt.displayName()),
