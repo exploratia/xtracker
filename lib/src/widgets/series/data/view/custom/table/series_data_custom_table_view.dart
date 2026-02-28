@@ -51,11 +51,10 @@ class SeriesDataCustomTableView extends StatelessWidget {
       gridCellChildBuilder: (value, cellSize, columnDef) {
         if (columnDef.siid != null) {
           var val = value.values[columnDef.siid];
-          if (val != null) {
-            return Center(child: OverflowText(expanded: false, NumberUtils.formatNumber(val)));
-          } else {
+          if (val == null || val.isNaN) {
             return const Center(child: Text("-"));
           }
+          return Center(child: OverflowText(expanded: false, NumberUtils.formatNumber(val)));
         } else if (columnDef.columnType == ColumnType.attribute) {
           if (value.aid != null) {
             var attribute = attributeResolver.resolve(value.aid);
