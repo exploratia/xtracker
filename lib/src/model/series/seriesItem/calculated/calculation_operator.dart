@@ -4,6 +4,7 @@ import 'package:easy_localization/easy_localization.dart';
 
 import '../../../../../generated/locale_keys.g.dart';
 import '../../../../util/ex.dart';
+import '../../../../util/number_utils.dart';
 
 enum CalculationOperator {
   add('+'),
@@ -13,6 +14,7 @@ enum CalculationOperator {
   min('min'),
   max('max'),
   nan('NaN'),
+  roundDecimals("≈d"),
   ;
 
   const CalculationOperator(this.displayName);
@@ -28,13 +30,14 @@ enum CalculationOperator {
       CalculationOperator.min => LocaleKeys.enum_operator_min_longNameInBrackets.tr(),
       CalculationOperator.max => LocaleKeys.enum_operator_max_longNameInBrackets.tr(),
       CalculationOperator.nan => LocaleKeys.enum_operator_nan_longNameInBrackets.tr(),
+      CalculationOperator.roundDecimals => LocaleKeys.enum_operator_roundDecimals_longNameInBrackets.tr(),
     };
   }
 
   factory CalculationOperator.byDisplayName(String displayName) => CalculationOperator.values.firstWhere(
-        (element) => element.displayName == displayName,
-        orElse: () => throw Ex("'$displayName' is no valid calculation operator!"),
-      );
+    (element) => element.displayName == displayName,
+    orElse: () => throw Ex("'$displayName' is no valid calculation operator!"),
+  );
 
   double calc(double a, double b) {
     switch (this) {
@@ -55,6 +58,10 @@ enum CalculationOperator {
         return math.max(a, b);
       case nan:
         return a.isNaN ? b : a;
+      case roundDecimals:
+        if (a.isNaN || b.isNaN) return double.nan;
+        if (b < 1) return a.roundToDouble();
+        return NumberUtils.roundToDecimals(a, b.toInt());
     }
   }
 }

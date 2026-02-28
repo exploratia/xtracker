@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:intl/intl.dart';
 
 class NumberUtils {
@@ -23,5 +25,11 @@ class NumberUtils {
   static String numToShortString(num num) {
     if (num is int) return num.toString();
     return num % 1 == 0 ? num.toInt().toString() : num.toString();
+  }
+
+  /// rounds a given number to places decimals
+  static double roundToDecimals(double val, int places) {
+    num mod = pow(10.0, places);
+    return ((val * mod).round().toDouble() / mod);
   }
 }

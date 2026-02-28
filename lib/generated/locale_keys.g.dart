@@ -80,6 +80,7 @@ abstract class  LocaleKeys {
   static const enum_operator_min_longNameInBrackets = 'enum.operator.min.longNameInBrackets';
   static const enum_operator_max_longNameInBrackets = 'enum.operator.max.longNameInBrackets';
   static const enum_operator_nan_longNameInBrackets = 'enum.operator.nan.longNameInBrackets';
+  static const enum_operator_roundDecimals_longNameInBrackets = 'enum.operator.roundDecimals.longNameInBrackets';
   static const enum_seriesType_bloodPressure_title = 'enum.seriesType.bloodPressure.title';
   static const enum_seriesType_bloodPressure_info = 'enum.seriesType.bloodPressure.info';
   static const enum_seriesType_dailyCheck_title = 'enum.seriesType.dailyCheck.title';

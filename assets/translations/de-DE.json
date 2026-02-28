@@ -181,6 +181,9 @@
       },
       "nan": {
         "longNameInBrackets": " (Not a Number)"
+      },
+      "roundDecimals": {
+        "longNameInBrackets": " (Runden auf Dezimalstellen)"
       }
     },
     "seriesType": {
