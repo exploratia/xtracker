@@ -25,8 +25,8 @@ class ChartUtilsCustom {
 
     var siids = siid2values.keys;
 
-    DateTime? prevTimestamp;
     for (final siid in siids) {
+      DateTime? prevTimestamp;
       double prevValue = 0;
       for (final dataItem in seriesData) {
         // check duplicate timestamps
