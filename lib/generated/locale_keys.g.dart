@@ -160,7 +160,13 @@ abstract class  LocaleKeys {
   static const seriesDataAnalytics_recordedHours_title = 'seriesDataAnalytics.recordedHours.title';
   static const seriesDataAnalytics_recordedHours_label_recordedHoursInfo = 'seriesDataAnalytics.recordedHours.label.recordedHoursInfo';
   static const seriesDataAnalytics_recordedHours_chart_chartTitle = 'seriesDataAnalytics.recordedHours.chart.chartTitle';
-  static const seriesDataAnalytics_recordedHours_chart_chartTitleDailyLife = 'seriesDataAnalytics.recordedHours.chart.chartTitleDailyLife';
+  static const seriesDataAnalytics_recordedHours_chart_chartTitleAttributes = 'seriesDataAnalytics.recordedHours.chart.chartTitleAttributes';
+  static const seriesDataAnalytics_attributesProportions_title = 'seriesDataAnalytics.attributesProportions.title';
+  static const seriesDataAnalytics_attributesProportions_subTitles_monthlyDistribution = 'seriesDataAnalytics.attributesProportions.subTitles.monthlyDistribution';
+  static const seriesDataAnalytics_attributesProportions_label_attributeProportionsInfo = 'seriesDataAnalytics.attributesProportions.label.attributeProportionsInfo';
+  static const seriesDataAnalytics_attributesProportions_table_colAttribute = 'seriesDataAnalytics.attributesProportions.table.colAttribute';
+  static const seriesDataAnalytics_attributesProportions_table_colProportions = 'seriesDataAnalytics.attributesProportions.table.colProportions';
+  static const seriesDataAnalytics_attributesProportions_table_colTotalShare = 'seriesDataAnalytics.attributesProportions.table.colTotalShare';
   static const seriesDataAnalytics_trend_title = 'seriesDataAnalytics.trend.title';
   static const seriesDataAnalytics_trend_label_forecast = 'seriesDataAnalytics.trend.label.forecast';
   static const seriesDataAnalytics_trend_label_failedToCalculateTrend = 'seriesDataAnalytics.trend.label.failedToCalculateTrend';
@@ -171,12 +177,6 @@ abstract class  LocaleKeys {
   static const seriesDataAnalytics_bloodPressure_recordedDaysMedication_title = 'seriesDataAnalytics.bloodPressure.recordedDaysMedication.title';
   static const seriesDataAnalytics_bloodPressure_recordedDaysMedication_label_medicationLastDays = 'seriesDataAnalytics.bloodPressure.recordedDaysMedication.label.medicationLastDays';
   static const seriesDataAnalytics_bloodPressure_trend_label_trendInfo = 'seriesDataAnalytics.bloodPressure.trend.label.trendInfo';
-  static const seriesDataAnalytics_dailyLife_attributesProportions_title = 'seriesDataAnalytics.dailyLife.attributesProportions.title';
-  static const seriesDataAnalytics_dailyLife_attributesProportions_subTitles_monthlyDistribution = 'seriesDataAnalytics.dailyLife.attributesProportions.subTitles.monthlyDistribution';
-  static const seriesDataAnalytics_dailyLife_attributesProportions_label_attributeProportionsInfo = 'seriesDataAnalytics.dailyLife.attributesProportions.label.attributeProportionsInfo';
-  static const seriesDataAnalytics_dailyLife_attributesProportions_table_colAttribute = 'seriesDataAnalytics.dailyLife.attributesProportions.table.colAttribute';
-  static const seriesDataAnalytics_dailyLife_attributesProportions_table_colProportions = 'seriesDataAnalytics.dailyLife.attributesProportions.table.colProportions';
-  static const seriesDataAnalytics_dailyLife_attributesProportions_table_colTotalShare = 'seriesDataAnalytics.dailyLife.attributesProportions.table.colTotalShare';
   static const seriesDataAnalytics_habit_trend_label_trendInfo = 'seriesDataAnalytics.habit.trend.label.trendInfo';
   static const seriesDefRenderer_action_addValue_tooltip = 'seriesDefRenderer.action.addValue.tooltip';
   static const seriesDefRenderer_action_showSeriesValues_tooltip = 'seriesDefRenderer.action.showSeriesValues.tooltip';

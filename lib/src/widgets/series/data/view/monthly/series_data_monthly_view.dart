@@ -4,6 +4,7 @@ import '../../../../../model/series/data/monthly/monthly_value.dart';
 import '../../../../../model/series/data/series_data_filter.dart';
 import '../../../../../model/series/series_view_meta_data.dart';
 import '../../../../../model/series/view_type.dart';
+import '../custom/pixels/series_data_custom_pixels_view.dart';
 import '../custom/table/series_data_custom_table_view.dart';
 import '../series_data_view_overlays.dart';
 import 'chart/series_data_monthly_chart_view.dart';
@@ -41,8 +42,14 @@ class SeriesDataMonthlyView extends StatelessWidget {
           seriesDataViewOverlays: seriesDataViewOverlays,
         );
       case ViewType.barChart:
-      case ViewType.pixels:
         throw UnimplementedError();
+      case ViewType.pixels:
+        return SeriesDataCustomPixelsView(
+          seriesViewMetaData: seriesViewMetaData,
+          seriesData: seriesData,
+          seriesDataFilter: seriesDataFilter,
+          seriesDataViewOverlays: seriesDataViewOverlays,
+        );
     }
   }
 }
