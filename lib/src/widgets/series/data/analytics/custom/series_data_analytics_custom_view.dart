@@ -17,8 +17,13 @@ class SeriesDataAnalyticsCustomView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget? attributesProportionsView;
+    Widget? seriesDataAnalyticsCustomHoursRecorded;
     if (seriesViewMetaData.seriesDef.isCustomSeriesWithAttributes()) {
       attributesProportionsView = SeriesDataAnalyticsCustomAttributesProportionsView(
+        seriesViewMetaData: seriesViewMetaData,
+        seriesDataValues: seriesDataValues,
+      );
+      seriesDataAnalyticsCustomHoursRecorded = SeriesDataAnalyticsCustomHoursRecorded(
         seriesViewMetaData: seriesViewMetaData,
         seriesDataValues: seriesDataValues,
       );
@@ -35,10 +40,7 @@ class SeriesDataAnalyticsCustomView extends StatelessWidget {
         SeriesDataAnalyticsHoursRecordedView(
           seriesViewMetaData: seriesViewMetaData,
           seriesDataValues: seriesDataValues,
-          child: SeriesDataAnalyticsCustomHoursRecorded(
-            seriesViewMetaData: seriesViewMetaData,
-            seriesDataValues: seriesDataValues,
-          ),
+          child: seriesDataAnalyticsCustomHoursRecorded,
         ),
       ],
     );
