@@ -40,19 +40,20 @@ class ChartUtilsCustom {
         }
         prevTimestamp = dataItem.dateTime;
         final v = dataItem.values[siid];
-        if (v != null) {
-          var val = v;
-          if (siid2useDelta[siid] ?? false) {
-            val = v - prevValue;
-            // if val < 0 we had a reset...
-            if (val < 0) val = v;
-            prevValue = v;
-          }
-
-          siid2values[siid]!.add(
-            TimedValue.value(dataItem.dateTime, val),
-          );
+        if (v == null || v.isNaN || v.isInfinite) {
+          continue;
         }
+        var val = v;
+        if (siid2useDelta[siid] ?? false) {
+          val = v - prevValue;
+          // if val < 0 we had a reset...
+          if (val < 0) val = v;
+          prevValue = v;
+        }
+
+        siid2values[siid]!.add(
+          TimedValue.value(dataItem.dateTime, val),
+        );
       }
     }
 
@@ -64,6 +65,7 @@ class ChartUtilsCustom {
       if (data.length > 1 && (siid2useDelta[seriesItem.siid] ?? false)) {
         data.removeAt(0);
       }
+      // if (data.isEmpty) continue; // would be: no data - no chart but also no info -> check on empty later
       result.add(ParameterChartData(seriesDef: seriesViewMetaData.seriesDef, seriesItem: seriesItem, data: data));
     }
     return result;
