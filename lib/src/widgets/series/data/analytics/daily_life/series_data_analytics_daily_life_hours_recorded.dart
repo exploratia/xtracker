@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../model/series/data/daily_life/daily_life_value.dart';
 import '../../../../../model/series/series_view_meta_data.dart';
-import '../series_data_analytics_attributes_hours_recorded.dart';
+import '../series_data_analytics_tags_hours_recorded.dart';
 
 class SeriesDataAnalyticsDailyLifeHoursRecorded extends StatelessWidget {
   const SeriesDataAnalyticsDailyLifeHoursRecorded({super.key, required this.seriesViewMetaData, required this.seriesDataValues});
@@ -12,10 +12,10 @@ class SeriesDataAnalyticsDailyLifeHoursRecorded extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SeriesDataAnalyticsAttributesHoursRecorded(
+    return SeriesDataAnalyticsTagsHoursRecorded(
       seriesViewMetaData: seriesViewMetaData,
       seriesDataValues: seriesDataValues,
-      attributeIdResolver: (seriesDataValue) => seriesDataValue.aid,
+      tagIdResolver: (seriesDataValue) => seriesDataValue.tagId,
     );
   }
 }

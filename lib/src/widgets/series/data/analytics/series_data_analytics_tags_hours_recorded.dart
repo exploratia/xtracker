@@ -5,25 +5,25 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../generated/locale_keys.g.dart';
-import '../../../../model/series/attributes/attribute_resolver.dart';
 import '../../../../model/series/data/series_data_value.dart';
 import '../../../../model/series/series_view_meta_data.dart';
+import '../../../../model/series/tags/tag_resolver.dart';
 import '../../../../util/chart/chart_utils.dart';
 import '../../../../util/color_utils.dart';
 import '../../../../util/media_query_utils.dart';
 import '../../../../util/theme_utils.dart';
 
-class SeriesDataAnalyticsAttributesHoursRecorded<D extends SeriesDataValue> extends StatelessWidget {
-  const SeriesDataAnalyticsAttributesHoursRecorded({
+class SeriesDataAnalyticsTagsHoursRecorded<D extends SeriesDataValue> extends StatelessWidget {
+  const SeriesDataAnalyticsTagsHoursRecorded({
     super.key,
     required this.seriesViewMetaData,
     required this.seriesDataValues,
-    required this.attributeIdResolver,
+    required this.tagIdResolver,
   });
 
   final SeriesViewMetaData seriesViewMetaData;
   final List<D> seriesDataValues;
-  final String? Function(D seriesDataValue) attributeIdResolver;
+  final String? Function(D seriesDataValue) tagIdResolver;
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class SeriesDataAnalyticsAttributesHoursRecorded<D extends SeriesDataValue> exte
   }
 
   Column _buildRecordedDaysDistributionChart(ThemeData themeData) {
-    var attributeResolver = AttributeResolver(seriesViewMetaData.seriesDef);
+    var tagResolver = TagResolver(seriesViewMetaData.seriesDef);
 
     var axisTitlesTheme = themeData.textTheme.labelLarge!;
     Widget chart = LayoutBuilder(
@@ -44,17 +44,17 @@ class SeriesDataAnalyticsAttributesHoursRecorded<D extends SeriesDataValue> exte
 
         List<LineChartBarData> lineChartBarDataList = [];
 
-        for (var attributeId in attributeResolver.attributeIds) {
+        for (var tagId in tagResolver.tagIds) {
           List<int> hours = List.generate(24, (index) => 0);
           for (var v in seriesDataValues) {
-            if (attributeIdResolver(v) == attributeId) {
+            if (tagIdResolver(v) == tagId) {
               var h = v.dateTime.hour;
               hours[h] += 1;
             }
           }
           hours.add(hours.first);
 
-          var baseColor = attributeResolver.resolve(attributeId).color;
+          var baseColor = tagResolver.resolve(tagId).color;
           var gradientColor = ColorUtils.gradientColor(baseColor);
           var gradient = ChartUtils.createTopToBottomGradient([baseColor, gradientColor]);
 
@@ -114,7 +114,7 @@ class SeriesDataAnalyticsAttributesHoursRecorded<D extends SeriesDataValue> exte
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Text(
-          LocaleKeys.seriesDataAnalytics_recordedHours_chart_chartTitleAttributes.tr(),
+          LocaleKeys.seriesDataAnalytics_recordedHours_chart_chartTitleTags.tr(),
           style: themeData.textTheme.titleMedium,
         ),
         chart,

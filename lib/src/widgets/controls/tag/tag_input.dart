@@ -2,37 +2,37 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../generated/locale_keys.g.dart';
-import '../../../model/series/attributes/attribute.dart';
+import '../../../model/series/tags/tag.dart';
 import '../../../util/theme_utils.dart';
 import '../layout/single_child_scroll_view_with_scrollbar.dart';
 import '../select/color_picker.dart';
 import '../text/overflow_text.dart';
 
-class AttributeInput extends StatefulWidget {
-  const AttributeInput({
+class TagInput extends StatefulWidget {
+  const TagInput({
     super.key,
-    this.attribute,
-    this.newAttributeColor,
+    this.tag,
+    this.newTagColor,
   });
 
-  final Attribute? attribute;
-  final Color? newAttributeColor;
+  final Tag? tag;
+  final Color? newTagColor;
 
-  static Future<Attribute?> showInputDlg(BuildContext context, {Attribute? attribute, Color? newAttributeColor}) async {
-    return await showDialog<Attribute>(
+  static Future<Tag?> showInputDlg(BuildContext context, {Tag? tag, Color? newTagColor}) async {
+    return await showDialog<Tag>(
       context: context,
-      builder: (_) => AttributeInput(
-        attribute: attribute,
-        newAttributeColor: newAttributeColor,
+      builder: (_) => TagInput(
+        tag: tag,
+        newTagColor: newTagColor,
       ),
     );
   }
 
   @override
-  State<AttributeInput> createState() => _AttributeInputState();
+  State<TagInput> createState() => _TagInputState();
 }
 
-class _AttributeInputState extends State<AttributeInput> {
+class _TagInputState extends State<TagInput> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
 
@@ -40,14 +40,14 @@ class _AttributeInputState extends State<AttributeInput> {
   bool _autoValidate = false;
   bool _isValid = false;
 
-  late final String _aid;
+  late final String _tagId;
   late Color _color;
 
   @override
   initState() {
-    var source = widget.attribute;
-    _aid = source?.aid ?? Attribute.generateUniqueAttributeId();
-    _color = source?.color ?? widget.newAttributeColor ?? ThemeUtils.primary;
+    var source = widget.tag;
+    _tagId = source?.tagId ?? Tag.generateUniqueTagId();
+    _color = source?.color ?? widget.newTagColor ?? ThemeUtils.primary;
 
     _nameController.addListener(_validate);
     if (source != null) {
@@ -87,7 +87,7 @@ class _AttributeInputState extends State<AttributeInput> {
     });
     _validate();
     if (!_isValid) return;
-    var val = Attribute(aid: _aid, color: _color, name: _nameController.text.trim());
+    var val = Tag(tagId: _tagId, color: _color, name: _nameController.text.trim());
     Navigator.pop(context, val);
   }
 
@@ -144,8 +144,8 @@ class _AttributeInputState extends State<AttributeInput> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            widget.attribute == null ? Icon(Icons.add_outlined, size: iconSize) : Icon(Icons.edit_outlined, size: iconSize),
-            OverflowText(LocaleKeys.seriesEdit_seriesSettings_attributes_dlg_title.tr()),
+            widget.tag == null ? Icon(Icons.add_outlined, size: iconSize) : Icon(Icons.edit_outlined, size: iconSize),
+            OverflowText(LocaleKeys.seriesEdit_seriesSettings_tags_dlg_title.tr()),
           ],
         ),
       ),

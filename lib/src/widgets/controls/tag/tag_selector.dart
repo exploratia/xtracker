@@ -2,52 +2,52 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../generated/locale_keys.g.dart';
-import '../../../model/series/attributes/attribute.dart';
-import '../../../model/series/attributes/attribute_resolver.dart';
+import '../../../model/series/tags/tag.dart';
+import '../../../model/series/tags/tag_resolver.dart';
 import '../../../util/media_query_utils.dart';
 import '../../../util/theme_utils.dart';
-import 'attribute_renderer.dart';
+import 'tag_renderer.dart';
 
-class AttributeSelector extends StatelessWidget {
-  final AttributeResolver attributeResolver;
-  final List<Attribute> attributes;
-  final String? attributeUuid;
-  final void Function(String) handleAttributeUuid;
-  final void Function()? deleteAttributeUuid;
+class TagSelector extends StatelessWidget {
+  final TagResolver tagResolver;
+  final List<Tag> tags;
+  final String? tagUuid;
+  final void Function(String) handleTagUuid;
+  final void Function()? deleteTagUuid;
 
-  const AttributeSelector({
+  const TagSelector({
     super.key,
-    required this.attributeResolver,
-    required this.attributes,
-    this.attributeUuid,
-    required this.handleAttributeUuid,
-    this.deleteAttributeUuid,
+    required this.tagResolver,
+    required this.tags,
+    this.tagUuid,
+    required this.handleTagUuid,
+    this.deleteTagUuid,
   });
 
   @override
   Widget build(BuildContext context) {
-    var attributesPopupMenuButton = PopupMenuButton(
+    var tagsPopupMenuButton = PopupMenuButton(
       borderRadius: ThemeUtils.borderRadiusCircular,
-      icon: attributeUuid == null ? const Icon(Icons.list) : null,
-      tooltip: LocaleKeys.controls_select_attribute_action_select_tooltip.tr(),
+      icon: tagUuid == null ? const Icon(Icons.list) : null,
+      tooltip: LocaleKeys.controls_select_tag_action_select_tooltip.tr(),
       itemBuilder: (context) {
-        var list = attributes
+        var list = tags
             .map(
               (e) => PopupMenuItem(
                 /* Flutter Bug? if right >= 10 a huge wider padding is used. Seems not to work always. If only Text-Widgets are uses as child it has no effect. */
                 padding: const EdgeInsets.only(right: 9, left: 9, bottom: 0),
-                onTap: () => handleAttributeUuid(e.aid),
-                child: AttributeRenderer(attribute: e),
+                onTap: () => handleTagUuid(e.tagId),
+                child: TagRenderer(tag: e),
               ),
             )
             .toList();
-        if (deleteAttributeUuid != null) {
+        if (deleteTagUuid != null) {
           list.add(
             PopupMenuItem(
               padding: const EdgeInsets.only(right: 9, left: 9, bottom: 0),
-              onTap: deleteAttributeUuid,
+              onTap: deleteTagUuid,
               child: Tooltip(
-                message: LocaleKeys.controls_select_attribute_action_clear_tooltip.tr(),
+                message: LocaleKeys.controls_select_tag_action_clear_tooltip.tr(),
                 child: const Center(child: Icon(Icons.clear_outlined)),
               ),
             ),
@@ -55,10 +55,10 @@ class AttributeSelector extends StatelessWidget {
         }
         return list;
       },
-      child: attributeUuid != null
+      child: tagUuid != null
           ? Padding(
               padding: const EdgeInsets.all(ThemeUtils.paddingSmall),
-              child: AttributeRenderer(attribute: attributeResolver.resolve(attributeUuid)),
+              child: TagRenderer(tag: tagResolver.resolve(tagUuid)),
             )
           : null,
     );
@@ -66,7 +66,7 @@ class AttributeSelector extends StatelessWidget {
     return ConstrainedBox(
       constraints: BoxConstraints(minHeight: 48 * MediaQueryUtils.textScaleFactor),
       child: Center(
-        child: attributesPopupMenuButton,
+        child: tagsPopupMenuButton,
       ),
     );
   }

@@ -38,7 +38,7 @@
         "dateMonthDays": "Datum | Monatstage (1–31)"
       },
       "columns": {
-        "attribute": "Attribut",
+        "tag": "Tag\uD83D\uDEA9",
         "dayRange": "Tagesübersicht",
         "hourlyOverview": "Stundenübersicht"
       }
@@ -125,13 +125,13 @@
           "selectMonth": "Monat auswählen"
         }
       },
-      "attribute": {
+      "tag": {
         "action": {
           "clear": {
-            "tooltip": "Attribut entfernen"
+            "tooltip": "Tag\uD83D\uDEA9 entfernen"
           },
           "select": {
-            "tooltip": "Attribut auswählen"
+            "tooltip": "Tag\uD83D\uDEA9 auswählen"
           }
         }
       }
@@ -197,7 +197,7 @@
       },
       "dailyLife": {
         "title": "Tägliches Leben",
-        "info": "Jeden Tag mit einem Attribut markieren – z. B. Sportart oder Stimmung.\n\nSo lässt sich der Tag reflektieren und langfristig ein Überblick über Muster und Verhältnisse gewinnen."
+        "info": "Jeden Tag mit einem 'Tag'\uD83D\uDEA9 markieren – z. B. Sportart oder Stimmung.\n\nSo lässt sich der Tag reflektieren und langfristig ein Überblick über Muster und Verhältnisse gewinnen."
       },
       "habit": {
         "title": "Gewohnheit",
@@ -414,19 +414,19 @@
       },
       "chart": {
         "chartTitle": "Verteilung nach Tageszeiten",
-        "chartTitleAttributes": "Verteilung nach Tageszeiten je Attribut"
+        "chartTitleTags": "Verteilung nach Tageszeiten je Tag\uD83D\uDEA9"
       }
     },
-    "attributesProportions": {
-      "title": "Attribut-Verteilung",
+    "tagsProportions": {
+      "title": "Tag\uD83D\uDEA9-Verteilung",
       "subTitles": {
         "monthlyDistribution": "Monatsverteilung"
       },
       "label": {
-        "attributeProportionsInfo": "Übersicht über die Häufigkeit der Attribute insgesamt und ihre Verteilung in verschiedenen Zeiträumen des letzten Jahres."
+        "tagProportionsInfo": "Übersicht über die Häufigkeit der Tags\uD83D\uDEA9 insgesamt und ihre Verteilung in verschiedenen Zeiträumen des letzten Jahres."
       },
       "table": {
-        "colAttribute": "Attribut",
+        "colTag": "Tag\uD83D\uDEA9",
         "colProportions": "Anteile",
         "colTotalShare": "Gesamtanteil"
       }
@@ -568,41 +568,41 @@
       "custom": {
         "title": "Individuell-Einstellungen"
       },
-      "attributes": {
-        "title": "Attribute",
+      "tags": {
+        "title": "Tag\uD83D\uDEA9",
         "actions": {
           "add": {
-            "tooltip": "Attribut hinzufügen"
+            "tooltip": "Tag\uD83D\uDEA9 hinzufügen"
           },
           "addPreset": {
-            "tooltip": "Vordefinierte Attribute hinzufügen"
+            "tooltip": "Vordefinierte Tags\uD83D\uDEA9 hinzufügen"
           },
           "delete": {
-            "tooltip": "Attribut löschen"
+            "tooltip": "Tag\uD83D\uDEA9 löschen"
           },
           "deleteAll": {
-            "tooltip": "Alle Attribute löschen"
+            "tooltip": "Alle Tags\uD83D\uDEA9 löschen"
           },
           "edit": {
-            "tooltip": "Attribut bearbeiten"
+            "tooltip": "Tag\uD83D\uDEA9 bearbeiten"
           }
         },
         "dlg": {
-          "title": "Attribut"
+          "title": "Tag\uD83D\uDEA9"
         },
-        "info": "Attribute der Messreihe verwalten.\nJeder Wert besitzt genau ein Attribut.\n\nWird ein Attribut gelöscht, das bereits genutzt wird, erhält der Wert als Fallback eine Farbe die in großem Kontrast zu den restlichen Attributen steht.",
+        "info": "Tags\uD83D\uDEA9 der Messreihe verwalten.\nJeder Wert besitzt genau ein Tag\uD83D\uDEA9.\n\nWird ein Tag\uD83D\uDEA9 gelöscht, das bereits genutzt wird, erhält der Wert als Fallback eine Farbe die in großem Kontrast zu den restlichen Tags\uD83D\uDEA9 steht.",
         "preset": {
           "feelings": {
             "title": "Vorlage: Gefühle",
-            "attributeNames": "fantastischer Tag|sehr guter, glücklicher Tag|normaler Tag|erschöpfter, müder Tag|trauriger, deprimierter Tag|frustrierter, wütender Tag|gestresster Tag|krank|wirklich schlimmer Tag"
+            "tagNames": "fantastischer Tag|sehr guter, glücklicher Tag|normaler Tag|erschöpfter, müder Tag|trauriger, deprimierter Tag|frustrierter, wütender Tag|gestresster Tag|krank|wirklich schlimmer Tag"
           },
           "sports": {
             "title": "Vorlage: Sport",
-            "attributeNames": "Walken|Joggen|Wandern|Rennrad|Mountainbike|Schwimmen|Workout"
+            "tagNames": "Walken|Joggen|Wandern|Rennrad|Mountainbike|Schwimmen|Workout"
           },
           "period": {
             "title": "Vorlage: Periode",
-            "attributeNames": "Keine|Schmierblutung|Leicht|Normal|Stark"
+            "tagNames": "Keine|Schmierblutung|Leicht|Normal|Stark"
           },
           "stars": {
             "title": "Vorlage: Sterne (★)"
@@ -633,7 +633,7 @@
           }
         },
         "validation": {
-          "emptyAttributs": "Mindestens ein Attribut erforderlich"
+          "emptyTags": "Mindestens ein Tag\uD83D\uDEA9 erforderlich"
         }
       },
       "seriesItems": {
@@ -814,7 +814,7 @@
       },
       "validation": {
         "dailyLife": {
-          "emptyAttributes": "Keine Attribute definiert."
+          "emptyTags": "Keine Tags\uD83D\uDEA9 definiert."
         }
       }
     }

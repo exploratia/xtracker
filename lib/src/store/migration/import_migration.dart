@@ -1,6 +1,7 @@
 import 'package:share_plus/share_plus.dart';
 
 import '../../util/ex.dart';
+import '../../util/logging/flutter_simple_logging.dart';
 import 'migration_v01_to_v02.dart';
 
 class ImportMigration {
@@ -8,7 +9,10 @@ class ImportMigration {
     if (json is Map<String, dynamic>) {
       final int? version = json['version'] as int?;
       if (version == 1) {
-        return MigrationV01ToV02.migrate(json);
+        SimpleLogging.i('IMPORT MIGRATION for file "${file.name}" version $version ...');
+        var migrated = MigrationV01ToV02.migrate(json);
+        SimpleLogging.i('IMPORT MIGRATION for file "${file.name}" version $version finished.');
+        return migrated;
       }
       throw Ex('Import migration failed - unexpected version in "${file.name}"! No migration step for version $version defined');
     } else {

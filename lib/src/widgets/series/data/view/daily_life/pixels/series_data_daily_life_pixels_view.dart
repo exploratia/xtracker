@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../../model/column_profile/fix_column_profile.dart';
-import '../../../../../../model/series/attributes/attribute_resolver.dart';
+import '../../../../../../model/series/tags/tag_resolver.dart';
 import '../../../../../../model/series/data/daily_life/daily_life_value.dart';
 import '../../../../../../model/series/data/series_data_filter.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
@@ -29,7 +29,7 @@ class SeriesDataDailyLifePixelsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AttributeResolver dailyLifeAttributeResolver = AttributeResolver(seriesViewMetaData.seriesDef);
+    TagResolver dailyLifeTagResolver = TagResolver(seriesViewMetaData.seriesDef);
     Pixel.updatePixelStyles(context);
 
     /// from new to old (latest date is the first item)
@@ -55,7 +55,7 @@ class SeriesDataDailyLifePixelsView extends StatelessWidget {
           gridCellChildBuilder: (DailyLifeDayItem dayItem) {
             return dayItem.toPixel(
               monthly,
-              dailyLifeAttributeResolver,
+              dailyLifeTagResolver,
             );
           },
         );

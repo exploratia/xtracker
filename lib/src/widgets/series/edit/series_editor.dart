@@ -5,8 +5,8 @@ import 'package:provider/provider.dart';
 import '../../../../generated/locale_keys.g.dart';
 import '../../../model/series/series_def.dart';
 import '../../../model/series/series_type.dart';
-import '../../../model/series/settings/custom/custom_attributes_settings.dart';
-import '../../../model/series/settings/daily_life/daily_life_attributes_settings.dart';
+import '../../../model/series/settings/custom/custom_tags_settings.dart';
+import '../../../model/series/settings/daily_life/daily_life_tags_settings.dart';
 import '../../../providers/series_provider.dart';
 import '../../../util/dialogs.dart';
 import '../../../util/logging/flutter_simple_logging.dart';
@@ -20,8 +20,8 @@ import '../../controls/select/icon_map.dart';
 import '../../controls/select/icon_picker.dart';
 import '../../controls/text/overflow_text.dart';
 import 'blood_pressure/blood_pressure_series_edit.dart';
-import 'custom/custom_series_edit_attributes.dart';
-import 'daily_life/daily_life_series_edit_attributes.dart';
+import 'custom/custom_series_edit_tags.dart';
+import 'daily_life/daily_life_series_edit_tags.dart';
 import 'series_edit_display_settings.dart';
 import 'series_items/series_items_edit.dart';
 
@@ -38,8 +38,8 @@ class SeriesEditor extends StatefulWidget {
 class _SeriesEditorState extends State<SeriesEditor> {
   late SeriesDef _seriesDef;
 
-  late DailyLifeAttributesSettings? _dailyLifeAttributesSettings;
-  late CustomAttributesSettings? _customAttributesSettings;
+  late DailyLifeTagsSettings? _dailyLifeTagsSettings;
+  late CustomTagsSettings? _customTagsSettings;
 
   var _isLoading = false;
 
@@ -52,17 +52,15 @@ class _SeriesEditorState extends State<SeriesEditor> {
 
   @override
   void initState() {
-    // when loading series into the editor ignore invalid once (e.g. new DailyLife without attributes)
+    // when loading series into the editor ignore invalid once (e.g. new DailyLife without tags)
     _seriesDef = widget.seriesDef.clone(ignoreValidation: true);
     var seriesType = _seriesDef.seriesType;
 
     _nameController.addListener(_validate);
     _nameController.text = _seriesDef.name.toString();
 
-    _dailyLifeAttributesSettings = (seriesType != SeriesType.dailyLife) ? null : _seriesDef.dailyLifeAttributesSettingsEditable(_updateState);
-    _customAttributesSettings = ([SeriesType.custom, SeriesType.monthly].contains(seriesType))
-        ? _seriesDef.customAttributesSettingsEditable(_updateState)
-        : null;
+    _dailyLifeTagsSettings = (seriesType != SeriesType.dailyLife) ? null : _seriesDef.dailyLifeTagsSettingsEditable(_updateState);
+    _customTagsSettings = ([SeriesType.custom, SeriesType.monthly].contains(seriesType)) ? _seriesDef.customTagsSettingsEditable(_updateState) : null;
 
     if (widget.goBack == null) {
       _isValid = true;
@@ -210,7 +208,7 @@ class _SeriesEditorState extends State<SeriesEditor> {
             child: BloodPressureSeriesEdit(_seriesDef, _updateState),
           ),
 
-        if (_dailyLifeAttributesSettings != null)
+        if (_dailyLifeTagsSettings != null)
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -218,17 +216,17 @@ class _SeriesEditorState extends State<SeriesEditor> {
                 initialExpanded: true,
                 useVerticalSpacingBeforeChild: false /* ListView has own padding */,
                 icon: Icon(Icons.format_list_bulleted_outlined, size: ThemeUtils.iconSizeScaled),
-                title: LocaleKeys.seriesEdit_seriesSettings_attributes_title.tr(),
-                child: DailyLifeSeriesEditAttributes(_seriesDef, _dailyLifeAttributesSettings!),
+                title: LocaleKeys.seriesEdit_seriesSettings_tags_title.tr(),
+                child: DailyLifeSeriesEditTags(_seriesDef, _dailyLifeTagsSettings!),
               ),
               ValidationField(
-                validatorCondition: () => _dailyLifeAttributesSettings!.isValid(),
-                errorMessage: LocaleKeys.seriesEdit_seriesSettings_attributes_validation_emptyAttributs.tr(),
+                validatorCondition: () => _dailyLifeTagsSettings!.isValid(),
+                errorMessage: LocaleKeys.seriesEdit_seriesSettings_tags_validation_emptyTags.tr(),
               ),
             ],
           ),
 
-        if (_customAttributesSettings != null)
+        if (_customTagsSettings != null)
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -236,12 +234,12 @@ class _SeriesEditorState extends State<SeriesEditor> {
                 initialExpanded: false,
                 useVerticalSpacingBeforeChild: false /* ListView has own padding */,
                 icon: Icon(Icons.format_list_bulleted_outlined, size: ThemeUtils.iconSizeScaled),
-                title: LocaleKeys.seriesEdit_seriesSettings_attributes_title.tr(),
-                child: CustomSeriesEditAttributes(_seriesDef, _customAttributesSettings!),
+                title: LocaleKeys.seriesEdit_seriesSettings_tags_title.tr(),
+                child: CustomSeriesEditTags(_seriesDef, _customTagsSettings!),
               ),
               ValidationField(
-                validatorCondition: () => _customAttributesSettings!.isValid(),
-                errorMessage: "unexpected custom attribute validation",
+                validatorCondition: () => _customTagsSettings!.isValid(),
+                errorMessage: "unexpected custom tag validation",
               ),
             ],
           ),

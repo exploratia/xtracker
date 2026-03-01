@@ -73,7 +73,7 @@ enum SeriesType {
     [
       ViewType.table,
       ViewType.lineChart,
-      // ViewType.pixels, optional if attributes are configured
+      // ViewType.pixels, optional if tags are configured
     ],
     [], // no fix table column profiles
   ),
@@ -83,7 +83,7 @@ enum SeriesType {
     [
       ViewType.table,
       ViewType.lineChart,
-      // ViewType.pixels, optional if attributes are configured
+      // ViewType.pixels, optional if tags are configured
     ],
     [], // no fix table column profiles
   ),

@@ -14,9 +14,9 @@ import 'seriesItem/calculated/calculation_item_series_value.dart';
 import 'seriesItem/series_item.dart';
 import 'series_type.dart';
 import 'settings/blood_pressure_settings.dart';
-import 'settings/custom/custom_attributes_settings.dart';
 import 'settings/custom/custom_settings.dart';
-import 'settings/daily_life/daily_life_attributes_settings.dart';
+import 'settings/custom/custom_tags_settings.dart';
+import 'settings/daily_life/daily_life_tags_settings.dart';
 import 'settings/display_settings.dart';
 import 'view_type.dart';
 
@@ -54,17 +54,17 @@ class SeriesDef {
   /// return CustomSettings read only mode
   CustomSettings customSettingsReadonly() => CustomSettings(_settings, null);
 
-  /// return customAttributes in edit mode (setters active)
-  CustomAttributesSettings customAttributesSettingsEditable(Function() updateStateCB) => CustomAttributesSettings(_settings, updateStateCB);
+  /// return customTags in edit mode (setters active)
+  CustomTagsSettings customTagsSettingsEditable(Function() updateStateCB) => CustomTagsSettings(_settings, updateStateCB);
 
-  /// return customAttributes read only mode
-  CustomAttributesSettings customAttributesSettingsReadonly() => CustomAttributesSettings(_settings, null);
+  /// return customTags read only mode
+  CustomTagsSettings customTagsSettingsReadonly() => CustomTagsSettings(_settings, null);
 
-  /// return dailyLifeAttributes in edit mode (setters active)
-  DailyLifeAttributesSettings dailyLifeAttributesSettingsEditable(Function() updateStateCB) => DailyLifeAttributesSettings(_settings, updateStateCB);
+  /// return dailyLifeTags in edit mode (setters active)
+  DailyLifeTagsSettings dailyLifeTagsSettingsEditable(Function() updateStateCB) => DailyLifeTagsSettings(_settings, updateStateCB);
 
-  /// return dailyLifeAttributes read only mode
-  DailyLifeAttributesSettings dailyLifeAttributesSettingsReadonly() => DailyLifeAttributesSettings(_settings, null);
+  /// return dailyLifeTags read only mode
+  DailyLifeTagsSettings dailyLifeTagsSettingsReadonly() => DailyLifeTagsSettings(_settings, null);
 
   /// return DisplaySettings in edit mode (setters active)
   DisplaySettings displaySettingsEditable(Function() updateStateCB) => DisplaySettings(_settings, updateStateCB);
@@ -86,11 +86,11 @@ class SeriesDef {
     return displaySettingsReadonly().getInitialViewType(seriesType.defaultViewType);
   }
 
-  /// return true, if is custom (or monthly) series and has attributes configured
-  bool isCustomSeriesWithAttributes() {
+  /// return true, if is custom (or monthly) series and has tags configured
+  bool isCustomSeriesWithTags() {
     if (seriesType.isCustomOrMonthlySeriesType()) {
-      bool isCustomSeriesWithAttributs = customAttributesSettingsReadonly().isNotEmpty();
-      return isCustomSeriesWithAttributs;
+      bool isCustomSeriesWithTags = customTagsSettingsReadonly().isNotEmpty();
+      return isCustomSeriesWithTags;
     }
     return false;
   }
@@ -115,12 +115,12 @@ class SeriesDef {
   /// 1: initial (all)
   static int seriesDefVersionByType(SeriesDef seriesDef) {
     return switch (seriesDef.seriesType) {
-      SeriesType.bloodPressure => 1,
-      SeriesType.dailyCheck => 1,
-      SeriesType.dailyLife => 1,
-      SeriesType.habit => 1,
-      SeriesType.custom => 1,
-      SeriesType.monthly => 1,
+      SeriesType.bloodPressure => 2,
+      SeriesType.dailyCheck => 2,
+      SeriesType.dailyLife => 2,
+      SeriesType.habit => 2,
+      SeriesType.custom => 2,
+      SeriesType.monthly => 2,
     };
   }
 
@@ -153,7 +153,7 @@ class SeriesDef {
 
     // validate settings
     if (!ignoreValidation) {
-      DailyLifeAttributesSettings.validate(seriesDef);
+      DailyLifeTagsSettings.validate(seriesDef);
     }
 
     return seriesDef;
@@ -186,12 +186,12 @@ class SeriesDef {
           // nothing to do - only timestamp column
         }
       case SeriesType.dailyLife:
-        headers.add("attribute");
+        headers.add("tag");
       case SeriesType.custom:
       case SeriesType.monthly:
         headers.addAll(seriesItems.map((e) => e.name));
-        if (customAttributesSettingsReadonly().attributes.isNotEmpty) {
-          headers.add("attribute");
+        if (customTagsSettingsReadonly().tags.isNotEmpty) {
+          headers.add("tag");
         }
     }
 

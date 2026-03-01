@@ -2,20 +2,20 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
-import '../../../model/series/attributes/attribute.dart';
+import '../../../model/series/tags/tag.dart';
 import '../../../util/chart/chart_utils.dart';
 import '../../../util/color_utils.dart';
 import '../../../util/theme_utils.dart';
 import '../text/overflow_text.dart';
 
-class AttributeRenderer extends StatelessWidget {
-  final Attribute attribute;
+class TagRenderer extends StatelessWidget {
+  final Tag tag;
   final double maxContentWidth;
   final EdgeInsetsGeometry? margin;
 
-  const AttributeRenderer({
+  const TagRenderer({
     super.key,
-    required this.attribute,
+    required this.tag,
     this.maxContentWidth = -1,
     this.margin,
   });
@@ -27,13 +27,13 @@ class AttributeRenderer extends StatelessWidget {
       padding: const EdgeInsets.all(ThemeUtils.paddingSmall),
       margin: margin,
       decoration: BoxDecoration(
-        gradient: ChartUtils.createLeftToRightGradient(buildAttributeGradient(attribute.color)),
+        gradient: ChartUtils.createLeftToRightGradient(buildTagGradient(tag.color)),
         borderRadius: ThemeUtils.borderRadiusCircularSmall,
       ),
       child: OverflowText(
         expanded: false,
-        attribute.name,
-        style: themeData.textTheme.labelMedium?.copyWith(color: ColorUtils.getContrastingTextColor(attribute.color)),
+        tag.name,
+        style: themeData.textTheme.labelMedium?.copyWith(color: ColorUtils.getContrastingTextColor(tag.color)),
       ),
     );
 
@@ -47,7 +47,7 @@ class AttributeRenderer extends StatelessWidget {
     return widget;
   }
 
-  static List<Color>? buildAttributeGradient(Color color) {
+  static List<Color>? buildTagGradient(Color color) {
     return [color, ColorUtils.gradientColor(color)];
   }
 }

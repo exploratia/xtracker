@@ -1,5 +1,6 @@
 import 'package:sembast/sembast.dart';
 
+import '../../util/logging/flutter_simple_logging.dart';
 import 'migration_v01_to_v02.dart';
 
 class DbMigration {
@@ -10,9 +11,11 @@ class DbMigration {
 
     while (current < newVersion) {
       if (current == 1) {
+        SimpleLogging.i('DB MIGRATION for version $current ...');
         await db.transaction((txn) async {
           await _migrateV1toV2(txn);
         });
+        SimpleLogging.i('DB MIGRATION for version $current finished.');
         current = 2;
       } else {
         throw Exception('No migration step for version $current');
@@ -28,10 +31,19 @@ class DbMigration {
     await _migrateStore(seriesDefStore, db);
 
     // 2) SeriesData Stores
-    final seriesDefList = await seriesDefStore.find(db);
-    for (final record in seriesDefList) {
+    final seriesDefRecords = await seriesDefStore.find(db);
+    for (final record in seriesDefRecords) {
       final uuid = record.key;
-      final seriesDataStore = StoreRef<String, Map<String, dynamic>>('seriesData_$uuid');
+      final seriesType = record.value['seriesType'] as String?;
+
+      if (seriesType == null || seriesType.isEmpty) {
+        SimpleLogging.w('DB MIGRATION: evaluation of series type failed!');
+        continue;
+      }
+
+      final storeName = 'seriesData_${seriesType}_$uuid';
+      final seriesDataStore = StoreRef<String, Map<String, dynamic>>(storeName);
+
       await _migrateStore(seriesDataStore, db);
     }
 

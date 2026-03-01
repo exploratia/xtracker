@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../../model/column_profile/fix_column_profile.dart';
-import '../../../../../../model/series/attributes/attribute_resolver.dart';
+import '../../../../../../model/series/tags/tag_resolver.dart';
 import '../../../../../../model/series/data/daily_life/daily_life_value.dart';
 import '../../../../../../model/series/data/series_data_filter.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
@@ -33,7 +33,7 @@ class SeriesDataDailyLifeTableView extends StatelessWidget {
   Widget build(BuildContext context) {
     FixColumnProfile columnProfile = seriesViewMetaData.tableFixColumnProfile!;
 
-    var dailyLifeAttributeResolver = AttributeResolver(seriesViewMetaData.seriesDef);
+    var dailyLifeTagResolver = TagResolver(seriesViewMetaData.seriesDef);
     var filteredSeriesData = seriesData.where((value) => seriesDataFilter.filter(value)).toList();
     if (filteredSeriesData.isEmpty) {
       return SeriesDataNoData(
@@ -48,7 +48,7 @@ class SeriesDataDailyLifeTableView extends StatelessWidget {
 
     if (FixColumnProfile.isMultiValueDayProfile(columnProfile)) {
       List<MultiValueDayRowItem<DailyLifeValue>> data = MultiValueDayRowItem.buildTableDataProvider(seriesViewMetaData, filteredSeriesData);
-      var dailyLifeAttributeResolver = AttributeResolver(seriesViewMetaData.seriesDef);
+      var dailyLifeTagResolver = TagResolver(seriesViewMetaData.seriesDef);
       var builder = MultiValueDayRowCellBuilder<DailyLifeValue>(
         data: data,
         fixColumnProfile: columnProfile,
@@ -59,7 +59,7 @@ class SeriesDataDailyLifeTableView extends StatelessWidget {
           tooltipValueBuilder: (dataValue) => DailyLifeValueRenderer(
             dailyLifeValue: dataValue,
             seriesDef: seriesViewMetaData.seriesDef,
-            dailyLifeAttributeResolver: dailyLifeAttributeResolver,
+            dailyLifeTagResolver: dailyLifeTagResolver,
           ),
         ),
       );
@@ -76,7 +76,7 @@ class SeriesDataDailyLifeTableView extends StatelessWidget {
           seriesDef: seriesViewMetaData.seriesDef,
           editMode: seriesViewMetaData.editMode,
           // wrapWithDateTimeTooltip: true, // tooltip not required in date time value column profile
-          dailyLifeAttributeResolver: dailyLifeAttributeResolver,
+          dailyLifeTagResolver: dailyLifeTagResolver,
           maxContentWidth: cellSize.width,
         ),
       );

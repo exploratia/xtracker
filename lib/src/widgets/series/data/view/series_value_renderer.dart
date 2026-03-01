@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../model/series/attributes/attribute_resolver.dart';
+import '../../../../model/series/tags/tag_resolver.dart';
 import '../../../../model/series/data/blood_pressure/blood_pressure_value.dart';
 import '../../../../model/series/data/custom/custom_value.dart';
 import '../../../../model/series/data/daily_check/daily_check_value.dart';
@@ -13,7 +13,7 @@ import '../../../../model/series/series_type.dart';
 import '../../../../util/date_time_utils.dart';
 import '../../../../util/logging/flutter_simple_logging.dart';
 import '../../../../util/theme_utils.dart';
-import '../../../controls/attribute/attribute_renderer.dart';
+import '../../../controls/tag/tag_renderer.dart';
 import 'blood_pressure/table/blood_pressure_value_renderer.dart';
 import 'custom/table/custom_value_renderer.dart';
 import 'daily_check/table/daily_check_value_renderer.dart';
@@ -32,7 +32,7 @@ class SeriesValueRenderer<T extends SeriesDataValue> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget? valueRenderer;
-    Widget? attributeRenderer;
+    Widget? tagRenderer;
 
     switch (seriesDef.seriesType) {
       case SeriesType.bloodPressure:
@@ -59,21 +59,21 @@ class SeriesValueRenderer<T extends SeriesDataValue> extends StatelessWidget {
         }
       case SeriesType.dailyLife:
         if (_seriesDataValue is DailyLifeValue) {
-          var resolver = AttributeResolver(seriesDef);
-          attributeRenderer = AttributeRenderer(attribute: resolver.resolve(_seriesDataValue.aid));
+          var resolver = TagResolver(seriesDef);
+          tagRenderer = TagRenderer(tag: resolver.resolve(_seriesDataValue.tagId));
         }
       case SeriesType.custom:
       case SeriesType.monthly:
         if (_seriesDataValue is CustomValue) {
           valueRenderer = CustomValueRenderer(customValue: _seriesDataValue, seriesDef: seriesDef);
-          var resolver = AttributeResolver(seriesDef);
+          var resolver = TagResolver(seriesDef);
           if (resolver.isNotEmpty()) {
-            attributeRenderer = AttributeRenderer(attribute: resolver.resolve(_seriesDataValue.aid));
+            tagRenderer = TagRenderer(tag: resolver.resolve(_seriesDataValue.tagId));
           }
         }
     }
 
-    if (valueRenderer != null || attributeRenderer != null) {
+    if (valueRenderer != null || tagRenderer != null) {
       List<Widget> children = [];
       if (_seriesDataValue is MonthlyValue) {
         children.add(Text(DateTimeUtils.formatMonthYear(_seriesDataValue.dateTime)));
@@ -86,8 +86,8 @@ class SeriesValueRenderer<T extends SeriesDataValue> extends StatelessWidget {
       if (valueRenderer != null) {
         children.add(valueRenderer);
       }
-      if (attributeRenderer != null) {
-        children.add(attributeRenderer);
+      if (tagRenderer != null) {
+        children.add(tagRenderer);
       }
 
       return ValueWrap(

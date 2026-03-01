@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../../model/column_profile/fix_column_profile.dart';
-import '../../../../../../model/series/attributes/attribute_resolver.dart';
+import '../../../../../../model/series/tags/tag_resolver.dart';
 import '../../../../../../model/series/data/custom/custom_value.dart';
 import '../../../../../../model/series/data/series_data_filter.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
-import '../../../../../controls/grid/daily/day/custom_value_attribute_day_item.dart';
+import '../../../../../controls/grid/daily/day/custom_value_tag_day_item.dart';
 import '../../../../../controls/grid/daily/pixel.dart';
 import '../../../../../controls/grid/daily/pixel_cell_builder.dart';
 import '../../../../../controls/grid/daily/row/row_item.dart';
@@ -29,11 +29,11 @@ class SeriesDataCustomPixelsView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    AttributeResolver attributeResolver = AttributeResolver(seriesViewMetaData.seriesDef);
+    TagResolver tagResolver = TagResolver(seriesViewMetaData.seriesDef);
     Pixel.updatePixelStyles(context);
 
     /// from new to old (latest date is the first item)
-    List<CustomValueAttributeDayItem> allDayItems = CustomValueAttributeDayItem.buildDayItems(seriesData, seriesViewMetaData.seriesDef);
+    List<CustomValueTagDayItem> allDayItems = CustomValueTagDayItem.buildDayItems(seriesData, seriesViewMetaData.seriesDef);
     var dayItems = allDayItems.where((dayItem) => seriesDataFilter.filterDate(dayItem.dayDate)).toList();
 
     if (dayItems.isEmpty || dayItems.where((i) => i.count > 0).isEmpty) {
@@ -47,15 +47,15 @@ class SeriesDataCustomPixelsView extends StatelessWidget {
       builder: (BuildContext context, BoxConstraints constraints) {
         bool monthly = constraints.maxWidth > FixColumnProfile.columnProfileDateMonthDays.minWidthScaled();
 
-        List<RowItem<CustomValueAttributeDayItem>> data = monthly ? RowItem.buildMonthRowItems(dayItems) : RowItem.buildWeekRowItems(dayItems);
+        List<RowItem<CustomValueTagDayItem>> data = monthly ? RowItem.buildMonthRowItems(dayItems) : RowItem.buildWeekRowItems(dayItems);
 
         var pixelCellBuilder = PixelCellBuilder(
           data: data,
           monthly: monthly,
-          gridCellChildBuilder: (CustomValueAttributeDayItem dayItem) {
+          gridCellChildBuilder: (CustomValueTagDayItem dayItem) {
             return dayItem.toPixel(
               monthly,
-              attributeResolver,
+              tagResolver,
             );
           },
         );

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
-import '../../../../../model/series/attributes/attribute_resolver.dart';
 import '../../../../../model/series/data/daily_life/daily_life_value.dart';
 import '../../../../../model/series/series_def.dart';
-import '../../../../controls/attribute/attribute_selector.dart';
+import '../../../../../model/series/tags/tag_resolver.dart';
+import '../../../../controls/tag/tag_selector.dart';
 import '../input_result.dart';
 import '../simple_dialog_input.dart';
 
@@ -33,21 +33,21 @@ class _DailyLifeInputState extends State<DailyLifeInput> {
 
   late final String _uuid;
   late DateTime _dateTime;
-  String? _attributeUuid;
-  late final AttributeResolver _attributeResolver;
+  String? _tagUuid;
+  late final TagResolver _tagResolver;
 
   @override
   initState() {
     var source = widget.dailyLifeValue;
     _uuid = source?.uuid ?? const Uuid().v4();
     _dateTime = source?.dateTime ?? DateTime.now();
-    _attributeUuid = source?.aid;
+    _tagUuid = source?.tagId;
 
     if (source != null) {
       _isValid = true;
     }
 
-    _attributeResolver = AttributeResolver(widget.seriesDef);
+    _tagResolver = TagResolver(widget.seriesDef);
 
     super.initState();
   }
@@ -58,10 +58,10 @@ class _DailyLifeInputState extends State<DailyLifeInput> {
     });
   }
 
-  void _setAttributeUuid(String value) {
+  void _setTagUuid(String value) {
     setState(() {
-      _attributeUuid = value;
-      _isValid = _attributeUuid != null;
+      _tagUuid = value;
+      _isValid = _tagUuid != null;
     });
   }
 
@@ -70,7 +70,7 @@ class _DailyLifeInputState extends State<DailyLifeInput> {
       return;
     }
     bool insert = widget.dailyLifeValue == null;
-    var val = DailyLifeValue(_uuid, _dateTime, _attributeUuid!);
+    var val = DailyLifeValue(_uuid, _dateTime, _tagUuid!);
     Navigator.pop(context, InputResult(val, insert ? InputResultAction.insert : InputResultAction.update));
   }
 
@@ -82,11 +82,11 @@ class _DailyLifeInputState extends State<DailyLifeInput> {
 
   @override
   Widget build(BuildContext context) {
-    var attributeSelector = AttributeSelector(
-      attributeUuid: _attributeUuid,
-      attributes: widget.seriesDef.dailyLifeAttributesSettingsReadonly().attributes,
-      handleAttributeUuid: _setAttributeUuid,
-      attributeResolver: _attributeResolver,
+    var tagSelector = TagSelector(
+      tagUuid: _tagUuid,
+      tags: widget.seriesDef.dailyLifeTagsSettingsReadonly().tags,
+      handleTagUuid: _setTagUuid,
+      tagResolver: _tagResolver,
     );
 
     return SimpleDialogInput(
@@ -97,7 +97,7 @@ class _DailyLifeInputState extends State<DailyLifeInput> {
       setDateTime: _setDateTime,
       saveHandler: _saveHandler,
       deleteHandler: _deleteHandler,
-      child: attributeSelector,
+      child: tagSelector,
     );
   }
 }

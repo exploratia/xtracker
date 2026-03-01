@@ -2,11 +2,11 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../../generated/locale_keys.g.dart';
-import '../../../../model/series/attributes/attribute.dart';
 import '../../../../model/series/seriesItem/calculated/calculation_container.dart';
 import '../../../../model/series/seriesItem/series_item.dart';
 import '../../../../model/series/series_def.dart';
 import '../../../../model/series/series_type.dart';
+import '../../../../model/series/tags/tag.dart';
 import '../../../../util/theme_utils.dart';
 import '../../../controls/form/validation_field.dart';
 import '../../../controls/layout/single_child_scroll_view_with_scrollbar.dart';
@@ -67,7 +67,7 @@ class _SeriesItemInputState extends State<SeriesItemInput> {
   @override
   initState() {
     var source = widget.seriesItem;
-    _siid = source?.siid ?? Attribute.generateUniqueAttributeId();
+    _siid = source?.siid ?? Tag.generateUniqueTagId();
     _color = source?.color ?? widget.seriesDef.color;
     _isCalculated = widget.isCalculated;
 

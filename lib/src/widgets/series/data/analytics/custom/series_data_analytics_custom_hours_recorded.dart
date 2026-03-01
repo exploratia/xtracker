@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../../model/series/data/custom/custom_value.dart';
 import '../../../../../model/series/series_view_meta_data.dart';
-import '../series_data_analytics_attributes_hours_recorded.dart';
+import '../series_data_analytics_tags_hours_recorded.dart';
 
 class SeriesDataAnalyticsCustomHoursRecorded extends StatelessWidget {
   const SeriesDataAnalyticsCustomHoursRecorded({super.key, required this.seriesViewMetaData, required this.seriesDataValues});
@@ -12,10 +12,10 @@ class SeriesDataAnalyticsCustomHoursRecorded extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SeriesDataAnalyticsAttributesHoursRecorded(
+    return SeriesDataAnalyticsTagsHoursRecorded(
       seriesViewMetaData: seriesViewMetaData,
       seriesDataValues: seriesDataValues,
-      attributeIdResolver: (seriesDataValue) => seriesDataValue.aid,
+      tagIdResolver: (seriesDataValue) => seriesDataValue.tagId,
     );
   }
 }

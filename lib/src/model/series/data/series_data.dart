@@ -35,7 +35,7 @@ class SeriesData<T extends SeriesDataValue> {
 
   Map<String, dynamic> toJson({bool exportUuid = true}) => {
     'uuid': seriesDefUuid,
-    'version': 1,
+    'version': 2,
     'data': [...data.map((e) => e.toJson(exportUuid: exportUuid))],
   };
 
@@ -89,14 +89,14 @@ class SeriesData<T extends SeriesDataValue> {
 
   static SeriesData<DailyLifeValue> fromCSVDailyLifeData(SeriesDef seriesDef, List<List<dynamic>> csv) {
     // build resolver map
-    var attributes = seriesDef.dailyLifeAttributesSettingsReadonly().attributes;
-    Map<String, String> attributeName2Aid = {};
-    for (var attribute in attributes) {
-      attributeName2Aid[attribute.name] = attribute.aid;
+    var tags = seriesDef.dailyLifeTagsSettingsReadonly().tags;
+    Map<String, String> tagName2TagId = {};
+    for (var tag in tags) {
+      tagName2TagId[tag.name] = tag.tagId;
     }
     return SeriesData(
       seriesDef.uuid,
-      [...csv.map((e) => DailyLifeValue.fromCSVList(e, attributeName2Aid))],
+      [...csv.map((e) => DailyLifeValue.fromCSVList(e, tagName2TagId))],
     );
   }
 

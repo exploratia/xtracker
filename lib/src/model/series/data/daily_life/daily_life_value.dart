@@ -7,42 +7,42 @@ import '../../series_def.dart';
 import '../series_data_value.dart';
 
 class DailyLifeValue extends SeriesDataValue {
-  final String aid;
+  final String tagId;
 
-  /// [aid] attribute unique id
-  DailyLifeValue(super.uuid, super.dateTime, this.aid);
+  /// [tagId] tag unique id
+  DailyLifeValue(super.uuid, super.dateTime, this.tagId);
 
   DailyLifeValue cloneWith(DateTime dateTime) {
-    return DailyLifeValue(uuid, dateTime, aid);
+    return DailyLifeValue(uuid, dateTime, tagId);
   }
 
   factory DailyLifeValue.fromJson(JsonReader json) => DailyLifeValue(
     json.asStringOr('uuid', const Uuid().v4()),
     DateTime.fromMillisecondsSinceEpoch(json.asReader('utcMs').getInt()),
-    json.asStringOr('aid', Globals.invalid),
+    json.asStringOr('tagId', Globals.invalid),
   );
 
   @override
   Map<String, dynamic> toJson({bool exportUuid = true}) => {
     if (exportUuid) 'uuid': uuid,
     'utcMs': dateTime.millisecondsSinceEpoch,
-    'aid': aid,
+    'tagId': tagId,
   };
 
   @override
   List<dynamic> toCSVList(SeriesDef seriesDef) {
-    var attributes = seriesDef.dailyLifeAttributesSettingsReadonly().attributes;
-    for (var attribute in attributes) {
-      if (attribute.aid == aid) return [dateTime.millisecondsSinceEpoch, attribute.name];
+    var tags = seriesDef.dailyLifeTagsSettingsReadonly().tags;
+    for (var tag in tags) {
+      if (tag.tagId == tagId) return [dateTime.millisecondsSinceEpoch, tag.name];
     }
     return [];
   }
 
-  factory DailyLifeValue.fromCSVList(List<dynamic> csv, Map<String, String> attributeName2Aid) {
+  factory DailyLifeValue.fromCSVList(List<dynamic> csv, Map<String, String> tagName2TagId) {
     return DailyLifeValue(
       const Uuid().v4().toString(),
       DateTime.fromMillisecondsSinceEpoch(csv[0] as int),
-      attributeName2Aid[csv[1]] ?? Globals.invalid,
+      tagName2TagId[csv[1]] ?? Globals.invalid,
     );
   }
 

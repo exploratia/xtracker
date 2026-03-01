@@ -410,8 +410,8 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
     if (seriesType.viewTypes.length > 1) {
       List<ViewType> viewTypes = List.from(seriesType.viewTypes, growable: true);
 
-      // special case custom series could have attributes
-      if (metaData.seriesDef.isCustomSeriesWithAttributes()) {
+      // special case custom series could have tags
+      if (metaData.seriesDef.isCustomSeriesWithTags()) {
         viewTypes.add(ViewType.pixels);
       }
 

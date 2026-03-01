@@ -3,10 +3,10 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../generated/locale_keys.g.dart';
-import '../../../../model/series/attributes/attribute.dart';
-import '../../../../model/series/attributes/attribute_resolver.dart';
 import '../../../../model/series/data/series_data_value.dart';
 import '../../../../model/series/series_view_meta_data.dart';
+import '../../../../model/series/tags/tag.dart';
+import '../../../../model/series/tags/tag_resolver.dart';
 import '../../../../util/analytics/analytics.dart';
 import '../../../../util/date_time_utils.dart';
 import '../../../../util/filter/after_date_filter.dart';
@@ -14,49 +14,49 @@ import '../../../../util/globals.dart';
 import '../../../../util/pair.dart';
 import '../../../../util/table_utils.dart';
 import '../../../../util/theme_utils.dart';
-import '../../../controls/attribute/attribute_renderer.dart';
 import '../../../controls/card/glowing_border_container.dart';
 import '../../../controls/progress/ratio_labeled_progress_bar.dart';
+import '../../../controls/tag/tag_renderer.dart';
 import 'analytics/analysis_table.dart';
 import 'analytics/analytics_settings_card.dart';
 
-class SeriesDataAnalyticsAttributesProportionsView<D extends SeriesDataValue> extends StatelessWidget {
-  const SeriesDataAnalyticsAttributesProportionsView({
+class SeriesDataAnalyticsTagsProportionsView<D extends SeriesDataValue> extends StatelessWidget {
+  const SeriesDataAnalyticsTagsProportionsView({
     super.key,
     required this.seriesViewMetaData,
     required this.seriesDataValues,
-    required this.attributeIdResolver,
+    required this.tagIdResolver,
   });
 
   final SeriesViewMetaData seriesViewMetaData;
   final List<D> seriesDataValues;
-  final String? Function(D seriesDataValue) attributeIdResolver;
+  final String? Function(D seriesDataValue) tagIdResolver;
 
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    final attributeResolver = AttributeResolver(seriesViewMetaData.seriesDef);
+    final tagResolver = TagResolver(seriesViewMetaData.seriesDef);
 
     final firstDataDateTime = seriesDataValues.first.dateTime;
 
-    final Map<String, List<DateTime>> aid2dates = {};
-    for (var aid in attributeResolver.attributeIds) {
-      aid2dates[aid] = [];
+    final Map<String, List<DateTime>> tagId2dates = {};
+    for (var tagId in tagResolver.tagIds) {
+      tagId2dates[tagId] = [];
     }
 
     for (var value in seriesDataValues) {
-      var optAttributeId = attributeIdResolver(value);
-      if (optAttributeId == null || Globals.invalid == optAttributeId) continue;
-      var resolvedAttributeId = attributeResolver.resolve(optAttributeId).aid;
-      aid2dates.putIfAbsent(resolvedAttributeId, () => []);
-      aid2dates[resolvedAttributeId]?.add(value.dateTime);
+      var optTagId = tagIdResolver(value);
+      if (optTagId == null || Globals.invalid == optTagId) continue;
+      var resolvedTagId = tagResolver.resolve(optTagId).tagId;
+      tagId2dates.putIfAbsent(resolvedTagId, () => []);
+      tagId2dates[resolvedTagId]?.add(value.dateTime);
     }
 
-    List<Pair<Attribute, List<DateTime>>> sorted = [];
-    for (var entry in aid2dates.entries) {
-      sorted.add(Pair(attributeResolver.resolve(entry.key), entry.value));
+    List<Pair<Tag, List<DateTime>>> sorted = [];
+    for (var entry in tagId2dates.entries) {
+      sorted.add(Pair(tagResolver.resolve(entry.key), entry.value));
     }
-    sorted.sort((a, b) => attributeResolver.compare(a.k, b.k));
+    sorted.sort((a, b) => tagResolver.compare(a.k, b.k));
 
     AnalysisTable totalTable = _buildTotalTable(sorted, context);
 
@@ -66,8 +66,8 @@ class SeriesDataAnalyticsAttributesProportionsView<D extends SeriesDataValue> ex
     Widget? monthlyChart = _buildMonthlyChart(sorted, firstDataDateTime, themeData);
 
     return AnalyticsSettingsCard.singleEntry(
-      title: LocaleKeys.seriesDataAnalytics_attributesProportions_title.tr(),
-      infoDlgContent: SimpleInfoDlgContent(info: LocaleKeys.seriesDataAnalytics_attributesProportions_label_attributeProportionsInfo.tr()),
+      title: LocaleKeys.seriesDataAnalytics_tagsProportions_title.tr(),
+      infoDlgContent: SimpleInfoDlgContent(info: LocaleKeys.seriesDataAnalytics_tagsProportions_label_tagProportionsInfo.tr()),
       content: Column(
         spacing: ThemeUtils.horizontalSpacing,
         children: [
@@ -79,13 +79,13 @@ class SeriesDataAnalyticsAttributesProportionsView<D extends SeriesDataValue> ex
     );
   }
 
-  Widget? _buildMonthlyChart(List<Pair<Attribute, List<DateTime>>> sorted, DateTime firstDataDateTime, ThemeData themeData) {
+  Widget? _buildMonthlyChart(List<Pair<Tag, List<DateTime>>> sorted, DateTime firstDataDateTime, ThemeData themeData) {
     // monthly chart
-    List<Pair<Attribute, Map<String, _MonthlyItem>>> attrib2MonthData = [];
+    List<Pair<Tag, Map<String, _MonthlyItem>>> attrib2MonthData = [];
     for (var pair in sorted) {
-      var attribute = pair.k;
+      var tag = pair.k;
       Map<String, _MonthlyItem> map = {};
-      attrib2MonthData.add(Pair(attribute, map));
+      attrib2MonthData.add(Pair(tag, map));
 
       for (var v in pair.v) {
         var key = _MonthlyItem.buildKey(v);
@@ -95,9 +95,9 @@ class SeriesDataAnalyticsAttributesProportionsView<D extends SeriesDataValue> ex
 
     // build lists with all dates
     List<String> xTitles = [];
-    bool fillXTitles = true; // for the first attribute fill xTitles list
+    bool fillXTitles = true; // for the first tag fill xTitles list
 
-    List<Pair<Attribute, List<_MonthlyItem>>> attrib2MonthDataList = [];
+    List<Pair<Tag, List<_MonthlyItem>>> attrib2MonthDataList = [];
     var now = DateTime.now();
     for (var pair in attrib2MonthData) {
       Map<String, _MonthlyItem> monthlyMap = pair.v;
@@ -195,7 +195,7 @@ class SeriesDataAnalyticsAttributesProportionsView<D extends SeriesDataValue> ex
         spacing: ThemeUtils.verticalSpacing,
         children: [
           Text(
-            LocaleKeys.seriesDataAnalytics_attributesProportions_subTitles_monthlyDistribution.tr(),
+            LocaleKeys.seriesDataAnalytics_tagsProportions_subTitles_monthlyDistribution.tr(),
             style: themeData.textTheme.titleMedium,
           ),
           SizedBox(height: 160, child: lineChart),
@@ -205,14 +205,14 @@ class SeriesDataAnalyticsAttributesProportionsView<D extends SeriesDataValue> ex
     return monthlyChart;
   }
 
-  AnalysisTable _buildChartTable(BuildContext context, List<Pair<Attribute, List<DateTime>>> sorted) {
+  AnalysisTable _buildChartTable(BuildContext context, List<Pair<Tag, List<DateTime>>> sorted) {
     List<TableRow> rows = TableUtils.buildKeyValueTableRows(
       context,
       keyColumnTitle: LocaleKeys.seriesDataAnalytics_label_dataset.tr(),
-      valueColumnTitle: LocaleKeys.seriesDataAnalytics_attributesProportions_table_colProportions.tr(),
+      valueColumnTitle: LocaleKeys.seriesDataAnalytics_tagsProportions_table_colProportions.tr(),
     );
 
-    List<Pair<Attribute, List<DateTime>>> reduced = [...sorted];
+    List<Pair<Tag, List<DateTime>>> reduced = [...sorted];
     for (var days in Analytics.datasetSizeInDays.reversed) {
       String keyColumnText = Analytics.buildDatasetSizeString(days);
       var keyColumnWidget = Text(
@@ -221,13 +221,13 @@ class SeriesDataAnalyticsAttributesProportionsView<D extends SeriesDataValue> ex
       );
 
       var filter = AfterDateFilter.daysBack(days);
-      List<Pair<Attribute, List<DateTime>>> reducedTmp = [];
+      List<Pair<Tag, List<DateTime>>> reducedTmp = [];
       for (var r in reduced) {
         reducedTmp.add(Pair(r.k, r.v.where((e) => filter.filter(e)).toList()));
       }
 
       var valueColumnWidget = _ProportionsChart(
-        attributeProportions: reducedTmp.map(
+        tagProportions: reducedTmp.map(
           (e) => Pair(e.k, e.v.length),
         ),
       );
@@ -248,17 +248,17 @@ class SeriesDataAnalyticsAttributesProportionsView<D extends SeriesDataValue> ex
     return AnalysisTable(rows: rows);
   }
 
-  AnalysisTable _buildTotalTable(List<Pair<Attribute, List<DateTime>>> sorted, BuildContext context) {
+  AnalysisTable _buildTotalTable(List<Pair<Tag, List<DateTime>>> sorted, BuildContext context) {
     var total = sorted.fold(0, (previousValue, p) => previousValue + p.v.length);
 
     List<TableRow> totalRows = TableUtils.buildKeyValueTableRows(
       context,
-      keyColumnTitle: LocaleKeys.seriesDataAnalytics_attributesProportions_table_colAttribute.tr(),
-      valueColumnTitle: LocaleKeys.seriesDataAnalytics_attributesProportions_table_colTotalShare.tr(),
+      keyColumnTitle: LocaleKeys.seriesDataAnalytics_tagsProportions_table_colTag.tr(),
+      valueColumnTitle: LocaleKeys.seriesDataAnalytics_tagsProportions_table_colTotalShare.tr(),
     );
 
     for (var p in sorted) {
-      var keyColumnWidget = AttributeRenderer(attribute: p.k);
+      var keyColumnWidget = TagRenderer(tag: p.k);
 
       var valueColumnWidget = RatioLabeledProgressBar(
         color: p.k.color,
@@ -355,10 +355,10 @@ class _MonthlyItem {
 
 class _ProportionsChart extends StatelessWidget {
   const _ProportionsChart({
-    required this.attributeProportions,
+    required this.tagProportions,
   });
 
-  final Iterable<Pair<Attribute, int>> attributeProportions;
+  final Iterable<Pair<Tag, int>> tagProportions;
 
   @override
   Widget build(BuildContext context) {
@@ -366,7 +366,7 @@ class _ProportionsChart extends StatelessWidget {
       height: ThemeUtils.borderRadiusSmall * 2,
       child: Row(
         children: [
-          ...attributeProportions
+          ...tagProportions
               .where((p) => p.v > 0)
               .map(
                 (p) => Expanded(
@@ -375,7 +375,7 @@ class _ProportionsChart extends StatelessWidget {
                     clipBehavior: Clip.antiAlias,
                     decoration: GlowingBorderContainer.createGlowingBoxDecoration(
                       p.k.color,
-                      backgroundGradientColors: AttributeRenderer.buildAttributeGradient(p.k.color),
+                      backgroundGradientColors: TagRenderer.buildTagGradient(p.k.color),
                       borderRadius: ThemeUtils.borderRadiusSmall,
                       blurRadius: ThemeUtils.borderRadiusSmall,
                       borderWidth: 1,

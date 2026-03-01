@@ -2,62 +2,62 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../generated/locale_keys.g.dart';
-import '../../../model/series/attributes/attribute.dart';
+import '../../../model/series/tags/tag.dart';
 import '../../../util/theme_utils.dart';
 import '../../series/series_def_renderer.dart';
 import '../card/glowing_border_container.dart';
 import '../list/drag_handle.dart';
-import 'attribute_input.dart';
-import 'attribute_renderer.dart';
+import 'tag_input.dart';
+import 'tag_renderer.dart';
 
-class AttributeEditRenderer extends StatelessWidget {
-  final Attribute attribute;
+class TagEditRenderer extends StatelessWidget {
+  final Tag tag;
   final int index;
-  final void Function(Attribute updatedAttribute) updateAttributeCB;
-  final void Function(Attribute deletedAttribute) deleteAttributeCB;
+  final void Function(Tag updatedTag) updateTagCB;
+  final void Function(Tag deletedTag) deleteTagCB;
 
-  const AttributeEditRenderer({
+  const TagEditRenderer({
     super.key,
-    required this.attribute,
+    required this.tag,
     required this.index,
-    required this.updateAttributeCB,
-    required this.deleteAttributeCB,
+    required this.updateTagCB,
+    required this.deleteTagCB,
   });
 
   @override
   Widget build(BuildContext context) {
     return GlowingBorderContainer(
-      glowColor: attribute.color,
+      glowColor: tag.color,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           const SizedBox(width: ThemeUtils.horizontalSpacing),
-          // OverflowText(dailyLifeAttribute.name),
+          // OverflowText(dailyLifeTag.name),
           Expanded(
-            child: AttributeRenderer(attribute: attribute),
+            child: TagRenderer(tag: tag),
           ),
           const SizedBox(width: ThemeUtils.horizontalSpacing),
           LeftBorder(
-            color: attribute.color,
+            color: tag.color,
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 IconButton(
                   iconSize: ThemeUtils.iconSizeScaled,
-                  tooltip: LocaleKeys.seriesEdit_seriesSettings_attributes_actions_edit_tooltip.tr(),
+                  tooltip: LocaleKeys.seriesEdit_seriesSettings_tags_actions_edit_tooltip.tr(),
                   onPressed: () async {
-                    Attribute? updatedDailyLifeAttribute = await AttributeInput.showInputDlg(context, attribute: attribute.clone());
-                    if (updatedDailyLifeAttribute != null) {
-                      updateAttributeCB(updatedDailyLifeAttribute);
+                    Tag? updatedDailyLifeTag = await TagInput.showInputDlg(context, tag: tag.clone());
+                    if (updatedDailyLifeTag != null) {
+                      updateTagCB(updatedDailyLifeTag);
                     }
                   },
                   icon: const Icon(Icons.edit_outlined),
                 ),
                 IconButton(
                   iconSize: ThemeUtils.iconSizeScaled,
-                  tooltip: LocaleKeys.seriesEdit_seriesSettings_attributes_actions_delete_tooltip.tr(),
+                  tooltip: LocaleKeys.seriesEdit_seriesSettings_tags_actions_delete_tooltip.tr(),
                   onPressed: () {
-                    deleteAttributeCB(attribute);
+                    deleteTagCB(tag);
                   },
                   icon: const Icon(Icons.close_outlined),
                 ),
@@ -65,7 +65,7 @@ class AttributeEditRenderer extends StatelessWidget {
             ),
           ),
           LeftBorder(
-            color: attribute.color,
+            color: tag.color,
             child: Row(
               children: [DragHandle(index: index)],
             ),

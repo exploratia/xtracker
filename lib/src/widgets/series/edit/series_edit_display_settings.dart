@@ -44,8 +44,8 @@ class SeriesEditDisplaySettings extends StatelessWidget {
 
             List<ViewType> possibleViewTypes = List.from(seriesType.viewTypes, growable: true);
 
-            // special case custom series could have (or no longer have) attributes
-            if (seriesDef.isCustomSeriesWithAttributes()) {
+            // special case custom series could have (or no longer have) tags
+            if (seriesDef.isCustomSeriesWithTags()) {
               possibleViewTypes.add(ViewType.pixels);
             } else if (actValue == ViewType.pixels) {
               actValue = defaultValue;

@@ -6,15 +6,15 @@ import 'package:flutter/services.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../../../generated/locale_keys.g.dart';
-import '../../../../../model/series/attributes/attribute_resolver.dart';
 import '../../../../../model/series/data/custom/custom_value.dart';
 import '../../../../../model/series/seriesItem/series_item.dart';
 import '../../../../../model/series/series_def.dart';
+import '../../../../../model/series/tags/tag_resolver.dart';
 import '../../../../../util/date_time_utils.dart';
 import '../../../../../util/dialogs.dart';
 import '../../../../../util/formatter/decimal_input_formatter.dart';
 import '../../../../../util/number_utils.dart';
-import '../../../../controls/attribute/attribute_selector.dart';
+import '../../../../controls/tag/tag_selector.dart';
 import '../fullscreen_input.dart';
 import '../input_result.dart';
 
@@ -43,7 +43,7 @@ class CustomInput extends StatelessWidget {
     return SeriesItemsInput<CustomValue>(
       seriesDef: seriesDef,
       val: customValue,
-      resultBuilder: (uuid, dateTime, values, aid, action) => InputResult(CustomValue(uuid, dateTime, values, aid), action),
+      resultBuilder: (uuid, dateTime, values, tagId, action) => InputResult(CustomValue(uuid, dateTime, values, tagId), action),
     );
   }
 }
@@ -59,7 +59,7 @@ class SeriesItemsInput<V extends CustomValue> extends StatefulWidget {
 
   final SeriesDef seriesDef;
   final V? val;
-  final InputResult<V> Function(String uuid, DateTime dateTime, Map<String, double> values, String? aid, InputResultAction inputResultAction) resultBuilder;
+  final InputResult<V> Function(String uuid, DateTime dateTime, Map<String, double> values, String? tagId, InputResultAction inputResultAction) resultBuilder;
   final bool monthly;
 
   @override
@@ -76,8 +76,8 @@ class _SeriesItemsInputState<V extends CustomValue> extends State<SeriesItemsInp
 
   late final String _uuid;
   DateTime _dateTime = DateTime.now();
-  String? _attributeUuid;
-  late final AttributeResolver _attributeResolver;
+  String? _tagUuid;
+  late final TagResolver _tagResolver;
 
   @override
   initState() {
@@ -88,7 +88,7 @@ class _SeriesItemsInputState<V extends CustomValue> extends State<SeriesItemsInp
     if (widget.monthly && source == null) {
       _dateTime = _dateTime.day < 15 ? DateTimeUtils.firstDayOfPreviousMonth(_dateTime) : DateTimeUtils.firstDayOfMonth(_dateTime);
     }
-    _attributeUuid = source?.aid;
+    _tagUuid = source?.tagId;
 
     for (var seriesItem in widget.seriesDef.seriesItems) {
       // skip calculated seriesItems for input
@@ -110,7 +110,7 @@ class _SeriesItemsInputState<V extends CustomValue> extends State<SeriesItemsInp
       }
     }
 
-    _attributeResolver = AttributeResolver(widget.seriesDef);
+    _tagResolver = TagResolver(widget.seriesDef);
 
     super.initState();
   }
@@ -129,9 +129,9 @@ class _SeriesItemsInputState<V extends CustomValue> extends State<SeriesItemsInp
     });
   }
 
-  void _setAttributeUuid(String? value) {
+  void _setTagUuid(String? value) {
     setState(() {
-      _attributeUuid = value;
+      _tagUuid = value;
     });
   }
 
@@ -159,7 +159,7 @@ class _SeriesItemsInputState<V extends CustomValue> extends State<SeriesItemsInp
         values[seriesItemData.seriesItem.siid] = val;
       }
     }
-    var inputResult = widget.resultBuilder(_uuid, _dateTime, values, _attributeUuid, insert ? InputResultAction.insert : InputResultAction.update);
+    var inputResult = widget.resultBuilder(_uuid, _dateTime, values, _tagUuid, insert ? InputResultAction.insert : InputResultAction.update);
     // First dismiss keyboard to trigger series view rebuild (-> series view animation)
     // and after a small delay pop the dialog with the return value - which then triggers the current value animation
     Dialogs.dismissKeyboard(context);
@@ -172,14 +172,14 @@ class _SeriesItemsInputState<V extends CustomValue> extends State<SeriesItemsInp
   void _deleteHandler() {
     if (widget.val != null && mounted) {
       var val = widget.val!;
-      var delResult = widget.resultBuilder(val.uuid, val.dateTime, val.values, val.aid, InputResultAction.delete);
+      var delResult = widget.resultBuilder(val.uuid, val.dateTime, val.values, val.tagId, InputResultAction.delete);
       Navigator.pop<InputResult<V>>(context, delResult);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    var seriesDefAttributes = widget.seriesDef.customAttributesSettingsReadonly().attributes;
+    var seriesDefTags = widget.seriesDef.customTagsSettingsReadonly().tags;
     List<Widget> formChildren = [
       ...widget.seriesDef.seriesItems.where((si) => !si.isCalculated).map(
         (seriesItem) {
@@ -211,14 +211,14 @@ class _SeriesItemsInputState<V extends CustomValue> extends State<SeriesItemsInp
           );
         },
       ),
-      // attributes?
-      if (seriesDefAttributes.isNotEmpty)
-        AttributeSelector(
-          attributeUuid: _attributeUuid,
-          attributes: seriesDefAttributes,
-          attributeResolver: _attributeResolver,
-          handleAttributeUuid: _setAttributeUuid,
-          deleteAttributeUuid: (_attributeUuid == null ? null : () => _setAttributeUuid(null)),
+      // tags?
+      if (seriesDefTags.isNotEmpty)
+        TagSelector(
+          tagUuid: _tagUuid,
+          tags: seriesDefTags,
+          tagResolver: _tagResolver,
+          handleTagUuid: _setTagUuid,
+          deleteTagUuid: (_tagUuid == null ? null : () => _setTagUuid(null)),
         ),
     ];
 

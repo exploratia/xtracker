@@ -49,14 +49,14 @@ class ColumnProfile {
           )
           .toList(),
     );
-    var attributeSettings = seriesDef.customAttributesSettingsReadonly();
-    if (attributeSettings.attributes.isNotEmpty) {
+    var tagSettings = seriesDef.customTagsSettingsReadonly();
+    if (tagSettings.tags.isNotEmpty) {
       columns.add(
         ColumnDef(
           minWidth: defaultColumnWidth.toDouble(),
           title: '-',
-          msgId: LocaleKeys.commons_columnProfile_columns_attribute,
-          columnType: ColumnType.attribute,
+          msgId: LocaleKeys.commons_columnProfile_columns_tag,
+          columnType: ColumnType.tag,
         ),
       );
     }

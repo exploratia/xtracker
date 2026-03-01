@@ -38,7 +38,7 @@
         "dateMonthDays": "Date | Month days (1–31)"
       },
       "columns": {
-        "attribute": "Attribute",
+        "tag": "Tag\uD83D\uDEA9",
         "dayRange": "Day overview",
         "hourlyOverview": "Hourly overview"
       }
@@ -125,13 +125,13 @@
           "selectMonth": "Select month"
         }
       },
-      "attribute": {
+      "tag": {
         "action": {
           "clear": {
-            "tooltip": "Clear attribute"
+            "tooltip": "Clear tag\uD83D\uDEA9"
           },
           "select": {
-            "tooltip": "Select attribute"
+            "tooltip": "Select tag\uD83D\uDEA9"
           }
         }
       }
@@ -197,7 +197,7 @@
       },
       "dailyLife": {
         "title": "Daily Life",
-        "info": "Tag each day with an attribute – e.g. type of sport or mood.\n\nThis helps reflect on the day and gives an overview of patterns and ratios over time."
+        "info": "Tag\uD83D\uDEA9 each day – e.g. type of sport or mood.\n\nThis helps reflect on the day and gives an overview of patterns and ratios over time."
       },
       "habit": {
         "title": "Habit",
@@ -414,19 +414,19 @@
       },
       "chart": {
         "chartTitle": "Distribution by time of day",
-        "chartTitleAttributes": "Distribution by time of day per attribute"
+        "chartTitleTags": "Distribution by time of day per tag\uD83D\uDEA9"
       }
     },
-    "attributesProportions": {
-      "title": "Attribute distribution",
+    "tagsProportions": {
+      "title": "Tag\uD83D\uDEA9 distribution",
       "subTitles": {
         "monthlyDistribution": "Monthly distribution"
       },
       "label": {
-        "attributeProportionsInfo": "Overview of attribute frequencies in total and their distribution across different periods of the past year."
+        "tagProportionsInfo": "Overview of tag\uD83D\uDEA9 frequencies in total and their distribution across different periods of the past year."
       },
       "table": {
-        "colAttribute": "Attribute",
+        "colTag": "Tag\uD83D\uDEA9",
         "colProportions": "Shares",
         "colTotalShare": "Total share"
       }
@@ -568,41 +568,41 @@
       "custom": {
         "title": "Custom settings"
       },
-      "attributes": {
-        "title": "Attributes",
+      "tags": {
+        "title": "Tags\uD83D\uDEA9",
         "actions": {
           "add": {
-            "tooltip": "Add attribute"
+            "tooltip": "Add tag\uD83D\uDEA9"
           },
           "addPreset": {
-            "tooltip": "Add preset attributes"
+            "tooltip": "Add preset tags\uD83D\uDEA9"
           },
           "delete": {
-            "tooltip": "Delete attribute"
+            "tooltip": "Delete tag\uD83D\uDEA9"
           },
           "deleteAll": {
-            "tooltip": "Delete all attributes"
+            "tooltip": "Delete all tags\uD83D\uDEA9"
           },
           "edit": {
-            "tooltip": "Edit attribute"
+            "tooltip": "Edit tag\uD83D\uDEA9"
           }
         },
         "dlg": {
-          "title": "Attribute"
+          "title": "Tag\uD83D\uDEA9"
         },
-        "info": "Manage the attributes of this series.\nEach value has exactly one attribute.\n\nIf a used attribute is deleted, the value automatically gets a fallback color that strongly contrasts with the remaining attributes.",
+        "info": "Manage the tags\uD83D\uDEA9 of this series.\nEach value has exactly one tag\uD83D\uDEA9.\n\nIf a used tag\uD83D\uDEA9 is deleted, the value automatically gets a fallback color that strongly contrasts with the remaining tags\uD83D\uDEA9.",
         "preset": {
           "feelings": {
             "title": "Preset: Feelings",
-            "attributeNames": "amazing day|really good, happy day|normal day|exhausted, tired day|depressed, sad day|frustrated, angry day|stressed day|sick day|really horrible day"
+            "tagNames": "amazing day|really good, happy day|normal day|exhausted, tired day|depressed, sad day|frustrated, angry day|stressed day|sick day|really horrible day"
           },
           "sports": {
             "title": "Preset: Sports",
-            "attributeNames": "Walking|Jogging|Hiking|Road bike|Mountain bike|Swimming|Workout"
+            "tagNames": "Walking|Jogging|Hiking|Road bike|Mountain bike|Swimming|Workout"
           },
           "period": {
             "title": "Preset: Period",
-            "attributeNames": "None|Spotting|Light|Regular|Heavy"
+            "tagNames": "None|Spotting|Light|Regular|Heavy"
           },
           "stars": {
             "title": "Preset: Stars (★)"
@@ -633,7 +633,7 @@
           }
         },
         "validation": {
-          "emptyAttributs": "At least one attribute required"
+          "emptyTags": "At least one tag\uD83D\uDEA9 required"
         }
       },
       "seriesItems": {
@@ -691,7 +691,7 @@
         },
         "info": "Manage series parameters.\nEach parameter has a name, unit and color. You can adjust how it appears in the table and chart.\n\nYou can also create calculated parameters. They have no input but compute their value from other parameters.\n\nIf a used parameter is deleted, its values are no longer shown.",
         "validation": {
-          "emptyAttributs": "At least one parameter required",
+          "emptyTags": "At least one tag\uD83D\uDEA9 required",
           "emptyParametersChart": "At least one parameter required for chart view",
           "emptyParametersTable": "At least one parameter required for table view"
         },
@@ -814,7 +814,7 @@
       },
       "validation": {
         "dailyLife": {
-          "emptyAttributes": "No attributes defined."
+          "emptyTags": "No tags\uD83D\uDEA9 defined."
         }
       }
     }

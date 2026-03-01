@@ -62,7 +62,7 @@ class SeriesImportExport {
       "series": seriesList,
       // type & version - could be used for parsing
       'type': 'multiSeriesExport',
-      'version': 1, // initial
+      'version': 2, // 1: initial, 2: attribute -> tag
     };
 
     var seriesProvider = context.read<SeriesProvider>();

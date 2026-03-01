@@ -8,16 +8,16 @@ import '../series_data_value.dart';
 
 class CustomValue extends SeriesDataValue {
   final Map<String, double> values;
-  final String? aid;
+  final String? tagId;
 
-  CustomValue(super.uuid, super.dateTime, this.values, this.aid);
+  CustomValue(super.uuid, super.dateTime, this.values, this.tagId);
 
   @override
   Map<String, dynamic> toJson({bool exportUuid = true}) => {
     if (exportUuid) 'uuid': uuid,
     'utcMs': dateTime.millisecondsSinceEpoch,
     'values': values,
-    if (aid != null) 'aid': aid,
+    if (tagId != null) 'tagId': tagId,
   };
 
   factory CustomValue.fromJson(JsonReader json) {
@@ -32,7 +32,7 @@ class CustomValue extends SeriesDataValue {
       json.asStringOr('uuid', const Uuid().v4()),
       DateTime.fromMillisecondsSinceEpoch(json.asReader('utcMs').getInt()),
       values,
-      json.asStringOrNull("aid"),
+      json.asStringOrNull("tagId"),
     );
   }
 
@@ -43,12 +43,12 @@ class CustomValue extends SeriesDataValue {
       list.add(values[seriesItem.siid]);
     }
 
-    String attributeName = Globals.invalid;
-    var attributes = seriesDef.customAttributesSettingsReadonly().attributes;
-    for (var attribute in attributes) {
-      if (attribute.aid == aid) attributeName = attribute.name;
+    String tagName = Globals.invalid;
+    var tags = seriesDef.customTagsSettingsReadonly().tags;
+    for (var tag in tags) {
+      if (tag.tagId == tagId) tagName = tag.name;
     }
-    list.add(attributeName);
+    list.add(tagName);
 
     return list;
   }
@@ -68,23 +68,23 @@ class CustomValue extends SeriesDataValue {
       }
     }
 
-    String? aid;
+    String? tagId;
     {
       // build resolver map
-      var attributes = seriesDef.customAttributesSettingsReadonly().attributes;
-      Map<String, String> attributeName2Aid = {};
-      for (var attribute in attributes) {
-        attributeName2Aid[attribute.name] = attribute.aid;
+      var tags = seriesDef.customTagsSettingsReadonly().tags;
+      Map<String, String> tagName2TagId = {};
+      for (var tag in tags) {
+        tagName2TagId[tag.name] = tag.tagId;
       }
       idx++;
-      aid = attributeName2Aid[csv[idx]];
+      tagId = tagName2TagId[csv[idx]];
     }
 
     return CustomValue(
       const Uuid().v4().toString(),
       DateTime.fromMillisecondsSinceEpoch(csv[0] as int),
       values,
-      aid,
+      tagId,
     );
   }
 

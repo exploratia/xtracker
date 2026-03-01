@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
-import '../../../../../../model/series/attributes/attribute_resolver.dart';
 import '../../../../../../model/series/data/daily_life/daily_life_value.dart';
 import '../../../../../../model/series/data/series_data.dart';
 import '../../../../../../model/series/series_def.dart';
+import '../../../../../../model/series/tags/tag_resolver.dart';
 import '../../../../../../util/chart/chart_utils.dart';
 import '../../../../../../util/date_time_utils.dart';
 import '../../../../../../util/media_query_utils.dart';
 import '../../../../../../util/theme_utils.dart';
 import '../../../../../../util/tooltip_utils.dart';
-import '../../../../../controls/attribute/attribute_renderer.dart';
+import '../../../../../controls/tag/tag_renderer.dart';
 
 class DailyLifeValueRenderer extends StatelessWidget {
   static int get height {
@@ -22,7 +22,7 @@ class DailyLifeValueRenderer extends StatelessWidget {
     required this.seriesDef,
     this.editMode = false,
     this.wrapWithDateTimeTooltip = false,
-    required this.dailyLifeAttributeResolver,
+    required this.dailyLifeTagResolver,
     this.maxContentWidth = 80,
   });
 
@@ -30,13 +30,13 @@ class DailyLifeValueRenderer extends StatelessWidget {
   final bool editMode;
   final SeriesDef seriesDef;
   final bool wrapWithDateTimeTooltip;
-  final AttributeResolver dailyLifeAttributeResolver;
+  final TagResolver dailyLifeTagResolver;
   final double maxContentWidth;
 
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    var resolvedAttribute = dailyLifeAttributeResolver.resolve(dailyLifeValue);
+    var resolvedTag = dailyLifeTagResolver.resolve(dailyLifeValue);
     Widget result = Container(
       decoration: editMode
           ? BoxDecoration(
@@ -58,8 +58,8 @@ class DailyLifeValueRenderer extends StatelessWidget {
       child: Center(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 2),
-          child: AttributeRenderer(
-            attribute: resolvedAttribute,
+          child: TagRenderer(
+            tag: resolvedTag,
             maxContentWidth: maxContentWidth,
           ),
         ),
@@ -76,7 +76,7 @@ class DailyLifeValueRenderer extends StatelessWidget {
 
     if (wrapWithDateTimeTooltip) {
       result = Tooltip(
-        message: '${DateTimeUtils.formatDate(dailyLifeValue.dateTime)}   ${DateTimeUtils.formatTime(dailyLifeValue.dateTime)}\n ${resolvedAttribute.name}',
+        message: '${DateTimeUtils.formatDate(dailyLifeValue.dateTime)}   ${DateTimeUtils.formatTime(dailyLifeValue.dateTime)}\n ${resolvedTag.name}',
         textStyle: TooltipUtils.tooltipMonospaceStyle,
         child: result,
       );
