@@ -20,9 +20,9 @@ class StoreSeriesData {
   final Database _db = StoresUtils.db;
 
   StoreSeriesData.fromSeriesDef({required SeriesDef seriesDef})
-      : seriesDefUuid = seriesDef.uuid,
-        seriesType = seriesDef.seriesType,
-        _store = StoreRef<String, Map<String, dynamic>>('seriesData_${seriesDef.seriesType}_${seriesDef.uuid}');
+    : seriesDefUuid = seriesDef.uuid,
+      seriesType = seriesDef.seriesType,
+      _store = StoreRef<String, Map<String, dynamic>>('seriesData_${seriesDef.uuid}');
 
   Future<void> save(SeriesDataValue seriesDataValue) async {
     await _store.record(seriesDataValue.uuid).put(_db, seriesDataValue.toJson());

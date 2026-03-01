@@ -14,6 +14,7 @@ import '../../model/series/series_type.dart';
 import '../../providers/series_data_provider.dart';
 import '../../providers/series_provider.dart';
 import '../../providers/series_providers.dart';
+import '../../store/migration/import_migration.dart';
 import '../../widgets/administration/settings/settings_controller.dart';
 import '../../widgets/controls/layout/single_child_scroll_view_with_scrollbar.dart';
 import '../../widgets/controls/overlay/progress_overlay.dart';
@@ -257,7 +258,12 @@ class SeriesImportExport {
 
         SimpleLogging.i("importing '${file.name}' ...");
         var fileContent = await file.readAsString(); // utf8
-        var json = JsonReader(jsonDecode(fileContent));
+        var decoded = jsonDecode(fileContent);
+
+        // migration
+        decoded = ImportMigration.migrate(decoded, file);
+
+        var json = JsonReader(decoded);
 
         var jType = json.asReader("type");
         if (jType.getString() == "multiSeriesExport") {
