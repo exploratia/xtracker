@@ -100,7 +100,7 @@ class SeriesDataViewContentBuilder extends StatelessWidget {
         // calc dependent seriesItems
         var calcSeriesItems = seriesViewMetaData.seriesDef.seriesItems.where((si) => si.isCalculated);
         if (calcSeriesItems.isNotEmpty) {
-          values = _calcValues(calcSeriesItems, values, (uuid, dateTime, valMap) => CustomValue(uuid, dateTime, valMap, null));
+          values = _calcValues(calcSeriesItems, values, (uuid, dateTime, valMap, aid) => CustomValue(uuid, dateTime, valMap, aid));
         }
 
         return builder(
@@ -119,7 +119,7 @@ class SeriesDataViewContentBuilder extends StatelessWidget {
         // calc dependent seriesItems
         var calcSeriesItems = seriesViewMetaData.seriesDef.seriesItems.where((si) => si.isCalculated);
         if (calcSeriesItems.isNotEmpty) {
-          values = _calcValues(calcSeriesItems, values, (uuid, dateTime, valMap) => MonthlyValue(uuid, dateTime, valMap, null));
+          values = _calcValues(calcSeriesItems, values, (uuid, dateTime, valMap, aid) => MonthlyValue(uuid, dateTime, valMap, aid));
         }
 
         return builder(
@@ -137,16 +137,16 @@ class SeriesDataViewContentBuilder extends StatelessWidget {
   static List<V> _calcValues<V extends CustomValue>(
     Iterable<SeriesItem> calcSeriesItems,
     List<V> values,
-    V Function(String uuid, DateTime dateTime, Map<String, double> valMap) valBuilder,
+    V Function(String uuid, DateTime dateTime, Map<String, double> valMap, String? aid) valBuilder,
   ) {
     List<V> valuesCalculated = [];
-    V prevValue = valBuilder("prev", DateTime(0), {});
+    V prevValue = valBuilder("prev", DateTime(0), {}, null);
     for (var value in values) {
       Map<String, double> valMap = {...value.values};
       for (var si in calcSeriesItems) {
         valMap[si.siid] = si.calculationContainer!.calculate(value.values, prevValue.values);
       }
-      valuesCalculated.add(valBuilder(value.uuid, value.dateTime, valMap));
+      valuesCalculated.add(valBuilder(value.uuid, value.dateTime, valMap, value.aid));
       prevValue = value;
     }
     return valuesCalculated;

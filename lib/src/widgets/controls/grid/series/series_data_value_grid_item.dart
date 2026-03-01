@@ -28,7 +28,10 @@ class SeriesDataValueGridItem<V extends SeriesDataValue> {
   }
 
   static List<SeriesDataValueGridItem<T>> buildTableDataProvider<T extends SeriesDataValue>(
-      SeriesViewMetaData seriesViewMetaData, List<T> seriesData, BuildContext context) {
+    SeriesViewMetaData seriesViewMetaData,
+    List<T> seriesData,
+    BuildContext context,
+  ) {
     var seriesDef = seriesViewMetaData.seriesDef;
     var monthly = seriesDef.seriesType == SeriesType.monthly;
 
@@ -69,8 +72,11 @@ class SeriesDataValueGridItem<V extends SeriesDataValue> {
 
     if (duplicateDates.isNotEmpty && context.mounted) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
-        Dialogs.showSnackBarWarning(LocaleKeys.seriesData_snackbar_duplicateDates.tr(args: [duplicateDates.join(", ")]), context,
-            duration: const Duration(seconds: 3));
+        Dialogs.showSnackBarWarning(
+          LocaleKeys.seriesData_snackbar_duplicateDates.tr(args: [duplicateDates.join(", ")]),
+          context,
+          duration: const Duration(seconds: 3),
+        );
       });
     }
 
