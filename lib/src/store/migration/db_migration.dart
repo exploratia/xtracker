@@ -31,7 +31,7 @@ class DbMigration {
     final currentValueStore = StoreRef<String, Map<String, dynamic>>('seriesCurrentValue');
 
     // 1) SeriesDef
-    await _migrateStore(seriesDefStore, db);
+    await _migrateStore(seriesDefStore, seriesDefStore, db, MigrationV01ToV02.migrate);
 
     // 2) SeriesData Stores
     final seriesDefRecords = await seriesDefStore.find(db);
@@ -44,24 +44,34 @@ class DbMigration {
         continue;
       }
 
-      final storeName = 'seriesData_${seriesType}_$uuid';
-      final seriesDataStore = StoreRef<String, Map<String, dynamic>>(storeName);
+      // correct store name as well
+      final storeNameOld = 'seriesData_SeriesType.${seriesType}_$uuid';
+      final storeNameNew = 'seriesData_$uuid';
+      final seriesDataStoreOld = StoreRef<String, Map<String, dynamic>>(storeNameOld);
+      final seriesDataStoreNew = StoreRef<String, Map<String, dynamic>>(storeNameNew);
 
-      await _migrateStore(seriesDataStore, db);
+      await _migrateStore(seriesDataStoreOld, seriesDataStoreNew, db, MigrationV01ToV02.migrate);
+
+      // delete all data from old store
+      // await seriesDataStoreOld.delete(db);
+      await seriesDataStoreOld.drop(db);
     }
 
     // 3) CurrentValue
-    await _migrateStore(currentValueStore, db);
+    await _migrateStore(currentValueStore, currentValueStore, db, MigrationV01ToV02.migrate);
   }
 
+  /// source and target may be the same
   static Future<void> _migrateStore(
-    StoreRef<String, Map<String, dynamic>> store,
+    StoreRef<String, Map<String, dynamic>> storeSource,
+    StoreRef<String, Map<String, dynamic>> storeTarget,
     DatabaseClient db,
+    Map<String, dynamic> Function(Map<String, dynamic>) migrateRecord,
   ) async {
-    final records = await store.find(db);
+    final records = await storeSource.find(db);
     for (final record in records) {
-      final migrated = MigrationV01ToV02.migrate(record.value);
-      await store.record(record.key).put(db, migrated);
+      final migrated = migrateRecord(record.value);
+      await storeTarget.record(record.key).put(db, migrated);
     }
   }
 }
