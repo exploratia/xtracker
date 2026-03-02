@@ -7,6 +7,9 @@ class DbMigration {
   static const int latestVersion = 2;
 
   static Future<void> migrate(Database db, int oldVersion, int newVersion) async {
+    // started on web?
+    if (oldVersion <= 0) return;
+
     var current = oldVersion;
 
     while (current < newVersion) {
