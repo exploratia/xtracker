@@ -38,7 +38,7 @@
         "dateMonthDays": "Date | Month days (1–31)"
       },
       "columns": {
-        "tag": "Tag\uD83D\uDEA9",
+        "tag": "\uD83D\uDEA9",
         "dayRange": "Day overview",
         "hourlyOverview": "Hourly overview"
       }
@@ -426,7 +426,7 @@
         "tagProportionsInfo": "Overview of tag\uD83D\uDEA9 frequencies in total and their distribution across different periods of the past year."
       },
       "table": {
-        "colTag": "Tag\uD83D\uDEA9",
+        "colTag": "\uD83D\uDEA9",
         "colProportions": "Shares",
         "colTotalShare": "Total share"
       }

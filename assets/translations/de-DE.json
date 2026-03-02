@@ -38,7 +38,7 @@
         "dateMonthDays": "Datum | Monatstage (1–31)"
       },
       "columns": {
-        "tag": "Tag\uD83D\uDEA9",
+        "tag": "\uD83D\uDEA9",
         "dayRange": "Tagesübersicht",
         "hourlyOverview": "Stundenübersicht"
       }
@@ -426,7 +426,7 @@
         "tagProportionsInfo": "Übersicht über die Häufigkeit der Tags\uD83D\uDEA9 insgesamt und ihre Verteilung in verschiedenen Zeiträumen des letzten Jahres."
       },
       "table": {
-        "colTag": "Tag\uD83D\uDEA9",
+        "colTag": "\uD83D\uDEA9",
         "colProportions": "Anteile",
         "colTotalShare": "Gesamtanteil"
       }
