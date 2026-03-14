@@ -34,6 +34,7 @@ class SingleChildScrollViewWithScrollbar extends StatefulWidget {
 class _SingleChildScrollViewWithScrollbarState extends State<SingleChildScrollViewWithScrollbar> {
   late final ScrollController _scrollController;
   late final bool _ownsController;
+  VoidCallback? _scrollListener;
 
   @override
   void initState() {
@@ -44,9 +45,10 @@ class _SingleChildScrollViewWithScrollbarState extends State<SingleChildScrollVi
 
     final cb = widget.scrollPositionHandler;
     if (cb != null) {
-      _scrollController.addListener(() {
+      _scrollListener = () {
         cb(_scrollController.position);
-      });
+      };
+      _scrollController.addListener(_scrollListener!);
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
         cb(_scrollController.position);
@@ -56,6 +58,12 @@ class _SingleChildScrollViewWithScrollbarState extends State<SingleChildScrollVi
 
   @override
   void dispose() {
+    final scrollListener = _scrollListener;
+    if (scrollListener != null) {
+      _scrollController.removeListener(scrollListener);
+      _scrollListener = null;
+    }
+
     if (_ownsController) {
       _scrollController.dispose();
     }

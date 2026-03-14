@@ -34,6 +34,8 @@ class TwoDimensionalGridViewWithScrollbar extends StatefulWidget {
 class _TwoDimensionalGridViewWithScrollbarState extends State<TwoDimensionalGridViewWithScrollbar> {
   late ScrollController _verticalController;
   late ScrollController _horizontalController;
+  VoidCallback? _verticalListener;
+  VoidCallback? _horizontalListener;
 
   @override
   void initState() {
@@ -43,18 +45,20 @@ class _TwoDimensionalGridViewWithScrollbarState extends State<TwoDimensionalGrid
 
     final verticalScrollPositionHandler = widget.verticalScrollPositionHandler;
     if (verticalScrollPositionHandler != null) {
-      _verticalController.addListener(() {
+      _verticalListener = () {
         verticalScrollPositionHandler(_verticalController.position);
-      });
+      };
+      _verticalController.addListener(_verticalListener!);
       // Call callback once direct with initial scroll pos
       WidgetsBinding.instance.addPostFrameCallback((_) => verticalScrollPositionHandler(_verticalController.position));
     }
 
     final horizontalScrollPositionHandler = widget.horizontalScrollPositionHandler;
     if (horizontalScrollPositionHandler != null) {
-      _horizontalController.addListener(() {
+      _horizontalListener = () {
         horizontalScrollPositionHandler(_horizontalController.position);
-      });
+      };
+      _horizontalController.addListener(_horizontalListener!);
       // Call callback once direct with initial scroll pos
       WidgetsBinding.instance.addPostFrameCallback((_) => horizontalScrollPositionHandler(_horizontalController.position));
     }
@@ -64,6 +68,17 @@ class _TwoDimensionalGridViewWithScrollbarState extends State<TwoDimensionalGrid
 
   @override
   void dispose() {
+    final verticalListener = _verticalListener;
+    if (verticalListener != null) {
+      _verticalController.removeListener(verticalListener);
+      _verticalListener = null;
+    }
+    final horizontalListener = _horizontalListener;
+    if (horizontalListener != null) {
+      _horizontalController.removeListener(horizontalListener);
+      _horizontalListener = null;
+    }
+
     // only dispose if not as parameter from parent
     if (widget.verticalScrollController == null) {
       _verticalController.dispose();
