@@ -57,43 +57,39 @@ class SeriesDataAnalyticsHoursRecordedView extends StatelessWidget {
 
         var spots = hours.asMap().entries.map((e) => FlSpot(e.key.toDouble(), e.value.toDouble())).toList();
 
-        return SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: SizedBox(
-            width: chartWidth,
-            height: 120,
-            child: LineChart(
-              LineChartData(
-                lineBarsData: [
-                  LineChartBarData(
-                    gradient: gradient,
-                    dotData: const FlDotData(show: false),
-                    preventCurveOverShooting: true,
-                    curveSmoothness: 0.7,
-                    isCurved: true,
-                    isStrokeCapRound: true,
-                    isStrokeJoinRound: true,
-                    spots: spots,
-                  ),
-                ],
-                // maxY: 1,
-                minY: 0,
-                borderData: FlBorderData(show: false),
-                lineTouchData: const LineTouchData(enabled: false),
-                gridData: const FlGridData(show: false),
-                titlesData: FlTitlesData(
-                  show: true,
-                  rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                  topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                  leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                  bottomTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      maxIncluded: false,
-                      minIncluded: true,
-                      getTitlesWidget: (value, meta) => bottomTitles(value, meta, axisTitlesTheme),
-                      reservedSize: axisTitlesTheme.fontSize! * MediaQueryUtils.textScaleFactor + ThemeUtils.verticalSpacingLarge,
-                    ),
+        return SizedBox(
+          height: 120,
+          child: LineChart(
+            LineChartData(
+              lineBarsData: [
+                LineChartBarData(
+                  gradient: gradient,
+                  dotData: const FlDotData(show: false),
+                  preventCurveOverShooting: true,
+                  curveSmoothness: 0.7,
+                  isCurved: true,
+                  isStrokeCapRound: true,
+                  isStrokeJoinRound: true,
+                  spots: spots,
+                ),
+              ],
+              // maxY: 1,
+              minY: 0,
+              borderData: FlBorderData(show: false),
+              lineTouchData: const LineTouchData(enabled: false),
+              gridData: const FlGridData(show: false),
+              titlesData: FlTitlesData(
+                show: true,
+                rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                bottomTitles: AxisTitles(
+                  sideTitles: SideTitles(
+                    showTitles: true,
+                    maxIncluded: false,
+                    minIncluded: true,
+                    getTitlesWidget: (value, meta) => bottomTitles(value, meta, axisTitlesTheme),
+                    reservedSize: axisTitlesTheme.fontSize! * MediaQueryUtils.textScaleFactor + ThemeUtils.verticalSpacingLarge,
                   ),
                 ),
               ),

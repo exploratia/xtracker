@@ -420,7 +420,9 @@
     "tagsProportions": {
       "title": "Tag\uD83D\uDEA9-Verteilung",
       "subTitles": {
-        "monthlyDistribution": "Monatsverteilung"
+        "monthlyDistribution": "Verteilung über Monate",
+        "distributionWeekdays": "Verteilung auf Wochentage",
+        "distributionHours": "Verteilung auf Stunden"
       },
       "label": {
         "tagProportionsInfo": "Übersicht über die Häufigkeit der Tags\uD83D\uDEA9 insgesamt und ihre Verteilung in verschiedenen Zeiträumen des letzten Jahres."

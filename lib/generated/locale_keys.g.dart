@@ -164,6 +164,8 @@ abstract class  LocaleKeys {
   static const seriesDataAnalytics_recordedHours_chart_chartTitleTags = 'seriesDataAnalytics.recordedHours.chart.chartTitleTags';
   static const seriesDataAnalytics_tagsProportions_title = 'seriesDataAnalytics.tagsProportions.title';
   static const seriesDataAnalytics_tagsProportions_subTitles_monthlyDistribution = 'seriesDataAnalytics.tagsProportions.subTitles.monthlyDistribution';
+  static const seriesDataAnalytics_tagsProportions_subTitles_distributionWeekdays = 'seriesDataAnalytics.tagsProportions.subTitles.distributionWeekdays';
+  static const seriesDataAnalytics_tagsProportions_subTitles_distributionHours = 'seriesDataAnalytics.tagsProportions.subTitles.distributionHours';
   static const seriesDataAnalytics_tagsProportions_label_tagProportionsInfo = 'seriesDataAnalytics.tagsProportions.label.tagProportionsInfo';
   static const seriesDataAnalytics_tagsProportions_table_colTag = 'seriesDataAnalytics.tagsProportions.table.colTag';
   static const seriesDataAnalytics_tagsProportions_table_colProportions = 'seriesDataAnalytics.tagsProportions.table.colProportions';

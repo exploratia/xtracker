@@ -5,7 +5,6 @@ import '../../../../../model/series/series_view_meta_data.dart';
 import '../../../../../util/theme_utils.dart';
 import '../series_data_analytics_days_recorded_view.dart';
 import '../series_data_analytics_hours_recorded_view.dart';
-import 'series_data_analytics_custom_hours_recorded.dart';
 import 'series_data_analytics_custom_tags_proportions_view.dart';
 
 class SeriesDataAnalyticsCustomView extends StatelessWidget {
@@ -17,13 +16,8 @@ class SeriesDataAnalyticsCustomView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget? tagsProportionsView;
-    Widget? seriesDataAnalyticsCustomHoursRecorded;
     if (seriesViewMetaData.seriesDef.isCustomSeriesWithTags()) {
       tagsProportionsView = SeriesDataAnalyticsCustomTagsProportionsView(
-        seriesViewMetaData: seriesViewMetaData,
-        seriesDataValues: seriesDataValues,
-      );
-      seriesDataAnalyticsCustomHoursRecorded = SeriesDataAnalyticsCustomHoursRecorded(
         seriesViewMetaData: seriesViewMetaData,
         seriesDataValues: seriesDataValues,
       );
@@ -40,7 +34,6 @@ class SeriesDataAnalyticsCustomView extends StatelessWidget {
         SeriesDataAnalyticsHoursRecordedView(
           seriesViewMetaData: seriesViewMetaData,
           seriesDataValues: seriesDataValues,
-          child: seriesDataAnalyticsCustomHoursRecorded,
         ),
       ],
     );

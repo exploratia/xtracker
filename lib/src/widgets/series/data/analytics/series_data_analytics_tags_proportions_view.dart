@@ -63,7 +63,7 @@ class SeriesDataAnalyticsTagsProportionsView<D extends SeriesDataValue> extends 
     AnalysisTable chartTable = _buildChartTable(context, sorted);
 
     // monthly chart
-    Widget? monthlyChart = _buildMonthlyChart(sorted, firstDataDateTime, themeData);
+    Widget? charts = _buildDistributionCharts(sorted, firstDataDateTime, themeData);
 
     return AnalyticsSettingsCard.singleEntry(
       title: LocaleKeys.seriesDataAnalytics_tagsProportions_title.tr(),
@@ -73,136 +73,195 @@ class SeriesDataAnalyticsTagsProportionsView<D extends SeriesDataValue> extends 
         children: [
           totalTable,
           chartTable,
-          ?monthlyChart,
+          ?charts,
         ],
       ),
     );
   }
 
-  Widget? _buildMonthlyChart(List<Pair<Tag, List<DateTime>>> sorted, DateTime firstDataDateTime, ThemeData themeData) {
-    // monthly chart
-    List<Pair<Tag, Map<String, _MonthlyItem>>> attrib2MonthData = [];
-    for (var pair in sorted) {
-      var tag = pair.k;
-      Map<String, _MonthlyItem> map = {};
-      attrib2MonthData.add(Pair(tag, map));
-
-      for (var v in pair.v) {
-        var key = _MonthlyItem.buildKey(v);
-        map.putIfAbsent(key, () => _MonthlyItem(v.year, v.month)).inc();
-      }
-    }
-
-    // build lists with all dates
-    List<String> xTitles = [];
-    bool fillXTitles = true; // for the first tag fill xTitles list
-
-    List<Pair<Tag, List<_MonthlyItem>>> attrib2MonthDataList = [];
-    var now = DateTime.now();
-    for (var pair in attrib2MonthData) {
-      Map<String, _MonthlyItem> monthlyMap = pair.v;
-      List<_MonthlyItem> monthlyList = [];
-      attrib2MonthDataList.add(Pair(pair.k, monthlyList));
-
-      var targetMonth = DateTimeUtils.firstDayOfNextMonth(now);
-      var actMonth = DateTimeUtils.firstDayOfMonth(firstDataDateTime);
-      int idx = 0;
-      while (actMonth.isBefore(targetMonth)) {
-        if (fillXTitles) {
-          xTitles.add("${actMonth.month}/${actMonth.year.toString().substring(2)}");
-        }
-
-        var monthItem = monthlyMap.putIfAbsent(_MonthlyItem.buildKey(actMonth), () => _MonthlyItem(actMonth.year, actMonth.month));
-        monthItem.idx = idx;
-        idx++;
-        monthlyList.add(monthItem);
-        actMonth = DateTimeUtils.firstDayOfNextMonth(actMonth);
-      }
-
-      fillXTitles = false;
-    }
-    Widget? monthlyChart;
-    if (xTitles.length >= 2) {
-      // build chart
-      List<LineChartBarData> lineChartBarDataList = [];
-      for (var pair in attrib2MonthDataList) {
-        var attrib = pair.k;
-        var data = pair.v;
-
-        List<FlSpot> spots = [];
-        for (var monthlyItem in data) {
-          spots.add(monthlyItem.flSpot);
-        }
-
-        lineChartBarDataList.add(
-          LineChartBarData(
-            isCurved: true,
-            color: attrib.color,
-            barWidth: 2,
-            isStrokeCapRound: true,
-            isStrokeJoinRound: true,
-            dotData: const FlDotData(show: false),
-            belowBarData: BarAreaData(show: false),
-            preventCurveOverShooting: true,
-            spots: spots,
-          ),
-        );
-      }
-
-      var flTitlesData = FlTitlesData(
-        bottomTitles: AxisTitles(
-          sideTitles: SideTitles(
-            // interval is always often not as expected :(
-            // only int values should be shown -> 1 but not to much as well -> null and it is depending on the width :/
-            // https://www.reddit.com/r/flutterhelp/comments/rhb7iu/fl_chart_set_time_series_interval_in_linechart/
-            interval: xTitles.length > 5 ? xTitles.length / 5 : 1,
-            showTitles: true,
-            maxIncluded: false,
-            minIncluded: false,
-            getTitlesWidget: (value, meta) {
-              return SideTitleWidget(
-                meta: meta,
-                fitInside: SideTitleFitInsideData.fromTitleMeta(meta),
-                // angle: 0.5,
-                child: Text(
-                  xTitles[value.toInt()],
-                ),
-              );
-            },
-          ),
-        ),
-        leftTitles: const AxisTitles(
-          sideTitles: SideTitles(
-            showTitles: true,
-            reservedSize: 40,
-          ),
-        ),
-        rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-        topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+  Widget? _buildDistributionCharts(List<Pair<Tag, List<DateTime>>> sorted, DateTime firstDataDateTime, ThemeData themeData) {
+    LineChartBarData buildLineChartBarData(Tag tag, List<FlSpot> spots) {
+      return LineChartBarData(
+        isCurved: true,
+        preventCurveOverShooting: true,
+        curveSmoothness: 0.7,
+        color: tag.color,
+        barWidth: 2,
+        isStrokeCapRound: true,
+        isStrokeJoinRound: true,
+        dotData: const FlDotData(show: false),
+        belowBarData: BarAreaData(show: false),
+        spots: spots,
       );
+    }
+
+    Widget buildBottomTitle(double value, TitleMeta meta, List<String> xTitles) {
+      final idx = value.toInt();
+      if (idx < 0 || idx >= xTitles.length) return const SizedBox.shrink();
+      return SideTitleWidget(
+        meta: meta,
+        fitInside: SideTitleFitInsideData.fromTitleMeta(meta),
+        child: Text(xTitles[idx]),
+      );
+    }
+
+    Widget buildDistributionChart({
+      required String title,
+      required List<String> xTitles,
+      required List<Pair<Tag, List<int>>> tag2counts,
+      required double interval,
+      bool includeMin = false,
+      bool includeMax = false,
+    }) {
+      List<LineChartBarData> lineChartBarDataList = [];
+      for (var pair in tag2counts) {
+        List<FlSpot> spots = pair.v.asMap().entries.map((e) => FlSpot(e.key.toDouble(), e.value.toDouble())).toList();
+        lineChartBarDataList.add(buildLineChartBarData(pair.k, spots));
+      }
+
       var lineChartData = LineChartData(
         lineBarsData: lineChartBarDataList,
         minY: 0,
         gridData: const FlGridData(show: false),
         lineTouchData: const LineTouchData(enabled: false),
         borderData: FlBorderData(show: false),
-        titlesData: flTitlesData,
+        titlesData: FlTitlesData(
+          bottomTitles: AxisTitles(
+            sideTitles: SideTitles(
+              interval: interval,
+              showTitles: true,
+              minIncluded: includeMin,
+              maxIncluded: includeMax,
+              getTitlesWidget: (value, meta) => buildBottomTitle(value, meta, xTitles),
+            ),
+          ),
+          leftTitles: const AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              reservedSize: 40,
+              maxIncluded: false,
+            ),
+          ),
+          rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+          topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+        ),
       );
-      Widget lineChart = _MonthlyLineChart(lineChartData: lineChartData);
 
-      monthlyChart = Column(
+      return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         spacing: ThemeUtils.verticalSpacing,
         children: [
           Text(
-            LocaleKeys.seriesDataAnalytics_tagsProportions_subTitles_monthlyDistribution.tr(),
+            title,
             style: themeData.textTheme.titleMedium,
           ),
-          SizedBox(height: 160, child: lineChart),
+          SizedBox(height: 160, child: _MonthlyLineChart(lineChartData: lineChartData)),
         ],
       );
     }
-    return monthlyChart;
+
+    // Monthly distribution
+    List<Pair<Tag, Map<String, _MonthlyItem>>> attrib2MonthData = [];
+    for (var pair in sorted) {
+      var tag = pair.k;
+      Map<String, _MonthlyItem> map = {};
+      attrib2MonthData.add(Pair(tag, map));
+      for (var v in pair.v) {
+        var key = _MonthlyItem.buildKey(v);
+        map.putIfAbsent(key, () => _MonthlyItem(v.year, v.month)).inc();
+      }
+    }
+
+    List<String> monthlyXTitles = [];
+    bool fillXTitles = true;
+    List<Pair<Tag, List<int>>> monthlyCounts = [];
+    var now = DateTime.now();
+    for (var pair in attrib2MonthData) {
+      Map<String, _MonthlyItem> monthlyMap = pair.v;
+      List<int> monthlyList = [];
+      monthlyCounts.add(Pair(pair.k, monthlyList));
+
+      var targetMonth = DateTimeUtils.firstDayOfNextMonth(now);
+      var actMonth = DateTimeUtils.firstDayOfMonth(firstDataDateTime);
+      while (actMonth.isBefore(targetMonth)) {
+        if (fillXTitles) {
+          monthlyXTitles.add("${actMonth.month}/${actMonth.year.toString().substring(2)}");
+        }
+        monthlyList.add(monthlyMap.putIfAbsent(_MonthlyItem.buildKey(actMonth), () => _MonthlyItem(actMonth.year, actMonth.month)).count);
+        actMonth = DateTimeUtils.firstDayOfNextMonth(actMonth);
+      }
+      fillXTitles = false;
+    }
+
+    List<Widget> charts = [];
+    if (monthlyXTitles.length >= 2) {
+      charts.add(
+        buildDistributionChart(
+          title: LocaleKeys.seriesDataAnalytics_tagsProportions_subTitles_monthlyDistribution.tr(),
+          xTitles: monthlyXTitles,
+          tag2counts: monthlyCounts,
+          interval: monthlyXTitles.length > 5 ? 2 : 1,
+          includeMax: true,
+          includeMin: true,
+        ),
+      );
+    }
+
+    // Weekday distribution (Mon..Sun, all labels visible)
+    final weekDayTitles = [
+      LocaleKeys.commons_date_shortWeekday_monday.tr(),
+      LocaleKeys.commons_date_shortWeekday_tuesday.tr(),
+      LocaleKeys.commons_date_shortWeekday_wednesday.tr(),
+      LocaleKeys.commons_date_shortWeekday_thursday.tr(),
+      LocaleKeys.commons_date_shortWeekday_friday.tr(),
+      LocaleKeys.commons_date_shortWeekday_saturday.tr(),
+      LocaleKeys.commons_date_shortWeekday_sunday.tr(),
+    ];
+    List<Pair<Tag, List<int>>> weekDayCounts = [];
+    for (var pair in sorted) {
+      List<int> counts = List.filled(7, 0);
+      for (var dateTime in pair.v) {
+        counts[dateTime.weekday - 1] += 1;
+      }
+      weekDayCounts.add(Pair(pair.k, counts));
+    }
+    charts.add(
+      buildDistributionChart(
+        title: LocaleKeys.seriesDataAnalytics_tagsProportions_subTitles_distributionWeekdays.tr(),
+        xTitles: weekDayTitles,
+        tag2counts: weekDayCounts,
+        interval: 1,
+        includeMin: true,
+        includeMax: true,
+      ),
+    );
+
+    // Hour distribution (every 2nd label)
+    List<String> hourTitles = List.generate(24, (index) => index.toString());
+    List<Pair<Tag, List<int>>> hourCounts = [];
+    for (var pair in sorted) {
+      List<int> counts = List.filled(24, 0);
+      for (var dateTime in pair.v) {
+        counts[dateTime.hour] += 1;
+      }
+      hourCounts.add(Pair(pair.k, counts));
+    }
+    charts.add(
+      buildDistributionChart(
+        title: LocaleKeys.seriesDataAnalytics_tagsProportions_subTitles_distributionHours.tr(),
+        xTitles: hourTitles,
+        tag2counts: hourCounts,
+        interval: 2,
+        includeMin: false,
+      ),
+    );
+
+    if (charts.isEmpty) return null;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      spacing: ThemeUtils.verticalSpacingLarge,
+      children: charts,
+    );
   }
 
   AnalysisTable _buildChartTable(BuildContext context, List<Pair<Tag, List<DateTime>>> sorted) {

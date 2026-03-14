@@ -420,7 +420,9 @@
     "tagsProportions": {
       "title": "Tag\uD83D\uDEA9 distribution",
       "subTitles": {
-        "monthlyDistribution": "Monthly distribution"
+        "monthlyDistribution": "Monthly distribution",
+        "distributionWeekdays": "Distribution by weekdays",
+        "distributionHours": "Distribution by time of day"
       },
       "label": {
         "tagProportionsInfo": "Overview of tag\uD83D\uDEA9 frequencies in total and their distribution across different periods of the past year."
