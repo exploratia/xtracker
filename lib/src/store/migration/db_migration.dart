@@ -4,7 +4,12 @@ import '../../util/logging/flutter_simple_logging.dart';
 import 'migration_v01_to_v02.dart';
 
 class DbMigration {
-  static const int latestVersion = 2;
+  /// 1: initial version
+  static const int v1 = 1;
+
+  /// 2: attribute -> tag migration
+  static const int v2 = 2;
+  static const int latestVersion = v2;
 
   static Future<void> migrate(Database db, int oldVersion, int newVersion) async {
     // started on web?
@@ -13,13 +18,13 @@ class DbMigration {
     var current = oldVersion;
 
     while (current < newVersion) {
-      if (current == 1) {
+      if (current == v1) {
         SimpleLogging.i('DB MIGRATION for version $current ...');
         await db.transaction((txn) async {
           await _migrateV1toV2(txn);
         });
         SimpleLogging.i('DB MIGRATION for version $current finished.');
-        current = 2;
+        current = v2;
       } else {
         throw Exception('No migration step for version $current');
       }

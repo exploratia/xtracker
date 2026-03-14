@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../store/migration/db_migration.dart';
 import '../../util/color_utils.dart';
 import '../../util/ex.dart';
 import '../../util/json_reader.dart';
@@ -110,20 +111,6 @@ class SeriesDef {
     return SeriesDef.fromJson(JsonReader(jsonDecode(jsonEncode(toJson()))), ignoreValidation: ignoreValidation);
   }
 
-  /// returns act/expected json version per series type (to be able to handle different parsings depending on version)
-  ///
-  /// 1: initial (all)
-  static int seriesDefVersionByType(SeriesDef seriesDef) {
-    return switch (seriesDef.seriesType) {
-      SeriesType.bloodPressure => 2,
-      SeriesType.dailyCheck => 2,
-      SeriesType.dailyLife => 2,
-      SeriesType.habit => 2,
-      SeriesType.custom => 2,
-      SeriesType.monthly => 2,
-    };
-  }
-
   Icon icon({double? size}) {
     return Icon(iconData(), color: color, size: size);
   }
@@ -169,7 +156,7 @@ class SeriesDef {
     'settings': _settings,
     // type & version - could be used for parsing
     'type': 'seriesDef',
-    'version': seriesDefVersionByType(this),
+    'version': DbMigration.latestVersion,
   };
 
   List<dynamic> toCSVHeaderList() {

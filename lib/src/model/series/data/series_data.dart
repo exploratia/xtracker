@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../../generated/locale_keys.g.dart';
 import '../../../providers/series_current_value_provider.dart';
 import '../../../providers/series_data_provider.dart';
+import '../../../store/migration/db_migration.dart';
 import '../../../util/dialogs.dart';
 import '../../../util/json_reader.dart';
 import '../../../util/logging/flutter_simple_logging.dart';
@@ -35,7 +36,7 @@ class SeriesData<T extends SeriesDataValue> {
 
   Map<String, dynamic> toJson({bool exportUuid = true}) => {
     'uuid': seriesDefUuid,
-    'version': 2,
+    'version': DbMigration.latestVersion,
     'data': [...data.map((e) => e.toJson(exportUuid: exportUuid))],
   };
 

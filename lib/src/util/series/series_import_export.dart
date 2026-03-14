@@ -14,6 +14,7 @@ import '../../model/series/series_type.dart';
 import '../../providers/series_data_provider.dart';
 import '../../providers/series_provider.dart';
 import '../../providers/series_providers.dart';
+import '../../store/migration/db_migration.dart';
 import '../../store/migration/import_migration.dart';
 import '../../widgets/administration/settings/settings_controller.dart';
 import '../../widgets/controls/layout/single_child_scroll_view_with_scrollbar.dart';
@@ -51,7 +52,7 @@ class SeriesImportExport {
       "seriesData": seriesData.toJson(exportUuid: false), // do not export value uuids - create new on import
       // type & version - could be used for parsing
       'type': 'seriesExport',
-      'version': SeriesDef.seriesDefVersionByType(seriesDef),
+      'version': DbMigration.latestVersion,
     };
     return json;
   }
@@ -62,7 +63,7 @@ class SeriesImportExport {
       "series": seriesList,
       // type & version - could be used for parsing
       'type': 'multiSeriesExport',
-      'version': 2, // 1: initial, 2: attribute -> tag
+      'version': DbMigration.latestVersion,
     };
 
     var seriesProvider = context.read<SeriesProvider>();
