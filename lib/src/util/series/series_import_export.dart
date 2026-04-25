@@ -190,18 +190,26 @@ class SeriesImportExport {
       SeriesData seriesData;
       switch (seriesDef.seriesType) {
         case SeriesType.bloodPressure:
-          seriesData = SeriesData.fromJsonBloodPressureData(jSeriesData);
+          seriesData = SeriesData.fromJsonBloodPressureData(jSeriesData, seriesDefUuid: seriesDef.uuid);
         case SeriesType.dailyCheck:
-          seriesData = SeriesData.fromJsonDailyCheckData(jSeriesData);
+          seriesData = SeriesData.fromJsonDailyCheckData(jSeriesData, seriesDefUuid: seriesDef.uuid);
         case SeriesType.dailyLife:
-          seriesData = SeriesData.fromJsonDailyLifeData(jSeriesData);
+          seriesData = SeriesData.fromJsonDailyLifeData(jSeriesData, seriesDefUuid: seriesDef.uuid);
         case SeriesType.habit:
-          seriesData = SeriesData.fromJsonHabitData(jSeriesData);
+          seriesData = SeriesData.fromJsonHabitData(jSeriesData, seriesDefUuid: seriesDef.uuid);
         case SeriesType.custom:
-          seriesData = SeriesData.fromJsonCustomData(jSeriesData);
+          seriesData = SeriesData.fromJsonCustomData(jSeriesData, seriesDefUuid: seriesDef.uuid);
         case SeriesType.monthly:
-          seriesData = SeriesData.fromJsonMonthlyData(jSeriesData);
+          seriesData = SeriesData.fromJsonMonthlyData(jSeriesData, seriesDefUuid: seriesDef.uuid);
       }
+
+      if (seriesDef.uuid != seriesData.seriesDefUuid) {
+        throw Ex(
+          "Import failed - seriesDef.uuid and seriesData.seriesDefUuid mismatch in file: $fileName",
+          localizedMessage: LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [fileName]),
+        );
+      }
+
       await seriesProviders.seriesProvider.delete(seriesDef, seriesProviders);
       await seriesProviders.seriesProvider.save(seriesDef);
       await seriesProviders.seriesDataProvider.addValues(seriesDef, seriesData.data, seriesProviders.seriesCurrentValueProvider);
