@@ -50,14 +50,6 @@ class DailyFiles {
     // No-op
   }
 
-  static Future<void> _clearTmpDir() async {
-    // No-op
-  }
-
-  static Future<void> _clearOldLogs() async {
-    // No-op
-  }
-
   static Future<dynamic> zipAllLogs() async {
     throw Ex('Zipping logs is not available on Web.');
   }
