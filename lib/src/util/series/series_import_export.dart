@@ -162,7 +162,7 @@ class SeriesImportExport {
     FilePickerResult? result;
     try {
       // https://pub.dev/packages/file_picker
-      result = await FilePicker.platform.pickFiles(
+      result = await FilePicker.pickFiles(
         allowMultiple: true,
         type: FileType.any,
         // allowedExtensions: ['json'], // not possible // https://github.com/miguelpruivo/flutter_file_picker/issues/1717

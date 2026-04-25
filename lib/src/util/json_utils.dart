@@ -10,8 +10,8 @@ class JsonUtils {
     Uint8List bytes = enc.convert(jsonEncode(json));
 
     // https://pub.dev/packages/file_picker
-    var selectedFile = await FilePicker.platform
-        .saveFile(dialogTitle: 'Please select an output file:', fileName: fileName, type: FileType.custom, allowedExtensions: ["json"], bytes: bytes);
+    var selectedFile = await FilePicker.saveFile(
+        dialogTitle: 'Please select an output file:', fileName: fileName, type: FileType.custom, allowedExtensions: ["json"], bytes: bytes);
     return selectedFile != null || kIsWeb; // in web no file select - just download
   }
 
