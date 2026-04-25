@@ -1,6 +1,8 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../../../../generated/locale_keys.g.dart';
 import '../../../../../../model/series/data/monthly/monthly_value.dart';
 import '../../../../../../model/series/data/series_data_filter.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
@@ -92,8 +94,22 @@ class SeriesDataMonthlyChartView extends StatelessWidget {
         } else {
           var subtractAdditionalHeights = 16 + ThemeUtils.verticalSpacing; // +12+ ThemeUtils.verticalSpacing; // Title + Legend
           for (var parameterChartData in chartDataPerParameterList) {
-            charts.add(
-              ChartContainer(
+            Widget chartWidget;
+            if (parameterChartData.data.isEmpty) {
+              chartWidget = Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  Align(
+                    alignment: .centerLeft,
+                    child: Text(parameterChartData.seriesItem.name + parameterChartData.seriesItem.unitInBrackets(emptyStringIfNullOrEmpty: true)),
+                  ),
+                  const Divider(),
+                  Center(child: Text(LocaleKeys.seriesData_label_noData.tr())),
+                  const Divider(),
+                ],
+              );
+            } else {
+              chartWidget = ChartContainer(
                 title: Align(
                   alignment: .centerLeft,
                   child: Text(parameterChartData.seriesItem.name + parameterChartData.seriesItem.unitInBrackets(emptyStringIfNullOrEmpty: true)),
@@ -116,8 +132,10 @@ class SeriesDataMonthlyChartView extends StatelessWidget {
                     ),
                   );
                 },
-              ),
-            );
+              );
+            }
+
+            charts.add(chartWidget);
           }
         }
 
