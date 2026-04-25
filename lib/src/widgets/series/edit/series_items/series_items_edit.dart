@@ -59,7 +59,7 @@ class SeriesItemsEdit extends StatelessWidget {
             updateSettings();
           } else {
             bool? deleteWithReferences = await Dialogs.simpleYesNoDialog(
-              LocaleKeys.seriesEdit_seriesSettings_seriesItems_actions_delete_query_deleteWithReferencingItems,
+              LocaleKeys.seriesEdit_seriesSettings_seriesItems_actions_delete_query_deleteWithReferencingItems.tr(),
               context,
             );
             if (deleteWithReferences == true) {
