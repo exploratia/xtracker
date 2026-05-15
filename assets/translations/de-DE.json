@@ -30,6 +30,7 @@
       "versionChanged": "Die App wurde auf Version {} aktualisiert."
     },
     "entries": {
+      "v2_0_0": "Neue individuelle und monatliche Messreihen mit mehreren Parametern, berechneten Werten, optionalen Tags und CSV-Import/-Export.",
       "v1_4_0": "Erste öffentliche Release-Version mit vereinheitlichter Pixelansicht.",
       "v1_3_1": "Erweiterte Auswertungen für Tageszeiten und Monatsverteilungen.",
       "v1_3_0": "Tägliches Leben als neue Messreihe, Standardansichten pro Messreihe und Hintergrundbild-Unterstützung.",
@@ -395,7 +396,7 @@
     },
     "monthly": {
       "msg": {
-        "duplicateTimestamp": "Mehrfach vorkommenden Messzeitpunkt gefunden: {}"
+        "duplicateTimestamp": "Mehrfach vorkommender Messzeitpunkt gefunden: {}"
       }
     }
   },
@@ -607,7 +608,7 @@
         "dlg": {
           "title": "Tag\uD83D\uDEA9"
         },
-        "info": "Tags\uD83D\uDEA9 der Messreihe verwalten.\nJeder Wert besitzt genau ein Tag\uD83D\uDEA9.\n\nWird ein Tag\uD83D\uDEA9 gelöscht, das bereits genutzt wird, erhält der Wert als Fallback eine Farbe die in großem Kontrast zu den restlichen Tags\uD83D\uDEA9 steht.",
+        "info": "Tags\uD83D\uDEA9 der Messreihe verwalten.\nJeder Wert besitzt genau ein Tag\uD83D\uDEA9.\n\nWird ein Tag\uD83D\uDEA9 gelöscht, das bereits genutzt wird, erhält der Wert als Fallback eine Farbe, die in großem Kontrast zu den restlichen Tags\uD83D\uDEA9 steht.",
         "preset": {
           "feelings": {
             "title": "Vorlage: Gefühle",
@@ -745,7 +746,7 @@
             }
           },
           "parameterSettingsDlg": {
-            "title": "Parameter Einstellungen"
+            "title": "Parameter-Einstellungen"
           },
           "calculationItemSettingsDlg": {
             "title": "Berechnung",
@@ -798,9 +799,9 @@
       "btn": {
         "exportSeries": "Alle Messreihen exportieren",
         "exportSingleSeries": "Messreihe exportieren",
-        "exportSingleSeriesCSV": "Messreihe exportieren (csv)",
+        "exportSingleSeriesCSV": "Messreihe exportieren (CSV)",
         "importSeries": "Messreihen importieren",
-        "importSeriesCSV": "Messreihe importieren (csv)",
+        "importSeriesCSV": "Messreihe importieren (CSV)",
         "shareSeries": "Alle Messreihen teilen",
         "shareSingleSeries": "Messreihe teilen"
       },

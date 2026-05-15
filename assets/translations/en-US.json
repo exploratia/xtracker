@@ -30,6 +30,7 @@
       "versionChanged": "The app was updated to version {}."
     },
     "entries": {
+      "v2_0_0": "New custom and monthly series with multiple parameters, calculated values, optional tags and CSV import/export.",
       "v1_4_0": "First public release version with a unified pixel view.",
       "v1_3_1": "Extended analytics for times of day and monthly distributions.",
       "v1_3_0": "Daily Life as a new series type, default views per series and wallpaper support.",
@@ -198,7 +199,7 @@
         "longNameInBrackets": " (Not a Number)"
       },
       "roundDecimals": {
-        "longNameInBrackets": " (Round to decimals)"
+        "longNameInBrackets": " (Round decimals)"
       }
     },
     "seriesType": {
@@ -708,7 +709,7 @@
         },
         "info": "Manage series parameters.\nEach parameter has a name, unit and color. You can adjust how it appears in the table and chart.\n\nYou can also create calculated parameters. They have no input but compute their value from other parameters.\n\nIf a used parameter is deleted, its values are no longer shown.",
         "validation": {
-          "emptyTags": "At least one tag\uD83D\uDEA9 required",
+          "emptyParameters": "At least one parameter required",
           "emptyParametersChart": "At least one parameter required for chart view",
           "emptyParametersTable": "At least one parameter required for table view"
         },
@@ -798,9 +799,9 @@
       "btn": {
         "exportSeries": "Export all series",
         "exportSingleSeries": "Export series",
-        "exportSingleSeriesCSV": "Export series values (csv)",
+        "exportSingleSeriesCSV": "Export series values (CSV)",
         "importSeries": "Import series",
-        "importSeriesCSV": "Import series values (csv)",
+        "importSeriesCSV": "Import series values (CSV)",
         "shareSeries": "Share all series",
         "shareSingleSeries": "Share series"
       },

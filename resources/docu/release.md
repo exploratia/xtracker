@@ -4,12 +4,6 @@
 
 Create and checkout a release branch from main when all features/bugs are included.
 
-## Check language files
-
-Upload files to AI-Chatbot...
-
-Prompt: improve_language_files
-
 ## Changelog
 
 Run automatic changelog generation:
@@ -25,7 +19,22 @@ Check the latest changelog entries.
 Adjust version in `changelog.md` and `pubspec.yaml`.  
 In `pubspec.yaml` also increase the build number (after +) by one.
 
-Commit
+## Check language files
+
+Upload files to AI-Chatbot...
+
+Prompt:
+
+````
+Füge in den translation Dateien einen neuen changelog Eintrag für die neuen Versionen hinzu.
+Prüfe die Änderungen in den Sprachdateien auf Konsistenz und ob noch etwas verbessert werden sollte.
+````
+
+## Playstore images
+
+Create images for phone and tablet with version no as prefix.
+
+## Commit
 
 ````
 update version and changelog
