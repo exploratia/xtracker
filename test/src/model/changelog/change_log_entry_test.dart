@@ -9,7 +9,7 @@ void main() {
         currentVersion: '1.4.0',
       );
 
-      expect(entries.map((entry) => entry.version), ['1.3.0', '1.3.1', '1.4.0']);
+      expect(entries.map((entry) => entry.version), ['1.4.0', '1.3.1', '1.3.0']);
     });
 
     test('returns no entries for first app start', () {

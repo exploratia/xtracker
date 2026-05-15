@@ -1,38 +1,38 @@
 class ChangeLogEntry {
   final String version;
-  final String message;
+  final String messageKey;
 
   const ChangeLogEntry({
     required this.version,
-    required this.message,
+    required this.messageKey,
   });
 }
 
 class ChangeLog {
   static const entries = [
     ChangeLogEntry(
-      version: '1.0.0',
-      message: 'Erste getestete Version mit Tages-Check, Blutdruck, Import/Export, Tabellen, Diagrammen und Pixelansicht.',
-    ),
-    ChangeLogEntry(
-      version: '1.1.0',
-      message: 'Neue Gewohnheiten, flexiblere Tabellenansichten und erste Erinnerungen fuer Backup und App-Unterstuetzung.',
-    ),
-    ChangeLogEntry(
-      version: '1.2.0',
-      message: 'Neue Analysen fuer aufgezeichnete Tage sowie Trend-Analysen fuer Blutdruck und Gewohnheiten.',
-    ),
-    ChangeLogEntry(
-      version: '1.3.0',
-      message: 'Taegliches Leben als neue Messreihe, Standardansichten pro Messreihe und Hintergrundbild-Unterstuetzung.',
+      version: '1.4.0',
+      messageKey: 'changeLog.entries.v1_4_0',
     ),
     ChangeLogEntry(
       version: '1.3.1',
-      message: 'Erweiterte Auswertungen fuer Tageszeiten und Monatsverteilungen.',
+      messageKey: 'changeLog.entries.v1_3_1',
     ),
     ChangeLogEntry(
-      version: '1.4.0',
-      message: 'Erste oeffentliche Release-Version mit vereinheitlichter Pixelansicht.',
+      version: '1.3.0',
+      messageKey: 'changeLog.entries.v1_3_0',
+    ),
+    ChangeLogEntry(
+      version: '1.2.0',
+      messageKey: 'changeLog.entries.v1_2_0',
+    ),
+    ChangeLogEntry(
+      version: '1.1.0',
+      messageKey: 'changeLog.entries.v1_1_0',
+    ),
+    ChangeLogEntry(
+      version: '1.0.0',
+      messageKey: 'changeLog.entries.v1_0_0',
     ),
   ];
 
@@ -46,11 +46,18 @@ class ChangeLog {
     final current = _ComparableVersion.tryParse(currentVersion);
     if (previous == null || current == null || previous.compareTo(current) >= 0) return [];
 
-    return entries.where((entry) {
+    final matchingEntries = entries.where((entry) {
       final entryVersion = _ComparableVersion.tryParse(entry.version);
       if (entryVersion == null) return false;
       return entryVersion.compareTo(previous) > 0 && entryVersion.compareTo(current) <= 0;
     }).toList();
+
+    matchingEntries.sort((left, right) {
+      final leftVersion = _ComparableVersion.tryParse(left.version)!;
+      final rightVersion = _ComparableVersion.tryParse(right.version)!;
+      return rightVersion.compareTo(leftVersion);
+    });
+    return matchingEntries;
   }
 }
 

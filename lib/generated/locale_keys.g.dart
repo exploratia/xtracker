@@ -16,6 +16,12 @@ abstract class  LocaleKeys {
   static const changeLog_title = 'changeLog.title';
   static const changeLog_label_version = 'changeLog.label.version';
   static const changeLog_label_versionChanged = 'changeLog.label.versionChanged';
+  static const changeLog_entries_v1_4_0 = 'changeLog.entries.v1_4_0';
+  static const changeLog_entries_v1_3_1 = 'changeLog.entries.v1_3_1';
+  static const changeLog_entries_v1_3_0 = 'changeLog.entries.v1_3_0';
+  static const changeLog_entries_v1_2_0 = 'changeLog.entries.v1_2_0';
+  static const changeLog_entries_v1_1_0 = 'changeLog.entries.v1_1_0';
+  static const changeLog_entries_v1_0_0 = 'changeLog.entries.v1_0_0';
   static const commons_nav_hideMenu = 'commons.nav.hideMenu';
   static const commons_nav_openMenu = 'commons.nav.openMenu';
   static const commons_columnProfile_name_dateMorningMiddayEvening = 'commons.columnProfile.name.dateMorningMiddayEvening';

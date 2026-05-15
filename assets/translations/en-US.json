@@ -28,6 +28,14 @@
     "label": {
       "version": "Version {}",
       "versionChanged": "The app was updated to version {}."
+    },
+    "entries": {
+      "v1_4_0": "First public release version with a unified pixel view.",
+      "v1_3_1": "Extended analytics for times of day and monthly distributions.",
+      "v1_3_0": "Daily Life as a new series type, default views per series and wallpaper support.",
+      "v1_2_0": "New analytics for recorded days and trend analysis for blood pressure and habits.",
+      "v1_1_0": "New habits, more flexible table views and first reminders for backups and app support.",
+      "v1_0_0": "First tested version with Day Check, blood pressure, import/export, tables, charts and pixel view."
     }
   },
   "commons": {

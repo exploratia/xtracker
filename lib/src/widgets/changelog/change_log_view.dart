@@ -7,6 +7,8 @@ import '../../util/app_info.dart';
 import '../../util/theme_utils.dart';
 import '../administration/settings/settings_controller.dart';
 import '../controls/appbar/gradient_app_bar.dart';
+import '../controls/card/settings_card.dart';
+import '../controls/layout/scroll_footer.dart';
 import '../controls/layout/single_child_scroll_view_with_scrollbar.dart';
 
 class ChangeLogView extends StatelessWidget {
@@ -32,45 +34,53 @@ class ChangeLogView extends StatelessWidget {
             ),
           ],
         ),
+        actions: [
+          IconButton(
+            iconSize: ThemeUtils.iconSizeScaled,
+            tooltip: LocaleKeys.commons_dialog_btn_okay.tr(),
+            onPressed: settingsController.dismissChangeLog,
+            icon: const Icon(Icons.check),
+          ),
+          const SizedBox(width: ThemeUtils.defaultPadding),
+        ],
       ),
       body: SafeArea(
         child: SingleChildScrollViewWithScrollbar(
           useScreenPadding: true,
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 700),
-            child: Card(
-              child: Padding(
-                padding: ThemeUtils.cardPaddingAll,
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  spacing: ThemeUtils.verticalSpacing,
-                  children: [
-                    Text(
-                      LocaleKeys.changeLog_title.tr(),
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    Text(
-                      LocaleKeys.changeLog_label_versionChanged.tr(
-                        args: [
-                          AppInfo.version,
-                        ],
+            child: Column(
+              spacing: ThemeUtils.screenPadding,
+              children: [
+                SettingsCard.singleEntry(
+                  title: LocaleKeys.changeLog_title.tr(),
+                  showDivider: true,
+                  content: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    spacing: ThemeUtils.verticalSpacing,
+                    children: [
+                      Text(
+                        LocaleKeys.changeLog_label_versionChanged.tr(
+                          args: [
+                            AppInfo.version,
+                          ],
+                        ),
                       ),
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
-                    const Divider(),
-                    ...entries.map((entry) => _ChangeLogEntryView(version: entry.version, message: entry.message)),
-                    const SizedBox(height: ThemeUtils.verticalSpacingSmall),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: ElevatedButton(
-                        onPressed: settingsController.dismissChangeLog,
-                        child: Text(LocaleKeys.commons_dialog_btn_okay.tr()),
+                      const SizedBox(height: ThemeUtils.verticalSpacingSmall),
+                      ...entries.map((entry) => _ChangeLogEntryView(version: entry.version, messageKey: entry.messageKey)),
+                      const SizedBox(height: ThemeUtils.verticalSpacingSmall),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: ElevatedButton(
+                          onPressed: settingsController.dismissChangeLog,
+                          child: Text(LocaleKeys.commons_dialog_btn_okay.tr()),
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
+                const ScrollFooter(),
+              ],
             ),
           ),
         ),
@@ -82,11 +92,11 @@ class ChangeLogView extends StatelessWidget {
 class _ChangeLogEntryView extends StatelessWidget {
   const _ChangeLogEntryView({
     required this.version,
-    required this.message,
+    required this.messageKey,
   });
 
   final String version;
-  final String message;
+  final String messageKey;
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +113,7 @@ class _ChangeLogEntryView extends StatelessWidget {
       ),
       subtitle: Padding(
         padding: const EdgeInsets.only(top: ThemeUtils.verticalSpacingSmall),
-        child: Text(message),
+        child: Text(messageKey.tr()),
       ),
     );
   }

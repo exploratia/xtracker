@@ -28,6 +28,14 @@
     "label": {
       "version": "Version {}",
       "versionChanged": "Die App wurde auf Version {} aktualisiert."
+    },
+    "entries": {
+      "v1_4_0": "Erste öffentliche Release-Version mit vereinheitlichter Pixelansicht.",
+      "v1_3_1": "Erweiterte Auswertungen für Tageszeiten und Monatsverteilungen.",
+      "v1_3_0": "Tägliches Leben als neue Messreihe, Standardansichten pro Messreihe und Hintergrundbild-Unterstützung.",
+      "v1_2_0": "Neue Analysen für aufgezeichnete Tage sowie Trend-Analysen für Blutdruck und Gewohnheiten.",
+      "v1_1_0": "Neue Gewohnheiten, flexiblere Tabellenansichten und erste Erinnerungen für Backup und App-Unterstützung.",
+      "v1_0_0": "Erste getestete Version mit Tages-Check, Blutdruck, Import/Export, Tabellen, Diagrammen und Pixelansicht."
     }
   },
   "commons": {
