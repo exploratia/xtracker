@@ -125,7 +125,7 @@ class _LogsScreenState extends State<LogsScreen> {
           try {
             final fileBytes = await zipAllLogs.readAsBytes();
 
-            var selectedFile = await FilePicker.platform.saveFile(
+            var selectedFile = await FilePicker.saveFile(
               dialogTitle: 'Please select an output file:',
               fileName: zipAllLogs.name,
               type: FileType.custom,

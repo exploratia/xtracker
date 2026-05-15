@@ -28,6 +28,15 @@ import '../logging/flutter_simple_logging.dart';
 import '../theme_utils.dart';
 
 class SeriesImportExport {
+  static Future<String> _readPickedFileAsString(PlatformFile file) async {
+    final bytes = file.bytes;
+    if (bytes != null) {
+      return utf8.decode(bytes);
+    }
+
+    return file.xFile.readAsString(); // utf8
+  }
+
   static Future<String> _buildSeriesExportCSV(SeriesDef seriesDef, BuildContext context) async {
     var seriesDataProvider = context.read<SeriesDataProvider>();
     await seriesDataProvider.fetchDataIfNotYetLoaded(seriesDef);
@@ -109,7 +118,7 @@ class SeriesImportExport {
       var enc = const Utf8Encoder();
       Uint8List bytes = enc.convert(json);
       // https://pub.dev/packages/file_picker
-      var selectedFile = await FilePicker.platform.saveFile(
+      var selectedFile = await FilePicker.saveFile(
         dialogTitle: 'Please select an output file:',
         fileName: 'xtracker_${_clearSeriesNameForExport(seriesDef)}_${DateTimeUtils.formatExportDateTime()}.csv',
         type: FileType.custom,
@@ -228,9 +237,10 @@ class SeriesImportExport {
     FilePickerResult? result;
     try {
       // https://pub.dev/packages/file_picker
-      result = await FilePicker.platform.pickFiles(
+      result = await FilePicker.pickFiles(
         allowMultiple: true,
         type: FileType.any,
+        withData: kIsWeb,
         // allowedExtensions: ['json'], // not possible // https://github.com/miguelpruivo/flutter_file_picker/issues/1717
       );
     } catch (ex, st) {
@@ -252,11 +262,11 @@ class SeriesImportExport {
 
     final overlay = ProgressOverlay.createAndShowProgressOverlay(context);
     int successfulImports = 0;
-    int numSelectedFiles = result.xFiles.length;
+    final files = result.files;
+    int numSelectedFiles = files.length;
 
     List<String> failures = [];
-
-    for (var file in result.xFiles) {
+    for (var file in files) {
       try {
         if (!file.name.endsWith(".json")) {
           throw Ex(
@@ -264,13 +274,12 @@ class SeriesImportExport {
             localizedMessage: LocaleKeys.seriesManagement_importExport_alert_unexpectedFile.tr(args: [file.name]),
           );
         }
-
         SimpleLogging.i("importing '${file.name}' ...");
-        var fileContent = await file.readAsString(); // utf8
+        var fileContent = await _readPickedFileAsString(file);
         var decoded = jsonDecode(fileContent);
 
         // migration
-        decoded = ImportMigration.migrate(decoded, file);
+        decoded = ImportMigration.migrate(decoded, file.name);
 
         var json = JsonReader(decoded);
 
@@ -356,9 +365,10 @@ class SeriesImportExport {
     FilePickerResult? result;
     try {
       // https://pub.dev/packages/file_picker
-      result = await FilePicker.platform.pickFiles(
+      result = await FilePicker.pickFiles(
         allowMultiple: false,
         type: FileType.any,
+        withData: kIsWeb,
         // allowedExtensions: ['json'], // not possible // https://github.com/miguelpruivo/flutter_file_picker/issues/1717
       );
     } catch (ex, st) {
@@ -380,15 +390,16 @@ class SeriesImportExport {
 
     final overlay = ProgressOverlay.createAndShowProgressOverlay(context);
     int successfulImports = 0;
-    int numSelectedFiles = result.xFiles.length;
+    final files = result.files;
+    int numSelectedFiles = files.length;
 
     List<String> failures = [];
 
-    if (result.xFiles.length != 1) {
+    if (files.length != 1) {
       throw Ex("Invalid amount of selected files");
     }
 
-    for (var file in result.xFiles) {
+    for (var file in files) {
       try {
         if (!file.name.endsWith(".csv")) {
           throw Ex(
@@ -399,7 +410,7 @@ class SeriesImportExport {
 
         SimpleLogging.i("importing '${file.name}' for series '${seriesDef.name}' ...");
 
-        var fileContent = await file.readAsString(); // utf8
+        var fileContent = await _readPickedFileAsString(file);
 
         final csv = const CsvToListConverter().convert(fileContent);
         // remove empty lines
