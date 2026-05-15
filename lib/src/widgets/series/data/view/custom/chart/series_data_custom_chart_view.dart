@@ -122,6 +122,7 @@ class SeriesDataCustomChartView extends StatelessWidget {
                 spacing: ThemeUtils.verticalSpacingLarge,
                 children: charts,
               ),
+              const SizedBox(height: ThemeUtils.verticalSpacingSmall),
               seriesDataViewOverlays.buildBottomSpacer(),
             ],
           ),
