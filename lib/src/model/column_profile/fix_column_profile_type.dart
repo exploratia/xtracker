@@ -9,7 +9,8 @@ enum FixColumnProfileType {
   dateDayRange("Date|DayRange"),
   dateHourlyOverview("Date|HourlyOverview"),
   dateWeekdays("Date|...Weekdays"),
-  dateMonthDays("Date|...MonthDays");
+  dateMonthDays("Date|...MonthDays")
+  ;
 
   final String typeName;
 

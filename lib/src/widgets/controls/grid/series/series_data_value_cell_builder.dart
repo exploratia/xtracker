@@ -51,10 +51,11 @@ class SeriesDataValueCellBuilder<T extends SeriesDataValue> {
           borderRadius: ThemeUtils.borderRadiusCircularSmall,
           onTap: () => SeriesData.showSeriesDataInputDlg(context, gridItem.seriesDef, value: gridItem.value),
           child: Container(
-              decoration: BoxDecoration(
-                gradient: RadialGradient(radius: 0.8, colors: [ThemeUtils.primaryColor.withAlpha(128), ThemeUtils.primaryColor.withAlpha(0)]),
-              ),
-              child: child),
+            decoration: BoxDecoration(
+              gradient: RadialGradient(radius: 0.8, colors: [ThemeUtils.primaryColor.withAlpha(128), ThemeUtils.primaryColor.withAlpha(0)]),
+            ),
+            child: child,
+          ),
         );
       }
     }

@@ -91,13 +91,14 @@ class _DailyCheckBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-        iconSize: ThemeUtils.iconSizeScaled,
-        tooltip: LocaleKeys.seriesDefRenderer_action_addValue_tooltip.tr(),
-        onPressed: () {
-          var seriesCurrentValueProvider = context.read<SeriesCurrentValueProvider>();
-          context.read<SeriesDataProvider>().addValue(seriesDef, DailyCheckValue(const Uuid().v4(), DateTime.now()), seriesCurrentValueProvider);
-        },
-        icon: const Icon(Icons.check_outlined));
+      iconSize: ThemeUtils.iconSizeScaled,
+      tooltip: LocaleKeys.seriesDefRenderer_action_addValue_tooltip.tr(),
+      onPressed: () {
+        var seriesCurrentValueProvider = context.read<SeriesCurrentValueProvider>();
+        context.read<SeriesDataProvider>().addValue(seriesDef, DailyCheckValue(const Uuid().v4(), DateTime.now()), seriesCurrentValueProvider);
+      },
+      icon: const Icon(Icons.check_outlined),
+    );
   }
 }
 
@@ -111,12 +112,13 @@ class _HabitBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return IconButton(
-        iconSize: ThemeUtils.iconSizeScaled,
-        tooltip: LocaleKeys.seriesDefRenderer_action_addValue_tooltip.tr(),
-        onPressed: () {
-          var seriesCurrentValueProvider = context.read<SeriesCurrentValueProvider>();
-          context.read<SeriesDataProvider>().addValue(seriesDef, HabitValue(const Uuid().v4(), DateTime.now()), seriesCurrentValueProvider);
-        },
-        icon: Icon(seriesDef.iconData()));
+      iconSize: ThemeUtils.iconSizeScaled,
+      tooltip: LocaleKeys.seriesDefRenderer_action_addValue_tooltip.tr(),
+      onPressed: () {
+        var seriesCurrentValueProvider = context.read<SeriesCurrentValueProvider>();
+        context.read<SeriesDataProvider>().addValue(seriesDef, HabitValue(const Uuid().v4(), DateTime.now()), seriesCurrentValueProvider);
+      },
+      icon: Icon(seriesDef.iconData()),
+    );
   }
 }

@@ -14,7 +14,7 @@ class AnalyticsSettingsCard extends StatelessWidget {
   });
 
   AnalyticsSettingsCard.singleEntry({super.key, required String title, Widget? infoDlgContent, required Widget content})
-      : analyticsSettingsCardEntries = [AnalyticsSettingsCardEntry(title: title, infoDlgContent: infoDlgContent, content: content)];
+    : analyticsSettingsCardEntries = [AnalyticsSettingsCardEntry(title: title, infoDlgContent: infoDlgContent, content: content)];
 
   final List<AnalyticsSettingsCardEntry> analyticsSettingsCardEntries;
 
@@ -24,21 +24,22 @@ class AnalyticsSettingsCard extends StatelessWidget {
       settingCardEntries: analyticsSettingsCardEntries
           .map(
             (e) => SettingsCardEntry(
-                title: Row(
-                  spacing: ThemeUtils.horizontalSpacing,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    OverflowText(
-                      e.title,
-                      style: Theme.of(context).textTheme.titleLarge,
-                      expanded: false,
-                      flexible: true,
-                    ),
-                    if (e.infoDlgContent != null) InfoBtn(title: e.title, content: e.infoDlgContent!),
-                  ],
-                ),
-                content: e.content),
+              title: Row(
+                spacing: ThemeUtils.horizontalSpacing,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  OverflowText(
+                    e.title,
+                    style: Theme.of(context).textTheme.titleLarge,
+                    expanded: false,
+                    flexible: true,
+                  ),
+                  if (e.infoDlgContent != null) InfoBtn(title: e.title, content: e.infoDlgContent!),
+                ],
+              ),
+              content: e.content,
+            ),
           )
           .toList(),
     );

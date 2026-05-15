@@ -173,7 +173,7 @@ class IconMap {
     return "help_outline";
   }
 
-// static IconData _materialIconData(int codePoint) {
-//   return IconData(codePoint, fontFamily: 'MaterialIcons');
-// }
+  // static IconData _materialIconData(int codePoint) {
+  //   return IconData(codePoint, fontFamily: 'MaterialIcons');
+  // }
 }

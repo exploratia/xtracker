@@ -18,8 +18,15 @@ class CustomPaintUtils {
     canvas.drawPath(path, paint);
   }
 
-  static void paintGradientFilledRect(Canvas canvas, Rect rect, double rectRadius, List<Color> colors, AlignmentGeometry begin, AlignmentGeometry end,
-      {List<double>? stops}) {
+  static void paintGradientFilledRect(
+    Canvas canvas,
+    Rect rect,
+    double rectRadius,
+    List<Color> colors,
+    AlignmentGeometry begin,
+    AlignmentGeometry end, {
+    List<double>? stops,
+  }) {
     final LinearGradient gradient = LinearGradient(
       colors: colors,
       stops: stops,

@@ -10,8 +10,13 @@ import 'pixels/series_data_habit_pixels_view.dart';
 import 'table/series_data_habit_table_view.dart';
 
 class SeriesDataHabitView extends StatelessWidget {
-  const SeriesDataHabitView(
-      {super.key, required this.seriesViewMetaData, required this.seriesData, required this.seriesDataFilter, required this.seriesDataViewOverlays});
+  const SeriesDataHabitView({
+    super.key,
+    required this.seriesViewMetaData,
+    required this.seriesData,
+    required this.seriesDataFilter,
+    required this.seriesDataViewOverlays,
+  });
 
   final SeriesViewMetaData seriesViewMetaData;
   final List<HabitValue> seriesData;

@@ -29,7 +29,7 @@ class _LogViewState extends State<LogView> {
     return SizedBox(
       width: double.infinity,
       child: FutureBuilderWithProgressIndicator(
-        future: DailyFiles.readLogLines(widget.logFileName,  !MediaQueryUtils.of(context).isTablet),
+        future: DailyFiles.readLogLines(widget.logFileName, !MediaQueryUtils.of(context).isTablet),
         errorBuilder: (error) => 'Log file "${widget.logFileName}" not found!',
         widgetBuilder: (logFileContent, _) {
           return _LogLines(
@@ -58,38 +58,39 @@ class _LogLines extends StatelessWidget {
         refreshHandler();
       },
       child: ListView.builder(
-          itemBuilder: (context, index) {
-            var logLineText = logLines[index];
-            var logLine = _LogLine(
-              logLine: logLineText,
-              key: ValueKey(logLineText.length > 28 ? logLineText.substring(0, 27) : logLineText),
-            );
+        itemBuilder: (context, index) {
+          var logLineText = logLines[index];
+          var logLine = _LogLine(
+            logLine: logLineText,
+            key: ValueKey(logLineText.length > 28 ? logLineText.substring(0, 27) : logLineText),
+          );
 
-            if (index == 0) {
-              return Padding(
-                padding: const EdgeInsets.only(left: outerPad, right: outerPad, top: outerPad, bottom: linePad),
-                child: logLine,
-              );
-            }
-            if (index == logLines.length - 1) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left: outerPad, right: outerPad, top: linePad),
-                    child: logLine,
-                  ),
-                  const Center(child: ScrollFooter()),
-                ],
-              );
-            }
+          if (index == 0) {
             return Padding(
-              padding: const EdgeInsets.symmetric(vertical: linePad, horizontal: outerPad),
+              padding: const EdgeInsets.only(left: outerPad, right: outerPad, top: outerPad, bottom: linePad),
               child: logLine,
             );
-          },
-          itemCount: logLines.length),
+          }
+          if (index == logLines.length - 1) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: outerPad, right: outerPad, top: linePad),
+                  child: logLine,
+                ),
+                const Center(child: ScrollFooter()),
+              ],
+            );
+          }
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: linePad, horizontal: outerPad),
+            child: logLine,
+          );
+        },
+        itemCount: logLines.length,
+      ),
     );
   }
 }

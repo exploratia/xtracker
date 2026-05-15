@@ -74,19 +74,21 @@ class _LiveWallpaperStarrySkyState extends State<LiveWallpaperStarrySky> {
   @override
   Widget build(BuildContext context) {
     // LayoutBuilder gibt die verfügbare Größe zuverlässig an
-    return LayoutBuilder(builder: (context, constraints) {
-      final size = Size(constraints.maxWidth, constraints.maxHeight);
-      _generateIfNeeded(size);
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final size = Size(constraints.maxWidth, constraints.maxHeight);
+        _generateIfNeeded(size);
 
-      return CustomPaint(
-        size: size,
-        painter: _StarPainter(
-          stars: _stars,
-          starColor: widget.starColor,
-        ),
-        child: widget.child,
-      );
-    });
+        return CustomPaint(
+          size: size,
+          painter: _StarPainter(
+            stars: _stars,
+            starColor: widget.starColor,
+          ),
+          child: widget.child,
+        );
+      },
+    );
   }
 }
 

@@ -18,7 +18,7 @@ class SeriesDataDailyCheckTableView extends StatelessWidget {
   static final FixColumnProfile standardColumnProfile = FixColumnProfile.columnProfileDateMorningMiddayEvening;
   static final List<FixColumnProfile> possibleColumnProfiles = [
     FixColumnProfile.columnProfileDateMorningMiddayEvening,
-    FixColumnProfile.columnProfileDateTimeValue
+    FixColumnProfile.columnProfileDateTimeValue,
   ];
 
   final List<DailyCheckValue> seriesData;
@@ -26,8 +26,13 @@ class SeriesDataDailyCheckTableView extends StatelessWidget {
   final SeriesDataFilter seriesDataFilter;
   final SeriesDataViewOverlays seriesDataViewOverlays;
 
-  const SeriesDataDailyCheckTableView(
-      {super.key, required this.seriesViewMetaData, required this.seriesData, required this.seriesDataFilter, required this.seriesDataViewOverlays});
+  const SeriesDataDailyCheckTableView({
+    super.key,
+    required this.seriesViewMetaData,
+    required this.seriesData,
+    required this.seriesDataFilter,
+    required this.seriesDataViewOverlays,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -42,8 +47,8 @@ class SeriesDataDailyCheckTableView extends StatelessWidget {
     }
 
     int lineCount = 0;
-    GridCell Function(BuildContext context, int yIndex, int xIndex, Size cellSize) gridCellBuilder =
-        (context, yIndex, xIndex, cellSize) => GridCell(child: Container());
+    GridCell Function(BuildContext context, int yIndex, int xIndex, Size cellSize) gridCellBuilder = (context, yIndex, xIndex, cellSize) =>
+        GridCell(child: Container());
 
     if (FixColumnProfile.isMultiValueDayProfile(columnProfile)) {
       List<MultiValueDayRowItem<DailyCheckValue>> data = MultiValueDayRowItem.buildTableDataProvider(seriesViewMetaData, filteredSeriesData);

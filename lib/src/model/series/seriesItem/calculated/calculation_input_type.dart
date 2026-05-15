@@ -9,9 +9,9 @@ enum CalculationInputType {
   ;
 
   factory CalculationInputType.byName(String name) => CalculationInputType.values.firstWhere(
-        (element) => element.name == name,
-        orElse: () => throw Ex("'$name' is no valid calculation input type!"),
-      );
+    (element) => element.name == name,
+    orElse: () => throw Ex("'$name' is no valid calculation input type!"),
+  );
 
   static String toDisplayString(CalculationInputType inputType) {
     return switch (inputType) {

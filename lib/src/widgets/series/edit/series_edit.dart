@@ -90,14 +90,19 @@ class _SeriesTypeSelector extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: ThemeUtils.verticalSpacingSmall,
             children: [
-              ...seriesTypes.map((st) => Row(mainAxisSize: MainAxisSize.min, children: [
+              ...seriesTypes.map(
+                (st) => Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
                     _SeriesTypeInfoBtn(st),
                     ElevatedButton.icon(
                       icon: Icon(st.iconData, size: ThemeUtils.iconSizeScaled),
                       label: Text(st.displayName),
                       onPressed: () => createSeriesDef(st),
-                    )
-                  ])),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
         ],

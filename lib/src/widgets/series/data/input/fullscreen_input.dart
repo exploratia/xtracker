@@ -68,7 +68,7 @@ class FullscreenInput extends StatelessWidget {
           ),
         ),
         const Divider(height: 1),
-        ...formChildren
+        ...formChildren,
       ],
     );
 
@@ -127,7 +127,7 @@ class FullscreenInput extends StatelessWidget {
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

@@ -144,10 +144,12 @@ class _SeriesDataAnalyticsHabitTrendViewState extends State<SeriesDataAnalyticsH
               );
             }
 
-            rows.add(TableUtils.tableRow([
-              keyWidget,
-              valueWidget,
-            ]));
+            rows.add(
+              TableUtils.tableRow([
+                keyWidget,
+                valueWidget,
+              ]),
+            );
           }
 
           return TrendTable(rows: rows);

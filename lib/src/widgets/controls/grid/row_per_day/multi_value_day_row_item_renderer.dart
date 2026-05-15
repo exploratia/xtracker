@@ -46,7 +46,9 @@ class MultiValueDayRowItemRenderer<T extends SeriesDataValue> extends StatelessW
     } else {
       // day range
       var rangeMinutesOfDay = Range(
-          DateTimeUtils.minutesOfDay(multiValueDayRowItem.minDateTime) / (24 * 60), DateTimeUtils.minutesOfDay(multiValueDayRowItem.maxDateTime) / (24 * 60));
+        DateTimeUtils.minutesOfDay(multiValueDayRowItem.minDateTime) / (24 * 60),
+        DateTimeUtils.minutesOfDay(multiValueDayRowItem.maxDateTime) / (24 * 60),
+      );
       result = Center(
         child: SizedBox(
           height: 8,
@@ -88,7 +90,10 @@ class MultiValueDayRowItemRenderer<T extends SeriesDataValue> extends StatelessW
           onTab = () async {
             var selected = await Dialogs.showSelectionDialog(
               context: context,
-              title: Align(alignment: AlignmentGeometry.topLeft, child: Icon(Icons.edit_outlined, size: ThemeUtils.iconSizeScaled)),
+              title: Align(
+                alignment: AlignmentGeometry.topLeft,
+                child: Icon(Icons.edit_outlined, size: ThemeUtils.iconSizeScaled),
+              ),
               values: multiValueDayRowItem.values,
               itemBuilder: (context, value) => SeriesValueRenderer(value, seriesDef: seriesDef),
             );
@@ -106,7 +111,9 @@ class MultiValueDayRowItemRenderer<T extends SeriesDataValue> extends StatelessW
       }
 
       result = LazyTooltip(
-          child: result, tooltipBuilder: (_) => SeriesDataTooltipContent.buildSeriesValueTooltipWidget(multiValueDayRowItem.values, tooltipValueBuilder));
+        child: result,
+        tooltipBuilder: (_) => SeriesDataTooltipContent.buildSeriesValueTooltipWidget(multiValueDayRowItem.values, tooltipValueBuilder),
+      );
     }
 
     return result;

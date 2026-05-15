@@ -26,15 +26,16 @@ class AppDrawerHeader extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           IconButton(
-              iconSize: ThemeUtils.iconSizeScaled,
-              tooltip: LocaleKeys.commons_nav_hideMenu.tr(),
-              onPressed: () {
-                NavigationUtils.closeDrawerIfOpen(context);
-              },
-              icon: Icon(
-                Icons.arrow_left,
-                color: themeData.colorScheme.onPrimary,
-              )),
+            iconSize: ThemeUtils.iconSizeScaled,
+            tooltip: LocaleKeys.commons_nav_hideMenu.tr(),
+            onPressed: () {
+              NavigationUtils.closeDrawerIfOpen(context);
+            },
+            icon: Icon(
+              Icons.arrow_left,
+              color: themeData.colorScheme.onPrimary,
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.only(right: 20),
             child: SizedBox(

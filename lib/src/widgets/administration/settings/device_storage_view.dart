@@ -20,22 +20,23 @@ class DeviceStorageView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         ListenableBuilder(
-            listenable: controller,
-            builder: (BuildContext context, Widget? child) {
-              return FutureBuilderWithProgressIndicator(
-                future: DeviceStorage.readAll(),
-                errorBuilder: (error) => 'Failed to storage data!',
-                widgetBuilder: (storageData, BuildContext ctx) {
-                  List<TableRow> rows = TableUtils.buildKeyValueTableRows(context);
+          listenable: controller,
+          builder: (BuildContext context, Widget? child) {
+            return FutureBuilderWithProgressIndicator(
+              future: DeviceStorage.readAll(),
+              errorBuilder: (error) => 'Failed to storage data!',
+              widgetBuilder: (storageData, BuildContext ctx) {
+                List<TableRow> rows = TableUtils.buildKeyValueTableRows(context);
 
-                  final keys = storageData.keys.toList();
-                  keys.sort();
-                  for (var key in keys) {
-                    var value = storageData[key];
-                    rows.add(TableUtils.tableRow([key, value ?? '-']));
-                  }
+                final keys = storageData.keys.toList();
+                keys.sort();
+                for (var key in keys) {
+                  var value = storageData[key];
+                  rows.add(TableUtils.tableRow([key, value ?? '-']));
+                }
 
-                  return LayoutBuilder(builder: (BuildContext _, BoxConstraints constraints) {
+                return LayoutBuilder(
+                  builder: (BuildContext _, BoxConstraints constraints) {
                     return Table(
                       // https://api.flutter.dev/flutter/widgets/Table-class.html
                       columnWidths: <int, TableColumnWidth>{
@@ -48,10 +49,12 @@ class DeviceStorageView extends StatelessWidget {
                       defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                       children: rows,
                     );
-                  });
-                },
-              );
-            }),
+                  },
+                );
+              },
+            );
+          },
+        ),
         const Divider(),
         Wrap(
           alignment: WrapAlignment.spaceBetween,

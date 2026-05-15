@@ -210,13 +210,13 @@ class _SeriesItemCalculationState extends State<SeriesItemCalculation> {
 
     if (moveUp) {
       var replacements = [
-        ...[...calculationItems.getRange(itemIdx - 1, itemIdx + 1)].reversed
+        ...[...calculationItems.getRange(itemIdx - 1, itemIdx + 1)].reversed,
       ];
       calculationItems.replaceRange(itemIdx - 1, itemIdx + 1, replacements);
       _setSelectedIndexPos(indexPos.replaceLast(itemIdx - 1));
     } else {
       var replacements = [
-        ...[...calculationItems.getRange(itemIdx, itemIdx + 2)].reversed
+        ...[...calculationItems.getRange(itemIdx, itemIdx + 2)].reversed,
       ];
       calculationItems.replaceRange(itemIdx, itemIdx + 2, replacements);
       _setSelectedIndexPos(indexPos.replaceLast(itemIdx + 1));
@@ -263,30 +263,34 @@ class _SeriesItemCalculationState extends State<SeriesItemCalculation> {
     if (calcEl is CalculationContainer || calcEl is CalculationItemSeriesValue) {
       List<CalculationItem> calculationItems;
       if (calcEl is CalculationContainer) {
-        calcWidgets.add(_CalculationInputRow(
-          indexedPos: indexedPos,
-          selected: indexedPos == _selectedIndexPos,
-          numItems: 0,
-          actionCallback: (_IndexPos indexPos, _Action action) => _actionCallback(indexPos, action),
-          child: CalculationSeriesItemRenderer(
-            seriesItem: widget.availableSeriesItems.firstWhere((e) => e.siid == calcEl.sourceSiid),
-            usePreviousInput: calcEl.usePreviousInput,
+        calcWidgets.add(
+          _CalculationInputRow(
+            indexedPos: indexedPos,
+            selected: indexedPos == _selectedIndexPos,
+            numItems: 0,
+            actionCallback: (_IndexPos indexPos, _Action action) => _actionCallback(indexPos, action),
+            child: CalculationSeriesItemRenderer(
+              seriesItem: widget.availableSeriesItems.firstWhere((e) => e.siid == calcEl.sourceSiid),
+              usePreviousInput: calcEl.usePreviousInput,
+            ),
           ),
-        ));
+        );
         calculationItems = calcEl.calculationItems;
       } else if (calcEl is CalculationItemSeriesValue) {
         var calcContainer = calcEl.calculationContainer;
-        calcWidgets.add(_CalculationInputRow(
-          indexedPos: indexedPos,
-          selected: indexedPos == _selectedIndexPos,
-          numItems: numSiblings,
-          actionCallback: (_IndexPos indexPos, _Action action) => _actionCallback(indexPos, action),
-          operator: calcEl.operator,
-          child: CalculationSeriesItemRenderer(
-            seriesItem: widget.availableSeriesItems.firstWhere((e) => e.siid == calcContainer.sourceSiid),
-            usePreviousInput: calcContainer.usePreviousInput,
+        calcWidgets.add(
+          _CalculationInputRow(
+            indexedPos: indexedPos,
+            selected: indexedPos == _selectedIndexPos,
+            numItems: numSiblings,
+            actionCallback: (_IndexPos indexPos, _Action action) => _actionCallback(indexPos, action),
+            operator: calcEl.operator,
+            child: CalculationSeriesItemRenderer(
+              seriesItem: widget.availableSeriesItems.firstWhere((e) => e.siid == calcContainer.sourceSiid),
+              usePreviousInput: calcContainer.usePreviousInput,
+            ),
           ),
-        ));
+        );
         calculationItems = calcEl.calculationContainer.calculationItems;
       } else {
         // must not happen
@@ -299,30 +303,34 @@ class _SeriesItemCalculationState extends State<SeriesItemCalculation> {
         _buildCalcWidgets(calculationItems[i], indexedPos.append(i), calculationItems.length, calcWidgets);
       }
 
-      calcWidgets.add(_CalculationInputRow(
-        indexedPos: indexedPos,
-        numItems: 0,
-        isAddBtn: true,
-        child: IconButton(
-          tooltip: LocaleKeys.seriesEdit_seriesSettings_seriesItems_calculation_btn_addCalculation_tooltip.tr(),
-          onPressed: () => _actionCallback(indexedPos, _Action.add),
-          color: ThemeUtils.primaryColor,
-          icon: Icon(
-            Icons.add_box_outlined,
-            size: ThemeUtils.iconSizeScaled,
+      calcWidgets.add(
+        _CalculationInputRow(
+          indexedPos: indexedPos,
+          numItems: 0,
+          isAddBtn: true,
+          child: IconButton(
+            tooltip: LocaleKeys.seriesEdit_seriesSettings_seriesItems_calculation_btn_addCalculation_tooltip.tr(),
+            onPressed: () => _actionCallback(indexedPos, _Action.add),
+            color: ThemeUtils.primaryColor,
+            icon: Icon(
+              Icons.add_box_outlined,
+              size: ThemeUtils.iconSizeScaled,
+            ),
           ),
         ),
-      ));
+      );
     } else if (calcEl is CalculationItem) {
       if (calcEl is CalculationItemNumeric) {
-        calcWidgets.add(_CalculationInputRow(
-          indexedPos: indexedPos,
-          selected: indexedPos == _selectedIndexPos,
-          numItems: numSiblings,
-          actionCallback: (_IndexPos indexPos, _Action action) => _actionCallback(indexPos, action),
-          operator: calcEl.operator,
-          child: Text(calcEl.value.toString()),
-        ));
+        calcWidgets.add(
+          _CalculationInputRow(
+            indexedPos: indexedPos,
+            selected: indexedPos == _selectedIndexPos,
+            numItems: numSiblings,
+            actionCallback: (_IndexPos indexPos, _Action action) => _actionCallback(indexPos, action),
+            operator: calcEl.operator,
+            child: Text(calcEl.value.toString()),
+          ),
+        );
       } else {
         SimpleLogging.w("Unexpected calculation item '$calcEl' in calculation items!");
       }
@@ -365,24 +373,28 @@ class _CalculationInputRow extends StatelessWidget {
   Widget build(BuildContext context) {
     List<Widget> lines = [];
     for (var i = 0; i < indexedPos.length; ++i) {
-      lines.add(Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4.0),
-        child: Container(
-          width: 2,
-          color: Colors.grey,
-        ),
-      ));
-    }
-    if (isAddBtn) {
-      lines.add(Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 4.0),
-        child: Container(
-          width: 2,
-          decoration: BoxDecoration(
-            gradient: ChartUtils.createTopToBottomGradient([Colors.grey, ThemeUtils.primaryColor.withAlpha(0)]),
+      lines.add(
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+          child: Container(
+            width: 2,
+            color: Colors.grey,
           ),
         ),
-      ));
+      );
+    }
+    if (isAddBtn) {
+      lines.add(
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 4.0),
+          child: Container(
+            width: 2,
+            decoration: BoxDecoration(
+              gradient: ChartUtils.createTopToBottomGradient([Colors.grey, ThemeUtils.primaryColor.withAlpha(0)]),
+            ),
+          ),
+        ),
+      );
     }
 
     Widget? actions;
@@ -440,11 +452,12 @@ class _CalculationInputRow extends StatelessWidget {
           ...lines,
           if (operator != null) Text(operator!.displayName),
           Expanded(
-              child: Row(
-            children: [
-              child,
-            ],
-          )),
+            child: Row(
+              children: [
+                child,
+              ],
+            ),
+          ),
           if (actionCallback != null)
             IconButton(
               tooltip: selected

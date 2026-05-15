@@ -112,7 +112,7 @@ class DailyFiles {
     _timerSet = true;
     Timer(
       const Duration(milliseconds: 1000),
-          () async {
+      () async {
         final messages = [..._msgQueue];
         _msgQueue.clear();
         _timerSet = false;

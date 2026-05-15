@@ -48,9 +48,7 @@ class _LogsViewState extends State<LogsView> {
                   return Padding(
                     padding: const EdgeInsets.all(16.0),
                     child: Text(
-                      available
-                          ? 'No log files found yet.'
-                          : 'File logging is not available on this platform.',
+                      available ? 'No log files found yet.' : 'File logging is not available on this platform.',
                       textAlign: TextAlign.center,
                     ),
                   );

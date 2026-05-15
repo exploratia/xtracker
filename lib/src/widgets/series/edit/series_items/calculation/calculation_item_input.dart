@@ -213,7 +213,7 @@ class _CalculationItemInputState extends State<CalculationItemInput> {
                       ),
                     );
                   }).toList(),
-                )
+                ),
               ]),
               TableUtils.tableRow([
                 Text(LocaleKeys.seriesEdit_seriesSettings_seriesItems_calculation_calculationItemSettingsDlg_label_inputType.tr()),

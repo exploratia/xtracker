@@ -20,8 +20,13 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
   final SeriesDataFilter seriesDataFilter;
   final SeriesDataViewOverlays seriesDataViewOverlays;
 
-  const SeriesDataBloodPressureTableView(
-      {super.key, required this.seriesViewMetaData, required this.seriesData, required this.seriesDataFilter, required this.seriesDataViewOverlays});
+  const SeriesDataBloodPressureTableView({
+    super.key,
+    required this.seriesViewMetaData,
+    required this.seriesData,
+    required this.seriesDataFilter,
+    required this.seriesDataViewOverlays,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +41,8 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
     }
 
     int lineCount = 0;
-    GridCell Function(BuildContext context, int yIndex, int xIndex, Size cellSize) gridCellBuilder =
-        (context, yIndex, xIndex, cellSize) => GridCell(child: Container());
+    GridCell Function(BuildContext context, int yIndex, int xIndex, Size cellSize) gridCellBuilder = (context, yIndex, xIndex, cellSize) =>
+        GridCell(child: Container());
 
     if (FixColumnProfile.isMultiValueDayProfile(columnProfile)) {
       List<MultiValueDayRowItem<BloodPressureValue>> data = MultiValueDayRowItem.buildTableDataProvider(seriesViewMetaData, filteredSeriesData);

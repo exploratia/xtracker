@@ -29,10 +29,11 @@ class Dialogs {
         content: contentWidget,
         actions: [
           TextButton(
-              onPressed: () {
-                Navigator.of(ctx).pop();
-              },
-              child: Text(buttonText ?? LocaleKeys.commons_dialog_btn_okay.tr()))
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+            child: Text(buttonText ?? LocaleKeys.commons_dialog_btn_okay.tr()),
+          ),
         ],
       ),
     );
@@ -137,11 +138,11 @@ class Dialogs {
     Widget c = (content is Widget)
         ? content
         : (content is String)
-            ? Text(
-                content,
-                style: TextStyle(color: color),
-              )
-            : const Text('invalid content given');
+        ? Text(
+            content,
+            style: TextStyle(color: color),
+          )
+        : const Text('invalid content given');
     var scaffoldMessengerState = ScaffoldMessenger.of(context);
     scaffoldMessengerState.hideCurrentSnackBar();
     scaffoldMessengerState.showSnackBar(

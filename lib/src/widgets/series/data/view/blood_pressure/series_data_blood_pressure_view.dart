@@ -10,8 +10,13 @@ import 'pixels/series_data_blood_pressure_pixels_view.dart';
 import 'table/series_data_blood_pressure_table_view.dart';
 
 class SeriesDataBloodPressureView extends StatelessWidget {
-  const SeriesDataBloodPressureView(
-      {super.key, required this.seriesViewMetaData, required this.seriesData, required this.seriesDataFilter, required this.seriesDataViewOverlays});
+  const SeriesDataBloodPressureView({
+    super.key,
+    required this.seriesViewMetaData,
+    required this.seriesData,
+    required this.seriesDataFilter,
+    required this.seriesDataViewOverlays,
+  });
 
   final SeriesViewMetaData seriesViewMetaData;
   final List<BloodPressureValue> seriesData;

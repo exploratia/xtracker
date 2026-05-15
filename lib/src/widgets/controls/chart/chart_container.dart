@@ -137,7 +137,7 @@ class _TooltipState extends State<_Tooltip> {
       var xPos = _tooltipPosition!.dx;
       final isRightSide = xPos > widget.stackWidth / 2;
       xPos += longTextCorrectValue * (isRightSide ? 1 : -1);
-      
+
       return Positioned(
         left: isRightSide ? null : math.max(0, xPos),
         right: isRightSide ? math.max(0, widget.stackWidth - xPos - 80) : null,

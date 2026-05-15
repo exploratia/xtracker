@@ -10,8 +10,13 @@ import 'pixels/series_data_daily_check_pixels_view.dart';
 import 'table/series_data_daily_check_table_view.dart';
 
 class SeriesDataDailyCheckView extends StatelessWidget {
-  const SeriesDataDailyCheckView(
-      {super.key, required this.seriesViewMetaData, required this.seriesData, required this.seriesDataFilter, required this.seriesDataViewOverlays});
+  const SeriesDataDailyCheckView({
+    super.key,
+    required this.seriesViewMetaData,
+    required this.seriesData,
+    required this.seriesDataFilter,
+    required this.seriesDataViewOverlays,
+  });
 
   final SeriesViewMetaData seriesViewMetaData;
   final List<DailyCheckValue> seriesData;

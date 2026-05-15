@@ -31,10 +31,10 @@ class TwoDimensionalGridView extends TwoDimensionalScrollView {
     required ScrollController horizontalController,
     this.bottomScrollExtend = 0,
   }) : super(
-          delegate: delegate,
-          verticalDetails: ScrollableDetails.vertical(controller: verticalController),
-          horizontalDetails: ScrollableDetails.horizontal(controller: horizontalController),
-        );
+         delegate: delegate,
+         verticalDetails: ScrollableDetails.vertical(controller: verticalController),
+         horizontalDetails: ScrollableDetails.horizontal(controller: horizontalController),
+       );
 
   @override
   Widget buildViewport(
@@ -81,17 +81,20 @@ class TwoDimensionalGridViewport extends TwoDimensionalViewport {
 
   @override
   RenderTwoDimensionalViewport createRenderObject(BuildContext context) {
-    return RenderTwoDimensionalGridViewport(lineHeight, tableColumnProfile,
-        horizontalOffset: horizontalOffset,
-        horizontalAxisDirection: horizontalAxisDirection,
-        verticalOffset: verticalOffset,
-        verticalAxisDirection: verticalAxisDirection,
-        mainAxis: mainAxis,
-        delegate: delegate as TwoDimensionalChildBuilderDelegate,
-        childManager: context as TwoDimensionalChildManager,
-        cacheExtent: cacheExtent,
-        clipBehavior: clipBehavior,
-        bottomScrollExtend: bottomScrollExtend);
+    return RenderTwoDimensionalGridViewport(
+      lineHeight,
+      tableColumnProfile,
+      horizontalOffset: horizontalOffset,
+      horizontalAxisDirection: horizontalAxisDirection,
+      verticalOffset: verticalOffset,
+      verticalAxisDirection: verticalAxisDirection,
+      mainAxis: mainAxis,
+      delegate: delegate as TwoDimensionalChildBuilderDelegate,
+      childManager: context as TwoDimensionalChildManager,
+      cacheExtent: cacheExtent,
+      clipBehavior: clipBehavior,
+      bottomScrollExtend: bottomScrollExtend,
+    );
   }
 
   @override
