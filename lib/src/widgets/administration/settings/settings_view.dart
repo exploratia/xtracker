@@ -33,13 +33,15 @@ class SettingsView extends StatelessWidget {
           spacing: ThemeUtils.cardPadding,
           children: [
             ExpandableSettingsCard(
-                title: OverflowText(LocaleKeys.settings_general_title.tr(), style: Theme.of(context).textTheme.titleLarge),
-                content: GeneralSettingsView(controller: settingsController)),
+              title: OverflowText(LocaleKeys.settings_general_title.tr(), style: Theme.of(context).textTheme.titleLarge),
+              content: GeneralSettingsView(controller: settingsController),
+            ),
             ExpandableSettingsCard(
-                title: OverflowText(LocaleKeys.settings_deviceStorage_title.tr(), style: Theme.of(context).textTheme.titleLarge),
-                content: DeviceStorageView(
-                  controller: settingsController,
-                )),
+              title: OverflowText(LocaleKeys.settings_deviceStorage_title.tr(), style: Theme.of(context).textTheme.titleLarge),
+              content: DeviceStorageView(
+                controller: settingsController,
+              ),
+            ),
             const ScrollFooter(),
           ],
         ),

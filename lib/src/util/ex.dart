@@ -1,7 +1,7 @@
 /// simple exception with message. toString() returns the message.
 class Ex implements Exception {
-  final dynamic message;
-  final dynamic localizedMessage;
+  final String? message;
+  final String? localizedMessage;
 
   Ex(
     this.message, {
@@ -11,11 +11,11 @@ class Ex implements Exception {
   @override
   String toString() {
     if (message == null) return "Ex";
-    return message.toString();
+    return message!;
   }
 
   String localizedToString() {
-    if (localizedMessage != null) return localizedMessage.toString();
+    if (localizedMessage != null) return localizedMessage!;
     return toString();
   }
 }

@@ -86,8 +86,10 @@ class _ExpandableState extends State<Expandable> {
                 end: const AlignmentDirectional(0, 1),
                 colors: [Colors.transparent, themeData.cardTheme.color ?? Colors.black],
               ),
-              borderRadius:
-                  const BorderRadius.only(bottomLeft: Radius.circular(ThemeUtils.borderRadius), bottomRight: Radius.circular(ThemeUtils.borderRadius)),
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(ThemeUtils.borderRadius),
+                bottomRight: Radius.circular(ThemeUtils.borderRadius),
+              ),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

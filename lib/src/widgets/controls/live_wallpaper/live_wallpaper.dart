@@ -63,11 +63,12 @@ class LiveWallpaper extends StatelessWidget {
               left: 1,
               right: 1,
               child: Opacity(
-                  opacity: 1 - t2,
-                  child: LiveWallpaperStarrySky(
-                    seed: 2,
-                    density: 0.0005 * ((math.sin(1.65 * math.cos(2 * math.pi * percentOfDay)) + 1) / 2),
-                  )),
+                opacity: 1 - t2,
+                child: LiveWallpaperStarrySky(
+                  seed: 2,
+                  density: 0.0005 * ((math.sin(1.65 * math.cos(2 * math.pi * percentOfDay)) + 1) / 2),
+                ),
+              ),
             ),
             // sun & moon
             _buildSunAndMoon(height, width, sceneDim, percentOfDay),

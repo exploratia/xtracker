@@ -11,8 +11,13 @@ import '../../series_data_no_data.dart';
 import '../../series_data_view_overlays.dart';
 
 class SeriesDataBloodPressureChartView extends StatelessWidget {
-  const SeriesDataBloodPressureChartView(
-      {super.key, required this.seriesViewMetaData, required this.seriesData, required this.seriesDataFilter, required this.seriesDataViewOverlays});
+  const SeriesDataBloodPressureChartView({
+    super.key,
+    required this.seriesViewMetaData,
+    required this.seriesData,
+    required this.seriesDataFilter,
+    required this.seriesDataViewOverlays,
+  });
 
   final SeriesViewMetaData seriesViewMetaData;
   final List<BloodPressureValue> seriesData;
@@ -31,25 +36,27 @@ class SeriesDataBloodPressureChartView extends StatelessWidget {
       );
     }
 
-    return LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
-      return SingleChildScrollViewWithScrollbar(
-        useHorizontalScreenPadding: true,
-        child: Column(
-          children: [
-            seriesDataViewOverlays.buildTopSpacer(),
-            ChartContainer(
-              showDateTooltip: true,
-              maxVisibleHeight: constraints.maxHeight - seriesDataViewOverlays.height,
-              chartWidgetBuilder: (touchCallback) {
-                return LineChart(
-                  ChartUtilsBloodPressure.buildLineChartData(filteredSeriesData, themeData, touchCallback, context),
-                );
-              },
-            ),
-            seriesDataViewOverlays.buildBottomSpacer(),
-          ],
-        ),
-      );
-    });
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        return SingleChildScrollViewWithScrollbar(
+          useHorizontalScreenPadding: true,
+          child: Column(
+            children: [
+              seriesDataViewOverlays.buildTopSpacer(),
+              ChartContainer(
+                showDateTooltip: true,
+                maxVisibleHeight: constraints.maxHeight - seriesDataViewOverlays.height,
+                chartWidgetBuilder: (touchCallback) {
+                  return LineChart(
+                    ChartUtilsBloodPressure.buildLineChartData(filteredSeriesData, themeData, touchCallback, context),
+                  );
+                },
+              ),
+              seriesDataViewOverlays.buildBottomSpacer(),
+            ],
+          ),
+        );
+      },
+    );
   }
 }

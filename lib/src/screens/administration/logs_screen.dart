@@ -100,10 +100,14 @@ class _LogsScreenState extends State<LogsScreen> {
       bodyBuilder: (context) => LogsView(
         key: UniqueKey(),
         logSelectHandler: (String logFileName, void Function() rebuildLogsView) {
-          Navigator.of(context).push(GenericRoute.route(LogScreen(
-            logFileName: logFileName,
-            rebuildLogsView: rebuildLogsView,
-          )));
+          Navigator.of(context).push(
+            GenericRoute.route(
+              LogScreen(
+                logFileName: logFileName,
+                rebuildLogsView: rebuildLogsView,
+              ),
+            ),
+          );
         },
       ),
     );
@@ -122,7 +126,12 @@ class _LogsScreenState extends State<LogsScreen> {
             final fileBytes = await zipAllLogs.readAsBytes();
 
             var selectedFile = await FilePicker.platform.saveFile(
-                dialogTitle: 'Please select an output file:', fileName: zipAllLogs.name, type: FileType.custom, allowedExtensions: ["zip"], bytes: fileBytes);
+              dialogTitle: 'Please select an output file:',
+              fileName: zipAllLogs.name,
+              type: FileType.custom,
+              allowedExtensions: ["zip"],
+              bytes: fileBytes,
+            );
             bool exported = selectedFile != null || kIsWeb; // in web no file select - just download
 
             if (exported) {

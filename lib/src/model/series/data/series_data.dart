@@ -5,19 +5,26 @@ import 'package:provider/provider.dart';
 import '../../../../generated/locale_keys.g.dart';
 import '../../../providers/series_current_value_provider.dart';
 import '../../../providers/series_data_provider.dart';
+import '../../../store/migration/db_migration.dart';
 import '../../../util/dialogs.dart';
+import '../../../util/globals.dart';
+import '../../../util/json_reader.dart';
 import '../../../util/logging/flutter_simple_logging.dart';
 import '../../../widgets/series/data/input/blood_pressure/blood_pressure_input.dart';
+import '../../../widgets/series/data/input/custom/custom_input.dart';
 import '../../../widgets/series/data/input/daily_check/daily_check_input.dart';
 import '../../../widgets/series/data/input/daily_life/daily_life_input.dart';
 import '../../../widgets/series/data/input/habit/habit_input.dart';
 import '../../../widgets/series/data/input/input_result.dart';
+import '../../../widgets/series/data/input/monthly/monthly_input.dart';
 import '../series_def.dart';
 import '../series_type.dart';
 import 'blood_pressure/blood_pressure_value.dart';
+import 'custom/custom_value.dart';
 import 'daily_check/daily_check_value.dart';
 import 'daily_life/daily_life_value.dart';
 import 'habit/habit_value.dart';
+import 'monthly/monthly_value.dart';
 import 'series_data_value.dart';
 
 class SeriesData<T extends SeriesDataValue> {
@@ -29,34 +36,86 @@ class SeriesData<T extends SeriesDataValue> {
   SeriesData(this.seriesDefUuid, this.data);
 
   Map<String, dynamic> toJson({bool exportUuid = true}) => {
-        'uuid': seriesDefUuid,
-        'version': 1,
-        'data': [...data.map((e) => e.toJson(exportUuid: exportUuid))],
-      };
+    'uuid': seriesDefUuid,
+    'version': DbMigration.latestVersion,
+    'data': [...data.map((e) => e.toJson(exportUuid: exportUuid))],
+  };
 
-  static SeriesData<BloodPressureValue> fromJsonBloodPressureData(Map<String, dynamic> json) => SeriesData(
-        json['uuid'] as String,
-        [...(json['data'] as List<dynamic>).map((e) => BloodPressureValue.fromJson(e))],
-        // if version is required: json['version'] as int? ?? 1
-      );
+  static SeriesData<BloodPressureValue> fromJsonBloodPressureData(JsonReader json, {String? seriesDefUuid}) => SeriesData(
+    json.asStringOr('uuid', seriesDefUuid ?? Globals.invalid),
+    [...json.asReader('data').asReaders().map((e) => BloodPressureValue.fromJson(e))],
+    // if version is required: json['version'] as int? ?? 1
+  );
 
-  static SeriesData<DailyCheckValue> fromJsonDailyCheckData(Map<String, dynamic> json) => SeriesData(
-        json['uuid'] as String,
-        [...(json['data'] as List<dynamic>).map((e) => DailyCheckValue.fromJson(e))],
-        // if version is required: json['version'] as int? ?? 1
-      );
+  static SeriesData<DailyCheckValue> fromJsonDailyCheckData(JsonReader json, {String? seriesDefUuid}) => SeriesData(
+    json.asStringOr('uuid', seriesDefUuid ?? Globals.invalid),
+    [...json.asReader('data').asReaders().map((e) => DailyCheckValue.fromJson(e))],
+    // if version is required: json['version'] as int? ?? 1
+  );
 
-  static SeriesData<DailyLifeValue> fromJsonDailyLifeData(Map<String, dynamic> json) => SeriesData(
-        json['uuid'] as String,
-        [...(json['data'] as List<dynamic>).map((e) => DailyLifeValue.fromJson(e))],
-        // if version is required: json['version'] as int? ?? 1
-      );
+  static SeriesData<DailyLifeValue> fromJsonDailyLifeData(JsonReader json, {String? seriesDefUuid}) => SeriesData(
+    json.asStringOr('uuid', seriesDefUuid ?? Globals.invalid),
+    [...json.asReader('data').asReaders().map((e) => DailyLifeValue.fromJson(e))],
+    // if version is required: json['version'] as int? ?? 1
+  );
 
-  static SeriesData<HabitValue> fromJsonHabitData(Map<String, dynamic> json) => SeriesData(
-        json['uuid'] as String,
-        [...(json['data'] as List<dynamic>).map((e) => HabitValue.fromJson(e))],
-        // if version is required: json['version'] as int? ?? 1
-      );
+  static SeriesData<HabitValue> fromJsonHabitData(JsonReader json, {String? seriesDefUuid}) => SeriesData(
+    json.asStringOr('uuid', seriesDefUuid ?? Globals.invalid),
+    [...json.asReader('data').asReaders().map((e) => HabitValue.fromJson(e))],
+    // if version is required: json['version'] as int? ?? 1
+  );
+
+  static SeriesData<CustomValue> fromJsonCustomData(JsonReader json, {String? seriesDefUuid}) => SeriesData(
+    json.asStringOr('uuid', seriesDefUuid ?? Globals.invalid),
+    [...json.asReader('data').asReaders().map((e) => CustomValue.fromJson(e))],
+    // if version is required: json['version'] as int? ?? 1
+  );
+
+  static SeriesData<MonthlyValue> fromJsonMonthlyData(JsonReader json, {String? seriesDefUuid}) => SeriesData(
+    json.asStringOr('uuid', seriesDefUuid ?? Globals.invalid),
+    [...json.asReader('data').asReaders().map((e) => MonthlyValue.fromJson(e))],
+    // if version is required: json['version'] as int? ?? 1
+  );
+
+  List<List<dynamic>> toCSVLists(SeriesDef seriesDef) => [...data.map((e) => e.toCSVList(seriesDef))];
+
+  static SeriesData<BloodPressureValue> fromCSVBloodPressureData(SeriesDef seriesDef, List<List<dynamic>> csv) => SeriesData(
+    seriesDef.uuid,
+    [...csv.map((e) => BloodPressureValue.fromCSVList(e))],
+  );
+
+  static SeriesData<DailyCheckValue> fromCSVDailyCheckData(SeriesDef seriesDef, List<List<dynamic>> csv) => SeriesData(
+    seriesDef.uuid,
+    [...csv.map((e) => DailyCheckValue.fromCSVList(e))],
+  );
+
+  static SeriesData<DailyLifeValue> fromCSVDailyLifeData(SeriesDef seriesDef, List<List<dynamic>> csv) {
+    // build resolver map
+    var tags = seriesDef.dailyLifeTagsSettingsReadonly().tags;
+    Map<String, String> tagName2TagId = {};
+    for (var tag in tags) {
+      tagName2TagId[tag.name] = tag.tagId;
+    }
+    return SeriesData(
+      seriesDef.uuid,
+      [...csv.map((e) => DailyLifeValue.fromCSVList(e, tagName2TagId))],
+    );
+  }
+
+  static SeriesData<HabitValue> fromCSVHabitData(SeriesDef seriesDef, List<List<dynamic>> csv) => SeriesData(
+    seriesDef.uuid,
+    [...csv.map((e) => HabitValue.fromCSVList(e))],
+  );
+
+  static SeriesData<CustomValue> fromCSVCustomData(SeriesDef seriesDef, List<List<dynamic>> csv) => SeriesData(
+    seriesDef.uuid,
+    [...csv.map((e) => CustomValue.fromCSVList(e, seriesDef))],
+  );
+
+  static SeriesData<MonthlyValue> fromCSVMonthlyData(SeriesDef seriesDef, List<List<dynamic>> csv) => SeriesData(
+    seriesDef.uuid,
+    [...csv.map((e) => MonthlyValue.fromCSVList(e, seriesDef))],
+  );
 
   bool isEmpty() {
     return data.isEmpty;
@@ -86,7 +145,7 @@ class SeriesData<T extends SeriesDataValue> {
   }
 
   void delete(T value) {
-    data.remove(value);
+    deleteById(value.uuid);
   }
 
   void deleteById(String uuid) {
@@ -118,9 +177,17 @@ class SeriesData<T extends SeriesDataValue> {
         inputResult = await DailyLifeInput.showInputDlg(context, seriesDef, dailyLifeValue: (value is DailyLifeValue) ? value : null);
       case SeriesType.habit:
         inputResult = await HabitInput.showInputDlg(context, seriesDef, habitValue: (value is HabitValue) ? value : null);
+      case SeriesType.custom:
+        inputResult = await CustomInput.showInputDlg(context, seriesDef, customValue: (value is CustomValue) ? value : null);
+      case SeriesType.monthly:
+        inputResult = await MonthlyInput.showInputDlg(context, seriesDef, monthlyValue: (value is MonthlyValue) ? value : null);
     }
 
-    if (inputResult == null) return; // canceled
+    if (inputResult == null) {
+      // also on canceled set recently updated to ensure scrolling in series view to the act series
+      seriesCurrentValueProvider.setRecentlyUpdatedSeries(seriesDef.uuid);
+      return; // canceled
+    }
     switch (inputResult.action) {
       case InputResultAction.insert:
       case InputResultAction.update:
@@ -131,7 +198,7 @@ class SeriesData<T extends SeriesDataValue> {
             await seriesDataProvider.updateValue(seriesDef, inputResult.seriesDataValue, seriesCurrentValueProvider); // update
           }
         } catch (ex) {
-          SimpleLogging.w('Failed to store ${seriesDef.seriesType.typeName} value.', error: ex);
+          SimpleLogging.w('Failed to store ${seriesDef.seriesType.name} value.', error: ex);
           if (context.mounted) {
             Dialogs.showSnackBarWarning(LocaleKeys.commons_snackbar_saveFailed.tr(), context);
           }
@@ -140,7 +207,7 @@ class SeriesData<T extends SeriesDataValue> {
         try {
           await seriesDataProvider.deleteValue(seriesDef, inputResult.seriesDataValue, seriesCurrentValueProvider);
         } catch (err) {
-          SimpleLogging.w('Failed to delete ${seriesDef.seriesType.typeName} value.', error: err);
+          SimpleLogging.w('Failed to delete ${seriesDef.seriesType.name} value.', error: err);
           if (context.mounted) {
             Dialogs.showSnackBarWarning(LocaleKeys.commons_snackbar_deleteFailed.tr(), context);
           }

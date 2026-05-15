@@ -55,18 +55,19 @@ class LogSettingsView extends StatelessWidget {
                     TableUtils.tableRow([
                       Text(LocaleKeys.logSettings_label_writeTestLogMessages.tr()),
                       IconButton(
-                          iconSize: ThemeUtils.iconSizeScaled,
-                          tooltip: LocaleKeys.logSettings_btn_writeTestLogMessages_tooltip.tr(),
-                          onPressed: () {
-                            SimpleLogging.d('Debug Message');
-                            SimpleLogging.i('Info Message');
-                            SimpleLogging.w('Warning Message');
-                            SimpleLogging.e('Error Message');
-                            // logger.wtf('WTF Message');
-                          },
-                          icon: const Icon(
-                            Icons.short_text_rounded,
-                          )),
+                        iconSize: ThemeUtils.iconSizeScaled,
+                        tooltip: LocaleKeys.logSettings_btn_writeTestLogMessages_tooltip.tr(),
+                        onPressed: () {
+                          SimpleLogging.d('Debug Message');
+                          SimpleLogging.i('Info Message');
+                          SimpleLogging.w('Warning Message');
+                          SimpleLogging.e('Error Message');
+                          // logger.wtf('WTF Message');
+                        },
+                        icon: const Icon(
+                          Icons.short_text_rounded,
+                        ),
+                      ),
                     ]),
                   ],
                 ),
@@ -91,26 +92,27 @@ class _LogLevelSelectorState extends State<_LogLevelSelector> {
   @override
   Widget build(BuildContext context) {
     return DropdownButton<Level>(
-        key: const Key('logSettingsLogLevelSelect'),
-        borderRadius: ThemeUtils.cardBorderRadius,
-        value: SimpleLogging.logLevel,
-        items: SimpleLogging.getKnownLevels().map<DropdownMenuItem<Level>>((logLevel) {
-          var selected = (logLevel == SimpleLogging.logLevel);
-          return DropdownMenuItem(
-            key: Key('logSettingsLogLevelSelect_${logLevel.name}'),
-            value: logLevel,
-            child: DropDownMenuItemChild(
-              selected: selected,
-              child: Text(logLevel.name.toUpperCase()),
-            ),
-          );
-        }).toList(),
-        onChanged: (value) {
-          if (value != null) {
-            SimpleLogging.logLevel = value;
-            setState(() {});
-          }
-        });
+      key: const Key('logSettingsLogLevelSelect'),
+      borderRadius: ThemeUtils.cardBorderRadius,
+      value: SimpleLogging.logLevel,
+      items: SimpleLogging.getKnownLevels().map<DropdownMenuItem<Level>>((logLevel) {
+        var selected = (logLevel == SimpleLogging.logLevel);
+        return DropdownMenuItem(
+          key: Key('logSettingsLogLevelSelect_${logLevel.name}'),
+          value: logLevel,
+          child: DropDownMenuItemChild(
+            selected: selected,
+            child: Text(logLevel.name.toUpperCase()),
+          ),
+        );
+      }).toList(),
+      onChanged: (value) {
+        if (value != null) {
+          SimpleLogging.logLevel = value;
+          setState(() {});
+        }
+      },
+    );
   }
 }
 

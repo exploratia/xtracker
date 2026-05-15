@@ -5,8 +5,7 @@ import '../../../../../model/series/series_view_meta_data.dart';
 import '../../../../../util/theme_utils.dart';
 import '../series_data_analytics_days_recorded_view.dart';
 import '../series_data_analytics_hours_recorded_view.dart';
-import 'series_data_analytics_daily_life_attributes_proportions_view.dart';
-import 'series_data_analytics_daily_life_hours_recorded.dart';
+import 'series_data_analytics_daily_life_tags_proportions_view.dart';
 
 class SeriesDataAnalyticsDailyLifeView extends StatelessWidget {
   const SeriesDataAnalyticsDailyLifeView({super.key, required this.seriesViewMetaData, required this.seriesDataValues});
@@ -19,7 +18,7 @@ class SeriesDataAnalyticsDailyLifeView extends StatelessWidget {
     return Column(
       spacing: ThemeUtils.screenPadding,
       children: [
-        SeriesDataAnalyticsDailyLifeAttributesProportionsView(
+        SeriesDataAnalyticsDailyLifeTagsProportionsView(
           seriesViewMetaData: seriesViewMetaData,
           seriesDataValues: seriesDataValues,
         ),
@@ -30,10 +29,6 @@ class SeriesDataAnalyticsDailyLifeView extends StatelessWidget {
         SeriesDataAnalyticsHoursRecordedView(
           seriesViewMetaData: seriesViewMetaData,
           seriesDataValues: seriesDataValues,
-          child: SeriesDataAnalyticsDailyLifeHoursRecorded(
-            seriesViewMetaData: seriesViewMetaData,
-            seriesDataValues: seriesDataValues,
-          ),
         ),
       ],
     );

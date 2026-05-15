@@ -28,11 +28,13 @@ class AdministrationView extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
 
-    final links = [SettingsScreen.navItem, LogsScreen.navItem, DeviceInfoScreen.navItem].map((navItem) => {
-          'ico': navItem.icon(),
-          'title': navItem.titleBuilder(),
-          'routeName': navItem.routeName,
-        });
+    final links = [SettingsScreen.navItem, LogsScreen.navItem, DeviceInfoScreen.navItem].map(
+      (navItem) => {
+        'ico': navItem.icon(),
+        'title': navItem.titleBuilder(),
+        'routeName': navItem.routeName,
+      },
+    );
 
     return SingleChildScrollViewWithScrollbar(
       useScreenPadding: true,
@@ -47,16 +49,18 @@ class AdministrationView extends StatelessWidget {
               spacing: ThemeUtils.verticalSpacing,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                ...links.map((lnk) => ListTile(
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(ThemeUtils.borderRadius)),
-                      leading: lnk['ico'] as Widget,
-                      title: Text(lnk['title'] as String),
-                      trailing: Icon(
-                        Icons.navigate_next,
-                        color: themeData.colorScheme.primary,
-                      ),
-                      onTap: () => Navigator.restorablePushNamed(context, lnk['routeName'] as String),
-                    )),
+                ...links.map(
+                  (lnk) => ListTile(
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(ThemeUtils.borderRadius)),
+                    leading: lnk['ico'] as Widget,
+                    title: Text(lnk['title'] as String),
+                    trailing: Icon(
+                      Icons.navigate_next,
+                      color: themeData.colorScheme.primary,
+                    ),
+                    onTap: () => Navigator.restorablePushNamed(context, lnk['routeName'] as String),
+                  ),
+                ),
               ],
             ),
           ),
@@ -205,7 +209,7 @@ class _SupportTheApp extends StatelessWidget {
               Text(LocaleKeys.administration_supportApp_label_reportABug.tr()),
               TextButton(onPressed: () => LaunchUri.launchUri(Globals.uriGithubXtrackerIssues), child: Text("${Globals.uriGithubXtrackerIssues}")),
             ],
-          )
+          ),
         ],
       ),
     );

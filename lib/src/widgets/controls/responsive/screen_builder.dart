@@ -54,17 +54,17 @@ class ScreenBuilder extends StatelessWidget {
     bool hideBottomNavigationBar = false,
     bool showWallpaper = false,
   }) : this(
-          key: key,
-          appBarBuilder: appBarBuilder,
-          bodyBuilder: bodyBuilder,
-          floatingActionButtonBuilder: floatingActionButtonBuilder,
-          isHome: navItem.routeName == '/',
-          isMainNavigation: Navigation.containsMainNavigationRoute(navItem.routeName),
-          drawerBuilder: (context) => const AppDrawer(),
-          navigationRailBuilder: (context) => const AppNavigationRail(),
-          bottomNavigationBarBuilder: hideBottomNavigationBar ? null : (context) => const AppBottomNavigationBar(),
-          showWallpaper: showWallpaper,
-        );
+         key: key,
+         appBarBuilder: appBarBuilder,
+         bodyBuilder: bodyBuilder,
+         floatingActionButtonBuilder: floatingActionButtonBuilder,
+         isHome: navItem.routeName == '/',
+         isMainNavigation: Navigation.containsMainNavigationRoute(navItem.routeName),
+         drawerBuilder: (context) => const AppDrawer(),
+         navigationRailBuilder: (context) => const AppNavigationRail(),
+         bottomNavigationBarBuilder: hideBottomNavigationBar ? null : (context) => const AppBottomNavigationBar(),
+         showWallpaper: showWallpaper,
+       );
 
   @override
   Widget build(BuildContext context) {
@@ -81,14 +81,15 @@ class ScreenBuilder extends StatelessWidget {
     final buildDrawer = !buildBottomNavigationBar && !buildNavigationRail && drawerBuilder != null;
 
     Widget bodySafeArea = SafeArea(
-        child: Row(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        if (buildNavigationRail) navigationRailBuilder!(context),
-        if (buildNavigationRail) const VerticalDivider(thickness: 1, width: 1),
-        Expanded(child: bodyBuilder(context)),
-      ],
-    ));
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          if (buildNavigationRail) navigationRailBuilder!(context),
+          if (buildNavigationRail) const VerticalDivider(thickness: 1, width: 1),
+          Expanded(child: bodyBuilder(context)),
+        ],
+      ),
+    );
 
     // PopScope depending on nav
     Widget bodyPopScope;

@@ -2,17 +2,18 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../generated/locale_keys.g.dart';
+import '../../util/logging/flutter_simple_logging.dart';
 
 enum ViewType {
-  lineChart("lineChart", Icons.area_chart_outlined),
-  barChart("barChart", Icons.bar_chart_outlined),
-  table("table", Icons.grid_on_outlined),
-  pixels("pixels", Icons.apps_rounded);
+  lineChart(Icons.area_chart_outlined),
+  barChart(Icons.bar_chart_outlined),
+  table(Icons.grid_on_outlined),
+  pixels(Icons.apps_rounded)
+  ;
 
-  final String typeName;
   final IconData iconData;
 
-  const ViewType(this.typeName, this.iconData);
+  const ViewType(this.iconData);
 
   String displayName() {
     return displayNameOf(this);
@@ -27,9 +28,12 @@ enum ViewType {
     };
   }
 
-  static ViewType resolveByTypeName(String? typeName) {
-    var vt = ViewType.values.where((element) => element.typeName == typeName).firstOrNull;
-    if (vt == null) return ViewType.table;
+  static ViewType byName(String? name) {
+    var vt = ViewType.values.where((e) => e.name == name).firstOrNull;
+    if (vt == null) {
+      SimpleLogging.i("No view type found for '$name'. Using table...");
+      return ViewType.table;
+    }
     return vt;
   }
 }

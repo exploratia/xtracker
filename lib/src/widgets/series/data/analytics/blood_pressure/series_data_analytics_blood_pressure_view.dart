@@ -25,7 +25,7 @@ class SeriesDataAnalyticsBloodPressureView extends StatelessWidget {
           seriesViewMetaData: seriesViewMetaData,
           seriesDataValues: seriesDataValues,
           additionalEntries: [
-            if (medicationEntry != null) medicationEntry,
+            ?medicationEntry,
           ],
         ),
         SeriesDataAnalyticsHoursRecordedView(

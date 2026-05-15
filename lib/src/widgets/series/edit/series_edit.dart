@@ -5,9 +5,9 @@ import 'package:uuid/v4.dart';
 import '../../../../generated/locale_keys.g.dart';
 import '../../../model/series/series_def.dart';
 import '../../../model/series/series_type.dart';
-import '../../../util/dialogs.dart';
 import '../../../util/theme_utils.dart';
 import '../../controls/appbar/gradient_app_bar.dart';
+import '../../controls/btn/info_btn.dart';
 import '../../controls/layout/v_centered_single_child_scroll_view_with_scrollbar.dart';
 import 'series_editor.dart';
 
@@ -90,18 +90,21 @@ class _SeriesTypeSelector extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             spacing: ThemeUtils.verticalSpacingSmall,
             children: [
-              ...seriesTypes.map((st) => Row(mainAxisSize: MainAxisSize.min, children: [
+              ...seriesTypes.map(
+                (st) => Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
                     _SeriesTypeInfoBtn(st),
                     ElevatedButton.icon(
                       icon: Icon(st.iconData, size: ThemeUtils.iconSizeScaled),
                       label: Text(st.displayName),
                       onPressed: () => createSeriesDef(st),
-                    )
-                  ])),
+                    ),
+                  ],
+                ),
+              ),
             ],
           ),
-          const SizedBox(height: ThemeUtils.verticalSpacingLarge),
-          Text(LocaleKeys.seriesEdit_label_moreSeriesToCome.tr()),
         ],
       ),
     );
@@ -115,21 +118,16 @@ class _SeriesTypeInfoBtn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      iconSize: ThemeUtils.iconSizeScaled,
-      tooltip: LocaleKeys.seriesEdit_btn_showSeriesTypeInfo.tr(),
-      onPressed: () => Dialogs.simpleOkDialog(
-        SeriesType.infoOf(st),
-        context,
-        title: Row(
-          spacing: ThemeUtils.horizontalSpacing,
-          children: [
-            Icon(st.iconData, size: ThemeUtils.iconSizeScaled),
-            Text(st.displayName),
-          ],
-        ),
+    return InfoBtn(
+      title: Row(
+        spacing: ThemeUtils.horizontalSpacing,
+        children: [
+          Icon(st.iconData, size: ThemeUtils.iconSizeScaled),
+          Text(st.displayName),
+        ],
       ),
-      icon: const Icon(Icons.info_outline),
+      content: SeriesType.infoOf(st),
+      tooltip: LocaleKeys.seriesEdit_btn_showSeriesTypeInfo.tr(),
     );
   }
 }

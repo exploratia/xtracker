@@ -42,12 +42,13 @@ class WeekdayProbabilityForecaster {
     this.alpha = 0.0,
     this.beta = 0.0,
     this.halfLifeDays,
-  })  : _eventDays = _normalizeToLocalDateSet(eventDates),
-        observationStart = (observationStart ??
-            _normalizeToLocalDate(
-              eventDates.isEmpty ? DateTime.now() : _minDate(eventDates),
-            )),
-        observationEnd = _normalizeToLocalDate(observationEnd ?? DateTime.now());
+  }) : _eventDays = _normalizeToLocalDateSet(eventDates),
+       observationStart =
+           (observationStart ??
+           _normalizeToLocalDate(
+             eventDates.isEmpty ? DateTime.now() : _minDate(eventDates),
+           )),
+       observationEnd = _normalizeToLocalDate(observationEnd ?? DateTime.now());
 
   /// Returns posterior probabilities p(Event | Weekday) for Mon..Sun (index 1..7)
   /// according to DateTime.weekday (1=Mon,...,7=Sun).

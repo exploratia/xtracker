@@ -78,7 +78,7 @@ class GeneralSettingsView extends StatelessWidget {
                     ),
                   );
                 }).toList(),
-              )
+              ),
             ]),
             TableUtils.tableRow([
               Text(LocaleKeys.settings_general_label_lang.tr()),
@@ -94,7 +94,10 @@ class GeneralSettingsView extends StatelessWidget {
                   var value = i["v"] as Locale?;
                   var selected = actLocale == value;
                   return DropdownMenuItem<Locale?>(
-                      key: Key('settingsLocaleSelect_$i'), value: value, child: DropDownMenuItemChild(selected: selected, child: text));
+                    key: Key('settingsLocaleSelect_$i'),
+                    value: value,
+                    child: DropDownMenuItemChild(selected: selected, child: text),
+                  );
                 }).toList(),
               ),
             ]),

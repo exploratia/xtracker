@@ -13,7 +13,7 @@ class ContrastColor {
 
     return [
       for (final h in hues)
-        for (final l in lightnessLevels) HSLColor.fromAHSL(1.0, h, saturation, l).toColor()
+        for (final l in lightnessLevels) HSLColor.fromAHSL(1.0, h, saturation, l).toColor(),
     ];
   }
 

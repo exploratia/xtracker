@@ -48,22 +48,26 @@ class _AppNavigationRailState extends State<AppNavigationRail> {
     List<NavigationRailDestination> result = [];
 
     // special expand item
-    result.add(NavigationRailDestination(
-      icon: Tooltip(
-        message: Navigation.navRailExpanded ? LocaleKeys.commons_nav_hideMenu.tr() : LocaleKeys.commons_nav_openMenu.tr(),
-        child: Icon(
-          Navigation.navRailExpanded ? Icons.arrow_left : Icons.arrow_right,
-          size: ThemeUtils.iconSizeScaled,
+    result.add(
+      NavigationRailDestination(
+        icon: Tooltip(
+          message: Navigation.navRailExpanded ? LocaleKeys.commons_nav_hideMenu.tr() : LocaleKeys.commons_nav_openMenu.tr(),
+          child: Icon(
+            Navigation.navRailExpanded ? Icons.arrow_left : Icons.arrow_right,
+            size: ThemeUtils.iconSizeScaled,
+          ),
         ),
+        label: const SizedBox(width: 0, height: 0),
       ),
-      label: const SizedBox(width: 0, height: 0),
-    ));
+    );
 
     for (var navItem in Navigation.mainNavigationItems) {
-      result.add(NavigationRailDestination(
-        icon: Tooltip(message: navItem.tooltipBuilder(), child: navItem.icon()),
-        label: Text(navItem.titleBuilder()),
-      ));
+      result.add(
+        NavigationRailDestination(
+          icon: Tooltip(message: navItem.tooltipBuilder(), child: navItem.icon()),
+          label: Text(navItem.titleBuilder()),
+        ),
+      );
     }
 
     return result;

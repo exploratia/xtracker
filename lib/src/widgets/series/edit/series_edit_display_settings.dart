@@ -6,22 +6,19 @@ import 'package:flutter/material.dart';
 import '../../../../../generated/locale_keys.g.dart';
 import '../../../model/column_profile/fix_column_profile_type.dart';
 import '../../../model/series/series_def.dart';
-import '../../../model/series/series_type.dart';
 import '../../../model/series/view_type.dart';
-import '../../../util/dialogs.dart';
 import '../../../util/media_query_utils.dart';
 import '../../../util/theme_utils.dart';
+import '../../controls/btn/info_btn.dart';
 import '../../controls/card/expandable.dart';
 import '../../controls/layout/drop_down_menu_item_child.dart';
-import '../../controls/layout/single_child_scroll_view_with_scrollbar.dart';
 import '../../controls/text/overflow_text.dart';
 import 'pixel_view_preview.dart';
 
 class SeriesEditDisplaySettings extends StatelessWidget {
-  static final List<SeriesType> _allowedSeriesTypes = [SeriesType.bloodPressure, SeriesType.dailyCheck, SeriesType.habit];
-
   static bool applicableOn(SeriesDef seriesDef) {
-    return _allowedSeriesTypes.contains(seriesDef.seriesType);
+    var seriesType = seriesDef.seriesType;
+    return seriesType.viewTypes.length > 1 || seriesType.tableFixColumnProfileTypes.length > 1 || PixelViewPreview.applicableOn(seriesDef);
   }
 
   final SeriesDef seriesDef;
@@ -40,11 +37,20 @@ class SeriesEditDisplaySettings extends StatelessWidget {
       child: LayoutBuilder(
         builder: (context, constraints) {
           // initial ViewType
-          Widget viewTypeSelect;
-          {
+          Widget? viewTypeSelect;
+          if (seriesType.viewTypes.length > 1) {
             ViewType defaultValue = seriesType.defaultViewType;
-            List<ViewType> possibleViewTypes = seriesType.viewTypes;
             ViewType actValue = settings.getInitialViewType(defaultValue);
+
+            List<ViewType> possibleViewTypes = List.from(seriesType.viewTypes, growable: true);
+
+            // special case custom series could have (or no longer have) tags
+            if (seriesDef.isCustomSeriesWithTags()) {
+              possibleViewTypes.add(ViewType.pixels);
+            } else if (actValue == ViewType.pixels) {
+              actValue = defaultValue;
+            }
+
             viewTypeSelect = Padding(
               padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.cardPadding),
               child: Wrap(
@@ -158,10 +164,10 @@ class SeriesEditDisplaySettings extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               // ViewType select
-              viewTypeSelect,
+              ?viewTypeSelect,
 
               // ColumnProfile? select
-              if (tableViewColumnProfileSelect != null) tableViewColumnProfileSelect,
+              ?tableViewColumnProfileSelect,
 
               // Pixel Preview
               if (PixelViewPreview.applicableOn(seriesDef)) ...[
@@ -179,17 +185,10 @@ class SeriesEditDisplaySettings extends StatelessWidget {
                           Text(LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_title.tr()),
                         ],
                       ),
-                      IconButton(
-                        iconSize: ThemeUtils.iconSizeScaled,
+                      InfoBtn(
+                        title: LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_title.tr(),
+                        content: LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_text.tr(),
                         tooltip: LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_tooltip.tr(),
-                        onPressed: () => Dialogs.simpleOkDialog(
-                          SingleChildScrollViewWithScrollbar(
-                            child: Text(LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_text.tr()),
-                          ),
-                          context,
-                          title: Text(LocaleKeys.seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_title.tr()),
-                        ),
-                        icon: const Icon(Icons.info_outline),
                       ),
                       PixelViewPreview(
                         color: seriesDef.color,

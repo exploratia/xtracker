@@ -2,7 +2,7 @@
 
 // ignore_for_file: constant_identifier_names
 
-abstract class  LocaleKeys {
+abstract class LocaleKeys {
   static const administration_nav_title = 'administration.nav.title';
   static const administration_nav_tooltip = 'administration.nav.tooltip';
   static const administration_supportApp_title = 'administration.supportApp.title';
@@ -13,6 +13,15 @@ abstract class  LocaleKeys {
   static const appSupport_title = 'appSupport.title';
   static const appSupport_oneYearMsg = 'appSupport.oneYearMsg';
   static const appSupport_multipleYearsMsg = 'appSupport.multipleYearsMsg';
+  static const changeLog_title = 'changeLog.title';
+  static const changeLog_label_version = 'changeLog.label.version';
+  static const changeLog_label_versionChanged = 'changeLog.label.versionChanged';
+  static const changeLog_entries_v1_4_0 = 'changeLog.entries.v1_4_0';
+  static const changeLog_entries_v1_3_1 = 'changeLog.entries.v1_3_1';
+  static const changeLog_entries_v1_3_0 = 'changeLog.entries.v1_3_0';
+  static const changeLog_entries_v1_2_0 = 'changeLog.entries.v1_2_0';
+  static const changeLog_entries_v1_1_0 = 'changeLog.entries.v1_1_0';
+  static const changeLog_entries_v1_0_0 = 'changeLog.entries.v1_0_0';
   static const commons_nav_hideMenu = 'commons.nav.hideMenu';
   static const commons_nav_openMenu = 'commons.nav.openMenu';
   static const commons_columnProfile_name_dateMorningMiddayEvening = 'commons.columnProfile.name.dateMorningMiddayEvening';
@@ -21,6 +30,7 @@ abstract class  LocaleKeys {
   static const commons_columnProfile_name_dateHourlyOverview = 'commons.columnProfile.name.dateHourlyOverview';
   static const commons_columnProfile_name_dateWeekdays = 'commons.columnProfile.name.dateWeekdays';
   static const commons_columnProfile_name_dateMonthDays = 'commons.columnProfile.name.dateMonthDays';
+  static const commons_columnProfile_columns_tag = 'commons.columnProfile.columns.tag';
   static const commons_columnProfile_columns_dayRange = 'commons.columnProfile.columns.dayRange';
   static const commons_columnProfile_columns_hourlyOverview = 'commons.columnProfile.columns.hourlyOverview';
   static const commons_date_shortWeekday_monday = 'commons.date.shortWeekday.monday';
@@ -31,6 +41,7 @@ abstract class  LocaleKeys {
   static const commons_date_shortWeekday_saturday = 'commons.date.shortWeekday.saturday';
   static const commons_date_shortWeekday_sunday = 'commons.date.shortWeekday.sunday';
   static const commons_date_date = 'commons.date.date';
+  static const commons_date_dateTime = 'commons.date.dateTime';
   static const commons_date_time = 'commons.date.time';
   static const commons_date_morning = 'commons.date.morning';
   static const commons_date_midday = 'commons.date.midday';
@@ -62,20 +73,33 @@ abstract class  LocaleKeys {
   static const commons_validator_emptyValue = 'commons.validator.emptyValue';
   static const controls_select_dayRangeSlider_btn_showSlider = 'controls.select.dayRangeSlider.btn.showSlider';
   static const controls_select_dayRangeSlider_btn_hideSlider = 'controls.select.dayRangeSlider.btn.hideSlider';
+  static const controls_select_monthSwitcher_label_selectMonth = 'controls.select.monthSwitcher.label.selectMonth';
+  static const controls_select_tag_action_clear_tooltip = 'controls.select.tag.action.clear.tooltip';
+  static const controls_select_tag_action_select_tooltip = 'controls.select.tag.action.select.tooltip';
   static const deviceInfo_title = 'deviceInfo.title';
   static const deviceInfo_action_exportOrShare_tooltip = 'deviceInfo.action.exportOrShare.tooltip';
   static const deviceInfo_action_export_tooltip = 'deviceInfo.action.export.tooltip';
   static const deviceInfo_action_share_tooltip = 'deviceInfo.action.share.tooltip';
+  static const enum_calculationInputType_numeric_displayName = 'enum.calculationInputType.numeric.displayName';
+  static const enum_calculationInputType_seriesValue_displayName = 'enum.calculationInputType.seriesValue.displayName';
+  static const enum_operator_add_longNameInBrackets = 'enum.operator.add.longNameInBrackets';
+  static const enum_operator_subtract_longNameInBrackets = 'enum.operator.subtract.longNameInBrackets';
+  static const enum_operator_multiply_longNameInBrackets = 'enum.operator.multiply.longNameInBrackets';
+  static const enum_operator_divide_longNameInBrackets = 'enum.operator.divide.longNameInBrackets';
+  static const enum_operator_min_longNameInBrackets = 'enum.operator.min.longNameInBrackets';
+  static const enum_operator_max_longNameInBrackets = 'enum.operator.max.longNameInBrackets';
+  static const enum_operator_nan_longNameInBrackets = 'enum.operator.nan.longNameInBrackets';
+  static const enum_operator_roundDecimals_longNameInBrackets = 'enum.operator.roundDecimals.longNameInBrackets';
   static const enum_seriesType_bloodPressure_title = 'enum.seriesType.bloodPressure.title';
   static const enum_seriesType_bloodPressure_info = 'enum.seriesType.bloodPressure.info';
   static const enum_seriesType_dailyCheck_title = 'enum.seriesType.dailyCheck.title';
   static const enum_seriesType_dailyCheck_info = 'enum.seriesType.dailyCheck.info';
   static const enum_seriesType_dailyLife_title = 'enum.seriesType.dailyLife.title';
   static const enum_seriesType_dailyLife_info = 'enum.seriesType.dailyLife.info';
-  static const enum_seriesType_free_title = 'enum.seriesType.free.title';
-  static const enum_seriesType_free_info = 'enum.seriesType.free.info';
   static const enum_seriesType_habit_title = 'enum.seriesType.habit.title';
   static const enum_seriesType_habit_info = 'enum.seriesType.habit.info';
+  static const enum_seriesType_custom_title = 'enum.seriesType.custom.title';
+  static const enum_seriesType_custom_info = 'enum.seriesType.custom.info';
   static const enum_seriesType_monthly_title = 'enum.seriesType.monthly.title';
   static const enum_seriesType_monthly_info = 'enum.seriesType.monthly.info';
   static const enum_viewType_lineChart_title = 'enum.viewType.lineChart.title';
@@ -131,6 +155,8 @@ abstract class  LocaleKeys {
   static const seriesData_action_viewTypeMenu_tooltip = 'seriesData.action.viewTypeMenu.tooltip';
   static const seriesData_label_noData = 'seriesData.label.noData';
   static const seriesData_label_noDataBecauseOfFilter = 'seriesData.label.noDataBecauseOfFilter';
+  static const seriesData_snackbar_duplicateDates = 'seriesData.snackbar.duplicateDates';
+  static const seriesData_monthly_msg_duplicateTimestamp = 'seriesData.monthly.msg.duplicateTimestamp';
   static const seriesDataAnalytics_title = 'seriesDataAnalytics.title';
   static const seriesDataAnalytics_action_close_tooltip = 'seriesDataAnalytics.action.close.tooltip';
   static const seriesDataAnalytics_label_dataset = 'seriesDataAnalytics.label.dataset';
@@ -144,7 +170,15 @@ abstract class  LocaleKeys {
   static const seriesDataAnalytics_recordedHours_title = 'seriesDataAnalytics.recordedHours.title';
   static const seriesDataAnalytics_recordedHours_label_recordedHoursInfo = 'seriesDataAnalytics.recordedHours.label.recordedHoursInfo';
   static const seriesDataAnalytics_recordedHours_chart_chartTitle = 'seriesDataAnalytics.recordedHours.chart.chartTitle';
-  static const seriesDataAnalytics_recordedHours_chart_chartTitleDailyLife = 'seriesDataAnalytics.recordedHours.chart.chartTitleDailyLife';
+  static const seriesDataAnalytics_recordedHours_chart_chartTitleTags = 'seriesDataAnalytics.recordedHours.chart.chartTitleTags';
+  static const seriesDataAnalytics_tagsProportions_title = 'seriesDataAnalytics.tagsProportions.title';
+  static const seriesDataAnalytics_tagsProportions_subTitles_monthlyDistribution = 'seriesDataAnalytics.tagsProportions.subTitles.monthlyDistribution';
+  static const seriesDataAnalytics_tagsProportions_subTitles_distributionWeekdays = 'seriesDataAnalytics.tagsProportions.subTitles.distributionWeekdays';
+  static const seriesDataAnalytics_tagsProportions_subTitles_distributionHours = 'seriesDataAnalytics.tagsProportions.subTitles.distributionHours';
+  static const seriesDataAnalytics_tagsProportions_label_tagProportionsInfo = 'seriesDataAnalytics.tagsProportions.label.tagProportionsInfo';
+  static const seriesDataAnalytics_tagsProportions_table_colTag = 'seriesDataAnalytics.tagsProportions.table.colTag';
+  static const seriesDataAnalytics_tagsProportions_table_colProportions = 'seriesDataAnalytics.tagsProportions.table.colProportions';
+  static const seriesDataAnalytics_tagsProportions_table_colTotalShare = 'seriesDataAnalytics.tagsProportions.table.colTotalShare';
   static const seriesDataAnalytics_trend_title = 'seriesDataAnalytics.trend.title';
   static const seriesDataAnalytics_trend_label_forecast = 'seriesDataAnalytics.trend.label.forecast';
   static const seriesDataAnalytics_trend_label_failedToCalculateTrend = 'seriesDataAnalytics.trend.label.failedToCalculateTrend';
@@ -153,14 +187,9 @@ abstract class  LocaleKeys {
   static const seriesDataAnalytics_trend_tendency_up = 'seriesDataAnalytics.trend.tendency.up';
   static const seriesDataAnalytics_trend_tendency_down = 'seriesDataAnalytics.trend.tendency.down';
   static const seriesDataAnalytics_bloodPressure_recordedDaysMedication_title = 'seriesDataAnalytics.bloodPressure.recordedDaysMedication.title';
-  static const seriesDataAnalytics_bloodPressure_recordedDaysMedication_label_medicationLastDays = 'seriesDataAnalytics.bloodPressure.recordedDaysMedication.label.medicationLastDays';
+  static const seriesDataAnalytics_bloodPressure_recordedDaysMedication_label_medicationLastDays =
+      'seriesDataAnalytics.bloodPressure.recordedDaysMedication.label.medicationLastDays';
   static const seriesDataAnalytics_bloodPressure_trend_label_trendInfo = 'seriesDataAnalytics.bloodPressure.trend.label.trendInfo';
-  static const seriesDataAnalytics_dailyLife_attributesProportions_title = 'seriesDataAnalytics.dailyLife.attributesProportions.title';
-  static const seriesDataAnalytics_dailyLife_attributesProportions_subTitles_monthlyDistribution = 'seriesDataAnalytics.dailyLife.attributesProportions.subTitles.monthlyDistribution';
-  static const seriesDataAnalytics_dailyLife_attributesProportions_label_attributeProportionsInfo = 'seriesDataAnalytics.dailyLife.attributesProportions.label.attributeProportionsInfo';
-  static const seriesDataAnalytics_dailyLife_attributesProportions_table_colAttribute = 'seriesDataAnalytics.dailyLife.attributesProportions.table.colAttribute';
-  static const seriesDataAnalytics_dailyLife_attributesProportions_table_colProportions = 'seriesDataAnalytics.dailyLife.attributesProportions.table.colProportions';
-  static const seriesDataAnalytics_dailyLife_attributesProportions_table_colTotalShare = 'seriesDataAnalytics.dailyLife.attributesProportions.table.colTotalShare';
   static const seriesDataAnalytics_habit_trend_label_trendInfo = 'seriesDataAnalytics.habit.trend.label.trendInfo';
   static const seriesDefRenderer_action_addValue_tooltip = 'seriesDefRenderer.action.addValue.tooltip';
   static const seriesDefRenderer_action_showSeriesValues_tooltip = 'seriesDefRenderer.action.showSeriesValues.tooltip';
@@ -176,47 +205,122 @@ abstract class  LocaleKeys {
   static const seriesEdit_action_abort_tooltip = 'seriesEdit.action.abort.tooltip';
   static const seriesEdit_action_save_tooltip = 'seriesEdit.action.save.tooltip';
   static const seriesEdit_label_selectSeriesType = 'seriesEdit.label.selectSeriesType';
-  static const seriesEdit_label_moreSeriesToCome = 'seriesEdit.label.moreSeriesToCome';
   static const seriesEdit_btn_showSeriesTypeInfo = 'seriesEdit.btn.showSeriesTypeInfo';
   static const seriesEdit_btn_backToSeriesTypeSelection = 'seriesEdit.btn.backToSeriesTypeSelection';
   static const seriesEdit_common_label_seriesName = 'seriesEdit.common.label.seriesName';
   static const seriesEdit_common_label_seriesIcon = 'seriesEdit.common.label.seriesIcon';
+  static const seriesEdit_common_label_seriesItemName = 'seriesEdit.common.label.seriesItemName';
+  static const seriesEdit_common_label_seriesItemUnit = 'seriesEdit.common.label.seriesItemUnit';
   static const seriesEdit_common_label_seriesColor = 'seriesEdit.common.label.seriesColor';
   static const seriesEdit_displaySettings_title = 'seriesEdit.displaySettings.title';
   static const seriesEdit_displaySettings_label_initialView = 'seriesEdit.displaySettings.label.initialView';
   static const seriesEdit_displaySettings_pixelsView_preview_title = 'seriesEdit.displaySettings.pixelsView.preview.title';
-  static const seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_tooltip = 'seriesEdit.displaySettings.pixelsView.preview.pixelViewSettingsInfo.tooltip';
-  static const seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_title = 'seriesEdit.displaySettings.pixelsView.preview.pixelViewSettingsInfo.title';
-  static const seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_text = 'seriesEdit.displaySettings.pixelsView.preview.pixelViewSettingsInfo.text';
+  static const seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_tooltip =
+      'seriesEdit.displaySettings.pixelsView.preview.pixelViewSettingsInfo.tooltip';
+  static const seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_title =
+      'seriesEdit.displaySettings.pixelsView.preview.pixelViewSettingsInfo.title';
+  static const seriesEdit_displaySettings_pixelsView_preview_pixelViewSettingsInfo_text =
+      'seriesEdit.displaySettings.pixelsView.preview.pixelViewSettingsInfo.text';
   static const seriesEdit_displaySettings_pixelsView_switch_invertHueDirection_label = 'seriesEdit.displaySettings.pixelsView.switch.invertHueDirection.label';
   static const seriesEdit_displaySettings_pixelsView_slider_hueFactor_label = 'seriesEdit.displaySettings.pixelsView.slider.hueFactor.label';
   static const seriesEdit_displaySettings_tableView_label_standardColumnProfile = 'seriesEdit.displaySettings.tableView.label.standardColumnProfile';
   static const seriesEdit_seriesSettings_bloodPressure_title = 'seriesEdit.seriesSettings.bloodPressure.title';
-  static const seriesEdit_seriesSettings_bloodPressure_switch_hideMedicationInput_label = 'seriesEdit.seriesSettings.bloodPressure.switch.hideMedicationInput.label';
-  static const seriesEdit_seriesSettings_dailyLifeAttributes_title = 'seriesEdit.seriesSettings.dailyLifeAttributes.title';
-  static const seriesEdit_seriesSettings_dailyLifeAttributes_actions_add_tooltip = 'seriesEdit.seriesSettings.dailyLifeAttributes.actions.add.tooltip';
-  static const seriesEdit_seriesSettings_dailyLifeAttributes_actions_addPreset_tooltip = 'seriesEdit.seriesSettings.dailyLifeAttributes.actions.addPreset.tooltip';
-  static const seriesEdit_seriesSettings_dailyLifeAttributes_actions_delete_tooltip = 'seriesEdit.seriesSettings.dailyLifeAttributes.actions.delete.tooltip';
-  static const seriesEdit_seriesSettings_dailyLifeAttributes_actions_deleteAll_tooltip = 'seriesEdit.seriesSettings.dailyLifeAttributes.actions.deleteAll.tooltip';
-  static const seriesEdit_seriesSettings_dailyLifeAttributes_actions_edit_tooltip = 'seriesEdit.seriesSettings.dailyLifeAttributes.actions.edit.tooltip';
-  static const seriesEdit_seriesSettings_dailyLifeAttributes_dlg_title = 'seriesEdit.seriesSettings.dailyLifeAttributes.dlg.title';
-  static const seriesEdit_seriesSettings_dailyLifeAttributes_info = 'seriesEdit.seriesSettings.dailyLifeAttributes.info';
-  static const seriesEdit_seriesSettings_dailyLifeAttributes_preset_feelings_title = 'seriesEdit.seriesSettings.dailyLifeAttributes.preset.feelings.title';
-  static const seriesEdit_seriesSettings_dailyLifeAttributes_preset_feelings_attributeNames = 'seriesEdit.seriesSettings.dailyLifeAttributes.preset.feelings.attributeNames';
-  static const seriesEdit_seriesSettings_dailyLifeAttributes_preset_sports_title = 'seriesEdit.seriesSettings.dailyLifeAttributes.preset.sports.title';
-  static const seriesEdit_seriesSettings_dailyLifeAttributes_preset_sports_attributeNames = 'seriesEdit.seriesSettings.dailyLifeAttributes.preset.sports.attributeNames';
-  static const seriesEdit_seriesSettings_dailyLifeAttributes_preset_period_title = 'seriesEdit.seriesSettings.dailyLifeAttributes.preset.period.title';
-  static const seriesEdit_seriesSettings_dailyLifeAttributes_preset_period_attributeNames = 'seriesEdit.seriesSettings.dailyLifeAttributes.preset.period.attributeNames';
-  static const seriesEdit_seriesSettings_dailyLifeAttributes_preset_stars_title = 'seriesEdit.seriesSettings.dailyLifeAttributes.preset.stars.title';
-  static const seriesEdit_seriesSettings_dailyLifeAttributes_preset_stress_title = 'seriesEdit.seriesSettings.dailyLifeAttributes.preset.stress.title';
-  static const seriesEdit_seriesSettings_dailyLifeAttributes_preset_colorWheel_title = 'seriesEdit.seriesSettings.dailyLifeAttributes.preset.colorWheel.title';
-  static const seriesEdit_seriesSettings_dailyLifeAttributes_preset_hoursDown_title = 'seriesEdit.seriesSettings.dailyLifeAttributes.preset.hoursDown.title';
-  static const seriesEdit_seriesSettings_dailyLifeAttributes_preset_hoursUp_title = 'seriesEdit.seriesSettings.dailyLifeAttributes.preset.hoursUp.title';
-  static const seriesEdit_seriesSettings_dailyLifeAttributes_preset_minutesDown_title = 'seriesEdit.seriesSettings.dailyLifeAttributes.preset.minutesDown.title';
-  static const seriesEdit_seriesSettings_dailyLifeAttributes_preset_minutesUp_title = 'seriesEdit.seriesSettings.dailyLifeAttributes.preset.minutesUp.title';
-  static const seriesEdit_seriesSettings_dailyLifeAttributes_preset_numbersDown_title = 'seriesEdit.seriesSettings.dailyLifeAttributes.preset.numbersDown.title';
-  static const seriesEdit_seriesSettings_dailyLifeAttributes_preset_numbersUp_title = 'seriesEdit.seriesSettings.dailyLifeAttributes.preset.numbersUp.title';
-  static const seriesEdit_seriesSettings_dailyLifeAttributes_validation_emptyAttributs = 'seriesEdit.seriesSettings.dailyLifeAttributes.validation.emptyAttributs';
+  static const seriesEdit_seriesSettings_bloodPressure_switch_hideMedicationInput_label =
+      'seriesEdit.seriesSettings.bloodPressure.switch.hideMedicationInput.label';
+  static const seriesEdit_seriesSettings_custom_title = 'seriesEdit.seriesSettings.custom.title';
+  static const seriesEdit_seriesSettings_tags_title = 'seriesEdit.seriesSettings.tags.title';
+  static const seriesEdit_seriesSettings_tags_actions_add_tooltip = 'seriesEdit.seriesSettings.tags.actions.add.tooltip';
+  static const seriesEdit_seriesSettings_tags_actions_addPreset_tooltip = 'seriesEdit.seriesSettings.tags.actions.addPreset.tooltip';
+  static const seriesEdit_seriesSettings_tags_actions_delete_tooltip = 'seriesEdit.seriesSettings.tags.actions.delete.tooltip';
+  static const seriesEdit_seriesSettings_tags_actions_deleteAll_tooltip = 'seriesEdit.seriesSettings.tags.actions.deleteAll.tooltip';
+  static const seriesEdit_seriesSettings_tags_actions_edit_tooltip = 'seriesEdit.seriesSettings.tags.actions.edit.tooltip';
+  static const seriesEdit_seriesSettings_tags_dlg_title = 'seriesEdit.seriesSettings.tags.dlg.title';
+  static const seriesEdit_seriesSettings_tags_info = 'seriesEdit.seriesSettings.tags.info';
+  static const seriesEdit_seriesSettings_tags_preset_feelings_title = 'seriesEdit.seriesSettings.tags.preset.feelings.title';
+  static const seriesEdit_seriesSettings_tags_preset_feelings_tagNames = 'seriesEdit.seriesSettings.tags.preset.feelings.tagNames';
+  static const seriesEdit_seriesSettings_tags_preset_sports_title = 'seriesEdit.seriesSettings.tags.preset.sports.title';
+  static const seriesEdit_seriesSettings_tags_preset_sports_tagNames = 'seriesEdit.seriesSettings.tags.preset.sports.tagNames';
+  static const seriesEdit_seriesSettings_tags_preset_period_title = 'seriesEdit.seriesSettings.tags.preset.period.title';
+  static const seriesEdit_seriesSettings_tags_preset_period_tagNames = 'seriesEdit.seriesSettings.tags.preset.period.tagNames';
+  static const seriesEdit_seriesSettings_tags_preset_stars_title = 'seriesEdit.seriesSettings.tags.preset.stars.title';
+  static const seriesEdit_seriesSettings_tags_preset_stress_title = 'seriesEdit.seriesSettings.tags.preset.stress.title';
+  static const seriesEdit_seriesSettings_tags_preset_colorWheel_title = 'seriesEdit.seriesSettings.tags.preset.colorWheel.title';
+  static const seriesEdit_seriesSettings_tags_preset_hoursDown_title = 'seriesEdit.seriesSettings.tags.preset.hoursDown.title';
+  static const seriesEdit_seriesSettings_tags_preset_hoursUp_title = 'seriesEdit.seriesSettings.tags.preset.hoursUp.title';
+  static const seriesEdit_seriesSettings_tags_preset_minutesDown_title = 'seriesEdit.seriesSettings.tags.preset.minutesDown.title';
+  static const seriesEdit_seriesSettings_tags_preset_minutesUp_title = 'seriesEdit.seriesSettings.tags.preset.minutesUp.title';
+  static const seriesEdit_seriesSettings_tags_preset_numbersDown_title = 'seriesEdit.seriesSettings.tags.preset.numbersDown.title';
+  static const seriesEdit_seriesSettings_tags_preset_numbersUp_title = 'seriesEdit.seriesSettings.tags.preset.numbersUp.title';
+  static const seriesEdit_seriesSettings_tags_validation_emptyTags = 'seriesEdit.seriesSettings.tags.validation.emptyTags';
+  static const seriesEdit_seriesSettings_seriesItems_title = 'seriesEdit.seriesSettings.seriesItems.title';
+  static const seriesEdit_seriesSettings_seriesItems_actions_add_tooltip = 'seriesEdit.seriesSettings.seriesItems.actions.add.tooltip';
+  static const seriesEdit_seriesSettings_seriesItems_actions_addCalculated_tooltip = 'seriesEdit.seriesSettings.seriesItems.actions.addCalculated.tooltip';
+  static const seriesEdit_seriesSettings_seriesItems_actions_delete_tooltip = 'seriesEdit.seriesSettings.seriesItems.actions.delete.tooltip';
+  static const seriesEdit_seriesSettings_seriesItems_actions_delete_query_deleteWithReferencingItems =
+      'seriesEdit.seriesSettings.seriesItems.actions.delete.query.deleteWithReferencingItems';
+  static const seriesEdit_seriesSettings_seriesItems_actions_deleteAll_tooltip = 'seriesEdit.seriesSettings.seriesItems.actions.deleteAll.tooltip';
+  static const seriesEdit_seriesSettings_seriesItems_actions_edit_tooltip = 'seriesEdit.seriesSettings.seriesItems.actions.edit.tooltip';
+  static const seriesEdit_seriesSettings_seriesItems_actions_editChartSettings_tooltip =
+      'seriesEdit.seriesSettings.seriesItems.actions.editChartSettings.tooltip';
+  static const seriesEdit_seriesSettings_seriesItems_actions_editTableSettings_tooltip =
+      'seriesEdit.seriesSettings.seriesItems.actions.editTableSettings.tooltip';
+  static const seriesEdit_seriesSettings_seriesItems_dlg_title = 'seriesEdit.seriesSettings.seriesItems.dlg.title';
+  static const seriesEdit_seriesSettings_seriesItems_chartSettingsDlg_title = 'seriesEdit.seriesSettings.seriesItems.chartSettingsDlg.title';
+  static const seriesEdit_seriesSettings_seriesItems_chartSettingsDlg_label_useDelta = 'seriesEdit.seriesSettings.seriesItems.chartSettingsDlg.label.useDelta';
+  static const seriesEdit_seriesSettings_seriesItems_chartSettingsDlg_tooltip_showChart =
+      'seriesEdit.seriesSettings.seriesItems.chartSettingsDlg.tooltip.showChart';
+  static const seriesEdit_seriesSettings_seriesItems_chartSettingsDlg_tooltip_hideChart =
+      'seriesEdit.seriesSettings.seriesItems.chartSettingsDlg.tooltip.hideChart';
+  static const seriesEdit_seriesSettings_seriesItems_chartSettingsDlg_tooltip_useDelta =
+      'seriesEdit.seriesSettings.seriesItems.chartSettingsDlg.tooltip.useDelta';
+  static const seriesEdit_seriesSettings_seriesItems_chartSettingsDlg_tooltip_disuseDelta =
+      'seriesEdit.seriesSettings.seriesItems.chartSettingsDlg.tooltip.disuseDelta';
+  static const seriesEdit_seriesSettings_seriesItems_tableSettingsDlg_title = 'seriesEdit.seriesSettings.seriesItems.tableSettingsDlg.title';
+  static const seriesEdit_seriesSettings_seriesItems_tableSettingsDlg_label_columnWidth =
+      'seriesEdit.seriesSettings.seriesItems.tableSettingsDlg.label.columnWidth';
+  static const seriesEdit_seriesSettings_seriesItems_tableSettingsDlg_tooltip_showColumn =
+      'seriesEdit.seriesSettings.seriesItems.tableSettingsDlg.tooltip.showColumn';
+  static const seriesEdit_seriesSettings_seriesItems_tableSettingsDlg_tooltip_hideColumn =
+      'seriesEdit.seriesSettings.seriesItems.tableSettingsDlg.tooltip.hideColumn';
+  static const seriesEdit_seriesSettings_seriesItems_info = 'seriesEdit.seriesSettings.seriesItems.info';
+  static const seriesEdit_seriesSettings_seriesItems_validation_emptyParameters = 'seriesEdit.seriesSettings.seriesItems.validation.emptyParameters';
+  static const seriesEdit_seriesSettings_seriesItems_validation_emptyParametersChart = 'seriesEdit.seriesSettings.seriesItems.validation.emptyParametersChart';
+  static const seriesEdit_seriesSettings_seriesItems_validation_emptyParametersTable = 'seriesEdit.seriesSettings.seriesItems.validation.emptyParametersTable';
+  static const seriesEdit_seriesSettings_seriesItems_calculation_action_delete_tooltip =
+      'seriesEdit.seriesSettings.seriesItems.calculation.action.delete.tooltip';
+  static const seriesEdit_seriesSettings_seriesItems_calculation_action_moveUp_tooltip =
+      'seriesEdit.seriesSettings.seriesItems.calculation.action.moveUp.tooltip';
+  static const seriesEdit_seriesSettings_seriesItems_calculation_action_moveDown_tooltip =
+      'seriesEdit.seriesSettings.seriesItems.calculation.action.moveDown.tooltip';
+  static const seriesEdit_seriesSettings_seriesItems_calculation_action_edit_tooltip = 'seriesEdit.seriesSettings.seriesItems.calculation.action.edit.tooltip';
+  static const seriesEdit_seriesSettings_seriesItems_calculation_btn_selectSeriesItem_tooltip =
+      'seriesEdit.seriesSettings.seriesItems.calculation.btn.selectSeriesItem.tooltip';
+  static const seriesEdit_seriesSettings_seriesItems_calculation_btn_selectFirstSeriesItem_tooltip =
+      'seriesEdit.seriesSettings.seriesItems.calculation.btn.selectFirstSeriesItem.tooltip';
+  static const seriesEdit_seriesSettings_seriesItems_calculation_btn_addCalculation_tooltip =
+      'seriesEdit.seriesSettings.seriesItems.calculation.btn.addCalculation.tooltip';
+  static const seriesEdit_seriesSettings_seriesItems_calculation_btn_selectCalculation_tooltip =
+      'seriesEdit.seriesSettings.seriesItems.calculation.btn.selectCalculation.tooltip';
+  static const seriesEdit_seriesSettings_seriesItems_calculation_btn_deselectCalculation_tooltip =
+      'seriesEdit.seriesSettings.seriesItems.calculation.btn.deselectCalculation.tooltip';
+  static const seriesEdit_seriesSettings_seriesItems_calculation_parameterSettingsDlg_title =
+      'seriesEdit.seriesSettings.seriesItems.calculation.parameterSettingsDlg.title';
+  static const seriesEdit_seriesSettings_seriesItems_calculation_calculationItemSettingsDlg_title =
+      'seriesEdit.seriesSettings.seriesItems.calculation.calculationItemSettingsDlg.title';
+  static const seriesEdit_seriesSettings_seriesItems_calculation_calculationItemSettingsDlg_label_operator =
+      'seriesEdit.seriesSettings.seriesItems.calculation.calculationItemSettingsDlg.label.operator';
+  static const seriesEdit_seriesSettings_seriesItems_calculation_calculationItemSettingsDlg_label_inputType =
+      'seriesEdit.seriesSettings.seriesItems.calculation.calculationItemSettingsDlg.label.inputType';
+  static const seriesEdit_seriesSettings_seriesItems_calculation_calculationItemSettingsDlg_label_value =
+      'seriesEdit.seriesSettings.seriesItems.calculation.calculationItemSettingsDlg.label.value';
+  static const seriesEdit_seriesSettings_seriesItems_calculation_switch_usePreviousValue_label =
+      'seriesEdit.seriesSettings.seriesItems.calculation.switch.usePreviousValue.label';
+  static const seriesEdit_seriesSettings_seriesItems_calculation_switch_usePreviousValue_tooltip =
+      'seriesEdit.seriesSettings.seriesItems.calculation.switch.usePreviousValue.tooltip';
+  static const seriesEdit_seriesSettings_seriesItems_calculation_validation_emptyParameter =
+      'seriesEdit.seriesSettings.seriesItems.calculation.validation.emptyParameter';
+  static const seriesEdit_seriesSettings_seriesItems_calculation_validation_emptyCalculation =
+      'seriesEdit.seriesSettings.seriesItems.calculation.validation.emptyCalculation';
   static const seriesManagement_title = 'seriesManagement.title';
   static const seriesManagement_action_importExport_tooltip = 'seriesManagement.action.importExport.tooltip';
   static const seriesManagement_action_closeSeriesManagement_tooltip = 'seriesManagement.action.closeSeriesManagement.tooltip';
@@ -229,15 +333,21 @@ abstract class  LocaleKeys {
   static const seriesManagement_importExport_title = 'seriesManagement.importExport.title';
   static const seriesManagement_importExport_btn_exportSeries = 'seriesManagement.importExport.btn.exportSeries';
   static const seriesManagement_importExport_btn_exportSingleSeries = 'seriesManagement.importExport.btn.exportSingleSeries';
+  static const seriesManagement_importExport_btn_exportSingleSeriesCSV = 'seriesManagement.importExport.btn.exportSingleSeriesCSV';
   static const seriesManagement_importExport_btn_importSeries = 'seriesManagement.importExport.btn.importSeries';
+  static const seriesManagement_importExport_btn_importSeriesCSV = 'seriesManagement.importExport.btn.importSeriesCSV';
   static const seriesManagement_importExport_btn_shareSeries = 'seriesManagement.importExport.btn.shareSeries';
   static const seriesManagement_importExport_btn_shareSingleSeries = 'seriesManagement.importExport.btn.shareSingleSeries';
   static const seriesManagement_importExport_label_exportSeries = 'seriesManagement.importExport.label.exportSeries';
   static const seriesManagement_importExport_label_exportSingleSeries = 'seriesManagement.importExport.label.exportSingleSeries';
+  static const seriesManagement_importExport_label_exportSingleSeriesCSV = 'seriesManagement.importExport.label.exportSingleSeriesCSV';
   static const seriesManagement_importExport_label_exportSeriesTip = 'seriesManagement.importExport.label.exportSeriesTip';
+  static const seriesManagement_importExport_label_exportSeriesCSVTip = 'seriesManagement.importExport.label.exportSeriesCSVTip';
   static const seriesManagement_importExport_label_exportSingleSeriesTip = 'seriesManagement.importExport.label.exportSingleSeriesTip';
   static const seriesManagement_importExport_label_importSeries = 'seriesManagement.importExport.label.importSeries';
   static const seriesManagement_importExport_label_importSeriesTip = 'seriesManagement.importExport.label.importSeriesTip';
+  static const seriesManagement_importExport_label_importSeriesCSV = 'seriesManagement.importExport.label.importSeriesCSV';
+  static const seriesManagement_importExport_label_importSeriesCSVTip = 'seriesManagement.importExport.label.importSeriesCSVTip';
   static const seriesManagement_importExport_label_latestSeriesExport = 'seriesManagement.importExport.label.latestSeriesExport';
   static const seriesManagement_importExport_label_shareSeries = 'seriesManagement.importExport.label.shareSeries';
   static const seriesManagement_importExport_label_shareSingleSeries = 'seriesManagement.importExport.label.shareSingleSeries';
@@ -245,7 +355,7 @@ abstract class  LocaleKeys {
   static const seriesManagement_importExport_alert_unexpectedDataStructure = 'seriesManagement.importExport.alert.unexpectedDataStructure';
   static const seriesManagement_importExport_alert_unexpectedFile = 'seriesManagement.importExport.alert.unexpectedFile';
   static const seriesManagement_importExport_alert_import_title = 'seriesManagement.importExport.alert.import.title';
-  static const seriesManagement_importExport_validation_dailyLife_emptyAttributes = 'seriesManagement.importExport.validation.dailyLife.emptyAttributes';
+  static const seriesManagement_importExport_validation_dailyLife_emptyTags = 'seriesManagement.importExport.validation.dailyLife.emptyTags';
   static const seriesValue_action_deleteValue_tooltip = 'seriesValue.action.deleteValue.tooltip';
   static const seriesValue_query_deleteValue = 'seriesValue.query.deleteValue';
   static const seriesValue_bloodPressure_label_diastolic = 'seriesValue.bloodPressure.label.diastolic';
@@ -256,7 +366,6 @@ abstract class  LocaleKeys {
   static const seriesValue_bloodPressure_validation_diastolicTooHigh = 'seriesValue.bloodPressure.validation.diastolicTooHigh';
   static const seriesValue_bloodPressure_validation_systolicTooLow = 'seriesValue.bloodPressure.validation.systolicTooLow';
   static const seriesValue_dailyCheck_btn_toggleCheck_tooltip = 'seriesValue.dailyCheck.btn.toggleCheck.tooltip';
-  static const seriesValue_dailyLife_btn_selectAttribute_tooltip = 'seriesValue.dailyLife.btn.selectAttribute.tooltip';
   static const seriesValue_habit_btn_toggleValue_tooltip = 'seriesValue.habit.btn.toggleValue.tooltip';
   static const settings_title = 'settings.title';
   static const settings_deviceStorage_title = 'settings.deviceStorage.title';
@@ -274,5 +383,4 @@ abstract class  LocaleKeys {
   static const settings_general_theme_system = 'settings.general.theme.system';
   static const settings_general_theme_dark = 'settings.general.theme.dark';
   static const settings_general_theme_light = 'settings.general.theme.light';
-
 }

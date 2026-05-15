@@ -11,9 +11,9 @@ class Navigation {
 
   static void setCurrentMainNavigationRouteIdx(int value, BuildContext context) {
     if (value < 0
-        // don't jump back to main navigation start page:
-        // || currentMainNavigationIdx.value == value
-        ) {
+    // don't jump back to main navigation start page:
+    // || currentMainNavigationIdx.value == value
+    ) {
       return;
     }
 

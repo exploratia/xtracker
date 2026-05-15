@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../util/app_info.dart';
 import '../../../util/device_storage/device_storage.dart';
 import '../../../util/device_storage/device_storage_keys.dart';
 
@@ -71,6 +72,13 @@ class SettingsService {
       await DeviceStorage.write(DeviceStorageKeys.initialAppStart, _toDateStr(timestamp));
     }
     return timestamp;
+  }
+
+  /// Persists the current app version and returns the previously stored version.
+  Future<String> appVersion() async {
+    var previousVersion = await DeviceStorage.read(DeviceStorageKeys.appVersion) ?? "0.0.0";
+    await DeviceStorage.write(DeviceStorageKeys.appVersion, AppInfo.version);
+    return previousVersion;
   }
 
   /// Loads last series export date (if any)

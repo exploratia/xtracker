@@ -91,18 +91,31 @@ class _Value extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           SizedBox(
-              width: (30 * scaleW).ceilToDouble(),
-              child: Text('${bloodPressureValue.high}', style: const TextStyle(color: Colors.white), textAlign: TextAlign.center)),
+            width: (30 * scaleW).ceilToDouble(),
+            child: Text(
+              '${bloodPressureValue.high}',
+              style: const TextStyle(color: Colors.white),
+              textAlign: TextAlign.center,
+            ),
+          ),
           bloodPressureValue.medication
               ? Icon(
                   Icons.medication_outlined,
                   size: 15 * scale,
                   color: Colors.white,
                 )
-              : SizedBox(height: 15 * scale, child: VerticalDivider(thickness: 1 * scale, width: ThemeUtils.horizontalSpacing, color: Colors.white)),
+              : SizedBox(
+                  height: 15 * scale,
+                  child: VerticalDivider(thickness: 1 * scale, width: ThemeUtils.horizontalSpacing, color: Colors.white),
+                ),
           SizedBox(
-              width: (30 * scaleW).ceilToDouble(),
-              child: Text('${bloodPressureValue.low}', style: const TextStyle(color: Colors.white), textAlign: TextAlign.center)),
+            width: (30 * scaleW).ceilToDouble(),
+            child: Text(
+              '${bloodPressureValue.low}',
+              style: const TextStyle(color: Colors.white),
+              textAlign: TextAlign.center,
+            ),
+          ),
         ],
       ),
     );

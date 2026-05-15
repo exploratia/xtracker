@@ -16,13 +16,15 @@ class AddFirstSeries extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         IconButton(
-            iconSize: 40 * MediaQueryUtils.textScaleFactor,
-            tooltip: LocaleKeys.seriesDashboard_btn_addSeries_tooltip.tr(),
-            color: themeData.colorScheme.primary,
-            onPressed: () async {
-              /*SeriesDef? s=*/ await SeriesDef.addNewSeries(context);
-            },
-            icon: const Icon(Icons.add_chart_outlined)),
+          iconSize: 40 * MediaQueryUtils.textScaleFactor,
+          tooltip: LocaleKeys.seriesDashboard_btn_addSeries_tooltip.tr(),
+          color: themeData.colorScheme.primary,
+          onPressed: () async {
+            /*SeriesDef? s=*/
+            await SeriesDef.addNewSeries(context);
+          },
+          icon: const Icon(Icons.add_chart_outlined),
+        ),
         Center(child: Text(LocaleKeys.seriesDashboard_btn_addSeries_label.tr())),
       ],
     );

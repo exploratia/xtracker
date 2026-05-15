@@ -9,6 +9,8 @@ import '../controls/layout/single_child_scroll_view_with_scrollbar.dart';
 
 /// Check if a backup reminder should be displayed.
 class SeriesExportCheck extends StatefulWidget {
+  static bool _dialogVisible = false;
+
   final Widget child;
   final SettingsController settingsController;
 
@@ -30,7 +32,8 @@ class _SeriesExportCheckState extends State<SeriesExportCheck> {
     // if no reminder date available use initialAppStart +30 days
     DateTime reminderDate = settingsController.seriesExportReminderDate ?? settingsController.initialAppStart.add(const Duration(days: 30));
 
-    if (DateTime.now().isAfter(reminderDate)) {
+    if (!SeriesExportCheck._dialogVisible && DateTime.now().isAfter(reminderDate)) {
+      SeriesExportCheck._dialogVisible = true;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _showAlert(context);
       });
@@ -78,24 +81,29 @@ class _SeriesExportCheckState extends State<SeriesExportCheck> {
       ),
     );
 
-    var res = await showDialog<bool?>(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: Text(LocaleKeys.seriesManagement_backupAlert_title.tr()),
-        content: dialogContent,
-        actions: [
-          TextButton(
+    try {
+      var res = await showDialog<bool?>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: Text(LocaleKeys.seriesManagement_backupAlert_title.tr()),
+          content: dialogContent,
+          actions: [
+            TextButton(
               onPressed: () {
                 Navigator.of(ctx).pop();
               },
-              child: Text(LocaleKeys.commons_dialog_btn_close.tr()))
-        ],
-      ),
-    );
+              child: Text(LocaleKeys.commons_dialog_btn_close.tr()),
+            ),
+          ],
+        ),
+      );
 
-    // case of close remember again in 1 day
-    if (res == null) {
-      await settingsController.updateSeriesExportReminderDate(1);
+      // case of close remember again in 1 day
+      if (res == null) {
+        await settingsController.updateSeriesExportReminderDate(1);
+      }
+    } finally {
+      SeriesExportCheck._dialogVisible = false;
     }
   }
 

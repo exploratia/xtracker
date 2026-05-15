@@ -5,6 +5,8 @@ import 'package:uuid/uuid.dart';
 
 import '../../../../util/color_utils.dart';
 import '../../../../util/ex.dart';
+import '../../../../util/json_reader.dart';
+import '../../series_def.dart';
 import '../series_data_value.dart';
 
 class BloodPressureValue extends SeriesDataValue {
@@ -16,22 +18,35 @@ class BloodPressureValue extends SeriesDataValue {
 
   BloodPressureValue(super.uuid, super.dateTime, this.high, this.low, this.medication);
 
-  factory BloodPressureValue.fromJson(Map<String, dynamic> json) => BloodPressureValue(
-        json['uuid'] as String? ?? const Uuid().v4().toString(),
-        DateTime.fromMillisecondsSinceEpoch(json['utcMs'] as int),
-        json['high'] as int,
-        json['low'] as int,
-        json['medication'] as bool? ?? false,
-      );
+  factory BloodPressureValue.fromJson(JsonReader json) => BloodPressureValue(
+    json.asStringOr('uuid', const Uuid().v4()),
+    DateTime.fromMillisecondsSinceEpoch(json.asReader('utcMs').getInt()),
+    json.asReader('high').getInt(),
+    json.asReader('low').getInt(),
+    json.asBoolOr('medication', false),
+  );
 
   @override
   Map<String, dynamic> toJson({bool exportUuid = true}) => {
-        if (exportUuid) 'uuid': uuid,
-        'utcMs': dateTime.millisecondsSinceEpoch,
-        'high': high,
-        'low': low,
-        if (medication) 'medication': medication, // only save if true
-      };
+    if (exportUuid) 'uuid': uuid,
+    'utcMs': dateTime.millisecondsSinceEpoch,
+    'high': high,
+    'low': low,
+    if (medication) 'medication': medication, // only save if true
+  };
+
+  factory BloodPressureValue.fromCSVList(List<dynamic> csv) => BloodPressureValue(
+    const Uuid().v4().toString(),
+    DateTime.fromMillisecondsSinceEpoch(csv[0] as int),
+    csv[1] as int,
+    csv[2] as int,
+    csv.length > 3 ? "1" == csv[3].toString() : false,
+  );
+
+  @override
+  List<dynamic> toCSVList(SeriesDef seriesDef) {
+    return [dateTime.millisecondsSinceEpoch, high, low, medication ? 1 : 0];
+  }
 
   @override
   String toString() {

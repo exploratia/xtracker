@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
@@ -23,11 +25,7 @@ class _DoubleBackToCloseState extends State<DoubleBackToClose> {
   static const _exitTimeInMillis = Duration(seconds: 2);
   var _lastTimeBackButtonWasTapped = DateTime(0);
   bool _canPopNow = false;
-
-  @override
-  void initState() {
-    super.initState();
-  }
+  Timer? _resetCanPopTimer;
 
   void _setLastTapped() {
     setState(() {
@@ -37,6 +35,7 @@ class _DoubleBackToCloseState extends State<DoubleBackToClose> {
   }
 
   void _resetCanPop() {
+    if (!mounted) return;
     setState(() {
       _lastTimeBackButtonWasTapped = DateTime(0);
       _canPopNow = false;
@@ -65,7 +64,8 @@ class _DoubleBackToCloseState extends State<DoubleBackToClose> {
           if (!_canPop()) {
             Dialogs.showSnackBar(LocaleKeys.commons_snackbar_pressBackAgainToExit.tr(), context);
             _setLastTapped();
-            Future.delayed(_exitTimeInMillis, () => _resetCanPop());
+            _resetCanPopTimer?.cancel();
+            _resetCanPopTimer = Timer(_exitTimeInMillis, _resetCanPop);
           }
         },
         child: widget.child,
@@ -73,5 +73,11 @@ class _DoubleBackToCloseState extends State<DoubleBackToClose> {
     } else {
       return widget.child;
     }
+  }
+
+  @override
+  void dispose() {
+    _resetCanPopTimer?.cancel();
+    super.dispose();
   }
 }

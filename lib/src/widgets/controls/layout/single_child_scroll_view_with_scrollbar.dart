@@ -4,6 +4,7 @@ import '../../../util/theme_utils.dart';
 
 class SingleChildScrollViewWithScrollbar extends StatefulWidget {
   final Widget child;
+  final ScrollController? scrollController;
   final Axis scrollDirection;
   final Future<void> Function()? onRefreshCallback;
   final void Function(ScrollPosition value)? scrollPositionHandler;
@@ -17,6 +18,7 @@ class SingleChildScrollViewWithScrollbar extends StatefulWidget {
   const SingleChildScrollViewWithScrollbar({
     super.key,
     required this.child,
+    this.scrollController,
     this.scrollDirection = Axis.vertical,
     this.onRefreshCallback,
     this.scrollPositionHandler,
@@ -30,41 +32,54 @@ class SingleChildScrollViewWithScrollbar extends StatefulWidget {
 }
 
 class _SingleChildScrollViewWithScrollbarState extends State<SingleChildScrollViewWithScrollbar> {
-  final ScrollController _scrollController = ScrollController();
+  late final ScrollController _scrollController;
+  late final bool _ownsController;
+  VoidCallback? _scrollListener;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _ownsController = widget.scrollController == null;
+    _scrollController = widget.scrollController ?? ScrollController();
+
+    final cb = widget.scrollPositionHandler;
+    if (cb != null) {
+      _scrollListener = () {
+        cb(_scrollController.position);
+      };
+      _scrollController.addListener(_scrollListener!);
+
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        cb(_scrollController.position);
+      });
+    }
+  }
 
   @override
   void dispose() {
-    _scrollController.dispose();
+    final scrollListener = _scrollListener;
+    if (scrollListener != null) {
+      _scrollController.removeListener(scrollListener);
+      _scrollListener = null;
+    }
+
+    if (_ownsController) {
+      _scrollController.dispose();
+    }
     super.dispose();
   }
 
   @override
+  @override
   Widget build(BuildContext context) {
-    final scrollPositionCb = widget.scrollPositionHandler;
-    if (scrollPositionCb != null) {
-      _scrollController.addListener(() {
-        scrollPositionCb(_scrollController.position);
-      });
-      // Call callback once direct with initial scroll pos (Show Bottom NavBar if not visible)
-      WidgetsBinding.instance.addPostFrameCallback((_) => scrollPositionCb(_scrollController.position));
-    }
+    ScrollPhysics? scrollPhysics = widget.onRefreshCallback != null ? const AlwaysScrollableScrollPhysics() : null;
 
-    final refreshHandler = widget.onRefreshCallback;
-    ScrollPhysics? scrollPhysics = (refreshHandler != null) ? const AlwaysScrollableScrollPhysics() : null;
-
-    Widget child;
-    if (widget.scrollDirection == Axis.vertical) {
-      child = Container(
-        // center horizontally
-        alignment: Alignment.center,
-        child: widget.child,
-      );
-    } else {
-      child = widget.child;
-    }
+    Widget child = widget.scrollDirection == Axis.vertical ? Align(alignment: Alignment.center, child: widget.child) : widget.child;
 
     ScrollbarOrientation? orientation;
-    EdgeInsetsGeometry padding = const EdgeInsets.all(0);
+    EdgeInsetsGeometry padding = EdgeInsets.zero;
+
     if (widget.useScreenPadding) {
       padding = ThemeUtils.screenPaddingAll;
     } else if (widget.useHorizontalScreenPadding) {
@@ -94,10 +109,11 @@ class _SingleChildScrollViewWithScrollbarState extends State<SingleChildScrollVi
       ),
     );
 
-    if (refreshHandler == null) {
-      return scrollbar;
-    }
-
-    return RefreshIndicator(onRefresh: refreshHandler, child: scrollbar);
+    return widget.onRefreshCallback == null
+        ? scrollbar
+        : RefreshIndicator(
+            onRefresh: widget.onRefreshCallback!,
+            child: scrollbar,
+          );
   }
 }

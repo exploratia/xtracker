@@ -36,10 +36,10 @@ class DayRangeSlider extends StatefulWidget {
     this.sliderVisibleCallback,
     this.maxSpan = 366 + 31,
     this.sliderInitialVisible = true,
-  })  : _dateRangeFrom = DateTimeUtils.truncateToDay(dateRangeFrom),
-        _dateRangeTill = DateTimeUtils.truncateToDay(dateRangeTill),
-        _selectedDateRangeFrom = selectedDateRangeFrom != null ? DateTimeUtils.truncateToDay(selectedDateRangeFrom) : null,
-        _selectedDateRangeTill = selectedDateRangeTill != null ? DateTimeUtils.truncateToDay(selectedDateRangeTill) : null;
+  }) : _dateRangeFrom = DateTimeUtils.truncateToDay(dateRangeFrom),
+       _dateRangeTill = DateTimeUtils.truncateToDay(dateRangeTill),
+       _selectedDateRangeFrom = selectedDateRangeFrom != null ? DateTimeUtils.truncateToDay(selectedDateRangeFrom) : null,
+       _selectedDateRangeTill = selectedDateRangeTill != null ? DateTimeUtils.truncateToDay(selectedDateRangeTill) : null;
 
   @override
   State<DayRangeSlider> createState() => _DayRangeSliderState();
@@ -102,8 +102,10 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
       till = _dateRangeTill;
     }
     // build difference to midday to ensure all full days are included (because of daylight saving)
-    _values = RangeValues(_dateRangeFrom.difference(DateTimeUtils.truncateToMidDay(from)).inDays.abs().toDouble(),
-        _dateRangeFrom.difference(DateTimeUtils.truncateToMidDay(till)).inDays.abs().toDouble());
+    _values = RangeValues(
+      _dateRangeFrom.difference(DateTimeUtils.truncateToMidDay(from)).inDays.abs().toDouble(),
+      _dateRangeFrom.difference(DateTimeUtils.truncateToMidDay(till)).inDays.abs().toDouble(),
+    );
   }
 
   void _initVars() {
@@ -420,15 +422,16 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
                                 borderRadius: ThemeUtils.borderRadiusCircular,
                               ),
                               child: const Center(
-                                  child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                spacing: ThemeUtils.horizontalSpacingSmall,
-                                children: [
-                                  _DragLine(),
-                                  _DragLine(),
-                                  _DragLine(),
-                                ],
-                              )),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  spacing: ThemeUtils.horizontalSpacingSmall,
+                                  children: [
+                                    _DragLine(),
+                                    _DragLine(),
+                                    _DragLine(),
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                         ),

@@ -1,9 +1,13 @@
+import '../../../util/json_reader.dart';
+import '../series_def.dart';
 import '../series_type.dart';
 import 'blood_pressure/blood_pressure_value.dart';
+import 'custom/custom_value.dart';
 import 'daily_check/daily_check_value.dart';
 import 'daily_life/daily_life_value.dart';
 import 'datetime_item.dart';
 import 'habit/habit_value.dart';
+import 'monthly/monthly_value.dart';
 
 abstract class SeriesDataValue implements DateTimeItem {
   final String uuid;
@@ -18,12 +22,16 @@ abstract class SeriesDataValue implements DateTimeItem {
 
   Map<String, dynamic> toJson({bool exportUuid = true});
 
-  static SeriesDataValue fromJson(Map<String, dynamic> json, SeriesType seriesType) {
+  static SeriesDataValue fromJson(JsonReader json, SeriesType seriesType) {
     return switch (seriesType) {
       SeriesType.bloodPressure => BloodPressureValue.fromJson(json),
       SeriesType.dailyCheck => DailyCheckValue.fromJson(json),
       SeriesType.dailyLife => DailyLifeValue.fromJson(json),
       SeriesType.habit => HabitValue.fromJson(json),
+      SeriesType.custom => CustomValue.fromJson(json),
+      SeriesType.monthly => MonthlyValue.fromJson(json),
     };
   }
+
+  List<dynamic> toCSVList(SeriesDef seriesDef);
 }

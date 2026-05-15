@@ -23,6 +23,21 @@
     "oneYearMsg": "Seit einem Jahr dabei – großartig!\n\nWenn dir die App gefällt und du ihre Weiterentwicklung unterstützen möchtest, kannst du mir gerne einen Kaffee spendieren. Dein Beitrag hilft, die App weiter zu verbessern und kostenlos bereitzustellen.",
     "multipleYearsMsg": "Wieder ein Jahr vorbei – danke, fürs Dranbleiben!\n\nWenn du die Weiterentwicklung unterstützen möchtest, freue ich mich über einen Kaffee. So hilfst du mir, die App aktuell und kostenlos zu halten."
   },
+  "changeLog": {
+    "title": "Was ist neu?",
+    "label": {
+      "version": "Version {}",
+      "versionChanged": "Die App wurde auf Version {} aktualisiert."
+    },
+    "entries": {
+      "v1_4_0": "Erste öffentliche Release-Version mit vereinheitlichter Pixelansicht.",
+      "v1_3_1": "Erweiterte Auswertungen für Tageszeiten und Monatsverteilungen.",
+      "v1_3_0": "Tägliches Leben als neue Messreihe, Standardansichten pro Messreihe und Hintergrundbild-Unterstützung.",
+      "v1_2_0": "Neue Analysen für aufgezeichnete Tage sowie Trend-Analysen für Blutdruck und Gewohnheiten.",
+      "v1_1_0": "Neue Gewohnheiten, flexiblere Tabellenansichten und erste Erinnerungen für Backup und App-Unterstützung.",
+      "v1_0_0": "Erste getestete Version mit Tages-Check, Blutdruck, Import/Export, Tabellen, Diagrammen und Pixelansicht."
+    }
+  },
   "commons": {
     "nav": {
       "hideMenu": "Navigationsmenü schließen",
@@ -38,6 +53,7 @@
         "dateMonthDays": "Datum | Monatstage (1–31)"
       },
       "columns": {
+        "tag": "\uD83D\uDEA9",
         "dayRange": "Tagesübersicht",
         "hourlyOverview": "Stundenübersicht"
       }
@@ -53,6 +69,7 @@
         "sunday": "So"
       },
       "date": "Datum",
+      "dateTime": "Datum  /  Uhrzeit",
       "time": "Uhrzeit",
       "morning": "Morgens",
       "midday": "Mittags",
@@ -117,6 +134,21 @@
           "showSlider": "Datum-Slider anzeigen",
           "hideSlider": "Datum-Slider ausblenden"
         }
+      },
+      "monthSwitcher": {
+        "label": {
+          "selectMonth": "Monat auswählen"
+        }
+      },
+      "tag": {
+        "action": {
+          "clear": {
+            "tooltip": "Tag\uD83D\uDEA9 entfernen"
+          },
+          "select": {
+            "tooltip": "Tag\uD83D\uDEA9 auswählen"
+          }
+        }
       }
     }
   },
@@ -135,6 +167,40 @@
     }
   },
   "enum": {
+    "calculationInputType": {
+      "numeric": {
+        "displayName": "Numerisch"
+      },
+      "seriesValue": {
+        "displayName": "Messwert"
+      }
+    },
+    "operator": {
+      "add": {
+        "longNameInBrackets": " (Addition)"
+      },
+      "subtract": {
+        "longNameInBrackets": " (Subtraktion)"
+      },
+      "multiply": {
+        "longNameInBrackets": " (Multiplikation)"
+      },
+      "divide": {
+        "longNameInBrackets": " (Division)"
+      },
+      "min": {
+        "longNameInBrackets": " (Minimum)"
+      },
+      "max": {
+        "longNameInBrackets": " (Maximum)"
+      },
+      "nan": {
+        "longNameInBrackets": " (Not a Number)"
+      },
+      "roundDecimals": {
+        "longNameInBrackets": " (Runden auf Dezimalstellen)"
+      }
+    },
     "seriesType": {
       "bloodPressure": {
         "title": "Blutdruck",
@@ -146,19 +212,19 @@
       },
       "dailyLife": {
         "title": "Tägliches Leben",
-        "info": "Jeden Tag mit einem Attribut markieren – z. B. Sportart oder Stimmung.\n\nSo lässt sich der Tag reflektieren und langfristig ein Überblick über Muster und Verhältnisse gewinnen."
-      },
-      "free": {
-        "title": "Frei",
-        "info": "Dinge ohne festen Rhythmus aufzeichnen. Z.B. Auto betanken (Kosten und gefahrene Distanz)."
+        "info": "Jeden Tag mit einem 'Tag'\uD83D\uDEA9 markieren – z. B. Sportart oder Stimmung.\n\nSo lässt sich der Tag reflektieren und langfristig ein Überblick über Muster und Verhältnisse gewinnen."
       },
       "habit": {
         "title": "Gewohnheit",
         "info": "Mehrfach tägliche Gewohnheiten erfassen – z. B. Kaffeekonsum oder genug Wasser trinken.\nGut geeignet für Routinen, die man verbessern oder ablegen möchte."
       },
+      "custom": {
+        "title": "Individuell",
+        "info": "Eigene Daten mit einem oder mehreren Parametern pro Eintrag erfassen – z. B. Tankabstand und Kosten."
+      },
       "monthly": {
         "title": "Monatlich",
-        "info": "Monatliche Werte aufzeichnen um diese über das Jahr oder Jahre zu verfolgen. Z.B. Wasser- oder Stromverbrauch."
+        "info": "Monatliche Daten mit einem oder mehreren Parametern pro Eintrag erfassen – z. B. Wasser- und Stromverbrauch, um Jahresverläufe zu sehen.\n\nBis zur Monatsmitte zählt die Eingabe noch für den Vormonat. Beispiel: Der Wasserverbrauch für Januar kann erst Anfang Februar abgelesen werden – eventuell erst am 4. Februar, wenn man am Monatsanfang nicht zu Hause ist."
       }
     },
     "viewType": {
@@ -323,6 +389,14 @@
     "label": {
       "noData": "Keine Daten vorhanden...",
       "noDataBecauseOfFilter": "Keine Daten mit diesen Filtereinstellungen"
+    },
+    "snackbar": {
+      "duplicateDates": "Mehrfach auftretende Messzeitpunkte gefunden: {}"
+    },
+    "monthly": {
+      "msg": {
+        "duplicateTimestamp": "Mehrfach vorkommenden Messzeitpunkt gefunden: {}"
+      }
     }
   },
   "seriesDataAnalytics": {
@@ -355,7 +429,23 @@
       },
       "chart": {
         "chartTitle": "Verteilung nach Tageszeiten",
-        "chartTitleDailyLife": "Verteilung nach Tageszeiten je Attribut"
+        "chartTitleTags": "Verteilung nach Tageszeiten je Tag\uD83D\uDEA9"
+      }
+    },
+    "tagsProportions": {
+      "title": "Tag\uD83D\uDEA9-Verteilung",
+      "subTitles": {
+        "monthlyDistribution": "Verteilung über Monate",
+        "distributionWeekdays": "Verteilung auf Wochentage",
+        "distributionHours": "Verteilung auf Stunden"
+      },
+      "label": {
+        "tagProportionsInfo": "Übersicht über die Häufigkeit der Tags\uD83D\uDEA9 insgesamt und ihre Verteilung in verschiedenen Zeiträumen des letzten Jahres."
+      },
+      "table": {
+        "colTag": "\uD83D\uDEA9",
+        "colProportions": "Anteile",
+        "colTotalShare": "Gesamtanteil"
       }
     },
     "trend": {
@@ -385,20 +475,6 @@
       }
     },
     "dailyLife": {
-      "attributesProportions": {
-        "title": "Attribut-Verteilung",
-        "subTitles": {
-          "monthlyDistribution": "Monatsverteilung"
-        },
-        "label": {
-          "attributeProportionsInfo": "Übersicht über die Häufigkeit der Attribute insgesamt und ihre Verteilung in verschiedenen Zeiträumen des letzten Jahres."
-        },
-        "table": {
-          "colAttribute": "Attribut",
-          "colProportions": "Anteile",
-          "colTotalShare": "Gesamtanteil"
-        }
-      }
     },
     "habit": {
       "trend": {
@@ -451,8 +527,7 @@
       }
     },
     "label": {
-      "selectSeriesType": "Wähle den Messreihen-Typ",
-      "moreSeriesToCome": "Weitere folgen bald..."
+      "selectSeriesType": "Wähle den Messreihen-Typ"
     },
     "btn": {
       "showSeriesTypeInfo": "Info zum Messreihen-Typ",
@@ -462,6 +537,8 @@
       "label": {
         "seriesName": "Name",
         "seriesIcon": "Symbol",
+        "seriesItemName": "Name",
+        "seriesItemUnit": "Einheit",
         "seriesColor": "Farbe"
       }
     },
@@ -498,48 +575,51 @@
     },
     "seriesSettings": {
       "bloodPressure": {
-        "title": "Blutdruckeinstellungen",
+        "title": "Blutdruck-Einstellungen",
         "switch": {
           "hideMedicationInput": {
-            "label": "Medikamenteneinnahme im Eingabedialog ausblenden:"
+            "label": "Medikamenteneinnahme-Option im Eingabedialog ausblenden:"
           }
         }
       },
-      "dailyLifeAttributes": {
-        "title": "Attribute",
+      "custom": {
+        "title": "Individuell-Einstellungen"
+      },
+      "tags": {
+        "title": "Tags\uD83D\uDEA9",
         "actions": {
           "add": {
-            "tooltip": "Attribut hinzufügen"
+            "tooltip": "Tag\uD83D\uDEA9 hinzufügen"
           },
           "addPreset": {
-            "tooltip": "Vordefinierte Attribute hinzufügen"
+            "tooltip": "Vordefinierte Tags\uD83D\uDEA9 hinzufügen"
           },
           "delete": {
-            "tooltip": "Attribut löschen"
+            "tooltip": "Tag\uD83D\uDEA9 löschen"
           },
           "deleteAll": {
-            "tooltip": "Alle Attribute löschen"
+            "tooltip": "Alle Tags\uD83D\uDEA9 löschen"
           },
           "edit": {
-            "tooltip": "Attribut bearbeiten"
+            "tooltip": "Tag\uD83D\uDEA9 bearbeiten"
           }
         },
         "dlg": {
-          "title": "Attribut"
+          "title": "Tag\uD83D\uDEA9"
         },
-        "info": "Attribute der Messreihe verwalten.\nJeder Wert hat genau ein Attribut.\n\nWird ein Attribut gelöscht, das bereits genutzt wird, erhält der Wert als Fallback eine Farbe die in großem Kontrast zu den restlichen Attributen steht.",
+        "info": "Tags\uD83D\uDEA9 der Messreihe verwalten.\nJeder Wert besitzt genau ein Tag\uD83D\uDEA9.\n\nWird ein Tag\uD83D\uDEA9 gelöscht, das bereits genutzt wird, erhält der Wert als Fallback eine Farbe die in großem Kontrast zu den restlichen Tags\uD83D\uDEA9 steht.",
         "preset": {
           "feelings": {
             "title": "Vorlage: Gefühle",
-            "attributeNames": "fantastischer Tag|sehr guter, glücklicher Tag|normaler Tag|erschöpft, müder Tag|trauriger, deprimierter Tag|frustrierter, wütender Tag|gestresster Tag|krank|wirklich schlimmer Tag"
+            "tagNames": "fantastischer Tag|sehr guter, glücklicher Tag|normaler Tag|erschöpfter, müder Tag|trauriger, deprimierter Tag|frustrierter, wütender Tag|gestresster Tag|krank|wirklich schlimmer Tag"
           },
           "sports": {
             "title": "Vorlage: Sport",
-            "attributeNames": "Walken|Joggen|Wandern|Rennrad|Mountainbike|Schwimmen|Workout"
+            "tagNames": "Walken|Joggen|Wandern|Rennrad|Mountainbike|Schwimmen|Workout"
           },
           "period": {
             "title": "Vorlage: Periode",
-            "attributeNames": "Keine|Schmierblutung|Leicht|Normal|Stark"
+            "tagNames": "Keine|Schmierblutung|Leicht|Normal|Stark"
           },
           "stars": {
             "title": "Vorlage: Sterne (★)"
@@ -570,7 +650,121 @@
           }
         },
         "validation": {
-          "emptyAttributs": "Mindestens ein Attribut anlegen"
+          "emptyTags": "Mindestens ein Tag\uD83D\uDEA9 erforderlich"
+        }
+      },
+      "seriesItems": {
+        "title": "Parameter",
+        "actions": {
+          "add": {
+            "tooltip": "Parameter hinzufügen"
+          },
+          "addCalculated": {
+            "tooltip": "Berechneten Parameter hinzufügen"
+          },
+          "delete": {
+            "tooltip": "Parameter löschen",
+            "query": {
+              "deleteWithReferencingItems": "Dieser Parameter wird von berechneten Parametern verwendet – trotzdem diesen und alle abhängigen löschen?"
+            }
+          },
+          "deleteAll": {
+            "tooltip": "Alle Parameter löschen"
+          },
+          "edit": {
+            "tooltip": "Parameter bearbeiten"
+          },
+          "editChartSettings": {
+            "tooltip": "Diagrammeinstellungen bearbeiten"
+          },
+          "editTableSettings": {
+            "tooltip": "Tabelleneinstellungen bearbeiten"
+          }
+        },
+        "dlg": {
+          "title": "Parameter"
+        },
+        "chartSettingsDlg": {
+          "title": "Diagrammeinstellungen",
+          "label": {
+            "useDelta": "Delta"
+          },
+          "tooltip": {
+            "showChart": "Diagramm anzeigen",
+            "hideChart": "Diagramm ausblenden",
+            "useDelta": "Delta zum vorherigen Wert verwenden. Nützlich, wenn die Messwerte steigen und die Veränderung interessanter ist als der aktuelle Wert.",
+            "disuseDelta": "Absoluten Wert verwenden"
+          }
+        },
+        "tableSettingsDlg": {
+          "title": "Tabelleneinstellungen",
+          "label": {
+            "columnWidth": "Spaltenbreite"
+          },
+          "tooltip": {
+            "showColumn": "Spalte anzeigen",
+            "hideColumn": "Spalte ausblenden"
+          }
+        },
+        "info": "Parameter der Messreihe verwalten.\nJeder Parameter hat einen Namen, eine Einheit und eine Farbe. Die Anzeige in Tabelle und Diagramm lässt sich anpassen.\n\nZusätzlich können berechnete Parameter angelegt werden. Sie haben keine Eingabe, sondern berechnen ihren Wert aus anderen Parametern.\n\nWird ein genutzter Parameter gelöscht, werden seine Werte nicht mehr angezeigt.",
+        "validation": {
+          "emptyParameters": "Mindestens ein Parameter erforderlich",
+          "emptyParametersChart": "Mindestens ein Parameter für die Diagrammansicht erforderlich",
+          "emptyParametersTable": "Mindestens ein Parameter für die Tabellenansicht erforderlich"
+        },
+        "calculation": {
+          "action": {
+            "delete": {
+              "tooltip": "Löschen"
+            },
+            "moveUp": {
+              "tooltip": "Nach oben verschieben"
+            },
+            "moveDown": {
+              "tooltip": "Nach unten verschieben"
+            },
+            "edit": {
+              "tooltip": "Bearbeiten"
+            }
+          },
+          "btn": {
+            "selectSeriesItem": {
+              "tooltip": "Parameter auswählen"
+            },
+            "selectFirstSeriesItem": {
+              "tooltip": "Startparameter auswählen"
+            },
+            "addCalculation": {
+              "tooltip": "Berechnung hinzufügen"
+            },
+            "selectCalculation": {
+              "tooltip": "Berechnung auswählen"
+            },
+            "deselectCalculation": {
+              "tooltip": "Berechnung abwählen"
+            }
+          },
+          "parameterSettingsDlg": {
+            "title": "Parameter Einstellungen"
+          },
+          "calculationItemSettingsDlg": {
+            "title": "Berechnung",
+            "label": {
+              "operator": "Operator",
+              "inputType": "Werttyp",
+              "value": "Wert"
+            }
+          },
+          "switch": {
+            "usePreviousValue": {
+              "label": "Vorherigen Wert",
+              "tooltip": "Verwendet den vorherigen Wert des ausgewählten Parameters"
+            }
+          },
+          "validation": {
+            "emptyParameter": "Parameter erforderlich",
+            "emptyCalculation": "Berechnung erforderlich"
+          }
         }
       }
     }
@@ -604,17 +798,23 @@
       "btn": {
         "exportSeries": "Alle Messreihen exportieren",
         "exportSingleSeries": "Messreihe exportieren",
+        "exportSingleSeriesCSV": "Messreihe exportieren (csv)",
         "importSeries": "Messreihen importieren",
+        "importSeriesCSV": "Messreihe importieren (csv)",
         "shareSeries": "Alle Messreihen teilen",
         "shareSingleSeries": "Messreihe teilen"
       },
       "label": {
         "exportSeries": "Alle Messreihen als eine JSON-Datei speichern.",
         "exportSingleSeries": "Messreihe (Konfiguration und Werte) als JSON-Datei speichern.",
+        "exportSingleSeriesCSV": "Messreihe (nur Werte) als CSV-Datei speichern.",
         "exportSeriesTip": "Tipp: Einzelne Messreihen über das Export-Symbol der jeweiligen Messreihe speichern.",
+        "exportSeriesCSVTip": "Tipp: CSV-Export ist für einzelne Messreihen über das Export-Symbol der jeweiligen Messreihe möglich.",
         "exportSingleSeriesTip": "Tipp: Alle Messreihen gemeinsam über das Export-Symbol der Messreihenverwaltung speichern.",
         "importSeries": "JSON-Dateien mit Messreihen zum Import auswählen.\nVorhandene Messreihen (inklusive Daten) werden anhand ihrer ID überschrieben. Neue Messreihen werden automatisch erstellt.",
         "importSeriesTip": "Tipp: Zuerst eine passende Messreihe erstellen und exportieren. Danach Daten in die Datei einfügen und erneut importieren – so passt das Format sicher.",
+        "importSeriesCSV": "Werte für die Messreihe „{}“ aus einer CSV-Datei importieren. Bereits vorhandene Daten werden überschrieben.\nDie Datei muss exakt folgende Spalten und pro Eintrag eine entsprechende Zeile enthalten:\n{}",
+        "importSeriesCSVTip": "Tipp: CSV-Import ist für einzelne Messreihen über das Export-Symbol der jeweiligen Messreihe möglich.",
         "latestSeriesExport": "Zuletzt exportiert: {}",
         "shareSeries": "Alle Messreihen als eine JSON-Datei teilen.",
         "shareSingleSeries": "Messreihe (Konfiguration und Werte) als JSON-Datei teilen."
@@ -631,7 +831,7 @@
       },
       "validation": {
         "dailyLife": {
-          "emptyAttributes": "Keine Attribute definiert."
+          "emptyTags": "Keine Tags\uD83D\uDEA9 definiert."
         }
       }
     }
@@ -666,13 +866,6 @@
       "btn": {
         "toggleCheck": {
           "tooltip": "Wert wechseln"
-        }
-      }
-    },
-    "dailyLife": {
-      "btn": {
-        "selectAttribute": {
-          "tooltip": "Attribut auswählen"
         }
       }
     },

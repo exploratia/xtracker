@@ -20,8 +20,13 @@ class SeriesDataHabitPixelsView extends StatelessWidget {
   final SeriesDataFilter seriesDataFilter;
   final SeriesDataViewOverlays seriesDataViewOverlays;
 
-  const SeriesDataHabitPixelsView(
-      {super.key, required this.seriesViewMetaData, required this.seriesData, required this.seriesDataFilter, required this.seriesDataViewOverlays});
+  const SeriesDataHabitPixelsView({
+    super.key,
+    required this.seriesViewMetaData,
+    required this.seriesData,
+    required this.seriesDataFilter,
+    required this.seriesDataViewOverlays,
+  });
 
   @override
   Widget build(BuildContext context) {

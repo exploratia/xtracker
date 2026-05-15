@@ -156,10 +156,12 @@ class _SeriesDataAnalyticsBloodPressureTrendViewState extends State<SeriesDataAn
               );
             }
 
-            rows.add(TableUtils.tableRow([
-              keyWidget,
-              valueWidget,
-            ]));
+            rows.add(
+              TableUtils.tableRow([
+                keyWidget,
+                valueWidget,
+              ]),
+            );
           }
 
           return TrendTable(rows: rows);
@@ -273,9 +275,17 @@ class _Value extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text('$high', style: const TextStyle(color: Colors.white), textAlign: TextAlign.center),
+          Text(
+            '$high',
+            style: const TextStyle(color: Colors.white),
+            textAlign: TextAlign.center,
+          ),
           const Divider(thickness: 1, color: Colors.white),
-          Text('$low', style: const TextStyle(color: Colors.white), textAlign: TextAlign.center),
+          Text(
+            '$low',
+            style: const TextStyle(color: Colors.white),
+            textAlign: TextAlign.center,
+          ),
         ],
       ),
     );

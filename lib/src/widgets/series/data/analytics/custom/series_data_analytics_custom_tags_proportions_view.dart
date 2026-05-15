@@ -1,0 +1,21 @@
+import 'package:flutter/material.dart';
+
+import '../../../../../model/series/data/custom/custom_value.dart';
+import '../../../../../model/series/series_view_meta_data.dart';
+import '../series_data_analytics_tags_proportions_view.dart';
+
+class SeriesDataAnalyticsCustomTagsProportionsView extends StatelessWidget {
+  const SeriesDataAnalyticsCustomTagsProportionsView({super.key, required this.seriesViewMetaData, required this.seriesDataValues});
+
+  final SeriesViewMetaData seriesViewMetaData;
+  final List<CustomValue> seriesDataValues;
+
+  @override
+  Widget build(BuildContext context) {
+    return SeriesDataAnalyticsTagsProportionsView(
+      seriesViewMetaData: seriesViewMetaData,
+      seriesDataValues: seriesDataValues,
+      tagIdResolver: (seriesDataValue) => seriesDataValue.tagId,
+    );
+  }
+}

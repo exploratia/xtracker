@@ -72,7 +72,8 @@ class _LazyTooltipState extends State<LazyTooltip> with SingleTickerProviderStat
         child: Container(
           key: tooltipKey,
           padding: theme.padding ?? const EdgeInsets.symmetric(horizontal: ThemeUtils.defaultPadding, vertical: ThemeUtils.defaultPadding / 2),
-          decoration: theme.decoration ??
+          decoration:
+              theme.decoration ??
               BoxDecoration(
                 color: Colors.grey,
                 borderRadius: ThemeUtils.borderRadiusCircularSmall,
