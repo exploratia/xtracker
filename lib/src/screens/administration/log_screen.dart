@@ -99,7 +99,12 @@ class LogScreen extends StatelessWidget {
           final fileBytes = await logFile.readAsBytes();
 
           var selectedFile = await FilePicker.saveFile(
-              dialogTitle: 'Please select an output file:', fileName: logFile.name, type: FileType.custom, allowedExtensions: ["txt"], bytes: fileBytes);
+            dialogTitle: 'Please select an output file:',
+            fileName: logFile.name,
+            type: FileType.custom,
+            allowedExtensions: ["txt"],
+            bytes: fileBytes,
+          );
           bool exported = selectedFile != null || kIsWeb; // in web no file select - just download
 
           if (exported) {
@@ -125,7 +130,8 @@ class LogScreen extends StatelessWidget {
       () async {
         try {
           final result = await SharePlus.instance.share(
-              ShareParams(files: [XFile(DailyFiles.getFullLogPath(logFileN))], text: '${/*AppInfo.appName*/ LocaleKeys.appTitle.tr()} Log $logFileName'));
+            ShareParams(files: [XFile(DailyFiles.getFullLogPath(logFileN))], text: '${ /*AppInfo.appName*/ LocaleKeys.appTitle.tr()} Log $logFileName'),
+          );
           if (result.status == ShareResultStatus.success) {
             SimpleLogging.i("Successfully shared log '$logFileName'.");
             if (context.mounted) {

@@ -23,26 +23,21 @@ class RatioLabeledProgressBar extends StatelessWidget {
             top: ThemeUtils.verticalSpacingSmall,
             bottom: ThemeUtils.verticalSpacingSmall,
             left: ThemeUtils.horizontalSpacing,
+            right: ThemeUtils.horizontalSpacing,
           ),
         ),
         Row(
-          spacing: ThemeUtils.horizontalSpacingLarge,
+          spacing: ThemeUtils.horizontalSpacingSmall,
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           mainAxisSize: MainAxisSize.min,
           children: [
-            SizedBox(
-              width: 70,
-              child: Align(
-                alignment: AlignmentGeometry.centerLeft,
-                child: Padding(
-                  padding: const EdgeInsets.only(left: ThemeUtils.defaultPadding),
-                  child: Text('${(percentage * 100).toInt()}%'),
-                ),
-              ),
+            Padding(
+              padding: const EdgeInsets.only(left: ThemeUtils.horizontalSpacing),
+              child: Text('${(percentage * 100).toInt()}%'),
             ),
             Padding(
-              padding: const EdgeInsets.only(right: ThemeUtils.defaultPadding),
+              padding: const EdgeInsets.only(right: ThemeUtils.horizontalSpacing),
               child: Text(
                 '$value / $total',
                 softWrap: false,

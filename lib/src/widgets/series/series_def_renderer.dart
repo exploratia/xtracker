@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../model/series/series_def.dart';
+import '../../providers/series_current_value_provider.dart';
 import '../../util/theme_utils.dart';
 import '../administration/settings/settings_controller.dart';
 import '../controls/card/glowing_border_container.dart';
@@ -27,53 +29,72 @@ class SeriesDefRenderer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Widget content;
-    if (managementMode) {
-      content = LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
-        var twoRows = (constraints.maxWidth < 500);
-        return IntrinsicHeight(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                child: Builder(
-                  builder: (BuildContext context) {
-                    var seriesManagementActions = SeriesManagementActions(
-                      seriesDef: seriesDef,
-                      settingsController: settingsController,
-                    );
-                    if (twoRows) {
-                      return Column(
-                        children: [
-                          _SeriesIconAndName(seriesDef: seriesDef, verticalPadding: ThemeUtils.defaultPadding),
-                          Divider(
-                            height: 2,
-                            thickness: 2,
-                            color: seriesDef.color,
-                          ),
-                          seriesManagementActions,
-                        ],
-                      );
-                    } else {
-                      return Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          _SeriesIconAndName(seriesDef: seriesDef),
-                          LeftBorder(
-                            color: seriesDef.color,
-                            child: seriesManagementActions,
-                          ),
-                        ],
-                      );
-                    }
-                  },
-                ),
-              ),
-              LeftBorder(color: seriesDef.color, child: DragHandle(index: index)),
-            ],
-          ),
+    // check if recently updated - if ensure visible
+    // because of the onscreen keyboard shown up in the input dialog the whole series view is rebuild -> no longe previous position
+    final recentlyUpdatedId = context.watch<SeriesCurrentValueProvider>().recentlyUpdatedSeries();
+    if (seriesDef.uuid == recentlyUpdatedId) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Scrollable.ensureVisible(
+          context,
+          duration: const Duration(milliseconds: 250),
+          curve: Curves.easeOut,
+          alignment: 0.45,
         );
       });
+    }
+
+    Widget content;
+    if (managementMode) {
+      content = LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          var twoRows = (constraints.maxWidth < 500);
+          return IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Expanded(
+                  child: Builder(
+                    builder: (BuildContext context) {
+                      var seriesManagementActions = SeriesManagementActions(
+                        seriesDef: seriesDef,
+                        settingsController: settingsController,
+                      );
+                      if (twoRows) {
+                        return Column(
+                          children: [
+                            _SeriesIconAndName(seriesDef: seriesDef, verticalPadding: ThemeUtils.defaultPadding),
+                            Divider(
+                              height: 2,
+                              thickness: 2,
+                              color: seriesDef.color,
+                            ),
+                            seriesManagementActions,
+                          ],
+                        );
+                      } else {
+                        return Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            _SeriesIconAndName(seriesDef: seriesDef),
+                            LeftBorder(
+                              color: seriesDef.color,
+                              child: seriesManagementActions,
+                            ),
+                          ],
+                        );
+                      }
+                    },
+                  ),
+                ),
+                LeftBorder(
+                  color: seriesDef.color,
+                  child: DragHandle(index: index),
+                ),
+              ],
+            ),
+          );
+        },
+      );
     } else {
       content = IntrinsicHeight(
         child: Column(
@@ -82,15 +103,19 @@ class SeriesDefRenderer extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 _SeriesIconAndName(seriesDef: seriesDef),
-                LeftBorder(color: seriesDef.color, child: SeriesActions(seriesDef: seriesDef)),
+                LeftBorder(
+                  color: seriesDef.color,
+                  child: SeriesActions(seriesDef: seriesDef),
+                ),
               ],
             ),
             _HDivider(seriesDef: seriesDef),
             Expanded(
-                child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.defaultPadding, vertical: ThemeUtils.defaultPadding / 2),
-              child: SeriesLatestValueRenderer(seriesDef: seriesDef),
-            )),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.defaultPadding, vertical: ThemeUtils.defaultPadding / 2),
+                child: SeriesLatestValueRenderer(seriesDef: seriesDef),
+              ),
+            ),
           ],
         ),
       );

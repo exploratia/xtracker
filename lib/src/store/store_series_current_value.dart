@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:sembast/sembast.dart';
 
 import '../model/series/current_value/series_current_value.dart';
+import '../util/json_reader.dart';
 import 'stores_utils.dart';
 
 // https://github.com/tekartik/sembast.dart/blob/master/sembast/doc/queries.md
@@ -24,7 +25,7 @@ class StoreSeriesCurrentValue {
       print('Loaded SeriesCurrentValue count: ${records.length}');
     }
     for (var value in records.values) {
-      result.add(SeriesCurrentValue.fromJson(value as Map<String, dynamic>));
+      result.add(SeriesCurrentValue.fromJson(JsonReader(value)));
     }
     return result;
   }

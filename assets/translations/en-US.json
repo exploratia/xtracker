@@ -23,6 +23,21 @@
     "oneYearMsg": "One year in - awesome!\n\nIf you enjoy the app and would like to support its future development, consider buying me a coffee. Your contribution helps keep improving the app and offering it for free.",
     "multipleYearsMsg": "Another year gone – thanks for sticking with it.\n\nIf you’d like to support ongoing development, I’d be grateful for a coffee. Your support helps to keep the app up to date and free to use."
   },
+  "changeLog": {
+    "title": "What's new?",
+    "label": {
+      "version": "Version {}",
+      "versionChanged": "The app was updated to version {}."
+    },
+    "entries": {
+      "v1_4_0": "First public release version with a unified pixel view.",
+      "v1_3_1": "Extended analytics for times of day and monthly distributions.",
+      "v1_3_0": "Daily Life as a new series type, default views per series and wallpaper support.",
+      "v1_2_0": "New analytics for recorded days and trend analysis for blood pressure and habits.",
+      "v1_1_0": "New habits, more flexible table views and first reminders for backups and app support.",
+      "v1_0_0": "First tested version with Day Check, blood pressure, import/export, tables, charts and pixel view."
+    }
+  },
   "commons": {
     "nav": {
       "hideMenu": "Close navigation menu",
@@ -38,6 +53,7 @@
         "dateMonthDays": "Date | Month days (1–31)"
       },
       "columns": {
+        "tag": "\uD83D\uDEA9",
         "dayRange": "Day overview",
         "hourlyOverview": "Hourly overview"
       }
@@ -53,6 +69,7 @@
         "sunday": "Sun"
       },
       "date": "Date",
+      "dateTime": "Date  /  Time",
       "time": "Time",
       "morning": "Morning",
       "midday": "Midday",
@@ -117,6 +134,21 @@
           "showSlider": "Show date slider",
           "hideSlider": "Hide date slider"
         }
+      },
+      "monthSwitcher": {
+        "label": {
+          "selectMonth": "Select month"
+        }
+      },
+      "tag": {
+        "action": {
+          "clear": {
+            "tooltip": "Clear tag\uD83D\uDEA9"
+          },
+          "select": {
+            "tooltip": "Select tag\uD83D\uDEA9"
+          }
+        }
       }
     }
   },
@@ -135,6 +167,40 @@
     }
   },
   "enum": {
+    "calculationInputType": {
+      "numeric": {
+        "displayName": "Numeric"
+      },
+      "seriesValue": {
+        "displayName": "Series value"
+      }
+    },
+    "operator": {
+      "add": {
+        "longNameInBrackets": " (Addition)"
+      },
+      "subtract": {
+        "longNameInBrackets": " (Subtraction)"
+      },
+      "multiply": {
+        "longNameInBrackets": " (Multiplication)"
+      },
+      "divide": {
+        "longNameInBrackets": " (Division)"
+      },
+      "min": {
+        "longNameInBrackets": " (Minimum)"
+      },
+      "max": {
+        "longNameInBrackets": " (Maximum)"
+      },
+      "nan": {
+        "longNameInBrackets": " (Not a Number)"
+      },
+      "roundDecimals": {
+        "longNameInBrackets": " (Round to decimals)"
+      }
+    },
     "seriesType": {
       "bloodPressure": {
         "title": "Blood pressure",
@@ -146,19 +212,19 @@
       },
       "dailyLife": {
         "title": "Daily Life",
-        "info": "Tag each day with an attribute – e.g. type of sport or mood.\n\nThis helps reflect on the day and gives an overview of patterns and ratios over time."
-      },
-      "free": {
-        "title": "Free",
-        "info": "Track things without a fixed interval. E.g. car refuel distance and costs."
+        "info": "Tag\uD83D\uDEA9 each day – e.g. type of sport or mood.\n\nThis helps reflect on the day and gives an overview of patterns and ratios over time."
       },
       "habit": {
         "title": "Habit",
         "info": "Track habits multiple times a day – e.g. coffee consumption or drinking enough water.\nIdeal for routines you want to build or reduce."
       },
+      "custom": {
+        "title": "Custom",
+        "info": "Track custom data with one or multiple parameters per entry – e.g. refueling distance and cost."
+      },
       "monthly": {
         "title": "Monthly",
-        "info": "Track monthly values - e.g. water or current consumption to see the yearly progress."
+        "info": "Track custom monthly data with one or multiple parameters per entry – e.g. water or current consumption to see the yearly progress.\n\nEntries made before mid-month still count for the previous month. Example: Water consumption for January can only be read at the beginning of February – maybe even on February 4 if you're not home earlier."
       }
     },
     "viewType": {
@@ -323,6 +389,14 @@
     "label": {
       "noData": "No data available...",
       "noDataBecauseOfFilter": "No data due to filter settings"
+    },
+    "snackbar": {
+      "duplicateDates": "Duplicate timestamps found: {}"
+    },
+    "monthly": {
+      "msg": {
+        "duplicateTimestamp": "Duplicate timestamp found: {}"
+      }
     }
   },
   "seriesDataAnalytics": {
@@ -355,7 +429,23 @@
       },
       "chart": {
         "chartTitle": "Distribution by time of day",
-        "chartTitleDailyLife": "Distribution by time of day per attribute"
+        "chartTitleTags": "Distribution by time of day per tag\uD83D\uDEA9"
+      }
+    },
+    "tagsProportions": {
+      "title": "Tag\uD83D\uDEA9 distribution",
+      "subTitles": {
+        "monthlyDistribution": "Monthly distribution",
+        "distributionWeekdays": "Distribution by weekdays",
+        "distributionHours": "Distribution by time of day"
+      },
+      "label": {
+        "tagProportionsInfo": "Overview of tag\uD83D\uDEA9 frequencies in total and their distribution across different periods of the past year."
+      },
+      "table": {
+        "colTag": "\uD83D\uDEA9",
+        "colProportions": "Shares",
+        "colTotalShare": "Total share"
       }
     },
     "trend": {
@@ -385,20 +475,6 @@
       }
     },
     "dailyLife": {
-      "attributesProportions": {
-        "title": "Attribute distribution",
-        "subTitles": {
-          "monthlyDistribution": "Monthly distribution"
-        },
-        "label": {
-          "attributeProportionsInfo": "Overview of attribute frequencies in total and their distribution across different periods of the past year."
-        },
-        "table": {
-          "colAttribute": "Attribute",
-          "colProportions": "Shares",
-          "colTotalShare": "Total share"
-        }
-      }
     },
     "habit": {
       "trend": {
@@ -451,8 +527,7 @@
       }
     },
     "label": {
-      "selectSeriesType": "Select series type:",
-      "moreSeriesToCome": "More to come ..."
+      "selectSeriesType": "Select series type:"
     },
     "btn": {
       "showSeriesTypeInfo": "Series type info",
@@ -462,6 +537,8 @@
       "label": {
         "seriesName": "Name",
         "seriesIcon": "Icon",
+        "seriesItemName": "Name",
+        "seriesItemUnit": "Unit",
         "seriesColor": "Color"
       }
     },
@@ -498,48 +575,51 @@
     },
     "seriesSettings": {
       "bloodPressure": {
-        "title": "Blood pressure settings",
+        "title": "Blood Pressure Settings",
         "switch": {
           "hideMedicationInput": {
             "label": "Hide medication input in dialog:"
           }
         }
       },
-      "dailyLifeAttributes": {
-        "title": "Attributes",
+      "custom": {
+        "title": "Custom settings"
+      },
+      "tags": {
+        "title": "Tags\uD83D\uDEA9",
         "actions": {
           "add": {
-            "tooltip": "Add attribute"
+            "tooltip": "Add tag\uD83D\uDEA9"
           },
           "addPreset": {
-            "tooltip": "Add preset attributes"
+            "tooltip": "Add preset tags\uD83D\uDEA9"
           },
           "delete": {
-            "tooltip": "Delete attribute"
+            "tooltip": "Delete tag\uD83D\uDEA9"
           },
           "deleteAll": {
-            "tooltip": "Delete all attributes"
+            "tooltip": "Delete all tags\uD83D\uDEA9"
           },
           "edit": {
-            "tooltip": "Edit attribute"
+            "tooltip": "Edit tag\uD83D\uDEA9"
           }
         },
         "dlg": {
-          "title": "Attribute"
+          "title": "Tag\uD83D\uDEA9"
         },
-        "info": "Manage series attributes.\nEach value has exactly one attribute.\n\nIf a used attribute is deleted, the value automatically gets a fallback color with high contrast to the other attributes.",
+        "info": "Manage the tags\uD83D\uDEA9 of this series.\nEach value has exactly one tag\uD83D\uDEA9.\n\nIf a used tag\uD83D\uDEA9 is deleted, the value automatically gets a fallback color that strongly contrasts with the remaining tags\uD83D\uDEA9.",
         "preset": {
           "feelings": {
             "title": "Preset: Feelings",
-            "attributeNames": "amazing day|really good, happy day|normal day|exhausted, tired day|depressed, sad day|frustrated, angry day|stressed day|sick day|really horrible day"
+            "tagNames": "amazing day|really good, happy day|normal day|exhausted, tired day|depressed, sad day|frustrated, angry day|stressed day|sick day|really horrible day"
           },
           "sports": {
             "title": "Preset: Sports",
-            "attributeNames": "Walking|Jogging|Hiking|Road bike|Mountain bike|Swimming|Workout"
+            "tagNames": "Walking|Jogging|Hiking|Road bike|Mountain bike|Swimming|Workout"
           },
           "period": {
             "title": "Preset: Period",
-            "attributeNames": "None|Spotting|Light|Regular|Heavy"
+            "tagNames": "None|Spotting|Light|Regular|Heavy"
           },
           "stars": {
             "title": "Preset: Stars (★)"
@@ -570,7 +650,121 @@
           }
         },
         "validation": {
-          "emptyAttributs": "At least one attribute required"
+          "emptyTags": "At least one tag\uD83D\uDEA9 required"
+        }
+      },
+      "seriesItems": {
+        "title": "Parameters",
+        "actions": {
+          "add": {
+            "tooltip": "Add parameter"
+          },
+          "addCalculated": {
+            "tooltip": "Add calculated parameter"
+          },
+          "delete": {
+            "tooltip": "Delete parameter",
+            "query": {
+              "deleteWithReferencingItems": "This parameter is used by calculated parameters – still delete it and all dependent ones?"
+            }
+          },
+          "deleteAll": {
+            "tooltip": "Delete all parameters"
+          },
+          "edit": {
+            "tooltip": "Edit parameter"
+          },
+          "editChartSettings": {
+            "tooltip": "Edit chart settings"
+          },
+          "editTableSettings": {
+            "tooltip": "Edit table settings"
+          }
+        },
+        "dlg": {
+          "title": "Parameter"
+        },
+        "chartSettingsDlg": {
+          "title": "Chart settings",
+          "label": {
+            "useDelta": "Delta"
+          },
+          "tooltip": {
+            "showChart": "Show chart",
+            "hideChart": "Hide chart",
+            "useDelta": "Use delta to the previous value. Useful when values keep rising and the change is more relevant than the current value.",
+            "disuseDelta": "Use absolute value"
+          }
+        },
+        "tableSettingsDlg": {
+          "title": "Table settings",
+          "label": {
+            "columnWidth": "Column width"
+          },
+          "tooltip": {
+            "showColumn": "Show column",
+            "hideColumn": "Hide column"
+          }
+        },
+        "info": "Manage series parameters.\nEach parameter has a name, unit and color. You can adjust how it appears in the table and chart.\n\nYou can also create calculated parameters. They have no input but compute their value from other parameters.\n\nIf a used parameter is deleted, its values are no longer shown.",
+        "validation": {
+          "emptyTags": "At least one tag\uD83D\uDEA9 required",
+          "emptyParametersChart": "At least one parameter required for chart view",
+          "emptyParametersTable": "At least one parameter required for table view"
+        },
+        "calculation": {
+          "action": {
+            "delete": {
+              "tooltip": "Delete"
+            },
+            "moveUp": {
+              "tooltip": "Move up"
+            },
+            "moveDown": {
+              "tooltip": "Move down"
+            },
+            "edit": {
+              "tooltip": "Edit"
+            }
+          },
+          "btn": {
+            "selectSeriesItem": {
+              "tooltip": "Select parameter"
+            },
+            "selectFirstSeriesItem": {
+              "tooltip": "Select start parameter"
+            },
+            "addCalculation": {
+              "tooltip": "Add calculation"
+            },
+            "selectCalculation": {
+              "tooltip": "Select calculation"
+            },
+            "deselectCalculation": {
+              "tooltip": "Deselect calculation"
+            }
+          },
+          "parameterSettingsDlg": {
+            "title": "Parameter settings"
+          },
+          "calculationItemSettingsDlg": {
+            "title": "Calculation",
+            "label": {
+              "operator": "Operator",
+              "inputType": "Value type",
+              "value": "Value"
+            }
+          },
+          "switch": {
+            "usePreviousValue": {
+              "label": "Previous value",
+              "tooltip": "Uses the previous value of the selected parameter"
+            }
+          },
+          "validation": {
+            "emptyParameter": "Parameter required",
+            "emptyCalculation": "Calculation required"
+          }
         }
       }
     }
@@ -604,17 +798,23 @@
       "btn": {
         "exportSeries": "Export all series",
         "exportSingleSeries": "Export series",
+        "exportSingleSeriesCSV": "Export series values (csv)",
         "importSeries": "Import series",
+        "importSeriesCSV": "Import series values (csv)",
         "shareSeries": "Share all series",
         "shareSingleSeries": "Share series"
       },
       "label": {
         "exportSeries": "Export all series as one JSON file.",
         "exportSingleSeries": "Export series (definition and values) as JSON file.",
+        "exportSingleSeriesCSV": "Export series (values only) as CSV file",
         "exportSeriesTip": "Tip: To save separate measurement series, use the export icon of the respective series.",
+        "exportSeriesCSVTip": "Tip: CSV export is available per series.",
         "exportSingleSeriesTip": "Tip: To save all measurement series in one file, use the export icon of the management view.",
         "importSeries": "Select series JSON files to import.\nExisting series (and their data) will be overwritten (identified by their unique id). New series will be created if they don't already exist.",
         "importSeriesTip": "Tip: Create and export a matching series first. Then insert your data into the exported file and re-import it. That way the format will be correct.",
+        "importSeriesCSV": "Import values for the series “{}” from a CSV file. Existing data will be overwritten.\nThe file must contain one line per entry in exactly these columns:\n{}",
+        "importSeriesCSVTip": "Tip: CSV import is available per series.",
         "latestSeriesExport": "Last exported: {}",
         "shareSeries": "Share all series as one JSON file.",
         "shareSingleSeries": "Share series (definition and values) as JSON file."
@@ -631,7 +831,7 @@
       },
       "validation": {
         "dailyLife": {
-          "emptyAttributes": "No attributes defined."
+          "emptyTags": "No tags\uD83D\uDEA9 defined."
         }
       }
     }
@@ -666,13 +866,6 @@
       "btn": {
         "toggleCheck": {
           "tooltip": "Toggle value"
-        }
-      }
-    },
-    "dailyLife": {
-      "btn": {
-        "selectAttribute": {
-          "tooltip": "Select attribute"
         }
       }
     },

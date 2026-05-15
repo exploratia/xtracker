@@ -5,13 +5,9 @@ import 'package:uuid/uuid.dart';
 import '../../../../../../generated/locale_keys.g.dart';
 import '../../../../../model/series/data/daily_check/daily_check_value.dart';
 import '../../../../../model/series/series_def.dart';
-import '../../../../../util/dialogs.dart';
 import '../../../../../util/media_query_utils.dart';
-import '../../../../../util/theme_utils.dart';
-import '../../../../controls/layout/single_child_scroll_view_with_scrollbar.dart';
-import '../../../../controls/text/overflow_text.dart';
-import '../input_header.dart';
 import '../input_result.dart';
+import '../simple_dialog_input.dart';
 
 class DailyCheckInput extends StatefulWidget {
   const DailyCheckInput({super.key, this.dailyCheckValue, required this.seriesDef});
@@ -64,7 +60,7 @@ class _DailyCheckInputState extends State<DailyCheckInput> {
     if (!_isValid) {
       // not valid means delete
       if (widget.dailyCheckValue != null) {
-        _deleteHandler(widget.dailyCheckValue!);
+        _deleteHandler();
       } else {
         Navigator.pop(context, null);
       }
@@ -75,79 +71,30 @@ class _DailyCheckInputState extends State<DailyCheckInput> {
     Navigator.pop(context, InputResult(val, insert ? InputResultAction.insert : InputResultAction.update));
   }
 
-  void _deleteHandler(DailyCheckValue dailyCheckValue) async {
-    bool? res = await Dialogs.simpleYesNoDialog(
-      LocaleKeys.seriesValue_query_deleteValue.tr(),
-      context,
-      title: LocaleKeys.commons_dialog_title_areYouSure.tr(),
-    );
-    if (res == true && mounted) {
-      Navigator.pop(context, InputResult(dailyCheckValue, InputResultAction.delete));
+  void _deleteHandler() {
+    if (widget.dailyCheckValue != null && mounted) {
+      Navigator.pop(context, InputResult(widget.dailyCheckValue!, InputResultAction.delete));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
-    var iconSize = ThemeUtils.iconSizeScaled;
-
-    var edit = Column(
-      mainAxisSize: MainAxisSize.min,
-      spacing: ThemeUtils.verticalSpacing,
-      children: [
-        InputHeader(dateTime: _dateTime, seriesDef: widget.seriesDef, setDateTime: _setDateTime),
-        const Divider(height: 1),
-        IconButton(
-          tooltip: LocaleKeys.seriesValue_dailyCheck_btn_toggleCheck_tooltip.tr(),
-          iconSize: 40 * MediaQueryUtils.textScaleFactor,
-          icon: Icon(_isValid ? Icons.check_box_outlined : Icons.check_box_outline_blank),
-          onPressed: _toggleChecked,
-        ),
-      ],
+    var edit = IconButton(
+      tooltip: LocaleKeys.seriesValue_dailyCheck_btn_toggleCheck_tooltip.tr(),
+      iconSize: 40 * MediaQueryUtils.textScaleFactor,
+      icon: Icon(_isValid ? Icons.check_box_outlined : Icons.check_box_outline_blank),
+      onPressed: _toggleChecked,
     );
 
-    return AlertDialog(
-      title: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: ThemeUtils.seriesDataInputDlgMaxWidth),
-        child: Row(
-          spacing: ThemeUtils.horizontalSpacing,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            widget.dailyCheckValue == null ? Icon(Icons.add_outlined, size: iconSize) : Icon(Icons.edit_outlined, size: iconSize),
-            OverflowText(widget.seriesDef.name),
-            if (widget.dailyCheckValue != null)
-              IconButton(
-                tooltip: LocaleKeys.seriesValue_action_deleteValue_tooltip.tr(),
-                onPressed: () => _deleteHandler(widget.dailyCheckValue!),
-                color: themeData.colorScheme.secondary,
-                iconSize: iconSize,
-                icon: const Icon(Icons.delete_outlined),
-              ),
-          ],
-        ),
-      ),
-      content: SingleChildScrollViewWithScrollbar(
-        child: edit,
-      ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context, null);
-          },
-          child: Text(LocaleKeys.commons_dialog_btn_cancel.tr()),
-        ),
-        if (_isValid)
-          TextButton(
-            onPressed: _saveHandler,
-            child: Text(LocaleKeys.commons_dialog_btn_okay.tr()),
-          ),
-        if (!_isValid && widget.dailyCheckValue != null)
-          TextButton(
-            onPressed: () => _deleteHandler(widget.dailyCheckValue!),
-            child: Text(LocaleKeys.commons_dialog_btn_delete.tr()),
-          ),
-      ],
+    return SimpleDialogInput(
+      isEdit: widget.dailyCheckValue != null,
+      isValid: _isValid,
+      seriesDef: widget.seriesDef,
+      dateTime: _dateTime,
+      setDateTime: _setDateTime,
+      saveHandler: _saveHandler,
+      deleteHandler: _deleteHandler,
+      child: edit,
     );
   }
 }

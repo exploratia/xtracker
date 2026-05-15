@@ -12,8 +12,13 @@ import '../../series_data_no_data.dart';
 import '../../series_data_view_overlays.dart';
 
 class SeriesDataDailyCheckChartView extends StatelessWidget {
-  const SeriesDataDailyCheckChartView(
-      {super.key, required this.seriesViewMetaData, required this.seriesData, required this.seriesDataFilter, required this.seriesDataViewOverlays});
+  const SeriesDataDailyCheckChartView({
+    super.key,
+    required this.seriesViewMetaData,
+    required this.seriesData,
+    required this.seriesDataFilter,
+    required this.seriesDataViewOverlays,
+  });
 
   final SeriesViewMetaData seriesViewMetaData;
   final List<DailyCheckValue> seriesData;
@@ -32,39 +37,50 @@ class SeriesDataDailyCheckChartView extends StatelessWidget {
       );
     }
 
-    List<SimpleValue> combinedSeriesData = _buildDataProvider();
+    List<TimedValue> combinedSeriesData = _buildDataProvider();
     var dateFormatter = seriesViewMetaData.showCompressed ? DateTimeUtils.formatYear : DateTimeUtils.formatMonthYear;
 
-    return LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
-      return SingleChildScrollViewWithScrollbar(
-        useHorizontalScreenPadding: true,
-        child: Column(
-          children: [
-            seriesDataViewOverlays.buildTopSpacer(),
-            ChartContainer(
-              showDateTooltip: true,
-              maxVisibleHeight: constraints.maxHeight - seriesDataViewOverlays.height,
-              dateFormatter: dateFormatter,
-              chartWidgetBuilder: (touchCallback) {
-                return LineChart(
-                  ChartUtilsSimpleValue.buildLineChartData(seriesViewMetaData, combinedSeriesData, themeData, dateFormatter, touchCallback),
-                );
-              },
-            ),
-            seriesDataViewOverlays.buildBottomSpacer(),
-          ],
-        ),
-      );
-    });
+    return LayoutBuilder(
+      builder: (BuildContext context, BoxConstraints constraints) {
+        return SingleChildScrollViewWithScrollbar(
+          useHorizontalScreenPadding: true,
+          child: Column(
+            children: [
+              seriesDataViewOverlays.buildTopSpacer(),
+              ChartContainer(
+                showDateTooltip: true,
+                maxVisibleHeight: constraints.maxHeight - seriesDataViewOverlays.height,
+                dateFormatter: dateFormatter,
+                chartWidgetBuilder: (touchCallback) {
+                  return LineChart(
+                    ChartUtilsSimpleValue.buildLineChartData(
+                      seriesViewMetaData,
+                      combinedSeriesData,
+                      themeData,
+                      dateFormatter,
+                      touchCallback,
+                      showSpotLine: true,
+                      lineWidth: 0,
+                      showDots: true,
+                    ),
+                  );
+                },
+              ),
+              seriesDataViewOverlays.buildBottomSpacer(),
+            ],
+          ),
+        );
+      },
+    );
   }
 
-  List<SimpleValue> _buildDataProvider() {
-    List<SimpleValue> combinedSeriesData = [];
-    SimpleValue? actSimpleValue;
+  List<TimedValue> _buildDataProvider() {
+    List<TimedValue> combinedSeriesData = [];
+    TimedValue? actSimpleValue;
     for (var seriesItem in seriesData) {
       var dateTime = seriesViewMetaData.showCompressed ? DateTimeUtils.firstDayOfYear(seriesItem.dateTime) : DateTimeUtils.firstDayOfMonth(seriesItem.dateTime);
       if (actSimpleValue == null || actSimpleValue.dateTime != dateTime) {
-        actSimpleValue = SimpleValue(dateTime);
+        actSimpleValue = TimedValue.value(dateTime, 1);
         combinedSeriesData.add(actSimpleValue);
       } else {
         actSimpleValue.increment();

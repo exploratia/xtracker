@@ -1,38 +1,38 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../../generated/locale_keys.g.dart';
-import '../../../../model/series/settings/daily_life/daily_life_attribute.dart';
-import '../../../../util/theme_utils.dart';
-import '../../../controls/layout/single_child_scroll_view_with_scrollbar.dart';
-import '../../../controls/select/color_picker.dart';
-import '../../../controls/text/overflow_text.dart';
+import '../../../../../generated/locale_keys.g.dart';
+import '../../../model/series/tags/tag.dart';
+import '../../../util/theme_utils.dart';
+import '../layout/single_child_scroll_view_with_scrollbar.dart';
+import '../select/color_picker.dart';
+import '../text/overflow_text.dart';
 
-class DailyLifeAttributeInput extends StatefulWidget {
-  const DailyLifeAttributeInput({
+class TagInput extends StatefulWidget {
+  const TagInput({
     super.key,
-    this.dailyLifeAttribute,
-    this.newAttributeColor,
+    this.tag,
+    this.newTagColor,
   });
 
-  final DailyLifeAttribute? dailyLifeAttribute;
-  final Color? newAttributeColor;
+  final Tag? tag;
+  final Color? newTagColor;
 
-  static Future<DailyLifeAttribute?> showInputDlg(BuildContext context, {DailyLifeAttribute? dailyLifeAttribute, Color? newAttributeColor}) async {
-    return await showDialog<DailyLifeAttribute>(
+  static Future<Tag?> showInputDlg(BuildContext context, {Tag? tag, Color? newTagColor}) async {
+    return await showDialog<Tag>(
       context: context,
-      builder: (_) => DailyLifeAttributeInput(
-        dailyLifeAttribute: dailyLifeAttribute,
-        newAttributeColor: newAttributeColor,
+      builder: (_) => TagInput(
+        tag: tag,
+        newTagColor: newTagColor,
       ),
     );
   }
 
   @override
-  State<DailyLifeAttributeInput> createState() => _DailyLifeAttributeInputState();
+  State<TagInput> createState() => _TagInputState();
 }
 
-class _DailyLifeAttributeInputState extends State<DailyLifeAttributeInput> {
+class _TagInputState extends State<TagInput> {
   final _formKey = GlobalKey<FormState>();
   final _nameController = TextEditingController();
 
@@ -40,14 +40,14 @@ class _DailyLifeAttributeInputState extends State<DailyLifeAttributeInput> {
   bool _autoValidate = false;
   bool _isValid = false;
 
-  late final String _aid;
+  late final String _tagId;
   late Color _color;
 
   @override
   initState() {
-    var source = widget.dailyLifeAttribute;
-    _aid = source?.aid ?? DailyLifeAttribute.generateUniqueAttributeId();
-    _color = source?.color ?? widget.newAttributeColor ?? ThemeUtils.primary;
+    var source = widget.tag;
+    _tagId = source?.tagId ?? Tag.generateUniqueTagId();
+    _color = source?.color ?? widget.newTagColor ?? ThemeUtils.primary;
 
     _nameController.addListener(_validate);
     if (source != null) {
@@ -87,7 +87,7 @@ class _DailyLifeAttributeInputState extends State<DailyLifeAttributeInput> {
     });
     _validate();
     if (!_isValid) return;
-    var val = DailyLifeAttribute(aid: _aid, color: _color, name: _nameController.text);
+    var val = Tag(tagId: _tagId, color: _color, name: _nameController.text.trim());
     Navigator.pop(context, val);
   }
 
@@ -144,8 +144,8 @@ class _DailyLifeAttributeInputState extends State<DailyLifeAttributeInput> {
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            widget.dailyLifeAttribute == null ? Icon(Icons.add_outlined, size: iconSize) : Icon(Icons.edit_outlined, size: iconSize),
-            OverflowText(LocaleKeys.seriesEdit_seriesSettings_dailyLifeAttributes_dlg_title.tr()),
+            widget.tag == null ? Icon(Icons.add_outlined, size: iconSize) : Icon(Icons.edit_outlined, size: iconSize),
+            OverflowText(LocaleKeys.seriesEdit_seriesSettings_tags_dlg_title.tr()),
           ],
         ),
       ),

@@ -58,8 +58,11 @@ dart run easy_localization:generate -f keys -S assets/translations -o locale_key
 ##### Auto generate keys when saving translation files with file watcher
 
 ![auto_generate_locale_keys_with_file_watcher.png](auto_generate_locale_keys_with_file_watcher.png)
-![auto_generate_locale_keys_with_file_watcher_scope.png](auto_generate_locale_keys_with_file_watcher_scope.png)  
-scope-pattern:
+![auto_generate_locale_keys_with_file_watcher_scope.png](auto_generate_locale_keys_with_file_watcher_scope.png)
+
+**Troubleshooting:** if it runs and exit code is -1 try only 'flutter' instead of 'dart' path in the command line.
+
+**scope-pattern:**
 
 ```text
 file[xtracker]:assets/translations//*
@@ -170,6 +173,18 @@ https://pub.dev/packages/file_picker
 #### Setup
 
 https://github.com/miguelpruivo/flutter_file_picker/wiki/Setup
+
+### Color Picker
+
+https://pub.dev/packages/flutter_colorpicker
+
+### Month Picker
+
+https://pub.dev/packages/month_picker_dialog
+
+### CSV (for import and export)
+
+https://pub.dev/packages/csv
 
 ### URL Launcher
 

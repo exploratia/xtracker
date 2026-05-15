@@ -8,9 +8,8 @@ import '../../../../../model/series/data/blood_pressure/blood_pressure_value.dar
 import '../../../../../model/series/series_def.dart';
 import '../../../../../util/dialogs.dart';
 import '../../../../../util/theme_utils.dart';
-import '../../../../controls/layout/single_child_scroll_view_with_scrollbar.dart';
 import '../../../../controls/text/overflow_text.dart';
-import '../input_header.dart';
+import '../fullscreen_input.dart';
 import '../input_result.dart';
 
 class BloodPressureQuickInput extends StatefulWidget {
@@ -133,171 +132,105 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
     }
   }
 
-  void _deleteHandler(BloodPressureValue bloodPressureValue) async {
-    bool? res = await Dialogs.simpleYesNoDialog(
-      LocaleKeys.seriesValue_query_deleteValue.tr(),
-      context,
-      title: LocaleKeys.commons_dialog_title_areYouSure.tr(),
-    );
-    if (res == true && mounted) {
-      Navigator.pop(context, InputResult(bloodPressureValue, InputResultAction.delete));
+  void _deleteHandler() {
+    if (widget.bloodPressureValue != null && mounted) {
+      Navigator.pop(context, InputResult(widget.bloodPressureValue!, InputResultAction.delete));
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
-    var iconSize = ThemeUtils.iconSizeScaled;
     final showMedicationInput = !widget.seriesDef.bloodPressureSettingsReadonly().hideMedicationInput;
 
-    var edit = Form(
-      key: _formKey,
-      autovalidateMode: _autoValidate ? AutovalidateMode.always : AutovalidateMode.disabled,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        spacing: ThemeUtils.verticalSpacing,
-        children: [
-          InputHeader(dateTime: _dateTime, seriesDef: widget.seriesDef, setDateTime: _setDateTime),
-          const Divider(height: 1),
-          Row(
-            spacing: ThemeUtils.horizontalSpacing,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Flexible(
-                child: Column(
-                  children: [
-                    TextFormField(
-                      autofocus: true,
-                      controller: _highController,
-                      decoration: InputDecoration(
-                        labelText: LocaleKeys.seriesValue_bloodPressure_label_systolic.tr(),
-                        // hintText: "hint text",
-                      ),
-                      // Only numbers can be entered:
-                      inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
-                      keyboardType: const TextInputType.numberWithOptions(signed: false, decimal: false),
-                      textInputAction: TextInputAction.next,
-                      // unicode is possible - e.g. from https://www.compart.com/de/unicode/block/U+1F600
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return LocaleKeys.commons_validator_emptyValue.tr();
-                        }
-                        var val = int.tryParse(value);
-                        if (val == null || val < BloodPressureValue.minValue || val > BloodPressureValue.maxValue) {
-                          return LocaleKeys.seriesValue_bloodPressure_validation_invalidNumber.tr();
-                        }
-                        if (val < _low) {
-                          return LocaleKeys.seriesValue_bloodPressure_validation_systolicTooLow.tr();
-                        }
-                        return null;
-                      },
-                      // onSaved: (value) => _setHigh(int.tryParse(value ?? "-1") ?? -1),
-                      onChanged: (value) => _setHigh(int.tryParse(value) ?? -1),
-                    ),
-                    TextFormField(
-                      controller: _lowController,
-                      decoration: InputDecoration(
-                        labelText: LocaleKeys.seriesValue_bloodPressure_label_diastolic.tr(),
-                        // hintText: "hint text",
-                      ),
-                      // Only numbers can be entered:
-                      inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
-                      keyboardType: const TextInputType.numberWithOptions(signed: false, decimal: false),
-                      textInputAction: TextInputAction.done,
-                      // unicode is possible - e.g. from https://www.compart.com/de/unicode/block/U+1F600
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return LocaleKeys.commons_validator_emptyValue.tr();
-                        }
-                        var val = int.tryParse(value);
-                        if (val == null || val < BloodPressureValue.minValue || val > BloodPressureValue.maxValue) {
-                          return LocaleKeys.seriesValue_bloodPressure_validation_invalidNumber.tr();
-                        }
-                        if (val > _high) {
-                          return LocaleKeys.seriesValue_bloodPressure_validation_diastolicTooHigh.tr();
-                        }
-                        return null;
-                      },
-                      onChanged: (value) => _setLow(int.tryParse(value) ?? -1),
-                    ),
-                  ],
+    List<Widget> formChildren = [
+      TextFormField(
+        autofocus: true,
+        controller: _highController,
+        decoration: InputDecoration(
+          labelText: LocaleKeys.seriesValue_bloodPressure_label_systolic.tr(),
+          // hintText: "hint text",
+          suffixIcon: const Icon(Icons.circle_outlined),
+          suffixIconColor: BloodPressureValue.colorHigh(_high),
+        ),
+        // Only numbers can be entered:
+        inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
+        keyboardType: const TextInputType.numberWithOptions(signed: false, decimal: false),
+        textInputAction: TextInputAction.next,
+        // unicode is possible - e.g. from https://www.compart.com/de/unicode/block/U+1F600
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return LocaleKeys.commons_validator_emptyValue.tr();
+          }
+          var val = int.tryParse(value);
+          if (val == null || val < BloodPressureValue.minValue || val > BloodPressureValue.maxValue) {
+            return LocaleKeys.seriesValue_bloodPressure_validation_invalidNumber.tr();
+          }
+          if (val < _low) {
+            return LocaleKeys.seriesValue_bloodPressure_validation_systolicTooLow.tr();
+          }
+          return null;
+        },
+        // onSaved: (value) => _setHigh(int.tryParse(value ?? "-1") ?? -1),
+        onChanged: (value) => _setHigh(int.tryParse(value) ?? -1),
+      ),
+      TextFormField(
+        controller: _lowController,
+        decoration: InputDecoration(
+          labelText: LocaleKeys.seriesValue_bloodPressure_label_diastolic.tr(),
+          // hintText: "hint text",
+          suffixIcon: const Icon(Icons.circle_outlined),
+          suffixIconColor: BloodPressureValue.colorLow(_low),
+        ),
+        // Only numbers can be entered:
+        inputFormatters: <TextInputFormatter>[FilteringTextInputFormatter.digitsOnly],
+        keyboardType: const TextInputType.numberWithOptions(signed: false, decimal: false),
+        textInputAction: TextInputAction.done,
+        // unicode is possible - e.g. from https://www.compart.com/de/unicode/block/U+1F600
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return LocaleKeys.commons_validator_emptyValue.tr();
+          }
+          var val = int.tryParse(value);
+          if (val == null || val < BloodPressureValue.minValue || val > BloodPressureValue.maxValue) {
+            return LocaleKeys.seriesValue_bloodPressure_validation_invalidNumber.tr();
+          }
+          if (val > _high) {
+            return LocaleKeys.seriesValue_bloodPressure_validation_diastolicTooHigh.tr();
+          }
+          return null;
+        },
+        onChanged: (value) => _setLow(int.tryParse(value) ?? -1),
+      ),
+      if (showMedicationInput)
+        SwitchListTile(
+          contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: ThemeUtils.defaultPadding),
+          title: Tooltip(
+            message: LocaleKeys.seriesValue_bloodPressure_switch_medication_tooltip.tr(),
+            child: Row(
+              spacing: ThemeUtils.horizontalSpacingSmall,
+              children: [
+                const Icon(Icons.medication_outlined),
+                OverflowText(
+                  LocaleKeys.seriesValue_bloodPressure_switch_medication_label.tr(),
                 ),
-              ),
-              Container(
-                height: 96,
-                width: 4,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: const AlignmentDirectional(0, -1),
-                    end: const AlignmentDirectional(0, 1),
-                    colors: [
-                      BloodPressureValue.colorHigh(_high),
-                      BloodPressureValue.colorLow(_low),
-                    ],
-                  ),
-                  borderRadius: const BorderRadius.all(Radius.circular(2)),
-                ),
-              ),
-            ],
-          ),
-          if (showMedicationInput)
-            SwitchListTile(
-              contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: ThemeUtils.defaultPadding),
-              title: Tooltip(
-                message: LocaleKeys.seriesValue_bloodPressure_switch_medication_tooltip.tr(),
-                child: Row(
-                  spacing: ThemeUtils.horizontalSpacingSmall,
-                  children: [
-                    const Icon(Icons.medication_outlined),
-                    OverflowText(
-                      LocaleKeys.seriesValue_bloodPressure_switch_medication_label.tr(),
-                    ),
-                  ],
-                ),
-              ),
-              value: _tablet,
-              onChanged: _setTablet,
+              ],
             ),
-        ],
-      ),
-    );
+          ),
+          value: _tablet,
+          onChanged: _setTablet,
+        ),
+    ];
 
-    return AlertDialog(
-      title: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: ThemeUtils.seriesDataInputDlgMaxWidth),
-        child: Row(
-          spacing: ThemeUtils.horizontalSpacing,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            widget.bloodPressureValue == null ? Icon(Icons.add_outlined, size: iconSize) : Icon(Icons.edit_outlined, size: iconSize),
-            OverflowText(widget.seriesDef.name),
-            if (widget.bloodPressureValue != null)
-              IconButton(
-                tooltip: LocaleKeys.seriesValue_action_deleteValue_tooltip.tr(),
-                onPressed: () => _deleteHandler(widget.bloodPressureValue!),
-                color: themeData.colorScheme.secondary,
-                iconSize: iconSize,
-                icon: const Icon(Icons.delete_outlined),
-              ),
-          ],
-        ),
-      ),
-      content: SingleChildScrollViewWithScrollbar(
-        child: edit,
-      ),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.pop(context, null);
-          },
-          child: Text(LocaleKeys.commons_dialog_btn_cancel.tr()),
-        ),
-        TextButton(
-          onPressed: _saveHandler,
-          child: Text(LocaleKeys.commons_dialog_btn_okay.tr()),
-        ),
-      ],
+    return FullscreenInput(
+      formKey: _formKey,
+      formChildren: formChildren,
+      autoValidate: _autoValidate,
+      isEdit: widget.bloodPressureValue != null,
+      seriesDef: widget.seriesDef,
+      dateTime: _dateTime,
+      setDateTime: _setDateTime,
+      saveHandler: _saveHandler,
+      deleteHandler: _deleteHandler,
     );
   }
 }

@@ -13,7 +13,11 @@ import 'chart_utils.dart';
 
 class ChartUtilsBloodPressure {
   static LineChartData buildLineChartData(
-      List<BloodPressureValue> seriesData, ThemeData themeData, Function(FlTouchEvent, LineTouchResponse?)? touchCallback, BuildContext context) {
+    List<BloodPressureValue> seriesData,
+    ThemeData themeData,
+    Function(FlTouchEvent, LineTouchResponse?)? touchCallback,
+    BuildContext context,
+  ) {
     List<LineChartBarData> lineBarsData = [];
 
     ChartMetaData chartMetaData = ChartMetaData();
@@ -52,28 +56,32 @@ class ChartUtilsBloodPressure {
     }
 
     var gradientData = buildGradient(highMin.toDouble(), highMax.toDouble(), 120, BloodPressureValue.colorHigh);
-    lineBarsData.add(LineChartBarData(
-      spots: highValues,
-      isCurved: false,
-      preventCurveOverShooting: true,
-      barWidth: 2,
-      gradient: ChartUtils.createBottomToTopGradient(gradientData.k, stops: gradientData.v),
-      dotData: ChartUtils.createDotData(chartMetaData),
-      isStrokeCapRound: true,
-      // dashArray: [5, 5],
-    ));
+    lineBarsData.add(
+      LineChartBarData(
+        spots: highValues,
+        isCurved: false,
+        preventCurveOverShooting: true,
+        barWidth: 2,
+        gradient: ChartUtils.createBottomToTopGradient(gradientData.k, stops: gradientData.v),
+        dotData: ChartUtils.createDotData(chartMetaData),
+        isStrokeCapRound: true,
+        // dashArray: [5, 5],
+      ),
+    );
 
     gradientData = buildGradient(lowMin.toDouble(), lowMax.toDouble(), 80, BloodPressureValue.colorLow);
-    lineBarsData.add(LineChartBarData(
-      spots: lowValues,
-      isCurved: false,
-      preventCurveOverShooting: true,
-      // curveSmoothness: 0.02, // only makes sense if no BetweenBarsData
-      barWidth: 2,
-      gradient: ChartUtils.createBottomToTopGradient(gradientData.k, stops: gradientData.v),
-      dotData: ChartUtils.createDotData(chartMetaData),
-      isStrokeCapRound: true,
-    ));
+    lineBarsData.add(
+      LineChartBarData(
+        spots: lowValues,
+        isCurved: false,
+        preventCurveOverShooting: true,
+        // curveSmoothness: 0.02, // only makes sense if no BetweenBarsData
+        barWidth: 2,
+        gradient: ChartUtils.createBottomToTopGradient(gradientData.k, stops: gradientData.v),
+        dotData: ChartUtils.createDotData(chartMetaData),
+        isStrokeCapRound: true,
+      ),
+    );
 
     chartMetaData.calcPadding();
 
@@ -101,12 +109,11 @@ class ChartUtilsBloodPressure {
             BloodPressureValue.colorHigh(chartMetaData.yMax.truncate()).withAlpha(64),
             BloodPressureValue.colorLow(chartMetaData.yMin.truncate()).withAlpha(64),
           ]),
-        )
+        ),
       ],
       borderData: ChartUtils.borderData,
       gridData: ChartUtils.noGridData,
       lineTouchData: ChartUtils.createLineTouchData(
-        fractionDigits: 0,
         themeData: themeData,
         touchCallback: touchCallback,
         provideTooltipTextColor: (x, y, barIdx) => (barIdx == 0) ? BloodPressureValue.colorHigh(y.truncate()) : BloodPressureValue.colorLow(y.truncate()),
@@ -215,7 +222,7 @@ class ChartUtilsBloodPressure {
       stops.add(tOf(v));
     }
 
-// enforce exact 0.0/1.0 at first/last stop
+    // enforce exact 0.0/1.0 at first/last stop
     stops[0] = 0.0;
     stops[stops.length - 1] = 1.0;
 

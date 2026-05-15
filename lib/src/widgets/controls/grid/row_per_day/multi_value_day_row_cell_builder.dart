@@ -17,7 +17,10 @@ class MultiValueDayRowCellBuilder<T extends SeriesDataValue> {
     MultiValueDayRowItem<T> dayItem = data[yIndex];
 
     if (xIndex == 0) {
-      return GridCell(backgroundColor: dayItem.backgroundColor, child: Center(child: Text(dayItem.date)));
+      return GridCell(
+        backgroundColor: dayItem.backgroundColor,
+        child: Center(child: Text(dayItem.date)),
+      );
     }
 
     if (FixColumnProfile.isMultiValueDayProfile(fixColumnProfile)) {

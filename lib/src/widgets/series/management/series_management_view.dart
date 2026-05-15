@@ -33,7 +33,8 @@ class SeriesManagementView extends StatelessWidget {
             iconSize: ThemeUtils.iconSizeScaled,
             tooltip: LocaleKeys.seriesDashboard_action_addSeries_tooltip.tr(),
             onPressed: () async {
-              /*SeriesDef? s=*/ await SeriesDef.addNewSeries(context);
+              /*SeriesDef? s=*/
+              await SeriesDef.addNewSeries(context);
             },
             icon: const Icon(Icons.add_chart_outlined),
           ),
@@ -83,7 +84,8 @@ class _SeriesList extends StatelessWidget {
     List<Widget> children = [];
     var idx = 0;
     for (var s in series) {
-      children.add(AnimateIn(
+      children.add(
+        AnimateIn(
           key: Key(s.uuid),
           durationMS: 2000 + idx * 500,
           slideOffset: const Offset(0, -0.2),
@@ -92,7 +94,9 @@ class _SeriesList extends StatelessWidget {
             seriesDef: s,
             index: idx,
             settingsController: settingsController,
-          )));
+          ),
+        ),
+      );
       idx++;
     }
 

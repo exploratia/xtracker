@@ -10,15 +10,16 @@ import '../../tooltip/lazy_tooltip.dart';
 
 class Pixel<T extends SeriesDataValue> extends StatelessWidget {
   /// - [tooltipValueBuilder] called for every data value
-  const Pixel(
-      {super.key,
-      required this.colors,
-      this.verticalGradient = false,
-      this.pixelText,
-      this.seriesValues,
-      this.isStartMarker = false,
-      this.backgroundColor,
-      this.tooltipValueBuilder});
+  const Pixel({
+    super.key,
+    required this.colors,
+    this.verticalGradient = false,
+    this.pixelText,
+    this.seriesValues,
+    this.isStartMarker = false,
+    this.backgroundColor,
+    this.tooltipValueBuilder,
+  });
 
   final List<Color> colors;
   final bool verticalGradient;

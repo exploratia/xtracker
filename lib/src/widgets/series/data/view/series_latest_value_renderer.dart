@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../../generated/locale_keys.g.dart';
 import '../../../../model/series/data/blood_pressure/blood_pressure_value.dart';
+import '../../../../model/series/data/custom/custom_value.dart';
 import '../../../../model/series/data/daily_check/daily_check_value.dart';
 import '../../../../model/series/data/daily_life/daily_life_value.dart';
 import '../../../../model/series/data/habit/habit_value.dart';
@@ -30,10 +31,6 @@ class SeriesLatestValueRenderer extends StatelessWidget {
           return AnimatedHighlightContainer<BloodPressureValue?>(
             highlightColor: seriesDef.color,
             valueSelector: (context) => context.read<SeriesCurrentValueProvider>().bloodPressureCurrentValue(seriesDef),
-            // highlight initial if recently updated current value is the same type.
-            // necessary, because of the onscreen keyboard shown up in the input dialog the whole series view is rebuild
-            // without highlight initial the animation could never be seen
-            highlightInitial: context.read<SeriesCurrentValueProvider>().recentlyUpdated() == seriesDef.seriesType,
             builder: (context, currentValue) {
               if (currentValue != null) {
                 return _CurrentValueEdit(
@@ -85,6 +82,24 @@ class SeriesLatestValueRenderer extends StatelessWidget {
           return AnimatedHighlightContainer<HabitValue?>(
             highlightColor: seriesDef.color,
             valueSelector: (context) => context.read<SeriesCurrentValueProvider>().habitCurrentValue(seriesDef),
+            builder: (context, currentValue) {
+              if (currentValue != null) {
+                return _CurrentValueEdit(
+                  seriesDef: seriesDef,
+                  seriesDataValue: currentValue,
+                  child: SeriesValueRenderer(currentValue, seriesDef: seriesDef),
+                );
+              }
+              return Center(child: Text(LocaleKeys.seriesDefRenderer_currentValue_label_noValue.tr()));
+            },
+          );
+        }
+      case SeriesType.custom:
+      case SeriesType.monthly:
+        {
+          return AnimatedHighlightContainer<CustomValue?>(
+            highlightColor: seriesDef.color,
+            valueSelector: (context) => context.read<SeriesCurrentValueProvider>().customCurrentValue(seriesDef),
             builder: (context, currentValue) {
               if (currentValue != null) {
                 return _CurrentValueEdit(

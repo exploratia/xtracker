@@ -50,7 +50,11 @@ class SeriesDataAnalyticsDaysRecordedView extends StatelessWidget {
   }
 
   static List<Widget> buildDaysRecordedWidgets(
-      BuildContext context, ThemeData themeData, SeriesViewMetaData seriesViewMetaData, List<SeriesDataValue> seriesDataValues) {
+    BuildContext context,
+    ThemeData themeData,
+    SeriesViewMetaData seriesViewMetaData,
+    List<SeriesDataValue> seriesDataValues,
+  ) {
     var dayItems = DayItem.buildDayItems(seriesDataValues, (day) => DayItem(day), includeToday: true);
 
     var daysRecordedList = Analytics.datasetSizeInDays.map((lastXDays) => _DaysRecorded.analyse(dayItems, lastXDays));
@@ -137,7 +141,7 @@ class SeriesDataAnalyticsDaysRecordedView extends StatelessWidget {
           children: [
             ...Analytics.datasetSizeInDays.map(
               (s) => _buildLegendItem(s, seriesViewMetaData, themeData),
-            )
+            ),
           ],
         ),
       ],

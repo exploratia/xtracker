@@ -67,19 +67,21 @@ class _KeyValueTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    return LayoutBuilder(builder: (BuildContext _, BoxConstraints constraints) {
-      return Table(
-        // https://api.flutter.dev/flutter/widgets/Table-class.html
-        columnWidths: <int, TableColumnWidth>{
-          0: constraints.maxWidth < 200 ? FixedColumnWidth(constraints.maxWidth / 2) : const IntrinsicColumnWidth(),
-          1: const FlexColumnWidth(),
-        },
-        border: TableBorder.symmetric(
-          inside: BorderSide(width: 1, color: themeData.canvasColor),
-        ),
-        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-        children: rows,
-      );
-    });
+    return LayoutBuilder(
+      builder: (BuildContext _, BoxConstraints constraints) {
+        return Table(
+          // https://api.flutter.dev/flutter/widgets/Table-class.html
+          columnWidths: <int, TableColumnWidth>{
+            0: constraints.maxWidth < 200 ? FixedColumnWidth(constraints.maxWidth / 2) : const IntrinsicColumnWidth(),
+            1: const FlexColumnWidth(),
+          },
+          border: TableBorder.symmetric(
+            inside: BorderSide(width: 1, color: themeData.canvasColor),
+          ),
+          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+          children: rows,
+        );
+      },
+    );
   }
 }

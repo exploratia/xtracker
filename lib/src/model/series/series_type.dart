@@ -3,13 +3,13 @@ import 'package:flutter/material.dart';
 
 import '../../../generated/locale_keys.g.dart';
 import '../../util/ex.dart';
+import '../../util/theme_utils.dart';
 import '../../widgets/controls/select/icon_map.dart';
 import '../column_profile/fix_column_profile_type.dart';
 import 'view_type.dart';
 
 enum SeriesType {
   bloodPressure(
-    'bloodPressure',
     Icons.monitor_heart_outlined,
     Colors.red,
     [
@@ -25,7 +25,6 @@ enum SeriesType {
     ],
   ),
   dailyCheck(
-    "dailyCheck",
     Icons.check_box_outlined,
     Colors.blue,
     [
@@ -41,7 +40,6 @@ enum SeriesType {
     ],
   ),
   habit(
-    "habit",
     Icons.repeat_outlined,
     Color.fromRGBO(255, 154, 0, 1.0),
     [
@@ -57,7 +55,6 @@ enum SeriesType {
     ],
   ),
   dailyLife(
-    "dailyLife",
     Icons.account_circle_outlined,
     Color.fromRGBO(0, 255, 50, 1.0),
     [
@@ -69,12 +66,29 @@ enum SeriesType {
       FixColumnProfileType.dateHourlyOverview,
       FixColumnProfileType.dateTimeValue,
     ],
-  );
-  // monthly("monthly", Icons.calendar_month_outlined, Colors.deepPurple, [ViewType.table, ViewType.lineChart]),
-  // free("free", Icons.calendar_today_outlined, Colors.green, [ViewType.lineChart, ViewType.table]);
-  // TODO TimeTracker
+  ),
+  custom(
+    Icons.line_axis_outlined,
+    ThemeUtils.primaryColor,
+    [
+      ViewType.table,
+      ViewType.lineChart,
+      // ViewType.pixels, optional if tags are configured
+    ],
+    [], // no fix table column profiles
+  ),
+  monthly(
+    Icons.calendar_month_outlined,
+    ThemeUtils.secondaryColor,
+    [
+      ViewType.table,
+      ViewType.lineChart,
+      // ViewType.pixels, optional if tags are configured
+    ],
+    [], // no fix table column profiles
+  ),
+  ;
 
-  final String typeName;
   final IconData iconData;
   final Color color;
 
@@ -85,7 +99,7 @@ enum SeriesType {
   final List<FixColumnProfileType> tableFixColumnProfileTypes;
 
   /// [iconData] one of [IconMap]
-  const SeriesType(this.typeName, this.iconData, this.color, this.viewTypes, this.tableFixColumnProfileTypes);
+  const SeriesType(this.iconData, this.color, this.viewTypes, this.tableFixColumnProfileTypes);
 
   ViewType get defaultViewType {
     return viewTypes.last;
@@ -102,8 +116,12 @@ enum SeriesType {
     return [...tableFixColumnProfileTypes]..sort((a, b) => a.displayName.compareTo(b.displayName));
   }
 
-  static SeriesType byTypeName(String typeName) {
-    return SeriesType.values.firstWhere((element) => element.typeName == typeName, orElse: () => throw Ex("Unexpected SeriesType '$typeName'"));
+  bool isCustomOrMonthlySeriesType() {
+    return this == SeriesType.custom || this == SeriesType.monthly;
+  }
+
+  static SeriesType byName(String name) {
+    return SeriesType.values.firstWhere((e) => e.name == name, orElse: () => throw Ex("Unexpected SeriesType '$name'"));
   }
 
   static String displayNameOf(SeriesType seriesType) {
@@ -112,8 +130,8 @@ enum SeriesType {
       SeriesType.dailyCheck => LocaleKeys.enum_seriesType_dailyCheck_title.tr(),
       SeriesType.dailyLife => LocaleKeys.enum_seriesType_dailyLife_title.tr(),
       SeriesType.habit => LocaleKeys.enum_seriesType_habit_title.tr(),
-      // SeriesType.monthly => LocaleKeys.series_seriesType_monthly_title.tr(),
-      // SeriesType.free => LocaleKeys.series_seriesType_free_title.tr(),
+      SeriesType.custom => LocaleKeys.enum_seriesType_custom_title.tr(),
+      SeriesType.monthly => LocaleKeys.enum_seriesType_monthly_title.tr(),
     };
   }
 
@@ -123,8 +141,8 @@ enum SeriesType {
       SeriesType.dailyCheck => LocaleKeys.enum_seriesType_dailyCheck_info.tr(),
       SeriesType.dailyLife => LocaleKeys.enum_seriesType_dailyLife_info.tr(),
       SeriesType.habit => LocaleKeys.enum_seriesType_habit_info.tr(),
-      // SeriesType.monthly => LocaleKeys.series_seriesType_monthly_info.tr(),
-      // SeriesType.free => LocaleKeys.series_seriesType_free_info.tr(),
+      SeriesType.custom => LocaleKeys.enum_seriesType_custom_info.tr(),
+      SeriesType.monthly => LocaleKeys.enum_seriesType_monthly_info.tr(),
     };
   }
 }

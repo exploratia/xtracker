@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
@@ -32,7 +30,7 @@ class SeriesDataAnalyticsHoursRecordedView extends StatelessWidget {
       content: Column(
         children: [
           recordedDaysWidget,
-          if (child != null) child!,
+          ?child,
         ],
       ),
     );
@@ -47,60 +45,51 @@ class SeriesDataAnalyticsHoursRecordedView extends StatelessWidget {
     hours.add(hours.first);
 
     var axisTitlesTheme = themeData.textTheme.labelLarge!;
-    Widget chart = LayoutBuilder(
-      builder: (BuildContext context, BoxConstraints constraints) {
-        var chartWidth = math.max(280.0, constraints.maxWidth);
 
-        var baseColor = seriesViewMetaData.seriesDef.color;
-        var gradientColor = ColorUtils.gradientColor(baseColor);
-        var gradient = ChartUtils.createTopToBottomGradient([baseColor, gradientColor]);
+    var baseColor = seriesViewMetaData.seriesDef.color;
+    var gradientColor = ColorUtils.gradientColor(baseColor);
+    var gradient = ChartUtils.createTopToBottomGradient([baseColor, gradientColor]);
 
-        var spots = hours.asMap().entries.map((e) => FlSpot(e.key.toDouble(), e.value.toDouble())).toList();
+    var spots = hours.asMap().entries.map((e) => FlSpot(e.key.toDouble(), e.value.toDouble())).toList();
 
-        return SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: SizedBox(
-            width: chartWidth,
-            height: 120,
-            child: LineChart(
-              LineChartData(
-                lineBarsData: [
-                  LineChartBarData(
-                    gradient: gradient,
-                    dotData: const FlDotData(show: false),
-                    preventCurveOverShooting: true,
-                    curveSmoothness: 0.7,
-                    isCurved: true,
-                    isStrokeCapRound: true,
-                    isStrokeJoinRound: true,
-                    spots: spots,
-                  ),
-                ],
-                // maxY: 1,
-                minY: 0,
-                borderData: FlBorderData(show: false),
-                lineTouchData: const LineTouchData(enabled: false),
-                gridData: const FlGridData(show: false),
-                titlesData: FlTitlesData(
-                  show: true,
-                  rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                  topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                  leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                  bottomTitles: AxisTitles(
-                    sideTitles: SideTitles(
-                      showTitles: true,
-                      maxIncluded: false,
-                      minIncluded: true,
-                      getTitlesWidget: (value, meta) => bottomTitles(value, meta, axisTitlesTheme),
-                      reservedSize: axisTitlesTheme.fontSize! * MediaQueryUtils.textScaleFactor + ThemeUtils.verticalSpacingLarge,
-                    ),
-                  ),
-                ),
+    var chart = SizedBox(
+      height: 120,
+      child: LineChart(
+        LineChartData(
+          lineBarsData: [
+            LineChartBarData(
+              gradient: gradient,
+              dotData: const FlDotData(show: false),
+              preventCurveOverShooting: true,
+              curveSmoothness: 0.7,
+              isCurved: true,
+              isStrokeCapRound: true,
+              isStrokeJoinRound: true,
+              spots: spots,
+            ),
+          ],
+          // maxY: 1,
+          minY: 0,
+          borderData: FlBorderData(show: false),
+          lineTouchData: const LineTouchData(enabled: false),
+          gridData: const FlGridData(show: false),
+          titlesData: FlTitlesData(
+            show: true,
+            rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            leftTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+            bottomTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                maxIncluded: false,
+                minIncluded: true,
+                getTitlesWidget: (value, meta) => bottomTitles(value, meta, axisTitlesTheme),
+                reservedSize: axisTitlesTheme.fontSize! * MediaQueryUtils.textScaleFactor + ThemeUtils.verticalSpacingLarge,
               ),
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
 
     var chartWidget = Column(

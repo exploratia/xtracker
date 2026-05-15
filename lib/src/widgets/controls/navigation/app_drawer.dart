@@ -15,23 +15,24 @@ class AppDrawer extends StatelessWidget {
     return ValueListenableBuilder(
       valueListenable: HideNavigationLabels.visible,
       builder: (BuildContext ctx0, navLabelsVisible, _) => Drawer(
-          // + icon and padding
-          width: (navLabelsVisible ? Navigation.getDrawerTextWidth(context) : 0) + 130,
-          child: Column(
-            children: [
-              const AppDrawerHeader(),
-              // Divider(),
-              Expanded(
-                child: SingleChildScrollViewWithScrollbar(
-                  useScreenPadding: true,
-                  child: ValueListenableBuilder(
-                    valueListenable: Navigation.currentMainNavigationIdx,
-                    builder: (BuildContext ctx, currentIdx, _) => _buildNavItems(ctx, currentIdx, navLabelsVisible),
-                  ),
+        // + icon and padding
+        width: (navLabelsVisible ? Navigation.getDrawerTextWidth(context) : 0) + 130,
+        child: Column(
+          children: [
+            const AppDrawerHeader(),
+            // Divider(),
+            Expanded(
+              child: SingleChildScrollViewWithScrollbar(
+                useScreenPadding: true,
+                child: ValueListenableBuilder(
+                  valueListenable: Navigation.currentMainNavigationIdx,
+                  builder: (BuildContext ctx, currentIdx, _) => _buildNavItems(ctx, currentIdx, navLabelsVisible),
                 ),
               ),
-            ],
-          )),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -42,16 +43,18 @@ class AppDrawer extends StatelessWidget {
     for (var navItem in Navigation.mainNavigationItems) {
       int itemIdx = ++actIdx;
       var icon = Tooltip(message: navItem.tooltipBuilder(), child: navItem.icon());
-      result.add(ListTile(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(ThemeUtils.borderRadius)),
-        selected: actIdx == currentIdx,
-        leading: navLabelsVisible ? icon : null,
-        title: navLabelsVisible ? Text(navItem.titleBuilder()) : icon,
-        onTap: () {
-          NavigationUtils.closeDrawerIfOpen(context);
-          Navigation.setCurrentMainNavigationRouteIdx(itemIdx, context);
-        },
-      ));
+      result.add(
+        ListTile(
+          shape: RoundedRectangleBorder(borderRadius: BorderRadiusGeometry.circular(ThemeUtils.borderRadius)),
+          selected: actIdx == currentIdx,
+          leading: navLabelsVisible ? icon : null,
+          title: navLabelsVisible ? Text(navItem.titleBuilder()) : icon,
+          onTap: () {
+            NavigationUtils.closeDrawerIfOpen(context);
+            Navigation.setCurrentMainNavigationRouteIdx(itemIdx, context);
+          },
+        ),
+      );
     }
 
     return Column(children: result);

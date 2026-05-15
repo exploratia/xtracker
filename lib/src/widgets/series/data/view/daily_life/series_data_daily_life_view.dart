@@ -9,8 +9,13 @@ import 'pixels/series_data_daily_life_pixels_view.dart';
 import 'table/series_data_daily_life_table_view.dart';
 
 class SeriesDataDailyLifeView extends StatelessWidget {
-  const SeriesDataDailyLifeView(
-      {super.key, required this.seriesViewMetaData, required this.seriesData, required this.seriesDataFilter, required this.seriesDataViewOverlays});
+  const SeriesDataDailyLifeView({
+    super.key,
+    required this.seriesViewMetaData,
+    required this.seriesData,
+    required this.seriesDataFilter,
+    required this.seriesDataViewOverlays,
+  });
 
   final SeriesViewMetaData seriesViewMetaData;
   final List<DailyLifeValue> seriesData;

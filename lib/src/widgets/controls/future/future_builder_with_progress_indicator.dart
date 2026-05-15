@@ -5,8 +5,14 @@ import '../../../util/theme_utils.dart';
 
 class FutureBuilderWithProgressIndicator<T> extends StatelessWidget {
   /// [waitingWidget] optional Widget which is shown while waiting additional to progress indicator
-  const FutureBuilderWithProgressIndicator(
-      {super.key, required this.future, this.errorBuilder, required this.widgetBuilder, this.marginTop = 0, this.waitingWidget});
+  const FutureBuilderWithProgressIndicator({
+    super.key,
+    required this.future,
+    this.errorBuilder,
+    required this.widgetBuilder,
+    this.marginTop = 0,
+    this.waitingWidget,
+  });
 
   final Future<T> future;
   final dynamic Function(Object error)? errorBuilder;
@@ -24,7 +30,7 @@ class FutureBuilderWithProgressIndicator<T> extends StatelessWidget {
             children: [
               if (marginTop > 0) SizedBox(height: marginTop),
               const LinearProgressIndicator(),
-              if (waitingWidget != null) waitingWidget!,
+              ?waitingWidget,
             ],
           );
         } else if (snapshot.hasError) {
@@ -52,8 +58,14 @@ class FutureBuilderWithProgressIndicator<T> extends StatelessWidget {
 
 class VoidFutureBuilderWithProgressIndicator extends StatelessWidget {
   /// [waitingWidget] optional Widget which is shown while waiting additional to progress indicator
-  VoidFutureBuilderWithProgressIndicator(
-      {super.key, required this.future, this.errorBuilder, required this.widgetBuilder, this.marginTop = 0, this.waitingWidget}) {
+  VoidFutureBuilderWithProgressIndicator({
+    super.key,
+    required this.future,
+    this.errorBuilder,
+    required this.widgetBuilder,
+    this.marginTop = 0,
+    this.waitingWidget,
+  }) {
     futureWrapper = Future(() async {
       await future;
       return true;
@@ -90,9 +102,10 @@ class _ErrMsg extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Center(
-        child: Padding(
-      padding: const EdgeInsets.all(ThemeUtils.defaultPadding),
-      child: Text(msg),
-    ));
+      child: Padding(
+        padding: const EdgeInsets.all(ThemeUtils.defaultPadding),
+        child: Text(msg),
+      ),
+    );
   }
 }

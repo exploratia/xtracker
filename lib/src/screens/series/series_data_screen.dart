@@ -93,19 +93,21 @@ class SeriesDataScreen extends StatelessWidget {
                       seriesDataFilter: filter,
                       seriesDataViewOverlays: seriesDataViewOverlays,
                       builder: (Widget Function() seriesDataViewBuilder, List<SeriesDataValue> seriesDataValues) {
-                        return OrientationBuilder(builder: (BuildContext context, Orientation orientation) {
-                          var isLandscape = orientation == Orientation.landscape;
-                          return _ScreenBuilder(
-                            seriesViewMetaData: seriesViewMetaData,
-                            seriesDataViewBuilder: seriesDataViewBuilder,
-                            seriesDataValues: seriesDataValues,
-                            filter: filter,
-                            updateFilter: updateFilter,
-                            seriesDataViewOverlays: seriesDataViewOverlays,
-                            updateOverlays: updateOverlays,
-                            isLandScape: isLandscape,
-                          );
-                        });
+                        return OrientationBuilder(
+                          builder: (BuildContext context, Orientation orientation) {
+                            var isLandscape = orientation == Orientation.landscape;
+                            return _ScreenBuilder(
+                              seriesViewMetaData: seriesViewMetaData,
+                              seriesDataViewBuilder: seriesDataViewBuilder,
+                              seriesDataValues: seriesDataValues,
+                              filter: filter,
+                              updateFilter: updateFilter,
+                              seriesDataViewOverlays: seriesDataViewOverlays,
+                              updateOverlays: updateOverlays,
+                              isLandScape: isLandscape,
+                            );
+                          },
+                        );
                       },
                     );
                   },
@@ -216,7 +218,7 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
 
   void _setTableFixColumnProfile(FixColumnProfileType fixColumnProfileType) {
     setState(() {
-      widget.seriesViewMetaData.tableFixColumnProfile = FixColumnProfile.resolveByType(fixColumnProfileType);
+      widget.seriesViewMetaData.columnProfile = FixColumnProfile.resolveByType(fixColumnProfileType);
       if (!widget.seriesViewMetaData.showDateFilter) widget.updateOverlays(bottomHeight: 0);
     });
   }
@@ -278,8 +280,8 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
     List<Widget> viewActions = [];
     List<Widget> orientationDependentViewActions = [];
 
-    // for all views analysis dialog
-    {
+    // data analysis - what could be valuable for monthly?
+    if (seriesType != SeriesType.monthly) {
       bool analyticsPossible = !hasNoData;
       if (analyticsPossible) {
         var d1 = widget.seriesDataValues.first.dateTime;
@@ -312,15 +314,17 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
 
     // in charts add depending on series type switch interval (day/month/year) btn
     if (viewType == ViewType.lineChart || viewType == ViewType.barChart) {
-      if (/*seriesType == SeriesType.monthly ||*/ seriesType == SeriesType.dailyCheck || seriesType == SeriesType.habit) {
+      if (seriesType == SeriesType.monthly || seriesType == SeriesType.dailyCheck || seriesType == SeriesType.habit) {
         var showCompressed = metaData.showCompressed;
         // monthly | yearly
-        var tooltip =
-            showCompressed ? LocaleKeys.seriesData_action_compression_monthly_tooltip.tr() : LocaleKeys.seriesData_action_compression_yearly_tooltip.tr();
+        var tooltip = showCompressed
+            ? LocaleKeys.seriesData_action_compression_monthly_tooltip.tr()
+            : LocaleKeys.seriesData_action_compression_yearly_tooltip.tr();
         if (seriesType == SeriesType.habit) {
           // daily | monthly
-          tooltip =
-              showCompressed ? LocaleKeys.seriesData_action_compression_daily_tooltip.tr() : LocaleKeys.seriesData_action_compression_monthly_tooltip.tr();
+          tooltip = showCompressed
+              ? LocaleKeys.seriesData_action_compression_daily_tooltip.tr()
+              : LocaleKeys.seriesData_action_compression_monthly_tooltip.tr();
         }
 
         var iconButtonToggleCompressed = IconButton(
@@ -343,6 +347,10 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
     {
       var showDateFilter = metaData.showDateFilter;
       bool dateFilterPossible = !hasNoData;
+      // in case of monthly and compressed (=yearly) no filter possible
+      if (metaData.seriesDef.seriesType == SeriesType.monthly && metaData.showCompressed && metaData.viewType == ViewType.lineChart) {
+        dateFilterPossible = false;
+      }
       if (dateFilterPossible) {
         var d1 = widget.seriesDataValues.first.dateTime;
         var d2 = widget.seriesDataValues.last.dateTime;
@@ -400,13 +408,22 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
 
     // more then one view type? Add view type selection
     if (seriesType.viewTypes.length > 1) {
+      List<ViewType> viewTypes = List.from(seriesType.viewTypes, growable: true);
+
+      // special case custom series could have tags
+      if (metaData.seriesDef.isCustomSeriesWithTags()) {
+        viewTypes.add(ViewType.pixels);
+      }
+
       viewActions.add(
         Tooltip(
           message: LocaleKeys.seriesData_action_viewTypeMenu_tooltip.tr(),
           child: IconPopupMenu(
             icon: const Icon(Icons.remove_red_eye_outlined),
             menuEntries: [
-              ...seriesType.viewTypes.where((vt) => vt != viewType).map(
+              ...viewTypes
+                  .where((vt) => vt != viewType)
+                  .map(
                     (vt) => IconPopupMenuEntry(Icon(vt.iconData), () => _setViewType(vt), vt.displayName()),
                   ),
             ],
@@ -442,7 +459,7 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
                 children: bottomBarActions,
               ),
             ),
-          )
+          ),
         ],
       );
     }
@@ -543,7 +560,7 @@ class _SelectColumnProfile extends StatelessWidget {
               ],
             ),
           ),
-        )
+        ),
       ],
     );
   }
@@ -581,6 +598,9 @@ class _SeriesDataFilterWrapperState extends State<_SeriesDataFilterWrapper> {
   @override
   void initState() {
     var filterStart = DateTimeUtils.firstDayOfMonth(DateTime.now().subtract(const Duration(days: 365)));
+    if (widget.seriesViewMetaData.seriesDef.seriesType == SeriesType.monthly) {
+      filterStart = DateTimeBuilder.now().firstDayOfYear.subtract(const Duration(days: 366 * 4)).firstDayOfMonth.dateTime;
+    }
     var seriesData = context.read<SeriesDataProvider>().seriesData(widget.seriesViewMetaData.seriesDef);
     if (seriesData != null && !seriesData.isEmpty()) {
       var firstValueDateTime = seriesData.data.first.dateTime;

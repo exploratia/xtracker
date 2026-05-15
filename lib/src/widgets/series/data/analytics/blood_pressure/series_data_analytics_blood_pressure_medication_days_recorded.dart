@@ -12,7 +12,11 @@ import '../series_data_analytics_days_recorded_view.dart';
 
 class SeriesDataAnalyticsBloodPressureMedicationDaysRecorded {
   static AnalyticsSettingsCardEntry? buildMedication(
-      BuildContext context, ThemeData themeData, List<BloodPressureValue> seriesDataValues, SeriesViewMetaData seriesViewMetaData) {
+    BuildContext context,
+    ThemeData themeData,
+    List<BloodPressureValue> seriesDataValues,
+    SeriesViewMetaData seriesViewMetaData,
+  ) {
     // no medication input?
     if (seriesViewMetaData.seriesDef.bloodPressureSettingsReadonly().hideMedicationInput) return null;
 

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../../../../../../model/column_profile/fix_column_profile.dart';
+import '../../../../../../model/series/tags/tag_resolver.dart';
 import '../../../../../../model/series/data/daily_life/daily_life_value.dart';
 import '../../../../../../model/series/data/series_data_filter.dart';
 import '../../../../../../model/series/series_view_meta_data.dart';
-import '../../../../../../model/series/settings/daily_life/daily_life_attribute_resolver.dart';
 import '../../../../../controls/grid/daily/day/daily_life_day_item.dart';
 import '../../../../../controls/grid/daily/pixel.dart';
 import '../../../../../controls/grid/daily/pixel_cell_builder.dart';
@@ -19,12 +19,17 @@ class SeriesDataDailyLifePixelsView extends StatelessWidget {
   final SeriesDataFilter seriesDataFilter;
   final SeriesDataViewOverlays seriesDataViewOverlays;
 
-  const SeriesDataDailyLifePixelsView(
-      {super.key, required this.seriesViewMetaData, required this.seriesData, required this.seriesDataFilter, required this.seriesDataViewOverlays});
+  const SeriesDataDailyLifePixelsView({
+    super.key,
+    required this.seriesViewMetaData,
+    required this.seriesData,
+    required this.seriesDataFilter,
+    required this.seriesDataViewOverlays,
+  });
 
   @override
   Widget build(BuildContext context) {
-    DailyLifeAttributeResolver dailyLifeAttributeResolver = DailyLifeAttributeResolver(seriesViewMetaData.seriesDef);
+    TagResolver dailyLifeTagResolver = TagResolver(seriesViewMetaData.seriesDef);
     Pixel.updatePixelStyles(context);
 
     /// from new to old (latest date is the first item)
@@ -50,7 +55,7 @@ class SeriesDataDailyLifePixelsView extends StatelessWidget {
           gridCellChildBuilder: (DailyLifeDayItem dayItem) {
             return dayItem.toPixel(
               monthly,
-              dailyLifeAttributeResolver,
+              dailyLifeTagResolver,
             );
           },
         );

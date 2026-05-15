@@ -1,19 +1,22 @@
 import 'package:flutter/material.dart';
 
+import '../../../../model/series/tags/tag_resolver.dart';
 import '../../../../model/series/data/blood_pressure/blood_pressure_value.dart';
+import '../../../../model/series/data/custom/custom_value.dart';
 import '../../../../model/series/data/daily_check/daily_check_value.dart';
 import '../../../../model/series/data/daily_life/daily_life_value.dart';
 import '../../../../model/series/data/habit/habit_value.dart';
+import '../../../../model/series/data/monthly/monthly_value.dart';
 import '../../../../model/series/data/series_data_value.dart';
 import '../../../../model/series/series_def.dart';
 import '../../../../model/series/series_type.dart';
-import '../../../../model/series/settings/daily_life/daily_life_attribute_resolver.dart';
 import '../../../../util/date_time_utils.dart';
 import '../../../../util/logging/flutter_simple_logging.dart';
 import '../../../../util/theme_utils.dart';
+import '../../../controls/tag/tag_renderer.dart';
 import 'blood_pressure/table/blood_pressure_value_renderer.dart';
+import 'custom/table/custom_value_renderer.dart';
 import 'daily_check/table/daily_check_value_renderer.dart';
-import 'daily_life/daily_life_attribute_renderer.dart';
 import 'habit/table/habit_value_renderer.dart';
 
 class SeriesValueRenderer<T extends SeriesDataValue> extends StatelessWidget {
@@ -29,6 +32,7 @@ class SeriesValueRenderer<T extends SeriesDataValue> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Widget? valueRenderer;
+    Widget? tagRenderer;
 
     switch (seriesDef.seriesType) {
       case SeriesType.bloodPressure:
@@ -55,27 +59,45 @@ class SeriesValueRenderer<T extends SeriesDataValue> extends StatelessWidget {
         }
       case SeriesType.dailyLife:
         if (_seriesDataValue is DailyLifeValue) {
-          valueRenderer = Builder(
-            builder: (context) {
-              var resolver = DailyLifeAttributeResolver(seriesDef);
-              return DailyLifeAttributeRenderer(dailyLifeAttribute: resolver.resolve(_seriesDataValue.aid));
-            },
-          );
+          var resolver = TagResolver(seriesDef);
+          tagRenderer = TagRenderer(tag: resolver.resolve(_seriesDataValue.tagId));
+        }
+      case SeriesType.custom:
+      case SeriesType.monthly:
+        if (_seriesDataValue is CustomValue) {
+          valueRenderer = CustomValueRenderer(customValue: _seriesDataValue, seriesDef: seriesDef);
+          var resolver = TagResolver(seriesDef);
+          if (resolver.isNotEmpty()) {
+            tagRenderer = TagRenderer(tag: resolver.resolve(_seriesDataValue.tagId));
+          }
         }
     }
 
-    if (valueRenderer != null) {
-      return ValueWrap(
-        children: [
+    if (valueRenderer != null || tagRenderer != null) {
+      List<Widget> children = [];
+      if (_seriesDataValue is MonthlyValue) {
+        children.add(Text(DateTimeUtils.formatMonthYear(_seriesDataValue.dateTime)));
+      } else {
+        children.addAll([
           Text(DateTimeUtils.formatDate(_seriesDataValue.dateTime)),
           Text(DateTimeUtils.formatTime(_seriesDataValue.dateTime)),
-          valueRenderer,
-        ],
+        ]);
+      }
+      if (valueRenderer != null) {
+        children.add(valueRenderer);
+      }
+      if (tagRenderer != null) {
+        children.add(tagRenderer);
+      }
+
+      return ValueWrap(
+        children: children,
       );
     }
 
     SimpleLogging.w(
-        "Invalid combination of seriesDef ''${seriesDef.seriesType} and seriesDataValue '${_seriesDataValue.runtimeType}' in series value renderer!");
+      "Invalid combination of seriesDef ''${seriesDef.seriesType} and seriesDataValue '${_seriesDataValue.runtimeType}' in series value renderer!",
+    );
     return const Icon(Icons.question_mark_outlined);
   }
 }

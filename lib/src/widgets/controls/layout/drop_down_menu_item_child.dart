@@ -19,17 +19,20 @@ class DropDownMenuItemChild extends StatelessWidget {
 
     BoxDecoration? boxDeco;
     if (selected) {
-      boxDeco = BoxDecoration(border: Border(left: BorderSide(width: 2, color: themeData.colorScheme.primary)));
+      boxDeco = BoxDecoration(
+        border: Border(left: BorderSide(width: 2, color: themeData.colorScheme.primary)),
+      );
     }
 
     return Padding(
       padding: const EdgeInsets.only(left: ThemeUtils.defaultPadding),
       child: Container(
-          decoration: boxDeco,
-          child: Padding(
-            padding: const EdgeInsets.only(left: ThemeUtils.defaultPadding),
-            child: child,
-          )),
+        decoration: boxDeco,
+        child: Padding(
+          padding: const EdgeInsets.only(left: ThemeUtils.defaultPadding),
+          child: child,
+        ),
+      ),
     );
   }
 }

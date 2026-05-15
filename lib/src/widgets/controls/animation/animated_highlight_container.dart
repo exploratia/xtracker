@@ -4,7 +4,6 @@ import '../../../util/theme_utils.dart';
 
 class AnimatedHighlightContainer<T> extends StatefulWidget {
   final T Function(BuildContext) valueSelector;
-  final bool? highlightInitial;
   final Widget Function(BuildContext, T) builder;
   final Duration duration;
   final Color highlightColor;
@@ -17,7 +16,6 @@ class AnimatedHighlightContainer<T> extends StatefulWidget {
     this.duration = const Duration(milliseconds: 600),
     this.highlightColor = const Color(0xFFE0F7FA),
     this.baseColor = Colors.transparent,
-    this.highlightInitial,
   });
 
   @override
@@ -27,14 +25,6 @@ class AnimatedHighlightContainer<T> extends StatefulWidget {
 class _AnimatedHighlightState<T> extends State<AnimatedHighlightContainer<T>> {
   late T _lastValue;
   bool _highlight = false;
-
-  @override
-  void initState() {
-    super.initState();
-    if (widget.highlightInitial ?? false) {
-      _triggerHighlight();
-    }
-  }
 
   @override
   void didChangeDependencies() {

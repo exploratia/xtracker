@@ -12,7 +12,7 @@ class SettingsCard extends StatelessWidget {
   });
 
   SettingsCard.singleEntry({super.key, dynamic title, bool showDivider = true, required Widget content})
-      : settingCardEntries = [SettingsCardEntry(content: content, showDivider: showDivider, title: title)];
+    : settingCardEntries = [SettingsCardEntry(content: content, showDivider: showDivider, title: title)];
 
   final List<SettingsCardEntry> settingCardEntries;
 

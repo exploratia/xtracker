@@ -1,6 +1,8 @@
 import 'package:uuid/uuid.dart';
 
 import '../../../../util/ex.dart';
+import '../../../../util/json_reader.dart';
+import '../../series_def.dart';
 import '../series_data_value.dart';
 
 class DailyCheckValue extends SeriesDataValue {
@@ -12,16 +14,26 @@ class DailyCheckValue extends SeriesDataValue {
     return DailyCheckValue(uuid, dateTime);
   }
 
-  factory DailyCheckValue.fromJson(Map<String, dynamic> json) => DailyCheckValue(
-        json['uuid'] as String? ?? const Uuid().v4().toString(),
-        DateTime.fromMillisecondsSinceEpoch(json['utcMs'] as int),
-      );
+  factory DailyCheckValue.fromJson(JsonReader json) => DailyCheckValue(
+    json.asStringOr('uuid', const Uuid().v4()),
+    DateTime.fromMillisecondsSinceEpoch(json.asReader('utcMs').getInt()),
+  );
 
   @override
   Map<String, dynamic> toJson({bool exportUuid = true}) => {
-        if (exportUuid) 'uuid': uuid,
-        'utcMs': dateTime.millisecondsSinceEpoch,
-      };
+    if (exportUuid) 'uuid': uuid,
+    'utcMs': dateTime.millisecondsSinceEpoch,
+  };
+
+  factory DailyCheckValue.fromCSVList(List<dynamic> csv) => DailyCheckValue(
+    const Uuid().v4().toString(),
+    DateTime.fromMillisecondsSinceEpoch(csv[0] as int),
+  );
+
+  @override
+  List<dynamic> toCSVList(SeriesDef seriesDef) {
+    return [dateTime.millisecondsSinceEpoch];
+  }
 
   static DailyCheckValue checkOnDailyCheckValue(dynamic value) {
     if (value is DailyCheckValue) return value;

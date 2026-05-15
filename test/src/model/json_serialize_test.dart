@@ -7,6 +7,7 @@ import 'package:xtracker/src/model/series/data/series_data.dart';
 import 'package:xtracker/src/model/series/series_def.dart';
 import 'package:xtracker/src/model/series/series_type.dart';
 import 'package:xtracker/src/util/color_utils.dart';
+import 'package:xtracker/src/util/json_reader.dart';
 
 void main() {
   group('SeriesCurrentValue', () {
@@ -17,7 +18,7 @@ void main() {
       SeriesCurrentValue currentValue =
           SeriesCurrentValue(seriesDefUUId, SeriesType.bloodPressure, BloodPressureValue(currentValueUUId, dateTime, 121, 81, true));
       var serialized = currentValue.toJson();
-      var deserialized = SeriesCurrentValue.fromJson(serialized);
+      var deserialized = SeriesCurrentValue.fromJson(JsonReader(serialized));
 
       expect(SeriesType.bloodPressure, deserialized.seriesType);
       expect(seriesDefUUId, deserialized.seriesDefUuid);
@@ -39,7 +40,7 @@ void main() {
       SeriesDef seriesDef =
           SeriesDef(uuid: seriesDefUUId, seriesType: SeriesType.bloodPressure, seriesItems: [], color: Colors.red, iconName: "icoName", name: "SeriesName");
       var serialized = seriesDef.toJson();
-      var deserialized = SeriesDef.fromJson(serialized);
+      var deserialized = SeriesDef.fromJson(JsonReader(serialized));
 
       expect(SeriesType.bloodPressure, deserialized.seriesType);
       expect(seriesDefUUId, deserialized.uuid);
@@ -58,7 +59,7 @@ void main() {
       SeriesData seriesData = SeriesData<BloodPressureValue>(seriesDefUUId, []);
       seriesData.insert(BloodPressureValue(currentValueUUId, dateTime, 121, 81, true));
       var serialized = seriesData.toJson();
-      var deserialized = SeriesData.fromJsonBloodPressureData(serialized);
+      var deserialized = SeriesData.fromJsonBloodPressureData(JsonReader(serialized));
 
       expect(seriesDefUUId, deserialized.seriesDefUuid);
       expect(true, deserialized.data.isNotEmpty);

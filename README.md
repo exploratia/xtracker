@@ -10,7 +10,7 @@ Tracker / monitoring app for blood pressure, daily checks and more...
 ### Blood pressure
 
 <img src="resources/playstore/screenshots/phone/phone_bloodpressure_table.jpg" width="300" alt="screenshot blood pressure table view">
-<img src="resources/playstore/screenshots/phone/phone_bloodpressure_overview.jpg" width="300" alt="screenshot blood pressure overview">
+<img src="resources/playstore/screenshots/phone/phone_bloodpressure_pixels.jpg" width="300" alt="screenshot blood pressure overview">
 <img src="resources/playstore/screenshots/phone/phone_bloodpressure_chart.jpg" width="300" alt="screenshot blood pressure line chart view">
 
 ### Habits

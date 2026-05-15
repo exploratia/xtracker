@@ -96,6 +96,29 @@ class _FabRadialExpandableState extends State<FabRadialExpandable> with SingleTi
   ) {
     final children = <Widget>[];
     final count = widget.actions.length;
+
+    // Handle single-action case to avoid division by zero
+    if (count <= 1) {
+      if (count == 1) {
+        final action = widget.actions.first;
+        children.add(
+          _ExpandingActionButton(
+            directionInDegrees: startAngle,
+            maxDistance: widget.distance,
+            progress: _expandAnimation,
+            child: FabActionButton(
+              onPressed: () {
+                if (action.autoClose) _close();
+                action.onPressed();
+              },
+              icon: Icon(action.iconData),
+            ),
+          ),
+        );
+      }
+      return children;
+    }
+
     final step = math.min(90.0, maxAngle) / (count - 1);
     for (var i = 0, angleInDegrees = math.max(0.0, startAngle); i < count; i++, angleInDegrees += step) {
       var action = widget.actions[i];

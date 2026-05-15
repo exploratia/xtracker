@@ -6,7 +6,8 @@ import '../../../../generated/locale_keys.g.dart';
 enum TrendTendency {
   none(Icons.trending_neutral, LocaleKeys.seriesDataAnalytics_trend_tendency_none),
   up(Icons.trending_up, LocaleKeys.seriesDataAnalytics_trend_tendency_up),
-  down(Icons.trending_down, LocaleKeys.seriesDataAnalytics_trend_tendency_down);
+  down(Icons.trending_down, LocaleKeys.seriesDataAnalytics_trend_tendency_down)
+  ;
 
   final IconData arrow;
 

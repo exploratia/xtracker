@@ -14,31 +14,35 @@ class TableUtils {
       color: themeData.canvasColor,
       borderRadius: const BorderRadius.vertical(top: Radius.circular(ThemeUtils.borderRadius)),
     );
-    EdgeInsets cellPad = cellPadding ??
+    EdgeInsets cellPad =
+        cellPadding ??
         const EdgeInsets.only(top: ThemeUtils.defaultPadding, left: ThemeUtils.paddingSmall, right: ThemeUtils.paddingSmall, bottom: ThemeUtils.paddingSmall);
 
-    return TableRow(decoration: decoration, children: [
-      ...values.map(
-        (value) {
-          Widget child;
-          if (value is Widget) {
-            child = value;
-          } else {
-            child = Text(
-              value.toString(),
-              textAlign: TextAlign.left,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
-              ),
+    return TableRow(
+      decoration: decoration,
+      children: [
+        ...values.map(
+          (value) {
+            Widget child;
+            if (value is Widget) {
+              child = value;
+            } else {
+              child = Text(
+                value.toString(),
+                textAlign: TextAlign.left,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              );
+            }
+            return _TableCellPadding(
+              child,
+              edgeInsets: cellPad,
             );
-          }
-          return _TableCellPadding(
-            child,
-            edgeInsets: cellPad,
-          );
-        },
-      ),
-    ]);
+          },
+        ),
+      ],
+    );
   }
 
   static TableRow tableRow(

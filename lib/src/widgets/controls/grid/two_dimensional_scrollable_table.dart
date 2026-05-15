@@ -35,17 +35,18 @@ class TwoDimensionalScrollableTable extends StatelessWidget {
     }
 
     return HideBottomNavigationBar(
-      child: LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
-        final ColumnProfile adjustedTableColumnProfile = tableColumnProfile.adjustToWidth(constraints.maxWidth);
-        ColumnDef? fixedFirstColumnTableColumn;
-        final bool showFixedFirstColumn = useFixedFirstColumn && adjustedTableColumnProfile.minWidthScaled() > constraints.maxWidth;
-        if (showFixedFirstColumn) {
-          fixedFirstColumnTableColumn = adjustedTableColumnProfile.columns.removeAt(0);
-        }
+      child: LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints constraints) {
+          final ColumnProfile adjustedTableColumnProfile = tableColumnProfile.adjustToWidth(constraints.maxWidth);
+          ColumnDef? fixedFirstColumnTableColumn;
+          final bool showFixedFirstColumn = useFixedFirstColumn && adjustedTableColumnProfile.minWidthScaled() > constraints.maxWidth;
+          if (showFixedFirstColumn) {
+            fixedFirstColumnTableColumn = adjustedTableColumnProfile.columns.removeAt(0);
+          }
 
-        final viewportSizeKey = ValueKey('2d_grid_view_size_key_${constraints.maxWidth}_$uniqueViewportSizeKeyId');
+          final viewportSizeKey = ValueKey('2d_grid_view_size_key_${constraints.maxWidth}_$uniqueViewportSizeKeyId');
 
-        final twoDimensionalChildBuilderDelegate = TwoDimensionalChildBuilderDelegate(
+          final twoDimensionalChildBuilderDelegate = TwoDimensionalChildBuilderDelegate(
             maxXIndex: adjustedTableColumnProfile.length() - 1,
             maxYIndex: lineCount - 1,
             builder: (BuildContext context, ChildVicinity vicinity) {
@@ -75,20 +76,22 @@ class TwoDimensionalScrollableTable extends StatelessWidget {
                 width: columnWidth,
                 child: cellData.child,
               );
-            });
+            },
+          );
 
-        return _ScrollableGrid(
-          lineHeight: lineHeight,
-          lineCount: lineCount,
-          fixedFirstColumnTableColumn: fixedFirstColumnTableColumn,
-          tableColumnProfile: adjustedTableColumnProfile,
-          viewportSizeKey: viewportSizeKey,
-          twoDimensionalChildBuilderDelegate: twoDimensionalChildBuilderDelegate,
-          gridCellBuilder: gridCellBuilder,
-          tableHeadHeight: tableHeadHeight,
-          bottomScrollExtend: bottomScrollExtend,
-        );
-      }),
+          return _ScrollableGrid(
+            lineHeight: lineHeight,
+            lineCount: lineCount,
+            fixedFirstColumnTableColumn: fixedFirstColumnTableColumn,
+            tableColumnProfile: adjustedTableColumnProfile,
+            viewportSizeKey: viewportSizeKey,
+            twoDimensionalChildBuilderDelegate: twoDimensionalChildBuilderDelegate,
+            gridCellBuilder: gridCellBuilder,
+            tableHeadHeight: tableHeadHeight,
+            bottomScrollExtend: bottomScrollExtend,
+          );
+        },
+      ),
     );
   }
 }
@@ -231,7 +234,7 @@ class _ScrollableGridState extends State<_ScrollableGrid> {
 
     return Row(
       children: [
-        if (firstColumn != null) firstColumn,
+        ?firstColumn,
         Expanded(
           child: Column(
             children: [

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'globals.dart';
+
 class ColorUtils {
   // https://stackoverflow.com/questions/58360989/programmatically-lighten-or-darken-a-hex-color-in-dart
   static const int hexRadix = 16;
@@ -15,8 +17,12 @@ class ColorUtils {
   static Color lighten(Color c, [int percent = 10]) {
     assert(1 <= percent && percent <= 100);
     var p = percent / 100;
-    return Color.fromARGB((c.a * 255).toInt(), (c.r * 255).toInt() + ((255 - (c.r * 255).toInt()) * p).round(),
-        (c.g * 255).toInt() + ((255 - (c.g * 255).toInt()) * p).round(), (c.b * 255).toInt() + ((255 - (c.b * 255).toInt()) * p).round());
+    return Color.fromARGB(
+      (c.a * 255).toInt(),
+      (c.r * 255).toInt() + ((255 - (c.r * 255).toInt()) * p).round(),
+      (c.g * 255).toInt() + ((255 - (c.g * 255).toInt()) * p).round(),
+      (c.b * 255).toInt() + ((255 - (c.b * 255).toInt()) * p).round(),
+    );
   }
 
   /// - add [[0, 360]]
@@ -30,6 +36,11 @@ class ColorUtils {
     return hue(c, 30);
   }
 
+  /// returns standard gradient color [hue(30)] for given color
+  static List<Color> gradientFromColor(Color c) {
+    return [c, hue(c, 30)];
+  }
+
   static Color fromHex(String hex) {
     String hexColor = hex.toUpperCase().replaceAll("#", "");
     if (hexColor.length == 6) {
@@ -39,7 +50,8 @@ class ColorUtils {
   }
 
   /// Prefixes a hash sign if [leadingHashSign] is set to `true` (default is `true`).
-  static String toHex(Color c, {bool leadingHashSign = true}) => '${leadingHashSign ? '#' : ''}'
+  static String toHex(Color c, {bool leadingHashSign = true}) =>
+      '${leadingHashSign ? '#' : ''}'
       '${(c.a * 255).toInt().toRadixString(hexRadix).padLeft(2, '0')}'
       '${(c.r * 255).toInt().toRadixString(hexRadix).padLeft(2, '0')}'
       '${(c.g * 255).toInt().toRadixString(hexRadix).padLeft(2, '0')}'
@@ -79,5 +91,14 @@ class ColorUtils {
   static bool isContrastingColorDark(Color background) {
     final brightness = ThemeData.estimateBrightnessForColor(background);
     return brightness != Brightness.dark;
+  }
+
+  static Color? weekdayBackgroundColor(DateTime dateTime) {
+    if (dateTime.weekday == DateTime.sunday) {
+      return Globals.backgroundColorSunday;
+    } else if (dateTime.weekday == DateTime.saturday) {
+      return Globals.backgroundColorSaturday;
+    }
+    return null;
   }
 }

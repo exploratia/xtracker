@@ -3,9 +3,11 @@ import 'dart:collection';
 import 'package:flutter/material.dart';
 
 import '../model/series/data/blood_pressure/blood_pressure_value.dart';
+import '../model/series/data/custom/custom_value.dart';
 import '../model/series/data/daily_check/daily_check_value.dart';
 import '../model/series/data/daily_life/daily_life_value.dart';
 import '../model/series/data/habit/habit_value.dart';
+import '../model/series/data/monthly/monthly_value.dart';
 import '../model/series/data/series_data.dart';
 import '../model/series/data/series_data_value.dart';
 import '../model/series/series_def.dart';
@@ -20,6 +22,8 @@ class SeriesDataProvider with ChangeNotifier {
   final Map<String, SeriesData<DailyCheckValue>> _uuid2seriesDataDailyCheck = HashMap();
   final Map<String, SeriesData<DailyLifeValue>> _uuid2seriesDataDailyLife = HashMap();
   final Map<String, SeriesData<HabitValue>> _uuid2seriesDataHabit = HashMap();
+  final Map<String, SeriesData<CustomValue>> _uuid2seriesDataCustom = HashMap();
+  final Map<String, SeriesData<MonthlyValue>> _uuid2seriesDataMonthly = HashMap();
 
   Future<void> fetchDataIfNotYetLoaded(SeriesDef seriesDef) async {
     var seriesData = switch (seriesDef.seriesType) {
@@ -27,6 +31,8 @@ class SeriesDataProvider with ChangeNotifier {
       SeriesType.dailyCheck => _uuid2seriesDataDailyCheck[seriesDef.uuid],
       SeriesType.dailyLife => _uuid2seriesDataDailyLife[seriesDef.uuid],
       SeriesType.habit => _uuid2seriesDataHabit[seriesDef.uuid],
+      SeriesType.custom => _uuid2seriesDataCustom[seriesDef.uuid],
+      SeriesType.monthly => _uuid2seriesDataMonthly[seriesDef.uuid],
     };
 
     if (seriesData == null) {
@@ -35,11 +41,6 @@ class SeriesDataProvider with ChangeNotifier {
   }
 
   Future<void> fetchData(SeriesDef seriesDef) async {
-    await _createSeriesDataIfNotExists(seriesDef);
-    notifyListeners();
-  }
-
-  Future<void> add(SeriesDef seriesDef) async {
     await _createSeriesDataIfNotExists(seriesDef);
     notifyListeners();
   }
@@ -136,6 +137,26 @@ class SeriesDataProvider with ChangeNotifier {
           seriesData.sort();
           _uuid2seriesDataHabit[seriesDef.uuid] = seriesData;
         }
+      case SeriesType.custom:
+        var seriesData = _uuid2seriesDataCustom[seriesDef.uuid];
+        if (seriesData == null) {
+          var store = Stores.getOrCreateSeriesDataStore(seriesDef);
+          var list = await store.getAllSeriesDataValuesAsCustomValue();
+
+          seriesData = SeriesData<CustomValue>(seriesDef.uuid, list);
+          seriesData.sort();
+          _uuid2seriesDataCustom[seriesDef.uuid] = seriesData;
+        }
+      case SeriesType.monthly:
+        var seriesData = _uuid2seriesDataMonthly[seriesDef.uuid];
+        if (seriesData == null) {
+          var store = Stores.getOrCreateSeriesDataStore(seriesDef);
+          var list = await store.getAllSeriesDataValuesAsMonthlyValue();
+
+          seriesData = SeriesData<MonthlyValue>(seriesDef.uuid, list);
+          seriesData.sort();
+          _uuid2seriesDataMonthly[seriesDef.uuid] = seriesData;
+        }
     }
   }
 
@@ -155,6 +176,10 @@ class SeriesDataProvider with ChangeNotifier {
         _uuid2seriesDataDailyLife.remove(seriesDef.uuid);
       case SeriesType.habit:
         _uuid2seriesDataHabit.remove(seriesDef.uuid);
+      case SeriesType.custom:
+        _uuid2seriesDataCustom.remove(seriesDef.uuid);
+      case SeriesType.monthly:
+        _uuid2seriesDataMonthly.remove(seriesDef.uuid);
     }
 
     notifyListeners();
@@ -166,6 +191,8 @@ class SeriesDataProvider with ChangeNotifier {
       SeriesType.dailyCheck => dailyCheckData(seriesDef),
       SeriesType.dailyLife => dailyLifeData(seriesDef),
       SeriesType.habit => habitData(seriesDef),
+      SeriesType.custom => customData(seriesDef),
+      SeriesType.monthly => monthlyData(seriesDef),
     };
   }
 
@@ -213,6 +240,28 @@ class SeriesDataProvider with ChangeNotifier {
     return seriesData!;
   }
 
+  SeriesData<CustomValue>? customData(SeriesDef seriesDef) {
+    var seriesData = _uuid2seriesDataCustom[seriesDef.uuid];
+    return seriesData;
+  }
+
+  SeriesData<CustomValue> requireCustomData(SeriesDef seriesDef) {
+    var seriesData = customData(seriesDef);
+    _checkOnSeriesData(seriesData, seriesDef);
+    return seriesData!;
+  }
+
+  SeriesData<MonthlyValue>? monthlyData(SeriesDef seriesDef) {
+    var seriesData = _uuid2seriesDataMonthly[seriesDef.uuid];
+    return seriesData;
+  }
+
+  SeriesData<MonthlyValue> requireMonthlyData(SeriesDef seriesDef) {
+    var seriesData = monthlyData(seriesDef);
+    _checkOnSeriesData(seriesData, seriesDef);
+    return seriesData!;
+  }
+
   Future<void> addValue(SeriesDef seriesDef, SeriesDataValue value, SeriesCurrentValueProvider seriesCurrentValueProvider) async {
     await _handleValue(seriesDef, value, _Action.insert, seriesCurrentValueProvider);
   }
@@ -244,6 +293,12 @@ class SeriesDataProvider with ChangeNotifier {
       case SeriesType.habit:
         HabitValue.checkOnHabitValue(value);
         seriesData = requireHabitData(seriesDef);
+      case SeriesType.custom:
+        CustomValue.checkOnCustomValue(value);
+        seriesData = requireCustomData(seriesDef);
+      case SeriesType.monthly:
+        MonthlyValue.checkOnMonthlyValue(value);
+        seriesData = requireMonthlyData(seriesDef);
     }
 
     if (action == _Action.insert) {
@@ -253,7 +308,7 @@ class SeriesDataProvider with ChangeNotifier {
       seriesData.update(value);
       await store.save(value);
     } else if (action == _Action.delete) {
-      seriesData.delete(value);
+      seriesData.deleteById(value.uuid); // .delete(value);
       await store.delete(value);
     }
     seriesData.sort();
@@ -268,7 +323,7 @@ class SeriesDataProvider with ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> addValues(SeriesDef seriesDef, List<dynamic> values, SeriesCurrentValueProvider seriesCurrentValueProvider) async {
+  Future<void> addValues(SeriesDef seriesDef, List<SeriesDataValue> values, SeriesCurrentValueProvider seriesCurrentValueProvider) async {
     await fetchDataIfNotYetLoaded(seriesDef);
     SeriesData<SeriesDataValue> seriesData;
     switch (seriesDef.seriesType) {
@@ -280,6 +335,10 @@ class SeriesDataProvider with ChangeNotifier {
         seriesData = requireDailyLifeData(seriesDef)..insertAll(values.map(DailyLifeValue.checkOnDailyLifeValue));
       case SeriesType.habit:
         seriesData = requireHabitData(seriesDef)..insertAll(values.map(HabitValue.checkOnHabitValue));
+      case SeriesType.custom:
+        seriesData = requireCustomData(seriesDef)..insertAll(values.map(CustomValue.checkOnCustomValue));
+      case SeriesType.monthly:
+        seriesData = requireMonthlyData(seriesDef)..insertAll(values.map(MonthlyValue.checkOnMonthlyValue));
     }
 
     seriesData.sort();
@@ -295,7 +354,7 @@ class SeriesDataProvider with ChangeNotifier {
 
   void _checkOnSeriesData(SeriesData? seriesData, SeriesDef seriesDef) {
     if (seriesData == null) {
-      var errMsg = "Failed to create/load series data for ${seriesDef.name} (type: ${seriesDef.seriesType.typeName})!";
+      var errMsg = "Failed to create/load series data for ${seriesDef.name} (type: ${seriesDef.seriesType.name})!";
       SimpleLogging.w(errMsg);
       throw Ex(errMsg);
     }
@@ -305,5 +364,5 @@ class SeriesDataProvider with ChangeNotifier {
 enum _Action {
   insert,
   update,
-  delete;
+  delete,
 }

@@ -11,12 +11,26 @@ import '../media_query_utils.dart';
 import 'chart_utils.dart';
 
 class ChartUtilsSimpleValue {
-  static LineChartData buildLineChartData(SeriesViewMetaData seriesViewMetaData, List<SimpleValue> simpleValues, ThemeData themeData,
-      String Function(DateTime dateTime) dateFormatter, Function(FlTouchEvent, LineTouchResponse?)? touchCallback) {
+  static LineChartData buildLineChartData(
+    SeriesViewMetaData seriesViewMetaData,
+    List<TimedValue> simpleValues,
+    ThemeData themeData,
+    String Function(DateTime dateTime) dateFormatter,
+    Function(FlTouchEvent, LineTouchResponse?)? touchCallback, {
+    Color? lineColor,
+    bool showDots = true,
+    bool isCurved = false,
+    double lineWidth = 5,
+    bool showSpotLine = false,
+    bool showAreaBelowLine = false,
+    bool showToucheLine = false,
+  }) {
+    var lineCol = lineColor ?? seriesViewMetaData.seriesDef.color;
+
     List<LineChartBarData> lineBarsData = [];
 
     ChartMetaData chartMetaData = ChartMetaData();
-    chartMetaData.showDots = true;
+    chartMetaData.showDots = showDots;
 
     List<FlSpot> values = [];
 
@@ -29,31 +43,39 @@ class ChartUtilsSimpleValue {
       values.add(FlSpot(t.toDouble(), value.toDouble()));
     }
 
-    lineBarsData.add(LineChartBarData(
+    lineBarsData.add(
+      LineChartBarData(
         spots: values,
-        isCurved: false,
+        isCurved: isCurved,
         preventCurveOverShooting: true,
-        // hide bar:
-        barWidth: 0,
-        color: seriesViewMetaData.seriesDef.color,
+        barWidth: lineWidth,
+        color: lineCol,
         dotData: ChartUtils.createDotData(chartMetaData),
         isStrokeCapRound: true,
         // dashArray: [5, 5],
         belowBarData: BarAreaData(
-          show: true,
-          color: Colors.transparent,
+          show: showAreaBelowLine || showSpotLine,
+          color: showAreaBelowLine ? null : Colors.transparent,
+          gradient: showAreaBelowLine
+              ? ChartUtils.createTopToBottomGradient([
+                  lineCol,
+                  Colors.transparent,
+                ])
+              : null,
           spotsLine: BarAreaSpotsLine(
-            show: true,
+            show: showSpotLine,
             flLineStyle: FlLine(
-              // color: seriesViewMetaData.seriesDef.color,
+              // color: lineCol,
               strokeWidth: 5,
               gradient: ChartUtils.createTopToBottomGradient([
-                ColorUtils.gradientColor(seriesViewMetaData.seriesDef.color),
-                seriesViewMetaData.seriesDef.color,
+                ColorUtils.gradientColor(lineCol),
+                lineCol,
               ]),
             ),
           ),
-        )));
+        ),
+      ),
+    );
 
     chartMetaData.calcPadding();
 
@@ -72,11 +94,10 @@ class ChartUtilsSimpleValue {
       borderData: ChartUtils.borderData,
       gridData: ChartUtils.noGridData,
       lineTouchData: ChartUtils.createLineTouchData(
-        fractionDigits: 0,
-        showToucheLine: false,
+        showToucheLine: showToucheLine,
         themeData: themeData,
         touchCallback: touchCallback,
-        provideTooltipTextColor: (x, y, barIdx) => seriesViewMetaData.seriesDef.color,
+        provideTooltipTextColor: (x, y, barIdx) => lineCol,
       ),
       titlesData: FlTitlesData(
         rightTitles: ChartUtils.axisTitlesNoTitles,
@@ -129,13 +150,32 @@ class ChartUtilsSimpleValue {
   }
 }
 
-class SimpleValue {
-  double value = 1;
+class TimedValue {
+  double value = 0;
   final DateTime dateTime;
 
-  SimpleValue(this.dateTime);
+  TimedValue(this.dateTime);
+
+  TimedValue.value(this.dateTime, this.value);
 
   void increment() {
     value++;
+  }
+
+  void add(double? val) => value += (val ?? 0);
+
+  void set(double? val) => value = (val ?? 0);
+
+  /// only calculates delta if value is bigger then prevValue.
+  /// otherwise it's counted as a reset (e.g. exchange of water meter)
+  void buildDelta(double prevValue) {
+    if (value > prevValue) {
+      value = value - prevValue;
+    }
+  }
+
+  @override
+  String toString() {
+    return 'SimpleValue{value: $value, dateTime: $dateTime}';
   }
 }

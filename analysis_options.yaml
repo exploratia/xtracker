@@ -11,6 +11,7 @@ include: package:flutter_lints/flutter.yaml
 
 formatter:
   page_width: 160
+  trailing_commas: preserve
 
 linter:
   # The lint rules applied to this project can be customized in the

@@ -18,7 +18,10 @@ class RowPerDayCellBuilder<T extends SeriesDataValue> {
     DayRowItem<T> dayItem = data[yIndex];
 
     if (xIndex == 0) {
-      return GridCell(backgroundColor: dayItem.backgroundColor, child: Center(child: Text(dayItem.date)));
+      return GridCell(
+        backgroundColor: dayItem.backgroundColor,
+        child: Center(child: Text(dayItem.date)),
+      );
     }
 
     T? value;

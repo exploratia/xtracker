@@ -59,7 +59,10 @@ class SeriesTitle extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   spacing: ThemeUtils.horizontalSpacing,
                   children: [
-                    Hero(tag: 'seriesDef_${seriesViewMetaData.seriesDef.uuid}', child: seriesViewMetaData.seriesDef.icon(size: ThemeUtils.iconSizeScaled)),
+                    Hero(
+                      tag: 'seriesDef_${seriesViewMetaData.seriesDef.uuid}',
+                      child: seriesViewMetaData.seriesDef.icon(size: ThemeUtils.iconSizeScaled),
+                    ),
                     OverflowText(
                       seriesViewMetaData.seriesDef.name,
                       expanded: false,

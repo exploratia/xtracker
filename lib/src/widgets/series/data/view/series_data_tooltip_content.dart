@@ -56,7 +56,7 @@ class SeriesDataTooltipContent {
         const SizedBox(width: ThemeUtils.horizontalSpacingSmall),
         Text(time, style: TooltipUtils.tooltipMonospaceStyle),
         if (value != null) const SizedBox(width: ThemeUtils.horizontalSpacingLarge),
-        if (value != null) value,
+        ?value,
       ],
     );
   }

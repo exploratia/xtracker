@@ -50,8 +50,8 @@ class MyApp extends StatelessWidget {
             // locale
             localizationsDelegates: context.localizationDelegates,
             supportedLocales: context.supportedLocales,
-            locale: context.locale,
             // locale: settingsController.locale,
+            locale: context.locale,
 
             onGenerateTitle: (BuildContext context) {
               // settings changed -> maybe locale? ->

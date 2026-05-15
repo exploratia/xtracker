@@ -82,42 +82,46 @@ class LiveWallpaperHills {
     ];
 
     if (rightLight != null && rightLight > 0 && rightLight < 1) {
-      list.add(Positioned(
-        bottom: bottom,
-        left: left,
-        right: right,
-        width: width,
-        height: height,
-        child: ClipPath(
-          clipper: _TriangleClipper(bottomLeft: rightLight),
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: ChartUtils.createBottomToTopGradient(
-                [baseColor, ColorUtils.lighten(baseColor, 50)],
+      list.add(
+        Positioned(
+          bottom: bottom,
+          left: left,
+          right: right,
+          width: width,
+          height: height,
+          child: ClipPath(
+            clipper: _TriangleClipper(bottomLeft: rightLight),
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: ChartUtils.createBottomToTopGradient(
+                  [baseColor, ColorUtils.lighten(baseColor, 50)],
+                ),
               ),
             ),
           ),
         ),
-      ));
+      );
     }
     if (leftLight != null && leftLight > 0 && leftLight < 1) {
-      list.add(Positioned(
-        bottom: bottom,
-        left: left,
-        right: right,
-        width: width,
-        height: height,
-        child: ClipPath(
-          clipper: _TriangleClipper(bottomRight: leftLight),
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: ChartUtils.createBottomToTopGradient(
-                [baseColor, ColorUtils.lighten(baseColor, 50)],
+      list.add(
+        Positioned(
+          bottom: bottom,
+          left: left,
+          right: right,
+          width: width,
+          height: height,
+          child: ClipPath(
+            clipper: _TriangleClipper(bottomRight: leftLight),
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: ChartUtils.createBottomToTopGradient(
+                  [baseColor, ColorUtils.lighten(baseColor, 50)],
+                ),
               ),
             ),
           ),
         ),
-      ));
+      );
     }
 
     return list;

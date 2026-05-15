@@ -6,6 +6,7 @@ import '../../generated/locale_keys.g.dart';
 import '../model/navigation/main_navigation_item.dart';
 import '../model/series/series_def.dart';
 import '../util/theme_utils.dart';
+import '../widgets/changelog/change_log_view.dart';
 import '../widgets/administration/settings/settings_controller.dart';
 import '../widgets/controls/appbar/gradient_app_bar.dart';
 import '../widgets/controls/navigation/hide_bottom_navigation_bar.dart';
@@ -26,6 +27,29 @@ class HomeScreen extends StatelessWidget {
 
   const HomeScreen({super.key, required this.settingsController});
 
+  @override
+  Widget build(BuildContext context) {
+    if (settingsController.showChangeLog) {
+      return ListenableBuilder(
+        listenable: settingsController,
+        builder: (context, _) {
+          if (settingsController.showChangeLog) {
+            return ChangeLogView(settingsController: settingsController);
+          }
+          return _HomeScreenContent(settingsController: settingsController);
+        },
+      );
+    }
+
+    return _HomeScreenContent(settingsController: settingsController);
+  }
+}
+
+class _HomeScreenContent extends StatelessWidget {
+  const _HomeScreenContent({required this.settingsController});
+
+  final SettingsController settingsController;
+
   void _showSeriesManagement(BuildContext context) async {
     await showDialog<SeriesDef>(
       context: context,
@@ -42,34 +66,38 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenBuilder.withStandardNavBuilders(
-      navItem: navItem,
+      navItem: HomeScreen.navItem,
       showWallpaper: settingsController.showWallpaper,
       appBarBuilder: (context) {
-        return GradientAppBar.build(context,
-            title: Row(
-              children: [
-                SizedBox(
-                  width: 40,
-                  child: Assets.images.logos.appLogoWhite.image(fit: BoxFit.cover),
-                ),
-              ],
-            ),
-            actions: [
-              IconButton(
-                  iconSize: ThemeUtils.iconSizeScaled,
-                  tooltip: LocaleKeys.seriesDashboard_action_addSeries_tooltip.tr(),
-                  onPressed: () async {
-                    /*SeriesDef? s=*/ await SeriesDef.addNewSeries(context);
-                  },
-                  icon: const Icon(Icons.add_chart_outlined)),
-              IconButton(
-                iconSize: ThemeUtils.iconSizeScaled,
-                tooltip: LocaleKeys.seriesDashboard_action_manageSeries_tooltip.tr(),
-                onPressed: () => _showSeriesManagement(context),
-                icon: const Icon(Icons.edit_outlined),
+        return GradientAppBar.build(
+          context,
+          title: Row(
+            children: [
+              SizedBox(
+                width: 40,
+                child: Assets.images.logos.appLogoWhite.image(fit: BoxFit.cover),
               ),
-              const SizedBox(width: ThemeUtils.defaultPadding),
-            ]);
+            ],
+          ),
+          actions: [
+            IconButton(
+              iconSize: ThemeUtils.iconSizeScaled,
+              tooltip: LocaleKeys.seriesDashboard_action_addSeries_tooltip.tr(),
+              onPressed: () async {
+                /*SeriesDef? s=*/
+                await SeriesDef.addNewSeries(context);
+              },
+              icon: const Icon(Icons.add_chart_outlined),
+            ),
+            IconButton(
+              iconSize: ThemeUtils.iconSizeScaled,
+              tooltip: LocaleKeys.seriesDashboard_action_manageSeries_tooltip.tr(),
+              onPressed: () => _showSeriesManagement(context),
+              icon: const Icon(Icons.edit_outlined),
+            ),
+            const SizedBox(width: ThemeUtils.defaultPadding),
+          ],
+        );
       },
       bodyBuilder: (context) => AppSupportCheck(
         settingsController: settingsController,
