@@ -75,8 +75,9 @@ class SettingsService {
   }
 
   /// Persists the current app version and returns the previously stored version.
+  /// If not set so far, 1.4.0 is returned as it is the version after which the changelog was invented.
   Future<String> appVersion() async {
-    var previousVersion = await DeviceStorage.read(DeviceStorageKeys.appVersion) ?? "0.0.0";
+    var previousVersion = await DeviceStorage.read(DeviceStorageKeys.appVersion) ?? "1.4.0";
     await DeviceStorage.write(DeviceStorageKeys.appVersion, AppInfo.version);
     return previousVersion;
   }

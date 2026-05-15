@@ -55,7 +55,7 @@ class ThemeUtils {
   static final cardBorderRadius = BorderRadius.circular(20);
   static const cardPaddingAll = EdgeInsets.all(20);
   static final btnShape = RoundedRectangleBorder(borderRadius: BorderRadius.circular(24));
-  static const double seriesDataInputDlgMaxWidth = 300;
+  static const double seriesDataInputDlgMaxWidth = 400;
 
   /// [seriesDataBottomFilterViewHeight] = 56 (e.g. Slider height 48 + padding/borders)
   static const double seriesDataBottomFilterViewHeight = 56;

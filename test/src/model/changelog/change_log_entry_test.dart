@@ -20,5 +20,14 @@ void main() {
 
       expect(entries, isEmpty);
     });
+
+    test('returns 2.0.0 entry after 1.4.0', () {
+      final entries = ChangeLog.entriesBetween(
+        previousVersion: '1.4.0',
+        currentVersion: '2.0.0',
+      );
+
+      expect(entries.map((entry) => entry.version), ['2.0.0']);
+    });
   });
 }

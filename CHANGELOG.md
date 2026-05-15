@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.0.0] - 2026-05-15
+
+### Features
+
+- implement tags for custom/monthly value
+- implement dynamic/calculated parameters for custom series
+- implement new series: custom/monthly
+- add csv import/export for series
+- migrate attribute -> tag
+
+### Fixes
+
+- rounded corners pixels
+- null pointer with file_picker 11.0.2 read in web
+- breaking change file_picker
+- possible "called after dispose"
+- possible listener leaks
+- import migration if already up to date
+- correct log file date by rollover
+- prevent reload and scrolling to top when adding values in start screen
+- increase height in attribute input to prevent dialog height change
+- prevent backup reminder dialog from showing multiple times
+
+### Others
+
+- improve import json parsing with better error messages in log
+- shorten export file names
+
 ## [1.4.0] - 2025-11-01
 
 First public release version
