@@ -23,6 +23,13 @@
     "oneYearMsg": "One year in - awesome!\n\nIf you enjoy the app and would like to support its future development, consider buying me a coffee. Your contribution helps keep improving the app and offering it for free.",
     "multipleYearsMsg": "Another year gone – thanks for sticking with it.\n\nIf you’d like to support ongoing development, I’d be grateful for a coffee. Your support helps to keep the app up to date and free to use."
   },
+  "changeLog": {
+    "title": "What's new?",
+    "label": {
+      "version": "Version {}",
+      "versionChanged": "The app was updated to version {}."
+    }
+  },
   "commons": {
     "nav": {
       "hideMenu": "Close navigation menu",

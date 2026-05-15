@@ -1,5 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import 'device_storage_keys.dart';
+
 class DeviceStorage {
   static const String _symbolChecked = '✓';
 
@@ -30,7 +32,9 @@ class DeviceStorage {
 
   /// Delete all
   static Future<void> deleteAll() async {
-    return storage.deleteAll();
+    final appVersion = await read(DeviceStorageKeys.appVersion);
+    await storage.deleteAll();
+    await write(DeviceStorageKeys.appVersion, appVersion);
   }
 
   /// Write value

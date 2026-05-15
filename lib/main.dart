@@ -16,10 +16,13 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // debugPrintRebuildDirtyWidgets = true; // Show which widgets rebuild.
- 
+
   // EasyLocalization only show > warning
   EasyLocalization.logger.enableLevels = EasyLocalization.logger.enableLevels.sublist(2);
   await EasyLocalization.ensureInitialized();
+
+  // Load app info before settings, because settings persist the current app version.
+  await AppInfo.init();
 
   // Set up the SettingsController, which will glue user settings to multiple
   // Flutter Widgets.
@@ -34,9 +37,6 @@ void main() async {
 
   DateTimeUtils.init();
 
-  // Load app info
-  await AppInfo.init();
-
   // init stack utils with determined project name
   StackUtils.init(AppInfo.projectName);
 
@@ -48,13 +48,15 @@ void main() async {
 
   // Run the app and pass in the SettingsController. The app listens to the
   // SettingsController for changes, then passes it further down to the SettingsView.
-  runApp(EasyLocalization(
-    supportedLocales: SettingsService.supportedLocales,
-    path: 'assets/translations',
-    fallbackLocale: SettingsService.supportedLocales[0],
-    startLocale: settingsController.locale,
-    // done by ourselves:
-    saveLocale: false,
-    child: MyApp(settingsController: settingsController),
-  ));
+  runApp(
+    EasyLocalization(
+      supportedLocales: SettingsService.supportedLocales,
+      path: 'assets/translations',
+      fallbackLocale: SettingsService.supportedLocales[0],
+      startLocale: settingsController.locale,
+      // done by ourselves:
+      saveLocale: false,
+      child: MyApp(settingsController: settingsController),
+    ),
+  );
 }

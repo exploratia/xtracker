@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
+import '../../../model/changelog/change_log_entry.dart';
+import '../../../util/app_info.dart';
 import '../../../util/navigation/hide_navigation_labels.dart';
 import 'settings_service.dart';
 
@@ -18,6 +20,14 @@ class SettingsController with ChangeNotifier {
   late DateTime _initialAppStart;
 
   DateTime get initialAppStart => _initialAppStart;
+
+  List<ChangeLogEntry> _changeLogEntries = [];
+
+  List<ChangeLogEntry> get changeLogEntries => _changeLogEntries;
+
+  bool _showChangeLog = false;
+
+  bool get showChangeLog => _showChangeLog;
 
   // Make ThemeMode a private variable so it is not updated directly without
   // also persisting the changes with the SettingsService.
@@ -64,6 +74,12 @@ class SettingsController with ChangeNotifier {
   /// settings from the service.
   Future<void> loadSettings() async {
     _initialAppStart = await _settingsService.initialAppStart();
+    var previousAppVersion = await _settingsService.appVersion();
+    _changeLogEntries = ChangeLog.entriesBetween(
+      previousVersion: previousAppVersion,
+      currentVersion: AppInfo.version,
+    );
+    _showChangeLog = _changeLogEntries.isNotEmpty;
     _themeMode = await _settingsService.themeMode();
     _locale = await _settingsService.locale();
     _hideNavigationLabels = await _settingsService.hideNavigationLabels();
@@ -74,6 +90,12 @@ class SettingsController with ChangeNotifier {
     _seriesExportReminderDate = await _settingsService.seriesExportReminderDate();
     _appSupportReminderDate = await _settingsService.appSupportReminderDate();
     // Important! Inform listeners a change has occurred.
+    notifyListeners();
+  }
+
+  void dismissChangeLog() {
+    if (!_showChangeLog) return;
+    _showChangeLog = false;
     notifyListeners();
   }
 
