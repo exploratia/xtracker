@@ -232,18 +232,19 @@ class _SeriesItemInputState extends State<SeriesItemInput> {
     );
 
     return AlertDialog(
-      title: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: ThemeUtils.seriesDataInputDlgMaxWidth),
-        child: Row(
-          spacing: ThemeUtils.horizontalSpacing,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            widget.seriesItem == null ? Icon(Icons.add_outlined, size: iconSize) : Icon(Icons.edit_outlined, size: iconSize),
-            if (_isCalculated) Icon(Icons.link_outlined, size: iconSize),
-            OverflowText(LocaleKeys.seriesEdit_seriesSettings_seriesItems_dlg_title.tr()),
-          ],
-        ),
+      constraints: const BoxConstraints(
+        minWidth: ThemeUtils.seriesDataInputDlgMaxWidth,
+        maxWidth: ThemeUtils.seriesDataInputDlgMaxWidth,
+      ),
+      title: Row(
+        spacing: ThemeUtils.horizontalSpacing,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          widget.seriesItem == null ? Icon(Icons.add_outlined, size: iconSize) : Icon(Icons.edit_outlined, size: iconSize),
+          if (_isCalculated) Icon(Icons.link_outlined, size: iconSize),
+          OverflowText(LocaleKeys.seriesEdit_seriesSettings_seriesItems_dlg_title.tr()),
+        ],
       ),
       content: SingleChildScrollViewWithScrollbar(
         child: edit,

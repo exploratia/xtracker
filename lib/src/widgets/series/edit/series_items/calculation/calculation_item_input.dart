@@ -189,8 +189,7 @@ class _CalculationItemInputState extends State<CalculationItemInput> {
             columnWidths: <int, TableColumnWidth>{
               // 0: FixedColumnWidth(96 * MediaQueryUtils.textScaleFactor),
               0: const IntrinsicColumnWidth(),
-              1: const IntrinsicColumnWidth(),
-              // 1: FlexColumnWidth(),
+              1: const FlexColumnWidth(),
             },
             // border: TableBorder.symmetric(
             //   inside: const BorderSide(width: 1, color: Colors.black12),
@@ -201,6 +200,7 @@ class _CalculationItemInputState extends State<CalculationItemInput> {
                 DropdownButton<CalculationOperator>(
                   key: const Key('operatorSelect'),
                   borderRadius: ThemeUtils.cardBorderRadius,
+                  isExpanded: true,
                   value: _operator,
                   onChanged: (value) => _setOperator(value),
                   items: CalculationOperator.values.map((o) {
@@ -209,7 +209,11 @@ class _CalculationItemInputState extends State<CalculationItemInput> {
                       value: o,
                       child: DropDownMenuItemChild(
                         selected: _operator == o,
-                        child: Text('${o.displayName}${CalculationOperator.toBracketDisplayString(o)}'),
+                        child: Text(
+                          '${o.displayName}${CalculationOperator.toBracketDisplayString(o)}',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
                       ),
                     );
                   }).toList(),
@@ -220,10 +224,15 @@ class _CalculationItemInputState extends State<CalculationItemInput> {
                 DropdownButton<CalculationInputType>(
                   key: const Key('inputTypeSelect'),
                   borderRadius: ThemeUtils.cardBorderRadius,
+                  isExpanded: true,
                   value: _inputType,
                   onChanged: (value) => _setInputType(value),
                   items: CalculationInputType.values.map((i) {
-                    var text = Text(CalculationInputType.toDisplayString(i));
+                    var text = Text(
+                      CalculationInputType.toDisplayString(i),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    );
                     return DropdownMenuItem<CalculationInputType>(
                       key: Key('inputTypeSelect_$i'),
                       value: i,
@@ -305,17 +314,18 @@ class _CalculationItemInputState extends State<CalculationItemInput> {
     );
 
     return AlertDialog(
-      title: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: ThemeUtils.seriesDataInputDlgMaxWidth),
-        child: Row(
-          spacing: ThemeUtils.horizontalSpacing,
-          mainAxisAlignment: MainAxisAlignment.start,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            widget.calculationItem == null ? Icon(Icons.add_outlined, size: iconSize) : Icon(Icons.edit_outlined, size: iconSize),
-            OverflowText(LocaleKeys.seriesEdit_seriesSettings_seriesItems_calculation_calculationItemSettingsDlg_title.tr()),
-          ],
-        ),
+      constraints: const BoxConstraints(
+        minWidth: ThemeUtils.seriesDataInputDlgMaxWidth,
+        maxWidth: ThemeUtils.seriesDataInputDlgMaxWidth,
+      ),
+      title: Row(
+        spacing: ThemeUtils.horizontalSpacing,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          widget.calculationItem == null ? Icon(Icons.add_outlined, size: iconSize) : Icon(Icons.edit_outlined, size: iconSize),
+          OverflowText(LocaleKeys.seriesEdit_seriesSettings_seriesItems_calculation_calculationItemSettingsDlg_title.tr()),
+        ],
       ),
       content: SingleChildScrollViewWithScrollbar(
         child: edit,
