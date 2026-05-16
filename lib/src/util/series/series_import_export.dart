@@ -46,7 +46,7 @@ class SeriesImportExport {
     List<List<dynamic>> exportList = [];
     exportList.add(seriesDef.toCSVHeaderList());
     exportList.addAll(seriesData.toCSVLists(seriesDef));
-    final csv = const ListToCsvConverter().convert(exportList);
+    final csv = const CsvEncoder().convert(exportList);
     return csv;
   }
 
@@ -412,7 +412,7 @@ class SeriesImportExport {
 
         var fileContent = await _readPickedFileAsString(file);
 
-        final csv = const CsvToListConverter().convert(fileContent);
+        final csv = const CsvDecoder(dynamicTyping: true).convert(fileContent);
         // remove empty lines
         csv.removeWhere((line) => line.isEmpty || line.length == 1 && ("" == line[0] || null == line[0]));
         if (csv.isEmpty) {
@@ -586,7 +586,7 @@ class SeriesImportExport {
               LocaleKeys.seriesManagement_importExport_label_importSeriesCSV.tr(
                 args: [
                   seriesDef.name,
-                  const ListToCsvConverter().convert([seriesDef.toCSVHeaderList()]),
+                  const CsvEncoder().convert([seriesDef.toCSVHeaderList()]),
                 ],
               ),
             ),
