@@ -23,13 +23,13 @@ dependencies:
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
-  cupertino_icons: ^1.0.8
+  cupertino_icons: ^1.0.9
 
   # EasyLocalization
   easy_localization: ^3.0.8
 
   # DeviceStorage
-  flutter_secure_storage: ^10.0.0
+  flutter_secure_storage: ^10.2.0
 
   # AppInfo
   package_info_plus: ^10.1.0
@@ -39,10 +39,10 @@ dependencies:
 
   # SimpleLogging
   # determine paths like tmp or app data
-  path_provider: ^2.0.15
+  path_provider: ^2.1.5
   # zip files
-  flutter_archive: ^6.0.3
-  logger: ^2.5.0
+  flutter_archive: ^6.0.4
+  logger: ^2.7.0
 
   # call native share dialog
   share_plus: ^13.1.0
@@ -51,29 +51,29 @@ dependencies:
   flutter_colorpicker: ^1.1.0
 
   # month picker
-  month_picker_dialog: ^6.6.0
+  month_picker_dialog: ^6.7.2
 
   # UUID generation (ids for model)
-  uuid: ^4.5.1
+  uuid: ^4.5.3
 
   # provider
-  provider: ^6.1.2
+  provider: ^6.1.5+1
 
   # 2d grid
   linked_scroll_controller: ^0.2.0
 
   # chart
-  fl_chart: ^1.0.0
+  fl_chart: ^1.2.0
 
   # data storage
-  sembast: ^3.8.3
-  sembast_web: ^2.4.0+4
+  sembast: ^3.8.7
+  sembast_web: ^2.4.4+1
 
   # file picker
   file_picker: ^12.0.0-beta.3
 
   # url launcher
-  url_launcher: ^6.3.1
+  url_launcher: ^6.3.2
 
   # display HTML in flutter
   simple_html_css: ^5.0.0
@@ -92,7 +92,7 @@ dev_dependencies:
   build_runner: any
 
   # splash
-  flutter_native_splash: ^2.4.6
+  flutter_native_splash: ^2.4.7
 
 flutter:
   uses-material-design: true
