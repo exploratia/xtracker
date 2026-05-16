@@ -4,6 +4,21 @@
 
 Create and checkout a release branch from main when all features/bugs are included.
 
+## Check dependencies (again - and do tests after that)
+
+New major versions available?
+
+```shell
+flutter pub upgrade --major-versions
+```
+
+Check pubspec.yaml in IDE
+
+```shell
+flutter pub upgrade
+flutter pub get
+```
+
 ## Changelog
 
 Run automatic changelog generation:
@@ -33,6 +48,8 @@ Prüfe die Änderungen in den Sprachdateien auf Konsistenz und ob noch etwas ver
 ## Playstore images
 
 Create images for phone and tablet with version no as prefix.
+
+Maybe update readme screenshots.
 
 ## Commit
 
