@@ -75,6 +75,9 @@ dependencies:
   # url launcher
   url_launcher: ^6.3.2
 
+  #quick actions (long press on app icon)
+  quick_actions: ^1.1.0
+
   # display HTML in flutter
   simple_html_css: ^5.0.0
 
