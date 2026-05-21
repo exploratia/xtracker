@@ -9,8 +9,15 @@ plugins {
 }
 
 val keystorePropertiesFile = rootProject.file("key.properties")
-val keystoreProperties = Properties().apply {
-    load(FileInputStream(keystorePropertiesFile))
+val keystoreProperties = Properties()
+val hasReleaseKeystore = keystorePropertiesFile.exists()
+
+if (hasReleaseKeystore) {
+    FileInputStream(keystorePropertiesFile).use { stream ->
+        keystoreProperties.load(stream)
+    }
+} else {
+    logger.lifecycle("No key.properties found. Falling back to debug signing configuration.")
 }
 
 android {
@@ -40,11 +47,13 @@ android {
     }
 
     signingConfigs {
-        create("release") {
-            keyAlias = keystoreProperties["keyAlias"] as String
-            keyPassword = keystoreProperties["keyPassword"] as String
-            storePassword = keystoreProperties["storePassword"] as String
-            storeFile = file(keystoreProperties["storeFile"] as String)
+        if (hasReleaseKeystore) {
+            create("release") {
+                keyAlias = keystoreProperties["keyAlias"] as String
+                keyPassword = keystoreProperties["keyPassword"] as String
+                storePassword = keystoreProperties["storePassword"] as String
+                storeFile = file(keystoreProperties["storeFile"] as String)
+            }
         }
     }
 
@@ -62,7 +71,11 @@ android {
 
             // Debug has to be deactivated for release
 //            isDebuggable = true
-            signingConfig = signingConfigs["release"]
+            signingConfig = if (hasReleaseKeystore) {
+                signingConfigs["release"]
+            } else {
+                signingConfigs["debug"]
+            }
         }
     }
 }
