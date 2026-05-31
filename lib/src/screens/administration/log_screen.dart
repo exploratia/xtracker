@@ -100,7 +100,7 @@ class LogScreen extends StatelessWidget {
 
           var selectedFile = await FilePicker.saveFile(
             dialogTitle: 'Please select an output file:',
-            fileName: logFile.name,
+            fileName: logFile.name ?? 'log.txt',
             type: FileType.custom,
             allowedExtensions: ["txt"],
             bytes: fileBytes,
