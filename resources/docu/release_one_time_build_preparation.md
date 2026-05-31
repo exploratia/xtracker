@@ -18,6 +18,10 @@ _App specific:_
 keytool -genkey -v -keystore xtracker-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias xTracker
 ````
 
+````shell
+keytool -genkey -v -keystore littledetective-release-key.jks -keyalg RSA -keysize 2048 -validity 10000 -alias "Little Detective"
+````
+
 ⚠⚠⚠ Store this file in a safe place separate from your project directory. ⚠⚠⚠
 
 ## Referencing the keystore in the app
