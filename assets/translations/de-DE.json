@@ -499,6 +499,9 @@
       "importExportSeries": {
         "tooltip": "Messreihe importieren/exportieren"
       },
+      "more": {
+        "tooltip": "Mehr..."
+      },
       "deleteSeriesValues": {
         "tooltip": "Werte der Messreihe löschen"
       },

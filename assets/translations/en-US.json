@@ -499,6 +499,9 @@
       "importExportSeries": {
         "tooltip": "Import / export series"
       },
+      "more": {
+        "tooltip": "More..."
+      },
       "deleteSeriesValues": {
         "tooltip": "Delete series values"
       },

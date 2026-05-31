@@ -12,6 +12,7 @@ import '../../../util/logging/flutter_simple_logging.dart';
 import '../../../util/series/series_import_export.dart';
 import '../../../util/theme_utils.dart';
 import '../../administration/settings/settings_controller.dart';
+import '../../controls/popupmenu/icon_popup_menu.dart';
 
 class SeriesManagementActions extends StatelessWidget {
   const SeriesManagementActions({super.key, required this.seriesDef, required this.settingsController});
@@ -37,8 +38,7 @@ class SeriesManagementActions extends StatelessWidget {
               onPressed: () async => SeriesImportExport.showImportExportDlg(context, seriesDef: seriesDef, settingsController: settingsController),
               icon: const Icon(Icons.import_export_outlined),
             ),
-            _ClearSeriesDataBtn(seriesDef: seriesDef),
-            _DeleteSeriesBtn(seriesDef: seriesDef),
+            _SeriesMoreActionsMenu(seriesDef: seriesDef),
           ],
         ),
       ),
@@ -46,41 +46,65 @@ class SeriesManagementActions extends StatelessWidget {
   }
 }
 
-class _DeleteSeriesBtn extends StatelessWidget {
-  const _DeleteSeriesBtn({
-    required this.seriesDef,
-  });
+class _SeriesMoreActionsMenu extends StatelessWidget {
+  const _SeriesMoreActionsMenu({required this.seriesDef});
 
   final SeriesDef seriesDef;
 
   @override
   Widget build(BuildContext context) {
+    return Tooltip(
+      message: LocaleKeys.seriesDefRenderer_action_more_tooltip.tr(),
+      child: IconPopupMenu(
+        icon: const Icon(Icons.more_vert_outlined),
+        menuEntries: [
+          IconPopupMenuEntry(
+            const Icon(Icons.highlight_remove_outlined),
+            () => _clearSeriesData(context),
+            LocaleKeys.seriesDefRenderer_action_deleteSeriesValues_tooltip.tr(),
+          ),
+          IconPopupMenuEntry(
+            const Icon(Icons.close_outlined),
+            () => _deleteSeries(context),
+            LocaleKeys.seriesDefRenderer_action_deleteSeries_tooltip.tr(),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _deleteSeries(BuildContext context) async {
     SeriesProviders seriesProviders = SeriesProviders.readOf(context);
 
-    deleteHandler() async {
-      bool? res = await Dialogs.simpleYesNoDialog(
-        LocaleKeys.seriesDefRenderer_query_deleteSeries.tr(args: [seriesDef.name]),
-        context,
-        title: LocaleKeys.commons_dialog_title_areYouSure.tr(),
-      );
-      if (res == true) {
-        try {
-          await seriesProviders.seriesProvider.delete(seriesDef, seriesProviders);
-        } catch (err) {
-          SimpleLogging.w("Failed to delete ${seriesDef.toLogString()}.", error: err);
-          if (context.mounted) {
-            Dialogs.showSnackBarWarning(LocaleKeys.commons_snackbar_deleteFailed.tr(), context);
-          }
+    bool? res = await Dialogs.simpleYesNoDialog(
+      LocaleKeys.seriesDefRenderer_query_deleteSeries.tr(args: [seriesDef.name]),
+      context,
+      title: LocaleKeys.commons_dialog_title_areYouSure.tr(),
+    );
+    if (res == true) {
+      try {
+        await seriesProviders.seriesProvider.delete(seriesDef, seriesProviders);
+      } catch (err) {
+        SimpleLogging.w("Failed to delete ${seriesDef.toLogString()}.", error: err);
+        if (context.mounted) {
+          Dialogs.showSnackBarWarning(LocaleKeys.commons_snackbar_deleteFailed.tr(), context);
         }
       }
     }
+  }
 
-    return IconButton(
-      iconSize: ThemeUtils.iconSizeScaled,
-      tooltip: LocaleKeys.seriesDefRenderer_action_deleteSeries_tooltip.tr(),
-      onPressed: deleteHandler,
-      icon: const Icon(Icons.close_outlined),
+  Future<void> _clearSeriesData(BuildContext context) async {
+    SeriesDataProvider seriesDataProvider = context.read<SeriesDataProvider>();
+    SeriesCurrentValueProvider seriesCurrentValueProvider = context.read<SeriesCurrentValueProvider>();
+
+    var result = await Dialogs.simpleYesNoDialog(
+      LocaleKeys.seriesDefRenderer_query_deleteSeriesData.tr(args: [seriesDef.name]),
+      context,
+      title: LocaleKeys.commons_dialog_title_areYouSure.tr(),
     );
+    if (result == true) {
+      await seriesDataProvider.delete(seriesDef, seriesCurrentValueProvider);
+    }
   }
 }
 
@@ -103,38 +127,6 @@ class _EditSeriesBtn extends StatelessWidget {
       tooltip: LocaleKeys.seriesDefRenderer_action_editSeries_tooltip.tr(),
       onPressed: editHandler,
       icon: const Icon(Icons.edit_outlined),
-    );
-  }
-}
-
-class _ClearSeriesDataBtn extends StatelessWidget {
-  const _ClearSeriesDataBtn({
-    required this.seriesDef,
-  });
-
-  final SeriesDef seriesDef;
-
-  @override
-  Widget build(BuildContext context) {
-    SeriesDataProvider seriesDataProvider = context.read<SeriesDataProvider>();
-    SeriesCurrentValueProvider seriesCurrentValueProvider = context.read<SeriesCurrentValueProvider>();
-
-    handler() async {
-      var result = await Dialogs.simpleYesNoDialog(
-        LocaleKeys.seriesDefRenderer_query_deleteSeriesData.tr(args: [seriesDef.name]),
-        context,
-        title: LocaleKeys.commons_dialog_title_areYouSure.tr(),
-      );
-      if (result == true) {
-        await seriesDataProvider.delete(seriesDef, seriesCurrentValueProvider);
-      }
-    }
-
-    return IconButton(
-      iconSize: ThemeUtils.iconSizeScaled,
-      tooltip: LocaleKeys.seriesDefRenderer_action_deleteSeriesValues_tooltip.tr(),
-      onPressed: handler,
-      icon: const Icon(Icons.highlight_remove_outlined),
     );
   }
 }

@@ -195,6 +195,7 @@ abstract class  LocaleKeys {
   static const seriesDefRenderer_action_showSeriesValues_tooltip = 'seriesDefRenderer.action.showSeriesValues.tooltip';
   static const seriesDefRenderer_action_editSeries_tooltip = 'seriesDefRenderer.action.editSeries.tooltip';
   static const seriesDefRenderer_action_importExportSeries_tooltip = 'seriesDefRenderer.action.importExportSeries.tooltip';
+  static const seriesDefRenderer_action_more_tooltip = 'seriesDefRenderer.action.more.tooltip';
   static const seriesDefRenderer_action_deleteSeriesValues_tooltip = 'seriesDefRenderer.action.deleteSeriesValues.tooltip';
   static const seriesDefRenderer_action_deleteSeries_tooltip = 'seriesDefRenderer.action.deleteSeries.tooltip';
   static const seriesDefRenderer_currentValue_tooltip = 'seriesDefRenderer.currentValue.tooltip';
