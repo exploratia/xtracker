@@ -8,6 +8,8 @@
       "title": "Support the App",
       "label": {
         "buyMeACoffee": "Maintaining and improving this app takes a lot of free time. Any support is greatly appreciated.",
+        "rateOnGooglePlay": "Rate us or write a review on Google Play:",
+        "sendFeedbackByMail": "Feedback by Mail",
         "reportABug": "Found a bug? Report it on GitHub:"
       }
     },

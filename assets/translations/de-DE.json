@@ -8,6 +8,8 @@
       "title": "Unterstütze die App",
       "label": {
         "buyMeACoffee": "Wartung und Weiterentwicklung kosten viel Freizeit. Über Unterstützung würde ich mich sehr freuen.",
+        "rateOnGooglePlay": "Auf Google Play bewerten / Rezension schreiben:",
+        "sendFeedbackByMail": "Feedback per Mail",
         "reportABug": "Fehler gefunden? Erstelle einen Bug-Report auf GitHub:"
       }
     },

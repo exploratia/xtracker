@@ -7,6 +7,8 @@ abstract class  LocaleKeys {
   static const administration_nav_tooltip = 'administration.nav.tooltip';
   static const administration_supportApp_title = 'administration.supportApp.title';
   static const administration_supportApp_label_buyMeACoffee = 'administration.supportApp.label.buyMeACoffee';
+  static const administration_supportApp_label_rateOnGooglePlay = 'administration.supportApp.label.rateOnGooglePlay';
+  static const administration_supportApp_label_sendFeedbackByMail = 'administration.supportApp.label.sendFeedbackByMail';
   static const administration_supportApp_label_reportABug = 'administration.supportApp.label.reportABug';
   static const administration_infoAndLegals_btn_version = 'administration.infoAndLegals.btn.version';
   static const appTitle = 'appTitle';

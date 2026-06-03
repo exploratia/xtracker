@@ -173,6 +173,9 @@ class _AppInfoCard extends StatelessWidget {
                 ],
               ),
               const Divider(height: ThemeUtils.verticalSpacingLarge),
+              TextButton(onPressed: () => LaunchUri.launchUri(Globals.urlExploratiaXTracker), child: Text("${Globals.urlExploratiaXTracker}")),
+              TextButton(onPressed: () => LaunchUri.launchUri(Globals.urlGithubXtracker), child: Text("${Globals.urlGithubXtracker}")),
+              const Divider(height: ThemeUtils.verticalSpacingLarge),
               ...rows.map(
                 (r) => Wrap(
                   spacing: ThemeUtils.horizontalSpacing,
@@ -202,12 +205,23 @@ class _SupportTheApp extends StatelessWidget {
         children: [
           Text(LocaleKeys.administration_supportApp_label_buyMeACoffee.tr()),
           ImgLnk(uri: Globals.urlCoffeeExploratia, imageProvider: Assets.images.bmc.bmcButton.provider(), height: 48, width: 171),
+          ImgLnk(uri: Globals.urlPaypalMe, imageProvider: Assets.images.paypal.paypalButton.provider(), height: 48, width: 171),
+          const SizedBox(height: ThemeUtils.verticalSpacing),
+          Text(LocaleKeys.administration_supportApp_label_rateOnGooglePlay.tr()),
+          ImgLnk(uri: Globals.urlPlaystore, imageProvider: Assets.images.google.googleplayButton.provider(), height: 48, width: 171),
+          const SizedBox(height: ThemeUtils.verticalSpacing),
+          OutlinedButton.icon(
+            onPressed: () => LaunchUri.launchUri(Globals.urlEmailFeedback),
+            icon: const Icon(Icons.mail_outline),
+            label: Text(LocaleKeys.administration_supportApp_label_sendFeedbackByMail.tr()),
+          ),
           const SizedBox(height: ThemeUtils.verticalSpacing),
           Wrap(
             crossAxisAlignment: WrapCrossAlignment.center,
             children: [
+              const Icon(Icons.bug_report_outlined),
               Text(LocaleKeys.administration_supportApp_label_reportABug.tr()),
-              TextButton(onPressed: () => LaunchUri.launchUri(Globals.uriGithubXtrackerIssues), child: Text("${Globals.uriGithubXtrackerIssues}")),
+              TextButton(onPressed: () => LaunchUri.launchUri(Globals.urlGithubXtrackerIssues), child: Text("${Globals.urlGithubXtrackerIssues}")),
             ],
           ),
         ],
