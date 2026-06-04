@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../generated/locale_keys.g.dart';
+import '../../util/app_icon_quick_actions.dart';
 import '../../util/series/series_import_export.dart';
 import '../../util/theme_utils.dart';
 import '../administration/settings/settings_controller.dart';
@@ -24,6 +25,9 @@ class _SeriesExportCheckState extends State<SeriesExportCheck> {
   @override
   void initState() {
     super.initState();
+
+    // A pending quick action has higher priority than reminder dialogs.
+    if (AppIconQuickActions.pendingSeriesQuickActionSeriesId() != null) return;
 
     var settingsController = widget.settingsController;
     // reminder disabled?
