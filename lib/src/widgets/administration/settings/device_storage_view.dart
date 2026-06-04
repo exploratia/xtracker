@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../generated/locale_keys.g.dart';
 import '../../../util/device_storage/device_storage.dart';
+import '../../../util/device_storage/device_storage_keys.dart';
 import '../../../util/dialogs.dart';
 import '../../../util/table_utils.dart';
 import '../../controls/future/future_builder_with_progress_indicator.dart';
@@ -32,7 +35,7 @@ class DeviceStorageView extends StatelessWidget {
                 keys.sort();
                 for (var key in keys) {
                   var value = storageData[key];
-                  rows.add(TableUtils.tableRow([key, value ?? '-']));
+                  rows.add(TableUtils.tableRow([key, _formatStorageValueForView(key, value)]));
                 }
 
                 return LayoutBuilder(
@@ -64,6 +67,37 @@ class DeviceStorageView extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  String _formatStorageValueForView(String key, String? value) {
+    if (value == null) {
+      return '-';
+    }
+    if (key == DeviceStorageKeys.seriesQuickActions) {
+      return _seriesQuickActionsCount(value).toString();
+    }
+    return value;
+  }
+
+  int _seriesQuickActionsCount(String value) {
+    var trimmed = value.trim();
+    if (trimmed.isEmpty) {
+      return 0;
+    }
+
+    try {
+      var parsed = jsonDecode(trimmed);
+      if (parsed is Map<String, dynamic>) {
+        var series = parsed['series'];
+        if (series is List) {
+          return series.where((entry) => entry is Map && entry['id'] is String && (entry['id'] as String).trim().isNotEmpty).length;
+        }
+      }
+    } catch (_) {
+      // Fallback below for non-JSON values.
+    }
+
+    return trimmed.split(',').map((e) => e.trim()).where((e) => e.isNotEmpty).length;
   }
 }
 
