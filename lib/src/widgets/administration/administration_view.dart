@@ -173,8 +173,14 @@ class _AppInfoCard extends StatelessWidget {
                 ],
               ),
               const Divider(height: ThemeUtils.verticalSpacingLarge),
-              TextButton(onPressed: () => LaunchUri.launchUri(Globals.urlExploratiaXTracker), child: Text("${Globals.urlExploratiaXTracker}")),
-              TextButton(onPressed: () => LaunchUri.launchUri(Globals.urlGithubXtracker), child: Text("${Globals.urlGithubXtracker}")),
+              Wrap(
+                spacing: ThemeUtils.horizontalSpacing,
+                crossAxisAlignment: WrapCrossAlignment.center,
+                children: [
+                  TextButton(onPressed: () => LaunchUri.launchUri(Globals.urlExploratiaXTracker), child: Text("${Globals.urlExploratiaXTracker}")),
+                  TextButton(onPressed: () => LaunchUri.launchUri(Globals.urlGithubXtracker), child: Text("${Globals.urlGithubXtracker}")),
+                ],
+              ),
               const Divider(height: ThemeUtils.verticalSpacingLarge),
               ...rows.map(
                 (r) => Wrap(
