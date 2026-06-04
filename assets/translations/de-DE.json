@@ -591,6 +591,12 @@
       "custom": {
         "title": "Individuell-Einstellungen"
       },
+      "quickActions": {
+        "title": "QuickActions",
+        "label": {
+          "enableInContextMenu": "Im Kontextmenue aktivieren"
+        }
+      },
       "tags": {
         "title": "Tags\uD83D\uDEA9",
         "actions": {

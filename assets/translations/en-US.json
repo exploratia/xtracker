@@ -591,6 +591,12 @@
       "custom": {
         "title": "Custom settings"
       },
+      "quickActions": {
+        "title": "QuickActions",
+        "label": {
+          "enableInContextMenu": "Enable in app icon menu"
+        }
+      },
       "tags": {
         "title": "Tags\uD83D\uDEA9",
         "actions": {

@@ -121,8 +121,10 @@ class _SeriesEditorState extends State<SeriesEditor> {
     try {
       var seriesProvider = context.read<SeriesProvider>();
       await seriesProvider.save(_seriesDef);
-      await AppIconQuickActions.setSeriesQuickActionEnabled(_seriesDef.uuid, _quickActionEnabled);
-      await AppIconQuickActions.refreshSeriesShortcutItems(seriesProvider.series);
+      var quickActionsChanged = await AppIconQuickActions.setSeriesQuickActionEnabled(_seriesDef.uuid, _quickActionEnabled);
+      if (quickActionsChanged) {
+        await AppIconQuickActions.refreshSeriesShortcutItems(seriesProvider.series);
+      }
       if (mounted) Dialogs.showSnackBar(LocaleKeys.commons_snackbar_saveSuccess.tr(), context);
     } catch (err) {
       SimpleLogging.w('Failed to store series.', error: err);
@@ -265,10 +267,10 @@ class _SeriesEditorState extends State<SeriesEditor> {
         Expandable(
           initialExpanded: false,
           icon: Icon(Icons.touch_app_outlined, size: ThemeUtils.iconSizeScaled),
-          title: 'QuickActions',
+          title: LocaleKeys.seriesEdit_seriesSettings_quickActions_title.tr(),
           child: SwitchListTile(
             contentPadding: EdgeInsets.zero,
-            title: const Text('Im Kontextmenue aktivieren'),
+            title: Text(LocaleKeys.seriesEdit_seriesSettings_quickActions_label_enableInContextMenu.tr()),
             value: _quickActionEnabled,
             onChanged: !_quickActionStateLoaded
                 ? null

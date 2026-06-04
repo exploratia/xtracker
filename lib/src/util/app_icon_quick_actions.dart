@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:quick_actions/quick_actions.dart';
 
@@ -15,6 +17,7 @@ class AppIconQuickActions {
   static const _maxQuickActionCount = 4;
   static const _quickActions = QuickActions();
   static String? _pendingSeriesQuickActionSeriesId;
+  static String? _lastShortcutItemsSignature;
 
   static Future<void> init() async {
     if (!_isQuickActionsSupportedPlatform()) {
@@ -60,14 +63,20 @@ class AppIconQuickActions {
     return (await readEnabledSeriesQuickActions()).contains(seriesUuid);
   }
 
-  static Future<void> setSeriesQuickActionEnabled(String seriesUuid, bool enabled) async {
+  static Future<bool> setSeriesQuickActionEnabled(String seriesUuid, bool enabled) async {
     var quickActionSeriesIds = await readEnabledSeriesQuickActions();
+    var wasEnabled = quickActionSeriesIds.contains(seriesUuid);
+    if (wasEnabled == enabled) {
+      return false;
+    }
+
     if (enabled) {
       quickActionSeriesIds.add(seriesUuid);
     } else {
       quickActionSeriesIds.remove(seriesUuid);
     }
     await _storeEnabledSeriesQuickActions(quickActionSeriesIds);
+    return true;
   }
 
   static Future<Set<String>> cleanUpOrphanedSeriesQuickActions(Iterable<String> validSeriesUuids) async {
@@ -91,7 +100,12 @@ class AppIconQuickActions {
     try {
       var quickActionSeriesIds = enabledSeriesIds ?? await readEnabledSeriesQuickActions();
       var shortcutItems = _buildShortcutItems(series, quickActionSeriesIds);
+      var shortcutItemsSignature = _buildShortcutItemsSignature(shortcutItems);
+      if (_lastShortcutItemsSignature == shortcutItemsSignature) {
+        return;
+      }
       await _quickActions.setShortcutItems(shortcutItems);
+      _lastShortcutItemsSignature = shortcutItemsSignature;
     } catch (err) {
       SimpleLogging.w('Could not refresh app icon quick actions', error: err);
     }
@@ -133,6 +147,21 @@ class AppIconQuickActions {
     }
 
     return shortcutItems;
+  }
+
+  static String _buildShortcutItemsSignature(List<ShortcutItem> shortcutItems) {
+    return jsonEncode(
+      shortcutItems
+          .map(
+            (item) => {
+              'type': item.type,
+              'localizedTitle': item.localizedTitle,
+              'localizedSubtitle': item.localizedSubtitle,
+              'icon': item.icon,
+            },
+          )
+          .toList(),
+    );
   }
 
   static bool _isQuickActionsSupportedPlatform() {
