@@ -50,6 +50,10 @@ class AppIconQuickActions {
     return res;
   }
 
+  static String? pendingSeriesQuickActionSeriesId() {
+    return _pendingSeriesQuickActionSeriesId;
+  }
+
   static Future<Set<String>> readEnabledSeriesQuickActions() async {
     var rawSeriesIds = await DeviceStorage.read(DeviceStorageKeys.seriesQuickActions);
     if (rawSeriesIds == null || rawSeriesIds.trim().isEmpty) {

@@ -10,12 +10,14 @@ import 'providers/series_current_value_provider.dart';
 import 'providers/series_data_provider.dart';
 import 'providers/series_provider.dart';
 import 'routing.dart';
+import 'screens/home_screen.dart';
+import 'util/app_icon_quick_actions.dart';
 import 'util/date_time_utils.dart';
 import 'util/theme_utils.dart';
 import 'widgets/administration/settings/settings_controller.dart';
 
 /// The Widget that configures your application.
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({
     super.key,
     required this.settingsController,
@@ -24,15 +26,62 @@ class MyApp extends StatelessWidget {
   final SettingsController settingsController;
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  final _navigatorKey = GlobalKey<NavigatorState>();
+  String? _lastHandledPendingQuickActionSeriesId;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _routeToHomeIfQuickActionPending());
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => _routeToHomeIfQuickActionPending());
+    }
+  }
+
+  void _routeToHomeIfQuickActionPending() {
+    var pendingSeriesUuid = AppIconQuickActions.pendingSeriesQuickActionSeriesId();
+    if (pendingSeriesUuid == null) {
+      _lastHandledPendingQuickActionSeriesId = null;
+      return;
+    }
+    if (_lastHandledPendingQuickActionSeriesId == pendingSeriesUuid) {
+      return;
+    }
+
+    var context = _navigatorKey.currentContext;
+    if (context == null) {
+      return;
+    }
+
+    _lastHandledPendingQuickActionSeriesId = pendingSeriesUuid;
+    Navigator.of(context).pushNamedAndRemoveUntil(HomeScreen.navItem.routeName, (route) => false);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final routing = Routing(settingsController);
+    final routing = Routing(widget.settingsController);
 
     // Glue the SettingsController to the MaterialApp.
     //
     // The ListenableBuilder Widget listens to the SettingsController for changes.
     // Whenever the user updates their settings, the MaterialApp is rebuilt.
     return ListenableBuilder(
-      listenable: settingsController,
+      listenable: widget.settingsController,
       builder: (BuildContext context, Widget? child) {
         return MultiProvider(
           providers: [
@@ -41,6 +90,7 @@ class MyApp extends StatelessWidget {
             ChangeNotifierProvider(create: (context) => SeriesCurrentValueProvider()),
           ],
           child: MaterialApp(
+            navigatorKey: _navigatorKey,
             // Providing a restorationScopeId allows the Navigator built by the
             // MaterialApp to restore the navigation stack when a user leaves and
             // returns to the app after it has been killed while running in the
@@ -70,7 +120,7 @@ class MyApp extends StatelessWidget {
             // SettingsController to display the correct theme.
             theme: ThemeUtils.buildThemeData(context, false),
             darkTheme: ThemeUtils.buildThemeData(context, true),
-            themeMode: settingsController.themeMode,
+            themeMode: widget.settingsController.themeMode,
 
             // Mouse dragging enabled
             scrollBehavior: const MaterialScrollBehavior().copyWith(
