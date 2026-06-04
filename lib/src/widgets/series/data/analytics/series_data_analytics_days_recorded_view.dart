@@ -44,7 +44,7 @@ class SeriesDataAnalyticsDaysRecordedView extends StatelessWidget {
             children: widgets,
           ),
         ),
-        if (additionalEntries != null) ...additionalEntries!,
+        ...?additionalEntries,
       ],
     );
   }

@@ -22,7 +22,7 @@ class TwoDimensionalGridView extends TwoDimensionalScrollView {
     super.primary,
     super.mainAxis = Axis.vertical,
     required TwoDimensionalChildBuilderDelegate delegate,
-    super.cacheExtent,
+    super.scrollCacheExtent,
     super.diagonalDragBehavior = DiagonalDragBehavior.none,
     super.dragStartBehavior = DragStartBehavior.start,
     super.keyboardDismissBehavior = ScrollViewKeyboardDismissBehavior.manual,
@@ -52,7 +52,7 @@ class TwoDimensionalGridView extends TwoDimensionalScrollView {
       verticalAxisDirection: verticalDetails.direction,
       mainAxis: mainAxis,
       delegate: delegate as TwoDimensionalChildBuilderDelegate,
-      cacheExtent: cacheExtent,
+      scrollCacheExtent: scrollCacheExtent,
       clipBehavior: clipBehavior,
       bottomScrollExtend: bottomScrollExtend,
     );
@@ -74,7 +74,7 @@ class TwoDimensionalGridViewport extends TwoDimensionalViewport {
     required super.horizontalAxisDirection,
     required TwoDimensionalChildBuilderDelegate super.delegate,
     required super.mainAxis,
-    super.cacheExtent,
+    super.scrollCacheExtent,
     super.clipBehavior = Clip.hardEdge,
     this.bottomScrollExtend = 0,
   });
@@ -91,7 +91,7 @@ class TwoDimensionalGridViewport extends TwoDimensionalViewport {
       mainAxis: mainAxis,
       delegate: delegate as TwoDimensionalChildBuilderDelegate,
       childManager: context as TwoDimensionalChildManager,
-      cacheExtent: cacheExtent,
+      scrollCacheExtent: scrollCacheExtent,
       clipBehavior: clipBehavior,
       bottomScrollExtend: bottomScrollExtend,
     );
@@ -109,7 +109,7 @@ class TwoDimensionalGridViewport extends TwoDimensionalViewport {
       ..verticalAxisDirection = verticalAxisDirection
       ..mainAxis = mainAxis
       ..delegate = delegate
-      ..cacheExtent = cacheExtent
+      ..scrollCacheExtent = scrollCacheExtent
       ..clipBehavior = clipBehavior;
   }
 }
@@ -130,7 +130,7 @@ class RenderTwoDimensionalGridViewport extends RenderTwoDimensionalViewport {
     required TwoDimensionalChildBuilderDelegate delegate,
     required super.mainAxis,
     required super.childManager,
-    super.cacheExtent,
+    super.scrollCacheExtent,
     super.clipBehavior = Clip.hardEdge,
     this.bottomScrollExtend = 0,
   }) : super(delegate: delegate);
@@ -139,8 +139,8 @@ class RenderTwoDimensionalGridViewport extends RenderTwoDimensionalViewport {
   void layoutChildSequence() {
     final double horizontalPixels = horizontalOffset.pixels;
     final double verticalPixels = verticalOffset.pixels;
-    final double viewportWidth = viewportDimension.width + cacheExtent;
-    final double viewportHeight = viewportDimension.height + cacheExtent;
+    final double viewportWidth = viewportDimension.width + scrollCacheExtent.value;
+    final double viewportHeight = viewportDimension.height + scrollCacheExtent.value;
     final TwoDimensionalChildBuilderDelegate builderDelegate = delegate as TwoDimensionalChildBuilderDelegate;
 
     final int maxRowIndex = builderDelegate.maxYIndex!;
