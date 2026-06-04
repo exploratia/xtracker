@@ -594,7 +594,7 @@
       "quickActions": {
         "title": "QuickActions",
         "label": {
-          "showAddValueInAppContextMenu": "Show 'add value' in app icon menu:"
+          "showAddValueInAppContextMenu": "'Add value' in app icon menu:"
         },
         "alert": {
           "androidSystemLimit": {
