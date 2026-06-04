@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -37,6 +38,7 @@ class SeriesEditor extends StatefulWidget {
 }
 
 class _SeriesEditorState extends State<SeriesEditor> {
+  static const _maxSystemQuickActions = 4;
   late SeriesDef _seriesDef;
 
   late DailyLifeTagsSettings? _dailyLifeTagsSettings;
@@ -124,6 +126,7 @@ class _SeriesEditorState extends State<SeriesEditor> {
       var quickActionsChanged = await AppIconQuickActions.setSeriesQuickActionEnabled(_seriesDef.uuid, _quickActionEnabled);
       if (quickActionsChanged) {
         await AppIconQuickActions.refreshSeriesShortcutItems(seriesProvider.series);
+        await _showQuickActionsSystemLimitInfoIfNeeded(seriesProvider.series);
       }
       if (mounted) Dialogs.showSnackBar(LocaleKeys.commons_snackbar_saveSuccess.tr(), context);
     } catch (err) {
@@ -136,6 +139,41 @@ class _SeriesEditorState extends State<SeriesEditor> {
     _setLoading(false);
 
     if (mounted) Navigator.of(context).pop(_seriesDef);
+  }
+
+  Future<void> _showQuickActionsSystemLimitInfoIfNeeded(List<SeriesDef> allSeries) async {
+    if (kIsWeb || defaultTargetPlatform != TargetPlatform.android) {
+      return;
+    }
+
+    var enabledSeriesIds = await AppIconQuickActions.readEnabledSeriesQuickActions();
+    if (enabledSeriesIds.length <= _maxSystemQuickActions || !mounted) {
+      return;
+    }
+
+    var configuredSeriesNames = allSeries
+        .where((seriesDef) => enabledSeriesIds.contains(seriesDef.uuid))
+        .map((seriesDef) => seriesDef.name.trim())
+        .where((name) => name.isNotEmpty)
+        .toList();
+
+    if (configuredSeriesNames.isEmpty) {
+      return;
+    }
+
+    var listItems = configuredSeriesNames.map((name) => '- $name').join('\n');
+    var message = [
+      LocaleKeys.seriesEdit_seriesSettings_quickActions_alert_androidSystemLimit_message.tr(args: ['$_maxSystemQuickActions']),
+      '',
+      LocaleKeys.seriesEdit_seriesSettings_quickActions_alert_androidSystemLimit_configuredSeries.tr(),
+      listItems,
+    ].join('\n');
+
+    await Dialogs.simpleOkDialog(
+      message,
+      context,
+      title: LocaleKeys.seriesEdit_seriesSettings_quickActions_alert_androidSystemLimit_title.tr(),
+    );
   }
 
   @override

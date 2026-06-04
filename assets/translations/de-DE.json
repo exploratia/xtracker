@@ -595,6 +595,13 @@
         "title": "QuickActions",
         "label": {
           "showAddValueInAppContextMenu": "Zeige 'Wert hinzufügen' im App-Icon-Menü:"
+        },
+        "alert": {
+          "androidSystemLimit": {
+            "title": "QuickActions begrenzt",
+            "message": "Android begrenzt die Anzahl der App-Icon-QuickActions auf {}.",
+            "configuredSeries": "Konfigurierte Messreihen:"
+          }
         }
       },
       "tags": {

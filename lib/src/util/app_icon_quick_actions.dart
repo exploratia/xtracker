@@ -16,6 +16,7 @@ class AppIconQuickActions {
   static const _actionSeriesAddPrefix = 'series_add_';
   static const _quickActionIconOpenUrl = 'qa_open_url';
   static const _quickActionIconSeriesAddPrefix = 'qa_series_add_';
+  static const _maxQuickActionCountOnAndroid = 4;
   static const _seriesQuickActionIconCount = 12;
   static const _seriesQuickActionPaletteStartHexRgb = <int>[
     0xED1E79,
@@ -163,7 +164,8 @@ class AppIconQuickActions {
   }
 
   static _ShortcutItemsBuildResult _buildShortcutItems(List<SeriesDef> series, _SeriesQuickActionsConfig config) {
-    var useAndroidIcon = defaultTargetPlatform == TargetPlatform.android;
+    var isAndroid = defaultTargetPlatform == TargetPlatform.android;
+    var useAndroidIcon = isAndroid;
     var enabledSeriesIds = config.enabledSeriesIds;
     var iconIndexBySeriesId = {...config.iconIndexBySeriesId};
     var enabledSeriesByUuid = {for (var s in series) s.uuid: s};
@@ -177,13 +179,17 @@ class AppIconQuickActions {
     }
     iconIndexBySeriesId.removeWhere((seriesUuid, _) => !enabledSeriesIds.contains(seriesUuid));
 
-    var shortcutItems = <ShortcutItem>[
-      ShortcutItem(
-        type: _actionOpenExploratia,
-        localizedTitle: 'exploratia.de',
-        icon: useAndroidIcon ? _quickActionIconOpenUrl : null,
-      ),
-    ];
+    var shortcutItems = <ShortcutItem>[];
+    var showOpenLinkQuickAction = !isAndroid || enabledSeriesIds.length < _maxQuickActionCountOnAndroid;
+    if (showOpenLinkQuickAction) {
+      shortcutItems.add(
+        ShortcutItem(
+          type: _actionOpenExploratia,
+          localizedTitle: 'exploratia.de',
+          icon: useAndroidIcon ? _quickActionIconOpenUrl : null,
+        ),
+      );
+    }
 
     var enabledSeries = series.where((s) => enabledSeriesIds.contains(s.uuid));
     for (var seriesDef in enabledSeries) {

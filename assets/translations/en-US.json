@@ -595,6 +595,13 @@
         "title": "QuickActions",
         "label": {
           "showAddValueInAppContextMenu": "Show 'add value' in app icon menu:"
+        },
+        "alert": {
+          "androidSystemLimit": {
+            "title": "QuickActions limited",
+            "message": "Android limits the number of app icon quick actions to {}.",
+            "configuredSeries": "Configured series:"
+          }
         }
       },
       "tags": {
