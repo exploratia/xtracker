@@ -268,17 +268,22 @@ class _SeriesEditorState extends State<SeriesEditor> {
           initialExpanded: false,
           icon: Icon(Icons.touch_app_outlined, size: ThemeUtils.iconSizeScaled),
           title: LocaleKeys.seriesEdit_seriesSettings_quickActions_title.tr(),
-          child: SwitchListTile(
-            contentPadding: EdgeInsets.zero,
-            title: Text(LocaleKeys.seriesEdit_seriesSettings_quickActions_label_enableInContextMenu.tr()),
-            value: _quickActionEnabled,
-            onChanged: !_quickActionStateLoaded
-                ? null
-                : (value) {
-                    setState(() {
-                      _quickActionEnabled = value;
-                    });
-                  },
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SwitchListTile(
+                contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: ThemeUtils.defaultPadding),
+                title: Text(LocaleKeys.seriesEdit_seriesSettings_quickActions_label_showAddValueInAppContextMenu.tr()),
+                value: _quickActionEnabled,
+                onChanged: !_quickActionStateLoaded
+                    ? null
+                    : (value) {
+                        setState(() {
+                          _quickActionEnabled = value;
+                        });
+                      },
+              ),
+            ],
           ),
         ),
       ],

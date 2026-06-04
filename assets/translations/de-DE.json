@@ -594,7 +594,7 @@
       "quickActions": {
         "title": "QuickActions",
         "label": {
-          "enableInContextMenu": "Im Kontextmenue aktivieren"
+          "showAddValueInAppContextMenu": "Zeige 'Wert hinzufügen' im App-Icon-Menü:"
         }
       },
       "tags": {

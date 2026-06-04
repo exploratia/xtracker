@@ -594,7 +594,7 @@
       "quickActions": {
         "title": "QuickActions",
         "label": {
-          "enableInContextMenu": "Enable in app icon menu"
+          "showAddValueInAppContextMenu": "Show 'add value' in app icon menu:"
         }
       },
       "tags": {
