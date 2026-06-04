@@ -100,10 +100,7 @@ class DailyLifeSeriesEditTags extends StatelessWidget {
       },
       padding: const EdgeInsets.all(ThemeUtils.cardPadding),
       children: listItems,
-      onReorder: (int oldIndex, int newIndex) {
-        if (oldIndex < newIndex) {
-          newIndex -= 1;
-        }
+      onReorderItem: (int oldIndex, int newIndex) {
         if (tags.length <= oldIndex || tags.length <= newIndex) return;
 
         final item = tags.removeAt(oldIndex);

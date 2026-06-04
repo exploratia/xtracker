@@ -116,7 +116,7 @@ class _SeriesList extends StatelessWidget {
       padding: const EdgeInsets.all(ThemeUtils.cardPadding),
       children: children,
       // children: [...series.map((s) => SeriesDefRenderer(key: Key(s.uuid), managementMode: true, seriesDef: s))],
-      onReorder: (int oldIndex, int newIndex) => context.read<SeriesProvider>().reorder(oldIndex, newIndex),
+      onReorderItem: (int oldIndex, int newIndex) => context.read<SeriesProvider>().reorder(oldIndex, newIndex),
     );
   }
 }

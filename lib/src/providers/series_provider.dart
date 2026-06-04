@@ -91,9 +91,6 @@ class SeriesProvider with ChangeNotifier {
   }
 
   Future<void> reorder(int oldIndex, int newIndex) async {
-    if (oldIndex < newIndex) {
-      newIndex -= 1;
-    }
     if (_series.length <= oldIndex || _series.length <= newIndex) return;
     var seriesUuids = [..._series.map((e) => e.uuid)];
 

@@ -208,10 +208,7 @@ class SeriesItemsEdit extends StatelessWidget {
       },
       padding: const EdgeInsets.all(ThemeUtils.cardPadding),
       children: listItems,
-      onReorder: (int oldIndex, int newIndex) {
-        if (oldIndex < newIndex) {
-          newIndex -= 1;
-        }
+      onReorderItem: (int oldIndex, int newIndex) {
         if (seriesItems.length <= oldIndex || seriesItems.length <= newIndex) return;
 
         final item = seriesItems.removeAt(oldIndex);
