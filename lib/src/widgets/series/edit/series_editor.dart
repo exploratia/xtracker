@@ -8,6 +8,7 @@ import '../../../model/series/series_type.dart';
 import '../../../model/series/settings/custom/custom_tags_settings.dart';
 import '../../../model/series/settings/daily_life/daily_life_tags_settings.dart';
 import '../../../providers/series_provider.dart';
+import '../../../util/app_icon_quick_actions.dart';
 import '../../../util/dialogs.dart';
 import '../../../util/logging/flutter_simple_logging.dart';
 import '../../../util/theme_utils.dart';
@@ -49,6 +50,8 @@ class _SeriesEditorState extends State<SeriesEditor> {
   // auto validate after first call of save
   bool _autoValidate = false;
   bool _isValid = false;
+  bool _quickActionEnabled = false;
+  bool _quickActionStateLoaded = false;
 
   @override
   void initState() {
@@ -61,6 +64,7 @@ class _SeriesEditorState extends State<SeriesEditor> {
 
     _dailyLifeTagsSettings = (seriesType != SeriesType.dailyLife) ? null : _seriesDef.dailyLifeTagsSettingsEditable(_updateState);
     _customTagsSettings = ([SeriesType.custom, SeriesType.monthly].contains(seriesType)) ? _seriesDef.customTagsSettingsEditable(_updateState) : null;
+    _loadQuickActionState();
 
     if (widget.goBack == null) {
       _isValid = true;
@@ -83,6 +87,15 @@ class _SeriesEditorState extends State<SeriesEditor> {
 
   void _updateState() {
     setState(() {});
+  }
+
+  Future<void> _loadQuickActionState() async {
+    var quickActionEnabled = await AppIconQuickActions.isSeriesQuickActionEnabled(_seriesDef.uuid);
+    if (!mounted) return;
+    setState(() {
+      _quickActionEnabled = quickActionEnabled;
+      _quickActionStateLoaded = true;
+    });
   }
 
   void _validate() {
@@ -108,6 +121,8 @@ class _SeriesEditorState extends State<SeriesEditor> {
     try {
       var seriesProvider = context.read<SeriesProvider>();
       await seriesProvider.save(_seriesDef);
+      await AppIconQuickActions.setSeriesQuickActionEnabled(_seriesDef.uuid, _quickActionEnabled);
+      await AppIconQuickActions.refreshSeriesShortcutItems(seriesProvider.series);
       if (mounted) Dialogs.showSnackBar(LocaleKeys.commons_snackbar_saveSuccess.tr(), context);
     } catch (err) {
       SimpleLogging.w('Failed to store series.', error: err);
@@ -246,6 +261,24 @@ class _SeriesEditorState extends State<SeriesEditor> {
 
         // only show DisplaySettings if there is something for that series type
         if (SeriesEditDisplaySettings.applicableOn(_seriesDef)) SeriesEditDisplaySettings(_seriesDef, _updateState),
+
+        Expandable(
+          initialExpanded: false,
+          icon: Icon(Icons.touch_app_outlined, size: ThemeUtils.iconSizeScaled),
+          title: 'QuickActions',
+          child: SwitchListTile(
+            contentPadding: EdgeInsets.zero,
+            title: const Text('Im Kontextmenue aktivieren'),
+            value: _quickActionEnabled,
+            onChanged: !_quickActionStateLoaded
+                ? null
+                : (value) {
+                    setState(() {
+                      _quickActionEnabled = value;
+                    });
+                  },
+          ),
+        ),
       ],
     );
 

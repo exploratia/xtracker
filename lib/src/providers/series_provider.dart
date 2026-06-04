@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../model/series/series_def.dart';
 import '../store/stores.dart';
+import '../util/app_icon_quick_actions.dart';
 import 'series_providers.dart';
 
 class SeriesProvider with ChangeNotifier {
@@ -51,6 +52,8 @@ class SeriesProvider with ChangeNotifier {
     List<String> orderedSeriesUuids = await _storeMain.loadSeriesOrder();
 
     _sortSeries(orderedSeriesUuids);
+    var enabledSeriesQuickActions = await AppIconQuickActions.cleanUpOrphanedSeriesQuickActions(_series.map((e) => e.uuid));
+    await AppIconQuickActions.refreshSeriesShortcutItems(_series, enabledSeriesIds: enabledSeriesQuickActions);
 
     _seriesLoaded = true;
     notifyListeners();

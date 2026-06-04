@@ -19,6 +19,22 @@ class SeriesActions extends StatelessWidget {
 
   final SeriesDef seriesDef;
 
+  static Future<void> triggerValueAction(BuildContext context, SeriesDef seriesDef) async {
+    switch (seriesDef.seriesType) {
+      case SeriesType.dailyCheck:
+        var seriesCurrentValueProvider = context.read<SeriesCurrentValueProvider>();
+        await context.read<SeriesDataProvider>().addValue(seriesDef, DailyCheckValue(const Uuid().v4(), DateTime.now()), seriesCurrentValueProvider);
+      case SeriesType.habit:
+        var seriesCurrentValueProvider = context.read<SeriesCurrentValueProvider>();
+        await context.read<SeriesDataProvider>().addValue(seriesDef, HabitValue(const Uuid().v4(), DateTime.now()), seriesCurrentValueProvider);
+      case SeriesType.bloodPressure:
+      case SeriesType.dailyLife:
+      case SeriesType.custom:
+      case SeriesType.monthly:
+        await SeriesData.showSeriesDataInputDlg(context, seriesDef);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget valueBtn = switch (seriesDef.seriesType) {
@@ -75,7 +91,7 @@ class _ShowSeriesDataInputDlgBtn extends StatelessWidget {
     return IconButton(
       iconSize: ThemeUtils.iconSizeScaled,
       tooltip: LocaleKeys.seriesDefRenderer_action_addValue_tooltip.tr(),
-      onPressed: () => SeriesData.showSeriesDataInputDlg(context, seriesDef),
+      onPressed: () => SeriesActions.triggerValueAction(context, seriesDef),
       icon: const Icon(Icons.add),
     );
   }
@@ -93,10 +109,7 @@ class _DailyCheckBtn extends StatelessWidget {
     return IconButton(
       iconSize: ThemeUtils.iconSizeScaled,
       tooltip: LocaleKeys.seriesDefRenderer_action_addValue_tooltip.tr(),
-      onPressed: () {
-        var seriesCurrentValueProvider = context.read<SeriesCurrentValueProvider>();
-        context.read<SeriesDataProvider>().addValue(seriesDef, DailyCheckValue(const Uuid().v4(), DateTime.now()), seriesCurrentValueProvider);
-      },
+      onPressed: () => SeriesActions.triggerValueAction(context, seriesDef),
       icon: const Icon(Icons.check_outlined),
     );
   }
@@ -114,10 +127,7 @@ class _HabitBtn extends StatelessWidget {
     return IconButton(
       iconSize: ThemeUtils.iconSizeScaled,
       tooltip: LocaleKeys.seriesDefRenderer_action_addValue_tooltip.tr(),
-      onPressed: () {
-        var seriesCurrentValueProvider = context.read<SeriesCurrentValueProvider>();
-        context.read<SeriesDataProvider>().addValue(seriesDef, HabitValue(const Uuid().v4(), DateTime.now()), seriesCurrentValueProvider);
-      },
+      onPressed: () => SeriesActions.triggerValueAction(context, seriesDef),
       icon: Icon(seriesDef.iconData()),
     );
   }
