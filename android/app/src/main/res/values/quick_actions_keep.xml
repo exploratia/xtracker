@@ -1,3 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools"
-    tools:keep="@drawable/qa_open_url,@drawable/qa_series_add_00,@drawable/qa_series_add_01,@drawable/qa_series_add_02,@drawable/qa_series_add_03,@drawable/qa_series_add_04,@drawable/qa_series_add_05,@drawable/qa_series_add_06,@drawable/qa_series_add_07,@drawable/qa_series_add_08,@drawable/qa_series_add_09,@drawable/qa_series_add_10,@drawable/qa_series_add_11" />
+    tools:keep="@drawable/qa_open_url,@drawable/qa_series_add_*">
+    <bool name="quick_actions_keep_marker">true</bool>
+</resources>
