@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../model/changelog/change_log_entry.dart';
 import '../../../util/app_info.dart';
+import '../../../util/app_icon_quick_actions.dart';
 import '../../../util/navigation/hide_navigation_labels.dart';
 import 'settings_service.dart';
 
@@ -50,6 +51,10 @@ class SettingsController with ChangeNotifier {
 
   bool get showWallpaper => !_hideWallpaper;
 
+  bool _hideExploratiaQuickActionUrl = false;
+
+  bool get hideExploratiaQuickActionUrl => _hideExploratiaQuickActionUrl;
+
   DateTime? _seriesExportDate;
 
   DateTime? get seriesExportDate => _seriesExportDate;
@@ -85,6 +90,7 @@ class SettingsController with ChangeNotifier {
     _hideNavigationLabels = await _settingsService.hideNavigationLabels();
     HideNavigationLabels.setVisible(!_hideNavigationLabels);
     _hideWallpaper = await _settingsService.hideWallpaper();
+    _hideExploratiaQuickActionUrl = await _settingsService.hideExploratiaQuickActionUrl();
     _seriesExportDate = await _settingsService.seriesExportDate();
     _seriesExportDisableReminder = await _settingsService.seriesExportDisableReminder();
     _seriesExportReminderDate = await _settingsService.seriesExportReminderDate();
@@ -170,6 +176,14 @@ class SettingsController with ChangeNotifier {
     _hideWallpaper = value;
     notifyListeners();
     await _settingsService.updateHideWallpaper(value);
+  }
+
+  Future<void> updateHideExploratiaQuickActionUrl(bool value) async {
+    if (value == _hideExploratiaQuickActionUrl) return;
+    _hideExploratiaQuickActionUrl = value;
+    notifyListeners();
+    await _settingsService.updateHideExploratiaQuickActionUrl(value);
+    await AppIconQuickActions.refreshShortcutItemsFromCache();
   }
 
   /// Update and persist

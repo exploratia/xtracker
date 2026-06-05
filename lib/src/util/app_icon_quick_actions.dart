@@ -35,6 +35,7 @@ class AppIconQuickActions {
   static const _quickActions = QuickActions();
   static String? _pendingSeriesQuickActionSeriesId;
   static String? _lastShortcutItemsSignature;
+  static List<SeriesDef> _lastKnownSeries = const [];
   static final _seriesQuickActionPaletteHues = _seriesQuickActionPaletteStartHexRgb.map((hexRgb) => HSVColor.fromColor(_rgbToColor(hexRgb)).hue).toList();
 
   static Future<void> init() async {
@@ -123,7 +124,9 @@ class AppIconQuickActions {
     }
 
     try {
+      _lastKnownSeries = List<SeriesDef>.unmodifiable(series);
       var config = await _readSeriesQuickActionsConfig();
+      var hideExploratiaQuickActionUrl = await DeviceStorage.readBool(DeviceStorageKeys.quickActionsHideExploratiaUrl);
       if (enabledSeriesIds != null && !setEquals(config.enabledSeriesIds, enabledSeriesIds)) {
         var iconIndexBySeriesId = {...config.iconIndexBySeriesId};
         iconIndexBySeriesId.removeWhere((seriesUuid, _) => !enabledSeriesIds.contains(seriesUuid));
@@ -133,7 +136,7 @@ class AppIconQuickActions {
         config = config.copyWith(entries: _entriesFromIconIndexBySeriesId(iconIndexBySeriesId));
       }
 
-      var buildResult = _buildShortcutItems(series, config);
+      var buildResult = _buildShortcutItems(series, config, hideExploratiaQuickActionUrl: hideExploratiaQuickActionUrl);
       var shortcutItems = buildResult.shortcutItems;
       if (!config.equals(buildResult.updatedConfig)) {
         await _storeSeriesQuickActionsConfig(buildResult.updatedConfig);
@@ -150,6 +153,16 @@ class AppIconQuickActions {
     }
   }
 
+  static Future<void> refreshShortcutItemsFromCache() async {
+    if (_lastKnownSeries.isEmpty) {
+      var config = await _readSeriesQuickActionsConfig();
+      if (config.entries.isNotEmpty) {
+        return;
+      }
+    }
+    await refreshSeriesShortcutItems(_lastKnownSeries);
+  }
+
   static Future<_SeriesQuickActionsConfig> _readSeriesQuickActionsConfig() async {
     var rawValue = await DeviceStorage.read(DeviceStorageKeys.seriesQuickActions);
     return _SeriesQuickActionsConfig.fromStorageString(rawValue);
@@ -163,7 +176,11 @@ class AppIconQuickActions {
     await DeviceStorage.write(DeviceStorageKeys.seriesQuickActions, config.toStorageString());
   }
 
-  static _ShortcutItemsBuildResult _buildShortcutItems(List<SeriesDef> series, _SeriesQuickActionsConfig config) {
+  static _ShortcutItemsBuildResult _buildShortcutItems(
+    List<SeriesDef> series,
+    _SeriesQuickActionsConfig config, {
+    required bool hideExploratiaQuickActionUrl,
+  }) {
     var isAndroid = defaultTargetPlatform == TargetPlatform.android;
     var useAndroidIcon = isAndroid;
     var enabledSeriesIds = config.enabledSeriesIds;
@@ -180,7 +197,7 @@ class AppIconQuickActions {
     iconIndexBySeriesId.removeWhere((seriesUuid, _) => !enabledSeriesIds.contains(seriesUuid));
 
     var shortcutItems = <ShortcutItem>[];
-    var showOpenLinkQuickAction = !isAndroid || enabledSeriesIds.length < _maxQuickActionCountOnAndroid;
+    var showOpenLinkQuickAction = !hideExploratiaQuickActionUrl && (!isAndroid || enabledSeriesIds.length < _maxQuickActionCountOnAndroid);
     if (showOpenLinkQuickAction) {
       shortcutItems.add(
         ShortcutItem(

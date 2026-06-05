@@ -912,6 +912,7 @@
       "label": {
         "hideNavigationLabels": "Hide navigation labels (menu & bottom navigation):",
         "hideWallpaper": "Hide wallpaper:",
+        "hideExploratiaQuickActionUrl": "Hide exploratia URL in app icon menu:",
         "seriesExportDisableReminder": "Disable series export reminder (30 days after last export):",
         "lang": "Language:",
         "theme": "Theme:"

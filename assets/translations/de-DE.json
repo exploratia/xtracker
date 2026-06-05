@@ -912,6 +912,7 @@
       "label": {
         "hideNavigationLabels": "Navigationslabels ausblenden (Menü & Navigationsleiste):",
         "hideWallpaper": "Hintergrundbild ausblenden:",
+        "hideExploratiaQuickActionUrl": "Exploratia-URL im App-Icon-Menü ausblenden:",
         "seriesExportDisableReminder": "Erinnerung für Messreihenexport deaktivieren (30 Tage nach letztem Export):",
         "lang": "Sprache:",
         "theme": "Theme:"

@@ -12,4 +12,5 @@ class DeviceStorageKeys {
   static const seriesExportReminderDate = 'seriesExportReminderDate';
   static const appSupportReminderDate = 'appSupportReminderDate';
   static const seriesQuickActions = 'seriesQuickActions';
+  static const quickActionsHideExploratiaUrl = 'quickActionsHideUrl';
 }
