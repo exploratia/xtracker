@@ -6,7 +6,9 @@ import 'package:xtracker/src/model/series/data/blood_pressure/blood_pressure_val
 import 'package:xtracker/src/model/series/data/series_data.dart';
 import 'package:xtracker/src/model/series/series_def.dart';
 import 'package:xtracker/src/model/series/series_type.dart';
+import 'package:xtracker/src/store/migration/db_migration.dart';
 import 'package:xtracker/src/util/color_utils.dart';
+import 'package:xtracker/src/util/ex.dart';
 import 'package:xtracker/src/util/json_reader.dart';
 
 void main() {
@@ -15,8 +17,11 @@ void main() {
       var seriesDefUUId = const Uuid().v4().toString();
       var currentValueUUId = const Uuid().v4().toString();
       var dateTime = DateTime.now();
-      SeriesCurrentValue currentValue =
-          SeriesCurrentValue(seriesDefUUId, SeriesType.bloodPressure, BloodPressureValue(currentValueUUId, dateTime, 121, 81, true));
+      SeriesCurrentValue currentValue = SeriesCurrentValue(
+        seriesDefUUId,
+        SeriesType.bloodPressure,
+        BloodPressureValue(currentValueUUId, dateTime, 121, 81, true),
+      );
       var serialized = currentValue.toJson();
       var deserialized = SeriesCurrentValue.fromJson(JsonReader(serialized));
 
@@ -37,8 +42,14 @@ void main() {
   group('SeriesDef', () {
     test('test serialize deserialize', () {
       var seriesDefUUId = const Uuid().v4().toString();
-      SeriesDef seriesDef =
-          SeriesDef(uuid: seriesDefUUId, seriesType: SeriesType.bloodPressure, seriesItems: [], color: Colors.red, iconName: "icoName", name: "SeriesName");
+      SeriesDef seriesDef = SeriesDef(
+        uuid: seriesDefUUId,
+        seriesType: SeriesType.bloodPressure,
+        seriesItems: [],
+        color: Colors.red,
+        iconName: "icoName",
+        name: "SeriesName",
+      );
       var serialized = seriesDef.toJson();
       var deserialized = SeriesDef.fromJson(JsonReader(serialized));
 
@@ -48,6 +59,34 @@ void main() {
       expect(ColorUtils.toHex(Colors.red), ColorUtils.toHex(deserialized.color));
       expect("icoName", deserialized.iconName);
       expect("SeriesName", deserialized.name);
+    });
+
+    test('rejects newer json version', () {
+      var serialized = SeriesDef(
+        uuid: const Uuid().v4().toString(),
+        seriesType: SeriesType.bloodPressure,
+        seriesItems: [],
+      ).toJson();
+      serialized['version'] = DbMigration.latestVersion + 1;
+
+      expect(
+        () => SeriesDef.fromJson(JsonReader(serialized)),
+        throwsA(isA<Ex>()),
+      );
+    });
+
+    test('accepts legacy json without version and type', () {
+      var serialized = SeriesDef(
+        uuid: const Uuid().v4().toString(),
+        seriesType: SeriesType.bloodPressure,
+        seriesItems: [],
+      ).toJson();
+      serialized.remove('version');
+      serialized.remove('type');
+
+      var deserialized = SeriesDef.fromJson(JsonReader(serialized));
+
+      expect(SeriesType.bloodPressure, deserialized.seriesType);
     });
   });
 
@@ -69,6 +108,28 @@ void main() {
       expect(121, deserializedBloodPressureValue.high);
       expect(81, deserializedBloodPressureValue.low);
       expect(true, deserializedBloodPressureValue.medication);
+    });
+
+    test('rejects newer json version', () {
+      var seriesData = SeriesData<BloodPressureValue>(const Uuid().v4().toString(), []);
+      var serialized = seriesData.toJson();
+      serialized['version'] = DbMigration.latestVersion + 1;
+
+      expect(
+        () => SeriesData.fromJsonBloodPressureData(JsonReader(serialized)),
+        throwsA(isA<Ex>()),
+      );
+    });
+
+    test('accepts legacy json without version', () {
+      var seriesDefUuid = const Uuid().v4().toString();
+      var seriesData = SeriesData<BloodPressureValue>(seriesDefUuid, []);
+      var serialized = seriesData.toJson();
+      serialized.remove('version');
+
+      var deserialized = SeriesData.fromJsonBloodPressureData(JsonReader(serialized));
+
+      expect(seriesDefUuid, deserialized.seriesDefUuid);
     });
   });
 }

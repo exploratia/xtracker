@@ -844,6 +844,7 @@
       "alert": {
         "unexpectedDataStructure": "Unexpected file content (file: '{}').",
         "unexpectedFile": "Unsupported file format (file: '{}').",
+        "unsupportedVersion": "The file '{}' was created with a newer data version ({}). This app only supports data up to version {}.",
         "import": {
           "title": "Import failed"
         }

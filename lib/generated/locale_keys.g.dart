@@ -366,6 +366,7 @@ abstract class LocaleKeys {
   static const seriesManagement_importExport_snackbar_importSuccessfulXofY = 'seriesManagement.importExport.snackbar.importSuccessfulXofY';
   static const seriesManagement_importExport_alert_unexpectedDataStructure = 'seriesManagement.importExport.alert.unexpectedDataStructure';
   static const seriesManagement_importExport_alert_unexpectedFile = 'seriesManagement.importExport.alert.unexpectedFile';
+  static const seriesManagement_importExport_alert_unsupportedVersion = 'seriesManagement.importExport.alert.unsupportedVersion';
   static const seriesManagement_importExport_alert_import_title = 'seriesManagement.importExport.alert.import.title';
   static const seriesManagement_importExport_validation_dailyLife_emptyTags = 'seriesManagement.importExport.validation.dailyLife.emptyTags';
   static const seriesValue_action_deleteValue_tooltip = 'seriesValue.action.deleteValue.tooltip';

@@ -7,6 +7,7 @@ import '../../store/migration/db_migration.dart';
 import '../../util/color_utils.dart';
 import '../../util/ex.dart';
 import '../../util/json_reader.dart';
+import '../../util/json_version.dart';
 import '../../widgets/controls/navigation/hide_bottom_navigation_bar.dart';
 import '../../widgets/controls/select/icon_map.dart';
 import '../../widgets/series/edit/series_edit.dart';
@@ -120,6 +121,8 @@ class SeriesDef {
   }
 
   factory SeriesDef.fromJson(JsonReader json, {bool ignoreValidation = false}) {
+    JsonVersion.validateNotNewer(json, 'seriesDef');
+
     SeriesType seriesType;
     var jType = json.asReader('seriesType');
     try {
