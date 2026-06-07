@@ -121,7 +121,7 @@ class SeriesDef {
   }
 
   factory SeriesDef.fromJson(JsonReader json, {bool ignoreValidation = false}) {
-    JsonVersion.validateNotNewer(json, 'seriesDef');
+    JsonVersion.validateNotNewer(json, 'seriesDef', validateType: false);
 
     SeriesType seriesType;
     var jType = json.asReader('seriesType');
@@ -157,8 +157,6 @@ class SeriesDef {
     'color': ColorUtils.toHex(color),
     'iconName': iconName,
     'settings': _settings,
-    // type & version - could be used for parsing
-    'type': 'seriesDef',
     'version': DbMigration.latestVersion,
   };
 

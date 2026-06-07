@@ -53,6 +53,7 @@ void main() {
       var serialized = seriesDef.toJson();
       var deserialized = SeriesDef.fromJson(JsonReader(serialized));
 
+      expect(false, serialized.containsKey('type'));
       expect(SeriesType.bloodPressure, deserialized.seriesType);
       expect(seriesDefUUId, deserialized.uuid);
       expect(true, deserialized.seriesItems.isEmpty);
@@ -75,14 +76,13 @@ void main() {
       );
     });
 
-    test('accepts legacy json without version and type', () {
+    test('accepts legacy json without version', () {
       var serialized = SeriesDef(
         uuid: const Uuid().v4().toString(),
         seriesType: SeriesType.bloodPressure,
         seriesItems: [],
       ).toJson();
       serialized.remove('version');
-      serialized.remove('type');
 
       var deserialized = SeriesDef.fromJson(JsonReader(serialized));
 
