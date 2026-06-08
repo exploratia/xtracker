@@ -73,46 +73,27 @@ class AppIconQuickActions {
     return _pendingSeriesQuickActionSeriesId;
   }
 
-  static Future<Set<String>> readEnabledSeriesQuickActions() async {
-    return (await _readSeriesQuickActionsConfig()).enabledSeriesIds;
+  static Future<Set<String>> readEnabledSeriesQuickActions(List<SeriesDef> series) async {
+    return _enabledSeriesIds(series);
   }
 
-  static Future<bool> isSeriesQuickActionEnabled(String seriesUuid) async {
-    return (await readEnabledSeriesQuickActions()).contains(seriesUuid);
+  static Future<bool> isSeriesQuickActionEnabled(SeriesDef seriesDef) async {
+    return seriesDef.quickActionsSettingsReadonly().showAddValueInAppContextMenu;
   }
 
-  static Future<bool> setSeriesQuickActionEnabled(String seriesUuid, bool enabled) async {
-    var config = await _readSeriesQuickActionsConfig();
-    var iconIndexBySeriesId = {...config.iconIndexBySeriesId};
-    var wasEnabled = iconIndexBySeriesId.containsKey(seriesUuid);
+  static Future<bool> setSeriesQuickActionEnabled(SeriesDef seriesDef, bool enabled) async {
+    var quickActionsSettings = seriesDef.quickActionsSettingsEditable(() {});
+    var wasEnabled = quickActionsSettings.showAddValueInAppContextMenu;
     if (wasEnabled == enabled) {
       return false;
     }
 
-    if (enabled) {
-      iconIndexBySeriesId[seriesUuid] = iconIndexBySeriesId[seriesUuid] ?? 0;
-    } else {
-      iconIndexBySeriesId.remove(seriesUuid);
-    }
-    await _storeSeriesQuickActionsConfig(config.copyWith(entries: _entriesFromIconIndexBySeriesId(iconIndexBySeriesId)));
+    quickActionsSettings.showAddValueInAppContextMenu = enabled;
     return true;
   }
 
-  static Future<Set<String>> cleanUpOrphanedSeriesQuickActions(Iterable<String> validSeriesUuids) async {
-    var config = await _readSeriesQuickActionsConfig();
-    var validSeriesUuidSet = validSeriesUuids.toSet();
-    var filteredIconIndexBySeriesId = <String, int>{};
-    for (var entry in config.iconIndexBySeriesId.entries) {
-      if (validSeriesUuidSet.contains(entry.key)) {
-        filteredIconIndexBySeriesId[entry.key] = entry.value;
-      }
-    }
-
-    var filteredConfig = config.copyWith(entries: _entriesFromIconIndexBySeriesId(filteredIconIndexBySeriesId));
-    if (!config.equals(filteredConfig)) {
-      await _storeSeriesQuickActionsConfig(filteredConfig);
-    }
-    return filteredIconIndexBySeriesId.keys.toSet();
+  static Future<Set<String>> cleanUpOrphanedSeriesQuickActions(List<SeriesDef> series) async {
+    return _enabledSeriesIds(series);
   }
 
   static Future<void> refreshSeriesShortcutItems(
@@ -125,22 +106,12 @@ class AppIconQuickActions {
 
     try {
       _lastKnownSeries = List<SeriesDef>.unmodifiable(series);
-      var config = await _readSeriesQuickActionsConfig();
       var hideExploratiaQuickActionUrl = await DeviceStorage.readBool(DeviceStorageKeys.quickActionsHideExploratiaUrl);
-      if (enabledSeriesIds != null && !setEquals(config.enabledSeriesIds, enabledSeriesIds)) {
-        var iconIndexBySeriesId = {...config.iconIndexBySeriesId};
-        iconIndexBySeriesId.removeWhere((seriesUuid, _) => !enabledSeriesIds.contains(seriesUuid));
-        for (var seriesUuid in enabledSeriesIds) {
-          iconIndexBySeriesId[seriesUuid] = iconIndexBySeriesId[seriesUuid] ?? 0;
-        }
-        config = config.copyWith(entries: _entriesFromIconIndexBySeriesId(iconIndexBySeriesId));
-      }
-
-      var buildResult = _buildShortcutItems(series, config, hideExploratiaQuickActionUrl: hideExploratiaQuickActionUrl);
-      var shortcutItems = buildResult.shortcutItems;
-      if (!config.equals(buildResult.updatedConfig)) {
-        await _storeSeriesQuickActionsConfig(buildResult.updatedConfig);
-      }
+      var shortcutItems = _buildShortcutItems(
+        series,
+        enabledSeriesIds ?? _enabledSeriesIds(series),
+        hideExploratiaQuickActionUrl: hideExploratiaQuickActionUrl,
+      );
 
       var shortcutItemsSignature = _buildShortcutItemsSignature(shortcutItems);
       if (_lastShortcutItemsSignature == shortcutItemsSignature) {
@@ -154,48 +125,20 @@ class AppIconQuickActions {
   }
 
   static Future<void> refreshShortcutItemsFromCache() async {
-    if (_lastKnownSeries.isEmpty) {
-      var config = await _readSeriesQuickActionsConfig();
-      if (config.entries.isNotEmpty) {
-        return;
-      }
-    }
     await refreshSeriesShortcutItems(_lastKnownSeries);
   }
 
-  static Future<_SeriesQuickActionsConfig> _readSeriesQuickActionsConfig() async {
-    var rawValue = await DeviceStorage.read(DeviceStorageKeys.seriesQuickActions);
-    return _SeriesQuickActionsConfig.fromStorageString(rawValue);
+  static Set<String> _enabledSeriesIds(List<SeriesDef> series) {
+    return series.where((seriesDef) => seriesDef.quickActionsSettingsReadonly().showAddValueInAppContextMenu).map((seriesDef) => seriesDef.uuid).toSet();
   }
 
-  static Future<void> _storeSeriesQuickActionsConfig(_SeriesQuickActionsConfig config) async {
-    if (config.entries.isEmpty) {
-      await DeviceStorage.delete(DeviceStorageKeys.seriesQuickActions);
-      return;
-    }
-    await DeviceStorage.write(DeviceStorageKeys.seriesQuickActions, config.toStorageString());
-  }
-
-  static _ShortcutItemsBuildResult _buildShortcutItems(
+  static List<ShortcutItem> _buildShortcutItems(
     List<SeriesDef> series,
-    _SeriesQuickActionsConfig config, {
+    Set<String> enabledSeriesIds, {
     required bool hideExploratiaQuickActionUrl,
   }) {
     var isAndroid = defaultTargetPlatform == TargetPlatform.android;
     var useAndroidIcon = isAndroid;
-    var enabledSeriesIds = config.enabledSeriesIds;
-    var iconIndexBySeriesId = {...config.iconIndexBySeriesId};
-    var enabledSeriesByUuid = {for (var s in series) s.uuid: s};
-
-    for (var seriesUuid in enabledSeriesIds) {
-      var seriesDef = enabledSeriesByUuid[seriesUuid];
-      if (seriesDef == null) {
-        continue;
-      }
-      iconIndexBySeriesId[seriesUuid] = _determineClosestSeriesQuickActionIconIndex(seriesDef.color);
-    }
-    iconIndexBySeriesId.removeWhere((seriesUuid, _) => !enabledSeriesIds.contains(seriesUuid));
-
     var shortcutItems = <ShortcutItem>[];
     var showOpenLinkQuickAction = !hideExploratiaQuickActionUrl && (!isAndroid || enabledSeriesIds.length < _maxQuickActionCountOnAndroid);
     if (showOpenLinkQuickAction) {
@@ -210,7 +153,7 @@ class AppIconQuickActions {
 
     var enabledSeries = series.where((s) => enabledSeriesIds.contains(s.uuid));
     for (var seriesDef in enabledSeries) {
-      var iconIndex = iconIndexBySeriesId[seriesDef.uuid] ?? 0;
+      var iconIndex = _determineClosestSeriesQuickActionIconIndex(seriesDef.color);
       shortcutItems.add(
         ShortcutItem(
           type: '$_actionSeriesAddPrefix${seriesDef.uuid}',
@@ -220,15 +163,7 @@ class AppIconQuickActions {
       );
     }
 
-    return _ShortcutItemsBuildResult(
-      shortcutItems,
-      config.copyWith(entries: _entriesFromIconIndexBySeriesId(iconIndexBySeriesId)),
-    );
-  }
-
-  static List<_SeriesQuickActionEntry> _entriesFromIconIndexBySeriesId(Map<String, int> iconIndexBySeriesId) {
-    var sortedSeriesIds = iconIndexBySeriesId.keys.toList()..sort();
-    return sortedSeriesIds.map((seriesId) => _SeriesQuickActionEntry(id: seriesId, iconIndex: iconIndexBySeriesId[seriesId]!)).toList();
+    return shortcutItems;
   }
 
   static int _determineClosestSeriesQuickActionIconIndex(Color color) {
@@ -287,118 +222,5 @@ class AppIconQuickActions {
     }
     final platform = defaultTargetPlatform;
     return platform == TargetPlatform.android || platform == TargetPlatform.iOS;
-  }
-}
-
-class _ShortcutItemsBuildResult {
-  final List<ShortcutItem> shortcutItems;
-  final _SeriesQuickActionsConfig updatedConfig;
-
-  _ShortcutItemsBuildResult(this.shortcutItems, this.updatedConfig);
-}
-
-class _SeriesQuickActionsConfig {
-  static const storageVersion = 1;
-  final int version;
-  final List<_SeriesQuickActionEntry> entries;
-
-  _SeriesQuickActionsConfig({
-    required this.version,
-    required this.entries,
-  });
-
-  factory _SeriesQuickActionsConfig.fromStorageString(String? rawValue) {
-    if (rawValue == null || rawValue.trim().isEmpty) {
-      return _SeriesQuickActionsConfig(version: storageVersion, entries: const []);
-    }
-
-    try {
-      var parsed = jsonDecode(rawValue);
-      if (parsed is Map<String, dynamic>) {
-        var parsedVersion = parsed['version'];
-        var version = parsedVersion is int ? parsedVersion : storageVersion;
-        var parsedEntries = <_SeriesQuickActionEntry>[];
-        var seriesRaw = parsed['series'];
-        if (seriesRaw is List) {
-          for (var item in seriesRaw) {
-            if (item is! Map) {
-              continue;
-            }
-            var rawId = item['id'];
-            var rawIconIndex = item['iconIndex'];
-            if (rawId is! String || rawIconIndex is! int) {
-              continue;
-            }
-            var trimmedId = rawId.trim();
-            if (trimmedId.isEmpty) {
-              continue;
-            }
-            parsedEntries.add(_SeriesQuickActionEntry(id: trimmedId, iconIndex: rawIconIndex));
-          }
-        }
-
-        return _SeriesQuickActionsConfig(version: version, entries: parsedEntries);
-      }
-    } catch (err) {
-      SimpleLogging.w('Could not parse series quick actions config from storage', error: err);
-    }
-
-    return _SeriesQuickActionsConfig(version: storageVersion, entries: const []);
-  }
-
-  Set<String> get enabledSeriesIds => entries.map((entry) => entry.id).toSet();
-
-  Map<String, int> get iconIndexBySeriesId => {for (var entry in entries) entry.id: entry.iconIndex};
-
-  _SeriesQuickActionsConfig copyWith({int? version, List<_SeriesQuickActionEntry>? entries}) {
-    return _SeriesQuickActionsConfig(
-      version: version ?? this.version,
-      entries: entries ?? this.entries,
-    );
-  }
-
-  bool equals(_SeriesQuickActionsConfig other) {
-    if (version != other.version) {
-      return false;
-    }
-    if (entries.length != other.entries.length) {
-      return false;
-    }
-    for (var idx = 0; idx < entries.length; idx++) {
-      if (!entries[idx].equals(other.entries[idx])) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  String toStorageString() {
-    var sortedEntries = [...entries]..sort((left, right) => left.id.compareTo(right.id));
-
-    return jsonEncode({
-      'version': version,
-      'series': sortedEntries.map((entry) => entry.toJson()).toList(),
-    });
-  }
-}
-
-class _SeriesQuickActionEntry {
-  final String id;
-  final int iconIndex;
-
-  const _SeriesQuickActionEntry({
-    required this.id,
-    required this.iconIndex,
-  });
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'iconIndex': iconIndex,
-    };
-  }
-
-  bool equals(_SeriesQuickActionEntry other) {
-    return id == other.id && iconIndex == other.iconIndex;
   }
 }

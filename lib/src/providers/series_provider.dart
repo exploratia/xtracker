@@ -52,7 +52,7 @@ class SeriesProvider with ChangeNotifier {
     List<String> orderedSeriesUuids = await _storeMain.loadSeriesOrder();
 
     _sortSeries(orderedSeriesUuids);
-    var enabledSeriesQuickActions = await AppIconQuickActions.cleanUpOrphanedSeriesQuickActions(_series.map((e) => e.uuid));
+    var enabledSeriesQuickActions = await AppIconQuickActions.cleanUpOrphanedSeriesQuickActions(_series);
     await AppIconQuickActions.refreshSeriesShortcutItems(_series, enabledSeriesIds: enabledSeriesQuickActions);
 
     _seriesLoaded = true;

@@ -20,6 +20,7 @@ import 'settings/custom/custom_settings.dart';
 import 'settings/custom/custom_tags_settings.dart';
 import 'settings/daily_life/daily_life_tags_settings.dart';
 import 'settings/display_settings.dart';
+import 'settings/quick_actions_settings.dart';
 import 'view_type.dart';
 
 class SeriesDef {
@@ -73,6 +74,12 @@ class SeriesDef {
 
   /// return DisplaySettings read only mode
   DisplaySettings displaySettingsReadonly() => DisplaySettings(_settings, null);
+
+  /// return QuickActionsSettings in edit mode (setters active)
+  QuickActionsSettings quickActionsSettingsEditable(Function() updateStateCB) => QuickActionsSettings(_settings, updateStateCB);
+
+  /// return QuickActionsSettings read only mode
+  QuickActionsSettings quickActionsSettingsReadonly() => QuickActionsSettings(_settings, null);
 
   /// return FixColumnProfile from display settings or default for the series type (or null if the series has no fix column profile)
   ColumnProfile? get determineTableColumnProfile {

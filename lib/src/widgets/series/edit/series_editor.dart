@@ -53,7 +53,6 @@ class _SeriesEditorState extends State<SeriesEditor> {
   bool _autoValidate = false;
   bool _isValid = false;
   bool _quickActionEnabled = false;
-  bool _quickActionStateLoaded = false;
 
   @override
   void initState() {
@@ -66,7 +65,7 @@ class _SeriesEditorState extends State<SeriesEditor> {
 
     _dailyLifeTagsSettings = (seriesType != SeriesType.dailyLife) ? null : _seriesDef.dailyLifeTagsSettingsEditable(_updateState);
     _customTagsSettings = ([SeriesType.custom, SeriesType.monthly].contains(seriesType)) ? _seriesDef.customTagsSettingsEditable(_updateState) : null;
-    _loadQuickActionState();
+    _quickActionEnabled = _seriesDef.quickActionsSettingsReadonly().showAddValueInAppContextMenu;
 
     if (widget.goBack == null) {
       _isValid = true;
@@ -91,15 +90,6 @@ class _SeriesEditorState extends State<SeriesEditor> {
     setState(() {});
   }
 
-  Future<void> _loadQuickActionState() async {
-    var quickActionEnabled = await AppIconQuickActions.isSeriesQuickActionEnabled(_seriesDef.uuid);
-    if (!mounted) return;
-    setState(() {
-      _quickActionEnabled = quickActionEnabled;
-      _quickActionStateLoaded = true;
-    });
-  }
-
   void _validate() {
     if (!_autoValidate) return;
     bool valid = _formKey.currentState?.validate() ?? false;
@@ -122,8 +112,8 @@ class _SeriesEditorState extends State<SeriesEditor> {
 
     try {
       var seriesProvider = context.read<SeriesProvider>();
+      var quickActionsChanged = await AppIconQuickActions.setSeriesQuickActionEnabled(_seriesDef, _quickActionEnabled);
       await seriesProvider.save(_seriesDef);
-      var quickActionsChanged = await AppIconQuickActions.setSeriesQuickActionEnabled(_seriesDef.uuid, _quickActionEnabled);
       if (quickActionsChanged) {
         await AppIconQuickActions.refreshSeriesShortcutItems(seriesProvider.series);
         await _showQuickActionsSystemLimitInfoIfNeeded(seriesProvider.series);
@@ -146,7 +136,7 @@ class _SeriesEditorState extends State<SeriesEditor> {
       return;
     }
 
-    var enabledSeriesIds = await AppIconQuickActions.readEnabledSeriesQuickActions();
+    var enabledSeriesIds = await AppIconQuickActions.readEnabledSeriesQuickActions(allSeries);
     if (enabledSeriesIds.length <= _maxSystemQuickActions || !mounted) {
       return;
     }
@@ -313,13 +303,11 @@ class _SeriesEditorState extends State<SeriesEditor> {
                 contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: ThemeUtils.defaultPadding),
                 title: Text(LocaleKeys.seriesEdit_seriesSettings_quickActions_label_showAddValueInAppContextMenu.tr()),
                 value: _quickActionEnabled,
-                onChanged: !_quickActionStateLoaded
-                    ? null
-                    : (value) {
-                        setState(() {
-                          _quickActionEnabled = value;
-                        });
-                      },
+                onChanged: (value) {
+                  setState(() {
+                    _quickActionEnabled = value;
+                  });
+                },
               ),
             ],
           ),
