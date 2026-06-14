@@ -55,14 +55,17 @@ class AppSeriesNotifications {
 
   static Future<void> init() async {
     if (!_isSupportedPlatform()) {
+      SimpleLogging.d('Series notifications init skipped: unsupported platform.');
       return;
     }
 
     if (_initialized) {
+      SimpleLogging.d('Series notifications init skipped: already initialized.');
       return;
     }
 
     try {
+      SimpleLogging.d('Initializing series notifications ...');
       await _configureTimezone();
 
       const androidInitSettings = AndroidInitializationSettings('app_logo_notification');
@@ -77,11 +80,13 @@ class AppSeriesNotifications {
       );
 
       final launchDetails = await _notificationsPlugin.getNotificationAppLaunchDetails();
+      SimpleLogging.d('Series notification launch details loaded. launchedByNotification=${launchDetails?.didNotificationLaunchApp == true}');
       if (launchDetails?.didNotificationLaunchApp == true) {
         handleNotificationResponsePayload(launchDetails?.notificationResponse?.payload);
       }
 
       _initialized = true;
+      SimpleLogging.d('Series notifications initialized.');
       await _showDebugNotificationIfEnabled();
     } catch (err, st) {
       SimpleLogging.w('Could not initialize series notifications', error: err, stackTrace: st);
@@ -91,6 +96,7 @@ class AppSeriesNotifications {
   static String? consumePendingSeriesNotificationSeriesId() {
     var res = _pendingSeriesNotificationSeriesId;
     _pendingSeriesNotificationSeriesId = null;
+    SimpleLogging.d('Consumed pending series notification response. seriesUuid=$res');
     return res;
   }
 
@@ -108,30 +114,37 @@ class AppSeriesNotifications {
 
   static void handleNotificationResponsePayload(String? payload) {
     if (payload == null || payload.isEmpty) {
+      SimpleLogging.d('Ignored series notification response: empty payload.');
       return;
     }
     if (!payload.startsWith(_actionSeriesAddPrefix)) {
+      SimpleLogging.d('Ignored series notification response: unsupported payload "$payload".');
       return;
     }
     var seriesUuid = payload.substring(_actionSeriesAddPrefix.length);
     if (seriesUuid.trim().isEmpty) {
+      SimpleLogging.d('Ignored series notification response: missing series uuid.');
       return;
     }
     _pendingSeriesNotificationSeriesId = seriesUuid;
     _notificationResponseVersion++;
     _notificationResponseVersionNotifier.value = _notificationResponseVersion;
+    SimpleLogging.d('Handled series notification response. seriesUuid=$seriesUuid, responseVersion=$_notificationResponseVersion');
   }
 
   static Future<bool> ensurePermissionRequested() async {
     if (!_isSupportedPlatform()) {
+      SimpleLogging.d('Series notification permission request skipped: unsupported platform.');
       return false;
     }
+    SimpleLogging.d('Requesting series notification permission ...');
     await init();
 
     try {
       final androidPlugin = _notificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
       if (androidPlugin != null) {
         final allowed = await androidPlugin.requestNotificationsPermission();
+        SimpleLogging.d('Series notification permission request completed. allowed=$allowed');
         if (allowed == true) {
           await _requestExactAlarmsPermissionIfNeeded(androidPlugin);
           await _showDebugNotificationIfEnabled();
@@ -143,15 +156,19 @@ class AppSeriesNotifications {
       return false;
     }
 
+    SimpleLogging.d('Series notification permission request skipped: no Android notification plugin implementation.');
     return true;
   }
 
   static Future<void> refreshDueSeriesNotifications(List<SeriesDef> series) async {
     if (!_isSupportedPlatform()) {
+      SimpleLogging.d('Refresh due series notifications skipped: unsupported platform.');
       return;
     }
+    SimpleLogging.d('Refreshing due series notifications for ${series.length} series ...');
     await init();
     if (!_initialized) {
+      SimpleLogging.d('Refresh due series notifications skipped: notifications are not initialized.');
       return;
     }
 
@@ -165,9 +182,15 @@ class AppSeriesNotifications {
       var scheduleMode = await _androidScheduleModeForReminders();
       var now = DateTime.now();
       var nowUtc = now.toUtc();
+      SimpleLogging.d(
+        'Loaded series notification state. stored=${existingEntries.length}, enabled=${enabledSeries.length}, scheduleMode=$scheduleMode',
+      );
 
       for (var entry in existingEntries) {
         if (!validSeriesIds.contains(entry.seriesDefUuid) || !enabledSeriesIds.contains(entry.seriesDefUuid)) {
+          SimpleLogging.d(
+            'Deleting stale series notifications. seriesUuid=${entry.seriesDefUuid}, notificationIds=${entry.notificationIds}',
+          );
           await _cancelNotifications(entry.notificationIds);
           await store.delete(entry.seriesDefUuid);
         }
@@ -193,6 +216,7 @@ class AppSeriesNotifications {
           globallyUsedIds.addAll(refreshed.notificationIds);
         }
       }
+      SimpleLogging.d('Finished refreshing due series notifications.');
     } catch (err, st) {
       SimpleLogging.w('Could not refresh due series notifications', error: err, stackTrace: st);
     }
@@ -200,10 +224,13 @@ class AppSeriesNotifications {
 
   static Future<void> refreshSeriesNotification(SeriesDef seriesDef, {bool force = false}) async {
     if (!_isSupportedPlatform()) {
+      SimpleLogging.d('Refresh series notification skipped: unsupported platform. seriesUuid=${seriesDef.uuid}');
       return;
     }
+    SimpleLogging.d('Refreshing series notifications. seriesUuid=${seriesDef.uuid}, force=$force');
     await init();
     if (!_initialized) {
+      SimpleLogging.d('Refresh series notification skipped: notifications are not initialized. seriesUuid=${seriesDef.uuid}');
       return;
     }
 
@@ -223,20 +250,27 @@ class AppSeriesNotifications {
         nowUtc: now.toUtc(),
         force: force,
       );
+      SimpleLogging.d('Finished refreshing series notifications. seriesUuid=${seriesDef.uuid}');
     } catch (err, st) {
       SimpleLogging.w('Could not refresh series notifications for ${seriesDef.uuid}', error: err, stackTrace: st);
     }
   }
 
   static Future<void> deleteSeriesNotifications(String seriesUuid) async {
+    SimpleLogging.d('Deleting series notifications. seriesUuid=$seriesUuid');
     await init();
-    if (!_initialized) return;
+    if (!_initialized) {
+      SimpleLogging.d('Delete series notifications skipped: notifications are not initialized. seriesUuid=$seriesUuid');
+      return;
+    }
 
     try {
       var store = Stores.storeSeriesNotifications;
       var existing = await store.get(seriesUuid);
+      SimpleLogging.d('Loaded series notifications for delete. seriesUuid=$seriesUuid, notificationIds=${existing?.notificationIds ?? const []}');
       await _cancelNotifications(existing?.notificationIds ?? const []);
       await store.delete(seriesUuid);
+      SimpleLogging.d('Deleted series notifications. seriesUuid=$seriesUuid');
     } catch (err, st) {
       SimpleLogging.w('Could not delete series notifications for $seriesUuid', error: err, stackTrace: st);
     }
@@ -266,6 +300,7 @@ class AppSeriesNotifications {
   }) async {
     var store = Stores.storeSeriesNotifications;
     if (!seriesDef.notificationSettingsReadonly().enabled) {
+      SimpleLogging.d('Series notifications disabled. Deleting stored notifications. seriesUuid=${seriesDef.uuid}');
       await _cancelNotifications(existing?.notificationIds ?? const []);
       await store.delete(seriesDef.uuid);
       return;
@@ -274,10 +309,17 @@ class AppSeriesNotifications {
     var scheduleSpec = _buildScheduleSpec(seriesDef, now);
     var signature = _buildSeriesSignature(seriesDef);
     var triggerUtcMs = _triggerUtcMs(scheduleSpec);
+    SimpleLogging.d(
+      'Built series notification schedule. seriesUuid=${seriesDef.uuid}, triggerCount=${scheduleSpec.length}, force=$force',
+    );
     if (!force && !_needsRefresh(existing, signature, triggerUtcMs, nowUtc)) {
+      SimpleLogging.d('Series notification refresh skipped: stored schedule is up to date. seriesUuid=${seriesDef.uuid}');
       return;
     }
 
+    SimpleLogging.d(
+      'Replacing series notifications. seriesUuid=${seriesDef.uuid}, existingNotificationIds=${existing?.notificationIds ?? const []}',
+    );
     await _cancelNotifications(existing?.notificationIds ?? const []);
 
     var ids = <int>[];
@@ -306,6 +348,9 @@ class AppSeriesNotifications {
         androidScheduleMode: scheduleMode,
       );
       ids.add(id);
+      SimpleLogging.d(
+        'Scheduled series notification. seriesUuid=${seriesDef.uuid}, notificationId=$id, triggerLocal=$trigger, scheduleMode=$scheduleMode',
+      );
     }
 
     if (ids.isNotEmpty) {
@@ -318,25 +363,35 @@ class AppSeriesNotifications {
           triggerUtcMs: triggerUtcMs,
         ),
       );
+      SimpleLogging.d('Saved series notification state. seriesUuid=${seriesDef.uuid}, notificationIds=$ids');
     } else {
       await store.delete(seriesDef.uuid);
+      SimpleLogging.d('Deleted series notification state because no future triggers exist. seriesUuid=${seriesDef.uuid}');
     }
   }
 
   static bool _needsRefresh(SeriesNotificationsStoreEntry? existing, String signature, List<int> triggerUtcMs, DateTime nowUtc) {
     if (existing == null) {
-      return triggerUtcMs.isNotEmpty;
+      var needsRefresh = triggerUtcMs.isNotEmpty;
+      SimpleLogging.d('Series notification refresh check: no stored entry. needsRefresh=$needsRefresh, triggerCount=${triggerUtcMs.length}');
+      return needsRefresh;
     }
     if (existing.scheduleSignature != signature) {
+      SimpleLogging.d('Series notification refresh check: schedule signature changed. seriesUuid=${existing.seriesDefUuid}');
       return true;
     }
     if (existing.triggerUtcMs.isEmpty && existing.notificationIds.isNotEmpty) {
+      SimpleLogging.d('Series notification refresh check: stored notification ids have no trigger metadata. seriesUuid=${existing.seriesDefUuid}');
       return true;
     }
 
     var expectedTriggers = triggerUtcMs.toSet();
     var storedFutureTriggers = existing.triggerUtcMs.where((triggerUtcMs) => triggerUtcMs > nowUtc.millisecondsSinceEpoch).toSet();
-    return !setEquals(storedFutureTriggers, expectedTriggers);
+    var needsRefresh = !setEquals(storedFutureTriggers, expectedTriggers);
+    SimpleLogging.d(
+      'Series notification refresh check: trigger comparison completed. seriesUuid=${existing.seriesDefUuid}, needsRefresh=$needsRefresh, storedFutureCount=${storedFutureTriggers.length}, expectedCount=${expectedTriggers.length}',
+    );
+    return needsRefresh;
   }
 
   static List<int> _triggerUtcMs(List<DateTime> triggers) {
@@ -344,20 +399,29 @@ class AppSeriesNotifications {
   }
 
   static Future<void> _cancelNotifications(List<int> notificationIds) async {
+    if (notificationIds.isEmpty) {
+      SimpleLogging.d('No series notifications to cancel.');
+      return;
+    }
+    SimpleLogging.d('Cancelling series notifications. notificationIds=$notificationIds');
     for (var id in notificationIds) {
       await _notificationsPlugin.cancel(id);
     }
+    SimpleLogging.d('Cancelled series notifications. notificationIds=$notificationIds');
   }
 
   static Future<void> _requestExactAlarmsPermissionIfNeeded(AndroidFlutterLocalNotificationsPlugin androidPlugin) async {
     try {
       var canScheduleExact = await androidPlugin.canScheduleExactNotifications();
+      SimpleLogging.d('Checked exact alarm permission before request. canScheduleExact=$canScheduleExact');
       if (canScheduleExact == true) {
         return;
       }
 
       var granted = await androidPlugin.requestExactAlarmsPermission();
-      if (granted != true) {
+      if (granted == true) {
+        SimpleLogging.i('Exact alarm permission granted. Series notifications will use exact scheduling.');
+      } else {
         SimpleLogging.i('Exact alarm permission not granted. Series notifications will use inexact scheduling.');
       }
     } catch (err, st) {
@@ -370,8 +434,10 @@ class AppSeriesNotifications {
       final androidPlugin = _notificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
       var canScheduleExact = await androidPlugin?.canScheduleExactNotifications();
       if (canScheduleExact == true) {
+        SimpleLogging.d('Using exact series notification scheduling.');
         return AndroidScheduleMode.exactAllowWhileIdle;
       }
+      SimpleLogging.d('Using inexact series notification scheduling. canScheduleExact=$canScheduleExact');
     } catch (err, st) {
       SimpleLogging.w('Could not check exact alarm permission', error: err, stackTrace: st);
     }
@@ -381,10 +447,14 @@ class AppSeriesNotifications {
 
   static Future<void> _showDebugNotificationIfEnabled() async {
     if (!kDebugMode || !_debugShowNotificationOnInit || _debugNotificationShownThisRun || !_initialized) {
+      SimpleLogging.d(
+        'Debug series notification skipped. kDebugMode=$kDebugMode, enabled=$_debugShowNotificationOnInit, alreadyShown=$_debugNotificationShownThisRun, initialized=$_initialized',
+      );
       return;
     }
 
     try {
+      SimpleLogging.d('Showing immediate debug series notification ...');
       await _notificationsPlugin.show(
         999001,
         'xTracker notification test',
@@ -402,6 +472,7 @@ class AppSeriesNotifications {
         ),
       );
       _debugNotificationShownThisRun = true;
+      SimpleLogging.d('Immediate debug series notification shown.');
     } catch (err, st) {
       SimpleLogging.w('Could not show debug notification', error: err, stackTrace: st);
     }
@@ -602,11 +673,14 @@ class AppSeriesNotifications {
       timeZoneName = await FlutterTimezone.getLocalTimezone();
     } catch (_) {
       timeZoneName = 'UTC';
+      SimpleLogging.d('Could not read local timezone. Falling back to UTC.');
     }
     try {
       tz.setLocalLocation(tz.getLocation(timeZoneName));
+      SimpleLogging.d('Configured series notification timezone. timeZone=$timeZoneName');
     } catch (_) {
       tz.setLocalLocation(tz.getLocation('UTC'));
+      SimpleLogging.d('Could not configure timezone "$timeZoneName". Falling back to UTC.');
     }
   }
 
