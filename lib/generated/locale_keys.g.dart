@@ -83,6 +83,14 @@ abstract class LocaleKeys {
   static const deviceInfo_action_exportOrShare_tooltip = 'deviceInfo.action.exportOrShare.tooltip';
   static const deviceInfo_action_export_tooltip = 'deviceInfo.action.export.tooltip';
   static const deviceInfo_action_share_tooltip = 'deviceInfo.action.share.tooltip';
+  static const notificationInfo_title = 'notificationInfo.title';
+  static const notificationInfo_section_nextNotifications = 'notificationInfo.section.nextNotifications';
+  static const notificationInfo_table_column_series = 'notificationInfo.table.column.series';
+  static const notificationInfo_table_column_nextNotification = 'notificationInfo.table.column.nextNotification';
+  static const notificationInfo_table_column_notification = 'notificationInfo.table.column.notification';
+  static const notificationInfo_label_noEnabledNotifications = 'notificationInfo.label.noEnabledNotifications';
+  static const notificationInfo_label_noScheduledNotifications = 'notificationInfo.label.noScheduledNotifications';
+  static const notificationInfo_label_loadFailed = 'notificationInfo.label.loadFailed';
   static const enum_calculationInputType_numeric_displayName = 'enum.calculationInputType.numeric.displayName';
   static const enum_calculationInputType_seriesValue_displayName = 'enum.calculationInputType.seriesValue.displayName';
   static const enum_operator_add_longNameInBrackets = 'enum.operator.add.longNameInBrackets';

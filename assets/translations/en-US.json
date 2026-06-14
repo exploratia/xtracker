@@ -169,6 +169,24 @@
       }
     }
   },
+  "notificationInfo": {
+    "title": "Notifications",
+    "section": {
+      "nextNotifications": "Next notifications"
+    },
+    "table": {
+      "column": {
+        "series": "Series",
+        "nextNotification": "Next notification",
+        "notification": "Notification"
+      }
+    },
+    "label": {
+      "noEnabledNotifications": "No series with enabled notifications.",
+      "noScheduledNotifications": "No future notifications scheduled.",
+      "loadFailed": "Could not load notification information."
+    }
+  },
   "enum": {
     "calculationInputType": {
       "numeric": {

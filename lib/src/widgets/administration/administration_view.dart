@@ -6,6 +6,7 @@ import '../../../generated/locale_keys.g.dart';
 import '../../screens/administration/device_info_screen.dart';
 import '../../screens/administration/info_screen.dart';
 import '../../screens/administration/logs_screen.dart';
+import '../../screens/administration/notification_info_screen.dart';
 import '../../screens/administration/settings_screen.dart';
 import '../../util/about_dlg.dart';
 import '../../util/globals.dart';
@@ -28,7 +29,7 @@ class AdministrationView extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
 
-    final links = [SettingsScreen.navItem, LogsScreen.navItem, DeviceInfoScreen.navItem].map(
+    final links = [SettingsScreen.navItem, LogsScreen.navItem, DeviceInfoScreen.navItem, NotificationInfoScreen.navItem].map(
       (navItem) => {
         'ico': navItem.icon(),
         'title': navItem.titleBuilder(),

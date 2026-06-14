@@ -270,6 +270,11 @@ class AppSeriesNotifications {
     return _buildScheduleSpec(seriesDef, now ?? DateTime.now()).firstOrNull;
   }
 
+  /// Returns all future notification times that are planned for [seriesDef].
+  static List<DateTime> scheduledNotificationTimes(SeriesDef seriesDef, {DateTime? now}) {
+    return List.unmodifiable(_buildScheduleSpec(seriesDef, now ?? DateTime.now()));
+  }
+
   static bool get isSchedulingSupportedOnCurrentPlatform => _isSupportedPlatform();
 
   static Future<void> _refreshSeriesNotification(

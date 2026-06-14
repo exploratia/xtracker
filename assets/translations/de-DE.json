@@ -169,6 +169,24 @@
       }
     }
   },
+  "notificationInfo": {
+    "title": "Benachrichtigungen",
+    "section": {
+      "nextNotifications": "Nächste Benachrichtigungen"
+    },
+    "table": {
+      "column": {
+        "series": "Messreihe",
+        "nextNotification": "Nächste Benachrichtigung",
+        "notification": "Benachrichtigung"
+      }
+    },
+    "label": {
+      "noEnabledNotifications": "Keine Messreihe mit aktivierten Benachrichtigungen.",
+      "noScheduledNotifications": "Keine zukünftigen Benachrichtigungen geplant.",
+      "loadFailed": "Benachrichtigungsinformationen konnten nicht geladen werden."
+    }
+  },
   "enum": {
     "calculationInputType": {
       "numeric": {
