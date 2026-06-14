@@ -71,7 +71,10 @@ class NotificationInfoView extends StatelessWidget {
       );
     }
 
-    return _InfoTable(rows: rows);
+    return _InfoTable(
+      rows: rows,
+      columnWidthsBuilder: _summaryColumnWidths,
+    );
   }
 
   Widget _buildSeriesScheduleTable(BuildContext context, SeriesDef seriesDef, DateTime now) {
@@ -98,7 +101,27 @@ class NotificationInfoView extends StatelessWidget {
       ),
     ];
 
-    return _InfoTable(rows: rows);
+    return _InfoTable(
+      rows: rows,
+      columnWidthsBuilder: (_) => const <int, TableColumnWidth>{
+        0: IntrinsicColumnWidth(),
+        1: FlexColumnWidth(),
+      },
+    );
+  }
+
+  Map<int, TableColumnWidth> _summaryColumnWidths(BoxConstraints constraints) {
+    if (constraints.maxWidth < 260) {
+      return <int, TableColumnWidth>{
+        0: FixedColumnWidth(constraints.maxWidth / 2),
+        1: FlexColumnWidth(),
+      };
+    }
+
+    return <int, TableColumnWidth>{
+      0: FixedColumnWidth(constraints.maxWidth / 3),
+      1: FlexColumnWidth(),
+    };
   }
 
   String _formatAbsoluteDateTime(DateTime dateTime) {
@@ -145,8 +168,12 @@ class NotificationInfoView extends StatelessWidget {
 
 class _InfoTable extends StatelessWidget {
   final List<TableRow> rows;
+  final Map<int, TableColumnWidth> Function(BoxConstraints constraints) columnWidthsBuilder;
 
-  const _InfoTable({required this.rows});
+  const _InfoTable({
+    required this.rows,
+    required this.columnWidthsBuilder,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -154,10 +181,7 @@ class _InfoTable extends StatelessWidget {
     return LayoutBuilder(
       builder: (BuildContext _, BoxConstraints constraints) {
         return Table(
-          columnWidths: <int, TableColumnWidth>{
-            0: constraints.maxWidth < 260 ? FixedColumnWidth(constraints.maxWidth / 2) : const IntrinsicColumnWidth(),
-            1: const FlexColumnWidth(),
-          },
+          columnWidths: columnWidthsBuilder(constraints),
           border: TableBorder.symmetric(
             inside: BorderSide(width: 1, color: themeData.canvasColor),
           ),
