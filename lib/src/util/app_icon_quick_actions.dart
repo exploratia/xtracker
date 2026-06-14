@@ -85,6 +85,12 @@ class AppIconQuickActions {
     return _quickActionResponseVersionNotifier;
   }
 
+  /// Returns the Android drawable resource name for the quick action icon that best matches [color].
+  static String quickActionIconNameForSeriesColor(Color color) {
+    var iconIndex = _determineClosestSeriesQuickActionIconIndex(color);
+    return _quickActionIconNameForPaletteIndex(iconIndex);
+  }
+
   static Future<Set<String>> readEnabledSeriesQuickActions(List<SeriesDef> series) async {
     return _enabledSeriesIds(series);
   }
@@ -165,12 +171,11 @@ class AppIconQuickActions {
 
     var enabledSeries = series.where((s) => enabledSeriesIds.contains(s.uuid));
     for (var seriesDef in enabledSeries) {
-      var iconIndex = _determineClosestSeriesQuickActionIconIndex(seriesDef.color);
       shortcutItems.add(
         ShortcutItem(
           type: '$_actionSeriesAddPrefix${seriesDef.uuid}',
           localizedTitle: seriesDef.name,
-          icon: useAndroidIcon ? _quickActionIconNameForPaletteIndex(iconIndex) : null,
+          icon: useAndroidIcon ? quickActionIconNameForSeriesColor(seriesDef.color) : null,
         ),
       );
     }

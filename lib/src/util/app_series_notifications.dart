@@ -3,7 +3,6 @@ import 'dart:math' as math;
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/data/latest_all.dart' as tzdata;
@@ -14,6 +13,7 @@ import '../model/series/series_def.dart';
 import '../model/series/settings/notification_settings.dart';
 import '../store/store_series_notifications.dart';
 import '../store/stores.dart';
+import 'app_icon_quick_actions.dart';
 import 'logging/flutter_simple_logging.dart';
 
 @pragma('vm:entry-point')
@@ -28,24 +28,7 @@ class AppSeriesNotifications {
   static const _channelName = 'Series notifications';
   static const _channelDescription = 'Measurement reminders for configured series';
   static const _groupKey = 'series_notifications_group';
-  static const _maxQuickActionIconCount = 12;
   static const _scheduledIntervalCount = 6;
-  static const _quickActionIconSeriesAddPrefix = 'qa_series_add_';
-  static const _seriesQuickActionPaletteStartHexRgb = <int>[
-    0xED1E79,
-    0xED2B1E,
-    0xED921E,
-    0xE0ED1E,
-    0x79ED1E,
-    0x1EED2B,
-    0x1EED92,
-    0x1EE0ED,
-    0x1E79ED,
-    0x2B1EED,
-    0x921EED,
-    0xED1EE0,
-  ];
-  static final _seriesQuickActionPaletteHues = _seriesQuickActionPaletteStartHexRgb.map((hexRgb) => HSVColor.fromColor(_rgbToColor(hexRgb)).hue).toList();
   static final FlutterLocalNotificationsPlugin _notificationsPlugin = FlutterLocalNotificationsPlugin();
   static bool _initialized = false;
   static bool _debugNotificationShownThisRun = false;
@@ -341,7 +324,7 @@ class AppSeriesNotifications {
             importance: Importance.high,
             priority: Priority.high,
             sound: const RawResourceAndroidNotificationSound('notification'),
-            largeIcon: DrawableResourceAndroidBitmap(_quickActionIconNameForSeriesColor(seriesDef.color)),
+            largeIcon: DrawableResourceAndroidBitmap(AppIconQuickActions.quickActionIconNameForSeriesColor(seriesDef.color)),
           ),
         ),
         payload: '$_actionSeriesAddPrefix${seriesDef.uuid}',
@@ -628,42 +611,6 @@ class AppSeriesNotifications {
       hash = (hash * 0x01000193) & 0xFFFFFFFF;
     }
     return hash;
-  }
-
-  static String _quickActionIconNameForSeriesColor(Color color) {
-    var idx = _determineClosestSeriesQuickActionIconIndex(color);
-    return '$_quickActionIconSeriesAddPrefix${idx.toString().padLeft(2, '0')}';
-  }
-
-  static int _determineClosestSeriesQuickActionIconIndex(Color color) {
-    var hue = HSVColor.fromColor(color).hue;
-    if (hue.isNaN) {
-      hue = 0;
-    }
-
-    var closestIdx = 0;
-    var smallestDistance = double.infinity;
-    for (var idx = 0; idx < _seriesQuickActionPaletteHues.length; ++idx) {
-      var distance = _circularHueDistance(hue, _seriesQuickActionPaletteHues[idx]);
-      if (distance < smallestDistance) {
-        smallestDistance = distance;
-        closestIdx = idx;
-      }
-    }
-    var normalized = closestIdx % _maxQuickActionIconCount;
-    if (normalized < 0) {
-      normalized += _maxQuickActionIconCount;
-    }
-    return normalized;
-  }
-
-  static double _circularHueDistance(double h1, double h2) {
-    var diff = (h1 - h2).abs();
-    return math.min(diff, 360 - diff);
-  }
-
-  static Color _rgbToColor(int hexRgb) {
-    return Color(0xFF000000 | hexRgb);
   }
 
   static Future<void> _configureTimezone() async {
