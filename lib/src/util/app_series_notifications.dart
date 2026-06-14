@@ -22,7 +22,7 @@ void onDidReceiveBackgroundSeriesNotificationResponse(NotificationResponse respo
 }
 
 class AppSeriesNotifications {
-  static const _debugShowNotificationOnInit = true;
+  static const _debugShowNotificationOnInit = false;
   static const _actionSeriesAddPrefix = 'series_add_';
   static const _channelId = 'series_notifications';
   static const _channelName = 'Series notifications';
