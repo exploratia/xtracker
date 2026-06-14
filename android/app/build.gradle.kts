@@ -58,6 +58,8 @@ android {
             // Enables code-related app optimization.
             isMinifyEnabled = true
 
+            // proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"))
+
             // Enables resource shrinking.
             isShrinkResources = true
 
