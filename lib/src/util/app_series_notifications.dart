@@ -565,8 +565,8 @@ class AppSeriesNotifications {
     while (result.length < _scheduledIntervalCount) {
       var year = monthCursor.year;
       var month = monthCursor.month;
-      var day = _resolveDayOfMonth(settings, year, month);
-      var candidate = DateTime(year, month, day, hm.$1, hm.$2);
+      var date = _resolveMonthlyDate(settings, year, month);
+      var candidate = DateTime(date.year, date.month, date.day, hm.$1, hm.$2);
       if (candidate.isAfter(now)) {
         result.add(candidate);
       }
@@ -575,12 +575,31 @@ class AppSeriesNotifications {
     return result;
   }
 
-  static int _resolveDayOfMonth(NotificationSettings settings, int year, int month) {
+  static DateTime _resolveMonthlyDate(NotificationSettings settings, int year, int month) {
     var lastDay = DateTime(year, month + 1, 0).day;
     return switch (settings.monthlyRule) {
-      NotificationMonthlyRule.lastDay => lastDay,
-      NotificationMonthlyRule.dayOfMonth => math.min(lastDay, settings.monthlyDay),
+      NotificationMonthlyRule.lastDay => DateTime(year, month, lastDay),
+      NotificationMonthlyRule.dayOfMonth => DateTime(year, month, math.min(lastDay, settings.monthlyDay)),
+      NotificationMonthlyRule.weekdayOfMonth => _resolveWeekdayOfMonth(
+        year,
+        month,
+        settings.monthlyWeekdayOrdinal,
+        settings.monthlyWeekday,
+      ),
     };
+  }
+
+  static DateTime _resolveWeekdayOfMonth(int year, int month, int ordinal, int weekday) {
+    if (ordinal == -1) {
+      var lastDayOfMonth = DateTime(year, month + 1, 0);
+      var daysBack = (lastDayOfMonth.weekday - weekday) % DateTime.daysPerWeek;
+      return lastDayOfMonth.subtract(Duration(days: daysBack));
+    }
+
+    var firstDayOfMonth = DateTime(year, month);
+    var daysToWeekday = (weekday - firstDayOfMonth.weekday) % DateTime.daysPerWeek;
+    var day = 1 + daysToWeekday + ((ordinal - 1) * DateTime.daysPerWeek);
+    return DateTime(year, month, day);
   }
 
   static (int, int) _parseTime(String value) {
@@ -651,6 +670,8 @@ class AppSeriesNotifications {
       'weekdays': settings.weeklyWeekdays,
       'monthlyRule': settings.monthlyRule.name,
       'monthlyDay': settings.monthlyDay,
+      'monthlyWeekdayOrdinal': settings.monthlyWeekdayOrdinal,
+      'monthlyWeekday': settings.monthlyWeekday,
     };
     return jsonEncode(payload);
   }

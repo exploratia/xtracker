@@ -643,7 +643,14 @@
         },
         "monthlyRule": {
           "dayOfMonth": "Specific day of month",
-          "lastDay": "Last day of month"
+          "lastDay": "Last day of month",
+          "weekdayOfMonth": "Weekday of month"
+        },
+        "monthlyWeekdayOrdinal": {
+          "first": "1st",
+          "second": "2nd",
+          "third": "3rd",
+          "last": "Last"
         },
         "action": {
           "addTime": "Add time",

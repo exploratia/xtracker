@@ -264,6 +264,11 @@ abstract class LocaleKeys {
   static const seriesEdit_seriesSettings_notifications_repeat_monthly = 'seriesEdit.seriesSettings.notifications.repeat.monthly';
   static const seriesEdit_seriesSettings_notifications_monthlyRule_dayOfMonth = 'seriesEdit.seriesSettings.notifications.monthlyRule.dayOfMonth';
   static const seriesEdit_seriesSettings_notifications_monthlyRule_lastDay = 'seriesEdit.seriesSettings.notifications.monthlyRule.lastDay';
+  static const seriesEdit_seriesSettings_notifications_monthlyRule_weekdayOfMonth = 'seriesEdit.seriesSettings.notifications.monthlyRule.weekdayOfMonth';
+  static const seriesEdit_seriesSettings_notifications_monthlyWeekdayOrdinal_first = 'seriesEdit.seriesSettings.notifications.monthlyWeekdayOrdinal.first';
+  static const seriesEdit_seriesSettings_notifications_monthlyWeekdayOrdinal_second = 'seriesEdit.seriesSettings.notifications.monthlyWeekdayOrdinal.second';
+  static const seriesEdit_seriesSettings_notifications_monthlyWeekdayOrdinal_third = 'seriesEdit.seriesSettings.notifications.monthlyWeekdayOrdinal.third';
+  static const seriesEdit_seriesSettings_notifications_monthlyWeekdayOrdinal_last = 'seriesEdit.seriesSettings.notifications.monthlyWeekdayOrdinal.last';
   static const seriesEdit_seriesSettings_notifications_action_addTime = 'seriesEdit.seriesSettings.notifications.action.addTime';
   static const seriesEdit_seriesSettings_notifications_action_enterValue = 'seriesEdit.seriesSettings.notifications.action.enterValue';
   static const seriesEdit_seriesSettings_notifications_snackbar_reminderIn = 'seriesEdit.seriesSettings.notifications.snackbar.reminderIn';

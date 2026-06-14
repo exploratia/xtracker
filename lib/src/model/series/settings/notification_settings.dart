@@ -16,7 +16,8 @@ enum NotificationRepeatType {
 
 enum NotificationMonthlyRule {
   dayOfMonth,
-  lastDay;
+  lastDay,
+  weekdayOfMonth;
 
   static NotificationMonthlyRule byNameOrDefault(String? raw) {
     for (var value in NotificationMonthlyRule.values) {
@@ -38,6 +39,8 @@ class NotificationSettings extends SeriesSettings {
   static const String _weeklyWeekdays = 'WeeklyWeekdays';
   static const String _monthlyRule = 'MonthlyRule';
   static const String _monthlyDay = 'MonthlyDay';
+  static const String _monthlyWeekdayOrdinal = 'MonthlyWeekdayOrdinal';
+  static const String _monthlyWeekday = 'MonthlyWeekday';
 
   /// [updateStateCB] optional callback which is called when the settings map is changed. If not set readonly.
   NotificationSettings(Map<String, dynamic> settings, Function()? updateStateCB) : super(_prefix, settings, updateStateCB);
@@ -129,6 +132,32 @@ class NotificationSettings extends SeriesSettings {
   set monthlyDay(int value) {
     var normalized = value.clamp(1, 31);
     set(_monthlyDay, normalized == 1 ? null : normalized);
+  }
+
+  int get monthlyWeekdayOrdinal {
+    var ordinal = getInt(_monthlyWeekdayOrdinal, defaultValue: 1);
+    if (ordinal == -1 || (ordinal >= 1 && ordinal <= 3)) {
+      return ordinal;
+    }
+    return 1;
+  }
+
+  set monthlyWeekdayOrdinal(int value) {
+    var normalized = value == -1 || (value >= 1 && value <= 3) ? value : 1;
+    set(_monthlyWeekdayOrdinal, normalized == 1 ? null : normalized);
+  }
+
+  int get monthlyWeekday {
+    var weekday = getInt(_monthlyWeekday, defaultValue: DateTime.monday);
+    if (weekday >= DateTime.monday && weekday <= DateTime.sunday) {
+      return weekday;
+    }
+    return DateTime.monday;
+  }
+
+  set monthlyWeekday(int value) {
+    var normalized = value.clamp(DateTime.monday, DateTime.sunday);
+    set(_monthlyWeekday, normalized == DateTime.monday ? null : normalized);
   }
 
   static bool isValidTimeValue(String value) => _isValidTimeValue(value);

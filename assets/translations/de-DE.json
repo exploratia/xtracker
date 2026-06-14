@@ -643,7 +643,14 @@
         },
         "monthlyRule": {
           "dayOfMonth": "Bestimmter Tag im Monat",
-          "lastDay": "Letzter Tag im Monat"
+          "lastDay": "Letzter Tag im Monat",
+          "weekdayOfMonth": "Wochentag im Monat"
+        },
+        "monthlyWeekdayOrdinal": {
+          "first": "1.",
+          "second": "2.",
+          "third": "3.",
+          "last": "Letzter"
         },
         "action": {
           "addTime": "Uhrzeit hinzufügen",

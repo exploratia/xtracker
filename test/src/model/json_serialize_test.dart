@@ -120,6 +120,48 @@ void main() {
       expect(deserializedSettings.repeatType, NotificationRepeatType.weekly);
       expect(nextReminder, DateTime(2026, 6, 10, 10, 30));
     });
+
+    test('monthly weekday notification rule schedules configured weekday in month', () {
+      var seriesDef = SeriesDef(
+        uuid: const Uuid().v4().toString(),
+        seriesType: SeriesType.bloodPressure,
+        seriesItems: [],
+        name: 'Monthly weekday reminder series',
+      );
+      var settings = seriesDef.notificationSettingsEditable(() {});
+      settings.enabled = true;
+      settings.repeatType = NotificationRepeatType.monthly;
+      settings.monthlyRule = NotificationMonthlyRule.weekdayOfMonth;
+      settings.time = '08:15';
+
+      settings.monthlyWeekdayOrdinal = 1;
+      settings.monthlyWeekday = DateTime.monday;
+      expect(
+        AppSeriesNotifications.nextScheduledNotificationAt(seriesDef, now: DateTime(2026, 5, 31)),
+        DateTime(2026, 6, 1, 8, 15),
+      );
+
+      settings.monthlyWeekdayOrdinal = 2;
+      settings.monthlyWeekday = DateTime.wednesday;
+      expect(
+        AppSeriesNotifications.nextScheduledNotificationAt(seriesDef, now: DateTime(2026, 5, 31)),
+        DateTime(2026, 6, 10, 8, 15),
+      );
+
+      settings.monthlyWeekdayOrdinal = 3;
+      settings.monthlyWeekday = DateTime.sunday;
+      expect(
+        AppSeriesNotifications.nextScheduledNotificationAt(seriesDef, now: DateTime(2026, 5, 31)),
+        DateTime(2026, 6, 21, 8, 15),
+      );
+
+      settings.monthlyWeekdayOrdinal = -1;
+      settings.monthlyWeekday = DateTime.friday;
+      expect(
+        AppSeriesNotifications.nextScheduledNotificationAt(seriesDef, now: DateTime(2026, 1, 1)),
+        DateTime(2026, 1, 30, 8, 15),
+      );
+    });
   });
 
   group('SeriesData', () {

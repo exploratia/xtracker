@@ -406,6 +406,13 @@ class _SeriesEditNotificationSettingsState extends State<SeriesEditNotificationS
                 child: Text(LocaleKeys.seriesEdit_seriesSettings_notifications_monthlyRule_lastDay.tr()),
               ),
             ),
+            DropdownMenuItem(
+              value: NotificationMonthlyRule.weekdayOfMonth,
+              child: DropDownMenuItemChild(
+                selected: selectedMonthlyRule == NotificationMonthlyRule.weekdayOfMonth,
+                child: Text(LocaleKeys.seriesEdit_seriesSettings_notifications_monthlyRule_weekdayOfMonth.tr()),
+              ),
+            ),
           ],
         ),
         iconData: Icons.calendar_month_outlined,
@@ -431,6 +438,62 @@ class _SeriesEditNotificationSettingsState extends State<SeriesEditNotificationS
                 ),
               );
             }),
+          ),
+          iconData: Icons.calendar_today_outlined,
+        ),
+      if (selectedMonthlyRule == NotificationMonthlyRule.weekdayOfMonth)
+        _tableRow(
+          constraints,
+          LocaleKeys.seriesEdit_seriesSettings_notifications_label_day.tr(),
+          Wrap(
+            spacing: ThemeUtils.horizontalSpacingSmall,
+            runSpacing: ThemeUtils.verticalSpacingSmall,
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              DropdownButton<int>(
+                borderRadius: ThemeUtils.cardBorderRadius,
+                value: settings.monthlyWeekdayOrdinal,
+                onChanged: (value) {
+                  if (value == null) return;
+                  settings.monthlyWeekdayOrdinal = value;
+                },
+                items: [1, 2, 3, -1].map((ordinal) {
+                  return DropdownMenuItem(
+                    value: ordinal,
+                    child: DropDownMenuItemChild(
+                      selected: settings.monthlyWeekdayOrdinal == ordinal,
+                      child: Text(_monthlyWeekdayOrdinalLabel(ordinal).tr()),
+                    ),
+                  );
+                }).toList(),
+              ),
+              DropdownButton<int>(
+                borderRadius: ThemeUtils.cardBorderRadius,
+                value: settings.monthlyWeekday,
+                onChanged: (value) {
+                  if (value == null) return;
+                  settings.monthlyWeekday = value;
+                },
+                items:
+                    [
+                      DateTime.monday,
+                      DateTime.tuesday,
+                      DateTime.wednesday,
+                      DateTime.thursday,
+                      DateTime.friday,
+                      DateTime.saturday,
+                      DateTime.sunday,
+                    ].map((weekday) {
+                      return DropdownMenuItem(
+                        value: weekday,
+                        child: DropDownMenuItemChild(
+                          selected: settings.monthlyWeekday == weekday,
+                          child: Text(_weekdayLabel(weekday).tr()),
+                        ),
+                      );
+                    }).toList(),
+              ),
+            ],
           ),
           iconData: Icons.calendar_today_outlined,
         ),
@@ -495,6 +558,16 @@ class _SeriesEditNotificationSettingsState extends State<SeriesEditNotificationS
       DateTime.saturday => LocaleKeys.commons_date_shortWeekday_saturday,
       DateTime.sunday => LocaleKeys.commons_date_shortWeekday_sunday,
       _ => LocaleKeys.commons_date_shortWeekday_monday,
+    };
+  }
+
+  String _monthlyWeekdayOrdinalLabel(int ordinal) {
+    return switch (ordinal) {
+      1 => LocaleKeys.seriesEdit_seriesSettings_notifications_monthlyWeekdayOrdinal_first,
+      2 => LocaleKeys.seriesEdit_seriesSettings_notifications_monthlyWeekdayOrdinal_second,
+      3 => LocaleKeys.seriesEdit_seriesSettings_notifications_monthlyWeekdayOrdinal_third,
+      -1 => LocaleKeys.seriesEdit_seriesSettings_notifications_monthlyWeekdayOrdinal_last,
+      _ => LocaleKeys.seriesEdit_seriesSettings_notifications_monthlyWeekdayOrdinal_first,
     };
   }
 
