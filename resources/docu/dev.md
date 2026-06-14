@@ -194,6 +194,14 @@ https://pub.dev/packages/url_launcher
 
 https://pub.dev/packages/simple_html_css
 
+### QuickActions
+
+https://pub.dev/packages/quick_actions
+
+### Notifications
+
+https://pub.dev/packages/flutter_local_notifications
+
 ## Splashscreen
 
 https://pub.dev/packages/flutter_native_splash
