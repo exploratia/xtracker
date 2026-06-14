@@ -114,13 +114,13 @@ class NotificationInfoView extends StatelessWidget {
     if (constraints.maxWidth < 260) {
       return <int, TableColumnWidth>{
         0: FixedColumnWidth(constraints.maxWidth / 2),
-        1: FlexColumnWidth(),
+        1: const FlexColumnWidth(),
       };
     }
 
     return <int, TableColumnWidth>{
       0: FixedColumnWidth(constraints.maxWidth / 3),
-      1: FlexColumnWidth(),
+      1: const FlexColumnWidth(),
     };
   }
 
