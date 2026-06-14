@@ -16,6 +16,7 @@ class AppIconQuickActions {
   static const _actionSeriesAddPrefix = 'series_add_';
   static const _quickActionIconOpenUrl = 'qa_open_url';
   static const _quickActionIconSeriesAddPrefix = 'qa_series_add_';
+  static const _notificationIconSeriesAddPrefix = 'notification_series_add_';
   static const _maxQuickActionCountOnAndroid = 4;
   static const _seriesQuickActionIconCount = 12;
   static const _seriesQuickActionPaletteStartHexRgb = <int>[
@@ -89,6 +90,12 @@ class AppIconQuickActions {
   static String quickActionIconNameForSeriesColor(Color color) {
     var iconIndex = _determineClosestSeriesQuickActionIconIndex(color);
     return _quickActionIconNameForPaletteIndex(iconIndex);
+  }
+
+  /// Returns the Android bitmap drawable resource name for the notification icon that best matches [color].
+  static String notificationIconNameForSeriesColor(Color color) {
+    var iconIndex = _determineClosestSeriesQuickActionIconIndex(color);
+    return _notificationIconNameForPaletteIndex(iconIndex);
   }
 
   static Future<Set<String>> readEnabledSeriesQuickActions(List<SeriesDef> series) async {
@@ -216,6 +223,14 @@ class AppIconQuickActions {
       normalizedIndex += _seriesQuickActionIconCount;
     }
     return '$_quickActionIconSeriesAddPrefix${normalizedIndex.toString().padLeft(2, '0')}';
+  }
+
+  static String _notificationIconNameForPaletteIndex(int paletteIndex) {
+    var normalizedIndex = paletteIndex % _seriesQuickActionIconCount;
+    if (normalizedIndex < 0) {
+      normalizedIndex += _seriesQuickActionIconCount;
+    }
+    return '$_notificationIconSeriesAddPrefix${normalizedIndex.toString().padLeft(2, '0')}';
   }
 
   static String _buildShortcutItemsSignature(List<ShortcutItem> shortcutItems) {

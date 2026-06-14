@@ -329,7 +329,7 @@ class AppSeriesNotifications {
             importance: Importance.high,
             priority: Priority.high,
             sound: const RawResourceAndroidNotificationSound('notification'),
-            largeIcon: DrawableResourceAndroidBitmap(AppIconQuickActions.quickActionIconNameForSeriesColor(seriesDef.color)),
+            largeIcon: DrawableResourceAndroidBitmap(AppIconQuickActions.notificationIconNameForSeriesColor(seriesDef.color)),
           ),
         ),
         payload: '$_actionSeriesAddPrefix${seriesDef.uuid}',
