@@ -43,6 +43,10 @@ abstract class SeriesSettings {
     return _settings[_key(key)] as bool? ?? false;
   }
 
+  int getInt(String key, {int defaultValue = 0}) {
+    return _settings[_key(key)] as int? ?? defaultValue;
+  }
+
   double getDouble(String key, {double defaultValue = 0}) {
     return _settings[_key(key)] as double? ?? defaultValue;
   }

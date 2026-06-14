@@ -113,6 +113,9 @@ class ThemeUtils {
       ),
       chipTheme: ChipThemeData(
         backgroundColor: chipBackgroundColor,
+        selectedColor: secondaryColor,
+        checkmarkColor: onPrimary,
+        secondaryLabelStyle: const TextStyle(color: onPrimary),
         iconTheme: IconThemeData(
           size: iconSize,
           color: primary,
@@ -238,6 +241,15 @@ class ThemeUtils {
       elevatedButtonTheme: ElevatedButtonThemeData(style: ElevatedButton.styleFrom(shape: btnShape)),
       textButtonTheme: TextButtonThemeData(style: TextButton.styleFrom(shape: btnShape)),
       outlinedButtonTheme: OutlinedButtonThemeData(style: OutlinedButton.styleFrom(shape: btnShape)),
+      segmentedButtonTheme: SegmentedButtonThemeData(
+        style: SegmentedButton.styleFrom(
+          foregroundColor: textColor,
+          selectedForegroundColor: onPrimary,
+          selectedBackgroundColor: secondaryColor,
+          visualDensity: const VisualDensity(vertical: 0),
+          shape: btnShape,
+        ),
+      ),
       // page transition
       pageTransitionsTheme: const PageTransitionsTheme(
         builders: {

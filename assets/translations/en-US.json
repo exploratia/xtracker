@@ -604,6 +604,48 @@
           }
         }
       },
+      "notifications": {
+        "title": "Notifications",
+        "label": {
+          "enabled": "Enable reminder notifications:",
+          "times": "Times",
+          "intervalDays": "Interval in days",
+          "weekdays": "Weekdays",
+          "day": "Day",
+          "weekday": "Weekday",
+          "monthlyRule": "Monthly rule",
+          "timeAt": "Time: {}",
+          "unsupportedPlatform": "This platform does not support notifications. The setting is still saved."
+        },
+        "repeat": {
+          "daily": "Daily",
+          "everyXDays": "Every X days",
+          "weekly": "Weekly",
+          "monthly": "Monthly"
+        },
+        "monthlyRule": {
+          "dayOfMonth": "Specific day of month",
+          "lastDay": "Last day of month"
+        },
+        "action": {
+          "addTime": "Add time",
+          "enterValue": "Enter new value"
+        },
+        "snackbar": {
+          "reminderIn": "Reminder in {}"
+        },
+        "duration": {
+          "day": "day",
+          "days": "days",
+          "hour": "hour",
+          "hours": "hours",
+          "minute": "minute",
+          "minutes": "minutes"
+        },
+        "alert": {
+          "permissionDenied": "Notification permission denied. Notifications were disabled for this series."
+        }
+      },
       "tags": {
         "title": "Tags\uD83D\uDEA9",
         "actions": {

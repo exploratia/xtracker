@@ -34,6 +34,8 @@ class AppIconQuickActions {
   ];
   static const _quickActions = QuickActions();
   static String? _pendingSeriesQuickActionSeriesId;
+  static int _quickActionResponseVersion = 0;
+  static final ValueNotifier<int> _quickActionResponseVersionNotifier = ValueNotifier<int>(0);
   static String? _lastShortcutItemsSignature;
   static List<SeriesDef> _lastKnownSeries = const [];
   static final _seriesQuickActionPaletteHues = _seriesQuickActionPaletteStartHexRgb.map((hexRgb) => HSVColor.fromColor(_rgbToColor(hexRgb)).hue).toList();
@@ -53,6 +55,8 @@ class AppIconQuickActions {
           var seriesUuid = actionType.substring(_actionSeriesAddPrefix.length);
           if (seriesUuid.isNotEmpty) {
             _pendingSeriesQuickActionSeriesId = seriesUuid;
+            _quickActionResponseVersion++;
+            _quickActionResponseVersionNotifier.value = _quickActionResponseVersion;
           }
         }
       });
@@ -71,6 +75,14 @@ class AppIconQuickActions {
 
   static String? pendingSeriesQuickActionSeriesId() {
     return _pendingSeriesQuickActionSeriesId;
+  }
+
+  static int pendingSeriesQuickActionResponseVersion() {
+    return _quickActionResponseVersion;
+  }
+
+  static ValueListenable<int> quickActionResponseVersionListenable() {
+    return _quickActionResponseVersionNotifier;
   }
 
   static Future<Set<String>> readEnabledSeriesQuickActions(List<SeriesDef> series) async {

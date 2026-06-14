@@ -1,5 +1,6 @@
 import '../model/series/series_def.dart';
 import 'store_main.dart';
+import 'store_series_notifications.dart';
 import 'store_series_current_value.dart';
 import 'store_series_data.dart';
 import 'store_series_def.dart';
@@ -8,6 +9,7 @@ class Stores {
   static final StoreMain storeMain = StoreMain();
   static final StoreSeriesDef storeSeriesDef = StoreSeriesDef();
   static final StoreSeriesCurrentValue storeSeriesCurrentValue = StoreSeriesCurrentValue();
+  static final StoreSeriesNotifications storeSeriesNotifications = StoreSeriesNotifications();
   static final Map<String, StoreSeriesData> _storeSeriesData = {};
 
   static StoreSeriesData getOrCreateSeriesDataStore(SeriesDef seriesDef) {

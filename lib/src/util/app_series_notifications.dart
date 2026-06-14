@@ -1,0 +1,638 @@
+import 'dart:convert';
+import 'dart:math' as math;
+
+import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
+import 'package:timezone/data/latest_all.dart' as tzdata;
+import 'package:timezone/timezone.dart' as tz;
+
+import '../../generated/locale_keys.g.dart';
+import '../model/series/series_def.dart';
+import '../model/series/settings/notification_settings.dart';
+import '../store/store_series_notifications.dart';
+import '../store/stores.dart';
+import 'logging/flutter_simple_logging.dart';
+
+@pragma('vm:entry-point')
+void onDidReceiveBackgroundSeriesNotificationResponse(NotificationResponse response) {
+  AppSeriesNotifications.handleNotificationResponsePayload(response.payload);
+}
+
+class AppSeriesNotifications {
+  static const _debugShowNotificationOnInit = true;
+  static const _actionSeriesAddPrefix = 'series_add_';
+  static const _channelId = 'series_notifications';
+  static const _channelName = 'Series notifications';
+  static const _channelDescription = 'Measurement reminders for configured series';
+  static const _groupKey = 'series_notifications_group';
+  static const _maxQuickActionIconCount = 12;
+  static const _scheduledIntervalCount = 6;
+  static const _quickActionIconSeriesAddPrefix = 'qa_series_add_';
+  static const _seriesQuickActionPaletteStartHexRgb = <int>[
+    0xED1E79,
+    0xED2B1E,
+    0xED921E,
+    0xE0ED1E,
+    0x79ED1E,
+    0x1EED2B,
+    0x1EED92,
+    0x1EE0ED,
+    0x1E79ED,
+    0x2B1EED,
+    0x921EED,
+    0xED1EE0,
+  ];
+  static final _seriesQuickActionPaletteHues = _seriesQuickActionPaletteStartHexRgb.map((hexRgb) => HSVColor.fromColor(_rgbToColor(hexRgb)).hue).toList();
+  static final FlutterLocalNotificationsPlugin _notificationsPlugin = FlutterLocalNotificationsPlugin();
+  static bool _initialized = false;
+  static bool _debugNotificationShownThisRun = false;
+  static String? _pendingSeriesNotificationSeriesId;
+  static int _notificationResponseVersion = 0;
+  static final ValueNotifier<int> _notificationResponseVersionNotifier = ValueNotifier<int>(0);
+
+  static Future<void> init() async {
+    if (!_isSupportedPlatform()) {
+      return;
+    }
+
+    if (_initialized) {
+      return;
+    }
+
+    try {
+      await _configureTimezone();
+
+      const androidInitSettings = AndroidInitializationSettings('app_logo_notification');
+      const initializationSettings = InitializationSettings(
+        android: androidInitSettings,
+      );
+
+      await _notificationsPlugin.initialize(
+        initializationSettings,
+        onDidReceiveNotificationResponse: (response) => handleNotificationResponsePayload(response.payload),
+        onDidReceiveBackgroundNotificationResponse: onDidReceiveBackgroundSeriesNotificationResponse,
+      );
+
+      final launchDetails = await _notificationsPlugin.getNotificationAppLaunchDetails();
+      if (launchDetails?.didNotificationLaunchApp == true) {
+        handleNotificationResponsePayload(launchDetails?.notificationResponse?.payload);
+      }
+
+      _initialized = true;
+      await _showDebugNotificationIfEnabled();
+    } catch (err, st) {
+      SimpleLogging.w('Could not initialize series notifications', error: err, stackTrace: st);
+    }
+  }
+
+  static String? consumePendingSeriesNotificationSeriesId() {
+    var res = _pendingSeriesNotificationSeriesId;
+    _pendingSeriesNotificationSeriesId = null;
+    return res;
+  }
+
+  static String? pendingSeriesNotificationSeriesId() {
+    return _pendingSeriesNotificationSeriesId;
+  }
+
+  static int pendingSeriesNotificationResponseVersion() {
+    return _notificationResponseVersion;
+  }
+
+  static ValueListenable<int> notificationResponseVersionListenable() {
+    return _notificationResponseVersionNotifier;
+  }
+
+  static void handleNotificationResponsePayload(String? payload) {
+    if (payload == null || payload.isEmpty) {
+      return;
+    }
+    if (!payload.startsWith(_actionSeriesAddPrefix)) {
+      return;
+    }
+    var seriesUuid = payload.substring(_actionSeriesAddPrefix.length);
+    if (seriesUuid.trim().isEmpty) {
+      return;
+    }
+    _pendingSeriesNotificationSeriesId = seriesUuid;
+    _notificationResponseVersion++;
+    _notificationResponseVersionNotifier.value = _notificationResponseVersion;
+  }
+
+  static Future<bool> ensurePermissionRequested() async {
+    if (!_isSupportedPlatform()) {
+      return false;
+    }
+    await init();
+
+    try {
+      final androidPlugin = _notificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+      if (androidPlugin != null) {
+        final allowed = await androidPlugin.requestNotificationsPermission();
+        if (allowed == true) {
+          await _requestExactAlarmsPermissionIfNeeded(androidPlugin);
+          await _showDebugNotificationIfEnabled();
+        }
+        return allowed ?? false;
+      }
+    } catch (err, st) {
+      SimpleLogging.w('Could not request notification permission', error: err, stackTrace: st);
+      return false;
+    }
+
+    return true;
+  }
+
+  static Future<void> refreshDueSeriesNotifications(List<SeriesDef> series) async {
+    if (!_isSupportedPlatform()) {
+      return;
+    }
+    await init();
+    if (!_initialized) {
+      return;
+    }
+
+    try {
+      var store = Stores.storeSeriesNotifications;
+      var existingEntries = await store.getAll();
+      var existingBySeries = {for (var entry in existingEntries) entry.seriesDefUuid: entry};
+      var validSeriesIds = series.map((s) => s.uuid).toSet();
+      var enabledSeries = series.where((s) => s.notificationSettingsReadonly().enabled).toList();
+      var enabledSeriesIds = enabledSeries.map((s) => s.uuid).toSet();
+      var scheduleMode = await _androidScheduleModeForReminders();
+      var now = DateTime.now();
+      var nowUtc = now.toUtc();
+
+      for (var entry in existingEntries) {
+        if (!validSeriesIds.contains(entry.seriesDefUuid) || !enabledSeriesIds.contains(entry.seriesDefUuid)) {
+          await _cancelNotifications(entry.notificationIds);
+          await store.delete(entry.seriesDefUuid);
+        }
+      }
+
+      var globallyUsedIds = existingEntries.where((entry) => enabledSeriesIds.contains(entry.seriesDefUuid)).expand((entry) => entry.notificationIds).toSet();
+      for (var seriesDef in enabledSeries) {
+        var existing = existingBySeries[seriesDef.uuid];
+        if (existing != null) {
+          globallyUsedIds.removeAll(existing.notificationIds);
+        }
+        await _refreshSeriesNotification(
+          seriesDef,
+          existing: existing,
+          scheduleMode: scheduleMode,
+          globallyUsedIds: globallyUsedIds,
+          now: now,
+          nowUtc: nowUtc,
+          force: false,
+        );
+        var refreshed = await store.get(seriesDef.uuid);
+        if (refreshed != null) {
+          globallyUsedIds.addAll(refreshed.notificationIds);
+        }
+      }
+    } catch (err, st) {
+      SimpleLogging.w('Could not refresh due series notifications', error: err, stackTrace: st);
+    }
+  }
+
+  static Future<void> refreshSeriesNotification(SeriesDef seriesDef, {bool force = false}) async {
+    if (!_isSupportedPlatform()) {
+      return;
+    }
+    await init();
+    if (!_initialized) {
+      return;
+    }
+
+    try {
+      var store = Stores.storeSeriesNotifications;
+      var existingEntries = await store.getAll();
+      var existing = existingEntries.where((entry) => entry.seriesDefUuid == seriesDef.uuid).firstOrNull;
+      var scheduleMode = await _androidScheduleModeForReminders();
+      var globallyUsedIds = existingEntries.where((entry) => entry.seriesDefUuid != seriesDef.uuid).expand((entry) => entry.notificationIds).toSet();
+      var now = DateTime.now();
+      await _refreshSeriesNotification(
+        seriesDef,
+        existing: existing,
+        scheduleMode: scheduleMode,
+        globallyUsedIds: globallyUsedIds,
+        now: now,
+        nowUtc: now.toUtc(),
+        force: force,
+      );
+    } catch (err, st) {
+      SimpleLogging.w('Could not refresh series notifications for ${seriesDef.uuid}', error: err, stackTrace: st);
+    }
+  }
+
+  static Future<void> deleteSeriesNotifications(String seriesUuid) async {
+    await init();
+    if (!_initialized) return;
+
+    try {
+      var store = Stores.storeSeriesNotifications;
+      var existing = await store.get(seriesUuid);
+      await _cancelNotifications(existing?.notificationIds ?? const []);
+      await store.delete(seriesUuid);
+    } catch (err, st) {
+      SimpleLogging.w('Could not delete series notifications for $seriesUuid', error: err, stackTrace: st);
+    }
+  }
+
+  static bool notificationScheduleChanged(SeriesDef? before, SeriesDef after) {
+    if (before == null) {
+      return after.notificationSettingsReadonly().enabled;
+    }
+    return _buildSeriesSignature(before) != _buildSeriesSignature(after);
+  }
+
+  static DateTime? nextScheduledNotificationAt(SeriesDef seriesDef, {DateTime? now}) {
+    return _buildScheduleSpec(seriesDef, now ?? DateTime.now()).firstOrNull;
+  }
+
+  static bool get isSchedulingSupportedOnCurrentPlatform => _isSupportedPlatform();
+
+  static Future<void> _refreshSeriesNotification(
+    SeriesDef seriesDef, {
+    required SeriesNotificationsStoreEntry? existing,
+    required AndroidScheduleMode scheduleMode,
+    required Set<int> globallyUsedIds,
+    required DateTime now,
+    required DateTime nowUtc,
+    required bool force,
+  }) async {
+    var store = Stores.storeSeriesNotifications;
+    if (!seriesDef.notificationSettingsReadonly().enabled) {
+      await _cancelNotifications(existing?.notificationIds ?? const []);
+      await store.delete(seriesDef.uuid);
+      return;
+    }
+
+    var scheduleSpec = _buildScheduleSpec(seriesDef, now);
+    var signature = _buildSeriesSignature(seriesDef);
+    var triggerUtcMs = _triggerUtcMs(scheduleSpec);
+    if (!force && !_needsRefresh(existing, signature, triggerUtcMs, nowUtc)) {
+      return;
+    }
+
+    await _cancelNotifications(existing?.notificationIds ?? const []);
+
+    var ids = <int>[];
+    for (var trigger in scheduleSpec) {
+      var id = _buildNotificationId(seriesDef.uuid, trigger, globallyUsedIds);
+      globallyUsedIds.add(id);
+      await _notificationsPlugin.zonedSchedule(
+        id,
+        seriesDef.name,
+        LocaleKeys.seriesEdit_seriesSettings_notifications_action_enterValue.tr(),
+        tz.TZDateTime.from(trigger, tz.local),
+        NotificationDetails(
+          android: AndroidNotificationDetails(
+            _channelId,
+            _channelName,
+            channelDescription: _channelDescription,
+            icon: 'app_logo_notification',
+            groupKey: _groupKey,
+            importance: Importance.high,
+            priority: Priority.high,
+            sound: const RawResourceAndroidNotificationSound('notification'),
+            largeIcon: DrawableResourceAndroidBitmap(_quickActionIconNameForSeriesColor(seriesDef.color)),
+          ),
+        ),
+        payload: '$_actionSeriesAddPrefix${seriesDef.uuid}',
+        androidScheduleMode: scheduleMode,
+      );
+      ids.add(id);
+    }
+
+    if (ids.isNotEmpty) {
+      await store.save(
+        SeriesNotificationsStoreEntry(
+          seriesDefUuid: seriesDef.uuid,
+          notificationIds: ids,
+          scheduledAtUtcMs: nowUtc.millisecondsSinceEpoch,
+          scheduleSignature: signature,
+          triggerUtcMs: triggerUtcMs,
+        ),
+      );
+    } else {
+      await store.delete(seriesDef.uuid);
+    }
+  }
+
+  static bool _needsRefresh(SeriesNotificationsStoreEntry? existing, String signature, List<int> triggerUtcMs, DateTime nowUtc) {
+    if (existing == null) {
+      return triggerUtcMs.isNotEmpty;
+    }
+    if (existing.scheduleSignature != signature) {
+      return true;
+    }
+    if (existing.triggerUtcMs.isEmpty && existing.notificationIds.isNotEmpty) {
+      return true;
+    }
+
+    var expectedTriggers = triggerUtcMs.toSet();
+    var storedFutureTriggers = existing.triggerUtcMs.where((triggerUtcMs) => triggerUtcMs > nowUtc.millisecondsSinceEpoch).toSet();
+    return !setEquals(storedFutureTriggers, expectedTriggers);
+  }
+
+  static List<int> _triggerUtcMs(List<DateTime> triggers) {
+    return triggers.map((trigger) => trigger.toUtc().millisecondsSinceEpoch).toList()..sort();
+  }
+
+  static Future<void> _cancelNotifications(List<int> notificationIds) async {
+    for (var id in notificationIds) {
+      await _notificationsPlugin.cancel(id);
+    }
+  }
+
+  static Future<void> _requestExactAlarmsPermissionIfNeeded(AndroidFlutterLocalNotificationsPlugin androidPlugin) async {
+    try {
+      var canScheduleExact = await androidPlugin.canScheduleExactNotifications();
+      if (canScheduleExact == true) {
+        return;
+      }
+
+      var granted = await androidPlugin.requestExactAlarmsPermission();
+      if (granted != true) {
+        SimpleLogging.i('Exact alarm permission not granted. Series notifications will use inexact scheduling.');
+      }
+    } catch (err, st) {
+      SimpleLogging.w('Could not request exact alarm permission', error: err, stackTrace: st);
+    }
+  }
+
+  static Future<AndroidScheduleMode> _androidScheduleModeForReminders() async {
+    try {
+      final androidPlugin = _notificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>();
+      var canScheduleExact = await androidPlugin?.canScheduleExactNotifications();
+      if (canScheduleExact == true) {
+        return AndroidScheduleMode.exactAllowWhileIdle;
+      }
+    } catch (err, st) {
+      SimpleLogging.w('Could not check exact alarm permission', error: err, stackTrace: st);
+    }
+
+    return AndroidScheduleMode.inexactAllowWhileIdle;
+  }
+
+  static Future<void> _showDebugNotificationIfEnabled() async {
+    if (!kDebugMode || !_debugShowNotificationOnInit || _debugNotificationShownThisRun || !_initialized) {
+      return;
+    }
+
+    try {
+      await _notificationsPlugin.show(
+        999001,
+        'xTracker notification test',
+        'Immediate debug notification',
+        const NotificationDetails(
+          android: AndroidNotificationDetails(
+            _channelId,
+            _channelName,
+            channelDescription: _channelDescription,
+            icon: 'app_logo_notification',
+            importance: Importance.high,
+            priority: Priority.high,
+            sound: RawResourceAndroidNotificationSound('notification'),
+          ),
+        ),
+      );
+      _debugNotificationShownThisRun = true;
+    } catch (err, st) {
+      SimpleLogging.w('Could not show debug notification', error: err, stackTrace: st);
+    }
+  }
+
+  static List<DateTime> _buildScheduleSpec(SeriesDef seriesDef, DateTime now) {
+    var settings = seriesDef.notificationSettingsReadonly();
+    if (!settings.enabled) return const [];
+
+    List<DateTime> result = switch (settings.repeatType) {
+      NotificationRepeatType.daily => _buildDailySchedule(settings, now),
+      NotificationRepeatType.everyXDays => _buildEveryXDaysSchedule(settings, now),
+      NotificationRepeatType.weekly => _buildWeeklySchedule(settings, now),
+      NotificationRepeatType.monthly => _buildMonthlySchedule(settings, now),
+    };
+    result.sort();
+    return result.where((dt) => dt.isAfter(now)).toList();
+  }
+
+  static List<DateTime> _buildDailySchedule(NotificationSettings settings, DateTime now) {
+    var times = settings.dailyTimes;
+    if (times.isEmpty) {
+      times = ['08:00'];
+    }
+
+    var result = <DateTime>[];
+    var date = DateTime(now.year, now.month, now.day);
+    var intervalCount = 0;
+    while (intervalCount < _scheduledIntervalCount) {
+      var addedForDate = false;
+      for (var time in times) {
+        var hm = _parseTime(time);
+        var candidate = DateTime(date.year, date.month, date.day, hm.$1, hm.$2);
+        if (candidate.isAfter(now)) {
+          result.add(candidate);
+          addedForDate = true;
+        }
+      }
+      if (addedForDate) {
+        intervalCount++;
+      }
+      date = date.add(const Duration(days: 1));
+    }
+    return result;
+  }
+
+  static List<DateTime> _buildEveryXDaysSchedule(NotificationSettings settings, DateTime now) {
+    var interval = settings.everyXDaysInterval;
+    var anchorUtc = settings.everyXDaysAnchorUtcMs;
+    var anchorLocal = anchorUtc != null ? DateTime.fromMillisecondsSinceEpoch(anchorUtc, isUtc: true).toLocal() : DateTime(now.year, now.month, now.day);
+    anchorLocal = DateTime(anchorLocal.year, anchorLocal.month, anchorLocal.day);
+    var hm = _parseTime(settings.time);
+
+    var result = <DateTime>[];
+    var candidate = DateTime(anchorLocal.year, anchorLocal.month, anchorLocal.day, hm.$1, hm.$2);
+    while (!candidate.isAfter(now)) {
+      candidate = candidate.add(Duration(days: interval));
+    }
+    while (result.length < _scheduledIntervalCount) {
+      result.add(candidate);
+      candidate = candidate.add(Duration(days: interval));
+    }
+    return result;
+  }
+
+  static List<DateTime> _buildWeeklySchedule(NotificationSettings settings, DateTime now) {
+    var weekdays = settings.weeklyWeekdays.toSet();
+    if (weekdays.isEmpty) {
+      weekdays = {DateTime.monday};
+    }
+    var hm = _parseTime(settings.time);
+
+    var result = <DateTime>[];
+    var date = DateTime(now.year, now.month, now.day);
+    var intervalCount = 0;
+    while (intervalCount < _scheduledIntervalCount) {
+      var addedForWeek = false;
+      for (var i = 0; i < DateTime.daysPerWeek; i++) {
+        var candidateDate = date.add(Duration(days: i));
+        if (!weekdays.contains(candidateDate.weekday)) {
+          continue;
+        }
+        var candidate = DateTime(candidateDate.year, candidateDate.month, candidateDate.day, hm.$1, hm.$2);
+        if (candidate.isAfter(now)) {
+          result.add(candidate);
+          addedForWeek = true;
+        }
+      }
+      if (addedForWeek) {
+        intervalCount++;
+      }
+      date = date.add(const Duration(days: DateTime.daysPerWeek));
+    }
+    return result;
+  }
+
+  static List<DateTime> _buildMonthlySchedule(NotificationSettings settings, DateTime now) {
+    var hm = _parseTime(settings.time);
+    var result = <DateTime>[];
+
+    var monthCursor = DateTime(now.year, now.month);
+    while (result.length < _scheduledIntervalCount) {
+      var year = monthCursor.year;
+      var month = monthCursor.month;
+      var day = _resolveDayOfMonth(settings, year, month);
+      var candidate = DateTime(year, month, day, hm.$1, hm.$2);
+      if (candidate.isAfter(now)) {
+        result.add(candidate);
+      }
+      monthCursor = DateTime(year, month + 1);
+    }
+    return result;
+  }
+
+  static int _resolveDayOfMonth(NotificationSettings settings, int year, int month) {
+    var lastDay = DateTime(year, month + 1, 0).day;
+    return switch (settings.monthlyRule) {
+      NotificationMonthlyRule.lastDay => lastDay,
+      NotificationMonthlyRule.dayOfMonth => math.min(lastDay, settings.monthlyDay),
+    };
+  }
+
+  static (int, int) _parseTime(String value) {
+    var parts = value.split(':');
+    if (parts.length != 2) return (8, 0);
+    var h = int.tryParse(parts[0]) ?? 8;
+    var m = int.tryParse(parts[1]) ?? 0;
+    h = h.clamp(0, 23);
+    m = m.clamp(0, 59);
+    return (h, m);
+  }
+
+  static int _buildNotificationId(String seriesUuid, DateTime triggerLocal, Set<int> usedIds) {
+    var salt = 0;
+    while (true) {
+      var hashInput = '$seriesUuid|${triggerLocal.toUtc().millisecondsSinceEpoch}|$salt';
+      var id = _stableHash(hashInput) & 0x7fffffff;
+      if (id == 0) {
+        salt++;
+        continue;
+      }
+      if (!usedIds.contains(id)) {
+        return id;
+      }
+      salt++;
+    }
+  }
+
+  static int _stableHash(String value) {
+    var hash = 0x811C9DC5;
+    for (var rune in value.runes) {
+      hash ^= rune;
+      hash = (hash * 0x01000193) & 0xFFFFFFFF;
+    }
+    return hash;
+  }
+
+  static String _quickActionIconNameForSeriesColor(Color color) {
+    var idx = _determineClosestSeriesQuickActionIconIndex(color);
+    return '$_quickActionIconSeriesAddPrefix${idx.toString().padLeft(2, '0')}';
+  }
+
+  static int _determineClosestSeriesQuickActionIconIndex(Color color) {
+    var hue = HSVColor.fromColor(color).hue;
+    if (hue.isNaN) {
+      hue = 0;
+    }
+
+    var closestIdx = 0;
+    var smallestDistance = double.infinity;
+    for (var idx = 0; idx < _seriesQuickActionPaletteHues.length; ++idx) {
+      var distance = _circularHueDistance(hue, _seriesQuickActionPaletteHues[idx]);
+      if (distance < smallestDistance) {
+        smallestDistance = distance;
+        closestIdx = idx;
+      }
+    }
+    var normalized = closestIdx % _maxQuickActionIconCount;
+    if (normalized < 0) {
+      normalized += _maxQuickActionIconCount;
+    }
+    return normalized;
+  }
+
+  static double _circularHueDistance(double h1, double h2) {
+    var diff = (h1 - h2).abs();
+    return math.min(diff, 360 - diff);
+  }
+
+  static Color _rgbToColor(int hexRgb) {
+    return Color(0xFF000000 | hexRgb);
+  }
+
+  static Future<void> _configureTimezone() async {
+    tzdata.initializeTimeZones();
+    String timeZoneName;
+    try {
+      timeZoneName = await FlutterTimezone.getLocalTimezone();
+    } catch (_) {
+      timeZoneName = 'UTC';
+    }
+    try {
+      tz.setLocalLocation(tz.getLocation(timeZoneName));
+    } catch (_) {
+      tz.setLocalLocation(tz.getLocation('UTC'));
+    }
+  }
+
+  static String _buildSeriesSignature(SeriesDef seriesDef) {
+    var settings = seriesDef.notificationSettingsReadonly();
+    var payload = {
+      'uuid': seriesDef.uuid,
+      'name': seriesDef.name,
+      'color': seriesDef.color.toARGB32(),
+      'enabled': settings.enabled,
+      'repeat': settings.repeatType.name,
+      'dailyTimes': settings.dailyTimes,
+      'time': settings.time,
+      'interval': settings.everyXDaysInterval,
+      'anchor': settings.everyXDaysAnchorUtcMs,
+      'weekdays': settings.weeklyWeekdays,
+      'monthlyRule': settings.monthlyRule.name,
+      'monthlyDay': settings.monthlyDay,
+    };
+    return jsonEncode(payload);
+  }
+
+  static bool _isSupportedPlatform() {
+    if (kIsWeb) {
+      return false;
+    }
+    return defaultTargetPlatform == TargetPlatform.android;
+  }
+}

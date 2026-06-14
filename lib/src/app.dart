@@ -12,6 +12,7 @@ import 'providers/series_provider.dart';
 import 'routing.dart';
 import 'screens/home_screen.dart';
 import 'util/app_icon_quick_actions.dart';
+import 'util/app_series_notifications.dart';
 import 'util/date_time_utils.dart';
 import 'util/theme_utils.dart';
 import 'widgets/administration/settings/settings_controller.dart';
@@ -31,17 +32,22 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   final _navigatorKey = GlobalKey<NavigatorState>();
-  String? _lastHandledPendingQuickActionSeriesId;
+  int _lastHandledPendingQuickActionResponseVersion = 0;
+  int _lastHandledPendingNotificationResponseVersion = 0;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    AppIconQuickActions.quickActionResponseVersionListenable().addListener(_routeToHomeIfExternalActionPending);
+    AppSeriesNotifications.notificationResponseVersionListenable().addListener(_routeToHomeIfExternalActionPending);
     WidgetsBinding.instance.addPostFrameCallback((_) => _routeToHomeIfQuickActionPending());
   }
 
   @override
   void dispose() {
+    AppIconQuickActions.quickActionResponseVersionListenable().removeListener(_routeToHomeIfExternalActionPending);
+    AppSeriesNotifications.notificationResponseVersionListenable().removeListener(_routeToHomeIfExternalActionPending);
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -49,26 +55,50 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      WidgetsBinding.instance.addPostFrameCallback((_) => _routeToHomeIfQuickActionPending());
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _routeToHomeIfQuickActionPending();
+        _refreshDueSeriesNotifications();
+      });
     }
+  }
+
+  void _refreshDueSeriesNotifications() {
+    var context = _navigatorKey.currentContext;
+    if (context == null) {
+      return;
+    }
+    context.read<SeriesProvider>().refreshDueNotifications();
+  }
+
+  void _routeToHomeIfExternalActionPending() {
+    WidgetsBinding.instance.addPostFrameCallback((_) => _routeToHomeIfQuickActionPending());
   }
 
   void _routeToHomeIfQuickActionPending() {
     var pendingSeriesUuid = AppIconQuickActions.pendingSeriesQuickActionSeriesId();
-    if (pendingSeriesUuid == null) {
-      _lastHandledPendingQuickActionSeriesId = null;
-      return;
-    }
-    if (_lastHandledPendingQuickActionSeriesId == pendingSeriesUuid) {
-      return;
-    }
+    var pendingQuickActionResponseVersion = AppIconQuickActions.pendingSeriesQuickActionResponseVersion();
+    var pendingNotificationSeriesUuid = AppSeriesNotifications.pendingSeriesNotificationSeriesId();
+    var pendingNotificationResponseVersion = AppSeriesNotifications.pendingSeriesNotificationResponseVersion();
 
     var context = _navigatorKey.currentContext;
     if (context == null) {
       return;
     }
 
-    _lastHandledPendingQuickActionSeriesId = pendingSeriesUuid;
+    if (pendingSeriesUuid != null && _lastHandledPendingQuickActionResponseVersion != pendingQuickActionResponseVersion) {
+      _lastHandledPendingQuickActionResponseVersion = pendingQuickActionResponseVersion;
+      Navigator.of(context).pushNamedAndRemoveUntil(HomeScreen.navItem.routeName, (route) => false);
+      return;
+    }
+
+    if (pendingNotificationSeriesUuid == null) {
+      return;
+    }
+    if (_lastHandledPendingNotificationResponseVersion == pendingNotificationResponseVersion) {
+      return;
+    }
+
+    _lastHandledPendingNotificationResponseVersion = pendingNotificationResponseVersion;
     Navigator.of(context).pushNamedAndRemoveUntil(HomeScreen.navItem.routeName, (route) => false);
   }
 

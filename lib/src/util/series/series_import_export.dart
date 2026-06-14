@@ -217,7 +217,7 @@ class SeriesImportExport {
       }
 
       await seriesProviders.seriesProvider.delete(seriesDef, seriesProviders);
-      await seriesProviders.seriesProvider.save(seriesDef);
+      await seriesProviders.seriesProvider.save(seriesDef, forceNotificationRefresh: true);
       await seriesProviders.seriesDataProvider.addValues(seriesDef, seriesData.data, seriesProviders.seriesCurrentValueProvider);
       SimpleLogging.i("Import for ${seriesDef.toLogString()} finished.");
       return true;

@@ -7,6 +7,7 @@ import '../../model/series/series_def.dart';
 import '../../providers/series_current_value_provider.dart';
 import '../../providers/series_provider.dart';
 import '../../util/app_icon_quick_actions.dart';
+import '../../util/app_series_notifications.dart';
 import '../../util/dialogs.dart';
 import '../../util/logging/flutter_simple_logging.dart';
 import '../../util/theme_utils.dart';
@@ -118,7 +119,10 @@ class _SeriesList extends StatelessWidget {
 
   Future<void> _handlePendingSeriesQuickAction(BuildContext context, List<SeriesDef> series) async {
     var seriesUuid = AppIconQuickActions.consumePendingSeriesQuickActionSeriesId();
-    if (seriesUuid == null) return;
+    seriesUuid ??= AppSeriesNotifications.consumePendingSeriesNotificationSeriesId();
+    if (seriesUuid == null) {
+      return;
+    }
 
     var seriesDef = series.where((e) => e.uuid == seriesUuid).firstOrNull;
     if (seriesDef == null) {

@@ -5,8 +5,10 @@ import 'package:xtracker/src/model/series/current_value/series_current_value.dar
 import 'package:xtracker/src/model/series/data/blood_pressure/blood_pressure_value.dart';
 import 'package:xtracker/src/model/series/data/series_data.dart';
 import 'package:xtracker/src/model/series/series_def.dart';
+import 'package:xtracker/src/model/series/settings/notification_settings.dart';
 import 'package:xtracker/src/model/series/series_type.dart';
 import 'package:xtracker/src/store/migration/db_migration.dart';
+import 'package:xtracker/src/util/app_series_notifications.dart';
 import 'package:xtracker/src/util/color_utils.dart';
 import 'package:xtracker/src/util/ex.dart';
 import 'package:xtracker/src/util/json_reader.dart';
@@ -87,6 +89,36 @@ void main() {
       var deserialized = SeriesDef.fromJson(JsonReader(serialized));
 
       expect(SeriesType.bloodPressure, deserialized.seriesType);
+    });
+
+    test('notification settings keep one active repeat type after type change', () {
+      var seriesDef = SeriesDef(
+        uuid: const Uuid().v4().toString(),
+        seriesType: SeriesType.bloodPressure,
+        seriesItems: [],
+        name: 'Reminder series',
+      );
+      var settings = seriesDef.notificationSettingsEditable(() {});
+      settings.enabled = true;
+      settings.repeatType = NotificationRepeatType.everyXDays;
+      settings.everyXDaysInterval = 3;
+      settings.everyXDaysAnchorUtcMs = DateTime.utc(2026, 6, 8).millisecondsSinceEpoch;
+      settings.time = '08:00';
+
+      settings.repeatType = NotificationRepeatType.weekly;
+      settings.weeklyWeekdays = [DateTime.wednesday];
+      settings.time = '10:30';
+
+      var deserialized = SeriesDef.fromJson(JsonReader(seriesDef.toJson()));
+      var deserializedSettings = deserialized.notificationSettingsReadonly();
+      var nextReminder = AppSeriesNotifications.nextScheduledNotificationAt(
+        deserialized,
+        now: DateTime(2026, 6, 8, 9),
+      );
+
+      expect(deserializedSettings.enabled, true);
+      expect(deserializedSettings.repeatType, NotificationRepeatType.weekly);
+      expect(nextReminder, DateTime(2026, 6, 10, 10, 30));
     });
   });
 

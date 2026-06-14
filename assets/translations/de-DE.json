@@ -604,6 +604,48 @@
           }
         }
       },
+      "notifications": {
+        "title": "Benachrichtigungen",
+        "label": {
+          "enabled": "Erinnerungs-Benachrichtigungen aktivieren:",
+          "times": "Uhrzeiten",
+          "intervalDays": "Intervall in Tagen",
+          "weekdays": "Wochentage",
+          "day": "Tag",
+          "weekday": "Wochentag",
+          "monthlyRule": "Monatliche Regel",
+          "timeAt": "Uhrzeit: {}",
+          "unsupportedPlatform": "Diese Plattform unterstützt keine Benachrichtigungen. Die Einstellung wird trotzdem gespeichert."
+        },
+        "repeat": {
+          "daily": "Täglich",
+          "everyXDays": "Alle X Tage",
+          "weekly": "Wöchentlich",
+          "monthly": "Monatlich"
+        },
+        "monthlyRule": {
+          "dayOfMonth": "Bestimmter Tag im Monat",
+          "lastDay": "Letzter Tag im Monat"
+        },
+        "action": {
+          "addTime": "Uhrzeit hinzufügen",
+          "enterValue": "Neuen Wert eintragen"
+        },
+        "snackbar": {
+          "reminderIn": "Erinnerung in {}"
+        },
+        "duration": {
+          "day": "Tag",
+          "days": "Tagen",
+          "hour": "Stunde",
+          "hours": "Stunden",
+          "minute": "Minute",
+          "minutes": "Minuten"
+        },
+        "alert": {
+          "permissionDenied": "Benachrichtigungsberechtigung verweigert. Benachrichtigungen wurden für diese Messreihe deaktiviert."
+        }
+      },
       "tags": {
         "title": "Tags\uD83D\uDEA9",
         "actions": {

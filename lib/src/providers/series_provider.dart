@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../model/series/series_def.dart';
 import '../store/stores.dart';
 import '../util/app_icon_quick_actions.dart';
+import '../util/app_series_notifications.dart';
 import 'series_providers.dart';
 
 class SeriesProvider with ChangeNotifier {
@@ -17,7 +18,7 @@ class SeriesProvider with ChangeNotifier {
     }
   }
 
-  Future<void> fetchData() async {
+  Future<void> fetchData({bool refreshDueNotifications = true}) async {
     // await Future.delayed(const Duration(seconds: 10)); // for testing
 
     _series = await _storeSeriesDef.getAllSeries();
@@ -54,6 +55,9 @@ class SeriesProvider with ChangeNotifier {
     _sortSeries(orderedSeriesUuids);
     var enabledSeriesQuickActions = await AppIconQuickActions.cleanUpOrphanedSeriesQuickActions(_series);
     await AppIconQuickActions.refreshSeriesShortcutItems(_series, enabledSeriesIds: enabledSeriesQuickActions);
+    if (refreshDueNotifications) {
+      await AppSeriesNotifications.refreshDueSeriesNotifications(_series);
+    }
 
     _seriesLoaded = true;
     notifyListeners();
@@ -63,15 +67,25 @@ class SeriesProvider with ChangeNotifier {
     return [..._series];
   }
 
-  SeriesDef? getSeries(String seriesUuid) {
-    if (_series.isEmpty) return null;
-    return _series.firstWhere((s) => s.uuid == seriesUuid);
+  Future<void> refreshDueNotifications() async {
+    if (!_seriesLoaded) return;
+    await AppSeriesNotifications.refreshDueSeriesNotifications(_series);
   }
 
-  Future<void> save(SeriesDef seriesDef) async {
+  SeriesDef? getSeries(String seriesUuid) {
+    if (_series.isEmpty) return null;
+    return _series.where((s) => s.uuid == seriesUuid).firstOrNull;
+  }
+
+  Future<void> save(SeriesDef seriesDef, {bool forceNotificationRefresh = false}) async {
     //  await Future.delayed(const Duration(seconds: 10)); // for testing
+    var previousSeriesDef = getSeries(seriesDef.uuid);
+    var refreshNotifications = forceNotificationRefresh || AppSeriesNotifications.notificationScheduleChanged(previousSeriesDef, seriesDef);
     await _storeSeriesDef.save(seriesDef);
-    await fetchData();
+    if (refreshNotifications) {
+      await AppSeriesNotifications.refreshSeriesNotification(seriesDef, force: true);
+    }
+    await fetchData(refreshDueNotifications: false);
     // notifyListeners(); notify is in fetch
   }
 
@@ -85,8 +99,9 @@ class SeriesProvider with ChangeNotifier {
     // delete series data (current value is deleted inside)
     await seriesProviders.seriesDataProvider.delete(seriesDef, seriesProviders.seriesCurrentValueProvider);
 
+    await AppSeriesNotifications.deleteSeriesNotifications(seriesDef.uuid);
     await _storeSeriesDef.delete(seriesDef);
-    await fetchData();
+    await fetchData(refreshDueNotifications: false);
     // notifyListeners(); notify is in fetch
   }
 
