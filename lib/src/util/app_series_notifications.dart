@@ -15,10 +15,11 @@ import '../store/store_series_notifications.dart';
 import '../store/stores.dart';
 import 'app_icon_quick_actions.dart';
 import 'logging/flutter_simple_logging.dart';
+import 'pending_app_actions.dart';
 
 @pragma('vm:entry-point')
 void onDidReceiveBackgroundSeriesNotificationResponse(NotificationResponse response) {
-  AppSeriesNotifications.handleNotificationResponsePayload(response.payload);
+  AppSeriesNotifications.handleNotificationResponse(response);
 }
 
 class AppSeriesNotifications {
@@ -32,9 +33,6 @@ class AppSeriesNotifications {
   static final FlutterLocalNotificationsPlugin _notificationsPlugin = FlutterLocalNotificationsPlugin();
   static bool _initialized = false;
   static bool _debugNotificationShownThisRun = false;
-  static String? _pendingSeriesNotificationSeriesId;
-  static int _notificationResponseVersion = 0;
-  static final ValueNotifier<int> _notificationResponseVersionNotifier = ValueNotifier<int>(0);
 
   static Future<void> init() async {
     if (!_isSupportedPlatform()) {
@@ -58,14 +56,17 @@ class AppSeriesNotifications {
 
       await _notificationsPlugin.initialize(
         initializationSettings,
-        onDidReceiveNotificationResponse: (response) => handleNotificationResponsePayload(response.payload),
+        onDidReceiveNotificationResponse: handleNotificationResponse,
         onDidReceiveBackgroundNotificationResponse: onDidReceiveBackgroundSeriesNotificationResponse,
       );
 
       final launchDetails = await _notificationsPlugin.getNotificationAppLaunchDetails();
       SimpleLogging.d('Series notification launch details loaded. launchedByNotification=${launchDetails?.didNotificationLaunchApp == true}');
       if (launchDetails?.didNotificationLaunchApp == true) {
-        handleNotificationResponsePayload(launchDetails?.notificationResponse?.payload);
+        var notificationResponse = launchDetails?.notificationResponse;
+        if (notificationResponse != null) {
+          handleNotificationResponse(notificationResponse);
+        }
       }
 
       _initialized = true;
@@ -76,26 +77,66 @@ class AppSeriesNotifications {
     }
   }
 
-  static String? consumePendingSeriesNotificationSeriesId() {
-    var res = _pendingSeriesNotificationSeriesId;
-    _pendingSeriesNotificationSeriesId = null;
-    SimpleLogging.d('Consumed pending series notification response. seriesUuid=$res');
-    return res;
+  static Future<void> queueActiveSeriesNotificationActions() async {
+    if (!_isSupportedPlatform()) {
+      SimpleLogging.d('Queue active series notifications skipped: unsupported platform.');
+      return;
+    }
+    await init();
+    if (!_initialized) {
+      SimpleLogging.d('Queue active series notifications skipped: notifications are not initialized.');
+      return;
+    }
+
+    try {
+      var activeNotifications = await _notificationsPlugin.getActiveNotifications();
+      if (activeNotifications.isEmpty) {
+        SimpleLogging.d('No active notifications found.');
+        return;
+      }
+
+      var entries = await Stores.storeSeriesNotifications.getAll();
+      var seriesUuidByNotificationId = <int, String>{};
+      for (var entry in entries) {
+        for (var notificationId in entry.notificationIds) {
+          seriesUuidByNotificationId[notificationId] = entry.seriesDefUuid;
+        }
+      }
+      SimpleLogging.d(
+        'Loaded active series notification sync state. activeIds=${activeNotifications.map((notification) => notification.id).whereType<int>().toList()}, storedIds=${seriesUuidByNotificationId.keys.toList()}',
+      );
+
+      var queuedCount = 0;
+      for (var activeNotification in activeNotifications) {
+        var notificationId = activeNotification.id;
+        if (notificationId == null) {
+          continue;
+        }
+
+        var seriesUuid = seriesUuidByNotificationId[notificationId];
+        if (seriesUuid == null) {
+          continue;
+        }
+
+        PendingAppActions.enqueueSeriesValue(
+          seriesUuid: seriesUuid,
+          source: PendingSeriesActionSource.notification,
+          notificationId: notificationId,
+        );
+        queuedCount++;
+      }
+
+      SimpleLogging.d('Queued active series notifications. active=${activeNotifications.length}, matched=$queuedCount');
+    } catch (err, st) {
+      SimpleLogging.w('Could not queue active series notifications', error: err, stackTrace: st);
+    }
   }
 
-  static String? pendingSeriesNotificationSeriesId() {
-    return _pendingSeriesNotificationSeriesId;
+  static void handleNotificationResponse(NotificationResponse response) {
+    handleNotificationResponsePayload(response.payload, notificationId: response.id);
   }
 
-  static int pendingSeriesNotificationResponseVersion() {
-    return _notificationResponseVersion;
-  }
-
-  static ValueListenable<int> notificationResponseVersionListenable() {
-    return _notificationResponseVersionNotifier;
-  }
-
-  static void handleNotificationResponsePayload(String? payload) {
+  static void handleNotificationResponsePayload(String? payload, {int? notificationId}) {
     if (payload == null || payload.isEmpty) {
       SimpleLogging.d('Ignored series notification response: empty payload.');
       return;
@@ -109,10 +150,12 @@ class AppSeriesNotifications {
       SimpleLogging.d('Ignored series notification response: missing series uuid.');
       return;
     }
-    _pendingSeriesNotificationSeriesId = seriesUuid;
-    _notificationResponseVersion++;
-    _notificationResponseVersionNotifier.value = _notificationResponseVersion;
-    SimpleLogging.d('Handled series notification response. seriesUuid=$seriesUuid, responseVersion=$_notificationResponseVersion');
+    PendingAppActions.enqueueSeriesValue(
+      seriesUuid: seriesUuid,
+      source: PendingSeriesActionSource.notification,
+      notificationId: notificationId,
+    );
+    SimpleLogging.d('Handled series notification response. seriesUuid=$seriesUuid, notificationId=$notificationId');
   }
 
   static Future<bool> ensurePermissionRequested() async {

@@ -357,6 +357,20 @@
         "tooltip": "Messreihen verwalten"
       }
     },
+    "pendingActions": {
+      "tooltip": "Offene Aktionen ({})",
+      "title": "Offene Aktionen",
+      "label": {
+        "empty": "Keine offenen Aktionen",
+        "seriesValue": "Wert erfassen: {}",
+        "backupReminder": "Backup-Erinnerung"
+      },
+      "source": {
+        "quickAction": "Quickaction",
+        "notification": "Benachrichtigung",
+        "backupReminder": "Datensicherung"
+      }
+    },
     "btn": {
       "addSeries": {
         "label": "Messreihe hinzufügen...",

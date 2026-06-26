@@ -11,9 +11,9 @@ import 'providers/series_data_provider.dart';
 import 'providers/series_provider.dart';
 import 'routing.dart';
 import 'screens/home_screen.dart';
-import 'util/app_icon_quick_actions.dart';
 import 'util/app_series_notifications.dart';
 import 'util/date_time_utils.dart';
+import 'util/pending_app_actions.dart';
 import 'util/theme_utils.dart';
 import 'widgets/administration/settings/settings_controller.dart';
 
@@ -32,22 +32,19 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   final _navigatorKey = GlobalKey<NavigatorState>();
-  int _lastHandledPendingQuickActionResponseVersion = 0;
-  int _lastHandledPendingNotificationResponseVersion = 0;
+  int _lastHandledPendingExternalSeriesActionVersion = 0;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    AppIconQuickActions.quickActionResponseVersionListenable().addListener(_routeToHomeIfExternalActionPending);
-    AppSeriesNotifications.notificationResponseVersionListenable().addListener(_routeToHomeIfExternalActionPending);
-    WidgetsBinding.instance.addPostFrameCallback((_) => _routeToHomeIfQuickActionPending());
+    PendingAppActions.externalSeriesActionListenable().addListener(_routeToHomeIfExternalActionPending);
+    WidgetsBinding.instance.addPostFrameCallback((_) => _queueActiveNotificationsAndRouteIfPending());
   }
 
   @override
   void dispose() {
-    AppIconQuickActions.quickActionResponseVersionListenable().removeListener(_routeToHomeIfExternalActionPending);
-    AppSeriesNotifications.notificationResponseVersionListenable().removeListener(_routeToHomeIfExternalActionPending);
+    PendingAppActions.externalSeriesActionListenable().removeListener(_routeToHomeIfExternalActionPending);
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
@@ -55,8 +52,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _routeToHomeIfQuickActionPending();
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        await _queueActiveNotificationsAndRouteIfPending();
         _refreshDueSeriesNotifications();
       });
     }
@@ -71,34 +68,26 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   }
 
   void _routeToHomeIfExternalActionPending() {
-    WidgetsBinding.instance.addPostFrameCallback((_) => _routeToHomeIfQuickActionPending());
+    WidgetsBinding.instance.addPostFrameCallback((_) => _queueActiveNotificationsAndRouteIfPending());
   }
 
-  void _routeToHomeIfQuickActionPending() {
-    var pendingSeriesUuid = AppIconQuickActions.pendingSeriesQuickActionSeriesId();
-    var pendingQuickActionResponseVersion = AppIconQuickActions.pendingSeriesQuickActionResponseVersion();
-    var pendingNotificationSeriesUuid = AppSeriesNotifications.pendingSeriesNotificationSeriesId();
-    var pendingNotificationResponseVersion = AppSeriesNotifications.pendingSeriesNotificationResponseVersion();
+  Future<void> _queueActiveNotificationsAndRouteIfPending() async {
+    await AppSeriesNotifications.queueActiveSeriesNotificationActions();
+    _routeToHomeIfExternalSeriesActionPending();
+  }
+
+  void _routeToHomeIfExternalSeriesActionPending() {
+    var pendingExternalSeriesActionVersion = PendingAppActions.pendingExternalSeriesActionVersion();
+    if (!PendingAppActions.hasPendingExternalSeriesAction || _lastHandledPendingExternalSeriesActionVersion == pendingExternalSeriesActionVersion) {
+      return;
+    }
 
     var context = _navigatorKey.currentContext;
     if (context == null) {
       return;
     }
 
-    if (pendingSeriesUuid != null && _lastHandledPendingQuickActionResponseVersion != pendingQuickActionResponseVersion) {
-      _lastHandledPendingQuickActionResponseVersion = pendingQuickActionResponseVersion;
-      Navigator.of(context).pushNamedAndRemoveUntil(HomeScreen.navItem.routeName, (route) => false);
-      return;
-    }
-
-    if (pendingNotificationSeriesUuid == null) {
-      return;
-    }
-    if (_lastHandledPendingNotificationResponseVersion == pendingNotificationResponseVersion) {
-      return;
-    }
-
-    _lastHandledPendingNotificationResponseVersion = pendingNotificationResponseVersion;
+    _lastHandledPendingExternalSeriesActionVersion = pendingExternalSeriesActionVersion;
     Navigator.of(context).pushNamedAndRemoveUntil(HomeScreen.navItem.routeName, (route) => false);
   }
 

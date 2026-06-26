@@ -2,7 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../generated/locale_keys.g.dart';
-import '../../util/app_icon_quick_actions.dart';
+import '../../util/pending_app_actions.dart';
 import '../../util/series/series_import_export.dart';
 import '../../util/theme_utils.dart';
 import '../administration/settings/settings_controller.dart';
@@ -10,42 +10,12 @@ import '../controls/layout/single_child_scroll_view_with_scrollbar.dart';
 
 /// Check if a backup reminder should be displayed.
 class SeriesExportCheck extends StatefulWidget {
-  static bool _dialogVisible = false;
-
   final Widget child;
   final SettingsController settingsController;
 
   const SeriesExportCheck({super.key, required this.child, required this.settingsController});
 
-  @override
-  State<SeriesExportCheck> createState() => _SeriesExportCheckState();
-}
-
-class _SeriesExportCheckState extends State<SeriesExportCheck> {
-  @override
-  void initState() {
-    super.initState();
-
-    // A pending quick action has higher priority than reminder dialogs.
-    if (AppIconQuickActions.pendingSeriesQuickActionSeriesId() != null) return;
-
-    var settingsController = widget.settingsController;
-    // reminder disabled?
-    if (settingsController.seriesExportDisableReminder) return;
-
-    // if no reminder date available use initialAppStart +30 days
-    DateTime reminderDate = settingsController.seriesExportReminderDate ?? settingsController.initialAppStart.add(const Duration(days: 30));
-
-    if (!SeriesExportCheck._dialogVisible && DateTime.now().isAfter(reminderDate)) {
-      SeriesExportCheck._dialogVisible = true;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _showAlert(context);
-      });
-    }
-  }
-
-  void _showAlert(BuildContext context) async {
-    final settingsController = widget.settingsController;
+  static Future<void> showReminderDialog(BuildContext context, SettingsController settingsController) async {
     String lastExport = SeriesImportExport.buildLastExportDateStr(settingsController);
 
     Widget dialogContent = SingleChildScrollViewWithScrollbar(
@@ -85,29 +55,46 @@ class _SeriesExportCheckState extends State<SeriesExportCheck> {
       ),
     );
 
-    try {
-      var res = await showDialog<bool?>(
-        context: context,
-        builder: (ctx) => AlertDialog(
-          title: Text(LocaleKeys.seriesManagement_backupAlert_title.tr()),
-          content: dialogContent,
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(ctx).pop();
-              },
-              child: Text(LocaleKeys.commons_dialog_btn_close.tr()),
-            ),
-          ],
-        ),
-      );
+    var res = await showDialog<bool?>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(LocaleKeys.seriesManagement_backupAlert_title.tr()),
+        content: dialogContent,
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+            child: Text(LocaleKeys.commons_dialog_btn_close.tr()),
+          ),
+        ],
+      ),
+    );
 
-      // case of close remember again in 1 day
-      if (res == null) {
-        await settingsController.updateSeriesExportReminderDate(1);
-      }
-    } finally {
-      SeriesExportCheck._dialogVisible = false;
+    // case of close remember again in 1 day
+    if (res == null) {
+      await settingsController.updateSeriesExportReminderDate(1);
+    }
+  }
+
+  @override
+  State<SeriesExportCheck> createState() => _SeriesExportCheckState();
+}
+
+class _SeriesExportCheckState extends State<SeriesExportCheck> {
+  @override
+  void initState() {
+    super.initState();
+
+    var settingsController = widget.settingsController;
+    // reminder disabled?
+    if (settingsController.seriesExportDisableReminder) return;
+
+    // if no reminder date available use initialAppStart +30 days
+    DateTime reminderDate = settingsController.seriesExportReminderDate ?? settingsController.initialAppStart.add(const Duration(days: 30));
+
+    if (DateTime.now().isAfter(reminderDate)) {
+      WidgetsBinding.instance.addPostFrameCallback((_) => PendingAppActions.enqueueBackupReminder());
     }
   }
 

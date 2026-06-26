@@ -150,6 +150,14 @@ abstract class LocaleKeys {
   static const seriesDashboard_nav_tooltip = 'seriesDashboard.nav.tooltip';
   static const seriesDashboard_action_addSeries_tooltip = 'seriesDashboard.action.addSeries.tooltip';
   static const seriesDashboard_action_manageSeries_tooltip = 'seriesDashboard.action.manageSeries.tooltip';
+  static const seriesDashboard_pendingActions_tooltip = 'seriesDashboard.pendingActions.tooltip';
+  static const seriesDashboard_pendingActions_title = 'seriesDashboard.pendingActions.title';
+  static const seriesDashboard_pendingActions_label_empty = 'seriesDashboard.pendingActions.label.empty';
+  static const seriesDashboard_pendingActions_label_seriesValue = 'seriesDashboard.pendingActions.label.seriesValue';
+  static const seriesDashboard_pendingActions_label_backupReminder = 'seriesDashboard.pendingActions.label.backupReminder';
+  static const seriesDashboard_pendingActions_source_quickAction = 'seriesDashboard.pendingActions.source.quickAction';
+  static const seriesDashboard_pendingActions_source_notification = 'seriesDashboard.pendingActions.source.notification';
+  static const seriesDashboard_pendingActions_source_backupReminder = 'seriesDashboard.pendingActions.source.backupReminder';
   static const seriesDashboard_btn_addSeries_label = 'seriesDashboard.btn.addSeries.label';
   static const seriesDashboard_btn_addSeries_tooltip = 'seriesDashboard.btn.addSeries.tooltip';
   static const seriesData_title = 'seriesData.title';

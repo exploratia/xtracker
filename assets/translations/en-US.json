@@ -357,6 +357,20 @@
         "tooltip": "Manage series"
       }
     },
+    "pendingActions": {
+      "tooltip": "Open actions ({})",
+      "title": "Open actions",
+      "label": {
+        "empty": "No open actions",
+        "seriesValue": "Enter value: {}",
+        "backupReminder": "Backup reminder"
+      },
+      "source": {
+        "quickAction": "Quick action",
+        "notification": "Notification",
+        "backupReminder": "Backup"
+      }
+    },
     "btn": {
       "addSeries": {
         "label": "Add series...",

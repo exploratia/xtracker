@@ -10,6 +10,7 @@ import 'device_storage/device_storage.dart';
 import 'device_storage/device_storage_keys.dart';
 import 'launch_uri.dart';
 import 'logging/flutter_simple_logging.dart';
+import 'pending_app_actions.dart';
 
 class AppIconQuickActions {
   static const _actionOpenExploratia = 'open_exploratia';
@@ -34,9 +35,6 @@ class AppIconQuickActions {
     0xED1EE0,
   ];
   static const _quickActions = QuickActions();
-  static String? _pendingSeriesQuickActionSeriesId;
-  static int _quickActionResponseVersion = 0;
-  static final ValueNotifier<int> _quickActionResponseVersionNotifier = ValueNotifier<int>(0);
   static String? _lastShortcutItemsSignature;
   static List<SeriesDef> _lastKnownSeries = const [];
   static final _seriesQuickActionPaletteHues = _seriesQuickActionPaletteStartHexRgb.map((hexRgb) => HSVColor.fromColor(_rgbToColor(hexRgb)).hue).toList();
@@ -55,9 +53,10 @@ class AppIconQuickActions {
         if (actionType.startsWith(_actionSeriesAddPrefix)) {
           var seriesUuid = actionType.substring(_actionSeriesAddPrefix.length);
           if (seriesUuid.isNotEmpty) {
-            _pendingSeriesQuickActionSeriesId = seriesUuid;
-            _quickActionResponseVersion++;
-            _quickActionResponseVersionNotifier.value = _quickActionResponseVersion;
+            PendingAppActions.enqueueSeriesValue(
+              seriesUuid: seriesUuid,
+              source: PendingSeriesActionSource.quickAction,
+            );
           }
         }
       });
@@ -66,24 +65,6 @@ class AppIconQuickActions {
     } catch (err) {
       SimpleLogging.w('Could not initialize app icon quick actions', error: err);
     }
-  }
-
-  static String? consumePendingSeriesQuickActionSeriesId() {
-    var res = _pendingSeriesQuickActionSeriesId;
-    _pendingSeriesQuickActionSeriesId = null;
-    return res;
-  }
-
-  static String? pendingSeriesQuickActionSeriesId() {
-    return _pendingSeriesQuickActionSeriesId;
-  }
-
-  static int pendingSeriesQuickActionResponseVersion() {
-    return _quickActionResponseVersion;
-  }
-
-  static ValueListenable<int> quickActionResponseVersionListenable() {
-    return _quickActionResponseVersionNotifier;
   }
 
   /// Returns the Android drawable resource name for the quick action icon that best matches [color].
