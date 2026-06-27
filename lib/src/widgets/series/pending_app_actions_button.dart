@@ -168,15 +168,15 @@ class _PendingActionsListState extends State<_PendingActionsList> {
         controller: _scrollController,
         padding: EdgeInsets.zero,
         itemCount: widget.actions.length,
-        separatorBuilder: (context, index) => const SizedBox(height: ThemeUtils.defaultPadding),
+        separatorBuilder: (context, index) => const SizedBox(height: ThemeUtils.verticalSpacing),
         itemBuilder: (context, index) {
           var action = widget.actions[index];
           return Padding(
             padding: EdgeInsets.fromLTRB(
               ThemeUtils.defaultPadding * 2,
-              index == 0 ? ThemeUtils.defaultPadding : 0,
+              index == 0 ? ThemeUtils.verticalSpacing : 0,
               ThemeUtils.defaultPadding * 2,
-              index == widget.actions.length - 1 ? ThemeUtils.defaultPadding : 0,
+              index == widget.actions.length - 1 ? ThemeUtils.verticalSpacing : 0,
             ),
             child: _PendingActionCard(
               action: action,
@@ -243,6 +243,7 @@ class _PendingActionCard extends StatelessWidget {
                 tooltip: LocaleKeys.commons_dialog_btn_delete.tr(),
                 onPressed: () => PendingAppActions.remove(action.id),
                 icon: const Icon(Icons.delete_outline),
+                color: ThemeUtils.secondaryColor,
               ),
             ],
           ),
