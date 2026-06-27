@@ -52,17 +52,29 @@ class PendingAppActionsButton extends StatelessWidget {
         var mediaQueryData = MediaQuery.of(popupContext);
         var top = mediaQueryData.padding.top + kToolbarHeight;
         var bottom = mediaQueryData.padding.bottom;
+        var popupWidth = mediaQueryData.size.width < 520 ? mediaQueryData.size.width : 520.0;
+        var popupMaxHeight = mediaQueryData.size.height - top - bottom;
 
         return Stack(
           children: [
+            Positioned.fill(
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () => Navigator.of(popupContext).pop(),
+              ),
+            ),
             Positioned(
               top: top,
-              bottom: bottom,
-              left: 0,
               right: 0,
-              child: _PendingActionsPopup(
-                actionContext: context,
-                settingsController: settingsController,
+              child: SizedBox(
+                width: popupWidth,
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(maxHeight: popupMaxHeight),
+                  child: _PendingActionsPopup(
+                    actionContext: context,
+                    settingsController: settingsController,
+                  ),
+                ),
               ),
             ),
           ],
@@ -95,23 +107,17 @@ class _PendingActionsPopup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.topRight,
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 520),
-        child: ValueListenableBuilder<int>(
-          valueListenable: PendingAppActions.listenable(),
-          builder: (context, _, _) {
-            var actions = PendingAppActions.items();
+    return ValueListenableBuilder<int>(
+      valueListenable: PendingAppActions.listenable(),
+      builder: (context, _, _) {
+        var actions = PendingAppActions.items();
 
-            return _PendingActionsList(
-              actions: actions,
-              actionContext: actionContext,
-              settingsController: settingsController,
-            );
-          },
-        ),
-      ),
+        return _PendingActionsList(
+          actions: actions,
+          actionContext: actionContext,
+          settingsController: settingsController,
+        );
+      },
     );
   }
 }
@@ -137,6 +143,8 @@ class _PendingActionsListState extends State<_PendingActionsList> {
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
   late final ScrollController _scrollController;
   late List<PendingAppAction> _actions;
+  final Set<String> _pendingDeleteActionIds = {};
+  bool _closeWhenEmptyScheduled = false;
 
   @override
   void initState() {
@@ -179,6 +187,7 @@ class _PendingActionsListState extends State<_PendingActionsList> {
         key: _listKey,
         controller: _scrollController,
         padding: EdgeInsets.zero,
+        shrinkWrap: true,
         initialItemCount: _actions.length,
         itemBuilder: (context, index, animation) => _buildActionItem(
           context,
@@ -227,6 +236,7 @@ class _PendingActionsListState extends State<_PendingActionsList> {
       return;
     }
 
+    _pendingDeleteActionIds.add(action.id);
     _actions.removeAt(index);
     _listKey.currentState?.removeItem(
       index,
@@ -253,10 +263,15 @@ class _PendingActionsListState extends State<_PendingActionsList> {
 
     await Future<void>.delayed(_removeDuration);
     PendingAppActions.remove(action.id);
+    _pendingDeleteActionIds.remove(action.id);
+    if (PendingAppActions.count == 0) {
+      _closePopupWhenEmpty();
+    }
   }
 
   void _syncActions(List<PendingAppAction> nextActions) {
-    var nextIds = nextActions.map((action) => action.id).toSet();
+    var visibleNextActions = nextActions.where((action) => !_pendingDeleteActionIds.contains(action.id)).toList();
+    var nextIds = visibleNextActions.map((action) => action.id).toSet();
     var localIds = _actions.map((action) => action.id).toSet();
 
     for (var index = _actions.length - 1; index >= 0; index--) {
@@ -274,8 +289,8 @@ class _PendingActionsListState extends State<_PendingActionsList> {
       }
     }
 
-    for (var index = 0; index < nextActions.length; index++) {
-      var action = nextActions[index];
+    for (var index = 0; index < visibleNextActions.length; index++) {
+      var action = visibleNextActions[index];
       if (!localIds.contains(action.id)) {
         _actions.insert(index, action);
         _listKey.currentState?.insertItem(
@@ -285,18 +300,39 @@ class _PendingActionsListState extends State<_PendingActionsList> {
       }
     }
 
-    var sameOrder = _actions.length == nextActions.length;
+    var sameOrder = _actions.length == visibleNextActions.length;
     if (sameOrder) {
       for (var index = 0; index < _actions.length; index++) {
-        if (_actions[index].id != nextActions[index].id) {
+        if (_actions[index].id != visibleNextActions[index].id) {
           sameOrder = false;
           break;
         }
       }
     }
     if (!sameOrder) {
-      _actions = List<PendingAppAction>.of(nextActions);
+      _actions = List<PendingAppAction>.of(visibleNextActions);
     }
+
+    if (visibleNextActions.isEmpty && PendingAppActions.count == 0) {
+      _closePopupWhenEmpty(delay: _removeDuration);
+    }
+  }
+
+  Future<void> _closePopupWhenEmpty({Duration delay = Duration.zero}) async {
+    if (_closeWhenEmptyScheduled && delay > Duration.zero) {
+      return;
+    }
+    _closeWhenEmptyScheduled = true;
+
+    if (delay > Duration.zero) {
+      await Future<void>.delayed(delay);
+    }
+    if (!mounted || PendingAppActions.count != 0) {
+      _closeWhenEmptyScheduled = false;
+      return;
+    }
+
+    Navigator.of(context).pop();
   }
 
   Widget _buildRemovedActionItemContent(PendingAppAction action, int index) {
