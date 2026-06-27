@@ -154,6 +154,7 @@ class AppSeriesNotifications {
       seriesUuid: seriesUuid,
       source: PendingSeriesActionSource.notification,
       notificationId: notificationId,
+      executeAutomatically: true,
     );
     SimpleLogging.d('Handled series notification response. seriesUuid=$seriesUuid, notificationId=$notificationId');
   }

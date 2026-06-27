@@ -136,7 +136,7 @@ class _SeriesListState extends State<_SeriesList> {
   }
 
   void _scheduleAutomaticAction() {
-    if (_automaticActionScheduled || PendingAppActions.count == 0) {
+    if (_automaticActionScheduled || !PendingAppActions.hasAutomaticAction) {
       return;
     }
 

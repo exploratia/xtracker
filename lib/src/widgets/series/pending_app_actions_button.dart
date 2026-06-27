@@ -1,5 +1,3 @@
-import 'dart:math' as math;
-
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +19,7 @@ class PendingAppActionsButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    PendingAppActions.enqueueDebugDummyActionsIfEnabled();
     return ValueListenableBuilder<int>(
       valueListenable: PendingAppActions.listenable(),
       builder: (context, _, _) {
@@ -52,21 +51,18 @@ class PendingAppActionsButton extends StatelessWidget {
       pageBuilder: (popupContext, _, _) {
         var mediaQueryData = MediaQuery.of(popupContext);
         var top = mediaQueryData.padding.top + kToolbarHeight;
-        var maxHeight = math.max(220.0, mediaQueryData.size.height - top - ThemeUtils.screenPadding * 2);
+        var bottom = mediaQueryData.padding.bottom;
 
         return Stack(
           children: [
             Positioned(
               top: top,
-              left: ThemeUtils.defaultPadding,
-              right: ThemeUtils.defaultPadding,
-              child: Align(
-                alignment: Alignment.topRight,
-                child: _PendingActionsPopup(
-                  actionContext: context,
-                  maxHeight: math.min(420.0, maxHeight),
-                  settingsController: settingsController,
-                ),
+              bottom: bottom,
+              left: 0,
+              right: 0,
+              child: _PendingActionsPopup(
+                actionContext: context,
+                settingsController: settingsController,
               ),
             ),
           ],
@@ -91,76 +87,27 @@ class PendingAppActionsButton extends StatelessWidget {
 class _PendingActionsPopup extends StatelessWidget {
   const _PendingActionsPopup({
     required this.actionContext,
-    required this.maxHeight,
     required this.settingsController,
   });
 
   final BuildContext actionContext;
-  final double maxHeight;
   final SettingsController settingsController;
 
   @override
   Widget build(BuildContext context) {
-    var themeData = Theme.of(context);
-
-    return Material(
-      elevation: ThemeUtils.elevation * 2,
-      color: themeData.dialogTheme.backgroundColor ?? themeData.colorScheme.surface,
-      borderRadius: ThemeUtils.borderRadiusCircular,
-      clipBehavior: Clip.antiAlias,
+    return Align(
+      alignment: Alignment.topRight,
       child: ConstrainedBox(
-        constraints: BoxConstraints(
-          maxWidth: 520,
-          maxHeight: maxHeight,
-        ),
+        constraints: const BoxConstraints(maxWidth: 520),
         child: ValueListenableBuilder<int>(
           valueListenable: PendingAppActions.listenable(),
           builder: (context, _, _) {
             var actions = PendingAppActions.items();
 
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(
-                    ThemeUtils.defaultPadding,
-                    ThemeUtils.defaultPadding,
-                    ThemeUtils.defaultPadding,
-                    ThemeUtils.paddingSmall,
-                  ),
-                  child: Text(
-                    LocaleKeys.seriesDashboard_pendingActions_title.tr(),
-                    style: themeData.textTheme.titleMedium,
-                  ),
-                ),
-                const Divider(height: 1),
-                if (actions.isEmpty)
-                  Padding(
-                    padding: ThemeUtils.screenPaddingAll,
-                    child: Text(LocaleKeys.seriesDashboard_pendingActions_label_empty.tr()),
-                  )
-                else
-                  ConstrainedBox(
-                    constraints: BoxConstraints(maxHeight: math.max(120.0, maxHeight - 56)),
-                    child: Scrollbar(
-                      child: ListView.separated(
-                        shrinkWrap: true,
-                        padding: const EdgeInsets.symmetric(vertical: ThemeUtils.paddingSmall),
-                        itemCount: actions.length,
-                        separatorBuilder: (context, index) => const Divider(height: 1),
-                        itemBuilder: (context, index) {
-                          var action = actions[index];
-                          return _PendingActionTile(
-                            action: action,
-                            actionContext: actionContext,
-                            settingsController: settingsController,
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-              ],
+            return _PendingActionsList(
+              actions: actions,
+              actionContext: actionContext,
+              settingsController: settingsController,
             );
           },
         ),
@@ -169,8 +116,82 @@ class _PendingActionsPopup extends StatelessWidget {
   }
 }
 
-class _PendingActionTile extends StatelessWidget {
-  const _PendingActionTile({
+class _PendingActionsList extends StatefulWidget {
+  const _PendingActionsList({
+    required this.actions,
+    required this.actionContext,
+    required this.settingsController,
+  });
+
+  final List<PendingAppAction> actions;
+  final BuildContext actionContext;
+  final SettingsController settingsController;
+
+  @override
+  State<_PendingActionsList> createState() => _PendingActionsListState();
+}
+
+class _PendingActionsListState extends State<_PendingActionsList> {
+  late final ScrollController _scrollController;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var themeData = Theme.of(context);
+    var scrollbarTheme = themeData.scrollbarTheme;
+    var thumbColor = scrollbarTheme.thumbColor?.resolve(const <WidgetState>{}) ?? themeData.colorScheme.primary;
+    var radius = scrollbarTheme.radius ?? Radius.zero;
+    var thickness = scrollbarTheme.thickness?.resolve(const <WidgetState>{});
+    var interactive = scrollbarTheme.interactive ?? true;
+
+    return RawScrollbar(
+      controller: _scrollController,
+      thumbColor: thumbColor,
+      radius: radius,
+      thickness: thickness,
+      interactive: interactive,
+      mainAxisMargin: 0,
+      crossAxisMargin: 0,
+      padding: EdgeInsets.zero,
+      child: ListView.separated(
+        controller: _scrollController,
+        padding: EdgeInsets.zero,
+        itemCount: widget.actions.length,
+        separatorBuilder: (context, index) => const SizedBox(height: ThemeUtils.defaultPadding),
+        itemBuilder: (context, index) {
+          var action = widget.actions[index];
+          return Padding(
+            padding: EdgeInsets.fromLTRB(
+              ThemeUtils.defaultPadding * 2,
+              index == 0 ? ThemeUtils.defaultPadding : 0,
+              ThemeUtils.defaultPadding * 2,
+              index == widget.actions.length - 1 ? ThemeUtils.defaultPadding : 0,
+            ),
+            child: _PendingActionCard(
+              action: action,
+              actionContext: widget.actionContext,
+              settingsController: widget.settingsController,
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _PendingActionCard extends StatelessWidget {
+  const _PendingActionCard({
     required this.action,
     required this.actionContext,
     required this.settingsController,
@@ -182,30 +203,59 @@ class _PendingActionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      leading: Icon(_iconData()),
-      title: Text(_title(context)),
-      subtitle: Text(_subtitle()),
-      trailing: IconButton(
-        tooltip: LocaleKeys.commons_dialog_btn_delete.tr(),
-        onPressed: () => PendingAppActions.remove(action.id),
-        icon: const Icon(Icons.delete_outline),
-      ),
-      onTap: () => _consumeAndExecute(context),
-    );
-  }
+    var themeData = Theme.of(context);
 
-  IconData _iconData() {
-    return switch (action.type) {
-      PendingAppActionType.seriesValue => Icons.add_chart_outlined,
-      PendingAppActionType.backupReminder => Icons.backup_outlined,
-    };
+    return Card(
+      margin: EdgeInsets.zero,
+      child: InkWell(
+        borderRadius: ThemeUtils.cardBorderRadius,
+        onTap: () => _consumeAndExecute(context),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: ThemeUtils.defaultPadding,
+            vertical: ThemeUtils.paddingSmall,
+          ),
+          child: Row(
+            children: [
+              _PendingActionIcon(action: action),
+              const SizedBox(width: ThemeUtils.horizontalSpacing),
+              Expanded(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _title(context),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: themeData.textTheme.bodyLarge,
+                    ),
+                    Text(
+                      _subtitle(),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: themeData.textTheme.bodySmall,
+                    ),
+                  ],
+                ),
+              ),
+              IconButton(
+                tooltip: LocaleKeys.commons_dialog_btn_delete.tr(),
+                onPressed: () => PendingAppActions.remove(action.id),
+                icon: const Icon(Icons.delete_outline),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   String _title(BuildContext context) {
     return switch (action.type) {
       PendingAppActionType.seriesValue => LocaleKeys.seriesDashboard_pendingActions_label_seriesValue.tr(args: [_seriesName(context)]),
       PendingAppActionType.backupReminder => LocaleKeys.seriesDashboard_pendingActions_label_backupReminder.tr(),
+      PendingAppActionType.debugDummy => LocaleKeys.seriesDashboard_pendingActions_label_debugDummy.tr(args: [action.id]),
     };
   }
 
@@ -217,6 +267,7 @@ class _PendingActionTile extends StatelessWidget {
         null => '',
       },
       PendingAppActionType.backupReminder => LocaleKeys.seriesDashboard_pendingActions_source_backupReminder.tr(),
+      PendingAppActionType.debugDummy => LocaleKeys.seriesDashboard_pendingActions_source_debugDummy.tr(),
     };
   }
 
@@ -245,6 +296,34 @@ class _PendingActionTile extends StatelessWidget {
       actionContext,
       consumedAction,
       settingsController: settingsController,
+    );
+  }
+}
+
+class _PendingActionIcon extends StatelessWidget {
+  const _PendingActionIcon({
+    required this.action,
+  });
+
+  final PendingAppAction action;
+
+  @override
+  Widget build(BuildContext context) {
+    if (action.type == PendingAppActionType.seriesValue) {
+      var seriesUuid = action.seriesUuid;
+      var seriesDef = seriesUuid == null ? null : context.watch<SeriesProvider>().series.where((seriesDef) => seriesDef.uuid == seriesUuid).firstOrNull;
+      return Icon(
+        seriesDef?.iconData() ?? Icons.add_chart_outlined,
+        color: seriesDef?.color,
+      );
+    }
+
+    return Icon(
+      switch (action.type) {
+        PendingAppActionType.backupReminder => Icons.backup_outlined,
+        PendingAppActionType.debugDummy => Icons.bug_report_outlined,
+        PendingAppActionType.seriesValue => Icons.add_outlined,
+      },
     );
   }
 }

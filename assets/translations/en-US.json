@@ -363,12 +363,14 @@
       "label": {
         "empty": "No open actions",
         "seriesValue": "Enter value: {}",
-        "backupReminder": "Backup reminder"
+        "backupReminder": "Backup reminder",
+        "debugDummy": "Debug action {}"
       },
       "source": {
         "quickAction": "Quick action",
         "notification": "Notification",
-        "backupReminder": "Backup"
+        "backupReminder": "Backup",
+        "debugDummy": "Test item"
       }
     },
     "btn": {

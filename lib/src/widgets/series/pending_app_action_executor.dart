@@ -26,6 +26,8 @@ class PendingAppActionExecutor {
         await _executeSeriesValueAction(context, action);
       case PendingAppActionType.backupReminder:
         await SeriesExportCheck.showReminderDialog(context, settingsController);
+      case PendingAppActionType.debugDummy:
+        Dialogs.showSnackBar('Debug action executed: ${action.id}', context);
     }
   }
 

@@ -56,6 +56,7 @@ class AppIconQuickActions {
             PendingAppActions.enqueueSeriesValue(
               seriesUuid: seriesUuid,
               source: PendingSeriesActionSource.quickAction,
+              executeAutomatically: true,
             );
           }
         }

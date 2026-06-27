@@ -363,12 +363,14 @@
       "label": {
         "empty": "Keine offenen Aktionen",
         "seriesValue": "Wert erfassen: {}",
-        "backupReminder": "Backup-Erinnerung"
+        "backupReminder": "Backup-Erinnerung",
+        "debugDummy": "Debug-Aktion {}"
       },
       "source": {
         "quickAction": "Quickaction",
         "notification": "Benachrichtigung",
-        "backupReminder": "Datensicherung"
+        "backupReminder": "Datensicherung",
+        "debugDummy": "Testeintrag"
       }
     },
     "btn": {
