@@ -121,6 +121,30 @@ void main() {
       expect(nextReminder, DateTime(2026, 6, 10, 10, 30));
     });
 
+    test('notification reminder text is optional and serialized', () {
+      var seriesDef = SeriesDef(
+        uuid: const Uuid().v4().toString(),
+        seriesType: SeriesType.bloodPressure,
+        seriesItems: [],
+        name: 'Reminder text series',
+      );
+      var settings = seriesDef.notificationSettingsEditable(() {});
+
+      settings.reminderText = '  Check blood pressure  ';
+      var deserialized = SeriesDef.fromJson(JsonReader(seriesDef.toJson()));
+
+      expect(deserialized.notificationSettingsReadonly().reminderText, 'Check blood pressure');
+
+      settings.reminderText = 'x' * (NotificationSettings.maxReminderTextLength + 1);
+
+      expect(settings.reminderText, 'x' * NotificationSettings.maxReminderTextLength);
+
+      settings.reminderText = '   ';
+
+      expect(seriesDef.notificationSettingsReadonly().reminderText, isNull);
+      expect(seriesDef.toJson()['settings'].containsKey('notificationReminderText'), false);
+    });
+
     test('monthly weekday notification rule schedules configured weekday in month', () {
       var seriesDef = SeriesDef(
         uuid: const Uuid().v4().toString(),

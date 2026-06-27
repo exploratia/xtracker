@@ -649,7 +649,8 @@
           "weekday": "Weekday",
           "monthlyRule": "Monthly rule",
           "timeAt": "Time: {}",
-          "unsupportedPlatform": "This platform does not support notifications. The setting is still saved."
+          "unsupportedPlatform": "This platform does not support notifications. The setting is still saved.",
+          "reminderText": "Reminder text"
         },
         "repeat": {
           "daily": "Daily",

@@ -649,7 +649,8 @@
           "weekday": "Wochentag",
           "monthlyRule": "Monatliche Regel",
           "timeAt": "Uhrzeit: {}",
-          "unsupportedPlatform": "Diese Plattform unterstützt keine Benachrichtigungen. Die Einstellung wird trotzdem gespeichert."
+          "unsupportedPlatform": "Diese Plattform unterstützt keine Benachrichtigungen. Die Einstellung wird trotzdem gespeichert.",
+          "reminderText": "Erinnerungstext"
         },
         "repeat": {
           "daily": "Täglich",

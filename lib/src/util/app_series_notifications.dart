@@ -341,6 +341,7 @@ class AppSeriesNotifications {
     var scheduleSpec = _buildScheduleSpec(seriesDef, now);
     var signature = _buildSeriesSignature(seriesDef);
     var triggerUtcMs = _triggerUtcMs(scheduleSpec);
+    var notificationText = _notificationBody(seriesDef);
     SimpleLogging.d(
       'Built series notification schedule. seriesUuid=${seriesDef.uuid}, triggerCount=${scheduleSpec.length}, force=$force',
     );
@@ -361,7 +362,7 @@ class AppSeriesNotifications {
       await _notificationsPlugin.zonedSchedule(
         id,
         seriesDef.name,
-        LocaleKeys.seriesEdit_seriesSettings_notifications_action_enterValue.tr(),
+        notificationText,
         tz.TZDateTime.from(trigger, tz.local),
         NotificationDetails(
           android: AndroidNotificationDetails(
@@ -428,6 +429,10 @@ class AppSeriesNotifications {
 
   static List<int> _triggerUtcMs(List<DateTime> triggers) {
     return triggers.map((trigger) => trigger.toUtc().millisecondsSinceEpoch).toList()..sort();
+  }
+
+  static String _notificationBody(SeriesDef seriesDef) {
+    return seriesDef.notificationSettingsReadonly().reminderText ?? LocaleKeys.seriesEdit_seriesSettings_notifications_action_enterValue.tr();
   }
 
   static Future<void> _cancelNotifications(List<int> notificationIds) async {
@@ -716,6 +721,7 @@ class AppSeriesNotifications {
       'monthlyDay': settings.monthlyDay,
       'monthlyWeekdayOrdinal': settings.monthlyWeekdayOrdinal,
       'monthlyWeekday': settings.monthlyWeekday,
+      'reminderText': settings.reminderText,
     };
     return jsonEncode(payload);
   }

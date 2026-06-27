@@ -28,6 +28,8 @@ enum NotificationMonthlyRule {
 }
 
 class NotificationSettings extends SeriesSettings {
+  static const int maxReminderTextLength = 70;
+
   static const String _prefix = 'notification';
 
   static const String _enabled = 'Enabled';
@@ -41,6 +43,7 @@ class NotificationSettings extends SeriesSettings {
   static const String _monthlyDay = 'MonthlyDay';
   static const String _monthlyWeekdayOrdinal = 'MonthlyWeekdayOrdinal';
   static const String _monthlyWeekday = 'MonthlyWeekday';
+  static const String _reminderText = 'ReminderText';
 
   /// [updateStateCB] optional callback which is called when the settings map is changed. If not set readonly.
   NotificationSettings(Map<String, dynamic> settings, Function()? updateStateCB) : super(_prefix, settings, updateStateCB);
@@ -158,6 +161,22 @@ class NotificationSettings extends SeriesSettings {
   set monthlyWeekday(int value) {
     var normalized = value.clamp(DateTime.monday, DateTime.sunday);
     set(_monthlyWeekday, normalized == DateTime.monday ? null : normalized);
+  }
+
+  String? get reminderText {
+    var value = optString(_reminderText)?.trim();
+    if (value == null || value.isEmpty) {
+      return null;
+    }
+    return value;
+  }
+
+  set reminderText(String? value) {
+    var normalized = value?.trim() ?? '';
+    if (normalized.runes.length > maxReminderTextLength) {
+      normalized = String.fromCharCodes(normalized.runes.take(maxReminderTextLength));
+    }
+    set(_reminderText, normalized.isEmpty ? null : normalized);
   }
 
   static bool isValidTimeValue(String value) => _isValidTimeValue(value);

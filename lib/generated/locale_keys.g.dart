@@ -268,6 +268,7 @@ abstract class LocaleKeys {
   static const seriesEdit_seriesSettings_notifications_label_monthlyRule = 'seriesEdit.seriesSettings.notifications.label.monthlyRule';
   static const seriesEdit_seriesSettings_notifications_label_timeAt = 'seriesEdit.seriesSettings.notifications.label.timeAt';
   static const seriesEdit_seriesSettings_notifications_label_unsupportedPlatform = 'seriesEdit.seriesSettings.notifications.label.unsupportedPlatform';
+  static const seriesEdit_seriesSettings_notifications_label_reminderText = 'seriesEdit.seriesSettings.notifications.label.reminderText';
   static const seriesEdit_seriesSettings_notifications_repeat_daily = 'seriesEdit.seriesSettings.notifications.repeat.daily';
   static const seriesEdit_seriesSettings_notifications_repeat_everyXDays = 'seriesEdit.seriesSettings.notifications.repeat.everyXDays';
   static const seriesEdit_seriesSettings_notifications_repeat_weekly = 'seriesEdit.seriesSettings.notifications.repeat.weekly';

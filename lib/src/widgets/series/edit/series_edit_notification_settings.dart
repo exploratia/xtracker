@@ -108,6 +108,10 @@ class _SeriesEditNotificationSettingsState extends State<SeriesEditNotificationS
                   ],
                 ),
               ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.cardPadding),
+              child: _buildReminderTextInput(settings),
+            ),
           ],
         ],
       ),
@@ -280,6 +284,29 @@ class _SeriesEditNotificationSettingsState extends State<SeriesEditNotificationS
         iconData: Icons.schedule_outlined,
       ),
     ];
+  }
+
+  Widget _buildReminderTextInput(NotificationSettings settings) {
+    var defaultReminderText = LocaleKeys.seriesEdit_seriesSettings_notifications_action_enterValue.tr();
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      spacing: ThemeUtils.horizontalSpacingSmall,
+      children: [
+        Icon(Icons.message_outlined, size: ThemeUtils.iconSizeScaled),
+        Expanded(
+          child: TextFormField(
+            initialValue: settings.reminderText ?? '',
+            decoration: InputDecoration(
+              labelText: LocaleKeys.seriesEdit_seriesSettings_notifications_label_reminderText.tr(),
+              hintText: defaultReminderText,
+            ),
+            maxLength: NotificationSettings.maxReminderTextLength,
+            textInputAction: TextInputAction.done,
+            onChanged: (value) => settings.reminderText = value,
+          ),
+        ),
+      ],
+    );
   }
 
   List<Widget> _buildEveryXDaysRows(BuildContext context, NotificationSettings settings, BoxConstraints constraints) {

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../generated/locale_keys.g.dart';
+import '../../model/series/series_def.dart';
 import '../../providers/series_provider.dart';
 import '../../util/pending_app_actions.dart';
 import '../../util/theme_utils.dart';
@@ -456,10 +457,17 @@ class _PendingActionCard extends StatelessWidget {
 
   String _title(BuildContext context) {
     return switch (action.type) {
-      PendingAppActionType.seriesValue => LocaleKeys.seriesDashboard_pendingActions_label_seriesValue.tr(args: [_seriesName(context)]),
+      PendingAppActionType.seriesValue => _seriesValueTitle(context),
       PendingAppActionType.backupReminder => LocaleKeys.seriesDashboard_pendingActions_label_backupReminder.tr(),
       PendingAppActionType.debugDummy => LocaleKeys.seriesDashboard_pendingActions_label_debugDummy.tr(args: [action.id]),
     };
+  }
+
+  String _seriesValueTitle(BuildContext context) {
+    if (action.seriesSource == PendingSeriesActionSource.notification) {
+      return _seriesDef(context)?.notificationSettingsReadonly().reminderText ?? LocaleKeys.seriesEdit_seriesSettings_notifications_action_enterValue.tr();
+    }
+    return LocaleKeys.seriesDashboard_pendingActions_label_seriesValue.tr(args: [_seriesName(context)]);
   }
 
   String _subtitle() {
@@ -480,8 +488,17 @@ class _PendingActionCard extends StatelessWidget {
       return '';
     }
 
-    var seriesDef = context.watch<SeriesProvider>().series.where((seriesDef) => seriesDef.uuid == seriesUuid).firstOrNull;
+    var seriesDef = _seriesDef(context);
     return seriesDef?.name ?? seriesUuid;
+  }
+
+  SeriesDef? _seriesDef(BuildContext context) {
+    var seriesUuid = action.seriesUuid;
+    if (seriesUuid == null) {
+      return null;
+    }
+
+    return context.watch<SeriesProvider>().series.where((seriesDef) => seriesDef.uuid == seriesUuid).firstOrNull;
   }
 
   Future<void> _consumeAndExecute(BuildContext popupContext) async {
