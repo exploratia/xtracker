@@ -31,8 +31,13 @@ class _IconPopupMenuState extends State<IconPopupMenu> {
     final RenderBox button = key.currentContext!.findRenderObject() as RenderBox;
     final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
     final Offset offset = button.localToGlobal(Offset.zero, ancestor: overlay);
+    final buttonCenterY = offset.dy + button.size.height / 2;
+    final openUpwards = buttonCenterY >= overlay.size.height * 2 / 3;
 
-    final menuPosition = Offset(offset.dx, offset.dy + button.size.height + ThemeUtils.verticalSpacingLarge);
+    final menuPosition = Offset(
+      offset.dx,
+      openUpwards ? overlay.size.height - offset.dy + ThemeUtils.verticalSpacingLarge : offset.dy + button.size.height + ThemeUtils.verticalSpacingLarge,
+    );
 
     showGeneralDialog(
       context: context,
@@ -43,6 +48,7 @@ class _IconPopupMenuState extends State<IconPopupMenu> {
         position: menuPosition,
         menuEntries: widget.menuEntries,
         animated: widget.animated,
+        openUpwards: openUpwards,
       ),
     );
   }
@@ -53,16 +59,21 @@ class _Menu extends StatelessWidget {
     required this.position,
     required this.menuEntries,
     required this.animated,
+    required this.openUpwards,
   });
 
   final Offset position;
   final List<IconPopupMenuEntry> menuEntries;
   final bool animated;
+  final bool openUpwards;
 
   @override
   Widget build(BuildContext context) {
     Widget menu = animated
-        ? _AnimatedMenu(menuEntries: menuEntries)
+        ? _AnimatedMenu(
+            menuEntries: menuEntries,
+            openUpwards: openUpwards,
+          )
         : Column(
             mainAxisSize: MainAxisSize.min,
             spacing: ThemeUtils.verticalSpacingLarge,
@@ -77,7 +88,8 @@ class _Menu extends StatelessWidget {
       children: [
         Positioned(
           left: position.dx,
-          top: position.dy,
+          top: openUpwards ? null : position.dy,
+          bottom: openUpwards ? position.dy : null,
           child: menu,
         ),
       ],
@@ -87,8 +99,12 @@ class _Menu extends StatelessWidget {
 
 class _AnimatedMenu extends StatefulWidget {
   final List<IconPopupMenuEntry> menuEntries;
+  final bool openUpwards;
 
-  const _AnimatedMenu({required this.menuEntries});
+  const _AnimatedMenu({
+    required this.menuEntries,
+    required this.openUpwards,
+  });
 
   @override
   State<_AnimatedMenu> createState() => _AnimatedMenuState();
@@ -113,7 +129,9 @@ class _AnimatedMenuState extends State<_AnimatedMenu> with SingleTickerProviderS
     super.dispose();
   }
 
-  Widget _buildAnimatedItem(Widget widget, int index) {
+  Widget _buildAnimatedItem(Widget childWidget, int index) {
+    final initialYOffset = 70 * (index + 1) * (widget.openUpwards ? 1 : -1);
+
     return AnimatedBuilder(
       animation: _controller,
       builder: (context, child) {
@@ -124,12 +142,12 @@ class _AnimatedMenuState extends State<_AnimatedMenu> with SingleTickerProviderS
         return Opacity(
           opacity: animationValue,
           child: Transform.translate(
-            offset: Offset(0, (1 - animationValue) * (-70 * (index + 1))),
+            offset: Offset(0, (1 - animationValue) * initialYOffset),
             child: child,
           ),
         );
       },
-      child: widget,
+      child: childWidget,
     );
   }
 
