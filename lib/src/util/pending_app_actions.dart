@@ -54,7 +54,7 @@ class PendingAppActions {
   static final List<PendingAppAction> _items = [];
   static final List<PendingAppAction> _directActions = [];
   static final Set<int> _handledNotificationIdsThisRun = {};
-  static const bool _debugShowDummyActions = true;
+  static const bool _debugShowDummyActions = false;
   static int _nextActionId = 0;
   static bool _backupReminderDismissedThisRun = false;
   static bool _automaticActionArmed = true;
