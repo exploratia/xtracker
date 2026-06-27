@@ -132,12 +132,23 @@ class _PendingActionsList extends StatefulWidget {
 }
 
 class _PendingActionsListState extends State<_PendingActionsList> {
+  static const Duration _removeDuration = Duration(milliseconds: ThemeUtils.animationDuration);
+
+  final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
   late final ScrollController _scrollController;
+  late List<PendingAppAction> _actions;
 
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
+    _actions = List<PendingAppAction>.of(widget.actions);
+  }
+
+  @override
+  void didUpdateWidget(covariant _PendingActionsList oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _syncActions(widget.actions);
   }
 
   @override
@@ -164,27 +175,178 @@ class _PendingActionsListState extends State<_PendingActionsList> {
       mainAxisMargin: 0,
       crossAxisMargin: 0,
       padding: EdgeInsets.zero,
-      child: ListView.separated(
+      child: AnimatedList(
+        key: _listKey,
         controller: _scrollController,
         padding: EdgeInsets.zero,
-        itemCount: widget.actions.length,
-        separatorBuilder: (context, index) => const SizedBox(height: ThemeUtils.verticalSpacing),
-        itemBuilder: (context, index) {
-          var action = widget.actions[index];
-          return Padding(
-            padding: EdgeInsets.fromLTRB(
-              ThemeUtils.defaultPadding * 2,
-              index == 0 ? ThemeUtils.verticalSpacing : 0,
-              ThemeUtils.defaultPadding * 2,
-              index == widget.actions.length - 1 ? ThemeUtils.verticalSpacing : 0,
-            ),
-            child: _PendingActionCard(
-              action: action,
-              actionContext: widget.actionContext,
-              settingsController: widget.settingsController,
-            ),
-          );
-        },
+        initialItemCount: _actions.length,
+        itemBuilder: (context, index, animation) => _buildActionItem(
+          context,
+          _actions[index],
+          index,
+          animation,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildActionItem(
+    BuildContext context,
+    PendingAppAction action,
+    int index,
+    Animation<double> animation,
+  ) {
+    return _PendingActionItemTransition(
+      animation: animation,
+      child: _buildActionItemContent(action, index),
+    );
+  }
+
+  Widget _buildActionItemContent(PendingAppAction action, int index) {
+    return Padding(
+      key: ValueKey(action.id),
+      padding: EdgeInsets.fromLTRB(
+        ThemeUtils.defaultPadding * 2,
+        ThemeUtils.verticalSpacing,
+        ThemeUtils.defaultPadding * 2,
+        index == _actions.length - 1 ? ThemeUtils.verticalSpacing : 0,
+      ),
+      child: _PendingActionCard(
+        action: action,
+        actionContext: widget.actionContext,
+        settingsController: widget.settingsController,
+        onDelete: () => _deleteAction(action),
+        isInteractive: true,
+      ),
+    );
+  }
+
+  Future<void> _deleteAction(PendingAppAction action) async {
+    var index = _actions.indexWhere((item) => item.id == action.id);
+    if (index < 0) {
+      return;
+    }
+
+    _actions.removeAt(index);
+    _listKey.currentState?.removeItem(
+      index,
+      (context, animation) => _PendingActionItemTransition(
+        animation: animation,
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(
+            ThemeUtils.defaultPadding * 2,
+            ThemeUtils.verticalSpacing,
+            ThemeUtils.defaultPadding * 2,
+            index == _actions.length ? ThemeUtils.verticalSpacing : 0,
+          ),
+          child: _PendingActionCard(
+            action: action,
+            actionContext: widget.actionContext,
+            settingsController: widget.settingsController,
+            onDelete: null,
+            isInteractive: false,
+          ),
+        ),
+      ),
+      duration: _removeDuration,
+    );
+
+    await Future<void>.delayed(_removeDuration);
+    PendingAppActions.remove(action.id);
+  }
+
+  void _syncActions(List<PendingAppAction> nextActions) {
+    var nextIds = nextActions.map((action) => action.id).toSet();
+    var localIds = _actions.map((action) => action.id).toSet();
+
+    for (var index = _actions.length - 1; index >= 0; index--) {
+      var action = _actions[index];
+      if (!nextIds.contains(action.id)) {
+        _actions.removeAt(index);
+        _listKey.currentState?.removeItem(
+          index,
+          (context, animation) => _PendingActionItemTransition(
+            animation: animation,
+            child: _buildRemovedActionItemContent(action, index),
+          ),
+          duration: _removeDuration,
+        );
+      }
+    }
+
+    for (var index = 0; index < nextActions.length; index++) {
+      var action = nextActions[index];
+      if (!localIds.contains(action.id)) {
+        _actions.insert(index, action);
+        _listKey.currentState?.insertItem(
+          index,
+          duration: const Duration(milliseconds: ThemeUtils.animationDurationShort),
+        );
+      }
+    }
+
+    var sameOrder = _actions.length == nextActions.length;
+    if (sameOrder) {
+      for (var index = 0; index < _actions.length; index++) {
+        if (_actions[index].id != nextActions[index].id) {
+          sameOrder = false;
+          break;
+        }
+      }
+    }
+    if (!sameOrder) {
+      _actions = List<PendingAppAction>.of(nextActions);
+    }
+  }
+
+  Widget _buildRemovedActionItemContent(PendingAppAction action, int index) {
+    return Padding(
+      padding: EdgeInsets.fromLTRB(
+        ThemeUtils.defaultPadding * 2,
+        ThemeUtils.verticalSpacing,
+        ThemeUtils.defaultPadding * 2,
+        index == _actions.length ? ThemeUtils.verticalSpacing : 0,
+      ),
+      child: _PendingActionCard(
+        action: action,
+        actionContext: widget.actionContext,
+        settingsController: widget.settingsController,
+        onDelete: null,
+        isInteractive: false,
+      ),
+    );
+  }
+}
+
+class _PendingActionItemTransition extends StatelessWidget {
+  const _PendingActionItemTransition({
+    required this.animation,
+    required this.child,
+  });
+
+  final Animation<double> animation;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    var curvedAnimation = CurvedAnimation(
+      parent: animation,
+      curve: Curves.easeOutCubic,
+      reverseCurve: Curves.easeInCubic,
+    );
+
+    return FadeTransition(
+      opacity: curvedAnimation,
+      child: SizeTransition(
+        sizeFactor: curvedAnimation,
+        alignment: AlignmentDirectional.topStart,
+        child: SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(0.04, 0),
+            end: Offset.zero,
+          ).animate(curvedAnimation),
+          child: child,
+        ),
       ),
     );
   }
@@ -195,11 +357,15 @@ class _PendingActionCard extends StatelessWidget {
     required this.action,
     required this.actionContext,
     required this.settingsController,
+    required this.onDelete,
+    required this.isInteractive,
   });
 
   final PendingAppAction action;
   final BuildContext actionContext;
   final SettingsController settingsController;
+  final VoidCallback? onDelete;
+  final bool isInteractive;
 
   @override
   Widget build(BuildContext context) {
@@ -209,7 +375,7 @@ class _PendingActionCard extends StatelessWidget {
       margin: EdgeInsets.zero,
       child: InkWell(
         borderRadius: ThemeUtils.cardBorderRadius,
-        onTap: () => _consumeAndExecute(context),
+        onTap: isInteractive ? () => _consumeAndExecute(context) : null,
         child: Padding(
           padding: const EdgeInsets.symmetric(
             horizontal: ThemeUtils.defaultPadding,
@@ -241,7 +407,7 @@ class _PendingActionCard extends StatelessWidget {
               ),
               IconButton(
                 tooltip: LocaleKeys.commons_dialog_btn_delete.tr(),
-                onPressed: () => PendingAppActions.remove(action.id),
+                onPressed: onDelete,
                 icon: const Icon(Icons.delete_outline),
                 color: ThemeUtils.secondaryColor,
               ),
