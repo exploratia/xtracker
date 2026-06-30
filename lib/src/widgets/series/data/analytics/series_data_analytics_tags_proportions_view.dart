@@ -255,7 +255,7 @@ class SeriesDataAnalyticsTagsProportionsView<D extends SeriesDataValue> extends 
         title: LocaleKeys.seriesDataAnalytics_tagsProportions_subTitles_distributionHours.tr(),
         xTitles: hourTitles,
         tag2counts: hourCounts,
-        includeMin: false,
+        includeMin: true,
       ),
     );
 
