@@ -109,7 +109,7 @@ class SeriesDataAnalyticsTagsProportionsView<D extends SeriesDataValue> extends 
       required String title,
       required List<String> xTitles,
       required List<Pair<Tag, List<int>>> tag2counts,
-      required double interval,
+      double? interval,
       bool includeMin = false,
       bool includeMax = false,
       bool showLeftTitles = false,
@@ -255,7 +255,6 @@ class SeriesDataAnalyticsTagsProportionsView<D extends SeriesDataValue> extends 
         title: LocaleKeys.seriesDataAnalytics_tagsProportions_subTitles_distributionHours.tr(),
         xTitles: hourTitles,
         tag2counts: hourCounts,
-        interval: 2,
         includeMin: false,
       ),
     );
