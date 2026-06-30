@@ -112,6 +112,7 @@ class SeriesDataAnalyticsTagsProportionsView<D extends SeriesDataValue> extends 
       required double interval,
       bool includeMin = false,
       bool includeMax = false,
+      bool showLeftTitles = false,
     }) {
       List<LineChartBarData> lineChartBarDataList = [];
       for (var pair in tag2counts) {
@@ -135,9 +136,9 @@ class SeriesDataAnalyticsTagsProportionsView<D extends SeriesDataValue> extends 
               getTitlesWidget: (value, meta) => buildBottomTitle(value, meta, xTitles),
             ),
           ),
-          leftTitles: const AxisTitles(
+          leftTitles: AxisTitles(
             sideTitles: SideTitles(
-              showTitles: true,
+              showTitles: showLeftTitles,
               reservedSize: 40,
               maxIncluded: false,
             ),
@@ -185,7 +186,9 @@ class SeriesDataAnalyticsTagsProportionsView<D extends SeriesDataValue> extends 
       var actMonth = DateTimeUtils.firstDayOfMonth(firstDataDateTime);
       while (actMonth.isBefore(targetMonth)) {
         if (fillXTitles) {
-          monthlyXTitles.add("${actMonth.month}/${actMonth.year.toString().substring(2)}");
+          monthlyXTitles.add("${actMonth.month}");
+          // with year but to wide on small screens
+          // monthlyXTitles.add("${actMonth.month}/${actMonth.year.toString().substring(2)}");
         }
         monthlyList.add(monthlyMap.putIfAbsent(_MonthlyItem.buildKey(actMonth), () => _MonthlyItem(actMonth.year, actMonth.month)).count);
         actMonth = DateTimeUtils.firstDayOfNextMonth(actMonth);
@@ -203,6 +206,7 @@ class SeriesDataAnalyticsTagsProportionsView<D extends SeriesDataValue> extends 
           interval: monthlyXTitles.length > 5 ? 2 : 1,
           includeMax: true,
           includeMin: true,
+          showLeftTitles: true,
         ),
       );
     }
