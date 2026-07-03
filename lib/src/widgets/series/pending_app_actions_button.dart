@@ -434,7 +434,7 @@ class _PendingActionCard extends StatelessWidget {
                       style: themeData.textTheme.bodyLarge,
                     ),
                     Text(
-                      _subtitle(),
+                      _subtitle(context),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: themeData.textTheme.bodySmall,
@@ -470,13 +470,9 @@ class _PendingActionCard extends StatelessWidget {
     return LocaleKeys.seriesDashboard_pendingActions_label_seriesValue.tr(args: [_seriesName(context)]);
   }
 
-  String _subtitle() {
+  String _subtitle(BuildContext context) {
     return switch (action.type) {
-      PendingAppActionType.seriesValue => switch (action.seriesSource) {
-        PendingSeriesActionSource.quickAction => LocaleKeys.seriesDashboard_pendingActions_source_quickAction.tr(),
-        PendingSeriesActionSource.notification => LocaleKeys.seriesDashboard_pendingActions_source_notification.tr(),
-        null => '',
-      },
+      PendingAppActionType.seriesValue => _seriesName(context),
       PendingAppActionType.backupReminder => LocaleKeys.seriesDashboard_pendingActions_source_backupReminder.tr(),
       PendingAppActionType.debugDummy => LocaleKeys.seriesDashboard_pendingActions_source_debugDummy.tr(),
     };

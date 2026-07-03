@@ -367,8 +367,6 @@
         "debugDummy": "Debug action {}"
       },
       "source": {
-        "quickAction": "Quick action",
-        "notification": "Notification",
         "backupReminder": "Backup",
         "debugDummy": "Test item"
       }

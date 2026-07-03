@@ -156,8 +156,6 @@ abstract class LocaleKeys {
   static const seriesDashboard_pendingActions_label_seriesValue = 'seriesDashboard.pendingActions.label.seriesValue';
   static const seriesDashboard_pendingActions_label_backupReminder = 'seriesDashboard.pendingActions.label.backupReminder';
   static const seriesDashboard_pendingActions_label_debugDummy = 'seriesDashboard.pendingActions.label.debugDummy';
-  static const seriesDashboard_pendingActions_source_quickAction = 'seriesDashboard.pendingActions.source.quickAction';
-  static const seriesDashboard_pendingActions_source_notification = 'seriesDashboard.pendingActions.source.notification';
   static const seriesDashboard_pendingActions_source_backupReminder = 'seriesDashboard.pendingActions.source.backupReminder';
   static const seriesDashboard_pendingActions_source_debugDummy = 'seriesDashboard.pendingActions.source.debugDummy';
   static const seriesDashboard_btn_addSeries_label = 'seriesDashboard.btn.addSeries.label';
