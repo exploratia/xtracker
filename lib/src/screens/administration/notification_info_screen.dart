@@ -1,14 +1,16 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../generated/locale_keys.g.dart';
 import '../../model/navigation/navigation_item.dart';
-import '../../model/series/series_def.dart';
-import '../../store/stores.dart';
+import '../../providers/series_provider.dart';
+import '../../util/dialogs.dart';
 import '../../util/logging/flutter_simple_logging.dart';
 import '../../widgets/administration/notification_info_view.dart';
 import '../../widgets/administration/settings/settings_controller.dart';
 import '../../widgets/controls/appbar/gradient_app_bar.dart';
+import '../../widgets/controls/provider/data_provider_loader.dart';
 import '../../widgets/controls/responsive/screen_builder.dart';
 
 class NotificationInfoScreen extends StatefulWidget {
@@ -27,32 +29,14 @@ class NotificationInfoScreen extends StatefulWidget {
 }
 
 class _NotificationInfoScreenState extends State<NotificationInfoScreen> {
-  List<SeriesDef> _series = const [];
-  bool _loading = true;
-  bool _loadFailed = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _loadSeries();
-  }
-
-  Future<void> _loadSeries() async {
+  Future<void> _refreshSeries() async {
     try {
-      var series = await Stores.storeSeriesDef.getAllSeries();
-      if (!mounted) return;
-      setState(() {
-        _series = series;
-        _loading = false;
-        _loadFailed = false;
-      });
-    } catch (err, st) {
-      SimpleLogging.w('Could not load notification info.', error: err, stackTrace: st);
-      if (!mounted) return;
-      setState(() {
-        _loading = false;
-        _loadFailed = true;
-      });
+      await context.read<SeriesProvider>().fetchData();
+    } catch (e, st) {
+      SimpleLogging.w('Failure on refresh notification info.', error: e, stackTrace: st);
+      if (mounted) {
+        Dialogs.showSnackBarWarning(LocaleKeys.commons_snackbar_loadFailed.tr(), context);
+      }
     }
   }
 
@@ -66,15 +50,15 @@ class _NotificationInfoScreenState extends State<NotificationInfoScreen> {
         addLeadingBackBtn: true,
         title: Text(NotificationInfoScreen.navItem.titleBuilder()),
       ),
-      bodyBuilder: (context) {
-        if (_loading) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (_loadFailed) {
-          return Center(child: Text(LocaleKeys.notificationInfo_label_loadFailed.tr()));
-        }
-        return NotificationInfoView(series: _series);
-      },
+      bodyBuilder: (context) => DataProviderLoader(
+        obtainDataProviderFuture: context.read<SeriesProvider>().fetchDataIfNotYetLoaded(),
+        child: Consumer<SeriesProvider>(
+          builder: (_, seriesProvider, _) => NotificationInfoView(
+            series: seriesProvider.series,
+            onRefreshCallback: _refreshSeries,
+          ),
+        ),
+      ),
     );
   }
 }

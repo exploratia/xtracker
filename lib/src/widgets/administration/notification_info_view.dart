@@ -14,8 +14,9 @@ import '../controls/navigation/hide_bottom_navigation_bar.dart';
 
 class NotificationInfoView extends StatelessWidget {
   final List<SeriesDef> series;
+  final Future<void> Function()? onRefreshCallback;
 
-  const NotificationInfoView({super.key, required this.series});
+  const NotificationInfoView({super.key, required this.series, this.onRefreshCallback});
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +25,7 @@ class NotificationInfoView extends StatelessWidget {
 
     return SingleChildScrollViewWithScrollbar(
       useScreenPadding: true,
+      onRefreshCallback: onRefreshCallback,
       scrollPositionHandler: HideBottomNavigationBar.setScrollPosition,
       child: Column(
         spacing: ThemeUtils.screenPadding,
