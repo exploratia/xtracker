@@ -8,8 +8,7 @@ enum ViewType {
   lineChart(Icons.area_chart_outlined),
   barChart(Icons.bar_chart_outlined),
   table(Icons.grid_on_outlined),
-  pixels(Icons.apps_rounded)
-  ;
+  pixels(Icons.apps_rounded);
 
   final IconData iconData;
 
