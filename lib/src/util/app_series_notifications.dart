@@ -55,7 +55,7 @@ class AppSeriesNotifications {
       );
 
       await _notificationsPlugin.initialize(
-        initializationSettings,
+        settings: initializationSettings,
         onDidReceiveNotificationResponse: handleNotificationResponse,
         onDidReceiveBackgroundNotificationResponse: onDidReceiveBackgroundSeriesNotificationResponse,
       );
@@ -360,11 +360,11 @@ class AppSeriesNotifications {
       var id = _buildNotificationId(seriesDef.uuid, trigger, globallyUsedIds);
       globallyUsedIds.add(id);
       await _notificationsPlugin.zonedSchedule(
-        id,
-        seriesDef.name,
-        notificationText,
-        tz.TZDateTime.from(trigger, tz.local),
-        NotificationDetails(
+        id: id,
+        title: seriesDef.name,
+        body: notificationText,
+        scheduledDate: tz.TZDateTime.from(trigger, tz.local),
+        notificationDetails: NotificationDetails(
           android: AndroidNotificationDetails(
             _channelId,
             _channelName,
@@ -442,7 +442,7 @@ class AppSeriesNotifications {
     }
     SimpleLogging.d('Cancelling series notifications. notificationIds=$notificationIds');
     for (var id in notificationIds) {
-      await _notificationsPlugin.cancel(id);
+      await _notificationsPlugin.cancel(id: id);
     }
     SimpleLogging.d('Cancelled series notifications. notificationIds=$notificationIds');
   }
@@ -493,10 +493,10 @@ class AppSeriesNotifications {
     try {
       SimpleLogging.d('Showing immediate debug series notification ...');
       await _notificationsPlugin.show(
-        999001,
-        'xTracker notification test',
-        'Immediate debug notification',
-        const NotificationDetails(
+        id: 999001,
+        title: 'xTracker notification test',
+        body: 'Immediate debug notification',
+        notificationDetails: const NotificationDetails(
           android: AndroidNotificationDetails(
             _channelId,
             _channelName,
@@ -690,7 +690,7 @@ class AppSeriesNotifications {
     tzdata.initializeTimeZones();
     String timeZoneName;
     try {
-      timeZoneName = await FlutterTimezone.getLocalTimezone();
+      timeZoneName = (await FlutterTimezone.getLocalTimezone()).identifier;
     } catch (_) {
       timeZoneName = 'UTC';
       SimpleLogging.d('Could not read local timezone. Falling back to UTC.');

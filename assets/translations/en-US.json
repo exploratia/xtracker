@@ -32,6 +32,8 @@
       "versionChanged": "The app was updated to version {}."
     },
     "entries": {
+      "v2_1_0": "New reminder notifications per series, app icon QuickActions and improvements for small screens.",
+      "v2_0_1": "Updated dependencies for better stability.",
       "v2_0_0": "New custom and monthly series with multiple parameters, calculated values, optional tags and CSV import/export.",
       "v1_4_0": "First public release version with a unified pixel view.",
       "v1_3_1": "Extended analytics for times of day and monthly distributions.",

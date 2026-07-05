@@ -9,7 +9,7 @@ funding:
 # Prevent accidental publishing to pub.dev.
 publish_to: 'none'
 
-version: 2.0.1+14
+version: 2.1.0+15
 
 environment:
   sdk: ^3.10.0
@@ -79,9 +79,9 @@ dependencies:
   quick_actions: ^1.1.0
 
   # notifications
-  flutter_local_notifications: ^19.4.2
-  timezone: ^0.10.1
-  flutter_timezone: ^4.1.1
+  flutter_local_notifications: ^22.0.1
+  timezone: ^0.11.1
+  flutter_timezone: ^5.1.0
 
   # display HTML in flutter
   simple_html_css: ^5.0.0
