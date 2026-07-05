@@ -9,6 +9,7 @@ import '../../../store/migration/db_migration.dart';
 import '../../../util/dialogs.dart';
 import '../../../util/globals.dart';
 import '../../../util/json_reader.dart';
+import '../../../util/json_version.dart';
 import '../../../util/logging/flutter_simple_logging.dart';
 import '../../../widgets/series/data/input/blood_pressure/blood_pressure_input.dart';
 import '../../../widgets/series/data/input/custom/custom_input.dart';
@@ -41,41 +42,53 @@ class SeriesData<T extends SeriesDataValue> {
     'data': [...data.map((e) => e.toJson(exportUuid: exportUuid))],
   };
 
-  static SeriesData<BloodPressureValue> fromJsonBloodPressureData(JsonReader json, {String? seriesDefUuid}) => SeriesData(
-    json.asStringOr('uuid', seriesDefUuid ?? Globals.invalid),
-    [...json.asReader('data').asReaders().map((e) => BloodPressureValue.fromJson(e))],
-    // if version is required: json['version'] as int? ?? 1
-  );
+  static SeriesData<BloodPressureValue> fromJsonBloodPressureData(JsonReader json, {String? seriesDefUuid}) {
+    JsonVersion.validateNotNewer(json, 'seriesData', validateType: false);
+    return SeriesData(
+      json.asStringOr('uuid', seriesDefUuid ?? Globals.invalid),
+      [...json.asReader('data').asReaders().map((e) => BloodPressureValue.fromJson(e))],
+    );
+  }
 
-  static SeriesData<DailyCheckValue> fromJsonDailyCheckData(JsonReader json, {String? seriesDefUuid}) => SeriesData(
-    json.asStringOr('uuid', seriesDefUuid ?? Globals.invalid),
-    [...json.asReader('data').asReaders().map((e) => DailyCheckValue.fromJson(e))],
-    // if version is required: json['version'] as int? ?? 1
-  );
+  static SeriesData<DailyCheckValue> fromJsonDailyCheckData(JsonReader json, {String? seriesDefUuid}) {
+    JsonVersion.validateNotNewer(json, 'seriesData', validateType: false);
+    return SeriesData(
+      json.asStringOr('uuid', seriesDefUuid ?? Globals.invalid),
+      [...json.asReader('data').asReaders().map((e) => DailyCheckValue.fromJson(e))],
+    );
+  }
 
-  static SeriesData<DailyLifeValue> fromJsonDailyLifeData(JsonReader json, {String? seriesDefUuid}) => SeriesData(
-    json.asStringOr('uuid', seriesDefUuid ?? Globals.invalid),
-    [...json.asReader('data').asReaders().map((e) => DailyLifeValue.fromJson(e))],
-    // if version is required: json['version'] as int? ?? 1
-  );
+  static SeriesData<DailyLifeValue> fromJsonDailyLifeData(JsonReader json, {String? seriesDefUuid}) {
+    JsonVersion.validateNotNewer(json, 'seriesData', validateType: false);
+    return SeriesData(
+      json.asStringOr('uuid', seriesDefUuid ?? Globals.invalid),
+      [...json.asReader('data').asReaders().map((e) => DailyLifeValue.fromJson(e))],
+    );
+  }
 
-  static SeriesData<HabitValue> fromJsonHabitData(JsonReader json, {String? seriesDefUuid}) => SeriesData(
-    json.asStringOr('uuid', seriesDefUuid ?? Globals.invalid),
-    [...json.asReader('data').asReaders().map((e) => HabitValue.fromJson(e))],
-    // if version is required: json['version'] as int? ?? 1
-  );
+  static SeriesData<HabitValue> fromJsonHabitData(JsonReader json, {String? seriesDefUuid}) {
+    JsonVersion.validateNotNewer(json, 'seriesData', validateType: false);
+    return SeriesData(
+      json.asStringOr('uuid', seriesDefUuid ?? Globals.invalid),
+      [...json.asReader('data').asReaders().map((e) => HabitValue.fromJson(e))],
+    );
+  }
 
-  static SeriesData<CustomValue> fromJsonCustomData(JsonReader json, {String? seriesDefUuid}) => SeriesData(
-    json.asStringOr('uuid', seriesDefUuid ?? Globals.invalid),
-    [...json.asReader('data').asReaders().map((e) => CustomValue.fromJson(e))],
-    // if version is required: json['version'] as int? ?? 1
-  );
+  static SeriesData<CustomValue> fromJsonCustomData(JsonReader json, {String? seriesDefUuid}) {
+    JsonVersion.validateNotNewer(json, 'seriesData', validateType: false);
+    return SeriesData(
+      json.asStringOr('uuid', seriesDefUuid ?? Globals.invalid),
+      [...json.asReader('data').asReaders().map((e) => CustomValue.fromJson(e))],
+    );
+  }
 
-  static SeriesData<MonthlyValue> fromJsonMonthlyData(JsonReader json, {String? seriesDefUuid}) => SeriesData(
-    json.asStringOr('uuid', seriesDefUuid ?? Globals.invalid),
-    [...json.asReader('data').asReaders().map((e) => MonthlyValue.fromJson(e))],
-    // if version is required: json['version'] as int? ?? 1
-  );
+  static SeriesData<MonthlyValue> fromJsonMonthlyData(JsonReader json, {String? seriesDefUuid}) {
+    JsonVersion.validateNotNewer(json, 'seriesData', validateType: false);
+    return SeriesData(
+      json.asStringOr('uuid', seriesDefUuid ?? Globals.invalid),
+      [...json.asReader('data').asReaders().map((e) => MonthlyValue.fromJson(e))],
+    );
+  }
 
   List<List<dynamic>> toCSVLists(SeriesDef seriesDef) => [...data.map((e) => e.toCSVList(seriesDef))];
 

@@ -43,6 +43,7 @@ class _ExpandableState extends State<Expandable> {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
+    var backgroundGradientColor = themeData.cardTheme.color ?? Colors.black;
     return Column(
       spacing: 0,
       children: [
@@ -84,7 +85,7 @@ class _ExpandableState extends State<Expandable> {
               gradient: LinearGradient(
                 begin: const AlignmentDirectional(0, -0.7),
                 end: const AlignmentDirectional(0, 1),
-                colors: [Colors.transparent, themeData.cardTheme.color ?? Colors.black],
+                colors: [(backgroundGradientColor).withAlpha(0), backgroundGradientColor],
               ),
               borderRadius: const BorderRadius.only(
                 bottomLeft: Radius.circular(ThemeUtils.borderRadius),

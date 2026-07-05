@@ -28,6 +28,20 @@ build:
 see
 https://gist.github.com/qoomon/5dfcdf8eec66a051ecd85625518cfd13
 
+## Commands
+
+Format:
+
+```shell
+dart format .
+```
+
+Format:
+
+```shell
+dart fix --apply
+```
+
 ## Assets
 
 The `assets` directory houses images, translations, fonts, and any other files you want to
@@ -193,6 +207,14 @@ https://pub.dev/packages/url_launcher
 ### Rich Text (for legal notice)
 
 https://pub.dev/packages/simple_html_css
+
+### QuickActions
+
+https://pub.dev/packages/quick_actions
+
+### Notifications
+
+https://pub.dev/packages/flutter_local_notifications
 
 ## Splashscreen
 

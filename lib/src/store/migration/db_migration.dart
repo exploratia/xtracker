@@ -2,6 +2,7 @@ import 'package:sembast/sembast.dart';
 
 import '../../util/logging/flutter_simple_logging.dart';
 import 'migration_v01_to_v02.dart';
+import 'migration_v02_to_v03.dart';
 
 class DbMigration {
   /// 1: initial version
@@ -9,7 +10,10 @@ class DbMigration {
 
   /// 2: attribute -> tag migration
   static const int v2 = 2;
-  static const int latestVersion = v2;
+
+  /// 3: QuickActions moved from device storage to SeriesDef settings
+  static const int v3 = 3;
+  static const int latestVersion = v3;
 
   static Future<void> migrate(Database db, int oldVersion, int newVersion) async {
     // started on web?
@@ -25,6 +29,13 @@ class DbMigration {
         });
         SimpleLogging.i('DB MIGRATION for version $current finished.');
         current = v2;
+      } else if (current == v2) {
+        SimpleLogging.i('DB MIGRATION for version $current ...');
+        await db.transaction((txn) async {
+          await _migrateV2toV3(txn);
+        });
+        SimpleLogging.i('DB MIGRATION for version $current finished.');
+        current = v3;
       } else {
         throw Exception('No migration step for version $current');
       }
@@ -64,6 +75,13 @@ class DbMigration {
 
     // 3) CurrentValue
     await _migrateStore(currentValueStore, currentValueStore, db, MigrationV01ToV02.migrate);
+  }
+
+  static Future<void> _migrateV2toV3(DatabaseClient db) async {
+    final seriesDefStore = StoreRef<String, Map<String, dynamic>>('seriesDef');
+
+    // No data migration required. Keep records as-is and only normalize through a pass.
+    await _migrateStore(seriesDefStore, seriesDefStore, db, MigrationV02ToV03.migrate);
   }
 
   /// source and target may be the same

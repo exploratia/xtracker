@@ -1,6 +1,6 @@
-const fs = require('fs');
-const path = require('path');
-const { execSync } = require('child_process');
+const fs = require('node:fs');
+const path = require('node:path');
+const { execSync } = require('node:child_process');
 
 // Get GitHub repo URL from git config
 function getGithubRepoUrl() {
@@ -14,16 +14,19 @@ function getGithubRepoUrl() {
     if (remoteUrl.startsWith('git@')) {
       // Convert SSH to HTTPS
       httpsUrl = remoteUrl
-        .replace(/^git@([^:]+):/, 'https://$1/')
-        .replace(/\.git$/, '');
-    } else if (remoteUrl.startsWith('http')) {
+      .replace(/^git@([^:]+):/, 'https://$1/')
+      .replace(/\.git$/, '');
+    }
+    else if (remoteUrl.startsWith('http')) {
       httpsUrl = remoteUrl.replace(/\.git$/, '');
-    } else {
+    }
+    else {
       throw new Error('Unsupported remote URL format.');
     }
 
     return httpsUrl;
-  } catch (err) {
+  }
+  catch (err) {
     console.error('Could not determine GitHub repo URL:', err.message);
     return null;
   }
@@ -33,7 +36,7 @@ function getGithubRepoUrl() {
 function getLastTagDate(changelogFilePath) {
   try {
     const changelogContent = fs.readFileSync(changelogFilePath, 'utf8');
-    const regex = /^## \[[^\]]+\] - (\d{4}-\d{2}-\d{2})/gm;
+    const regex = /^## \[[^\]]+] - (\d{4}-\d{2}-\d{2})/gm;
 
     const dates = [];
     let match;
@@ -41,8 +44,14 @@ function getLastTagDate(changelogFilePath) {
       dates.push(match[1]);
     }
 
-    return dates.length > 0 ? dates.sort().reverse()[0] : null;
-  } catch (err) {
+    if (dates.length === 0) {
+      return null;
+    }
+
+    dates.sort((firstDate, secondDate) => secondDate.localeCompare(firstDate));
+    return dates[0];
+  }
+  catch (err) {
     console.error('Error reading CHANGELOG.md:', err.message);
     return null;
   }
@@ -56,10 +65,11 @@ function getGitCommitsSince(date = null) {
     const result = execSync(cmd, { encoding: 'utf8' });
 
     return result
-      .split('\n')
-      .map(line => line.trim())
-      .filter(line => line.length > 0);
-  } catch (err) {
+    .split('\n')
+    .map(line => line.trim())
+    .filter(line => line.length > 0);
+  }
+  catch (err) {
     console.error('Error executing git log:', err.message);
     return [];
   }
@@ -83,16 +93,18 @@ function groupCommits(commits, githubRepoUrl) {
     const match = commitRegex.exec(commit);
     if (!match) continue;
 
-    const [, type, issueNum, scope, message] = match;
+    const [, type, issueNum, , message] = match;
     const issueLink = issueNum ? ` ([#${issueNum}](${githubRepoUrl}/issues/${issueNum}))` : '';
     // Scope is not included in output, only message + issue link
     const formatted = message.trim();
 
     if (type.toLowerCase() === 'feat') {
       features.push(`${formatted}${issueLink}`);
-    } else if (type.toLowerCase() === 'fix') {
+    }
+    else if (type.toLowerCase() === 'fix') {
       fixes.push(`${formatted}${issueLink}`);
-    }else if (type.toLowerCase() === 'other') {
+    }
+    else if (type.toLowerCase() === 'other') {
       others.push(`${formatted}${issueLink}`);
     }
   }
@@ -134,9 +146,9 @@ function prependToChangelog(filePath, newSection) {
 
   const insertionIndex = original.search(/^## \[/m);
   const updated =
-    insertionIndex !== -1
-      ? original.slice(0, insertionIndex) + newSection + '\n\n' + original.slice(insertionIndex)
-      : original + '\n\n' + newSection;
+    insertionIndex === -1
+      ? original + '\n\n' + newSection
+      : original.slice(0, insertionIndex) + newSection + '\n\n' + original.slice(insertionIndex);
 
   fs.writeFileSync(filePath, updated, 'utf8');
   console.log('CHANGELOG.md updated successfully.');
@@ -159,13 +171,14 @@ const latestDate = getLastTagDate(changelogPath);
 const githubRepoUrl = getGithubRepoUrl();
 
 if (!githubRepoUrl) {
-  console.error('❌ GitHub repository URL not found. Aborting.');
+  console.error('GitHub repository URL not found. Aborting.');
   process.exit(1);
 }
 
 if (latestDate) {
   console.log(`Most recent tag date: ${latestDate}`);
-} else {
+}
+else {
   console.log('No date found in changelog. Fetching full git history.');
 }
 

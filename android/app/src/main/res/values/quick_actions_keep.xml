@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools"
+  tools:keep="@drawable/qa_open_url,@drawable/qa_series_add_*,@drawable/notification_series_add_*,@drawable/app_logo_notification,@raw/notification">
+  <bool name="quick_actions_keep_marker">true</bool>
+</resources>

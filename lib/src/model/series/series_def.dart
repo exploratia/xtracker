@@ -7,6 +7,7 @@ import '../../store/migration/db_migration.dart';
 import '../../util/color_utils.dart';
 import '../../util/ex.dart';
 import '../../util/json_reader.dart';
+import '../../util/json_version.dart';
 import '../../widgets/controls/navigation/hide_bottom_navigation_bar.dart';
 import '../../widgets/controls/select/icon_map.dart';
 import '../../widgets/series/edit/series_edit.dart';
@@ -19,6 +20,8 @@ import 'settings/custom/custom_settings.dart';
 import 'settings/custom/custom_tags_settings.dart';
 import 'settings/daily_life/daily_life_tags_settings.dart';
 import 'settings/display_settings.dart';
+import 'settings/notification_settings.dart';
+import 'settings/quick_actions_settings.dart';
 import 'view_type.dart';
 
 class SeriesDef {
@@ -73,6 +76,18 @@ class SeriesDef {
   /// return DisplaySettings read only mode
   DisplaySettings displaySettingsReadonly() => DisplaySettings(_settings, null);
 
+  /// return QuickActionsSettings in edit mode (setters active)
+  QuickActionsSettings quickActionsSettingsEditable(Function() updateStateCB) => QuickActionsSettings(_settings, updateStateCB);
+
+  /// return QuickActionsSettings read only mode
+  QuickActionsSettings quickActionsSettingsReadonly() => QuickActionsSettings(_settings, null);
+
+  /// return NotificationSettings in edit mode (setters active)
+  NotificationSettings notificationSettingsEditable(Function() updateStateCB) => NotificationSettings(_settings, updateStateCB);
+
+  /// return NotificationSettings read only mode
+  NotificationSettings notificationSettingsReadonly() => NotificationSettings(_settings, null);
+
   /// return FixColumnProfile from display settings or default for the series type (or null if the series has no fix column profile)
   ColumnProfile? get determineTableColumnProfile {
     // custom or monthly?
@@ -120,6 +135,8 @@ class SeriesDef {
   }
 
   factory SeriesDef.fromJson(JsonReader json, {bool ignoreValidation = false}) {
+    JsonVersion.validateNotNewer(json, 'seriesDef', validateType: false);
+
     SeriesType seriesType;
     var jType = json.asReader('seriesType');
     try {
@@ -154,8 +171,6 @@ class SeriesDef {
     'color': ColorUtils.toHex(color),
     'iconName': iconName,
     'settings': _settings,
-    // type & version - could be used for parsing
-    'type': 'seriesDef',
     'version': DbMigration.latestVersion,
   };
 

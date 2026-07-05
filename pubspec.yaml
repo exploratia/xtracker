@@ -75,6 +75,14 @@ dependencies:
   # url launcher
   url_launcher: ^6.3.2
 
+  #quick actions (long press on app icon)
+  quick_actions: ^1.1.0
+
+  # notifications
+  flutter_local_notifications: ^19.4.2
+  timezone: ^0.10.1
+  flutter_timezone: ^4.1.1
+
   # display HTML in flutter
   simple_html_css: ^5.0.0
 
@@ -101,6 +109,8 @@ flutter:
     # Add assets from the images directory to the application.
     - assets/images/
     - assets/images/bmc/
+    - assets/images/google/
+    - assets/images/paypal/
     - assets/images/logos/
     - assets/images/trend/
     - assets/translations/

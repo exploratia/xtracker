@@ -6,6 +6,7 @@ import 'screens/administration/info_screen.dart';
 import 'screens/administration/log_screen.dart';
 import 'screens/administration/log_settings_screen.dart';
 import 'screens/administration/logs_screen.dart';
+import 'screens/administration/notification_info_screen.dart';
 import 'screens/administration/settings_screen.dart';
 import 'screens/home_screen.dart';
 import 'screens/series/series_data_screen.dart';
@@ -52,6 +53,7 @@ class Routing {
         if (routeName == InfoScreen.navItem.routeName) return InfoScreen(args: args);
         if (routeName == SettingsScreen.navItem.routeName) return SettingsScreen(settingsController: settingsController);
         if (routeName == DeviceInfoScreen.navItem.routeName) return DeviceInfoScreen(settingsController: settingsController);
+        if (routeName == NotificationInfoScreen.navItem.routeName) return NotificationInfoScreen(settingsController: settingsController);
         // << administration
         // series >>
         if (routeName == SeriesDataScreen.navItem.routeName) return SeriesDataScreen(args: args);

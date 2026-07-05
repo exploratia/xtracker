@@ -63,6 +63,14 @@ class SettingsService {
     await DeviceStorage.writeBool(DeviceStorageKeys.layoutHideWallpaper, value);
   }
 
+  Future<bool> hideExploratiaQuickActionUrl() async {
+    return await DeviceStorage.readBool(DeviceStorageKeys.quickActionsHideExploratiaUrl);
+  }
+
+  Future<void> updateHideExploratiaQuickActionUrl(bool value) async {
+    await DeviceStorage.writeBool(DeviceStorageKeys.quickActionsHideExploratiaUrl, value);
+  }
+
   /// Loads the initial app start and set if not yet exists
   Future<DateTime> initialAppStart() async {
     var strTimestamp = await DeviceStorage.read(DeviceStorageKeys.initialAppStart);

@@ -9,8 +9,7 @@ enum InfoType {
   eula('eula', LocaleKeys.enum_infoType_eula_title),
   privacyPolicy('privacyPolicy', LocaleKeys.enum_infoType_privacyPolicy_title),
   disclaimer('disclaimer', LocaleKeys.enum_infoType_disclaimer_title),
-  unknown("unknown", LocaleKeys.appTitle)
-  ;
+  unknown("unknown", LocaleKeys.appTitle);
 
   final String typeName;
   final String _titleKey;

@@ -8,6 +8,8 @@
       "title": "Support the App",
       "label": {
         "buyMeACoffee": "Maintaining and improving this app takes a lot of free time. Any support is greatly appreciated.",
+        "rateOnGooglePlay": "Rate us or write a review on Google Play:",
+        "sendFeedbackByMail": "Feedback by Mail",
         "reportABug": "Found a bug? Report it on GitHub:"
       }
     },
@@ -165,6 +167,24 @@
       "share": {
         "tooltip": "Share device info"
       }
+    }
+  },
+  "notificationInfo": {
+    "title": "Notifications",
+    "section": {
+      "nextNotifications": "Next notifications"
+    },
+    "table": {
+      "column": {
+        "series": "Series",
+        "nextNotification": "Next notification",
+        "notification": "Notification"
+      }
+    },
+    "label": {
+      "noEnabledNotifications": "No series with enabled notifications.",
+      "noScheduledNotifications": "No future notifications scheduled.",
+      "loadFailed": "Could not load notification information."
     }
   },
   "enum": {
@@ -337,6 +357,20 @@
         "tooltip": "Manage series"
       }
     },
+    "pendingActions": {
+      "tooltip": "Open actions ({})",
+      "title": "Open actions",
+      "label": {
+        "empty": "No open actions",
+        "seriesValue": "Enter value: {}",
+        "backupReminder": "Backup reminder",
+        "debugDummy": "Debug action {}"
+      },
+      "source": {
+        "backupReminder": "Backup",
+        "debugDummy": "Test item"
+      }
+    },
     "btn": {
       "addSeries": {
         "label": "Add series...",
@@ -499,6 +533,9 @@
       "importExportSeries": {
         "tooltip": "Import / export series"
       },
+      "more": {
+        "tooltip": "More..."
+      },
       "deleteSeriesValues": {
         "tooltip": "Delete series values"
       },
@@ -585,6 +622,69 @@
       },
       "custom": {
         "title": "Custom settings"
+      },
+      "quickActions": {
+        "title": "QuickActions",
+        "label": {
+          "showAddValueInAppContextMenu": "'Add value' in app icon menu:"
+        },
+        "alert": {
+          "androidSystemLimit": {
+            "title": "QuickActions limited",
+            "message": "Android limits the number of app icon quick actions to {}.",
+            "configuredSeries": "Configured series:"
+          }
+        }
+      },
+      "notifications": {
+        "title": "Notifications",
+        "label": {
+          "enabled": "Enable reminder notifications:",
+          "times": "Times",
+          "intervalDays": "Interval in days",
+          "weekdays": "Weekdays",
+          "day": "Day",
+          "weekday": "Weekday",
+          "monthlyRule": "Monthly rule",
+          "timeAt": "Time: {}",
+          "unsupportedPlatform": "This platform does not support notifications. The setting is still saved.",
+          "reminderText": "Reminder text"
+        },
+        "repeat": {
+          "daily": "Daily",
+          "everyXDays": "Every X days",
+          "weekly": "Weekly",
+          "monthly": "Monthly"
+        },
+        "monthlyRule": {
+          "dayOfMonth": "Specific day of month",
+          "lastDay": "Last day of month",
+          "weekdayOfMonth": "Weekday of month"
+        },
+        "monthlyWeekdayOrdinal": {
+          "first": "1st",
+          "second": "2nd",
+          "third": "3rd",
+          "last": "Last"
+        },
+        "action": {
+          "addTime": "Add time",
+          "enterValue": "Enter new value"
+        },
+        "snackbar": {
+          "reminderIn": "Reminder in {}"
+        },
+        "duration": {
+          "day": "day",
+          "days": "days",
+          "hour": "hour",
+          "hours": "hours",
+          "minute": "minute",
+          "minutes": "minutes"
+        },
+        "alert": {
+          "permissionDenied": "Notification permission denied. Notifications were disabled for this series."
+        }
       },
       "tags": {
         "title": "Tags\uD83D\uDEA9",
@@ -826,6 +926,7 @@
       "alert": {
         "unexpectedDataStructure": "Unexpected file content (file: '{}').",
         "unexpectedFile": "Unsupported file format (file: '{}').",
+        "unsupportedVersion": "The file '{}' was created with a newer data version ({}). This app only supports data up to version {}.",
         "import": {
           "title": "Import failed"
         }
@@ -894,6 +995,7 @@
       "label": {
         "hideNavigationLabels": "Hide navigation labels (menu & bottom navigation):",
         "hideWallpaper": "Hide wallpaper:",
+        "hideExploratiaQuickActionUrl": "Hide exploratia URL in app icon menu:",
         "seriesExportDisableReminder": "Disable series export reminder (30 days after last export):",
         "lang": "Language:",
         "theme": "Theme:"

@@ -13,6 +13,7 @@ import '../widgets/controls/navigation/hide_bottom_navigation_bar.dart';
 import '../widgets/controls/responsive/screen_builder.dart';
 import '../widgets/series/app_support_check.dart';
 import '../widgets/series/management/series_management_view.dart';
+import '../widgets/series/pending_app_actions_button.dart';
 import '../widgets/series/series_view.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -80,6 +81,7 @@ class _HomeScreenContent extends StatelessWidget {
             ],
           ),
           actions: [
+            PendingAppActionsButton(settingsController: settingsController),
             IconButton(
               iconSize: ThemeUtils.iconSizeScaled,
               tooltip: LocaleKeys.seriesDashboard_action_addSeries_tooltip.tr(),

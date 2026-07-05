@@ -8,6 +8,8 @@
       "title": "Unterstütze die App",
       "label": {
         "buyMeACoffee": "Wartung und Weiterentwicklung kosten viel Freizeit. Über Unterstützung würde ich mich sehr freuen.",
+        "rateOnGooglePlay": "Auf Google Play bewerten / Rezension schreiben:",
+        "sendFeedbackByMail": "Feedback per Mail",
         "reportABug": "Fehler gefunden? Erstelle einen Bug-Report auf GitHub:"
       }
     },
@@ -165,6 +167,24 @@
       "share": {
         "tooltip": "Geräteinfo teilen"
       }
+    }
+  },
+  "notificationInfo": {
+    "title": "Benachrichtigungen",
+    "section": {
+      "nextNotifications": "Nächste Benachrichtigungen"
+    },
+    "table": {
+      "column": {
+        "series": "Messreihe",
+        "nextNotification": "Nächste Benachrichtigung",
+        "notification": "Benachrichtigung"
+      }
+    },
+    "label": {
+      "noEnabledNotifications": "Keine Messreihe mit aktivierten Benachrichtigungen.",
+      "noScheduledNotifications": "Keine zukünftigen Benachrichtigungen geplant.",
+      "loadFailed": "Benachrichtigungsinformationen konnten nicht geladen werden."
     }
   },
   "enum": {
@@ -337,6 +357,20 @@
         "tooltip": "Messreihen verwalten"
       }
     },
+    "pendingActions": {
+      "tooltip": "Offene Aktionen ({})",
+      "title": "Offene Aktionen",
+      "label": {
+        "empty": "Keine offenen Aktionen",
+        "seriesValue": "Wert erfassen: {}",
+        "backupReminder": "Backup-Erinnerung",
+        "debugDummy": "Debug-Aktion {}"
+      },
+      "source": {
+        "backupReminder": "Datensicherung",
+        "debugDummy": "Testeintrag"
+      }
+    },
     "btn": {
       "addSeries": {
         "label": "Messreihe hinzufügen...",
@@ -499,6 +533,9 @@
       "importExportSeries": {
         "tooltip": "Messreihe importieren/exportieren"
       },
+      "more": {
+        "tooltip": "Mehr..."
+      },
       "deleteSeriesValues": {
         "tooltip": "Werte der Messreihe löschen"
       },
@@ -585,6 +622,69 @@
       },
       "custom": {
         "title": "Individuell-Einstellungen"
+      },
+      "quickActions": {
+        "title": "QuickActions",
+        "label": {
+          "showAddValueInAppContextMenu": "'Wert hinzufügen' im App-Icon-Menü:"
+        },
+        "alert": {
+          "androidSystemLimit": {
+            "title": "QuickActions begrenzt",
+            "message": "Android begrenzt die Anzahl der App-Icon-QuickActions auf {}.",
+            "configuredSeries": "Konfigurierte Messreihen:"
+          }
+        }
+      },
+      "notifications": {
+        "title": "Benachrichtigungen",
+        "label": {
+          "enabled": "Erinnerungs-Benachrichtigungen aktivieren:",
+          "times": "Uhrzeiten",
+          "intervalDays": "Intervall in Tagen",
+          "weekdays": "Wochentage",
+          "day": "Tag",
+          "weekday": "Wochentag",
+          "monthlyRule": "Monatliche Regel",
+          "timeAt": "Uhrzeit: {}",
+          "unsupportedPlatform": "Diese Plattform unterstützt keine Benachrichtigungen. Die Einstellung wird trotzdem gespeichert.",
+          "reminderText": "Erinnerungstext"
+        },
+        "repeat": {
+          "daily": "Täglich",
+          "everyXDays": "Alle X Tage",
+          "weekly": "Wöchentlich",
+          "monthly": "Monatlich"
+        },
+        "monthlyRule": {
+          "dayOfMonth": "Bestimmter Tag im Monat",
+          "lastDay": "Letzter Tag im Monat",
+          "weekdayOfMonth": "Wochentag im Monat"
+        },
+        "monthlyWeekdayOrdinal": {
+          "first": "1.",
+          "second": "2.",
+          "third": "3.",
+          "last": "Letzter"
+        },
+        "action": {
+          "addTime": "Uhrzeit hinzufügen",
+          "enterValue": "Neuen Wert eintragen"
+        },
+        "snackbar": {
+          "reminderIn": "Erinnerung in {}"
+        },
+        "duration": {
+          "day": "Tag",
+          "days": "Tagen",
+          "hour": "Stunde",
+          "hours": "Stunden",
+          "minute": "Minute",
+          "minutes": "Minuten"
+        },
+        "alert": {
+          "permissionDenied": "Benachrichtigungsberechtigung verweigert. Benachrichtigungen wurden für diese Messreihe deaktiviert."
+        }
       },
       "tags": {
         "title": "Tags\uD83D\uDEA9",
@@ -826,6 +926,7 @@
       "alert": {
         "unexpectedDataStructure": "Unerwarteter Dateiinhalt (Datei: '{}').",
         "unexpectedFile": "Nicht unterstütztes Dateiformat (Datei: '{}').",
+        "unsupportedVersion": "Die Datei '{}' wurde mit einer neueren Datenversion ({}) erstellt. Diese App unterstützt nur Daten bis Version {}.",
         "import": {
           "title": "Fehler beim Import"
         }
@@ -894,6 +995,7 @@
       "label": {
         "hideNavigationLabels": "Navigationslabels ausblenden (Menü & Navigationsleiste):",
         "hideWallpaper": "Hintergrundbild ausblenden:",
+        "hideExploratiaQuickActionUrl": "Exploratia-URL im App-Icon-Menü ausblenden:",
         "seriesExportDisableReminder": "Erinnerung für Messreihenexport deaktivieren (30 Tage nach letztem Export):",
         "lang": "Sprache:",
         "theme": "Theme:"

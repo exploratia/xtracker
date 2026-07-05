@@ -5,6 +5,8 @@ import 'package:intl/date_symbol_data_local.dart';
 import 'src/app.dart';
 import 'src/store/stores_utils.dart';
 import 'src/util/app_info.dart';
+import 'src/util/app_icon_quick_actions.dart';
+import 'src/util/app_series_notifications.dart';
 import 'src/util/date_time_utils.dart';
 import 'src/util/logging/daily_files.dart';
 import 'src/util/stack/stack_utils.dart';
@@ -14,6 +16,8 @@ import 'src/widgets/administration/settings/settings_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await AppSeriesNotifications.init();
+  await AppIconQuickActions.init();
 
   // debugPrintRebuildDirtyWidgets = true; // Show which widgets rebuild.
 

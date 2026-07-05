@@ -32,7 +32,7 @@ class DeviceStorageView extends StatelessWidget {
                 keys.sort();
                 for (var key in keys) {
                   var value = storageData[key];
-                  rows.add(TableUtils.tableRow([key, value ?? '-']));
+                  rows.add(TableUtils.tableRow([key, _formatStorageValueForView(key, value)]));
                 }
 
                 return LayoutBuilder(
@@ -64,6 +64,13 @@ class DeviceStorageView extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  String _formatStorageValueForView(String key, String? value) {
+    if (value == null) {
+      return '-';
+    }
+    return value;
   }
 }
 

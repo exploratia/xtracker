@@ -24,17 +24,14 @@ import '../dialogs.dart';
 import '../ex.dart';
 import '../json_reader.dart';
 import '../json_utils.dart';
+import '../json_version.dart';
 import '../logging/flutter_simple_logging.dart';
 import '../theme_utils.dart';
 
 class SeriesImportExport {
   static Future<String> _readPickedFileAsString(PlatformFile file) async {
-    final bytes = file.bytes;
-    if (bytes != null) {
-      return utf8.decode(bytes);
-    }
-
-    return file.xFile.readAsString(); // utf8
+    final bytes = await file.xFile.readAsBytes();
+    return utf8.decode(bytes);
   }
 
   static Future<String> _buildSeriesExportCSV(SeriesDef seriesDef, BuildContext context) async {
@@ -191,7 +188,7 @@ class SeriesImportExport {
   /// - throws [Ex] in case of unexpected json
   static Future<bool> _importSeries(JsonReader json, String fileName, SeriesProviders seriesProviders) async {
     if (json.asReader("type").getString() == "seriesExport") {
-      // check version...
+      JsonVersion.validateNotNewer(json, 'seriesExport');
       var seriesDef = SeriesDef.fromJson(json.asReader("seriesDef"));
       seriesDef.validate();
       SimpleLogging.i("Importing series and data for ${seriesDef.toLogString()} ...");
@@ -220,7 +217,7 @@ class SeriesImportExport {
       }
 
       await seriesProviders.seriesProvider.delete(seriesDef, seriesProviders);
-      await seriesProviders.seriesProvider.save(seriesDef);
+      await seriesProviders.seriesProvider.save(seriesDef, forceNotificationRefresh: true);
       await seriesProviders.seriesDataProvider.addValues(seriesDef, seriesData.data, seriesProviders.seriesCurrentValueProvider);
       SimpleLogging.i("Import for ${seriesDef.toLogString()} finished.");
       return true;
@@ -238,9 +235,10 @@ class SeriesImportExport {
     try {
       // https://pub.dev/packages/file_picker
       result = await FilePicker.pickFiles(
+        // file_picker 12 beta has no replacement for multiple file selection.
+        // ignore: deprecated_member_use
         allowMultiple: true,
         type: FileType.any,
-        withData: kIsWeb,
         // allowedExtensions: ['json'], // not possible // https://github.com/miguelpruivo/flutter_file_picker/issues/1717
       );
     } catch (ex, st) {
@@ -285,7 +283,7 @@ class SeriesImportExport {
 
         var jType = json.asReader("type");
         if (jType.getString() == "multiSeriesExport") {
-          // check version...
+          JsonVersion.validateNotNewer(json, 'multiSeriesExport');
           for (var jSeries in json.asReader("series").asReaders()) {
             if (await _importSeries(jSeries, file.name, seriesProviders)) {
               successfulImports++;
@@ -366,9 +364,7 @@ class SeriesImportExport {
     try {
       // https://pub.dev/packages/file_picker
       result = await FilePicker.pickFiles(
-        allowMultiple: false,
         type: FileType.any,
-        withData: kIsWeb,
         // allowedExtensions: ['json'], // not possible // https://github.com/miguelpruivo/flutter_file_picker/issues/1717
       );
     } catch (ex, st) {

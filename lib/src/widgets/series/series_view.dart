@@ -7,6 +7,7 @@ import '../../providers/series_current_value_provider.dart';
 import '../../providers/series_provider.dart';
 import '../../util/dialogs.dart';
 import '../../util/logging/flutter_simple_logging.dart';
+import '../../util/pending_app_actions.dart';
 import '../../util/theme_utils.dart';
 import '../administration/settings/settings_controller.dart';
 import '../controls/animation/animate_in.dart';
@@ -16,6 +17,7 @@ import '../controls/navigation/hide_bottom_navigation_bar.dart';
 import '../controls/provider/data_provider_loader.dart';
 import '../controls/responsive/device_dependent_constrained_box.dart';
 import 'add_first_series.dart';
+import 'pending_app_action_executor.dart';
 import 'series_def_renderer.dart';
 import 'series_export_check.dart';
 
@@ -71,14 +73,35 @@ class _SeriesViewState extends State<SeriesView> {
   }
 }
 
-class _SeriesList extends StatelessWidget {
+class _SeriesList extends StatefulWidget {
   final SettingsController settingsController;
 
   const _SeriesList(this.settingsController);
 
   @override
+  State<_SeriesList> createState() => _SeriesListState();
+}
+
+class _SeriesListState extends State<_SeriesList> {
+  bool _automaticActionScheduled = false;
+  bool _executingAutomaticAction = false;
+
+  @override
+  void initState() {
+    super.initState();
+    PendingAppActions.listenable().addListener(_scheduleAutomaticAction);
+  }
+
+  @override
+  void dispose() {
+    PendingAppActions.listenable().removeListener(_scheduleAutomaticAction);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     var series = context.watch<SeriesProvider>().series;
+    _scheduleAutomaticAction();
     if (series.isEmpty) {
       return const FadeIn(child: AddFirstSeries());
     }
@@ -93,7 +116,7 @@ class _SeriesList extends StatelessWidget {
           child: SeriesDefRenderer(
             seriesDef: s,
             index: idx,
-            settingsController: settingsController,
+            settingsController: widget.settingsController,
           ),
         ),
       );
@@ -101,7 +124,7 @@ class _SeriesList extends StatelessWidget {
     }
 
     return SeriesExportCheck(
-      settingsController: settingsController,
+      settingsController: widget.settingsController,
       child: DeviceDependentWidthConstrainedBox(
         child: Column(
           spacing: ThemeUtils.verticalSpacingLarge,
@@ -110,5 +133,45 @@ class _SeriesList extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _scheduleAutomaticAction() {
+    if (_automaticActionScheduled || !PendingAppActions.hasAutomaticAction) {
+      return;
+    }
+
+    _automaticActionScheduled = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        if (!mounted) {
+          return;
+        }
+        _automaticActionScheduled = false;
+        await _executeNextAutomaticAction();
+      });
+    });
+  }
+
+  Future<void> _executeNextAutomaticAction() async {
+    if (!mounted || _executingAutomaticAction || ModalRoute.of(context)?.isCurrent != true) {
+      return;
+    }
+
+    var action = PendingAppActions.takeNextAutomaticAction();
+    if (action == null) {
+      return;
+    }
+
+    _executingAutomaticAction = true;
+    try {
+      await PendingAppActionExecutor.execute(
+        context,
+        action,
+        settingsController: widget.settingsController,
+      );
+    } finally {
+      _executingAutomaticAction = false;
+      PendingAppActions.completeAutomaticAction();
+    }
   }
 }

@@ -17,8 +17,14 @@ class $AssetsImagesGen {
   /// Directory path: assets/images/bmc
   $AssetsImagesBmcGen get bmc => const $AssetsImagesBmcGen();
 
+  /// Directory path: assets/images/google
+  $AssetsImagesGoogleGen get google => const $AssetsImagesGoogleGen();
+
   /// Directory path: assets/images/logos
   $AssetsImagesLogosGen get logos => const $AssetsImagesLogosGen();
+
+  /// Directory path: assets/images/paypal
+  $AssetsImagesPaypalGen get paypal => const $AssetsImagesPaypalGen();
 
   /// Directory path: assets/images/trend
   $AssetsImagesTrendGen get trend => const $AssetsImagesTrendGen();
@@ -56,6 +62,16 @@ class $AssetsImagesBmcGen {
   List<AssetGenImage> get values => [bmcButton, coffee];
 }
 
+class $AssetsImagesGoogleGen {
+  const $AssetsImagesGoogleGen();
+
+  /// File path: assets/images/google/googleplay-button.png
+  AssetGenImage get googleplayButton => const AssetGenImage('assets/images/google/googleplay-button.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [googleplayButton];
+}
+
 class $AssetsImagesLogosGen {
   const $AssetsImagesLogosGen();
 
@@ -76,6 +92,16 @@ class $AssetsImagesLogosGen {
 
   /// List of all assets
   List<AssetGenImage> get values => [appLogo, appLogoWhite, caLogo, exploratiaLogo, exploratiaLogoWide];
+}
+
+class $AssetsImagesPaypalGen {
+  const $AssetsImagesPaypalGen();
+
+  /// File path: assets/images/paypal/paypal-button.png
+  AssetGenImage get paypalButton => const AssetGenImage('assets/images/paypal/paypal-button.png');
+
+  /// List of all assets
+  List<AssetGenImage> get values => [paypalButton];
 }
 
 class $AssetsImagesTrendGen {
@@ -99,12 +125,7 @@ class Assets {
 }
 
 class AssetGenImage {
-  const AssetGenImage(
-    this._assetName, {
-    this.size,
-    this.flavors = const {},
-    this.animation,
-  });
+  const AssetGenImage(this._assetName, {this.size, this.flavors = const {}, this.animation});
 
   final String _assetName;
 
@@ -165,15 +186,8 @@ class AssetGenImage {
     );
   }
 
-  ImageProvider provider({
-    AssetBundle? bundle,
-    String? package,
-  }) {
-    return AssetImage(
-      _assetName,
-      bundle: bundle,
-      package: package,
-    );
+  ImageProvider provider({AssetBundle? bundle, String? package}) {
+    return AssetImage(_assetName, bundle: bundle, package: package);
   }
 
   String get path => _assetName;
@@ -182,11 +196,7 @@ class AssetGenImage {
 }
 
 class AssetGenImageAnimation {
-  const AssetGenImageAnimation({
-    required this.isAnimation,
-    required this.duration,
-    required this.frames,
-  });
+  const AssetGenImageAnimation({required this.isAnimation, required this.duration, required this.frames});
 
   final bool isAnimation;
   final Duration duration;
