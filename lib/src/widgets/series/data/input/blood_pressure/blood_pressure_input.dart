@@ -40,10 +40,12 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
   final _formKey = GlobalKey<FormState>();
   final _highController = TextEditingController();
   final _lowController = TextEditingController();
+  final _lowFocusNode = FocusNode();
 
   // auto validate after first call of save
   bool _autoValidate = false;
   bool _isValid = false;
+  bool _didAutoFocusLow = false;
 
   late final String _uuid;
   DateTime _dateTime = DateTime.now();
@@ -78,6 +80,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
   void dispose() {
     _highController.dispose();
     _lowController.dispose();
+    _lowFocusNode.dispose();
     super.dispose();
   }
 
@@ -91,6 +94,14 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
     setState(() {
       _high = value;
     });
+  }
+
+  void _handleHighChanged(String value) {
+    _setHigh(int.tryParse(value) ?? -1);
+    if (!_didAutoFocusLow && value.length >= 3) {
+      _didAutoFocusLow = true;
+      _lowFocusNode.requestFocus();
+    }
   }
 
   void _setLow(int value) {
@@ -171,9 +182,10 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
           return null;
         },
         // onSaved: (value) => _setHigh(int.tryParse(value ?? "-1") ?? -1),
-        onChanged: (value) => _setHigh(int.tryParse(value) ?? -1),
+        onChanged: _handleHighChanged,
       ),
       TextFormField(
+        focusNode: _lowFocusNode,
         controller: _lowController,
         decoration: InputDecoration(
           labelText: LocaleKeys.seriesValue_bloodPressure_label_diastolic.tr(),
