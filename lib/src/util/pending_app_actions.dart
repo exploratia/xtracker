@@ -32,6 +32,9 @@ class PendingAppAction {
     this.notificationId,
   });
 
+  /// Whether this action may be executed without a manual in-app selection.
+  bool get isDirectSeriesAction => type == PendingAppActionType.seriesValue && executeAutomatically && seriesSource != null;
+
   PendingAppAction copyWith({
     bool? executeAutomatically,
     DateTime? createdAt,

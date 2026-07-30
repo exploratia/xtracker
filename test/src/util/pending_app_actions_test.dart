@@ -139,5 +139,16 @@ void main() {
       expect(PendingAppActions.count, 1);
       expect(PendingAppActions.items().single.type, PendingAppActionType.backupReminder);
     });
+
+    test('never classifies a backup reminder as a direct action', () {
+      var backupReminder = PendingAppAction(
+        id: 'backup-reminder',
+        type: PendingAppActionType.backupReminder,
+        executeAutomatically: true,
+        createdAt: DateTime(2026),
+      );
+
+      expect(backupReminder.isDirectSeriesAction, false);
+    });
   });
 }
