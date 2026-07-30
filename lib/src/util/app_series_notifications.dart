@@ -77,7 +77,8 @@ class AppSeriesNotifications {
     }
   }
 
-  static Future<void> queueActiveSeriesNotificationActions() async {
+  /// Synchronizes Android's active series notifications with the in-app messages.
+  static Future<void> synchronizeActiveSeriesNotificationActions() async {
     if (!_isSupportedPlatform()) {
       SimpleLogging.d('Queue active series notifications skipped: unsupported platform.');
       return;
@@ -90,6 +91,8 @@ class AppSeriesNotifications {
 
     try {
       var activeNotifications = await _notificationsPlugin.getActiveNotifications();
+      var activeNotificationIds = activeNotifications.map((notification) => notification.id).whereType<int>().toSet();
+      PendingAppActions.retainActiveNotificationActions(activeNotificationIds);
       if (activeNotifications.isEmpty) {
         SimpleLogging.d('No active notifications found.');
         return;
@@ -159,6 +162,28 @@ class AppSeriesNotifications {
     SimpleLogging.d('Handled series notification response. seriesUuid=$seriesUuid, notificationId=$notificationId');
   }
 
+  /// Removes a currently displayed Android notification.
+  static Future<void> cancelActiveNotification(int? notificationId) async {
+    if (notificationId == null || !_isSupportedPlatform()) {
+      return;
+    }
+    await init();
+    if (!_initialized) {
+      return;
+    }
+
+    try {
+      await _notificationsPlugin.cancel(id: notificationId);
+      SimpleLogging.d('Cancelled active series notification. notificationId=$notificationId');
+    } catch (err, st) {
+      SimpleLogging.w(
+        'Could not cancel active series notification. notificationId=$notificationId',
+        error: err,
+        stackTrace: st,
+      );
+    }
+  }
+
   static Future<bool> ensurePermissionRequested() async {
     if (!_isSupportedPlatform()) {
       SimpleLogging.d('Series notification permission request skipped: unsupported platform.');
@@ -207,6 +232,10 @@ class AppSeriesNotifications {
       var enabledSeries = series.where((s) => s.notificationSettingsReadonly().enabled).toList();
       var enabledSeriesIds = enabledSeries.map((s) => s.uuid).toSet();
       var scheduleMode = await _androidScheduleModeForReminders();
+      var activeNotificationIds = await _activeNotificationIds();
+      if (activeNotificationIds == null) {
+        return;
+      }
       var now = DateTime.now();
       var nowUtc = now.toUtc();
       SimpleLogging.d(
@@ -234,6 +263,7 @@ class AppSeriesNotifications {
           existing: existing,
           scheduleMode: scheduleMode,
           globallyUsedIds: globallyUsedIds,
+          activeNotificationIds: activeNotificationIds,
           now: now,
           nowUtc: nowUtc,
           force: false,
@@ -266,6 +296,10 @@ class AppSeriesNotifications {
       var existingEntries = await store.getAll();
       var existing = existingEntries.where((entry) => entry.seriesDefUuid == seriesDef.uuid).firstOrNull;
       var scheduleMode = await _androidScheduleModeForReminders();
+      var activeNotificationIds = await _activeNotificationIds();
+      if (activeNotificationIds == null) {
+        return;
+      }
       var globallyUsedIds = existingEntries.where((entry) => entry.seriesDefUuid != seriesDef.uuid).expand((entry) => entry.notificationIds).toSet();
       var now = DateTime.now();
       await _refreshSeriesNotification(
@@ -273,6 +307,7 @@ class AppSeriesNotifications {
         existing: existing,
         scheduleMode: scheduleMode,
         globallyUsedIds: globallyUsedIds,
+        activeNotificationIds: activeNotificationIds,
         now: now,
         nowUtc: now.toUtc(),
         force: force,
@@ -326,6 +361,7 @@ class AppSeriesNotifications {
     required SeriesNotificationsStoreEntry? existing,
     required AndroidScheduleMode scheduleMode,
     required Set<int> globallyUsedIds,
+    required Set<int> activeNotificationIds,
     required DateTime now,
     required DateTime nowUtc,
     required bool force,
@@ -353,9 +389,12 @@ class AppSeriesNotifications {
     SimpleLogging.d(
       'Replacing series notifications. seriesUuid=${seriesDef.uuid}, existingNotificationIds=${existing?.notificationIds ?? const []}',
     );
-    await _cancelNotifications(existing?.notificationIds ?? const []);
+    var preservedActiveIds = existing?.notificationIds.where(activeNotificationIds.contains).toSet() ?? <int>{};
+    var notificationIdsToCancel = (existing?.notificationIds ?? const <int>[]).where((id) => !preservedActiveIds.contains(id)).toList();
+    await _cancelNotifications(notificationIdsToCancel);
+    globallyUsedIds.addAll(preservedActiveIds);
 
-    var ids = <int>[];
+    var ids = preservedActiveIds.toList();
     for (var trigger in scheduleSpec) {
       var id = _buildNotificationId(seriesDef.uuid, trigger, globallyUsedIds);
       globallyUsedIds.add(id);
@@ -445,6 +484,16 @@ class AppSeriesNotifications {
       await _notificationsPlugin.cancel(id: id);
     }
     SimpleLogging.d('Cancelled series notifications. notificationIds=$notificationIds');
+  }
+
+  static Future<Set<int>?> _activeNotificationIds() async {
+    try {
+      var activeNotifications = await _notificationsPlugin.getActiveNotifications();
+      return activeNotifications.map((notification) => notification.id).whereType<int>().toSet();
+    } catch (err, st) {
+      SimpleLogging.w('Could not load active notifications while refreshing schedules', error: err, stackTrace: st);
+      return null;
+    }
   }
 
   static Future<void> _requestExactAlarmsPermissionIfNeeded(AndroidFlutterLocalNotificationsPlugin androidPlugin) async {

@@ -39,7 +39,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     PendingAppActions.externalSeriesActionListenable().addListener(_routeToHomeIfExternalActionPending);
-    WidgetsBinding.instance.addPostFrameCallback((_) => _queueActiveNotificationsAndRouteIfPending());
+    WidgetsBinding.instance.addPostFrameCallback((_) => _synchronizeNotificationsAndRouteIfPending());
   }
 
   @override
@@ -53,7 +53,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       WidgetsBinding.instance.addPostFrameCallback((_) async {
-        await _queueActiveNotificationsAndRouteIfPending();
+        await _synchronizeNotificationsAndRouteIfPending();
         _refreshDueSeriesNotifications();
       });
     }
@@ -68,11 +68,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   }
 
   void _routeToHomeIfExternalActionPending() {
-    WidgetsBinding.instance.addPostFrameCallback((_) => _queueActiveNotificationsAndRouteIfPending());
+    WidgetsBinding.instance.addPostFrameCallback((_) => _synchronizeNotificationsAndRouteIfPending());
   }
 
-  Future<void> _queueActiveNotificationsAndRouteIfPending() async {
-    await AppSeriesNotifications.queueActiveSeriesNotificationActions();
+  Future<void> _synchronizeNotificationsAndRouteIfPending() async {
+    await AppSeriesNotifications.synchronizeActiveSeriesNotificationActions();
     _routeToHomeIfExternalSeriesActionPending();
   }
 

@@ -32,6 +32,9 @@ class PendingAppAction {
     this.notificationId,
   });
 
+  /// Whether this action may be executed without a manual in-app selection.
+  bool get isDirectSeriesAction => type == PendingAppActionType.seriesValue && executeAutomatically && seriesSource != null;
+
   PendingAppAction copyWith({
     bool? executeAutomatically,
     DateTime? createdAt,
@@ -57,15 +60,13 @@ class PendingAppActions {
   static const bool _debugShowDummyActions = false;
   static int _nextActionId = 0;
   static bool _backupReminderDismissedThisRun = false;
-  static bool _automaticActionArmed = true;
   static bool _debugDummyActionsQueued = false;
 
   static int get count => _items.length;
 
-  static bool get hasPendingExternalSeriesAction =>
-      _directActions.any((item) => item.type == PendingAppActionType.seriesValue) || _items.any((item) => item.type == PendingAppActionType.seriesValue);
+  static bool get hasPendingExternalSeriesAction => _directActions.any((item) => item.type == PendingAppActionType.seriesValue);
 
-  static bool get hasAutomaticAction => _directActions.isNotEmpty || _items.isNotEmpty;
+  static bool get hasAutomaticAction => _directActions.isNotEmpty;
 
   static ValueListenable<int> listenable() {
     return _versionNotifier;
@@ -80,30 +81,14 @@ class PendingAppActions {
   }
 
   static List<PendingAppAction> items() {
-    return List.unmodifiable(_sortedItems());
+    return List.unmodifiable(_items);
   }
 
   static PendingAppAction? takeNextAutomaticAction() {
-    if (_directActions.isEmpty && _items.isEmpty) {
+    if (_directActions.isEmpty) {
       return null;
     }
-
-    var itemIdx = _indexOfNextAutomaticAction();
-    if (itemIdx < 0) {
-      return null;
-    }
-
-    _automaticActionArmed = false;
-    if (_directActions.isNotEmpty) {
-      return _takeDirectAt(itemIdx);
-    }
-    return _takeAt(itemIdx, rearmIfEmpty: false);
-  }
-
-  static void completeAutomaticAction() {
-    if (_directActions.isEmpty && _items.isEmpty) {
-      _automaticActionArmed = true;
-    }
+    return _takeDirectAt(0);
   }
 
   static void enqueueSeriesValue({
@@ -150,7 +135,6 @@ class PendingAppActions {
     );
     _items.add(action);
     _notifyChanged();
-    _externalSeriesActionVersionNotifier.value++;
     SimpleLogging.d(
       'Queued pending series action. actionId=${action.id}, seriesUuid=$seriesUuid, source=${source.name}, executeAutomatically=$executeAutomatically, pending=${_items.length}',
     );
@@ -243,16 +227,13 @@ class PendingAppActions {
     return _takeAt(itemIdx);
   }
 
-  static PendingAppAction _takeAt(int itemIdx, {bool rearmIfEmpty = true}) {
+  static PendingAppAction _takeAt(int itemIdx) {
     var action = _items.removeAt(itemIdx);
     if (action.type == PendingAppActionType.backupReminder) {
       _backupReminderDismissedThisRun = true;
     }
     if (action.notificationId != null) {
       _handledNotificationIdsThisRun.add(action.notificationId!);
-    }
-    if (rearmIfEmpty && _items.isEmpty) {
-      _automaticActionArmed = true;
     }
     _notifyChanged();
     SimpleLogging.d('Consumed pending app action. actionId=${action.id}, type=${action.type.name}, remaining=${_items.length}');
@@ -275,10 +256,22 @@ class PendingAppActions {
 
   static void removeBackupReminder() {
     _items.removeWhere((item) => item.type == PendingAppActionType.backupReminder);
-    if (_items.isEmpty) {
-      _automaticActionArmed = true;
-    }
     _notifyChanged();
+  }
+
+  /// Removes notification messages whose Android notifications are no longer active.
+  static void retainActiveNotificationActions(Set<int> activeNotificationIds) {
+    var previousLength = _items.length;
+    _items.removeWhere(
+      (item) =>
+          item.seriesSource == PendingSeriesActionSource.notification && item.notificationId != null && !activeNotificationIds.contains(item.notificationId),
+    );
+    if (_items.length != previousLength) {
+      _notifyChanged();
+      SimpleLogging.d(
+        'Removed inactive notification actions. activeNotificationIds=$activeNotificationIds, pending=${_items.length}',
+      );
+    }
   }
 
   @visibleForTesting
@@ -288,7 +281,6 @@ class PendingAppActions {
     _handledNotificationIdsThisRun.clear();
     _nextActionId = 0;
     _backupReminderDismissedThisRun = false;
-    _automaticActionArmed = true;
     _debugDummyActionsQueued = false;
     _versionNotifier.value = 0;
     _externalSeriesActionVersionNotifier.value = 0;
@@ -303,71 +295,11 @@ class PendingAppActions {
     _versionNotifier.value++;
   }
 
-  static List<PendingAppAction> _sortedItems() {
-    return List<PendingAppAction>.of(_items)..sort((a, b) {
-      var priorityCompare = _priority(a).compareTo(_priority(b));
-      if (priorityCompare != 0) {
-        return priorityCompare;
-      }
-      return a.createdAt.compareTo(b.createdAt);
-    });
-  }
-
-  static int _indexOfNextAutomaticAction() {
-    if (_directActions.isNotEmpty) {
-      return _indexOfHighestPriorityDirectAction();
-    }
-
-    var explicitlyRequestedIdx = _indexOfHighestPriorityAction((item) => item.executeAutomatically);
-    if (explicitlyRequestedIdx >= 0) {
-      return explicitlyRequestedIdx;
-    }
-    if (!_automaticActionArmed) {
-      return -1;
-    }
-    return _indexOfHighestPriorityAction((_) => true);
-  }
-
   static PendingAppAction? _removeQueuedNotificationAction(int notificationId) {
     var existingNotificationIdx = _items.indexWhere((item) => item.notificationId == notificationId);
     if (existingNotificationIdx < 0) {
       return null;
     }
     return _items.removeAt(existingNotificationIdx);
-  }
-
-  static int _indexOfHighestPriorityDirectAction() {
-    var bestIdx = 0;
-    for (var idx = 1; idx < _directActions.length; idx++) {
-      if (_priority(_directActions[idx]) < _priority(_directActions[bestIdx])) {
-        bestIdx = idx;
-      }
-    }
-    return bestIdx;
-  }
-
-  static int _indexOfHighestPriorityAction(bool Function(PendingAppAction item) predicate) {
-    var bestIdx = -1;
-    for (var idx = 0; idx < _items.length; idx++) {
-      if (!predicate(_items[idx])) {
-        continue;
-      }
-      if (bestIdx < 0 || _priority(_items[idx]) < _priority(_items[bestIdx])) {
-        bestIdx = idx;
-      }
-    }
-    return bestIdx;
-  }
-
-  static int _priority(PendingAppAction action) {
-    return switch (action.type) {
-      PendingAppActionType.seriesValue => switch (action.seriesSource) {
-        PendingSeriesActionSource.quickAction => 0,
-        PendingSeriesActionSource.notification => 1,
-        null => 1,
-      },
-      PendingAppActionType.backupReminder => 2,
-      PendingAppActionType.debugDummy => 3,
-    };
   }
 }

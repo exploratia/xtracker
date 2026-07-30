@@ -164,14 +164,9 @@ class _SeriesListState extends State<_SeriesList> {
 
     _executingAutomaticAction = true;
     try {
-      await PendingAppActionExecutor.execute(
-        context,
-        action,
-        settingsController: widget.settingsController,
-      );
+      await PendingAppActionExecutor.executeDirectSeriesAction(context, action);
     } finally {
       _executingAutomaticAction = false;
-      PendingAppActions.completeAutomaticAction();
     }
   }
 }
