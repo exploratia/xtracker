@@ -69,6 +69,7 @@ class SeriesDataHabitTableView extends StatelessWidget {
           habitValue: value,
           seriesDef: seriesViewMetaData.seriesDef,
           editMode: seriesViewMetaData.editMode,
+          enableActions: true,
           wrapWithDateTimeTooltip: true,
         ),
       );

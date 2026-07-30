@@ -10,17 +10,24 @@ import '../input_result.dart';
 import '../simple_dialog_input.dart';
 
 class DailyCheckInput extends StatefulWidget {
-  const DailyCheckInput({super.key, this.dailyCheckValue, required this.seriesDef});
+  const DailyCheckInput({super.key, this.dailyCheckValue, required this.seriesDef, required this.inputMode});
 
   final SeriesDef seriesDef;
   final DailyCheckValue? dailyCheckValue;
+  final SeriesDataInputMode inputMode;
 
-  static Future<InputResult<DailyCheckValue>?> showInputDlg(BuildContext context, SeriesDef seriesDef, {DailyCheckValue? dailyCheckValue}) async {
+  static Future<InputResult<DailyCheckValue>?> showInputDlg(
+    BuildContext context,
+    SeriesDef seriesDef, {
+    DailyCheckValue? dailyCheckValue,
+    required SeriesDataInputMode inputMode,
+  }) async {
     return await showDialog<InputResult<DailyCheckValue>>(
       context: context,
       builder: (ctx) => DailyCheckInput(
         seriesDef: seriesDef,
         dailyCheckValue: dailyCheckValue,
+        inputMode: inputMode,
       ),
     );
   }
@@ -59,20 +66,20 @@ class _DailyCheckInputState extends State<DailyCheckInput> {
   void _saveHandler() {
     if (!_isValid) {
       // not valid means delete
-      if (widget.dailyCheckValue != null) {
+      if (widget.dailyCheckValue != null && widget.inputMode == SeriesDataInputMode.edit) {
         _deleteHandler();
       } else {
         Navigator.pop(context, null);
       }
       return;
     }
-    bool insert = widget.dailyCheckValue == null;
+    bool insert = widget.inputMode == SeriesDataInputMode.create;
     var val = DailyCheckValue(_uuid, _dateTime);
     Navigator.pop(context, InputResult(val, insert ? InputResultAction.insert : InputResultAction.update));
   }
 
   void _deleteHandler() {
-    if (widget.dailyCheckValue != null && mounted) {
+    if (widget.dailyCheckValue != null && widget.inputMode == SeriesDataInputMode.edit && mounted) {
       Navigator.pop(context, InputResult(widget.dailyCheckValue!, InputResultAction.delete));
     }
   }
@@ -87,7 +94,7 @@ class _DailyCheckInputState extends State<DailyCheckInput> {
     );
 
     return SimpleDialogInput(
-      isEdit: widget.dailyCheckValue != null,
+      isEdit: widget.inputMode == SeriesDataInputMode.edit,
       isValid: _isValid,
       seriesDef: widget.seriesDef,
       dateTime: _dateTime,

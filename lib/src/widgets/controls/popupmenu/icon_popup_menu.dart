@@ -10,6 +10,35 @@ class IconPopupMenu extends StatefulWidget {
   final List<IconPopupMenuEntry> menuEntries;
   final bool animated;
 
+  /// Shows the popup menu at a global screen position.
+  static Future<void> showAt(
+    BuildContext context, {
+    required Offset globalPosition,
+    required List<IconPopupMenuEntry> menuEntries,
+    bool animated = true,
+  }) {
+    final overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+    final position = overlay.globalToLocal(globalPosition);
+    final openUpwards = position.dy >= overlay.size.height * 2 / 3;
+    final menuPosition = Offset(
+      position.dx.clamp(ThemeUtils.defaultPadding, overlay.size.width - kMinInteractiveDimension - ThemeUtils.defaultPadding),
+      openUpwards ? overlay.size.height - position.dy + ThemeUtils.verticalSpacingLarge : position.dy + ThemeUtils.verticalSpacingLarge,
+    );
+
+    return showGeneralDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: 'PopupMenu',
+      barrierColor: Colors.transparent,
+      pageBuilder: (_, _, _) => _Menu(
+        position: menuPosition,
+        menuEntries: menuEntries,
+        animated: animated,
+        openUpwards: openUpwards,
+      ),
+    );
+  }
+
   @override
   State<IconPopupMenu> createState() => _IconPopupMenuState();
 }
@@ -17,39 +46,28 @@ class IconPopupMenu extends StatefulWidget {
 class _IconPopupMenuState extends State<IconPopupMenu> {
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
     final GlobalKey menuButtonKey = GlobalKey();
     return IconButton(
       iconSize: ThemeUtils.iconSizeScaled,
       key: menuButtonKey,
       icon: widget.icon,
-      onPressed: () => _showCustomPopupMenu(context, menuButtonKey, themeData),
+      onPressed: () => _showCustomPopupMenu(context, menuButtonKey),
     );
   }
 
-  void _showCustomPopupMenu(BuildContext context, GlobalKey key, ThemeData themeData) {
+  void _showCustomPopupMenu(BuildContext context, GlobalKey key) {
     final RenderBox button = key.currentContext!.findRenderObject() as RenderBox;
-    final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
-    final Offset offset = button.localToGlobal(Offset.zero, ancestor: overlay);
-    final buttonCenterY = offset.dy + button.size.height / 2;
-    final openUpwards = buttonCenterY >= overlay.size.height * 2 / 3;
-
-    final menuPosition = Offset(
-      offset.dx,
-      openUpwards ? overlay.size.height - offset.dy + ThemeUtils.verticalSpacingLarge : offset.dy + button.size.height + ThemeUtils.verticalSpacingLarge,
+    final overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+    final buttonCenter = button.localToGlobal(button.size.center(Offset.zero));
+    final openUpwards = buttonCenter.dy >= overlay.size.height * 2 / 3;
+    final offset = button.localToGlobal(
+      openUpwards ? Offset.zero : Offset(0, button.size.height),
     );
-
-    showGeneralDialog(
-      context: context,
-      barrierDismissible: true,
-      barrierLabel: "PopupMenu",
-      barrierColor: Colors.transparent,
-      pageBuilder: (_, _, _) => _Menu(
-        position: menuPosition,
-        menuEntries: widget.menuEntries,
-        animated: widget.animated,
-        openUpwards: openUpwards,
-      ),
+    IconPopupMenu.showAt(
+      context,
+      globalPosition: offset,
+      menuEntries: widget.menuEntries,
+      animated: widget.animated,
     );
   }
 }

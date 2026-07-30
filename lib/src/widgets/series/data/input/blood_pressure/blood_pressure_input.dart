@@ -17,17 +17,25 @@ class BloodPressureQuickInput extends StatefulWidget {
     super.key,
     this.bloodPressureValue,
     required this.seriesDef,
+    required this.inputMode,
   });
 
   final SeriesDef seriesDef;
   final BloodPressureValue? bloodPressureValue;
+  final SeriesDataInputMode inputMode;
 
-  static Future<InputResult<BloodPressureValue>?> showInputDlg(BuildContext context, SeriesDef seriesDef, {BloodPressureValue? bloodPressureValue}) async {
+  static Future<InputResult<BloodPressureValue>?> showInputDlg(
+    BuildContext context,
+    SeriesDef seriesDef, {
+    BloodPressureValue? bloodPressureValue,
+    required SeriesDataInputMode inputMode,
+  }) async {
     return await showDialog<InputResult<BloodPressureValue>>(
       context: context,
       builder: (_) => BloodPressureQuickInput(
         seriesDef: seriesDef,
         bloodPressureValue: bloodPressureValue,
+        inputMode: inputMode,
       ),
     );
   }
@@ -127,7 +135,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
   }
 
   void _saveHandler() async {
-    bool insert = widget.bloodPressureValue == null;
+    bool insert = widget.inputMode == SeriesDataInputMode.create;
     setState(() {
       _autoValidate = true;
     });
@@ -144,7 +152,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
   }
 
   void _deleteHandler() {
-    if (widget.bloodPressureValue != null && mounted) {
+    if (widget.bloodPressureValue != null && widget.inputMode == SeriesDataInputMode.edit && mounted) {
       Navigator.pop(context, InputResult(widget.bloodPressureValue!, InputResultAction.delete));
     }
   }
@@ -237,7 +245,7 @@ class _BloodPressureQuickInputState extends State<BloodPressureQuickInput> {
       formKey: _formKey,
       formChildren: formChildren,
       autoValidate: _autoValidate,
-      isEdit: widget.bloodPressureValue != null,
+      isEdit: widget.inputMode == SeriesDataInputMode.edit,
       seriesDef: widget.seriesDef,
       dateTime: _dateTime,
       setDateTime: _setDateTime,

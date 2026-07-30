@@ -7,6 +7,7 @@ import '../../../../../../util/date_time_utils.dart';
 import '../../../../../../util/media_query_utils.dart';
 import '../../../../../../util/theme_utils.dart';
 import '../../../../../../util/tooltip_utils.dart';
+import '../../series_value_actions.dart';
 
 class DailyCheckValueRenderer extends StatelessWidget {
   static int get height {
@@ -19,12 +20,14 @@ class DailyCheckValueRenderer extends StatelessWidget {
     required this.seriesDef,
     this.editMode = false,
     this.wrapWithDateTimeTooltip = false,
+    this.enableActions = false,
   });
 
   final DailyCheckValue dailyCheckValue;
   final bool editMode;
   final SeriesDef seriesDef;
   final bool wrapWithDateTimeTooltip;
+  final bool enableActions;
 
   @override
   Widget build(BuildContext context) {
@@ -38,10 +41,11 @@ class DailyCheckValueRenderer extends StatelessWidget {
       ),
     );
 
-    if (editMode) {
-      result = InkWell(
-        borderRadius: ThemeUtils.borderRadiusCircularSmall,
-        onTap: () => SeriesData.showSeriesDataInputDlg(context, seriesDef, value: dailyCheckValue),
+    if (enableActions) {
+      result = SeriesValueActions(
+        seriesDef: seriesDef,
+        value: dailyCheckValue,
+        onTap: editMode ? () => SeriesData.showSeriesDataInputDlg(context, seriesDef, value: dailyCheckValue) : null,
         child: result,
       );
     }

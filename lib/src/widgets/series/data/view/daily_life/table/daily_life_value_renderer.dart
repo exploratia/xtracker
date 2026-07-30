@@ -10,6 +10,7 @@ import '../../../../../../util/media_query_utils.dart';
 import '../../../../../../util/theme_utils.dart';
 import '../../../../../../util/tooltip_utils.dart';
 import '../../../../../controls/tag/tag_renderer.dart';
+import '../../series_value_actions.dart';
 
 class DailyLifeValueRenderer extends StatelessWidget {
   static int get height {
@@ -24,6 +25,7 @@ class DailyLifeValueRenderer extends StatelessWidget {
     this.wrapWithDateTimeTooltip = false,
     required this.dailyLifeTagResolver,
     this.maxContentWidth = 80,
+    this.enableActions = false,
   });
 
   final DailyLifeValue dailyLifeValue;
@@ -32,6 +34,7 @@ class DailyLifeValueRenderer extends StatelessWidget {
   final bool wrapWithDateTimeTooltip;
   final TagResolver dailyLifeTagResolver;
   final double maxContentWidth;
+  final bool enableActions;
 
   @override
   Widget build(BuildContext context) {
@@ -66,10 +69,11 @@ class DailyLifeValueRenderer extends StatelessWidget {
       ),
     );
 
-    if (editMode) {
-      result = InkWell(
-        borderRadius: ThemeUtils.borderRadiusCircularSmall,
-        onTap: () => SeriesData.showSeriesDataInputDlg(context, seriesDef, value: dailyLifeValue),
+    if (enableActions) {
+      result = SeriesValueActions(
+        seriesDef: seriesDef,
+        value: dailyLifeValue,
+        onTap: editMode ? () => SeriesData.showSeriesDataInputDlg(context, seriesDef, value: dailyLifeValue) : null,
         child: result,
       );
     }

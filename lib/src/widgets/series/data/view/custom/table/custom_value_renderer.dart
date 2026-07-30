@@ -11,6 +11,7 @@ import '../../../../../../util/media_query_utils.dart';
 import '../../../../../../util/theme_utils.dart';
 import '../../../../../../util/tooltip_utils.dart';
 import '../../../../../controls/text/overflow_text.dart';
+import '../../series_value_actions.dart';
 
 class CustomValueRenderer extends StatelessWidget {
   static int get height {
@@ -23,12 +24,14 @@ class CustomValueRenderer extends StatelessWidget {
     required this.seriesDef,
     this.editMode = false,
     this.wrapWithDateTimeTooltip = false,
+    this.enableActions = false,
   });
 
   final CustomValue customValue;
   final bool editMode;
   final SeriesDef seriesDef;
   final bool wrapWithDateTimeTooltip;
+  final bool enableActions;
 
   @override
   Widget build(BuildContext context) {
@@ -61,10 +64,11 @@ class CustomValueRenderer extends StatelessWidget {
       );
     }
 
-    if (editMode) {
-      result = InkWell(
-        borderRadius: ThemeUtils.borderRadiusCircularSmall,
-        onTap: () => SeriesData.showSeriesDataInputDlg(context, seriesDef, value: customValue),
+    if (enableActions) {
+      result = SeriesValueActions(
+        seriesDef: seriesDef,
+        value: customValue,
+        onTap: editMode ? () => SeriesData.showSeriesDataInputDlg(context, seriesDef, value: customValue) : null,
         child: result,
       );
     }

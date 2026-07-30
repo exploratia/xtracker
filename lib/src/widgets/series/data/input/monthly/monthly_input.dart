@@ -10,17 +10,25 @@ class MonthlyInput extends StatelessWidget {
     super.key,
     this.monthlyValue,
     required this.seriesDef,
+    required this.inputMode,
   });
 
   final SeriesDef seriesDef;
   final MonthlyValue? monthlyValue;
+  final SeriesDataInputMode inputMode;
 
-  static Future<InputResult<MonthlyValue>?> showInputDlg(BuildContext context, SeriesDef seriesDef, {MonthlyValue? monthlyValue}) async {
+  static Future<InputResult<MonthlyValue>?> showInputDlg(
+    BuildContext context,
+    SeriesDef seriesDef, {
+    MonthlyValue? monthlyValue,
+    required SeriesDataInputMode inputMode,
+  }) async {
     return await showDialog<InputResult<MonthlyValue>>(
       context: context,
       builder: (_) => MonthlyInput(
         seriesDef: seriesDef,
         monthlyValue: monthlyValue,
+        inputMode: inputMode,
       ),
     );
   }
@@ -31,6 +39,7 @@ class MonthlyInput extends StatelessWidget {
       monthly: true,
       seriesDef: seriesDef,
       val: monthlyValue,
+      inputMode: inputMode,
       resultBuilder: (uuid, dateTime, values, tagId, action) => InputResult(MonthlyValue(uuid, dateTime, values, tagId), action),
     );
   }

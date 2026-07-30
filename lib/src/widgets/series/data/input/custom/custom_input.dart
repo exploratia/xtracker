@@ -21,17 +21,25 @@ class CustomInput extends StatelessWidget {
     super.key,
     this.customValue,
     required this.seriesDef,
+    required this.inputMode,
   });
 
   final SeriesDef seriesDef;
   final CustomValue? customValue;
+  final SeriesDataInputMode inputMode;
 
-  static Future<InputResult<CustomValue>?> showInputDlg(BuildContext context, SeriesDef seriesDef, {CustomValue? customValue}) async {
+  static Future<InputResult<CustomValue>?> showInputDlg(
+    BuildContext context,
+    SeriesDef seriesDef, {
+    CustomValue? customValue,
+    required SeriesDataInputMode inputMode,
+  }) async {
     return await showDialog<InputResult<CustomValue>>(
       context: context,
       builder: (context) => CustomInput(
         seriesDef: seriesDef,
         customValue: customValue,
+        inputMode: inputMode,
       ),
     );
   }
@@ -41,6 +49,7 @@ class CustomInput extends StatelessWidget {
     return SeriesItemsInput<CustomValue>(
       seriesDef: seriesDef,
       val: customValue,
+      inputMode: inputMode,
       resultBuilder: (uuid, dateTime, values, tagId, action) => InputResult(CustomValue(uuid, dateTime, values, tagId), action),
     );
   }
@@ -53,12 +62,14 @@ class SeriesItemsInput<V extends CustomValue> extends StatefulWidget {
     required this.seriesDef,
     required this.resultBuilder,
     this.monthly = false,
+    required this.inputMode,
   });
 
   final SeriesDef seriesDef;
   final V? val;
   final InputResult<V> Function(String uuid, DateTime dateTime, Map<String, double> values, String? tagId, InputResultAction inputResultAction) resultBuilder;
   final bool monthly;
+  final SeriesDataInputMode inputMode;
 
   @override
   State<SeriesItemsInput> createState() => _SeriesItemsInputState();
@@ -144,7 +155,7 @@ class _SeriesItemsInputState<V extends CustomValue> extends State<SeriesItemsInp
   }
 
   void _saveHandler() async {
-    bool insert = widget.val == null;
+    bool insert = widget.inputMode == SeriesDataInputMode.create;
     setState(() {
       _autoValidate = true;
     });
@@ -168,7 +179,7 @@ class _SeriesItemsInputState<V extends CustomValue> extends State<SeriesItemsInp
   }
 
   void _deleteHandler() {
-    if (widget.val != null && mounted) {
+    if (widget.val != null && widget.inputMode == SeriesDataInputMode.edit && mounted) {
       var val = widget.val!;
       var delResult = widget.resultBuilder(val.uuid, val.dateTime, val.values, val.tagId, InputResultAction.delete);
       Navigator.pop<InputResult<V>>(context, delResult);
@@ -224,7 +235,7 @@ class _SeriesItemsInputState<V extends CustomValue> extends State<SeriesItemsInp
       formKey: _formKey,
       formChildren: formChildren,
       autoValidate: _autoValidate,
-      isEdit: widget.val != null,
+      isEdit: widget.inputMode == SeriesDataInputMode.edit,
       seriesDef: widget.seriesDef,
       dateTime: _dateTime,
       setDateTime: _setDateTime,

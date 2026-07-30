@@ -8,3 +8,6 @@ class InputResult<T extends SeriesDataValue> {
 }
 
 enum InputResultAction { insert, update, delete }
+
+/// Defines whether an input dialog creates a new value or edits a stored one.
+enum SeriesDataInputMode { create, edit }
