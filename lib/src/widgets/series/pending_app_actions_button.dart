@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../generated/locale_keys.g.dart';
 import '../../model/series/series_def.dart';
 import '../../providers/series_provider.dart';
+import '../../util/app_series_notifications.dart';
 import '../../util/pending_app_actions.dart';
 import '../../util/theme_utils.dart';
 import '../administration/settings/settings_controller.dart';
@@ -43,6 +44,10 @@ class PendingAppActionsButton extends StatelessWidget {
   }
 
   Future<void> _showPendingActionsPopup(BuildContext context) async {
+    await AppSeriesNotifications.synchronizeActiveSeriesNotificationActions();
+    if (!context.mounted || PendingAppActions.count == 0) {
+      return;
+    }
     await showGeneralDialog<void>(
       context: context,
       barrierDismissible: true,
@@ -262,6 +267,7 @@ class _PendingActionsListState extends State<_PendingActionsList> {
       duration: _removeDuration,
     );
 
+    await AppSeriesNotifications.cancelActiveNotification(action.notificationId);
     await Future<void>.delayed(_removeDuration);
     PendingAppActions.remove(action.id);
     _pendingDeleteActionIds.remove(action.id);
@@ -503,6 +509,10 @@ class _PendingActionCard extends StatelessWidget {
       return;
     }
 
+    await AppSeriesNotifications.cancelActiveNotification(consumedAction.notificationId);
+    if (!popupContext.mounted) {
+      return;
+    }
     Navigator.of(popupContext).pop();
     if (!actionContext.mounted) {
       return;

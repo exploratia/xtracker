@@ -171,7 +171,6 @@ class _SeriesListState extends State<_SeriesList> {
       );
     } finally {
       _executingAutomaticAction = false;
-      PendingAppActions.completeAutomaticAction();
     }
   }
 }

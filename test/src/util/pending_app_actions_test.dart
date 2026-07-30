@@ -5,42 +5,23 @@ void main() {
   group('PendingAppActions', () {
     setUp(PendingAppActions.resetForTests);
 
-    test('orders actions by priority and keeps overflow pending', () {
+    test('keeps in-app messages passive and in creation order', () {
       PendingAppActions.enqueueSeriesValue(
         seriesUuid: 'notification-series',
         source: PendingSeriesActionSource.notification,
       );
-      PendingAppActions.enqueueSeriesValue(
-        seriesUuid: 'quick-action-series',
-        source: PendingSeriesActionSource.quickAction,
-      );
       PendingAppActions.enqueueBackupReminder();
       PendingAppActions.enqueueDebugDummyActionForTests();
 
-      expect(PendingAppActions.count, 4);
-      expect(PendingAppActions.hasPendingExternalSeriesAction, true);
-      expect(PendingAppActions.pendingExternalSeriesActionVersion(), 2);
-
-      var items = PendingAppActions.items();
-      expect(items[0].seriesUuid, 'quick-action-series');
-      expect(items[0].seriesSource, PendingSeriesActionSource.quickAction);
-      expect(items[1].seriesUuid, 'notification-series');
-      expect(items[1].seriesSource, PendingSeriesActionSource.notification);
-      expect(items[2].type, PendingAppActionType.backupReminder);
-      expect(items[3].type, PendingAppActionType.debugDummy);
-
-      var automaticAction = PendingAppActions.takeNextAutomaticAction();
-      expect(automaticAction?.seriesUuid, 'quick-action-series');
+      expect(PendingAppActions.count, 3);
+      expect(PendingAppActions.hasPendingExternalSeriesAction, false);
+      expect(PendingAppActions.hasAutomaticAction, false);
+      expect(PendingAppActions.takeNextAutomaticAction(), null);
       expect(PendingAppActions.items().map((item) => item.type), [
         PendingAppActionType.seriesValue,
         PendingAppActionType.backupReminder,
         PendingAppActionType.debugDummy,
       ]);
-
-      PendingAppActions.completeAutomaticAction();
-
-      expect(PendingAppActions.takeNextAutomaticAction(), null);
-      expect(PendingAppActions.count, 3);
     });
 
     test('deduplicates backup reminder in current app run', () {
@@ -56,7 +37,7 @@ void main() {
       expect(PendingAppActions.count, 0);
     });
 
-    test('deduplicates notification actions by notification id', () {
+    test('deduplicates notification messages by notification id', () {
       PendingAppActions.enqueueSeriesValue(
         seriesUuid: 'series-1',
         source: PendingSeriesActionSource.notification,
@@ -70,9 +51,7 @@ void main() {
 
       expect(PendingAppActions.count, 1);
 
-      var action = PendingAppActions.takeNextAutomaticAction();
-      expect(action?.notificationId, 123);
-
+      PendingAppActions.remove(PendingAppActions.items().single.id);
       PendingAppActions.enqueueSeriesValue(
         seriesUuid: 'series-1',
         source: PendingSeriesActionSource.notification,
@@ -82,67 +61,74 @@ void main() {
       expect(PendingAppActions.count, 0);
     });
 
-    test('executes explicitly requested action even while automatic actions are blocked', () {
+    test('executes only directly requested quick action', () {
       PendingAppActions.enqueueSeriesValue(
-        seriesUuid: 'old-notification-series',
+        seriesUuid: 'notification-series',
         source: PendingSeriesActionSource.notification,
       );
       PendingAppActions.enqueueBackupReminder();
-
-      var firstAction = PendingAppActions.takeNextAutomaticAction();
-      expect(firstAction?.seriesUuid, 'old-notification-series');
-      PendingAppActions.completeAutomaticAction();
-      expect(PendingAppActions.takeNextAutomaticAction(), null);
-
       PendingAppActions.enqueueSeriesValue(
-        seriesUuid: 'direct-quick-action-series',
+        seriesUuid: 'quick-action-series',
         source: PendingSeriesActionSource.quickAction,
         executeAutomatically: true,
       );
 
-      expect(PendingAppActions.count, 1);
+      expect(PendingAppActions.count, 2);
+      expect(PendingAppActions.hasPendingExternalSeriesAction, true);
+      expect(PendingAppActions.hasAutomaticAction, true);
+
       var directAction = PendingAppActions.takeNextAutomaticAction();
-      expect(directAction?.seriesUuid, 'direct-quick-action-series');
-      PendingAppActions.completeAutomaticAction();
-      expect(PendingAppActions.items().map((item) => item.type), [
-        PendingAppActionType.backupReminder,
-      ]);
+
+      expect(directAction?.seriesUuid, 'quick-action-series');
+      expect(PendingAppActions.hasAutomaticAction, false);
       expect(PendingAppActions.takeNextAutomaticAction(), null);
+      expect(PendingAppActions.count, 2);
     });
 
-    test('marks already queued notification action for automatic execution when tapped', () {
+    test('notification tap consumes matching message and executes directly', () {
       PendingAppActions.enqueueSeriesValue(
         seriesUuid: 'series-1',
         source: PendingSeriesActionSource.notification,
         notificationId: 123,
       );
       PendingAppActions.enqueueBackupReminder();
-
-      var firstAction = PendingAppActions.takeNextAutomaticAction();
-      expect(firstAction?.seriesUuid, 'series-1');
-      PendingAppActions.completeAutomaticAction();
-      expect(PendingAppActions.takeNextAutomaticAction(), null);
-
       PendingAppActions.enqueueSeriesValue(
-        seriesUuid: 'series-2',
+        seriesUuid: 'series-1',
         source: PendingSeriesActionSource.notification,
-        notificationId: 456,
-      );
-      PendingAppActions.enqueueSeriesValue(
-        seriesUuid: 'series-2',
-        source: PendingSeriesActionSource.notification,
-        notificationId: 456,
+        notificationId: 123,
         executeAutomatically: true,
       );
 
       expect(PendingAppActions.count, 1);
       expect(PendingAppActions.items().single.type, PendingAppActionType.backupReminder);
+
       var directAction = PendingAppActions.takeNextAutomaticAction();
-      expect(directAction?.seriesUuid, 'series-2');
-      expect(directAction?.notificationId, 456);
+
+      expect(directAction?.seriesUuid, 'series-1');
+      expect(directAction?.notificationId, 123);
     });
 
-    test('does not expose quick actions as visible pending actions', () {
+    test('removes messages for Android notifications that are no longer active', () {
+      PendingAppActions.enqueueSeriesValue(
+        seriesUuid: 'series-1',
+        source: PendingSeriesActionSource.notification,
+        notificationId: 123,
+      );
+      PendingAppActions.enqueueSeriesValue(
+        seriesUuid: 'series-2',
+        source: PendingSeriesActionSource.notification,
+        notificationId: 456,
+      );
+      PendingAppActions.enqueueBackupReminder();
+
+      PendingAppActions.retainActiveNotificationActions({456});
+
+      expect(PendingAppActions.count, 2);
+      expect(PendingAppActions.items().where((item) => item.notificationId != null).single.notificationId, 456);
+      expect(PendingAppActions.items().any((item) => item.type == PendingAppActionType.backupReminder), true);
+    });
+
+    test('does not expose quick actions as visible messages', () {
       PendingAppActions.enqueueBackupReminder();
       PendingAppActions.enqueueSeriesValue(
         seriesUuid: 'quick-action-series',
@@ -152,10 +138,6 @@ void main() {
 
       expect(PendingAppActions.count, 1);
       expect(PendingAppActions.items().single.type, PendingAppActionType.backupReminder);
-
-      var directAction = PendingAppActions.takeNextAutomaticAction();
-      expect(directAction?.seriesUuid, 'quick-action-series');
-      expect(PendingAppActions.count, 1);
     });
   });
 }

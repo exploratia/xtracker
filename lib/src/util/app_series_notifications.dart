@@ -77,7 +77,8 @@ class AppSeriesNotifications {
     }
   }
 
-  static Future<void> queueActiveSeriesNotificationActions() async {
+  /// Synchronizes Android's active series notifications with the in-app messages.
+  static Future<void> synchronizeActiveSeriesNotificationActions() async {
     if (!_isSupportedPlatform()) {
       SimpleLogging.d('Queue active series notifications skipped: unsupported platform.');
       return;
@@ -90,6 +91,8 @@ class AppSeriesNotifications {
 
     try {
       var activeNotifications = await _notificationsPlugin.getActiveNotifications();
+      var activeNotificationIds = activeNotifications.map((notification) => notification.id).whereType<int>().toSet();
+      PendingAppActions.retainActiveNotificationActions(activeNotificationIds);
       if (activeNotifications.isEmpty) {
         SimpleLogging.d('No active notifications found.');
         return;
@@ -157,6 +160,28 @@ class AppSeriesNotifications {
       executeAutomatically: true,
     );
     SimpleLogging.d('Handled series notification response. seriesUuid=$seriesUuid, notificationId=$notificationId');
+  }
+
+  /// Removes a currently displayed Android notification.
+  static Future<void> cancelActiveNotification(int? notificationId) async {
+    if (notificationId == null || !_isSupportedPlatform()) {
+      return;
+    }
+    await init();
+    if (!_initialized) {
+      return;
+    }
+
+    try {
+      await _notificationsPlugin.cancel(id: notificationId);
+      SimpleLogging.d('Cancelled active series notification. notificationId=$notificationId');
+    } catch (err, st) {
+      SimpleLogging.w(
+        'Could not cancel active series notification. notificationId=$notificationId',
+        error: err,
+        stackTrace: st,
+      );
+    }
   }
 
   static Future<bool> ensurePermissionRequested() async {
