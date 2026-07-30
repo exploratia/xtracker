@@ -44,10 +44,6 @@ class PendingAppActionsButton extends StatelessWidget {
   }
 
   Future<void> _showPendingActionsPopup(BuildContext context) async {
-    await AppSeriesNotifications.synchronizeActiveSeriesNotificationActions();
-    if (!context.mounted || PendingAppActions.count == 0) {
-      return;
-    }
     await showGeneralDialog<void>(
       context: context,
       barrierDismissible: true,
