@@ -176,24 +176,67 @@ class SeriesData<T extends SeriesDataValue> {
     return reduced;
   }
 
-  static Future<void> showSeriesDataInputDlg(BuildContext context, SeriesDef seriesDef, {SeriesDataValue? value}) async {
+  /// Shows the value input dialog in create or edit mode.
+  ///
+  /// When [inputMode] is omitted, the mode is inferred from whether [value]
+  /// exists. Create mode may still receive a value as an input template.
+  static Future<void> showSeriesDataInputDlg(
+    BuildContext context,
+    SeriesDef seriesDef, {
+    SeriesDataValue? value,
+    SeriesDataInputMode? inputMode,
+  }) async {
     var seriesDataProvider = context.read<SeriesDataProvider>();
     var seriesCurrentValueProvider = context.read<SeriesCurrentValueProvider>();
+    final resolvedInputMode = inputMode ?? (value == null ? SeriesDataInputMode.create : SeriesDataInputMode.edit);
+    if (resolvedInputMode == SeriesDataInputMode.edit && value == null) {
+      throw ArgumentError.value(value, 'value', 'An existing value is required in edit mode.');
+    }
 
     InputResult<SeriesDataValue>? inputResult;
     switch (seriesDef.seriesType) {
       case SeriesType.bloodPressure:
-        inputResult = await BloodPressureQuickInput.showInputDlg(context, seriesDef, bloodPressureValue: (value is BloodPressureValue) ? value : null);
+        inputResult = await BloodPressureQuickInput.showInputDlg(
+          context,
+          seriesDef,
+          bloodPressureValue: (value is BloodPressureValue) ? value : null,
+          inputMode: resolvedInputMode,
+        );
       case SeriesType.dailyCheck:
-        inputResult = await DailyCheckInput.showInputDlg(context, seriesDef, dailyCheckValue: (value is DailyCheckValue) ? value : null);
+        inputResult = await DailyCheckInput.showInputDlg(
+          context,
+          seriesDef,
+          dailyCheckValue: (value is DailyCheckValue) ? value : null,
+          inputMode: resolvedInputMode,
+        );
       case SeriesType.dailyLife:
-        inputResult = await DailyLifeInput.showInputDlg(context, seriesDef, dailyLifeValue: (value is DailyLifeValue) ? value : null);
+        inputResult = await DailyLifeInput.showInputDlg(
+          context,
+          seriesDef,
+          dailyLifeValue: (value is DailyLifeValue) ? value : null,
+          inputMode: resolvedInputMode,
+        );
       case SeriesType.habit:
-        inputResult = await HabitInput.showInputDlg(context, seriesDef, habitValue: (value is HabitValue) ? value : null);
+        inputResult = await HabitInput.showInputDlg(
+          context,
+          seriesDef,
+          habitValue: (value is HabitValue) ? value : null,
+          inputMode: resolvedInputMode,
+        );
       case SeriesType.custom:
-        inputResult = await CustomInput.showInputDlg(context, seriesDef, customValue: (value is CustomValue) ? value : null);
+        inputResult = await CustomInput.showInputDlg(
+          context,
+          seriesDef,
+          customValue: (value is CustomValue) ? value : null,
+          inputMode: resolvedInputMode,
+        );
       case SeriesType.monthly:
-        inputResult = await MonthlyInput.showInputDlg(context, seriesDef, monthlyValue: (value is MonthlyValue) ? value : null);
+        inputResult = await MonthlyInput.showInputDlg(
+          context,
+          seriesDef,
+          monthlyValue: (value is MonthlyValue) ? value : null,
+          inputMode: resolvedInputMode,
+        );
     }
 
     if (inputResult == null) {

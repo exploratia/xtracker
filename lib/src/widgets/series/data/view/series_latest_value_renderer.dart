@@ -15,6 +15,7 @@ import '../../../../model/series/series_type.dart';
 import '../../../../providers/series_current_value_provider.dart';
 import '../../../../util/theme_utils.dart';
 import '../../../controls/animation/animated_highlight_container.dart';
+import 'series_value_actions.dart';
 import 'series_value_renderer.dart';
 
 class SeriesLatestValueRenderer extends StatelessWidget {
@@ -131,15 +132,13 @@ class _CurrentValueEdit extends StatelessWidget {
   Widget build(BuildContext context) {
     return Material(
       color: Colors.transparent,
-      child: Tooltip(
-        message: LocaleKeys.seriesDefRenderer_currentValue_tooltip.tr(),
-        child: InkWell(
-          borderRadius: ThemeUtils.borderRadiusCircularSmall,
-          onTap: () => SeriesData.showSeriesDataInputDlg(context, seriesDef, value: seriesDataValue),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.defaultPadding),
-            child: child,
-          ),
+      child: SeriesValueActions(
+        seriesDef: seriesDef,
+        value: seriesDataValue,
+        onTap: () => SeriesData.showSeriesDataInputDlg(context, seriesDef, value: seriesDataValue),
+        childBuilder: (_, _) => Padding(
+          padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.defaultPadding),
+          child: child,
         ),
       ),
     );

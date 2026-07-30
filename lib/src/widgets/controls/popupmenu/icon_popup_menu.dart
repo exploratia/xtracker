@@ -1,6 +1,12 @@
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 
 import '../../../util/theme_utils.dart';
+import '../card/glowing_border_container.dart';
+
+/// Defines how popup menu entries are arranged around their anchor.
+enum IconPopupMenuLayout { vertical, radial }
 
 class IconPopupMenu extends StatefulWidget {
   /// [animated] if true, fly in. Fade is always active, because of the default page transition.
@@ -10,46 +16,181 @@ class IconPopupMenu extends StatefulWidget {
   final List<IconPopupMenuEntry> menuEntries;
   final bool animated;
 
+  /// Shows the popup menu at a global screen position.
+  static Future<void> showAt(
+    BuildContext context, {
+    required Offset globalPosition,
+    required List<IconPopupMenuEntry> menuEntries,
+    bool animated = true,
+    IconPopupMenuLayout layout = IconPopupMenuLayout.vertical,
+  }) {
+    final overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+    final position = overlay.globalToLocal(globalPosition);
+    final openUpwards = position.dy >= overlay.size.height * 2 / 3;
+    final menuPosition = Offset(
+      position.dx.clamp(ThemeUtils.defaultPadding, overlay.size.width - kMinInteractiveDimension - ThemeUtils.defaultPadding),
+      openUpwards ? overlay.size.height - position.dy + ThemeUtils.verticalSpacingLarge : position.dy + ThemeUtils.verticalSpacingLarge,
+    );
+
+    return showGeneralDialog<void>(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: 'PopupMenu',
+      barrierColor: Colors.transparent,
+      pageBuilder: (_, _, _) => layout == IconPopupMenuLayout.radial
+          ? _RadialMenu(
+              position: position,
+              availableSize: overlay.size,
+              menuEntries: menuEntries,
+              animated: animated,
+            )
+          : _Menu(
+              position: menuPosition,
+              menuEntries: menuEntries,
+              animated: animated,
+              openUpwards: openUpwards,
+            ),
+    );
+  }
+
   @override
   State<IconPopupMenu> createState() => _IconPopupMenuState();
+}
+
+class _RadialMenu extends StatelessWidget {
+  const _RadialMenu({required this.position, required this.availableSize, required this.menuEntries, required this.animated});
+
+  static const double radius = 64;
+
+  final Offset position;
+  final Size availableSize;
+  final List<IconPopupMenuEntry> menuEntries;
+  final bool animated;
+
+  @override
+  Widget build(BuildContext context) {
+    if (!animated) {
+      return _buildMenu(1);
+    }
+    return TweenAnimationBuilder<double>(
+      tween: Tween(begin: 0, end: 1),
+      duration: const Duration(milliseconds: 150),
+      curve: Curves.easeOut,
+      builder: (_, value, _) => _buildMenu(value),
+    );
+  }
+
+  Widget _buildMenu(double animationValue) {
+    final angles = _angles(menuEntries.length, _resolveArc());
+    return Stack(
+      children: [
+        Positioned(
+          left: position.dx - _RadialMenuCenterIndicator.size / 2,
+          top: position.dy - _RadialMenuCenterIndicator.size / 2,
+          child: Opacity(
+            opacity: animationValue,
+            child: Transform.scale(
+              scale: animationValue,
+              child: const _RadialMenuCenterIndicator(),
+            ),
+          ),
+        ),
+        for (var i = 0; i < menuEntries.length; i++)
+          Positioned(
+            left: position.dx + math.cos(angles[i]) * radius * animationValue - kMinInteractiveDimension / 2,
+            top: position.dy + math.sin(angles[i]) * radius * animationValue - kMinInteractiveDimension / 2,
+            child: Opacity(
+              opacity: animationValue,
+              child: _MenuItemIconButton(menuEntries[i]),
+            ),
+          ),
+      ],
+    );
+  }
+
+  _RadialMenuArc _resolveArc() {
+    const requiredSpace = radius + kMinInteractiveDimension / 2 + ThemeUtils.defaultPadding;
+    final hasSpaceAbove = position.dy >= requiredSpace;
+    final hasSpaceBelow = availableSize.height - position.dy >= requiredSpace;
+    if (hasSpaceAbove && !hasSpaceBelow) {
+      return _RadialMenuArc.upper;
+    }
+    if (!hasSpaceAbove && hasSpaceBelow) {
+      return _RadialMenuArc.lower;
+    }
+    if (!hasSpaceAbove && !hasSpaceBelow) {
+      return position.dy >= availableSize.height / 2 ? _RadialMenuArc.upper : _RadialMenuArc.lower;
+    }
+    return _RadialMenuArc.full;
+  }
+
+  List<double> _angles(int itemCount, _RadialMenuArc arc) {
+    return switch ((itemCount, arc)) {
+      (1, _RadialMenuArc.upper) => [-math.pi / 2],
+      (1, _RadialMenuArc.lower) => [math.pi / 2],
+      (2, _RadialMenuArc.upper) => [-5 * math.pi / 6, -math.pi / 6],
+      (2, _RadialMenuArc.lower) => [5 * math.pi / 6, math.pi / 6],
+      (3, _RadialMenuArc.upper) => [-math.pi / 2, -math.pi / 6, -5 * math.pi / 6],
+      (3, _RadialMenuArc.lower) => [math.pi / 2, math.pi / 6, 5 * math.pi / 6],
+      (1, _RadialMenuArc.full) => [-math.pi / 2],
+      (2, _RadialMenuArc.full) => [-math.pi / 2, math.pi / 2],
+      (3, _RadialMenuArc.full) => [-math.pi / 2, math.pi / 6, 5 * math.pi / 6],
+      _ => List.generate(itemCount, (index) => -math.pi / 2 + index * 2 * math.pi / itemCount),
+    };
+  }
+}
+
+enum _RadialMenuArc { full, upper, lower }
+
+class _RadialMenuCenterIndicator extends StatelessWidget {
+  const _RadialMenuCenterIndicator();
+
+  static const double size = 32;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    return IgnorePointer(
+      child: Container(
+        width: size,
+        height: size,
+        decoration: GlowingBorderContainer.createGlowingBoxDecoration(
+          colorScheme.secondary.withValues(alpha: 0.3),
+          backgroundColor: Colors.transparent,
+          borderRadius: size / 2,
+          borderWidth: 1,
+          blurRadius: 10,
+        ),
+      ),
+    );
+  }
 }
 
 class _IconPopupMenuState extends State<IconPopupMenu> {
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
     final GlobalKey menuButtonKey = GlobalKey();
     return IconButton(
       iconSize: ThemeUtils.iconSizeScaled,
       key: menuButtonKey,
       icon: widget.icon,
-      onPressed: () => _showCustomPopupMenu(context, menuButtonKey, themeData),
+      onPressed: () => _showCustomPopupMenu(context, menuButtonKey),
     );
   }
 
-  void _showCustomPopupMenu(BuildContext context, GlobalKey key, ThemeData themeData) {
+  void _showCustomPopupMenu(BuildContext context, GlobalKey key) {
     final RenderBox button = key.currentContext!.findRenderObject() as RenderBox;
-    final RenderBox overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
-    final Offset offset = button.localToGlobal(Offset.zero, ancestor: overlay);
-    final buttonCenterY = offset.dy + button.size.height / 2;
-    final openUpwards = buttonCenterY >= overlay.size.height * 2 / 3;
-
-    final menuPosition = Offset(
-      offset.dx,
-      openUpwards ? overlay.size.height - offset.dy + ThemeUtils.verticalSpacingLarge : offset.dy + button.size.height + ThemeUtils.verticalSpacingLarge,
+    final overlay = Overlay.of(context).context.findRenderObject() as RenderBox;
+    final buttonCenter = button.localToGlobal(button.size.center(Offset.zero));
+    final openUpwards = buttonCenter.dy >= overlay.size.height * 2 / 3;
+    final offset = button.localToGlobal(
+      openUpwards ? Offset.zero : Offset(0, button.size.height),
     );
-
-    showGeneralDialog(
-      context: context,
-      barrierDismissible: true,
-      barrierLabel: "PopupMenu",
-      barrierColor: Colors.transparent,
-      pageBuilder: (_, _, _) => _Menu(
-        position: menuPosition,
-        menuEntries: widget.menuEntries,
-        animated: widget.animated,
-        openUpwards: openUpwards,
-      ),
+    IconPopupMenu.showAt(
+      context,
+      globalPosition: offset,
+      menuEntries: widget.menuEntries,
+      animated: widget.animated,
     );
   }
 }

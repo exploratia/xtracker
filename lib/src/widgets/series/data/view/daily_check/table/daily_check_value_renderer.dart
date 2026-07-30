@@ -7,6 +7,7 @@ import '../../../../../../util/date_time_utils.dart';
 import '../../../../../../util/media_query_utils.dart';
 import '../../../../../../util/theme_utils.dart';
 import '../../../../../../util/tooltip_utils.dart';
+import '../../series_value_actions.dart';
 
 class DailyCheckValueRenderer extends StatelessWidget {
   static int get height {
@@ -19,31 +20,38 @@ class DailyCheckValueRenderer extends StatelessWidget {
     required this.seriesDef,
     this.editMode = false,
     this.wrapWithDateTimeTooltip = false,
+    this.enableActions = false,
   });
 
   final DailyCheckValue dailyCheckValue;
   final bool editMode;
   final SeriesDef seriesDef;
   final bool wrapWithDateTimeTooltip;
+  final bool enableActions;
 
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    Widget result = Container(
+    Widget buildValue(bool selected) => Container(
       margin: const EdgeInsets.all(2),
       child: Icon(
         size: ThemeUtils.iconSizeScaled,
         Icons.check_box_outlined,
-        color: editMode ? themeData.colorScheme.secondary : null,
+        color: selected ? themeData.colorScheme.secondary : null,
       ),
     );
 
-    if (editMode) {
-      result = InkWell(
-        borderRadius: ThemeUtils.borderRadiusCircularSmall,
-        onTap: () => SeriesData.showSeriesDataInputDlg(context, seriesDef, value: dailyCheckValue),
-        child: result,
+    Widget result;
+
+    if (enableActions) {
+      result = SeriesValueActions(
+        seriesDef: seriesDef,
+        value: dailyCheckValue,
+        onTap: editMode ? () => SeriesData.showSeriesDataInputDlg(context, seriesDef, value: dailyCheckValue) : null,
+        childBuilder: (_, selected) => buildValue(editMode || selected),
       );
+    } else {
+      result = buildValue(editMode);
     }
 
     if (wrapWithDateTimeTooltip) {

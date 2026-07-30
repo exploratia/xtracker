@@ -942,9 +942,17 @@
   },
   "seriesValue": {
     "action": {
+      "editValue": {
+        "tooltip": "Edit value"
+      },
+      "duplicateValue": {
+        "tooltip": "Duplicate value"
+      },
       "deleteValue": {
         "tooltip": "Delete value"
-      }
+      },
+      "semanticsHint": "Tap to edit, long press for more actions",
+      "semanticsHintLongPress": "Long press for more actions"
     },
     "query": {
       "deleteValue": "Do you really want to delete this value?"

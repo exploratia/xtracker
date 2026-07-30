@@ -5,6 +5,7 @@ import '../../../../model/column_profile/column_type.dart';
 import '../../../../model/series/data/series_data.dart';
 import '../../../../model/series/data/series_data_value.dart';
 import '../../../../util/theme_utils.dart';
+import '../../../series/data/view/series_value_actions.dart';
 import '../two_dimensional_scrollable_table.dart';
 import 'series_data_value_grid_item.dart';
 
@@ -45,19 +46,23 @@ class SeriesDataValueCellBuilder<T extends SeriesDataValue> {
       );
     } else {
       child = gridCellChildBuilder(gridItem.value, cellSize, columnDef);
-
-      if (editMode) {
-        child = InkWell(
-          borderRadius: ThemeUtils.borderRadiusCircularSmall,
-          onTap: () => SeriesData.showSeriesDataInputDlg(context, gridItem.seriesDef, value: gridItem.value),
-          child: Container(
+      final valueChild = child;
+      child = SeriesValueActions(
+        seriesDef: gridItem.seriesDef,
+        value: gridItem.value,
+        onTap: editMode ? () => SeriesData.showSeriesDataInputDlg(context, gridItem.seriesDef, value: gridItem.value) : null,
+        childBuilder: (_, selected) {
+          if (!editMode && !selected) {
+            return valueChild;
+          }
+          return Container(
             decoration: BoxDecoration(
               gradient: RadialGradient(radius: 0.8, colors: [ThemeUtils.primaryColor.withAlpha(128), ThemeUtils.primaryColor.withAlpha(0)]),
             ),
-            child: child,
-          ),
-        );
-      }
+            child: valueChild,
+          );
+        },
+      );
     }
     child ??= Container();
     return GridCell(backgroundColor: gridItem.backgroundColor, child: child);

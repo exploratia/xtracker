@@ -419,7 +419,11 @@ abstract class LocaleKeys {
   static const seriesManagement_importExport_alert_unsupportedVersion = 'seriesManagement.importExport.alert.unsupportedVersion';
   static const seriesManagement_importExport_alert_import_title = 'seriesManagement.importExport.alert.import.title';
   static const seriesManagement_importExport_validation_dailyLife_emptyTags = 'seriesManagement.importExport.validation.dailyLife.emptyTags';
+  static const seriesValue_action_editValue_tooltip = 'seriesValue.action.editValue.tooltip';
+  static const seriesValue_action_duplicateValue_tooltip = 'seriesValue.action.duplicateValue.tooltip';
   static const seriesValue_action_deleteValue_tooltip = 'seriesValue.action.deleteValue.tooltip';
+  static const seriesValue_action_semanticsHint = 'seriesValue.action.semanticsHint';
+  static const seriesValue_action_semanticsHintLongPress = 'seriesValue.action.semanticsHintLongPress';
   static const seriesValue_query_deleteValue = 'seriesValue.query.deleteValue';
   static const seriesValue_bloodPressure_label_diastolic = 'seriesValue.bloodPressure.label.diastolic';
   static const seriesValue_bloodPressure_label_systolic = 'seriesValue.bloodPressure.label.systolic';

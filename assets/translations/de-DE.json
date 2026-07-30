@@ -942,9 +942,17 @@
   },
   "seriesValue": {
     "action": {
+      "editValue": {
+        "tooltip": "Wert bearbeiten"
+      },
+      "duplicateValue": {
+        "tooltip": "Wert duplizieren"
+      },
       "deleteValue": {
         "tooltip": "Wert löschen"
-      }
+      },
+      "semanticsHint": "Tippen zum Bearbeiten, lange drücken für weitere Aktionen",
+      "semanticsHintLongPress": "Lange drücken für weitere Aktionen"
     },
     "query": {
       "deleteValue": "Diesen Messwert wirklich löschen?"
