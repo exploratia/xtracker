@@ -136,7 +136,7 @@ class _CurrentValueEdit extends StatelessWidget {
         seriesDef: seriesDef,
         value: seriesDataValue,
         onTap: () => SeriesData.showSeriesDataInputDlg(context, seriesDef, value: seriesDataValue),
-        child: Padding(
+        childBuilder: (_, _) => Padding(
           padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.defaultPadding),
           child: child,
         ),

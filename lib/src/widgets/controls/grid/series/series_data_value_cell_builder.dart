@@ -46,20 +46,22 @@ class SeriesDataValueCellBuilder<T extends SeriesDataValue> {
       );
     } else {
       child = gridCellChildBuilder(gridItem.value, cellSize, columnDef);
-
-      if (editMode) {
-        child = Container(
-          decoration: BoxDecoration(
-            gradient: RadialGradient(radius: 0.8, colors: [ThemeUtils.primaryColor.withAlpha(128), ThemeUtils.primaryColor.withAlpha(0)]),
-          ),
-          child: child,
-        );
-      }
+      final valueChild = child;
       child = SeriesValueActions(
         seriesDef: gridItem.seriesDef,
         value: gridItem.value,
         onTap: editMode ? () => SeriesData.showSeriesDataInputDlg(context, gridItem.seriesDef, value: gridItem.value) : null,
-        child: child,
+        childBuilder: (_, selected) {
+          if (!editMode && !selected) {
+            return valueChild;
+          }
+          return Container(
+            decoration: BoxDecoration(
+              gradient: RadialGradient(radius: 0.8, colors: [ThemeUtils.primaryColor.withAlpha(128), ThemeUtils.primaryColor.withAlpha(0)]),
+            ),
+            child: valueChild,
+          );
+        },
       );
     }
     child ??= Container();

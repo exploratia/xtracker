@@ -22,13 +22,13 @@ class SeriesValueActions extends StatefulWidget {
     super.key,
     required this.seriesDef,
     required this.value,
-    required this.child,
+    required this.childBuilder,
     this.onTap,
   });
 
   final SeriesDef seriesDef;
   final SeriesDataValue value;
-  final Widget child;
+  final Widget Function(BuildContext context, bool selected) childBuilder;
   final VoidCallback? onTap;
 
   @override
@@ -43,7 +43,6 @@ class _SeriesValueActionsState extends State<SeriesValueActions> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
     return Semantics(
       button: true,
       hint: widget.onTap == null ? LocaleKeys.seriesValue_action_semanticsHintLongPress.tr() : LocaleKeys.seriesValue_action_semanticsHint.tr(),
@@ -52,19 +51,7 @@ class _SeriesValueActionsState extends State<SeriesValueActions> {
         onTap: widget.onTap,
         onTapDown: (details) => _globalTapPosition = details.globalPosition,
         onLongPress: _showActions,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 150),
-          decoration: BoxDecoration(
-            borderRadius: ThemeUtils.borderRadiusCircularSmall,
-            gradient: _menuVisible
-                ? RadialGradient(
-                    radius: 0.8,
-                    colors: [colorScheme.secondary.withAlpha(128), colorScheme.secondary.withAlpha(0)],
-                  )
-                : null,
-          ),
-          child: widget.child,
-        ),
+        child: widget.childBuilder(context, _menuVisible),
       ),
     );
   }
@@ -81,6 +68,7 @@ class _SeriesValueActionsState extends State<SeriesValueActions> {
     await IconPopupMenu.showAt(
       context,
       globalPosition: position,
+      layout: IconPopupMenuLayout.radial,
       menuEntries: [
         IconPopupMenuEntry(
           const Icon(Icons.edit_outlined),

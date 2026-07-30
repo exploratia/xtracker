@@ -36,12 +36,10 @@ class BloodPressureValueRenderer extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
 
-    Widget result = _Value(bloodPressureValue: bloodPressureValue);
-
-    result = Container(
+    Widget buildValue(bool selected) => Container(
       margin: const EdgeInsets.all(ThemeUtils.paddingSmall / 2),
       decoration: BoxDecoration(
-        border: (showBorder || editMode) ? Border.all(width: 1, color: editMode ? themeData.colorScheme.secondary : themeData.cardColor) : null,
+        border: (showBorder || selected) ? Border.all(width: 1, color: selected ? themeData.colorScheme.secondary : themeData.cardColor) : null,
         borderRadius: ThemeUtils.borderRadiusCircularSmall,
         gradient: LinearGradient(
           colors: [
@@ -50,16 +48,20 @@ class BloodPressureValueRenderer extends StatelessWidget {
           ],
         ),
       ),
-      child: result,
+      child: _Value(bloodPressureValue: bloodPressureValue),
     );
+
+    Widget result;
 
     if (enableActions) {
       result = SeriesValueActions(
         seriesDef: seriesDef,
         value: bloodPressureValue,
         onTap: editMode ? () => SeriesData.showSeriesDataInputDlg(context, seriesDef, value: bloodPressureValue) : null,
-        child: result,
+        childBuilder: (_, selected) => buildValue(editMode || selected),
       );
+    } else {
+      result = buildValue(editMode);
     }
 
     if (wrapWithDateTimeTooltip) {

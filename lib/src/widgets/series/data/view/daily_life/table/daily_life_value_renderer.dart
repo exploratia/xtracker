@@ -40,8 +40,8 @@ class DailyLifeValueRenderer extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
     var resolvedTag = dailyLifeTagResolver.resolve(dailyLifeValue);
-    Widget result = Container(
-      decoration: editMode
+    Widget buildValue(bool selected) => Container(
+      decoration: selected
           ? BoxDecoration(
               border: Border.all(
                 color: themeData.colorScheme.secondary,
@@ -69,13 +69,17 @@ class DailyLifeValueRenderer extends StatelessWidget {
       ),
     );
 
+    Widget result;
+
     if (enableActions) {
       result = SeriesValueActions(
         seriesDef: seriesDef,
         value: dailyLifeValue,
         onTap: editMode ? () => SeriesData.showSeriesDataInputDlg(context, seriesDef, value: dailyLifeValue) : null,
-        child: result,
+        childBuilder: (_, selected) => buildValue(editMode || selected),
       );
+    } else {
+      result = buildValue(editMode);
     }
 
     if (wrapWithDateTimeTooltip) {

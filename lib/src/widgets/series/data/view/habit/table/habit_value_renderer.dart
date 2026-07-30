@@ -32,22 +32,26 @@ class HabitValueRenderer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    Widget result = Container(
+    Widget buildValue(bool selected) => Container(
       margin: const EdgeInsets.all(2),
       child: Icon(
         size: ThemeUtils.iconSizeScaled,
         seriesDef.iconData(),
-        color: editMode ? themeData.colorScheme.secondary : null,
+        color: selected ? themeData.colorScheme.secondary : null,
       ),
     );
+
+    Widget result;
 
     if (enableActions) {
       result = SeriesValueActions(
         seriesDef: seriesDef,
         value: habitValue,
         onTap: editMode ? () => SeriesData.showSeriesDataInputDlg(context, seriesDef, value: habitValue) : null,
-        child: result,
+        childBuilder: (_, selected) => buildValue(editMode || selected),
       );
+    } else {
+      result = buildValue(editMode);
     }
 
     if (wrapWithDateTimeTooltip) {
