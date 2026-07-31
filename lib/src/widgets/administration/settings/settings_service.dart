@@ -92,15 +92,20 @@ class SettingsService {
     await DeviceStorage.write(DeviceStorageKeys.autoBackupIntervalDays, value.toString());
   }
 
-  /// Loads the exact next automatic backup time from ISO-8601.
+  /// Loads the next automatic backup date without a time component.
   Future<DateTime?> autoBackupNextDate() async {
     final storedValue = await DeviceStorage.read(DeviceStorageKeys.autoBackupNextDate);
-    return storedValue == null ? null : DateTime.tryParse(storedValue);
+    if (storedValue == null) return null;
+
+    // Accept the former ISO-8601 value so existing installations migrate
+    // transparently to day-based scheduling.
+    final parsedValue = _parseDate(storedValue) ?? DateTime.tryParse(storedValue);
+    return parsedValue == null ? null : DateTime(parsedValue.year, parsedValue.month, parsedValue.day);
   }
 
-  /// Persists the exact next automatic backup time as ISO-8601.
+  /// Persists the next automatic backup as a calendar date.
   Future<void> updateAutoBackupNextDate(DateTime value) async {
-    await DeviceStorage.write(DeviceStorageKeys.autoBackupNextDate, value.toIso8601String());
+    await DeviceStorage.write(DeviceStorageKeys.autoBackupNextDate, _toDateStr(value));
   }
 
   /// Loads the date of the latest successful automatic backup.

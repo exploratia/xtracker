@@ -537,7 +537,7 @@ class SeriesImportExport {
               label: Text(LocaleKeys.seriesManagement_importExport_btn_shareSeries.tr()),
             ),
             _LabelMedium(LocaleKeys.seriesManagement_importExport_label_shareSeries.tr()),
-            if (!kIsWeb && settingsController.autoBackupEnabled)
+            if (!kIsWeb && settingsController.autoBackupEnabled) ...[
               ElevatedButton.icon(
                 onPressed: () async {
                   Navigator.of(context).pop();
@@ -552,6 +552,8 @@ class SeriesImportExport {
                 icon: Icon(Icons.cloud_upload_outlined, size: ThemeUtils.iconSizeScaled),
                 label: Text(LocaleKeys.seriesManagement_importExport_btn_startAutoBackup.tr()),
               ),
+              _LabelMedium(LocaleKeys.seriesManagement_importExport_label_startAutoBackup.tr()),
+            ],
           ],
           // single series
           if (seriesDef != null) ...[

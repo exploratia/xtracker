@@ -16,8 +16,7 @@ class SettingsController with ChangeNotifier {
   SettingsController(this._settingsService);
 
   static const defaultAutoBackupIntervalDays = 3;
-  static const minAutoBackupIntervalDays = 1;
-  static const maxAutoBackupIntervalDays = 365;
+  static const supportedAutoBackupIntervalDays = [1, 2, 3, 5, 7, 10, 14, 31, 90];
 
   // Make SettingsService a private variable so it is not used directly.
   final SettingsService _settingsService;
@@ -115,10 +114,10 @@ class SettingsController with ChangeNotifier {
     _seriesExportDisableReminder = await _settingsService.seriesExportDisableReminder();
     _seriesExportReminderDate = await _settingsService.seriesExportReminderDate();
     _autoBackupEnabled = await _settingsService.autoBackupEnabled();
-    _autoBackupIntervalDays = (await _settingsService.autoBackupIntervalDays()).clamp(
-      minAutoBackupIntervalDays,
-      maxAutoBackupIntervalDays,
-    );
+    final storedAutoBackupIntervalDays = await _settingsService.autoBackupIntervalDays();
+    _autoBackupIntervalDays = supportedAutoBackupIntervalDays.contains(storedAutoBackupIntervalDays)
+        ? storedAutoBackupIntervalDays
+        : defaultAutoBackupIntervalDays;
     _autoBackupNextDate = await _settingsService.autoBackupNextDate();
     _autoBackupDate = await _settingsService.autoBackupDate();
     _appSupportReminderDate = await _settingsService.appSupportReminderDate();
@@ -240,17 +239,18 @@ class SettingsController with ChangeNotifier {
 
   /// Changes the interval and schedules the next backup from now.
   Future<void> updateAutoBackupIntervalDays(int value) async {
-    final validatedValue = value.clamp(minAutoBackupIntervalDays, maxAutoBackupIntervalDays);
-    _autoBackupIntervalDays = validatedValue;
-    await _settingsService.updateAutoBackupIntervalDays(validatedValue);
-    await updateAutoBackupNextDate(DateTime.now().add(Duration(days: validatedValue)));
+    if (!supportedAutoBackupIntervalDays.contains(value) || value == _autoBackupIntervalDays) return;
+    _autoBackupIntervalDays = value;
+    await _settingsService.updateAutoBackupIntervalDays(value);
+    final now = DateTime.now();
+    await updateAutoBackupNextDate(DateTime(now.year, now.month, now.day + value));
   }
 
-  /// Persists the exact next backup time as ISO-8601.
+  /// Persists the next backup as a calendar date.
   Future<void> updateAutoBackupNextDate(DateTime value) async {
-    _autoBackupNextDate = value;
+    _autoBackupNextDate = DateTime(value.year, value.month, value.day);
     notifyListeners();
-    await _settingsService.updateAutoBackupNextDate(value);
+    await _settingsService.updateAutoBackupNextDate(_autoBackupNextDate!);
   }
 
   /// Persists the date of the latest successful automatic backup.

@@ -139,6 +139,14 @@ class GeneralSettingsView extends StatelessWidget {
         ),
         SwitchListTile(
           contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: ThemeUtils.defaultPadding),
+          value: controller.hideExploratiaQuickActionUrl,
+          onChanged: (bool value) {
+            controller.updateHideExploratiaQuickActionUrl(value);
+          },
+          title: Text(LocaleKeys.settings_general_label_hideExploratiaQuickActionUrl.tr()),
+        ),
+        SwitchListTile(
+          contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: ThemeUtils.defaultPadding),
           value: controller.seriesExportDisableReminder,
           onChanged: (bool value) {
             controller.updateSeriesExportDisableReminder(value);
@@ -146,14 +154,6 @@ class GeneralSettingsView extends StatelessWidget {
           title: Text(LocaleKeys.settings_general_label_seriesExportDisableReminder.tr()),
         ),
         if (!kIsWeb) DropboxAutoBackupSettings(controller: controller),
-        SwitchListTile(
-          contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: ThemeUtils.defaultPadding),
-          value: controller.hideExploratiaQuickActionUrl,
-          onChanged: (bool value) {
-            controller.updateHideExploratiaQuickActionUrl(value);
-          },
-          title: Text(LocaleKeys.settings_general_label_hideExploratiaQuickActionUrl.tr()),
-        ),
       ],
     );
   }

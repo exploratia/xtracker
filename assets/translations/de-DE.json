@@ -906,7 +906,7 @@
         "importSeriesCSV": "Messreihe importieren (CSV)",
         "shareSeries": "Alle Messreihen teilen",
         "shareSingleSeries": "Messreihe teilen",
-        "startAutoBackup": "Backup jetzt starten"
+        "startAutoBackup": "Dropbox-Backup jetzt starten"
       },
       "label": {
         "exportSeries": "Alle Messreihen als eine JSON-Datei speichern.",
@@ -922,7 +922,8 @@
         "latestSeriesExport": "Zuletzt exportiert: {}",
         "latestAutoBackup": "Zuletzt gesichert: {}",
         "shareSeries": "Alle Messreihen als eine JSON-Datei teilen.",
-        "shareSingleSeries": "Messreihe (Konfiguration und Werte) als JSON-Datei teilen."
+        "shareSingleSeries": "Messreihe (Konfiguration und Werte) als JSON-Datei teilen.",
+        "startAutoBackup": "Alle Messreihen als eine JSON-Datei in deiner Dropbox sichern."
       },
       "snackbar": {
         "importSuccessfulXofY": "{} Messreihen aus {} Dateien erfolgreich importiert."
@@ -1020,7 +1021,7 @@
         "hideExploratiaQuickActionUrl": "Exploratia-URL im App-Icon-Menü ausblenden:",
         "seriesExportDisableReminder": "Erinnerung für Messreihenexport deaktivieren (30 Tage nach letztem Export):",
         "autoBackupEnabled": "Automatisches Dropbox-Backup:",
-        "autoBackupIntervalDays": "Backup-Intervall in Tagen (1–365):",
+        "autoBackupIntervalDays": "Backup-Intervall in Tagen:",
         "autoBackupNextDate": "Nächstes Backup: {}",
         "lang": "Sprache:",
         "theme": "Theme:"

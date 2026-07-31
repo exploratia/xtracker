@@ -415,6 +415,7 @@ abstract class LocaleKeys {
   static const seriesManagement_importExport_label_latestAutoBackup = 'seriesManagement.importExport.label.latestAutoBackup';
   static const seriesManagement_importExport_label_shareSeries = 'seriesManagement.importExport.label.shareSeries';
   static const seriesManagement_importExport_label_shareSingleSeries = 'seriesManagement.importExport.label.shareSingleSeries';
+  static const seriesManagement_importExport_label_startAutoBackup = 'seriesManagement.importExport.label.startAutoBackup';
   static const seriesManagement_importExport_snackbar_importSuccessfulXofY = 'seriesManagement.importExport.snackbar.importSuccessfulXofY';
   static const seriesManagement_importExport_alert_unexpectedDataStructure = 'seriesManagement.importExport.alert.unexpectedDataStructure';
   static const seriesManagement_importExport_alert_unexpectedFile = 'seriesManagement.importExport.alert.unexpectedFile';

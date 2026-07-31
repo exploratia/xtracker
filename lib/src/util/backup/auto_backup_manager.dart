@@ -31,7 +31,10 @@ class AutoBackupManager {
 
   /// Returns whether a backup is due at [now].
   bool isBackupDue(DateTime? nextBackupDate, DateTime now) {
-    return nextBackupDate == null || !now.isBefore(nextBackupDate);
+    if (nextBackupDate == null) return true;
+    final scheduledDay = DateTime(nextBackupDate.year, nextBackupDate.month, nextBackupDate.day);
+    final currentDay = DateTime(now.year, now.month, now.day);
+    return !currentDay.isBefore(scheduledDay);
   }
 
   /// Writes [backupJson] temporarily and uploads it to the Dropbox app folder.

@@ -906,7 +906,7 @@
         "importSeriesCSV": "Import series values (CSV)",
         "shareSeries": "Share all series",
         "shareSingleSeries": "Share series",
-        "startAutoBackup": "Start backup now"
+        "startAutoBackup": "Start Dropbox backup now"
       },
       "label": {
         "exportSeries": "Export all series as one JSON file.",
@@ -922,7 +922,8 @@
         "latestSeriesExport": "Last exported: {}",
         "latestAutoBackup": "Last backup: {}",
         "shareSeries": "Share all series as one JSON file.",
-        "shareSingleSeries": "Share series (definition and values) as JSON file."
+        "shareSingleSeries": "Share series (definition and values) as JSON file.",
+        "startAutoBackup": "Back up all series as one JSON file to your Dropbox."
       },
       "snackbar": {
         "importSuccessfulXofY": "Imported {} series from {} files successfully."
@@ -1020,7 +1021,7 @@
         "hideExploratiaQuickActionUrl": "Hide exploratia URL in app icon menu:",
         "seriesExportDisableReminder": "Disable series export reminder (30 days after last export):",
         "autoBackupEnabled": "Automatic Dropbox backup:",
-        "autoBackupIntervalDays": "Backup interval in days (1–365):",
+        "autoBackupIntervalDays": "Backup interval in days:",
         "autoBackupNextDate": "Next backup: {}",
         "lang": "Language:",
         "theme": "Theme:"

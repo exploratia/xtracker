@@ -14,13 +14,17 @@ void main() {
       expect(manager.isBackupDue(null, now), isTrue);
     });
 
-    test('is not due before the next date', () {
-      expect(manager.isBackupDue(now.add(const Duration(minutes: 1)), now), isFalse);
+    test('is not due before the next calendar date', () {
+      expect(manager.isBackupDue(DateTime(2026, 8, 1), now), isFalse);
     });
 
-    test('is due at and after the next date', () {
-      expect(manager.isBackupDue(now, now), isTrue);
-      expect(manager.isBackupDue(now.subtract(const Duration(minutes: 1)), now), isTrue);
+    test('is due throughout the scheduled calendar date', () {
+      expect(manager.isBackupDue(DateTime(2026, 7, 31), DateTime(2026, 7, 31, 0, 1)), isTrue);
+      expect(manager.isBackupDue(DateTime(2026, 7, 31, 23, 59), DateTime(2026, 7, 31, 0, 1)), isTrue);
+    });
+
+    test('is due after the scheduled calendar date', () {
+      expect(manager.isBackupDue(DateTime(2026, 7, 30, 23, 59), now), isTrue);
     });
   });
 

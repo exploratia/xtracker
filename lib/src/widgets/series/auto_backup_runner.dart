@@ -40,7 +40,7 @@ class AutoBackupRunner {
 
       await settingsController.updateAutoBackupDate(now);
       await settingsController.updateAutoBackupNextDate(
-        now.add(Duration(days: settingsController.autoBackupIntervalDays)),
+        DateTime(now.year, now.month, now.day + settingsController.autoBackupIntervalDays),
       );
       succeeded = true;
       return true;
