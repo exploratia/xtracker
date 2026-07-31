@@ -84,7 +84,9 @@ dependencies:
   flutter_timezone: ^5.1.0
 
   # Dropbox auto backup (Android/iOS only)
-  dropbox_client: ^1.2.1
+  # Vendored temporarily for PKCE initialization without an app secret.
+  dropbox_client:
+    path: third_party/dropbox_client
 
   # display HTML in flutter
   simple_html_css: ^5.0.0
