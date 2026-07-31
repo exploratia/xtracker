@@ -5,8 +5,8 @@ class BackupFileName {
   static const prefix = 'xtracker_backup_';
   static const extension = '.json';
 
-  /// Builds a file name such as `xtracker_backup_20260731.json`.
+  /// Builds a file name such as `xtracker_backup_20260731_142530.json`.
   static String build(DateTime dateTime) {
-    return '$prefix${DateTimeUtils.formatBackupDate(dateTime)}$extension';
+    return '$prefix${DateTimeUtils.formatBackupDateTime(dateTime)}$extension';
   }
 }

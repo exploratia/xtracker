@@ -39,7 +39,7 @@ void main() {
     );
 
     expect(result.success, isTrue);
-    expect(uploader.dropboxPath, '/xtracker_backup_20260731.json');
+    expect(uploader.dropboxPath, '/xtracker_backup_20260731_000000.json');
     expect(jsonDecode(uploader.uploadedContent!), containsPair('type', 'multiSeriesExport'));
     expect(directory.listSync(), isEmpty);
   });

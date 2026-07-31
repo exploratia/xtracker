@@ -79,6 +79,10 @@ class SettingsController with ChangeNotifier {
 
   DateTime? get autoBackupNextDate => _autoBackupNextDate;
 
+  DateTime? _autoBackupDate;
+
+  DateTime? get autoBackupDate => _autoBackupDate;
+
   DateTime? _seriesExportReminderDate;
 
   DateTime? get seriesExportReminderDate => _seriesExportReminderDate;
@@ -116,6 +120,7 @@ class SettingsController with ChangeNotifier {
       maxAutoBackupIntervalDays,
     );
     _autoBackupNextDate = await _settingsService.autoBackupNextDate();
+    _autoBackupDate = await _settingsService.autoBackupDate();
     _appSupportReminderDate = await _settingsService.appSupportReminderDate();
     // Important! Inform listeners a change has occurred.
     notifyListeners();
@@ -246,6 +251,13 @@ class SettingsController with ChangeNotifier {
     _autoBackupNextDate = value;
     notifyListeners();
     await _settingsService.updateAutoBackupNextDate(value);
+  }
+
+  /// Persists the date of the latest successful automatic backup.
+  Future<void> updateAutoBackupDate(DateTime value) async {
+    _autoBackupDate = value;
+    notifyListeners();
+    await _settingsService.updateAutoBackupDate(value);
   }
 
   /// Update and persist

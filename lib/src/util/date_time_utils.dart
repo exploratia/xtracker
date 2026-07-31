@@ -40,8 +40,8 @@ class DateTimeUtils {
   }
 
   /// Formats [dateTime] for automatic backup file names.
-  static String formatBackupDate(DateTime dateTime) {
-    return DateFormat('yyyyMMdd').format(dateTime);
+  static String formatBackupDateTime(DateTime dateTime) {
+    return DateFormat('yyyyMMdd_HHmmss').format(dateTime);
   }
 
   /// format date yMd

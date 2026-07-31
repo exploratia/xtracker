@@ -103,6 +103,16 @@ class SettingsService {
     await DeviceStorage.write(DeviceStorageKeys.autoBackupNextDate, value.toIso8601String());
   }
 
+  /// Loads the date of the latest successful automatic backup.
+  Future<DateTime?> autoBackupDate() async {
+    return _parseDate(await DeviceStorage.read(DeviceStorageKeys.autoBackupDate));
+  }
+
+  /// Persists the date of the latest successful automatic backup.
+  Future<void> updateAutoBackupDate(DateTime value) async {
+    await DeviceStorage.write(DeviceStorageKeys.autoBackupDate, _toDateStr(value));
+  }
+
   /// Loads the initial app start and set if not yet exists
   Future<DateTime> initialAppStart() async {
     var strTimestamp = await DeviceStorage.read(DeviceStorageKeys.initialAppStart);

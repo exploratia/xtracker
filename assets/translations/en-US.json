@@ -905,7 +905,8 @@
         "importSeries": "Import series",
         "importSeriesCSV": "Import series values (CSV)",
         "shareSeries": "Share all series",
-        "shareSingleSeries": "Share series"
+        "shareSingleSeries": "Share series",
+        "startAutoBackup": "Start backup now"
       },
       "label": {
         "exportSeries": "Export all series as one JSON file.",
@@ -919,6 +920,7 @@
         "importSeriesCSV": "Import values for the series “{}” from a CSV file. Existing data will be overwritten.\nThe file must contain one line per entry in exactly these columns:\n{}",
         "importSeriesCSVTip": "Tip: CSV import is available per series.",
         "latestSeriesExport": "Last exported: {}",
+        "latestAutoBackup": "Last backup: {}",
         "shareSeries": "Share all series as one JSON file.",
         "shareSingleSeries": "Share series (definition and values) as JSON file."
       },
@@ -1019,11 +1021,13 @@
         "seriesExportDisableReminder": "Disable series export reminder (30 days after last export):",
         "autoBackupEnabled": "Automatic Dropbox backup:",
         "autoBackupIntervalDays": "Backup interval in days (1–365):",
+        "autoBackupNextDate": "Next backup: {}",
         "lang": "Language:",
         "theme": "Theme:"
       },
       "info": {
-        "autoBackupNoAutomaticDeletion": "Dropbox backups are not deleted automatically. Please delete backups you no longer need in Dropbox yourself."
+        "autoBackupNoAutomaticDeletion": "Dropbox backups are not deleted automatically. Please delete backups you no longer need in Dropbox yourself.",
+        "autoBackupAtNextStart": "at the next app start"
       },
       "language": {
         "system": "System",

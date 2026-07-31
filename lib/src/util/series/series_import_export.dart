@@ -19,6 +19,7 @@ import '../../store/migration/import_migration.dart';
 import '../../widgets/administration/settings/settings_controller.dart';
 import '../../widgets/controls/layout/single_child_scroll_view_with_scrollbar.dart';
 import '../../widgets/controls/overlay/progress_overlay.dart';
+import '../../widgets/series/auto_backup_runner.dart';
 import '../date_time_utils.dart';
 import '../dialogs.dart';
 import '../ex.dart';
@@ -499,12 +500,18 @@ class SeriesImportExport {
               listenable: settingsController,
               builder: (context, child) {
                 String lastExport = buildLastExportDateStr(settingsController);
+                String lastBackup = buildLastBackupDateStr(settingsController);
 
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    _LabelMedium(LocaleKeys.seriesManagement_importExport_label_latestSeriesExport.tr(args: [lastExport])),
-                  ],
+                return Align(
+                  alignment: Alignment.centerRight,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      _LabelMedium(LocaleKeys.seriesManagement_importExport_label_latestSeriesExport.tr(args: [lastExport])),
+                      if (settingsController.autoBackupEnabled)
+                        _LabelMedium(LocaleKeys.seriesManagement_importExport_label_latestAutoBackup.tr(args: [lastBackup])),
+                    ],
+                  ),
                 );
               },
             ),
@@ -530,6 +537,21 @@ class SeriesImportExport {
               label: Text(LocaleKeys.seriesManagement_importExport_btn_shareSeries.tr()),
             ),
             _LabelMedium(LocaleKeys.seriesManagement_importExport_label_shareSeries.tr()),
+            if (!kIsWeb && settingsController.autoBackupEnabled)
+              ElevatedButton.icon(
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  await Future<void>.delayed(Duration.zero);
+                  if (!context.mounted) return;
+                  await AutoBackupRunner.run(
+                    context,
+                    settingsController,
+                    buildBackupJson: () => buildAllSeriesBackupJson(context),
+                  );
+                },
+                icon: Icon(Icons.cloud_upload_outlined, size: ThemeUtils.iconSizeScaled),
+                label: Text(LocaleKeys.seriesManagement_importExport_btn_startAutoBackup.tr()),
+              ),
           ],
           // single series
           if (seriesDef != null) ...[
@@ -611,6 +633,13 @@ class SeriesImportExport {
       lastExport = DateTimeUtils.formatDate(lastExportDate);
     }
     return lastExport;
+  }
+
+  /// Formats the latest successful Dropbox backup date for display.
+  static String buildLastBackupDateStr(SettingsController settingsController) {
+    DateTime? lastBackupDate = settingsController.autoBackupDate;
+    if (lastBackupDate == null) return '-';
+    return DateTimeUtils.formatDate(lastBackupDate);
   }
 }
 

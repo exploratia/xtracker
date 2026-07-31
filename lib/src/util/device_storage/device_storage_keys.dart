@@ -15,5 +15,6 @@ class DeviceStorageKeys {
   static const autoBackupEnabled = 'autoBackupEnabled';
   static const autoBackupIntervalDays = 'autoBackupIntervalDays';
   static const autoBackupNextDate = 'autoBackupNextDate';
+  static const autoBackupDate = 'autoBackupDate';
   static const dropboxCredentials = 'dropboxCredentials';
 }

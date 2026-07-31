@@ -905,7 +905,8 @@
         "importSeries": "Messreihen importieren",
         "importSeriesCSV": "Messreihe importieren (CSV)",
         "shareSeries": "Alle Messreihen teilen",
-        "shareSingleSeries": "Messreihe teilen"
+        "shareSingleSeries": "Messreihe teilen",
+        "startAutoBackup": "Backup jetzt starten"
       },
       "label": {
         "exportSeries": "Alle Messreihen als eine JSON-Datei speichern.",
@@ -919,6 +920,7 @@
         "importSeriesCSV": "Werte für die Messreihe „{}“ aus einer CSV-Datei importieren. Bereits vorhandene Daten werden überschrieben.\nDie Datei muss exakt folgende Spalten und pro Eintrag eine entsprechende Zeile enthalten:\n{}",
         "importSeriesCSVTip": "Tipp: CSV-Import ist für einzelne Messreihen über das Export-Symbol der jeweiligen Messreihe möglich.",
         "latestSeriesExport": "Zuletzt exportiert: {}",
+        "latestAutoBackup": "Zuletzt gesichert: {}",
         "shareSeries": "Alle Messreihen als eine JSON-Datei teilen.",
         "shareSingleSeries": "Messreihe (Konfiguration und Werte) als JSON-Datei teilen."
       },
@@ -1019,11 +1021,13 @@
         "seriesExportDisableReminder": "Erinnerung für Messreihenexport deaktivieren (30 Tage nach letztem Export):",
         "autoBackupEnabled": "Automatisches Dropbox-Backup:",
         "autoBackupIntervalDays": "Backup-Intervall in Tagen (1–365):",
+        "autoBackupNextDate": "Nächstes Backup: {}",
         "lang": "Sprache:",
         "theme": "Theme:"
       },
       "info": {
-        "autoBackupNoAutomaticDeletion": "Dropbox-Backups werden nicht automatisch gelöscht. Bitte lösche nicht mehr benötigte Backups selbst in Dropbox."
+        "autoBackupNoAutomaticDeletion": "Dropbox-Backups werden nicht automatisch gelöscht. Bitte lösche nicht mehr benötigte Backups selbst in Dropbox.",
+        "autoBackupAtNextStart": "beim nächsten App-Start"
       },
       "language": {
         "system": "Systemeinstellung",

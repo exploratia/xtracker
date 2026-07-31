@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 
 import '../../../../generated/locale_keys.g.dart';
 import '../../../util/backup/dropbox_backup_service.dart';
+import '../../../util/date_time_utils.dart';
 import '../../../util/dialogs.dart';
 import '../../../util/logging/flutter_simple_logging.dart';
 import '../../../util/theme_utils.dart';
@@ -126,6 +127,10 @@ class _DropboxAutoBackupSettingsState extends State<DropboxAutoBackupSettings> w
   @override
   Widget build(BuildContext context) {
     final enabled = widget.controller.autoBackupEnabled;
+    final nextBackupDate = widget.controller.autoBackupNextDate;
+    final nextBackup = nextBackupDate == null
+        ? LocaleKeys.settings_general_info_autoBackupAtNextStart.tr()
+        : '${DateTimeUtils.formatDate(nextBackupDate)} ${DateTimeUtils.formatTime(nextBackupDate)}';
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -162,6 +167,7 @@ class _DropboxAutoBackupSettingsState extends State<DropboxAutoBackupSettings> w
                     ),
                   ],
                 ),
+                Text(LocaleKeys.settings_general_label_autoBackupNextDate.tr(args: [nextBackup])),
                 Text(
                   LocaleKeys.settings_general_info_autoBackupNoAutomaticDeletion.tr(),
                   style: Theme.of(context).textTheme.bodySmall,

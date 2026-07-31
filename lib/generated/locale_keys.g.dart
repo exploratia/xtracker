@@ -400,6 +400,7 @@ abstract class LocaleKeys {
   static const seriesManagement_importExport_btn_importSeriesCSV = 'seriesManagement.importExport.btn.importSeriesCSV';
   static const seriesManagement_importExport_btn_shareSeries = 'seriesManagement.importExport.btn.shareSeries';
   static const seriesManagement_importExport_btn_shareSingleSeries = 'seriesManagement.importExport.btn.shareSingleSeries';
+  static const seriesManagement_importExport_btn_startAutoBackup = 'seriesManagement.importExport.btn.startAutoBackup';
   static const seriesManagement_importExport_label_exportSeries = 'seriesManagement.importExport.label.exportSeries';
   static const seriesManagement_importExport_label_exportSingleSeries = 'seriesManagement.importExport.label.exportSingleSeries';
   static const seriesManagement_importExport_label_exportSingleSeriesCSV = 'seriesManagement.importExport.label.exportSingleSeriesCSV';
@@ -411,6 +412,7 @@ abstract class LocaleKeys {
   static const seriesManagement_importExport_label_importSeriesCSV = 'seriesManagement.importExport.label.importSeriesCSV';
   static const seriesManagement_importExport_label_importSeriesCSVTip = 'seriesManagement.importExport.label.importSeriesCSVTip';
   static const seriesManagement_importExport_label_latestSeriesExport = 'seriesManagement.importExport.label.latestSeriesExport';
+  static const seriesManagement_importExport_label_latestAutoBackup = 'seriesManagement.importExport.label.latestAutoBackup';
   static const seriesManagement_importExport_label_shareSeries = 'seriesManagement.importExport.label.shareSeries';
   static const seriesManagement_importExport_label_shareSingleSeries = 'seriesManagement.importExport.label.shareSingleSeries';
   static const seriesManagement_importExport_snackbar_importSuccessfulXofY = 'seriesManagement.importExport.snackbar.importSuccessfulXofY';
@@ -449,9 +451,11 @@ abstract class LocaleKeys {
   static const settings_general_label_seriesExportDisableReminder = 'settings.general.label.seriesExportDisableReminder';
   static const settings_general_label_autoBackupEnabled = 'settings.general.label.autoBackupEnabled';
   static const settings_general_label_autoBackupIntervalDays = 'settings.general.label.autoBackupIntervalDays';
+  static const settings_general_label_autoBackupNextDate = 'settings.general.label.autoBackupNextDate';
   static const settings_general_label_lang = 'settings.general.label.lang';
   static const settings_general_label_theme = 'settings.general.label.theme';
   static const settings_general_info_autoBackupNoAutomaticDeletion = 'settings.general.info.autoBackupNoAutomaticDeletion';
+  static const settings_general_info_autoBackupAtNextStart = 'settings.general.info.autoBackupAtNextStart';
   static const settings_general_language_system = 'settings.general.language.system';
   static const settings_general_language_english = 'settings.general.language.english';
   static const settings_general_language_german = 'settings.general.language.german';
