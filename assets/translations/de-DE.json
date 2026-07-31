@@ -989,6 +989,16 @@
       }
     }
   },
+  "autoBackup": {
+    "overlay": {
+      "label": "Backup wird in Dropbox gespeichert …"
+    },
+    "snackbar": {
+      "success": "Dropbox-Backup erfolgreich gespeichert",
+      "failure": "Dropbox-Backup fehlgeschlagen",
+      "authFailure": "Dropbox-Anmeldung wurde abgebrochen oder ist fehlgeschlagen"
+    }
+  },
   "settings": {
     "title": "Einstellungen",
     "deviceStorage": {
@@ -1007,8 +1017,13 @@
         "hideWallpaper": "Hintergrundbild ausblenden:",
         "hideExploratiaQuickActionUrl": "Exploratia-URL im App-Icon-Menü ausblenden:",
         "seriesExportDisableReminder": "Erinnerung für Messreihenexport deaktivieren (30 Tage nach letztem Export):",
+        "autoBackupEnabled": "Automatisches Dropbox-Backup:",
+        "autoBackupIntervalDays": "Backup-Intervall in Tagen (1–365):",
         "lang": "Sprache:",
         "theme": "Theme:"
+      },
+      "info": {
+        "autoBackupNoAutomaticDeletion": "Dropbox-Backups werden nicht automatisch gelöscht. Bitte lösche nicht mehr benötigte Backups selbst in Dropbox."
       },
       "language": {
         "system": "Systemeinstellung",

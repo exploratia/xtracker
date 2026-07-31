@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../generated/locale_keys.g.dart';
@@ -7,6 +8,7 @@ import '../../../util/table_utils.dart';
 import '../../../util/theme_utils.dart';
 import '../../controls/layout/drop_down_menu_item_child.dart';
 import '../../controls/live_wallpaper/live_wallpaper_refresh.dart';
+import 'dropbox_auto_backup_settings.dart';
 import './settings_controller.dart';
 import 'settings_service.dart';
 
@@ -143,6 +145,7 @@ class GeneralSettingsView extends StatelessWidget {
           },
           title: Text(LocaleKeys.settings_general_label_seriesExportDisableReminder.tr()),
         ),
+        if (!kIsWeb) DropboxAutoBackupSettings(controller: controller),
         SwitchListTile(
           contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: ThemeUtils.defaultPadding),
           value: controller.hideExploratiaQuickActionUrl,

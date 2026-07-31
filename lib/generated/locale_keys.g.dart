@@ -434,6 +434,10 @@ abstract class LocaleKeys {
   static const seriesValue_bloodPressure_validation_systolicTooLow = 'seriesValue.bloodPressure.validation.systolicTooLow';
   static const seriesValue_dailyCheck_btn_toggleCheck_tooltip = 'seriesValue.dailyCheck.btn.toggleCheck.tooltip';
   static const seriesValue_habit_btn_toggleValue_tooltip = 'seriesValue.habit.btn.toggleValue.tooltip';
+  static const autoBackup_overlay_label = 'autoBackup.overlay.label';
+  static const autoBackup_snackbar_success = 'autoBackup.snackbar.success';
+  static const autoBackup_snackbar_failure = 'autoBackup.snackbar.failure';
+  static const autoBackup_snackbar_authFailure = 'autoBackup.snackbar.authFailure';
   static const settings_title = 'settings.title';
   static const settings_deviceStorage_title = 'settings.deviceStorage.title';
   static const settings_deviceStorage_btn_clearStorage = 'settings.deviceStorage.btn.clearStorage';
@@ -443,8 +447,11 @@ abstract class LocaleKeys {
   static const settings_general_label_hideWallpaper = 'settings.general.label.hideWallpaper';
   static const settings_general_label_hideExploratiaQuickActionUrl = 'settings.general.label.hideExploratiaQuickActionUrl';
   static const settings_general_label_seriesExportDisableReminder = 'settings.general.label.seriesExportDisableReminder';
+  static const settings_general_label_autoBackupEnabled = 'settings.general.label.autoBackupEnabled';
+  static const settings_general_label_autoBackupIntervalDays = 'settings.general.label.autoBackupIntervalDays';
   static const settings_general_label_lang = 'settings.general.label.lang';
   static const settings_general_label_theme = 'settings.general.label.theme';
+  static const settings_general_info_autoBackupNoAutomaticDeletion = 'settings.general.info.autoBackupNoAutomaticDeletion';
   static const settings_general_language_system = 'settings.general.language.system';
   static const settings_general_language_english = 'settings.general.language.english';
   static const settings_general_language_german = 'settings.general.language.german';

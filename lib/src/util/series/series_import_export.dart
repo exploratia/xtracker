@@ -87,6 +87,11 @@ class SeriesImportExport {
     return json;
   }
 
+  /// Builds the complete series export used by manual and automatic backups.
+  static Future<Map<String, dynamic>> buildAllSeriesBackupJson(BuildContext context) {
+    return _buildAllSeriesExportJson(context);
+  }
+
   static String _clearSeriesNameForExport(SeriesDef seriesDef) {
     var res = seriesDef.name.replaceAll(RegExp(r'[^a-zA-Z0-9]+'), '_').replaceAll(RegExp(r'^_+|_+$'), ''); //remove underscore at start/end
     // fallback uuid

@@ -29,6 +29,18 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <activity
+                android:name="com.dropbox.core.android.AuthActivity"
+                android:configChanges="orientation|keyboard"
+                android:exported="true"
+                android:launchMode="singleTask">
+            <intent-filter>
+                <data android:scheme="db-1zm0mwzq0j3bgz4" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <receiver
                 android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver"
                 android:exported="false" />

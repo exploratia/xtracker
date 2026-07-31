@@ -83,6 +83,9 @@ dependencies:
   timezone: ^0.11.1
   flutter_timezone: ^5.1.0
 
+  # Dropbox auto backup (Android/iOS only)
+  dropbox_client: ^1.2.1
+
   # display HTML in flutter
   simple_html_css: ^5.0.0
 

@@ -71,6 +71,38 @@ class SettingsService {
     await DeviceStorage.writeBool(DeviceStorageKeys.quickActionsHideExploratiaUrl, value);
   }
 
+  /// Loads whether automatic Dropbox backups are enabled.
+  Future<bool> autoBackupEnabled() async {
+    return DeviceStorage.readBool(DeviceStorageKeys.autoBackupEnabled);
+  }
+
+  /// Persists whether automatic Dropbox backups are enabled.
+  Future<void> updateAutoBackupEnabled(bool value) async {
+    await DeviceStorage.writeBool(DeviceStorageKeys.autoBackupEnabled, value);
+  }
+
+  /// Loads the configured automatic backup interval in days.
+  Future<int> autoBackupIntervalDays() async {
+    final storedValue = await DeviceStorage.read(DeviceStorageKeys.autoBackupIntervalDays);
+    return int.tryParse(storedValue ?? '') ?? 3;
+  }
+
+  /// Persists the automatic backup interval in days.
+  Future<void> updateAutoBackupIntervalDays(int value) async {
+    await DeviceStorage.write(DeviceStorageKeys.autoBackupIntervalDays, value.toString());
+  }
+
+  /// Loads the exact next automatic backup time from ISO-8601.
+  Future<DateTime?> autoBackupNextDate() async {
+    final storedValue = await DeviceStorage.read(DeviceStorageKeys.autoBackupNextDate);
+    return storedValue == null ? null : DateTime.tryParse(storedValue);
+  }
+
+  /// Persists the exact next automatic backup time as ISO-8601.
+  Future<void> updateAutoBackupNextDate(DateTime value) async {
+    await DeviceStorage.write(DeviceStorageKeys.autoBackupNextDate, value.toIso8601String());
+  }
+
   /// Loads the initial app start and set if not yet exists
   Future<DateTime> initialAppStart() async {
     var strTimestamp = await DeviceStorage.read(DeviceStorageKeys.initialAppStart);

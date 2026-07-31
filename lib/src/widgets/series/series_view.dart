@@ -17,6 +17,7 @@ import '../controls/navigation/hide_bottom_navigation_bar.dart';
 import '../controls/provider/data_provider_loader.dart';
 import '../controls/responsive/device_dependent_constrained_box.dart';
 import 'add_first_series.dart';
+import 'auto_backup_check.dart';
 import 'pending_app_action_executor.dart';
 import 'series_def_renderer.dart';
 import 'series_export_check.dart';
@@ -85,54 +86,70 @@ class _SeriesList extends StatefulWidget {
 class _SeriesListState extends State<_SeriesList> {
   bool _automaticActionScheduled = false;
   bool _executingAutomaticAction = false;
+  bool _autoBackupScheduled = false;
+  bool _autoBackupRequested = false;
 
   @override
   void initState() {
     super.initState();
-    PendingAppActions.listenable().addListener(_scheduleAutomaticAction);
+    PendingAppActions.listenable().addListener(_scheduleStartupWork);
   }
 
   @override
   void dispose() {
-    PendingAppActions.listenable().removeListener(_scheduleAutomaticAction);
+    PendingAppActions.listenable().removeListener(_scheduleStartupWork);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     var series = context.watch<SeriesProvider>().series;
-    _scheduleAutomaticAction();
+    _scheduleStartupWork();
+    Widget content;
     if (series.isEmpty) {
-      return const FadeIn(child: AddFirstSeries());
-    }
+      content = const FadeIn(child: AddFirstSeries());
+    } else {
+      List<Widget> children = [];
+      var idx = 0;
+      for (var s in series) {
+        children.add(
+          AnimateIn(
+            durationMS: 1000 + idx * 500,
+            slideOffset: const Offset(0, 0.2),
+            child: SeriesDefRenderer(
+              seriesDef: s,
+              index: idx,
+              settingsController: widget.settingsController,
+            ),
+          ),
+        );
+        idx++;
+      }
 
-    List<Widget> children = [];
-    var idx = 0;
-    for (var s in series) {
-      children.add(
-        AnimateIn(
-          durationMS: 1000 + idx * 500,
-          slideOffset: const Offset(0, 0.2),
-          child: SeriesDefRenderer(
-            seriesDef: s,
-            index: idx,
-            settingsController: widget.settingsController,
+      content = SeriesExportCheck(
+        settingsController: widget.settingsController,
+        child: DeviceDependentWidthConstrainedBox(
+          child: Column(
+            spacing: ThemeUtils.verticalSpacingLarge,
+            children: children,
           ),
         ),
       );
-      idx++;
     }
 
-    return SeriesExportCheck(
+    return AutoBackupCheck(
+      shouldRun: _autoBackupRequested,
       settingsController: widget.settingsController,
-      child: DeviceDependentWidthConstrainedBox(
-        child: Column(
-          spacing: ThemeUtils.verticalSpacingLarge,
-          children: children,
-          // children: [ ...series.map((s) => SeriesDefRenderer(seriesDef: s)) ],
-        ),
-      ),
+      child: content,
     );
+  }
+
+  void _scheduleStartupWork() {
+    if (PendingAppActions.hasAutomaticAction) {
+      _scheduleAutomaticAction();
+    } else {
+      _scheduleAutoBackupCheck();
+    }
   }
 
   void _scheduleAutomaticAction() {
@@ -167,6 +184,26 @@ class _SeriesListState extends State<_SeriesList> {
       await PendingAppActionExecutor.executeDirectSeriesAction(context, action);
     } finally {
       _executingAutomaticAction = false;
+      _scheduleStartupWork();
     }
+  }
+
+  void _scheduleAutoBackupCheck() {
+    if (_autoBackupScheduled || _autoBackupRequested || _executingAutomaticAction || PendingAppActions.hasAutomaticAction) {
+      return;
+    }
+
+    _autoBackupScheduled = true;
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (!mounted) return;
+        _autoBackupScheduled = false;
+        if (_executingAutomaticAction || PendingAppActions.hasAutomaticAction) {
+          _scheduleStartupWork();
+          return;
+        }
+        setState(() => _autoBackupRequested = true);
+      });
+    });
   }
 }

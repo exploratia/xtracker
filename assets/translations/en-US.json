@@ -989,6 +989,16 @@
       }
     }
   },
+  "autoBackup": {
+    "overlay": {
+      "label": "Saving backup to Dropbox …"
+    },
+    "snackbar": {
+      "success": "Dropbox backup saved successfully",
+      "failure": "Dropbox backup failed",
+      "authFailure": "Dropbox sign-in was cancelled or failed"
+    }
+  },
   "settings": {
     "title": "Settings",
     "deviceStorage": {
@@ -1007,8 +1017,13 @@
         "hideWallpaper": "Hide wallpaper:",
         "hideExploratiaQuickActionUrl": "Hide exploratia URL in app icon menu:",
         "seriesExportDisableReminder": "Disable series export reminder (30 days after last export):",
+        "autoBackupEnabled": "Automatic Dropbox backup:",
+        "autoBackupIntervalDays": "Backup interval in days (1–365):",
         "lang": "Language:",
         "theme": "Theme:"
+      },
+      "info": {
+        "autoBackupNoAutomaticDeletion": "Dropbox backups are not deleted automatically. Please delete backups you no longer need in Dropbox yourself."
       },
       "language": {
         "system": "System",
