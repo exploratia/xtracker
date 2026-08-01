@@ -9,6 +9,7 @@ import '../../util/app_series_notifications.dart';
 import '../../util/pending_app_actions.dart';
 import '../../util/theme_utils.dart';
 import '../administration/settings/settings_controller.dart';
+import '../controls/card/glowing_border_container.dart';
 import 'pending_app_action_executor.dart';
 
 class PendingAppActionsButton extends StatelessWidget {
@@ -412,45 +413,52 @@ class _PendingActionCard extends StatelessWidget {
 
     return Card(
       margin: EdgeInsets.zero,
-      child: InkWell(
-        borderRadius: ThemeUtils.cardBorderRadius,
-        onTap: isInteractive ? () => _consumeAndExecute(context) : null,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: ThemeUtils.defaultPadding,
-            vertical: ThemeUtils.paddingSmall,
-          ),
-          child: Row(
-            children: [
-              _PendingActionIcon(action: action),
-              const SizedBox(width: ThemeUtils.horizontalSpacing),
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      _title(context),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: themeData.textTheme.bodyLarge,
-                    ),
-                    Text(
-                      _subtitle(context),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: themeData.textTheme.bodySmall,
-                    ),
-                  ],
+      child: Ink(
+        decoration: GlowingBorderContainer.createGlowingBoxDecoration(
+          themeData.colorScheme.primary,
+          backgroundColor: themeData.cardTheme.color,
+          borderRadius: ThemeUtils.cardBorderRadius.topLeft.x,
+        ),
+        child: InkWell(
+          borderRadius: ThemeUtils.cardBorderRadius,
+          onTap: isInteractive ? () => _consumeAndExecute(context) : null,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: ThemeUtils.defaultPadding,
+              vertical: ThemeUtils.paddingSmall,
+            ),
+            child: Row(
+              children: [
+                _PendingActionIcon(action: action),
+                const SizedBox(width: ThemeUtils.horizontalSpacing),
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        _title(context),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: themeData.textTheme.bodyLarge,
+                      ),
+                      Text(
+                        _subtitle(context),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: themeData.textTheme.bodySmall,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              IconButton(
-                tooltip: LocaleKeys.commons_dialog_btn_delete.tr(),
-                onPressed: onDelete,
-                icon: const Icon(Icons.delete_outline),
-                color: ThemeUtils.secondaryColor,
-              ),
-            ],
+                IconButton(
+                  tooltip: LocaleKeys.commons_dialog_btn_delete.tr(),
+                  onPressed: onDelete,
+                  icon: const Icon(Icons.delete_outline),
+                  color: ThemeUtils.secondaryColor,
+                ),
+              ],
+            ),
           ),
         ),
       ),
