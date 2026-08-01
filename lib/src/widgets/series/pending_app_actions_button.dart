@@ -192,7 +192,7 @@ class _PendingActionsListState extends State<_PendingActionsList> {
       child: AnimatedList(
         key: _listKey,
         controller: _scrollController,
-        padding: EdgeInsets.zero,
+        padding: const EdgeInsets.symmetric(vertical: ThemeUtils.verticalSpacing),
         shrinkWrap: true,
         initialItemCount: _actions.length,
         itemBuilder: (_, index, animation) => _buildActionItem(
