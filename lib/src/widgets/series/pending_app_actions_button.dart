@@ -141,6 +141,10 @@ class _PendingActionsList extends StatefulWidget {
 
 class _PendingActionsListState extends State<_PendingActionsList> {
   static const Duration _removeDuration = Duration(milliseconds: ThemeUtils.animationDuration);
+  static const EdgeInsets _actionPadding = EdgeInsets.symmetric(
+    horizontal: ThemeUtils.defaultPadding * 2,
+    vertical: ThemeUtils.verticalSpacing,
+  );
 
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
   late final ScrollController _scrollController;
@@ -191,10 +195,8 @@ class _PendingActionsListState extends State<_PendingActionsList> {
         padding: EdgeInsets.zero,
         shrinkWrap: true,
         initialItemCount: _actions.length,
-        itemBuilder: (context, index, animation) => _buildActionItem(
-          context,
+        itemBuilder: (_, index, animation) => _buildActionItem(
           _actions[index],
-          index,
           animation,
         ),
       ),
@@ -202,26 +204,19 @@ class _PendingActionsListState extends State<_PendingActionsList> {
   }
 
   Widget _buildActionItem(
-    BuildContext context,
     PendingAppAction action,
-    int index,
     Animation<double> animation,
   ) {
     return _PendingActionItemTransition(
       animation: animation,
-      child: _buildActionItemContent(action, index),
+      child: _buildActionItemContent(action),
     );
   }
 
-  Widget _buildActionItemContent(PendingAppAction action, int index) {
+  Widget _buildActionItemContent(PendingAppAction action) {
     return Padding(
       key: ValueKey(action.id),
-      padding: EdgeInsets.fromLTRB(
-        ThemeUtils.defaultPadding * 2,
-        ThemeUtils.verticalSpacing,
-        ThemeUtils.defaultPadding * 2,
-        index == _actions.length - 1 ? ThemeUtils.verticalSpacing : 0,
-      ),
+      padding: _actionPadding,
       child: _PendingActionCard(
         action: action,
         actionContext: widget.actionContext,
@@ -245,12 +240,7 @@ class _PendingActionsListState extends State<_PendingActionsList> {
       (context, animation) => _PendingActionItemTransition(
         animation: animation,
         child: Padding(
-          padding: EdgeInsets.fromLTRB(
-            ThemeUtils.defaultPadding * 2,
-            ThemeUtils.verticalSpacing,
-            ThemeUtils.defaultPadding * 2,
-            index == _actions.length ? ThemeUtils.verticalSpacing : 0,
-          ),
+          padding: _actionPadding,
           child: _PendingActionCard(
             action: action,
             actionContext: widget.actionContext,
@@ -285,7 +275,7 @@ class _PendingActionsListState extends State<_PendingActionsList> {
           index,
           (context, animation) => _PendingActionItemTransition(
             animation: animation,
-            child: _buildRemovedActionItemContent(action, index),
+            child: _buildRemovedActionItemContent(action),
           ),
           duration: _removeDuration,
         );
@@ -338,14 +328,9 @@ class _PendingActionsListState extends State<_PendingActionsList> {
     Navigator.of(context).pop();
   }
 
-  Widget _buildRemovedActionItemContent(PendingAppAction action, int index) {
+  Widget _buildRemovedActionItemContent(PendingAppAction action) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(
-        ThemeUtils.defaultPadding * 2,
-        ThemeUtils.verticalSpacing,
-        ThemeUtils.defaultPadding * 2,
-        index == _actions.length ? ThemeUtils.verticalSpacing : 0,
-      ),
+      padding: _actionPadding,
       child: _PendingActionCard(
         action: action,
         actionContext: widget.actionContext,
