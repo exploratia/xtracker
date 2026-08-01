@@ -22,7 +22,6 @@ class PendingAppActionsButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    PendingAppActions.enqueueDebugDummyActionsIfEnabled();
     return ValueListenableBuilder<int>(
       valueListenable: PendingAppActions.listenable(),
       builder: (context, _, _) {

@@ -57,10 +57,8 @@ class PendingAppActions {
   static final List<PendingAppAction> _items = [];
   static final List<PendingAppAction> _directActions = [];
   static final Set<int> _handledNotificationIdsThisRun = {};
-  static const bool _debugShowDummyActions = false;
   static int _nextActionId = 0;
   static bool _backupReminderDismissedThisRun = false;
-  static bool _debugDummyActionsQueued = false;
 
   static int get count => _items.length;
 
@@ -187,25 +185,6 @@ class PendingAppActions {
     SimpleLogging.d('Queued pending backup reminder. actionId=${action.id}, pending=${_items.length}');
   }
 
-  static void enqueueDebugDummyActionsIfEnabled() {
-    if (!_debugShowDummyActions || _debugDummyActionsQueued) {
-      return;
-    }
-
-    for (var idx = 1; idx <= 20; idx++) {
-      _items.add(
-        PendingAppAction(
-          id: _buildActionId(),
-          type: PendingAppActionType.debugDummy,
-          createdAt: DateTime.now().add(Duration(milliseconds: idx)),
-        ),
-      );
-    }
-    _debugDummyActionsQueued = true;
-    _notifyChanged();
-    SimpleLogging.d('Queued debug dummy pending app actions. pending=${_items.length}');
-  }
-
   /// Queues a passive test message for validating the pending-action UI.
   static void enqueueDebugDummyAction() {
     _items.add(
@@ -282,7 +261,6 @@ class PendingAppActions {
     _handledNotificationIdsThisRun.clear();
     _nextActionId = 0;
     _backupReminderDismissedThisRun = false;
-    _debugDummyActionsQueued = false;
     _versionNotifier.value = 0;
     _externalSeriesActionVersionNotifier.value = 0;
   }
