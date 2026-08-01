@@ -41,7 +41,7 @@ dependencies:
   # determine paths like tmp or app data
   path_provider: ^2.1.5
   # zip files
-  flutter_archive: ^6.0.4
+  archive: ^4.0.9
   logger: ^2.7.0
 
   # call native share dialog

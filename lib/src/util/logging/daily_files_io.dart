@@ -3,7 +3,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
-import 'package:flutter_archive/flutter_archive.dart';
+import 'package:archive/archive_io.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -315,7 +315,7 @@ class DailyFiles {
     final logsDir = _logsDir;
     if (logsDir == null) throw 'No log dir found!';
     final zipFile = File('${tmpDir.path}/logs_${DateFormat('yyyy-MM-dd_HH_mm_ss').format(DateTime.now())}.zip');
-    await ZipFile.createFromDirectory(sourceDir: logsDir, zipFile: zipFile, recurseSubDirs: true);
+    await ZipFileEncoder().zipDirectory(logsDir, filename: zipFile.path);
     return zipFile;
   }
 }
