@@ -233,8 +233,19 @@ class SettingsController with ChangeNotifier {
   Future<void> updateAutoBackupEnabled(bool value) async {
     if (value == _autoBackupEnabled) return;
     _autoBackupEnabled = value;
+
+    if (!value) {
+      _autoBackupIntervalDays = defaultAutoBackupIntervalDays;
+      _autoBackupNextDate = null;
+      _autoBackupDate = null;
+    }
+
     notifyListeners();
-    await _settingsService.updateAutoBackupEnabled(value);
+    if (value) {
+      await _settingsService.updateAutoBackupEnabled(true);
+    } else {
+      await _settingsService.resetAutoBackupSettings();
+    }
   }
 
   /// Changes the interval and schedules the next backup from now.

@@ -81,6 +81,16 @@ class SettingsService {
     await DeviceStorage.writeBool(DeviceStorageKeys.autoBackupEnabled, value);
   }
 
+  /// Removes all settings that belong to automatic Dropbox backups.
+  Future<void> resetAutoBackupSettings() async {
+    await Future.wait([
+      DeviceStorage.delete(DeviceStorageKeys.autoBackupEnabled),
+      DeviceStorage.delete(DeviceStorageKeys.autoBackupIntervalDays),
+      DeviceStorage.delete(DeviceStorageKeys.autoBackupNextDate),
+      DeviceStorage.delete(DeviceStorageKeys.autoBackupDate),
+    ]);
+  }
+
   /// Loads the configured automatic backup interval in days.
   Future<int> autoBackupIntervalDays() async {
     final storedValue = await DeviceStorage.read(DeviceStorageKeys.autoBackupIntervalDays);
