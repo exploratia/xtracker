@@ -906,7 +906,7 @@
         "importSeriesCSV": "Messreihe importieren (CSV)",
         "shareSeries": "Alle Messreihen teilen",
         "shareSingleSeries": "Messreihe teilen",
-        "startAutoBackup": "Dropbox-Backup jetzt starten"
+        "startAutoBackup": "Dropbox-Backup starten"
       },
       "label": {
         "exportSeries": "Alle Messreihen als eine JSON-Datei speichern.",

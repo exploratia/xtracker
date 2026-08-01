@@ -906,7 +906,7 @@
         "importSeriesCSV": "Import series values (CSV)",
         "shareSeries": "Share all series",
         "shareSingleSeries": "Share series",
-        "startAutoBackup": "Start Dropbox backup now"
+        "startAutoBackup": "Start Dropbox backup"
       },
       "label": {
         "exportSeries": "Export all series as one JSON file.",
