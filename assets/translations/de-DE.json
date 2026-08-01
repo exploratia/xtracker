@@ -371,6 +371,14 @@
       "source": {
         "backupReminder": "Datensicherung",
         "debugDummy": "Testeintrag"
+      },
+      "action": {
+        "createTestMessage": {
+          "tooltip": "Testnachricht erstellen"
+        }
+      },
+      "snackbar": {
+        "testActionExecuted": "Testaktion ausgeführt."
       }
     },
     "btn": {

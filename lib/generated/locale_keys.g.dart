@@ -160,6 +160,8 @@ abstract class LocaleKeys {
   static const seriesDashboard_pendingActions_label_debugDummy = 'seriesDashboard.pendingActions.label.debugDummy';
   static const seriesDashboard_pendingActions_source_backupReminder = 'seriesDashboard.pendingActions.source.backupReminder';
   static const seriesDashboard_pendingActions_source_debugDummy = 'seriesDashboard.pendingActions.source.debugDummy';
+  static const seriesDashboard_pendingActions_action_createTestMessage_tooltip = 'seriesDashboard.pendingActions.action.createTestMessage.tooltip';
+  static const seriesDashboard_pendingActions_snackbar_testActionExecuted = 'seriesDashboard.pendingActions.snackbar.testActionExecuted';
   static const seriesDashboard_btn_addSeries_label = 'seriesDashboard.btn.addSeries.label';
   static const seriesDashboard_btn_addSeries_tooltip = 'seriesDashboard.btn.addSeries.tooltip';
   static const seriesData_title = 'seriesData.title';

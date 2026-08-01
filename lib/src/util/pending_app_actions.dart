@@ -206,8 +206,8 @@ class PendingAppActions {
     SimpleLogging.d('Queued debug dummy pending app actions. pending=${_items.length}');
   }
 
-  @visibleForTesting
-  static void enqueueDebugDummyActionForTests() {
+  /// Queues a passive test message for validating the pending-action UI.
+  static void enqueueDebugDummyAction() {
     _items.add(
       PendingAppAction(
         id: _buildActionId(),
@@ -216,6 +216,7 @@ class PendingAppActions {
       ),
     );
     _notifyChanged();
+    SimpleLogging.d('Queued debug dummy pending app action. pending=${_items.length}');
   }
 
   static PendingAppAction? take(String actionId) {

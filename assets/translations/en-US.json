@@ -371,6 +371,14 @@
       "source": {
         "backupReminder": "Backup",
         "debugDummy": "Test item"
+      },
+      "action": {
+        "createTestMessage": {
+          "tooltip": "Create test message"
+        }
+      },
+      "snackbar": {
+        "testActionExecuted": "Test action executed."
       }
     },
     "btn": {
