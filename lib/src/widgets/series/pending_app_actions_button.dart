@@ -411,14 +411,16 @@ class _PendingActionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     var themeData = Theme.of(context);
 
-    return Card(
-      margin: EdgeInsets.zero,
-      child: Ink(
-        decoration: GlowingBorderContainer.createGlowingBoxDecoration(
-          themeData.colorScheme.primary,
-          backgroundColor: themeData.cardTheme.color,
-          borderRadius: ThemeUtils.cardBorderRadius.topLeft.x,
-        ),
+    return DecoratedBox(
+      decoration: GlowingBorderContainer.createGlowingBoxDecoration(
+        themeData.colorScheme.primary,
+        backgroundColor: themeData.cardTheme.color ?? themeData.colorScheme.surface,
+        borderRadius: ThemeUtils.cardBorderRadius.topLeft.x,
+      ),
+      child: Material(
+        type: MaterialType.transparency,
+        borderRadius: ThemeUtils.cardBorderRadius,
+        clipBehavior: Clip.antiAlias,
         child: InkWell(
           borderRadius: ThemeUtils.cardBorderRadius,
           onTap: isInteractive ? () => _consumeAndExecute(context) : null,
