@@ -112,16 +112,30 @@ class _RadialMenu extends StatelessWidget {
     const requiredSpace = radius + kMinInteractiveDimension / 2 + ThemeUtils.defaultPadding;
     final hasSpaceAbove = position.dy >= requiredSpace;
     final hasSpaceBelow = availableSize.height - position.dy >= requiredSpace;
-    if (hasSpaceAbove && !hasSpaceBelow) {
-      return _RadialMenuArc.upper;
-    }
-    if (!hasSpaceAbove && hasSpaceBelow) {
-      return _RadialMenuArc.lower;
-    }
-    if (!hasSpaceAbove && !hasSpaceBelow) {
-      return position.dy >= availableSize.height / 2 ? _RadialMenuArc.upper : _RadialMenuArc.lower;
-    }
-    return _RadialMenuArc.full;
+    final hasSpaceLeft = position.dx >= requiredSpace;
+    final hasSpaceRight = availableSize.width - position.dx >= requiredSpace;
+    final verticalArc = switch ((hasSpaceAbove, hasSpaceBelow)) {
+      (true, false) => _RadialMenuArc.upper,
+      (false, true) => _RadialMenuArc.lower,
+      (false, false) => position.dy >= availableSize.height / 2 ? _RadialMenuArc.upper : _RadialMenuArc.lower,
+      _ => null,
+    };
+    final horizontalArc = switch ((hasSpaceLeft, hasSpaceRight)) {
+      (true, false) => _RadialMenuArc.left,
+      (false, true) => _RadialMenuArc.right,
+      (false, false) => position.dx >= availableSize.width / 2 ? _RadialMenuArc.left : _RadialMenuArc.right,
+      _ => null,
+    };
+
+    return switch ((verticalArc, horizontalArc)) {
+      (_RadialMenuArc.upper, _RadialMenuArc.left) => _RadialMenuArc.upperLeft,
+      (_RadialMenuArc.upper, _RadialMenuArc.right) => _RadialMenuArc.upperRight,
+      (_RadialMenuArc.lower, _RadialMenuArc.left) => _RadialMenuArc.lowerLeft,
+      (_RadialMenuArc.lower, _RadialMenuArc.right) => _RadialMenuArc.lowerRight,
+      (final verticalArc?, null) => verticalArc,
+      (null, final horizontalArc?) => horizontalArc,
+      _ => _RadialMenuArc.full,
+    };
   }
 
   List<double> _angles(int itemCount, _RadialMenuArc arc) {
@@ -132,15 +146,30 @@ class _RadialMenu extends StatelessWidget {
       (2, _RadialMenuArc.lower) => [5 * math.pi / 6, math.pi / 6],
       (3, _RadialMenuArc.upper) => [-math.pi / 2, -math.pi / 6, -5 * math.pi / 6],
       (3, _RadialMenuArc.lower) => [math.pi / 2, math.pi / 6, 5 * math.pi / 6],
+      (1, _RadialMenuArc.left) => [math.pi],
+      (1, _RadialMenuArc.right) => [0],
+      (2, _RadialMenuArc.left) => [-2 * math.pi / 3, 2 * math.pi / 3],
+      (2, _RadialMenuArc.right) => [-math.pi / 3, math.pi / 3],
+      (3, _RadialMenuArc.left) => [math.pi, -2 * math.pi / 3, 2 * math.pi / 3],
+      (3, _RadialMenuArc.right) => [0, -math.pi / 3, math.pi / 3],
+      (_, _RadialMenuArc.upperLeft) => _quarterAngles(itemCount, math.pi, 3 * math.pi / 2),
+      (_, _RadialMenuArc.upperRight) => _quarterAngles(itemCount, 3 * math.pi / 2, 2 * math.pi),
+      (_, _RadialMenuArc.lowerLeft) => _quarterAngles(itemCount, math.pi / 2, math.pi),
+      (_, _RadialMenuArc.lowerRight) => _quarterAngles(itemCount, 0, math.pi / 2),
       (1, _RadialMenuArc.full) => [-math.pi / 2],
       (2, _RadialMenuArc.full) => [-math.pi / 2, math.pi / 2],
       (3, _RadialMenuArc.full) => [-math.pi / 2, math.pi / 6, 5 * math.pi / 6],
       _ => List.generate(itemCount, (index) => -math.pi / 2 + index * 2 * math.pi / itemCount),
     };
   }
+
+  List<double> _quarterAngles(int itemCount, double startAngle, double endAngle) {
+    final angleStep = (endAngle - startAngle) / (itemCount + 1);
+    return List.generate(itemCount, (index) => startAngle + angleStep * (index + 1));
+  }
 }
 
-enum _RadialMenuArc { full, upper, lower }
+enum _RadialMenuArc { full, upper, lower, left, right, upperLeft, upperRight, lowerLeft, lowerRight }
 
 class _RadialMenuCenterIndicator extends StatelessWidget {
   const _RadialMenuCenterIndicator();
