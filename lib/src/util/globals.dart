@@ -5,6 +5,7 @@ class Globals {
 
   /// Shows the app-bar button for creating pending-action test messages.
   static const debugShowPendingActionTestButton = false;
+  static const debugShowSeriesValueActionTestButtons = false;
 
   static const backgroundColorSaturday = Color.fromRGBO(128, 128, 128, 0.1);
   static const backgroundColorSunday = Color.fromRGBO(128, 128, 128, 0.2);

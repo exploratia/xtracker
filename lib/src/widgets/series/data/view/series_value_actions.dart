@@ -11,6 +11,7 @@ import '../../../../model/series/series_type.dart';
 import '../../../../providers/series_current_value_provider.dart';
 import '../../../../providers/series_data_provider.dart';
 import '../../../../util/dialogs.dart';
+import '../../../../util/globals.dart';
 import '../../../../util/logging/flutter_simple_logging.dart';
 import '../../../../util/theme_utils.dart';
 import '../../../controls/popupmenu/icon_popup_menu.dart';
@@ -86,12 +87,20 @@ class _SeriesValueActionsState extends State<SeriesValueActions> {
           _delete,
           LocaleKeys.seriesValue_action_deleteValue_tooltip.tr(),
         ),
+        if (Globals.debugShowSeriesValueActionTestButtons) ...[
+          IconPopupMenuEntry(const Icon(Icons.star_outline), _dummyAction, LocaleKeys.commons_btn_info_tooltip.tr()),
+          IconPopupMenuEntry(const Icon(Icons.favorite_outline), _dummyAction, LocaleKeys.commons_btn_info_tooltip.tr()),
+          IconPopupMenuEntry(const Icon(Icons.share_outlined), _dummyAction, LocaleKeys.commons_btn_info_tooltip.tr()),
+          IconPopupMenuEntry(const Icon(Icons.info_outline), _dummyAction, LocaleKeys.commons_btn_info_tooltip.tr()),
+        ],
       ],
     );
     if (mounted) {
       setState(() => _menuVisible = false);
     }
   }
+
+  void _dummyAction() {}
 
   void _edit() {
     SeriesData.showSeriesDataInputDlg(context, widget.seriesDef, value: widget.value);
