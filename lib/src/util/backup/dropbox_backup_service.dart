@@ -1,9 +1,14 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 
 import '../device_storage/device_storage.dart';
 import '../device_storage/device_storage_keys.dart';
 import '../logging/flutter_simple_logging.dart';
 import 'dropbox_client_adapter.dart';
+import 'internet_availability.dart';
+
+typedef InternetAvailabilityChecker = Future<bool> Function(Duration timeout);
 
 /// Upload target used by [AutoBackupManager].
 abstract interface class BackupUploader {
@@ -15,8 +20,12 @@ class DropboxBackupService implements BackupUploader {
   DropboxBackupService({
     DropboxClientAdapter? client,
     String appKey = '1zm0mwzq0j3bgz4',
+    InternetAvailabilityChecker? internetAvailabilityChecker,
+    this.connectionTimeout = const Duration(seconds: 5),
+    this.operationTimeout = const Duration(seconds: 30),
   }) : _client = client ?? createDropboxClientAdapter(),
-       _appKey = appKey;
+       _appKey = appKey,
+       _internetAvailabilityChecker = internetAvailabilityChecker ?? isDropboxInternetAvailable;
 
   static final instance = DropboxBackupService();
 
@@ -24,6 +33,9 @@ class DropboxBackupService implements BackupUploader {
 
   final DropboxClientAdapter _client;
   final String _appKey;
+  final InternetAvailabilityChecker _internetAvailabilityChecker;
+  final Duration connectionTimeout;
+  final Duration operationTimeout;
   bool _initialized = false;
 
   /// Whether the current platform has native Dropbox support.
@@ -31,6 +43,16 @@ class DropboxBackupService implements BackupUploader {
 
   /// Whether an app key was supplied at compile time.
   bool get isConfigured => _appKey.isNotEmpty;
+
+  /// Whether the Dropbox API endpoint is reachable within [connectionTimeout].
+  Future<bool> hasInternetConnection() async {
+    try {
+      return await _internetAvailabilityChecker(connectionTimeout);
+    } catch (error, stackTrace) {
+      SimpleLogging.w('Dropbox connectivity check failed.', error: error, stackTrace: stackTrace);
+      return false;
+    }
+  }
 
   /// Initializes the native SDK once. PKCE deliberately uses no app secret.
   Future<void> ensureInitialized() async {
@@ -50,12 +72,17 @@ class DropboxBackupService implements BackupUploader {
     if (storedCredentials == null || storedCredentials.isEmpty) return false;
 
     try {
-      await ensureInitialized();
-      await _client.authorizeWithCredentials(storedCredentials);
-      final refreshedCredentials = await _client.getCredentials();
+      final refreshedCredentials = await (() async {
+        await ensureInitialized();
+        await _client.authorizeWithCredentials(storedCredentials);
+        return _client.getCredentials();
+      })().timeout(operationTimeout);
       if (refreshedCredentials == null || refreshedCredentials.isEmpty) return false;
       await DeviceStorage.write(DeviceStorageKeys.dropboxCredentials, refreshedCredentials);
       return true;
+    } on TimeoutException catch (error, stackTrace) {
+      SimpleLogging.w('Restoring Dropbox authorization timed out.', error: error, stackTrace: stackTrace);
+      rethrow;
     } catch (error, stackTrace) {
       SimpleLogging.w('Restoring Dropbox authorization failed.', error: error, stackTrace: stackTrace);
       return false;
@@ -90,16 +117,18 @@ class DropboxBackupService implements BackupUploader {
   /// Uploads a backup and verifies that Dropbox lists the target afterwards.
   @override
   Future<void> uploadBackup(String localFilePath, String dropboxPath) async {
-    await ensureInitialized();
-    SimpleLogging.i('Uploading automatic backup to $dropboxPath.');
-    await _client.upload(localFilePath, dropboxPath);
+    await (() async {
+      await ensureInitialized();
+      SimpleLogging.i('Uploading automatic backup to $dropboxPath.');
+      await _client.upload(localFilePath, dropboxPath);
 
-    final fileNames = await listBackupFileNames();
-    final expectedName = dropboxPath.split('/').last;
-    if (!fileNames.contains(expectedName)) {
-      throw StateError('Dropbox did not confirm uploaded backup $expectedName.');
-    }
-    SimpleLogging.i('Automatic backup upload verified.');
+      final fileNames = await listBackupFileNames();
+      final expectedName = dropboxPath.split('/').last;
+      if (!fileNames.contains(expectedName)) {
+        throw StateError('Dropbox did not confirm uploaded backup $expectedName.');
+      }
+      SimpleLogging.i('Automatic backup upload verified.');
+    })().timeout(operationTimeout);
   }
 
   /// Lists automatic backup files in the Dropbox app folder.

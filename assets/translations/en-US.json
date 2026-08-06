@@ -1007,6 +1007,8 @@
     "snackbar": {
       "success": "Dropbox backup saved successfully",
       "failure": "Dropbox backup failed",
+      "noInternet": "No internet connection. Dropbox backup was cancelled",
+      "timeout": "Dropbox backup cancelled because it timed out",
       "authFailure": "Dropbox sign-in was cancelled or failed"
     }
   },

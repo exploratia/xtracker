@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
@@ -16,27 +18,35 @@ class AutoBackupRunner {
     BuildContext context,
     SettingsController settingsController, {
     required Future<Map<String, dynamic>> Function() buildBackupJson,
-    bool showAuthorizationFailure = true,
+    DropboxBackupService? backupService,
   }) async {
-    if (!await DropboxBackupService.instance.isAuthorized()) {
-      SimpleLogging.w('Dropbox backup skipped because Dropbox is not authorized.');
-      if (showAuthorizationFailure && context.mounted) {
-        Dialogs.showSnackBarWarning(LocaleKeys.autoBackup_snackbar_failure.tr(), context);
-      }
-      return false;
-    }
-    if (!context.mounted) return false;
-
     final now = DateTime.now();
-    final manager = AutoBackupManager(uploader: DropboxBackupService.instance);
-    SimpleLogging.i('Dropbox backup started.');
-    final overlay = AnimatedBackupOverlay.show(context);
+    final service = backupService ?? DropboxBackupService.instance;
+    final manager = AutoBackupManager(uploader: service);
+    OverlayEntry? overlay;
     var succeeded = false;
+    var feedbackKey = LocaleKeys.autoBackup_snackbar_failure;
     try {
+      if (!await service.hasInternetConnection()) {
+        feedbackKey = LocaleKeys.autoBackup_snackbar_noInternet;
+        SimpleLogging.w('Dropbox backup skipped because no internet connection is available.');
+        return false;
+      }
+      if (!await service.isAuthorized()) {
+        SimpleLogging.w('Dropbox backup skipped because Dropbox is not authorized.');
+        return false;
+      }
+      if (!context.mounted) return false;
+
+      SimpleLogging.i('Dropbox backup started.');
+      overlay = AnimatedBackupOverlay.show(context);
       final backupJson = await buildBackupJson();
       if (!context.mounted) return false;
       final result = await manager.performBackup(backupJson: backupJson, now: now);
-      if (!result.success) return false;
+      if (!result.success) {
+        if (result.error is TimeoutException) feedbackKey = LocaleKeys.autoBackup_snackbar_timeout;
+        return false;
+      }
 
       await settingsController.updateAutoBackupDate(now);
       await settingsController.updateAutoBackupNextDate(
@@ -45,15 +55,23 @@ class AutoBackupRunner {
       succeeded = true;
       return true;
     } catch (error, stackTrace) {
+      if (error is TimeoutException) feedbackKey = LocaleKeys.autoBackup_snackbar_timeout;
       SimpleLogging.w('Dropbox backup failed.', error: error, stackTrace: stackTrace);
       return false;
     } finally {
-      overlay.remove();
+      overlay?.remove();
+      if (!succeeded) {
+        try {
+          await settingsController.scheduleAutoBackupRetry(now);
+        } catch (error, stackTrace) {
+          SimpleLogging.w('Could not schedule Dropbox backup retry.', error: error, stackTrace: stackTrace);
+        }
+      }
       if (context.mounted) {
         if (succeeded) {
           Dialogs.showSnackBar(LocaleKeys.autoBackup_snackbar_success.tr(), context);
         } else {
-          Dialogs.showSnackBarWarning(LocaleKeys.autoBackup_snackbar_failure.tr(), context);
+          Dialogs.showSnackBarWarning(feedbackKey.tr(), context);
         }
       }
     }

@@ -442,6 +442,8 @@ abstract class LocaleKeys {
   static const autoBackup_overlay_label = 'autoBackup.overlay.label';
   static const autoBackup_snackbar_success = 'autoBackup.snackbar.success';
   static const autoBackup_snackbar_failure = 'autoBackup.snackbar.failure';
+  static const autoBackup_snackbar_noInternet = 'autoBackup.snackbar.noInternet';
+  static const autoBackup_snackbar_timeout = 'autoBackup.snackbar.timeout';
   static const autoBackup_snackbar_authFailure = 'autoBackup.snackbar.authFailure';
   static const settings_title = 'settings.title';
   static const settings_deviceStorage_title = 'settings.deviceStorage.title';

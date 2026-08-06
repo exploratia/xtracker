@@ -1007,6 +1007,8 @@
     "snackbar": {
       "success": "Dropbox-Backup erfolgreich gespeichert",
       "failure": "Dropbox-Backup fehlgeschlagen",
+      "noInternet": "Keine Internetverbindung. Dropbox-Backup wurde abgebrochen",
+      "timeout": "Dropbox-Backup wegen Zeitüberschreitung abgebrochen",
       "authFailure": "Dropbox-Anmeldung wurde abgebrochen oder ist fehlgeschlagen"
     }
   },

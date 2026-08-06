@@ -55,7 +55,6 @@ class _AutoBackupCheckState extends State<AutoBackupCheck> {
       context,
       widget.settingsController,
       buildBackupJson: () => SeriesImportExport.buildAllSeriesBackupJson(context),
-      showAuthorizationFailure: false,
     );
   }
 

@@ -42,4 +42,18 @@ void main() {
     final storedValues = await DeviceStorage.readAll();
     expect(storedValues.keys.where((key) => key.startsWith('autoBackup')), isEmpty);
   });
+
+  test('failed backup retry is scheduled for tomorrow regardless of the interval', () async {
+    FlutterSecureStorage.setMockInitialValues({
+      DeviceStorageKeys.autoBackupEnabled: 'enabled',
+      DeviceStorageKeys.autoBackupIntervalDays: '90',
+    });
+    final controller = SettingsController(SettingsService());
+    await controller.loadSettings();
+
+    await controller.scheduleAutoBackupRetry(DateTime(2026, 8, 6, 23, 59));
+
+    expect(controller.autoBackupNextDate, DateTime(2026, 8, 7));
+    expect(await DeviceStorage.read(DeviceStorageKeys.autoBackupNextDate), '2026-8-7');
+  });
 }

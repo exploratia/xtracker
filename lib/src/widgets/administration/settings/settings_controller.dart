@@ -264,6 +264,11 @@ class SettingsController with ChangeNotifier {
     await _settingsService.updateAutoBackupNextDate(_autoBackupNextDate!);
   }
 
+  /// Schedules a failed automatic backup for another attempt tomorrow.
+  Future<void> scheduleAutoBackupRetry(DateTime now) async {
+    await updateAutoBackupNextDate(DateTime(now.year, now.month, now.day + 1));
+  }
+
   /// Persists the date of the latest successful automatic backup.
   Future<void> updateAutoBackupDate(DateTime value) async {
     _autoBackupDate = value;
