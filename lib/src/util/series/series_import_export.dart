@@ -31,7 +31,7 @@ import '../theme_utils.dart';
 
 class SeriesImportExport {
   static Future<String> _readPickedFileAsString(PlatformFile file) async {
-    final bytes = await file.xFile.readAsBytes();
+    final bytes = await file.readAsBytes();
     return utf8.decode(bytes);
   }
 
@@ -237,13 +237,10 @@ class SeriesImportExport {
 
   /// import series with data
   static Future<void> _importJsonFile(BuildContext context, SeriesProviders seriesProviders) async {
-    FilePickerResult? result;
+    List<PlatformFile> files = const [];
     try {
       // https://pub.dev/packages/file_picker
-      result = await FilePicker.pickFiles(
-        // file_picker 12 beta has no replacement for multiple file selection.
-        // ignore: deprecated_member_use
-        allowMultiple: true,
+      files = await FilePicker.pickFiles(
         type: FileType.any,
         // allowedExtensions: ['json'], // not possible // https://github.com/miguelpruivo/flutter_file_picker/issues/1717
       );
@@ -251,7 +248,7 @@ class SeriesImportExport {
       SimpleLogging.w(ex.toString(), stackTrace: st);
       if (context.mounted) Dialogs.showSnackBar("Failure while choosing import file.", context);
     }
-    if (result == null) return; // User canceled the picker
+    if (files.isEmpty) return; // User canceled the picker
 
     if (!context.mounted) return;
     // already hide dialog -> the series could be seen while importing
@@ -266,7 +263,6 @@ class SeriesImportExport {
 
     final overlay = ProgressOverlay.createAndShowProgressOverlay(context);
     int successfulImports = 0;
-    final files = result.files;
     int numSelectedFiles = files.length;
 
     List<String> failures = [];
@@ -366,18 +362,18 @@ class SeriesImportExport {
 
   // import series data from csv
   static Future<void> _importCSVFile(BuildContext context, SeriesDef seriesDef, SeriesProviders seriesProviders) async {
-    FilePickerResult? result;
+    PlatformFile? file;
     try {
       // https://pub.dev/packages/file_picker
-      result = await FilePicker.pickFiles(
+      file = await FilePicker.pickFile(
         type: FileType.any,
-        // allowedExtensions: ['json'], // not possible // https://github.com/miguelpruivo/flutter_file_picker/issues/1717
+        // allowedExtensions: ['csv'], // not possible // https://github.com/miguelpruivo/flutter_file_picker/issues/1717
       );
     } catch (ex, st) {
       SimpleLogging.w(ex.toString(), stackTrace: st);
       if (context.mounted) Dialogs.showSnackBar("Failure while choosing import file.", context);
     }
-    if (result == null) return; // User canceled the picker
+    if (file == null) return; // User canceled the picker
 
     if (!context.mounted) return;
     // already hide dialog -> the series could be seen while importing
@@ -392,73 +388,65 @@ class SeriesImportExport {
 
     final overlay = ProgressOverlay.createAndShowProgressOverlay(context);
     int successfulImports = 0;
-    final files = result.files;
-    int numSelectedFiles = files.length;
 
     List<String> failures = [];
 
-    if (files.length != 1) {
-      throw Ex("Invalid amount of selected files");
-    }
+    try {
+      if (!file.name.endsWith(".csv")) {
+        throw Ex(
+          "Import failed - unexpected file: ${file.name}",
+          localizedMessage: LocaleKeys.seriesManagement_importExport_alert_unexpectedFile.tr(args: [file.name]),
+        );
+      }
 
-    for (var file in files) {
-      try {
-        if (!file.name.endsWith(".csv")) {
-          throw Ex(
-            "Import failed - unexpected file: ${file.name}",
-            localizedMessage: LocaleKeys.seriesManagement_importExport_alert_unexpectedFile.tr(args: [file.name]),
-          );
-        }
+      SimpleLogging.i("importing '${file.name}' for series '${seriesDef.name}' ...");
 
-        SimpleLogging.i("importing '${file.name}' for series '${seriesDef.name}' ...");
+      var fileContent = await _readPickedFileAsString(file);
 
-        var fileContent = await _readPickedFileAsString(file);
-
-        final csv = const CsvDecoder(dynamicTyping: true).convert(fileContent);
-        // remove empty lines
-        csv.removeWhere((line) => line.isEmpty || line.length == 1 && ("" == line[0] || null == line[0]));
-        if (csv.isEmpty) {
-          throw Ex(
-            "Series data import failed - unexpected (empty) data in file: ${file.name}",
-            localizedMessage: LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]),
-          );
-        }
-        if (csv.length < 2) {
-          throw Ex(
-            "Series data import failed - unexpected data (invalid amount of lines) in file: ${file.name}",
-            localizedMessage: LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]),
-          );
-        }
-        // check if first line matches series header
-        var headerList = seriesDef.toCSVHeaderList();
-        var csvHeaderList = csv.removeAt(0);
-        bool headerEquals = csvHeaderList.length == headerList.length;
-        if (headerEquals) {
-          for (var i = 0; i < headerList.length; ++i) {
-            var hVal = headerList[i];
-            var csvVal = csvHeaderList[i];
-            if (hVal != csvVal.toString()) {
-              headerEquals = false;
-              break;
-            }
+      final csv = const CsvDecoder(dynamicTyping: true).convert(fileContent);
+      // remove empty lines
+      csv.removeWhere((line) => line.isEmpty || line.length == 1 && ("" == line[0] || null == line[0]));
+      if (csv.isEmpty) {
+        throw Ex(
+          "Series data import failed - unexpected (empty) data in file: ${file.name}",
+          localizedMessage: LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]),
+        );
+      }
+      if (csv.length < 2) {
+        throw Ex(
+          "Series data import failed - unexpected data (invalid amount of lines) in file: ${file.name}",
+          localizedMessage: LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]),
+        );
+      }
+      // check if first line matches series header
+      var headerList = seriesDef.toCSVHeaderList();
+      var csvHeaderList = csv.removeAt(0);
+      bool headerEquals = csvHeaderList.length == headerList.length;
+      if (headerEquals) {
+        for (var i = 0; i < headerList.length; ++i) {
+          var hVal = headerList[i];
+          var csvVal = csvHeaderList[i];
+          if (hVal != csvVal.toString()) {
+            headerEquals = false;
+            break;
           }
         }
-        if (!headerEquals) {
-          throw Ex(
-            "Series data import failed - unexpected data (header mismatch) in file: ${file.name}",
-            localizedMessage: LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]),
-          );
-        }
+      }
+      if (!headerEquals) {
+        throw Ex(
+          "Series data import failed - unexpected data (header mismatch) in file: ${file.name}",
+          localizedMessage: LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]),
+        );
+      }
 
-        await _importSeriesCSV(csv, file.name, seriesDef, seriesProviders);
-        successfulImports++;
-      } catch (ex, st) {
-        SimpleLogging.w(ex.toString(), stackTrace: st);
-        if (ex is Ex) {
-          failures.add(ex.localizedToString());
-        } else {
-          failures.add(LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]));
-        }
+      await _importSeriesCSV(csv, file.name, seriesDef, seriesProviders);
+      successfulImports++;
+    } catch (ex, st) {
+      SimpleLogging.w(ex.toString(), stackTrace: st);
+      if (ex is Ex) {
+        failures.add(ex.localizedToString());
+      } else {
+        failures.add(LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]));
       }
     }
 
@@ -476,7 +464,7 @@ class SeriesImportExport {
       SimpleLogging.i('Successfully imported $successfulImports series.');
       if (context.mounted) {
         Dialogs.showSnackBar(
-          LocaleKeys.seriesManagement_importExport_snackbar_importSuccessfulXofY.tr(args: [successfulImports.toString(), numSelectedFiles.toString()]),
+          LocaleKeys.seriesManagement_importExport_snackbar_importSuccessfulXofY.tr(args: [successfulImports.toString(), '1']),
           context,
         );
       }

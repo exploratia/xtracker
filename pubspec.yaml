@@ -70,7 +70,7 @@ dependencies:
   sembast_web: ^2.4.4+1
 
   # file picker
-  file_picker: ^12.0.0-beta.3
+  file_picker: ^12.0.0
 
   # url launcher
   url_launcher: ^6.3.2
