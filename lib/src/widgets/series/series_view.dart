@@ -7,6 +7,7 @@ import '../../providers/series_current_value_provider.dart';
 import '../../providers/series_provider.dart';
 import '../../util/dialogs.dart';
 import '../../util/logging/flutter_simple_logging.dart';
+import '../../util/motion_utils.dart';
 import '../../util/pending_app_actions.dart';
 import '../../util/theme_utils.dart';
 import '../administration/settings/settings_controller.dart';
@@ -22,10 +23,6 @@ import 'pending_app_action_executor.dart';
 import 'series_def_renderer.dart';
 import 'series_export_check.dart';
 import 'series_mutation_transition.dart';
-
-const _seriesEntranceDurationMS = 220;
-const _seriesEntranceStaggerMS = 40;
-const _seriesEntranceMaxDelayMS = 160;
 
 class SeriesView extends StatefulWidget {
   final SettingsController settingsController;
@@ -119,13 +116,13 @@ class _SeriesListState extends State<_SeriesList> {
       List<Widget> children = [];
       var idx = 0;
       for (var s in series) {
-        final staggerDelayMS = idx * _seriesEntranceStaggerMS;
+        final staggerDelay = MotionUtils.stagger * idx;
         final isInserted = mutation?.seriesUuid == s.uuid && mutation?.type == SeriesMutationType.inserted;
         children.add(
           AnimateIn(
             key: ValueKey(s.uuid),
-            durationMS: _seriesEntranceDurationMS,
-            delayMS: staggerDelayMS > _seriesEntranceMaxDelayMS ? _seriesEntranceMaxDelayMS : staggerDelayMS,
+            duration: MotionUtils.standard,
+            delay: staggerDelay > MotionUtils.maxStagger ? MotionUtils.maxStagger : staggerDelay,
             fade: !isInserted,
             slideOffset: isInserted ? null : const Offset(0, 0.2),
             child: SeriesMutationTransition(

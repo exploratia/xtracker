@@ -16,6 +16,7 @@ import '../model/series/series_type.dart';
 import '../store/stores.dart';
 import '../util/ex.dart';
 import '../util/logging/flutter_simple_logging.dart';
+import '../util/motion_utils.dart';
 import 'series_current_value_provider.dart';
 
 /// The kind of change most recently applied to a series value.
@@ -32,10 +33,10 @@ class SeriesDataMutation {
   });
 
   /// Duration used to visually remove a value before deleting it from the data set.
-  static const deletionDuration = Duration(milliseconds: 200);
+  static const deletionDuration = MotionUtils.viewTransition;
 
   /// Duration of the highlight shown after inserting or updating a value.
-  static const highlightDuration = Duration(milliseconds: 600);
+  static const highlightDuration = MotionUtils.highlight;
 
   /// UUID of the series containing the changed value.
   final String seriesUuid;
@@ -309,11 +310,28 @@ class SeriesDataProvider with ChangeNotifier {
     await _handleValue(seriesDef, value, _Action.update, seriesCurrentValueProvider);
   }
 
-  Future<void> deleteValue(SeriesDef seriesDef, SeriesDataValue value, SeriesCurrentValueProvider seriesCurrentValueProvider) async {
-    await _handleValue(seriesDef, value, _Action.delete, seriesCurrentValueProvider);
+  Future<void> deleteValue(
+    SeriesDef seriesDef,
+    SeriesDataValue value,
+    SeriesCurrentValueProvider seriesCurrentValueProvider, {
+    Duration deletionDelay = Duration.zero,
+  }) async {
+    await _handleValue(
+      seriesDef,
+      value,
+      _Action.delete,
+      seriesCurrentValueProvider,
+      deletionDelay: deletionDelay,
+    );
   }
 
-  Future<void> _handleValue(SeriesDef seriesDef, SeriesDataValue value, _Action action, SeriesCurrentValueProvider seriesCurrentValueProvider) async {
+  Future<void> _handleValue(
+    SeriesDef seriesDef,
+    SeriesDataValue value,
+    _Action action,
+    SeriesCurrentValueProvider seriesCurrentValueProvider, {
+    Duration deletionDelay = Duration.zero,
+  }) async {
     await fetchDataIfNotYetLoaded(seriesDef);
     var store = Stores.getOrCreateSeriesDataStore(seriesDef);
 
@@ -342,7 +360,7 @@ class SeriesDataProvider with ChangeNotifier {
 
     if (action == _Action.delete) {
       _publishMutation(seriesDef, value, SeriesDataMutationType.deleted);
-      await Future<void>.delayed(SeriesDataMutation.deletionDuration);
+      await Future<void>.delayed(deletionDelay);
     }
 
     if (action == _Action.insert) {

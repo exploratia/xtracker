@@ -6,6 +6,7 @@ import '../model/series/series_def.dart';
 import '../store/stores.dart';
 import '../util/app_icon_quick_actions.dart';
 import '../util/app_series_notifications.dart';
+import '../util/motion_utils.dart';
 import 'series_providers.dart';
 
 /// The kind of structural change most recently applied to the series list.
@@ -21,10 +22,10 @@ class SeriesMutation {
   });
 
   /// Duration of insert and delete transitions.
-  static const transitionDuration = Duration(milliseconds: 220);
+  static const transitionDuration = MotionUtils.standard;
 
   /// Delay before a deleted series is removed from the in-memory list.
-  static const removalDelay = Duration(milliseconds: 250);
+  static const removalDelay = MotionUtils.emphasized;
 
   /// UUID of the affected series.
   final String seriesUuid;
@@ -132,13 +133,21 @@ class SeriesProvider with ChangeNotifier {
     // notifyListeners(); notify is in fetch
   }
 
-  Future<void> deleteById(String seriesDefUuid, SeriesProviders seriesProviders) async {
+  Future<void> deleteById(
+    String seriesDefUuid,
+    SeriesProviders seriesProviders, {
+    Duration removalDelay = Duration.zero,
+  }) async {
     var idx = _series.indexWhere((s) => s.uuid == seriesDefUuid);
     if (idx < 0) return;
-    await delete(_series[idx], seriesProviders);
+    await delete(_series[idx], seriesProviders, removalDelay: removalDelay);
   }
 
-  Future<void> delete(SeriesDef seriesDef, SeriesProviders seriesProviders) async {
+  Future<void> delete(
+    SeriesDef seriesDef,
+    SeriesProviders seriesProviders, {
+    Duration removalDelay = Duration.zero,
+  }) async {
     // delete series data (current value is deleted inside)
     await seriesProviders.seriesDataProvider.delete(seriesDef, seriesProviders.seriesCurrentValueProvider);
 
@@ -148,7 +157,7 @@ class SeriesProvider with ChangeNotifier {
     final mutation = _setMutation(seriesDef.uuid, SeriesMutationType.deleted);
     notifyListeners();
     _scheduleMutationClear(mutation);
-    await Future<void>.delayed(SeriesMutation.removalDelay);
+    await Future<void>.delayed(removalDelay);
 
     await fetchData(refreshDueNotifications: false);
     // notifyListeners(); notify is in fetch
@@ -194,7 +203,7 @@ class SeriesProvider with ChangeNotifier {
   }
 
   void _scheduleMutationClear(SeriesMutation mutation) {
-    _mutationTimer = Timer(const Duration(milliseconds: 400), () {
+    _mutationTimer = Timer(MotionUtils.feedbackRetention, () {
       if (_latestMutation?.version != mutation.version) {
         return;
       }

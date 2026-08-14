@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../../generated/locale_keys.g.dart';
 import '../../../model/series/series_def.dart';
 import '../../../providers/series_provider.dart';
+import '../../../util/motion_utils.dart';
 import '../../../util/series/series_import_export.dart';
 import '../../../util/theme_utils.dart';
 import '../../administration/settings/settings_controller.dart';
@@ -15,10 +16,6 @@ import '../../controls/layout/wallpaper.dart';
 import '../../controls/responsive/device_dependent_constrained_box.dart';
 import '../series_def_renderer.dart';
 import '../series_mutation_transition.dart';
-
-const _seriesEntranceDurationMS = 220;
-const _seriesEntranceStaggerMS = 40;
-const _seriesEntranceMaxDelayMS = 160;
 
 class SeriesManagementView extends StatelessWidget {
   final SettingsController settingsController;
@@ -91,13 +88,13 @@ class _SeriesList extends StatelessWidget {
     List<Widget> children = [];
     var idx = 0;
     for (var s in series) {
-      final staggerDelayMS = idx * _seriesEntranceStaggerMS;
+      final staggerDelay = MotionUtils.stagger * idx;
       final isInserted = mutation?.seriesUuid == s.uuid && mutation?.type == SeriesMutationType.inserted;
       children.add(
         AnimateIn(
           key: Key(s.uuid),
-          durationMS: _seriesEntranceDurationMS,
-          delayMS: staggerDelayMS > _seriesEntranceMaxDelayMS ? _seriesEntranceMaxDelayMS : staggerDelayMS,
+          duration: MotionUtils.standard,
+          delay: staggerDelay > MotionUtils.maxStagger ? MotionUtils.maxStagger : staggerDelay,
           fade: !isInserted,
           slideOffset: isInserted ? null : const Offset(0, -0.2),
           child: SeriesMutationTransition(

@@ -22,4 +22,20 @@ void main() {
     await tester.pump(const Duration(milliseconds: 125));
     expect(fade().opacity.value, 1);
   });
+
+  testWidgets('shows content immediately when animations are disabled', (tester) async {
+    await tester.pumpWidget(
+      const MediaQuery(
+        data: MediaQueryData(disableAnimations: true),
+        child: MaterialApp(
+          home: FadeIn(child: Text('empty state')),
+        ),
+      ),
+    );
+
+    final fade = tester.widget<FadeTransition>(
+      find.descendant(of: find.byType(FadeIn), matching: find.byType(FadeTransition)),
+    );
+    expect(fade.opacity.value, 1);
+  });
 }

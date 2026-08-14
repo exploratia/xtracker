@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../providers/series_provider.dart';
+import '../../util/motion_utils.dart';
 
 /// Animates a single series card when it is inserted or deleted.
 class SeriesMutationTransition extends StatefulWidget {
@@ -38,8 +39,9 @@ class _SeriesMutationTransitionState extends State<SeriesMutationTransition> wit
   int? _handledMutationVersion;
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _controller.duration = MotionUtils.resolve(context, SeriesMutation.transitionDuration);
     _handleMutation(widget.mutation);
   }
 
@@ -55,6 +57,10 @@ class _SeriesMutationTransitionState extends State<SeriesMutationTransition> wit
     }
 
     _handledMutationVersion = mutation.version;
+    if (MotionUtils.animationsDisabled(context)) {
+      _controller.value = mutation.type == SeriesMutationType.inserted ? 1 : 0;
+      return;
+    }
     if (mutation.type == SeriesMutationType.inserted) {
       _controller.forward(from: 0);
     } else {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../providers/series_data_provider.dart';
+import '../../../../util/motion_utils.dart';
 
 /// Provides short, non-blocking feedback for a recently changed series value.
 class SeriesDataMutationTransition extends StatefulWidget {
@@ -40,6 +41,8 @@ class _SeriesDataMutationTransitionState extends State<SeriesDataMutationTransit
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+    _highlightController.duration = MotionUtils.resolve(context, SeriesDataMutation.highlightDuration);
+    _visibilityController.duration = MotionUtils.resolve(context, SeriesDataMutation.deletionDuration);
     final mutation = context.watch<SeriesDataProvider>().latestMutation;
     if (mutation == null || mutation.version == _handledMutationVersion || !widget.valueUuids.contains(mutation.valueUuid)) {
       return;
@@ -48,10 +51,16 @@ class _SeriesDataMutationTransitionState extends State<SeriesDataMutationTransit
     _handledMutationVersion = mutation.version;
     if (mutation.type == SeriesDataMutationType.deleted) {
       _highlightController.reset();
-      _visibilityController.reverse(from: 1);
+      if (MotionUtils.animationsDisabled(context)) {
+        _visibilityController.value = 0;
+      } else {
+        _visibilityController.reverse(from: 1);
+      }
     } else {
       _visibilityController.value = 1;
-      _highlightController.forward(from: 0);
+      if (!MotionUtils.animationsDisabled(context)) {
+        _highlightController.forward(from: 0);
+      }
     }
   }
 

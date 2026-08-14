@@ -56,4 +56,35 @@ void main() {
     expect(fade().opacity.value, 0);
     expect(hiddenCount, 1);
   });
+
+  testWidgets('hides immediately when animations are disabled', (tester) async {
+    final visible = ValueNotifier(true);
+    var hiddenCount = 0;
+    addTearDown(visible.dispose);
+
+    await tester.pumpWidget(
+      MediaQuery(
+        data: const MediaQueryData(disableAnimations: true),
+        child: MaterialApp(
+          home: ValueListenableBuilder(
+            valueListenable: visible,
+            builder: (context, isVisible, _) => SeriesDataFilterTransition(
+              visible: isVisible,
+              onHidden: () => hiddenCount++,
+              child: const Text('filter'),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    visible.value = false;
+    await tester.pump();
+
+    final fade = tester.widget<FadeTransition>(
+      find.descendant(of: find.byType(SeriesDataFilterTransition), matching: find.byType(FadeTransition)),
+    );
+    expect(fade.opacity.value, 0);
+    expect(hiddenCount, 1);
+  });
 }

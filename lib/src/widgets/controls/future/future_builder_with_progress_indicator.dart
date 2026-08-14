@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../util/logging/flutter_simple_logging.dart';
+import '../../../util/motion_utils.dart';
 import '../../../util/theme_utils.dart';
 
 class FutureBuilderWithProgressIndicator<T> extends StatelessWidget {
@@ -64,7 +65,7 @@ class FutureBuilderWithProgressIndicator<T> extends StatelessWidget {
         }
 
         return AnimatedSwitcher(
-          duration: const Duration(milliseconds: 150),
+          duration: MotionUtils.resolve(context, MotionUtils.quick),
           switchInCurve: Curves.easeOut,
           switchOutCurve: Curves.easeIn,
           child: KeyedSubtree(

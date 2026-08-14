@@ -2,18 +2,20 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 
+import '../../../util/motion_utils.dart';
+
 class AnimateIn extends StatefulWidget {
   final Widget child;
-  final int durationMS;
-  final int delayMS;
+  final Duration duration;
+  final Duration delay;
   final bool fade;
   final Offset? slideOffset;
 
   const AnimateIn({
     super.key,
     required this.child,
-    this.durationMS = 220,
-    this.delayMS = 0,
+    this.duration = MotionUtils.standard,
+    this.delay = Duration.zero,
     this.fade = true,
     this.slideOffset,
   });
@@ -23,10 +25,7 @@ class AnimateIn extends StatefulWidget {
 }
 
 class _AnimateInState extends State<AnimateIn> with SingleTickerProviderStateMixin {
-  late final AnimationController _controller = AnimationController(
-    duration: Duration(milliseconds: widget.durationMS),
-    vsync: this,
-  );
+  late final AnimationController _controller = AnimationController(vsync: this);
   late final Animation<double> _animation = CurvedAnimation(
     parent: _controller,
     curve: Curves.easeOutCubic,
@@ -36,17 +35,29 @@ class _AnimateInState extends State<AnimateIn> with SingleTickerProviderStateMix
     end: Offset.zero,
   ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOutCubic));
   Timer? _delayTimer;
+  bool _started = false;
 
   @override
-  void initState() {
-    super.initState();
-    if (widget.delayMS <= 0) {
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _controller.duration = MotionUtils.resolve(context, widget.duration);
+    if (MotionUtils.animationsDisabled(context)) {
+      _delayTimer?.cancel();
+      _controller.value = 1;
+      _started = true;
+      return;
+    }
+    if (_started) {
+      return;
+    }
+    _started = true;
+    if (widget.delay == Duration.zero) {
       _controller.forward();
       return;
     }
 
     _delayTimer = Timer(
-      Duration(milliseconds: widget.delayMS),
+      widget.delay,
       _controller.forward,
     );
   }

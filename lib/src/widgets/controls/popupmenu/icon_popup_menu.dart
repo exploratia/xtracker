@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../../../util/theme_utils.dart';
+import '../../../util/motion_utils.dart';
 import '../card/glowing_border_container.dart';
 
 /// Defines how popup menu entries are arranged around their anchor.
@@ -75,7 +76,7 @@ class _RadialMenu extends StatelessWidget {
     }
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0, end: 1),
-      duration: const Duration(milliseconds: 150),
+      duration: MotionUtils.resolve(context, MotionUtils.quick),
       curve: Curves.easeOut,
       builder: (_, value, _) => _buildMenu(value),
     );
@@ -292,15 +293,20 @@ class _AnimatedMenu extends StatefulWidget {
 
 class _AnimatedMenuState extends State<_AnimatedMenu> with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
-  final int animationDuration = 150;
-
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: animationDuration),
-    )..forward();
+      duration: MotionUtils.quick,
+    );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _controller.duration = MotionUtils.resolve(context, MotionUtils.quick);
+    _controller.forward();
   }
 
   @override

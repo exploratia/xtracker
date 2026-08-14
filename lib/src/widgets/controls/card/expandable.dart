@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../util/theme_utils.dart';
+import '../../../util/motion_utils.dart';
 import '../text/overflow_text.dart';
 
 class Expandable extends StatefulWidget {
@@ -78,7 +79,7 @@ class _ExpandableState extends State<Expandable> {
           ),
         ),
         AnimatedCrossFade(
-          duration: Duration(milliseconds: _expanded ? ThemeUtils.animationDuration : ThemeUtils.animationDurationShort),
+          duration: MotionUtils.resolve(context, _expanded ? MotionUtils.complex : MotionUtils.quick),
           crossFadeState: _expanded ? CrossFadeState.showFirst : CrossFadeState.showSecond,
           firstChild: Container(
             decoration: BoxDecoration(

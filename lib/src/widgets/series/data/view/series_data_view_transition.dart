@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../../model/series/view_type.dart';
+import '../../../../util/motion_utils.dart';
 
 /// Smoothly replaces the data presentation when its view type changes.
 class SeriesDataViewTransition extends StatelessWidget {
@@ -19,7 +20,7 @@ class SeriesDataViewTransition extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedSwitcher(
-      duration: const Duration(milliseconds: 200),
+      duration: MotionUtils.resolve(context, MotionUtils.viewTransition),
       switchInCurve: Curves.easeOutCubic,
       switchOutCurve: Curves.easeInCubic,
       transitionBuilder: (child, animation) {

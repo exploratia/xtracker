@@ -13,6 +13,7 @@ import '../../../../providers/series_data_provider.dart';
 import '../../../../util/dialogs.dart';
 import '../../../../util/globals.dart';
 import '../../../../util/logging/flutter_simple_logging.dart';
+import '../../../../util/motion_utils.dart';
 import '../../../../util/theme_utils.dart';
 import '../../../controls/popupmenu/icon_popup_menu.dart';
 import '../input/input_result.dart';
@@ -131,6 +132,7 @@ class _SeriesValueActionsState extends State<SeriesValueActions> {
         widget.seriesDef,
         widget.value,
         context.read<SeriesCurrentValueProvider>(),
+        deletionDelay: MotionUtils.resolve(context, SeriesDataMutation.deletionDuration),
       );
     } catch (error, stackTrace) {
       SimpleLogging.w(

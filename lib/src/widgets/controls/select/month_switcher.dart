@@ -5,6 +5,7 @@ import 'package:month_picker_dialog/month_picker_dialog.dart';
 import '../../../../generated/locale_keys.g.dart';
 import '../../../util/date_time_utils.dart';
 import '../../../util/theme_utils.dart';
+import '../../../util/motion_utils.dart';
 
 class MonthSwitcher extends StatefulWidget {
   const MonthSwitcher({super.key, this.initialDate, required this.monthCallback});
@@ -126,7 +127,7 @@ class _MonthSwitcherState extends State<MonthSwitcher> {
         SizedBox(
           width: 160,
           child: AnimatedSwitcher(
-            duration: const Duration(milliseconds: 250),
+            duration: MotionUtils.resolve(context, MotionUtils.emphasized),
             switchInCurve: Curves.easeOutCubic,
             switchOutCurve: Curves.easeInCubic,
             transitionBuilder: (child, animation) => SlideTransition(

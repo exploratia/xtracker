@@ -7,8 +7,8 @@ void main() {
     await tester.pumpWidget(
       const MaterialApp(
         home: AnimateIn(
-          durationMS: 200,
-          delayMS: 100,
+          duration: Duration(milliseconds: 200),
+          delay: Duration(milliseconds: 100),
           slideOffset: Offset(0, 0.2),
           child: SizedBox(),
         ),
@@ -38,5 +38,30 @@ void main() {
     await tester.pump(const Duration(milliseconds: 100));
     expect(fadeTransition().opacity.value, 1);
     expect(slideTransition().position.value, Offset.zero);
+  });
+
+  testWidgets('skips entrance delay when animations are disabled', (tester) async {
+    await tester.pumpWidget(
+      const MediaQuery(
+        data: MediaQueryData(disableAnimations: true),
+        child: MaterialApp(
+          home: AnimateIn(
+            delay: Duration(seconds: 1),
+            slideOffset: Offset(0, 0.2),
+            child: SizedBox(),
+          ),
+        ),
+      ),
+    );
+
+    final animateIn = find.byType(AnimateIn);
+    final fade = tester.widget<FadeTransition>(
+      find.descendant(of: animateIn, matching: find.byType(FadeTransition)),
+    );
+    final slide = tester.widget<SlideTransition>(
+      find.descendant(of: animateIn, matching: find.byType(SlideTransition)),
+    );
+    expect(fade.opacity.value, 1);
+    expect(slide.position.value, Offset.zero);
   });
 }

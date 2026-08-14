@@ -7,6 +7,7 @@ import '../../model/series/series_def.dart';
 import '../../providers/series_provider.dart';
 import '../../util/app_series_notifications.dart';
 import '../../util/pending_app_actions.dart';
+import '../../util/motion_utils.dart';
 import '../../util/theme_utils.dart';
 import '../administration/settings/settings_controller.dart';
 import '../controls/card/glowing_border_container.dart';
@@ -49,7 +50,7 @@ class PendingAppActionsButton extends StatelessWidget {
       barrierDismissible: true,
       barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
       barrierColor: Colors.black26,
-      transitionDuration: const Duration(milliseconds: ThemeUtils.animationDurationShort),
+      transitionDuration: MotionUtils.resolve(context, MotionUtils.quick),
       pageBuilder: (popupContext, _, _) {
         var mediaQueryData = MediaQuery.of(popupContext);
         var top = mediaQueryData.padding.top + kToolbarHeight;
@@ -140,7 +141,6 @@ class _PendingActionsList extends StatefulWidget {
 }
 
 class _PendingActionsListState extends State<_PendingActionsList> {
-  static const Duration _removeDuration = Duration(milliseconds: ThemeUtils.animationDuration);
   static const EdgeInsets _actionPadding = EdgeInsets.symmetric(
     horizontal: ThemeUtils.defaultPadding * 2,
     vertical: ThemeUtils.verticalSpacing,
@@ -202,6 +202,8 @@ class _PendingActionsListState extends State<_PendingActionsList> {
       ),
     );
   }
+
+  Duration get _removeDuration => MotionUtils.resolve(context, MotionUtils.complex);
 
   Widget _buildActionItem(
     PendingAppAction action,
@@ -288,7 +290,7 @@ class _PendingActionsListState extends State<_PendingActionsList> {
         _actions.insert(index, action);
         _listKey.currentState?.insertItem(
           index,
-          duration: const Duration(milliseconds: ThemeUtils.animationDurationShort),
+          duration: MotionUtils.resolve(context, MotionUtils.quick),
         );
       }
     }

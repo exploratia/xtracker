@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../util/motion_utils.dart';
+
 /// Fades and slightly slides the date filter without discarding its state.
 class SeriesDataFilterTransition extends StatefulWidget {
   const SeriesDataFilterTransition({
@@ -25,7 +27,7 @@ class SeriesDataFilterTransition extends StatefulWidget {
 class _SeriesDataFilterTransitionState extends State<SeriesDataFilterTransition> with SingleTickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
     value: widget.visible ? 1 : 0,
-    duration: const Duration(milliseconds: 200),
+    duration: MotionUtils.viewTransition,
     vsync: this,
   );
   late final Animation<double> _animation = CurvedAnimation(
@@ -45,15 +47,32 @@ class _SeriesDataFilterTransitionState extends State<SeriesDataFilterTransition>
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _controller.duration = MotionUtils.resolve(context, MotionUtils.viewTransition);
+    if (MotionUtils.animationsDisabled(context)) {
+      _controller.value = widget.visible ? 1 : 0;
+    }
+  }
+
+  @override
   void didUpdateWidget(covariant SeriesDataFilterTransition oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (widget.visible == oldWidget.visible) {
       return;
     }
     if (widget.visible) {
-      _controller.forward();
+      if (MotionUtils.animationsDisabled(context)) {
+        _controller.value = 1;
+      } else {
+        _controller.forward();
+      }
     } else {
-      _controller.reverse();
+      if (MotionUtils.animationsDisabled(context)) {
+        _controller.value = 0;
+      } else {
+        _controller.reverse();
+      }
     }
   }
 

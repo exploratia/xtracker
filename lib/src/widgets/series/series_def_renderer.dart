@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../model/series/series_def.dart';
 import '../../providers/series_current_value_provider.dart';
 import '../../util/theme_utils.dart';
+import '../../util/motion_utils.dart';
 import '../administration/settings/settings_controller.dart';
 import '../controls/card/glowing_border_container.dart';
 import '../controls/list/drag_handle.dart';
@@ -36,7 +37,7 @@ class SeriesDefRenderer extends StatelessWidget {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Scrollable.ensureVisible(
           context,
-          duration: const Duration(milliseconds: 250),
+          duration: MotionUtils.resolve(context, MotionUtils.emphasized),
           curve: Curves.easeOut,
           alignment: 0.45,
         );

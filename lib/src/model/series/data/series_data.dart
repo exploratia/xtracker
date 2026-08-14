@@ -11,6 +11,7 @@ import '../../../util/globals.dart';
 import '../../../util/json_reader.dart';
 import '../../../util/json_version.dart';
 import '../../../util/logging/flutter_simple_logging.dart';
+import '../../../util/motion_utils.dart';
 import '../../../widgets/series/data/input/blood_pressure/blood_pressure_input.dart';
 import '../../../widgets/series/data/input/custom/custom_input.dart';
 import '../../../widgets/series/data/input/daily_check/daily_check_input.dart';
@@ -244,6 +245,9 @@ class SeriesData<T extends SeriesDataValue> {
       seriesCurrentValueProvider.setRecentlyUpdatedSeries(seriesDef.uuid);
       return; // canceled
     }
+    if (!context.mounted) {
+      return;
+    }
     switch (inputResult.action) {
       case InputResultAction.insert:
       case InputResultAction.update:
@@ -261,7 +265,12 @@ class SeriesData<T extends SeriesDataValue> {
         }
       case InputResultAction.delete:
         try {
-          await seriesDataProvider.deleteValue(seriesDef, inputResult.seriesDataValue, seriesCurrentValueProvider);
+          await seriesDataProvider.deleteValue(
+            seriesDef,
+            inputResult.seriesDataValue,
+            seriesCurrentValueProvider,
+            deletionDelay: MotionUtils.resolve(context, SeriesDataMutation.deletionDuration),
+          );
         } catch (err) {
           SimpleLogging.w('Failed to delete ${seriesDef.seriesType.name} value.', error: err);
           if (context.mounted) {
