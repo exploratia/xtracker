@@ -22,6 +22,10 @@ import 'pending_app_action_executor.dart';
 import 'series_def_renderer.dart';
 import 'series_export_check.dart';
 
+const _seriesEntranceDurationMS = 220;
+const _seriesEntranceStaggerMS = 40;
+const _seriesEntranceMaxDelayMS = 160;
+
 class SeriesView extends StatefulWidget {
   final SettingsController settingsController;
 
@@ -112,9 +116,12 @@ class _SeriesListState extends State<_SeriesList> {
       List<Widget> children = [];
       var idx = 0;
       for (var s in series) {
+        final staggerDelayMS = idx * _seriesEntranceStaggerMS;
         children.add(
           AnimateIn(
-            durationMS: 1000 + idx * 500,
+            key: ValueKey(s.uuid),
+            durationMS: _seriesEntranceDurationMS,
+            delayMS: staggerDelayMS > _seriesEntranceMaxDelayMS ? _seriesEntranceMaxDelayMS : staggerDelayMS,
             slideOffset: const Offset(0, 0.2),
             child: SeriesDefRenderer(
               seriesDef: s,

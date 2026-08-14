@@ -15,6 +15,10 @@ import '../../controls/layout/wallpaper.dart';
 import '../../controls/responsive/device_dependent_constrained_box.dart';
 import '../series_def_renderer.dart';
 
+const _seriesEntranceDurationMS = 220;
+const _seriesEntranceStaggerMS = 40;
+const _seriesEntranceMaxDelayMS = 160;
+
 class SeriesManagementView extends StatelessWidget {
   final SettingsController settingsController;
 
@@ -84,10 +88,12 @@ class _SeriesList extends StatelessWidget {
     List<Widget> children = [];
     var idx = 0;
     for (var s in series) {
+      final staggerDelayMS = idx * _seriesEntranceStaggerMS;
       children.add(
         AnimateIn(
           key: Key(s.uuid),
-          durationMS: 2000 + idx * 500,
+          durationMS: _seriesEntranceDurationMS,
+          delayMS: staggerDelayMS > _seriesEntranceMaxDelayMS ? _seriesEntranceMaxDelayMS : staggerDelayMS,
           slideOffset: const Offset(0, -0.2),
           child: SeriesDefRenderer(
             managementMode: true,
