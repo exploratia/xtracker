@@ -7,21 +7,21 @@ class FadeIn extends StatefulWidget {
   const FadeIn({
     super.key,
     required this.child,
-    this.durationMS = 2000,
+    this.durationMS = 250,
   });
 
   @override
   State<FadeIn> createState() => _FadeInState();
 }
 
-class _FadeInState extends State<FadeIn> with TickerProviderStateMixin {
+class _FadeInState extends State<FadeIn> with SingleTickerProviderStateMixin {
   late final AnimationController _controller = AnimationController(
     duration: Duration(milliseconds: widget.durationMS),
     vsync: this,
-  )..forward(); // ..repeat(reverse: true);
+  )..forward();
   late final Animation<double> _animation = CurvedAnimation(
     parent: _controller,
-    curve: Curves.easeOut,
+    curve: Curves.easeOutCubic,
   );
 
   @override
