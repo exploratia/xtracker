@@ -36,6 +36,7 @@ import '../../widgets/series/data/view/series_data_no_data.dart';
 import '../../widgets/series/data/view/series_data_view.dart';
 import '../../widgets/series/data/view/series_data_view_content_builder.dart';
 import '../../widgets/series/data/view/series_data_view_overlays.dart';
+import '../../widgets/series/data/view/series_data_view_transition.dart';
 import '../../widgets/series/data/view/series_title.dart';
 
 class SeriesDataScreen extends StatelessWidget {
@@ -271,6 +272,7 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
         updateOverlays: widget.updateOverlays,
       );
     }
+    view = SeriesDataViewTransition(viewType: viewType, child: view);
 
     List<Widget> actions = [];
     // in case of portrait show actions as own bar in the bottom
