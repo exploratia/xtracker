@@ -15,10 +15,12 @@ class MultiValueDayRowCellBuilder<T extends SeriesDataValue> {
 
   GridCell gridCellBuilder(BuildContext context, int yIndex, int xIndex, Size cellSize) {
     MultiValueDayRowItem<T> dayItem = data[yIndex];
+    final valueUuids = dayItem.values.map((value) => value.uuid).toSet();
 
     if (xIndex == 0) {
       return GridCell(
         backgroundColor: dayItem.backgroundColor,
+        valueUuids: valueUuids,
         child: Center(child: Text(dayItem.date)),
       );
     }
@@ -29,7 +31,7 @@ class MultiValueDayRowCellBuilder<T extends SeriesDataValue> {
         gridCellChild = gridCellChildBuilder(dayItem, cellSize);
       }
 
-      return GridCell(backgroundColor: dayItem.backgroundColor, child: gridCellChild);
+      return GridCell(backgroundColor: dayItem.backgroundColor, valueUuids: valueUuids, child: gridCellChild);
     }
 
     // Fallback
