@@ -213,14 +213,12 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
   void _toggleShowDateFilter() {
     setState(() {
       widget.seriesViewMetaData.toggleShowDateFilter();
-      if (!widget.seriesViewMetaData.showDateFilter) widget.updateOverlays(bottomHeight: 0);
     });
   }
 
   void _setTableFixColumnProfile(FixColumnProfileType fixColumnProfileType) {
     setState(() {
       widget.seriesViewMetaData.columnProfile = FixColumnProfile.resolveByType(fixColumnProfileType);
-      if (!widget.seriesViewMetaData.showDateFilter) widget.updateOverlays(bottomHeight: 0);
     });
   }
 
@@ -268,7 +266,6 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
         seriesDataViewContentBuilder: widget.seriesDataViewBuilder,
         filter: widget.filter,
         updateFilter: widget.updateFilter,
-        seriesDataViewOverlays: widget.seriesDataViewOverlays,
         updateOverlays: widget.updateOverlays,
       );
     }
