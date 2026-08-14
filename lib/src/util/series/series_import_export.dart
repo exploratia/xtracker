@@ -241,8 +241,8 @@ class SeriesImportExport {
     try {
       // https://pub.dev/packages/file_picker
       files = await FilePicker.pickFiles(
-        type: FileType.any,
-        // allowedExtensions: ['json'], // not possible // https://github.com/miguelpruivo/flutter_file_picker/issues/1717
+        type: FileType.custom,
+        allowedExtensions: const ['json'],
       );
     } catch (ex, st) {
       SimpleLogging.w(ex.toString(), stackTrace: st);
@@ -366,8 +366,8 @@ class SeriesImportExport {
     try {
       // https://pub.dev/packages/file_picker
       file = await FilePicker.pickFile(
-        type: FileType.any,
-        // allowedExtensions: ['csv'], // not possible // https://github.com/miguelpruivo/flutter_file_picker/issues/1717
+        type: FileType.custom,
+        allowedExtensions: const ['csv'],
       );
     } catch (ex, st) {
       SimpleLogging.w(ex.toString(), stackTrace: st);
