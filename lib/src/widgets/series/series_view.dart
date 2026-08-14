@@ -21,6 +21,7 @@ import 'auto_backup_check.dart';
 import 'pending_app_action_executor.dart';
 import 'series_def_renderer.dart';
 import 'series_export_check.dart';
+import 'series_mutation_transition.dart';
 
 const _seriesEntranceDurationMS = 220;
 const _seriesEntranceStaggerMS = 40;
@@ -107,7 +108,9 @@ class _SeriesListState extends State<_SeriesList> {
 
   @override
   Widget build(BuildContext context) {
-    var series = context.watch<SeriesProvider>().series;
+    final seriesProvider = context.watch<SeriesProvider>();
+    var series = seriesProvider.series;
+    final mutation = seriesProvider.latestMutation;
     _scheduleStartupWork();
     Widget content;
     if (series.isEmpty) {
@@ -117,16 +120,22 @@ class _SeriesListState extends State<_SeriesList> {
       var idx = 0;
       for (var s in series) {
         final staggerDelayMS = idx * _seriesEntranceStaggerMS;
+        final isInserted = mutation?.seriesUuid == s.uuid && mutation?.type == SeriesMutationType.inserted;
         children.add(
           AnimateIn(
             key: ValueKey(s.uuid),
             durationMS: _seriesEntranceDurationMS,
             delayMS: staggerDelayMS > _seriesEntranceMaxDelayMS ? _seriesEntranceMaxDelayMS : staggerDelayMS,
-            slideOffset: const Offset(0, 0.2),
-            child: SeriesDefRenderer(
-              seriesDef: s,
-              index: idx,
-              settingsController: widget.settingsController,
+            fade: !isInserted,
+            slideOffset: isInserted ? null : const Offset(0, 0.2),
+            child: SeriesMutationTransition(
+              seriesUuid: s.uuid,
+              mutation: mutation,
+              child: SeriesDefRenderer(
+                seriesDef: s,
+                index: idx,
+                settingsController: widget.settingsController,
+              ),
             ),
           ),
         );

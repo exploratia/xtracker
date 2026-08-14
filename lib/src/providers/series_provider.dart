@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../model/series/series_def.dart';
@@ -6,11 +8,45 @@ import '../util/app_icon_quick_actions.dart';
 import '../util/app_series_notifications.dart';
 import 'series_providers.dart';
 
+/// The kind of structural change most recently applied to the series list.
+enum SeriesMutationType { inserted, deleted }
+
+/// Describes a short-lived structural series change for UI feedback.
+@immutable
+class SeriesMutation {
+  const SeriesMutation({
+    required this.seriesUuid,
+    required this.type,
+    required this.version,
+  });
+
+  /// Duration of insert and delete transitions.
+  static const transitionDuration = Duration(milliseconds: 220);
+
+  /// Delay before a deleted series is removed from the in-memory list.
+  static const removalDelay = Duration(milliseconds: 250);
+
+  /// UUID of the affected series.
+  final String seriesUuid;
+
+  /// Operation that changed the series list.
+  final SeriesMutationType type;
+
+  /// Monotonically increasing identifier used to handle each change once.
+  final int version;
+}
+
 class SeriesProvider with ChangeNotifier {
   final _storeMain = Stores.storeMain;
   final _storeSeriesDef = Stores.storeSeriesDef;
   List<SeriesDef> _series = [];
   bool _seriesLoaded = false;
+  SeriesMutation? _latestMutation;
+  Timer? _mutationTimer;
+  int _mutationVersion = 0;
+
+  /// The latest list change while its visual feedback is still relevant.
+  SeriesMutation? get latestMutation => _latestMutation;
 
   Future<void> fetchDataIfNotYetLoaded() async {
     if (!_seriesLoaded) {
@@ -85,14 +121,21 @@ class SeriesProvider with ChangeNotifier {
     if (refreshNotifications) {
       await AppSeriesNotifications.refreshSeriesNotification(seriesDef, force: true);
     }
+    SeriesMutation? mutation;
+    if (previousSeriesDef == null) {
+      mutation = _setMutation(seriesDef.uuid, SeriesMutationType.inserted);
+    }
     await fetchData(refreshDueNotifications: false);
+    if (mutation != null) {
+      _scheduleMutationClear(mutation);
+    }
     // notifyListeners(); notify is in fetch
   }
 
   Future<void> deleteById(String seriesDefUuid, SeriesProviders seriesProviders) async {
     var idx = _series.indexWhere((s) => s.uuid == seriesDefUuid);
     if (idx < 0) return;
-    await delete(_series.removeAt(idx), seriesProviders);
+    await delete(_series[idx], seriesProviders);
   }
 
   Future<void> delete(SeriesDef seriesDef, SeriesProviders seriesProviders) async {
@@ -101,6 +144,12 @@ class SeriesProvider with ChangeNotifier {
 
     await AppSeriesNotifications.deleteSeriesNotifications(seriesDef.uuid);
     await _storeSeriesDef.delete(seriesDef);
+
+    final mutation = _setMutation(seriesDef.uuid, SeriesMutationType.deleted);
+    notifyListeners();
+    _scheduleMutationClear(mutation);
+    await Future<void>.delayed(SeriesMutation.removalDelay);
+
     await fetchData(refreshDueNotifications: false);
     // notifyListeners(); notify is in fetch
   }
@@ -131,5 +180,32 @@ class SeriesProvider with ChangeNotifier {
 
       return indexA.compareTo(indexB);
     });
+  }
+
+  SeriesMutation _setMutation(String seriesUuid, SeriesMutationType type) {
+    _mutationTimer?.cancel();
+    final mutation = SeriesMutation(
+      seriesUuid: seriesUuid,
+      type: type,
+      version: ++_mutationVersion,
+    );
+    _latestMutation = mutation;
+    return mutation;
+  }
+
+  void _scheduleMutationClear(SeriesMutation mutation) {
+    _mutationTimer = Timer(const Duration(milliseconds: 400), () {
+      if (_latestMutation?.version != mutation.version) {
+        return;
+      }
+      _latestMutation = null;
+      notifyListeners();
+    });
+  }
+
+  @override
+  void dispose() {
+    _mutationTimer?.cancel();
+    super.dispose();
   }
 }
