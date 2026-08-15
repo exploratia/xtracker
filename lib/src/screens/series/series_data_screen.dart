@@ -224,7 +224,9 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
 
   void _addSeriesValueHandler(BuildContext context) async {
     await SeriesData.showSeriesDataInputDlg(context, widget.seriesViewMetaData.seriesDef);
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   void _showSeriesDataAnalytics(BuildContext context) async {

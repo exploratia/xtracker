@@ -189,6 +189,7 @@ class SeriesData<T extends SeriesDataValue> {
   }) async {
     var seriesDataProvider = context.read<SeriesDataProvider>();
     var seriesCurrentValueProvider = context.read<SeriesCurrentValueProvider>();
+    final deletionDelay = MotionUtils.resolve(context, SeriesDataMutation.deletionDuration);
     final resolvedInputMode = inputMode ?? (value == null ? SeriesDataInputMode.create : SeriesDataInputMode.edit);
     if (resolvedInputMode == SeriesDataInputMode.edit && value == null) {
       throw ArgumentError.value(value, 'value', 'An existing value is required in edit mode.');
@@ -245,9 +246,6 @@ class SeriesData<T extends SeriesDataValue> {
       seriesCurrentValueProvider.setRecentlyUpdatedSeries(seriesDef.uuid);
       return; // canceled
     }
-    if (!context.mounted) {
-      return;
-    }
     switch (inputResult.action) {
       case InputResultAction.insert:
       case InputResultAction.update:
@@ -269,7 +267,7 @@ class SeriesData<T extends SeriesDataValue> {
             seriesDef,
             inputResult.seriesDataValue,
             seriesCurrentValueProvider,
-            deletionDelay: MotionUtils.resolve(context, SeriesDataMutation.deletionDuration),
+            deletionDelay: deletionDelay,
           );
         } catch (err) {
           SimpleLogging.w('Failed to delete ${seriesDef.seriesType.name} value.', error: err);
