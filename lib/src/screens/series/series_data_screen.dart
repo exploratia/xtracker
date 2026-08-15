@@ -555,6 +555,7 @@ class _SelectColumnProfile extends StatelessWidget {
                   Icon(
                     Icons.check,
                     size: ThemeUtils.iconSizeScaled,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
               ],
             ),
