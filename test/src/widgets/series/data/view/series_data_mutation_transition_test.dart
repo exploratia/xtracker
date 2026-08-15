@@ -43,6 +43,30 @@ void main() {
     expect(fade.opacity.value, 0);
     expect(size.sizeFactor.value, 0);
   });
+
+  testWidgets('keeps its child expanded to the available cell size', (tester) async {
+    final provider = _TestSeriesDataProvider();
+    var tapCount = 0;
+    await tester.pumpWidget(
+      _TestApp(
+        provider: provider,
+        child: InkWell(
+          onTap: () => tapCount++,
+          child: const Icon(Icons.check_box_outlined),
+        ),
+      ),
+    );
+
+    final transitionFinder = find.byType(SeriesDataMutationTransition);
+    final coloredBoxFinder = find.descendant(of: transitionFinder, matching: find.byType(ColoredBox));
+    final inkWellFinder = find.descendant(of: transitionFinder, matching: find.byType(InkWell));
+
+    expect(tester.getSize(coloredBoxFinder), const Size(100, 40));
+    expect(tester.getSize(inkWellFinder), const Size(100, 40));
+
+    await tester.tapAt(tester.getTopLeft(transitionFinder) + const Offset(95, 20));
+    expect(tapCount, 1);
+  });
 }
 
 Color _highlightColor(WidgetTester tester) {
@@ -53,18 +77,27 @@ Color _highlightColor(WidgetTester tester) {
 }
 
 class _TestApp extends StatelessWidget {
-  const _TestApp({required this.provider});
+  const _TestApp({required this.provider, this.child = const SizedBox.expand()});
 
   final _TestSeriesDataProvider provider;
+  final Widget child;
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<SeriesDataProvider>.value(
       value: provider,
-      child: const MaterialApp(
-        home: SeriesDataMutationTransition(
-          valueUuids: {'value-id'},
-          child: SizedBox(width: 100, height: 40),
+      child: MaterialApp(
+        home: Scaffold(
+          body: Center(
+            child: SizedBox(
+              width: 100,
+              height: 40,
+              child: SeriesDataMutationTransition(
+                valueUuids: const {'value-id'},
+                child: child,
+              ),
+            ),
+          ),
         ),
       ),
     );

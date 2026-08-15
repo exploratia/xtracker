@@ -74,12 +74,14 @@ class _SeriesDataMutationTransitionState extends State<SeriesDataMutationTransit
   @override
   Widget build(BuildContext context) {
     final highlightColor = Theme.of(context).colorScheme.primaryContainer.withValues(alpha: 0.35);
-    final highlightedChild = AnimatedBuilder(
-      animation: _highlight,
-      child: widget.child,
-      builder: (context, child) => ColoredBox(
-        color: highlightColor.withValues(alpha: highlightColor.a * _highlight.value),
-        child: child,
+    final highlightedChild = SizedBox.expand(
+      child: AnimatedBuilder(
+        animation: _highlight,
+        child: widget.child,
+        builder: (context, child) => ColoredBox(
+          color: highlightColor.withValues(alpha: highlightColor.a * _highlight.value),
+          child: child,
+        ),
       ),
     );
 
