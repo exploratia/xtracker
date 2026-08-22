@@ -32,6 +32,7 @@
       "versionChanged": "The app was updated to version {}."
     },
     "entries": {
+      "v2_2_1": "Fixed the display of information about new app versions.",
       "v2_2_0": "Automatic Dropbox backups, actions to edit, duplicate and delete series values, plus improved notifications and animations.",
       "v2_1_0": "New reminder notifications per series, app icon QuickActions and improvements for small screens.",
       "v2_0_1": "Updated dependencies for better stability.",

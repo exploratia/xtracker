@@ -32,6 +32,7 @@
       "versionChanged": "Die App wurde auf Version {} aktualisiert."
     },
     "entries": {
+      "v2_2_1": "Die Anzeige der Informationen zu neuen App-Versionen wurde korrigiert.",
       "v2_2_0": "Automatische Dropbox-Backups, Aktionen zum Bearbeiten, Duplizieren und Löschen von Messreihenwerten sowie optimierte Benachrichtigungen und Animationen.",
       "v2_1_0": "Neue Erinnerungs-Benachrichtigungen pro Messreihe, QuickActions über das App-Icon und Verbesserungen für kleine Bildschirme.",
       "v2_0_1": "Aktualisierte Abh\u00e4ngigkeiten für mehr Stabilität.",

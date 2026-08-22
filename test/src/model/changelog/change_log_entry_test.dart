@@ -30,13 +30,22 @@ void main() {
       expect(entries.map((entry) => entry.version), ['2.0.0']);
     });
 
-    test('returns entries for current release after 2.0.0', () {
+    test('returns all entries up to current release after 2.0.0', () {
       final entries = ChangeLog.entriesBetween(
         previousVersion: '2.0.0',
-        currentVersion: '2.1.0',
+        currentVersion: '2.2.1',
       );
 
-      expect(entries.map((entry) => entry.version), ['2.1.0', '2.0.1']);
+      expect(entries.map((entry) => entry.version), ['2.2.1', '2.2.0', '2.1.0', '2.0.1']);
+    });
+
+    test('returns only patch entry after affected 2.2.0 release', () {
+      final entries = ChangeLog.entriesBetween(
+        previousVersion: '2.2.0',
+        currentVersion: '2.2.1',
+      );
+
+      expect(entries.map((entry) => entry.version), ['2.2.1']);
     });
   });
 }
