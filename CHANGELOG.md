@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.0] - 2026-08-22
+
+### Features
+
+- implement DropBox auto backup
+- implement series value actions (edit, duplicate - where applicable, delete)
+- autofocus low input field after high value entered for blood pressure input
+
+### Fixes
+
+- upgrade flutter_secure_storage to v11.0.0
+- update file_picker to stable release
+- backup reminder only in internal messages
+- improve notification handling
+- improve animations (speed, common handling)
+
 ## [2.1.0] - 2026-07-05
 
 ### Features
@@ -116,10 +132,10 @@ First public release version
 
 ### Features
 
-- save initial app start on device storage for coming improvements (backup
-  reminder, ...) ([#49](https://github.com/exploratia/xtracker/issues/49))
-- add display option for different table column profile with time
-  column ([#36](https://github.com/exploratia/xtracker/issues/36))
+- save initial app start on device storage for coming improvements (backup reminder, ...)
+  ([#49](https://github.com/exploratia/xtracker/issues/49))
+- add display option for different table column profile with time column
+  ([#36](https://github.com/exploratia/xtracker/issues/36))
 - add new series type habit ([#43](https://github.com/exploratia/xtracker/issues/43))
 
 ### Fixes
@@ -143,13 +159,13 @@ First public release version
 - add a tooltip showing date and time in the table view ([#36](https://github.com/exploratia/xtracker/issues/36))
 - add tooltips showing date, time, and value in the dots view ([#35](https://github.com/exploratia/xtracker/issues/35))
 - improve scroll performance in dots view
-- add a small count number in dot overview (configurable per
-  series) ([#35](https://github.com/exploratia/xtracker/issues/35))
+- add a small count number in dot overview (configurable per series)
+  ([#35](https://github.com/exploratia/xtracker/issues/35))
 
 ### Fixes
 
-- correct displayed message when no or no actual data is
-  available ([#30](https://github.com/exploratia/xtracker/issues/30))
+- correct displayed message when no or no actual data is available
+  ([#30](https://github.com/exploratia/xtracker/issues/30))
 
 ### Other
 
