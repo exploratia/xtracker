@@ -5,9 +5,12 @@ import 'package:provider/provider.dart';
 import '../../../generated/locale_keys.g.dart';
 import '../../model/series/series_def.dart';
 import '../../providers/series_provider.dart';
+import '../../util/app_series_notifications.dart';
 import '../../util/pending_app_actions.dart';
+import '../../util/motion_utils.dart';
 import '../../util/theme_utils.dart';
 import '../administration/settings/settings_controller.dart';
+import '../controls/card/glowing_border_container.dart';
 import 'pending_app_action_executor.dart';
 
 class PendingAppActionsButton extends StatelessWidget {
@@ -20,7 +23,6 @@ class PendingAppActionsButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    PendingAppActions.enqueueDebugDummyActionsIfEnabled();
     return ValueListenableBuilder<int>(
       valueListenable: PendingAppActions.listenable(),
       builder: (context, _, _) {
@@ -48,7 +50,7 @@ class PendingAppActionsButton extends StatelessWidget {
       barrierDismissible: true,
       barrierLabel: MaterialLocalizations.of(context).modalBarrierDismissLabel,
       barrierColor: Colors.black26,
-      transitionDuration: const Duration(milliseconds: ThemeUtils.animationDurationShort),
+      transitionDuration: MotionUtils.resolve(context, MotionUtils.quick),
       pageBuilder: (popupContext, _, _) {
         var mediaQueryData = MediaQuery.of(popupContext);
         var top = mediaQueryData.padding.top + kToolbarHeight;
@@ -139,7 +141,10 @@ class _PendingActionsList extends StatefulWidget {
 }
 
 class _PendingActionsListState extends State<_PendingActionsList> {
-  static const Duration _removeDuration = Duration(milliseconds: ThemeUtils.animationDuration);
+  static const EdgeInsets _actionPadding = EdgeInsets.symmetric(
+    horizontal: ThemeUtils.defaultPadding * 2,
+    vertical: ThemeUtils.verticalSpacing,
+  );
 
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
   late final ScrollController _scrollController;
@@ -187,40 +192,33 @@ class _PendingActionsListState extends State<_PendingActionsList> {
       child: AnimatedList(
         key: _listKey,
         controller: _scrollController,
-        padding: EdgeInsets.zero,
+        padding: const EdgeInsets.symmetric(vertical: ThemeUtils.verticalSpacing),
         shrinkWrap: true,
         initialItemCount: _actions.length,
-        itemBuilder: (context, index, animation) => _buildActionItem(
-          context,
+        itemBuilder: (_, index, animation) => _buildActionItem(
           _actions[index],
-          index,
           animation,
         ),
       ),
     );
   }
 
+  Duration get _removeDuration => MotionUtils.resolve(context, MotionUtils.complex);
+
   Widget _buildActionItem(
-    BuildContext context,
     PendingAppAction action,
-    int index,
     Animation<double> animation,
   ) {
     return _PendingActionItemTransition(
       animation: animation,
-      child: _buildActionItemContent(action, index),
+      child: _buildActionItemContent(action),
     );
   }
 
-  Widget _buildActionItemContent(PendingAppAction action, int index) {
+  Widget _buildActionItemContent(PendingAppAction action) {
     return Padding(
       key: ValueKey(action.id),
-      padding: EdgeInsets.fromLTRB(
-        ThemeUtils.defaultPadding * 2,
-        ThemeUtils.verticalSpacing,
-        ThemeUtils.defaultPadding * 2,
-        index == _actions.length - 1 ? ThemeUtils.verticalSpacing : 0,
-      ),
+      padding: _actionPadding,
       child: _PendingActionCard(
         action: action,
         actionContext: widget.actionContext,
@@ -244,12 +242,7 @@ class _PendingActionsListState extends State<_PendingActionsList> {
       (context, animation) => _PendingActionItemTransition(
         animation: animation,
         child: Padding(
-          padding: EdgeInsets.fromLTRB(
-            ThemeUtils.defaultPadding * 2,
-            ThemeUtils.verticalSpacing,
-            ThemeUtils.defaultPadding * 2,
-            index == _actions.length ? ThemeUtils.verticalSpacing : 0,
-          ),
+          padding: _actionPadding,
           child: _PendingActionCard(
             action: action,
             actionContext: widget.actionContext,
@@ -262,6 +255,7 @@ class _PendingActionsListState extends State<_PendingActionsList> {
       duration: _removeDuration,
     );
 
+    await AppSeriesNotifications.cancelActiveNotification(action.notificationId);
     await Future<void>.delayed(_removeDuration);
     PendingAppActions.remove(action.id);
     _pendingDeleteActionIds.remove(action.id);
@@ -283,7 +277,7 @@ class _PendingActionsListState extends State<_PendingActionsList> {
           index,
           (context, animation) => _PendingActionItemTransition(
             animation: animation,
-            child: _buildRemovedActionItemContent(action, index),
+            child: _buildRemovedActionItemContent(action),
           ),
           duration: _removeDuration,
         );
@@ -296,7 +290,7 @@ class _PendingActionsListState extends State<_PendingActionsList> {
         _actions.insert(index, action);
         _listKey.currentState?.insertItem(
           index,
-          duration: const Duration(milliseconds: ThemeUtils.animationDurationShort),
+          duration: MotionUtils.resolve(context, MotionUtils.quick),
         );
       }
     }
@@ -336,14 +330,9 @@ class _PendingActionsListState extends State<_PendingActionsList> {
     Navigator.of(context).pop();
   }
 
-  Widget _buildRemovedActionItemContent(PendingAppAction action, int index) {
+  Widget _buildRemovedActionItemContent(PendingAppAction action) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(
-        ThemeUtils.defaultPadding * 2,
-        ThemeUtils.verticalSpacing,
-        ThemeUtils.defaultPadding * 2,
-        index == _actions.length ? ThemeUtils.verticalSpacing : 0,
-      ),
+      padding: _actionPadding,
       child: _PendingActionCard(
         action: action,
         actionContext: widget.actionContext,
@@ -408,47 +397,56 @@ class _PendingActionCard extends StatelessWidget {
   Widget build(BuildContext context) {
     var themeData = Theme.of(context);
 
-    return Card(
-      margin: EdgeInsets.zero,
-      child: InkWell(
+    return DecoratedBox(
+      decoration: GlowingBorderContainer.createGlowingBoxDecoration(
+        themeData.colorScheme.primary,
+        backgroundColor: themeData.cardTheme.color ?? themeData.colorScheme.surface,
+        borderRadius: ThemeUtils.cardBorderRadius.topLeft.x,
+      ),
+      child: Material(
+        type: MaterialType.transparency,
         borderRadius: ThemeUtils.cardBorderRadius,
-        onTap: isInteractive ? () => _consumeAndExecute(context) : null,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: ThemeUtils.defaultPadding,
-            vertical: ThemeUtils.paddingSmall,
-          ),
-          child: Row(
-            children: [
-              _PendingActionIcon(action: action),
-              const SizedBox(width: ThemeUtils.horizontalSpacing),
-              Expanded(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      _title(context),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: themeData.textTheme.bodyLarge,
-                    ),
-                    Text(
-                      _subtitle(context),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: themeData.textTheme.bodySmall,
-                    ),
-                  ],
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          borderRadius: ThemeUtils.cardBorderRadius,
+          onTap: isInteractive ? () => _consumeAndExecute(context) : null,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(
+              horizontal: ThemeUtils.defaultPadding,
+              vertical: ThemeUtils.paddingSmall,
+            ),
+            child: Row(
+              children: [
+                _PendingActionIcon(action: action),
+                const SizedBox(width: ThemeUtils.horizontalSpacing),
+                Expanded(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        _title(context),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: themeData.textTheme.bodyLarge,
+                      ),
+                      Text(
+                        _subtitle(context),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: themeData.textTheme.bodySmall,
+                      ),
+                    ],
+                  ),
                 ),
-              ),
-              IconButton(
-                tooltip: LocaleKeys.commons_dialog_btn_delete.tr(),
-                onPressed: onDelete,
-                icon: const Icon(Icons.delete_outline),
-                color: ThemeUtils.secondaryColor,
-              ),
-            ],
+                IconButton(
+                  tooltip: LocaleKeys.commons_dialog_btn_delete.tr(),
+                  onPressed: onDelete,
+                  icon: const Icon(Icons.delete_outline),
+                  color: ThemeUtils.secondaryColor,
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -503,6 +501,10 @@ class _PendingActionCard extends StatelessWidget {
       return;
     }
 
+    await AppSeriesNotifications.cancelActiveNotification(consumedAction.notificationId);
+    if (!popupContext.mounted) {
+      return;
+    }
     Navigator.of(popupContext).pop();
     if (!actionContext.mounted) {
       return;

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../util/theme_utils.dart';
+import '../../../util/motion_utils.dart';
+import '../animation/animated_expansion.dart';
 import 'settings_card.dart';
 
 class ExpandableSettingsCard extends StatefulWidget {
@@ -48,18 +50,15 @@ class _ExpandableSettingsCardState extends State<ExpandableSettingsCard> {
           ),
         ),
       ),
-      content: AnimatedCrossFade(
-        duration: Duration(milliseconds: _expanded ? ThemeUtils.animationDuration : ThemeUtils.animationDurationShort),
-        crossFadeState: _expanded ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-        firstChild: Column(
+      content: AnimatedExpansion(
+        expanded: _expanded,
+        duration: MotionUtils.resolve(context, _expanded ? MotionUtils.complex : MotionUtils.quick),
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const Divider(height: ThemeUtils.verticalSpacingLarge),
             widget.content,
           ],
-        ),
-        secondChild: Container(
-          height: 0,
         ),
       ),
     );

@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/date_symbol_data_local.dart';
 
@@ -7,8 +8,10 @@ import 'src/store/stores_utils.dart';
 import 'src/util/app_info.dart';
 import 'src/util/app_icon_quick_actions.dart';
 import 'src/util/app_series_notifications.dart';
+import 'src/util/backup/dropbox_backup_service.dart';
 import 'src/util/date_time_utils.dart';
 import 'src/util/logging/daily_files.dart';
+import 'src/util/logging/flutter_simple_logging.dart';
 import 'src/util/stack/stack_utils.dart';
 import 'src/util/tmp_clean.dart';
 import 'src/widgets/administration/settings/settings_controller.dart';
@@ -45,6 +48,14 @@ void main() async {
   StackUtils.init(AppInfo.projectName);
 
   await DailyFiles.init();
+
+  if (!kIsWeb) {
+    try {
+      await DropboxBackupService.instance.ensureInitialized();
+    } catch (error, stackTrace) {
+      SimpleLogging.w('Dropbox backup initialization skipped.', error: error, stackTrace: stackTrace);
+    }
+  }
 
   await TmpClean.clearTmpDirectory();
 

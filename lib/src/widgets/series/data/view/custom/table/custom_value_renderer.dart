@@ -11,6 +11,7 @@ import '../../../../../../util/media_query_utils.dart';
 import '../../../../../../util/theme_utils.dart';
 import '../../../../../../util/tooltip_utils.dart';
 import '../../../../../controls/text/overflow_text.dart';
+import '../../series_value_actions.dart';
 
 class CustomValueRenderer extends StatelessWidget {
   static int get height {
@@ -23,50 +24,56 @@ class CustomValueRenderer extends StatelessWidget {
     required this.seriesDef,
     this.editMode = false,
     this.wrapWithDateTimeTooltip = false,
+    this.enableActions = false,
   });
 
   final CustomValue customValue;
   final bool editMode;
   final SeriesDef seriesDef;
   final bool wrapWithDateTimeTooltip;
+  final bool enableActions;
 
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
-    Widget result;
+    Widget buildValue(bool selected) {
+      if (customValue.values.length == 1 && !selected) {
+        var seriesItem = seriesDef.seriesItems.first;
 
-    if (customValue.values.length == 1 && !editMode) {
-      var seriesItem = seriesDef.seriesItems.first;
-
-      result = Container(
-        padding: const EdgeInsets.all(ThemeUtils.paddingSmall),
-        decoration: BoxDecoration(
-          gradient: ChartUtils.createLeftToRightGradient(ColorUtils.gradientFromColor(seriesItem.color)),
-          borderRadius: ThemeUtils.borderRadiusCircularSmall,
-        ),
-        child: OverflowText(
-          expanded: false,
-          "${customValue.values.values.first}${seriesDef.seriesItems.first.unitSuffix()}",
-          style: themeData.textTheme.labelMedium?.copyWith(color: ColorUtils.getContrastingTextColor(seriesItem.color)),
-        ),
-      );
-    } else {
-      result = Container(
+        return Container(
+          padding: const EdgeInsets.all(ThemeUtils.paddingSmall),
+          decoration: BoxDecoration(
+            gradient: ChartUtils.createLeftToRightGradient(ColorUtils.gradientFromColor(seriesItem.color)),
+            borderRadius: ThemeUtils.borderRadiusCircularSmall,
+          ),
+          child: OverflowText(
+            expanded: false,
+            "${customValue.values.values.first}${seriesDef.seriesItems.first.unitSuffix()}",
+            style: themeData.textTheme.labelMedium?.copyWith(color: ColorUtils.getContrastingTextColor(seriesItem.color)),
+          ),
+        );
+      }
+      return Container(
         margin: const EdgeInsets.all(2),
         child: Icon(
           size: ThemeUtils.iconSizeScaled,
           seriesDef.iconData(),
-          color: editMode ? themeData.colorScheme.secondary : null,
+          color: selected ? themeData.colorScheme.secondary : null,
         ),
       );
     }
 
-    if (editMode) {
-      result = InkWell(
-        borderRadius: ThemeUtils.borderRadiusCircularSmall,
-        onTap: () => SeriesData.showSeriesDataInputDlg(context, seriesDef, value: customValue),
-        child: result,
+    Widget result;
+
+    if (enableActions) {
+      result = SeriesValueActions(
+        seriesDef: seriesDef,
+        value: customValue,
+        onTap: editMode ? () => SeriesData.showSeriesDataInputDlg(context, seriesDef, value: customValue) : null,
+        childBuilder: (_, selected) => buildValue(editMode || selected),
       );
+    } else {
+      result = buildValue(editMode);
     }
 
     if (wrapWithDateTimeTooltip) {

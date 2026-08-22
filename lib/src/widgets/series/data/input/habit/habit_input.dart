@@ -10,17 +10,24 @@ import '../input_result.dart';
 import '../simple_dialog_input.dart';
 
 class HabitInput extends StatefulWidget {
-  const HabitInput({super.key, this.habitValue, required this.seriesDef});
+  const HabitInput({super.key, this.habitValue, required this.seriesDef, required this.inputMode});
 
   final SeriesDef seriesDef;
   final HabitValue? habitValue;
+  final SeriesDataInputMode inputMode;
 
-  static Future<InputResult<HabitValue>?> showInputDlg(BuildContext context, SeriesDef seriesDef, {HabitValue? habitValue}) async {
+  static Future<InputResult<HabitValue>?> showInputDlg(
+    BuildContext context,
+    SeriesDef seriesDef, {
+    HabitValue? habitValue,
+    required SeriesDataInputMode inputMode,
+  }) async {
     return await showDialog<InputResult<HabitValue>>(
       context: context,
       builder: (ctx) => HabitInput(
         seriesDef: seriesDef,
         habitValue: habitValue,
+        inputMode: inputMode,
       ),
     );
   }
@@ -59,20 +66,20 @@ class _HabitInputState extends State<HabitInput> {
   void _saveHandler() {
     if (!_isValid) {
       // not valid means delete
-      if (widget.habitValue != null) {
+      if (widget.habitValue != null && widget.inputMode == SeriesDataInputMode.edit) {
         _deleteHandler();
       } else {
         Navigator.pop(context, null);
       }
       return;
     }
-    bool insert = widget.habitValue == null;
+    bool insert = widget.inputMode == SeriesDataInputMode.create;
     var val = HabitValue(_uuid, _dateTime);
     Navigator.pop(context, InputResult<HabitValue>(val, insert ? InputResultAction.insert : InputResultAction.update));
   }
 
   void _deleteHandler() {
-    if (widget.habitValue != null && mounted) {
+    if (widget.habitValue != null && widget.inputMode == SeriesDataInputMode.edit && mounted) {
       Navigator.pop(context, InputResult<HabitValue>(widget.habitValue!, InputResultAction.delete));
     }
   }
@@ -87,7 +94,7 @@ class _HabitInputState extends State<HabitInput> {
     );
 
     return SimpleDialogInput(
-      isEdit: widget.habitValue != null,
+      isEdit: widget.inputMode == SeriesDataInputMode.edit,
       isValid: _isValid,
       seriesDef: widget.seriesDef,
       dateTime: _dateTime,

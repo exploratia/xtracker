@@ -29,7 +29,7 @@ dependencies:
   easy_localization: ^3.0.8
 
   # DeviceStorage
-  flutter_secure_storage: ^10.2.0
+  flutter_secure_storage: ^11.0.0
 
   # AppInfo
   package_info_plus: ^10.1.0
@@ -41,7 +41,7 @@ dependencies:
   # determine paths like tmp or app data
   path_provider: ^2.1.5
   # zip files
-  flutter_archive: ^6.0.4
+  archive: ^4.0.9
   logger: ^2.7.0
 
   # call native share dialog
@@ -70,7 +70,7 @@ dependencies:
   sembast_web: ^2.4.4+1
 
   # file picker
-  file_picker: ^12.0.0-beta.3
+  file_picker: ^12.0.0
 
   # url launcher
   url_launcher: ^6.3.2
@@ -82,6 +82,9 @@ dependencies:
   flutter_local_notifications: ^22.0.1
   timezone: ^0.11.1
   flutter_timezone: ^5.1.0
+
+  # Dropbox auto backup (Android/iOS only)
+  dropbox_client: ^1.2.2
 
   # display HTML in flutter
   simple_html_css: ^5.0.0

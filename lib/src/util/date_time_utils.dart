@@ -39,6 +39,11 @@ class DateTimeUtils {
     return DateFormat('yyyyMMdd_HHmmss').format(DateTime.now());
   }
 
+  /// Formats [dateTime] for automatic backup file names.
+  static String formatBackupDateTime(DateTime dateTime) {
+    return DateFormat('yyyyMMdd_HHmmss').format(dateTime);
+  }
+
   /// format date yMd
   static String formatDate(DateTime dateTime) {
     return DateFormat.yMd().format(dateTime);

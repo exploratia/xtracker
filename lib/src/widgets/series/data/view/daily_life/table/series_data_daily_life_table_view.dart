@@ -75,6 +75,7 @@ class SeriesDataDailyLifeTableView extends StatelessWidget {
           dailyLifeValue: value,
           seriesDef: seriesViewMetaData.seriesDef,
           editMode: seriesViewMetaData.editMode,
+          enableActions: true,
           // wrapWithDateTimeTooltip: true, // tooltip not required in date time value column profile
           dailyLifeTagResolver: dailyLifeTagResolver,
           maxContentWidth: cellSize.width,

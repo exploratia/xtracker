@@ -9,7 +9,7 @@ import '../../../../util/date_time_utils.dart';
 import '../../../../util/theme_utils.dart';
 import '../../../controls/select/day_range_slider.dart';
 import '../../../controls/select/day_range_slider_overlay.dart';
-import 'series_data_view_overlays.dart';
+import 'series_data_filter_transition.dart';
 import 'series_title.dart';
 
 class SeriesDataView extends StatelessWidget {
@@ -20,7 +20,6 @@ class SeriesDataView extends StatelessWidget {
     required this.seriesDataViewContentBuilder,
     required this.filter,
     required this.updateFilter,
-    required this.seriesDataViewOverlays,
     required this.updateOverlays,
   });
 
@@ -29,7 +28,6 @@ class SeriesDataView extends StatelessWidget {
   final Widget Function() seriesDataViewContentBuilder;
   final SeriesDataFilter filter;
   final VoidCallback updateFilter;
-  final SeriesDataViewOverlays seriesDataViewOverlays;
   final void Function({double? topHeight, double? bottomHeight}) updateOverlays;
 
   final bool _showTitle = true;
@@ -65,27 +63,27 @@ class SeriesDataView extends StatelessWidget {
       WidgetsBinding.instance.addPostFrameCallback((_) => updateOverlays(topHeight: 0));
     }
 
-    // filter view
-    // var seriesType = seriesDef.seriesType;
-    if (seriesViewMetaData.showDateFilter
-    // at the moment all series types support date filtering
-    // && [SeriesType.bloodPressure, SeriesType.dailyCheck, SeriesType.dailyLife, SeriesType.habit].contains(seriesType)
-    ) {
-      stackChildren.add(
-        Positioned.fill(
+    final showDateFilter = seriesViewMetaData.showDateFilter;
+    if (showDateFilter) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        final additionalHeight = DayRangeSlider.calcAdditionalHeightByTextScale();
+        updateOverlays(bottomHeight: ThemeUtils.seriesDataBottomFilterViewHeight + additionalHeight);
+      });
+    }
+    stackChildren.add(
+      Positioned.fill(
+        child: SeriesDataFilterTransition(
+          visible: showDateFilter,
+          onHidden: () => updateOverlays(bottomHeight: 0),
           child: _SeriesDataFilterView(
             seriesViewMetaData: seriesViewMetaData,
             seriesDataValues: seriesDataValues,
             filter: filter,
             updateFilter: updateFilter,
-            seriesDataViewOverlays: seriesDataViewOverlays,
-            updateOverlays: updateOverlays,
           ),
         ),
-      );
-    } else {
-      WidgetsBinding.instance.addPostFrameCallback((_) => updateOverlays(bottomHeight: 0));
-    }
+      ),
+    );
 
     return Stack(
       children: stackChildren,
@@ -99,16 +97,12 @@ class _SeriesDataFilterView extends StatelessWidget {
     required this.seriesDataValues,
     required this.filter,
     required this.updateFilter,
-    required this.seriesDataViewOverlays,
-    required this.updateOverlays,
   });
 
   final SeriesViewMetaData seriesViewMetaData;
   final List<SeriesDataValue> seriesDataValues;
   final SeriesDataFilter filter;
   final VoidCallback updateFilter;
-  final SeriesDataViewOverlays seriesDataViewOverlays;
-  final void Function({double? topHeight, double? bottomHeight}) updateOverlays;
 
   @override
   Widget build(BuildContext context) {
@@ -116,11 +110,6 @@ class _SeriesDataFilterView extends StatelessWidget {
       builder: (BuildContext context, BoxConstraints constraints) {
         // range slider date filter
         if ([ViewType.pixels, ViewType.table, ViewType.lineChart, ViewType.barChart].contains(seriesViewMetaData.viewType)) {
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            double addHeightForTextScale = DayRangeSlider.calcAdditionalHeightByTextScale();
-            updateOverlays(bottomHeight: ThemeUtils.seriesDataBottomFilterViewHeight + addHeightForTextScale);
-          });
-
           int maxSpan = 366 * 2;
 
           // for monthly wider maxSpan

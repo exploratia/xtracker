@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../../generated/locale_keys.g.dart';
 import '../../../model/series/series_def.dart';
 import '../../../providers/series_provider.dart';
+import '../../../util/motion_utils.dart';
 import '../../../util/series/series_import_export.dart';
 import '../../../util/theme_utils.dart';
 import '../../administration/settings/settings_controller.dart';
@@ -14,6 +15,7 @@ import '../../controls/layout/centered_message.dart';
 import '../../controls/layout/wallpaper.dart';
 import '../../controls/responsive/device_dependent_constrained_box.dart';
 import '../series_def_renderer.dart';
+import '../series_mutation_transition.dart';
 
 class SeriesManagementView extends StatelessWidget {
   final SettingsController settingsController;
@@ -68,7 +70,9 @@ class _SeriesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var series = context.watch<SeriesProvider>().series;
+    final seriesProvider = context.watch<SeriesProvider>();
+    var series = seriesProvider.series;
+    final mutation = seriesProvider.latestMutation;
 
     if (series.isEmpty) {
       return AnimateIn(
@@ -84,16 +88,24 @@ class _SeriesList extends StatelessWidget {
     List<Widget> children = [];
     var idx = 0;
     for (var s in series) {
+      final staggerDelay = MotionUtils.stagger * idx;
+      final isInserted = mutation?.seriesUuid == s.uuid && mutation?.type == SeriesMutationType.inserted;
       children.add(
         AnimateIn(
           key: Key(s.uuid),
-          durationMS: 2000 + idx * 500,
-          slideOffset: const Offset(0, -0.2),
-          child: SeriesDefRenderer(
-            managementMode: true,
-            seriesDef: s,
-            index: idx,
-            settingsController: settingsController,
+          duration: MotionUtils.standard,
+          delay: staggerDelay > MotionUtils.maxStagger ? MotionUtils.maxStagger : staggerDelay,
+          fade: !isInserted,
+          slideOffset: isInserted ? null : const Offset(0, -0.2),
+          child: SeriesMutationTransition(
+            seriesUuid: s.uuid,
+            mutation: mutation,
+            child: SeriesDefRenderer(
+              managementMode: true,
+              seriesDef: s,
+              index: idx,
+              settingsController: settingsController,
+            ),
           ),
         ),
       );

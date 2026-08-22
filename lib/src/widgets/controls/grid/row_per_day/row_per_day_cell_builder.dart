@@ -16,10 +16,12 @@ class RowPerDayCellBuilder<T extends SeriesDataValue> {
 
   GridCell gridCellBuilder(BuildContext context, int yIndex, int xIndex, Size cellSize) {
     DayRowItem<T> dayItem = data[yIndex];
+    final valueUuids = dayItem.values.map((value) => value.uuid).toSet();
 
     if (xIndex == 0) {
       return GridCell(
         backgroundColor: dayItem.backgroundColor,
+        valueUuids: valueUuids,
         child: Center(child: Text(dayItem.date)),
       );
     }
@@ -35,7 +37,7 @@ class RowPerDayCellBuilder<T extends SeriesDataValue> {
         gridCellChild = gridCellChildBuilder(value, cellSize);
       }
 
-      return GridCell(backgroundColor: dayItem.backgroundColor, child: gridCellChild);
+      return GridCell(backgroundColor: dayItem.backgroundColor, valueUuids: valueUuids, child: gridCellChild);
     }
 
     if (fixColumnProfile == FixColumnProfile.columnProfileDateMorningMiddayEvening) {
@@ -53,6 +55,7 @@ class RowPerDayCellBuilder<T extends SeriesDataValue> {
       }
       return GridCell(
         backgroundColor: dayItem.backgroundColor,
+        valueUuids: valueUuids,
         child: gridCellChild,
       );
     }

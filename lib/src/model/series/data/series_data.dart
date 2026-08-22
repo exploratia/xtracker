@@ -11,6 +11,7 @@ import '../../../util/globals.dart';
 import '../../../util/json_reader.dart';
 import '../../../util/json_version.dart';
 import '../../../util/logging/flutter_simple_logging.dart';
+import '../../../util/motion_utils.dart';
 import '../../../widgets/series/data/input/blood_pressure/blood_pressure_input.dart';
 import '../../../widgets/series/data/input/custom/custom_input.dart';
 import '../../../widgets/series/data/input/daily_check/daily_check_input.dart';
@@ -176,24 +177,68 @@ class SeriesData<T extends SeriesDataValue> {
     return reduced;
   }
 
-  static Future<void> showSeriesDataInputDlg(BuildContext context, SeriesDef seriesDef, {SeriesDataValue? value}) async {
+  /// Shows the value input dialog in create or edit mode.
+  ///
+  /// When [inputMode] is omitted, the mode is inferred from whether [value]
+  /// exists. Create mode may still receive a value as an input template.
+  static Future<void> showSeriesDataInputDlg(
+    BuildContext context,
+    SeriesDef seriesDef, {
+    SeriesDataValue? value,
+    SeriesDataInputMode? inputMode,
+  }) async {
     var seriesDataProvider = context.read<SeriesDataProvider>();
     var seriesCurrentValueProvider = context.read<SeriesCurrentValueProvider>();
+    final deletionDelay = MotionUtils.resolve(context, SeriesDataMutation.deletionDuration);
+    final resolvedInputMode = inputMode ?? (value == null ? SeriesDataInputMode.create : SeriesDataInputMode.edit);
+    if (resolvedInputMode == SeriesDataInputMode.edit && value == null) {
+      throw ArgumentError.value(value, 'value', 'An existing value is required in edit mode.');
+    }
 
     InputResult<SeriesDataValue>? inputResult;
     switch (seriesDef.seriesType) {
       case SeriesType.bloodPressure:
-        inputResult = await BloodPressureQuickInput.showInputDlg(context, seriesDef, bloodPressureValue: (value is BloodPressureValue) ? value : null);
+        inputResult = await BloodPressureQuickInput.showInputDlg(
+          context,
+          seriesDef,
+          bloodPressureValue: (value is BloodPressureValue) ? value : null,
+          inputMode: resolvedInputMode,
+        );
       case SeriesType.dailyCheck:
-        inputResult = await DailyCheckInput.showInputDlg(context, seriesDef, dailyCheckValue: (value is DailyCheckValue) ? value : null);
+        inputResult = await DailyCheckInput.showInputDlg(
+          context,
+          seriesDef,
+          dailyCheckValue: (value is DailyCheckValue) ? value : null,
+          inputMode: resolvedInputMode,
+        );
       case SeriesType.dailyLife:
-        inputResult = await DailyLifeInput.showInputDlg(context, seriesDef, dailyLifeValue: (value is DailyLifeValue) ? value : null);
+        inputResult = await DailyLifeInput.showInputDlg(
+          context,
+          seriesDef,
+          dailyLifeValue: (value is DailyLifeValue) ? value : null,
+          inputMode: resolvedInputMode,
+        );
       case SeriesType.habit:
-        inputResult = await HabitInput.showInputDlg(context, seriesDef, habitValue: (value is HabitValue) ? value : null);
+        inputResult = await HabitInput.showInputDlg(
+          context,
+          seriesDef,
+          habitValue: (value is HabitValue) ? value : null,
+          inputMode: resolvedInputMode,
+        );
       case SeriesType.custom:
-        inputResult = await CustomInput.showInputDlg(context, seriesDef, customValue: (value is CustomValue) ? value : null);
+        inputResult = await CustomInput.showInputDlg(
+          context,
+          seriesDef,
+          customValue: (value is CustomValue) ? value : null,
+          inputMode: resolvedInputMode,
+        );
       case SeriesType.monthly:
-        inputResult = await MonthlyInput.showInputDlg(context, seriesDef, monthlyValue: (value is MonthlyValue) ? value : null);
+        inputResult = await MonthlyInput.showInputDlg(
+          context,
+          seriesDef,
+          monthlyValue: (value is MonthlyValue) ? value : null,
+          inputMode: resolvedInputMode,
+        );
     }
 
     if (inputResult == null) {
@@ -218,7 +263,12 @@ class SeriesData<T extends SeriesDataValue> {
         }
       case InputResultAction.delete:
         try {
-          await seriesDataProvider.deleteValue(seriesDef, inputResult.seriesDataValue, seriesCurrentValueProvider);
+          await seriesDataProvider.deleteValue(
+            seriesDef,
+            inputResult.seriesDataValue,
+            seriesCurrentValueProvider,
+            deletionDelay: deletionDelay,
+          );
         } catch (err) {
           SimpleLogging.w('Failed to delete ${seriesDef.seriesType.name} value.', error: err);
           if (context.mounted) {

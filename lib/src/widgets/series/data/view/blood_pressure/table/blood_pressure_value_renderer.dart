@@ -7,6 +7,7 @@ import '../../../../../../util/date_time_utils.dart';
 import '../../../../../../util/media_query_utils.dart';
 import '../../../../../../util/theme_utils.dart';
 import '../../../../../../util/tooltip_utils.dart';
+import '../../series_value_actions.dart';
 
 class BloodPressureValueRenderer extends StatelessWidget {
   static int get height {
@@ -21,6 +22,7 @@ class BloodPressureValueRenderer extends StatelessWidget {
     this.editMode = false,
     this.showBorder = false,
     this.wrapWithDateTimeTooltip = false,
+    this.enableActions = false,
   });
 
   final BloodPressureValue bloodPressureValue;
@@ -28,28 +30,16 @@ class BloodPressureValueRenderer extends StatelessWidget {
   final bool showBorder;
   final SeriesDef seriesDef;
   final bool wrapWithDateTimeTooltip;
+  final bool enableActions;
 
   @override
   Widget build(BuildContext context) {
     final themeData = Theme.of(context);
 
-    Widget result = _Value(bloodPressureValue: bloodPressureValue);
-
-    if (editMode) {
-      result = Material(
-        color: Colors.transparent,
-        child: InkWell(
-          borderRadius: ThemeUtils.borderRadiusCircularSmall,
-          onTap: () => SeriesData.showSeriesDataInputDlg(context, seriesDef, value: bloodPressureValue),
-          child: result,
-        ),
-      );
-    }
-
-    result = Container(
+    Widget buildValue(bool selected) => Container(
       margin: const EdgeInsets.all(ThemeUtils.paddingSmall / 2),
       decoration: BoxDecoration(
-        border: (showBorder || editMode) ? Border.all(width: 1, color: editMode ? themeData.colorScheme.secondary : themeData.cardColor) : null,
+        border: (showBorder || selected) ? Border.all(width: 1, color: selected ? themeData.colorScheme.secondary : themeData.cardColor) : null,
         borderRadius: ThemeUtils.borderRadiusCircularSmall,
         gradient: LinearGradient(
           colors: [
@@ -58,8 +48,21 @@ class BloodPressureValueRenderer extends StatelessWidget {
           ],
         ),
       ),
-      child: result,
+      child: _Value(bloodPressureValue: bloodPressureValue),
     );
+
+    Widget result;
+
+    if (enableActions) {
+      result = SeriesValueActions(
+        seriesDef: seriesDef,
+        value: bloodPressureValue,
+        onTap: editMode ? () => SeriesData.showSeriesDataInputDlg(context, seriesDef, value: bloodPressureValue) : null,
+        childBuilder: (_, selected) => buildValue(editMode || selected),
+      );
+    } else {
+      result = buildValue(editMode);
+    }
 
     if (wrapWithDateTimeTooltip) {
       result = Tooltip(

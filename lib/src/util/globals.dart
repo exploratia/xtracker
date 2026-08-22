@@ -3,6 +3,10 @@ import 'package:flutter/material.dart';
 class Globals {
   static const invalid = 'INVALID';
 
+  /// Shows the app-bar button for creating pending-action test messages.
+  static const debugShowPendingActionTestButton = false;
+  static const debugShowSeriesValueActionTestButtons = false;
+
   static const backgroundColorSaturday = Color.fromRGBO(128, 128, 128, 0.1);
   static const backgroundColorSunday = Color.fromRGBO(128, 128, 128, 0.2);
 

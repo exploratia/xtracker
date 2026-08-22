@@ -69,6 +69,7 @@ class SeriesDataBloodPressureTableView extends StatelessWidget {
           bloodPressureValue: value,
           seriesDef: seriesViewMetaData.seriesDef,
           editMode: seriesViewMetaData.editMode,
+          enableActions: true,
           wrapWithDateTimeTooltip: true,
         ),
       );

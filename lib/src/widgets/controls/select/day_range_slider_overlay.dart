@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../util/theme_utils.dart';
+import '../../../util/motion_utils.dart';
 import 'day_range_slider.dart';
 
 class DayRangeSliderOverlay extends StatefulWidget {
@@ -47,7 +48,7 @@ class _DayRangeSliderOverlayState extends State<DayRangeSliderOverlay> {
           left: 0,
           right: 0,
           bottom: 0,
-          duration: const Duration(milliseconds: ThemeUtils.animationDuration),
+          duration: MotionUtils.resolve(context, MotionUtils.complex),
           child: IgnorePointer(
             child: Container(
               color: themeData.scaffoldBackgroundColor.withAlpha(128),
@@ -59,7 +60,7 @@ class _DayRangeSliderOverlayState extends State<DayRangeSliderOverlay> {
           left: 0,
           right: 0,
           bottom: 0,
-          duration: const Duration(milliseconds: ThemeUtils.animationDuration),
+          duration: MotionUtils.resolve(context, MotionUtils.complex),
           child: DayRangeSlider(
             rangeCallback: widget.setFilter,
             maxSpan: widget.maxSpan,

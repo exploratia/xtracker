@@ -8,6 +8,7 @@ import '../../../../../../generated/locale_keys.g.dart';
 import '../../../../model/column_profile/column_profile.dart';
 import '../../../../model/series/seriesItem/series_item.dart';
 import '../../../../util/theme_utils.dart';
+import '../../../../util/motion_utils.dart';
 import '../../../controls/card/glowing_border_container.dart';
 import '../../../controls/layout/single_child_scroll_view_with_scrollbar.dart';
 import '../../../controls/text/overflow_text.dart';
@@ -156,7 +157,7 @@ class _SeriesItemsTableSettingsState extends State<SeriesItemsTableSettings> {
                     child: SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       child: AnimatedContainer(
-                        duration: const Duration(milliseconds: ThemeUtils.animationDuration),
+                        duration: MotionUtils.resolve(context, MotionUtils.complex),
                         color: e.seriesItem.color,
                         height: 2,
                         width: min(244, double.tryParse(e.textEditingController.text) ?? ColumnProfile.defaultColumnWidth.toDouble()),

@@ -46,6 +46,9 @@ class PixelCellBuilder<T extends GridDayItem> {
       );
     }
 
-    return GridCell(child: gridCellChildBuilder(dayItem));
+    return GridCell(
+      valueUuids: dayItem.dateTimeItems.map((value) => value.uuid).toSet(),
+      child: gridCellChildBuilder(dayItem),
+    );
   }
 }

@@ -7,8 +7,10 @@ import '../../../model/series/series_def.dart';
 import '../../../providers/series_current_value_provider.dart';
 import '../../../providers/series_data_provider.dart';
 import '../../../providers/series_providers.dart';
+import '../../../providers/series_provider.dart';
 import '../../../util/dialogs.dart';
 import '../../../util/logging/flutter_simple_logging.dart';
+import '../../../util/motion_utils.dart';
 import '../../../util/series/series_import_export.dart';
 import '../../../util/theme_utils.dart';
 import '../../administration/settings/settings_controller.dart';
@@ -81,9 +83,13 @@ class _SeriesMoreActionsMenu extends StatelessWidget {
       context,
       title: LocaleKeys.commons_dialog_title_areYouSure.tr(),
     );
-    if (res == true) {
+    if (res == true && context.mounted) {
       try {
-        await seriesProviders.seriesProvider.delete(seriesDef, seriesProviders);
+        await seriesProviders.seriesProvider.delete(
+          seriesDef,
+          seriesProviders,
+          removalDelay: MotionUtils.resolve(context, SeriesMutation.removalDelay),
+        );
       } catch (err) {
         SimpleLogging.w("Failed to delete ${seriesDef.toLogString()}.", error: err);
         if (context.mounted) {

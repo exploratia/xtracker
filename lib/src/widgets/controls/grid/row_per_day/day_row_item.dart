@@ -17,6 +17,8 @@ class DayRowItem<T extends SeriesDataValue> {
 
   DayRowItem(this.date, this.backgroundColor);
 
+  Iterable<T> get values => [all, morning, midday, evening].whereType<T>();
+
   static List<DayRowItem<T>> buildTableDataProvider<T extends SeriesDataValue>(SeriesViewMetaData seriesViewMetaData, List<T> seriesData) {
     bool useDateTimeValueColumnProfile = FixColumnProfile.columnProfileDateMorningMiddayEvening != seriesViewMetaData.tableFixColumnProfile;
     List<DayRowItem<T>> list = [];

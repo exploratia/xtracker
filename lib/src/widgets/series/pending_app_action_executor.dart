@@ -12,6 +12,7 @@ import 'series_actions.dart';
 import 'series_export_check.dart';
 
 class PendingAppActionExecutor {
+  /// Executes an action selected manually from the in-app message list.
   static Future<void> execute(
     BuildContext context,
     PendingAppAction action, {
@@ -27,8 +28,24 @@ class PendingAppActionExecutor {
       case PendingAppActionType.backupReminder:
         await SeriesExportCheck.showReminderDialog(context, settingsController);
       case PendingAppActionType.debugDummy:
-        Dialogs.showSnackBar('Debug action executed: ${action.id}', context);
+        Dialogs.showSnackBar(LocaleKeys.seriesDashboard_pendingActions_snackbar_testActionExecuted.tr(), context);
     }
+  }
+
+  /// Executes a series action explicitly requested by a Quick Action or notification tap.
+  static Future<void> executeDirectSeriesAction(BuildContext context, PendingAppAction action) async {
+    if (!action.isDirectSeriesAction) {
+      SimpleLogging.w(
+        'Ignored invalid direct app action. actionId=${action.id}, type=${action.type.name}, '
+        'executeAutomatically=${action.executeAutomatically}, source=${action.seriesSource?.name}',
+      );
+      return;
+    }
+
+    if (!context.mounted) {
+      return;
+    }
+    await _executeSeriesValueAction(context, action);
   }
 
   static Future<void> _executeSeriesValueAction(BuildContext context, PendingAppAction action) async {
