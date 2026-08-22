@@ -9,7 +9,7 @@ funding:
 # Prevent accidental publishing to pub.dev.
 publish_to: 'none'
 
-version: 2.2.0+16
+version: 2.2.1+17
 
 environment:
   sdk: ^3.10.0

@@ -27,7 +27,11 @@ Run automatic changelog generation:
 node ../../update_changelog.js
 ```
 
-Check the latest changelog entries.
+Check the latest changelog entries:
+`lib/src/model/changelog/change_log_entry.dart`
+
+Ensure every released version is registered there and covered by a test in
+`test/src/model/changelog/change_log_entry_test.dart`.
 
 ## Version
 

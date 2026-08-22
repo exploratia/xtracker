@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.1] - 2026-08-22
+
+### Fixes
+
+- fix display of information about new app versions
+
 ## [2.2.0] - 2026-08-22
 
 ### Features
