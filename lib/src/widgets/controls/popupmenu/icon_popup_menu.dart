@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../../../util/theme_utils.dart';
+import '../../../util/motion_utils.dart';
 import '../card/glowing_border_container.dart';
 
 /// Defines how popup menu entries are arranged around their anchor.
@@ -61,6 +62,7 @@ class _RadialMenu extends StatelessWidget {
   const _RadialMenu({required this.position, required this.availableSize, required this.menuEntries, required this.animated});
 
   static const double radius = 64;
+  static const double initialDistanceFactor = 0.8;
 
   final Offset position;
   final Size availableSize;
@@ -74,14 +76,14 @@ class _RadialMenu extends StatelessWidget {
     }
     return TweenAnimationBuilder<double>(
       tween: Tween(begin: 0, end: 1),
-      duration: const Duration(milliseconds: 150),
+      duration: MotionUtils.resolve(context, MotionUtils.quick),
       curve: Curves.easeOut,
       builder: (_, value, _) => _buildMenu(value),
     );
   }
 
   Widget _buildMenu(double animationValue) {
-    final angles = _angles(menuEntries.length, _resolveArc());
+    final offsets = _offsets(menuEntries.length, _resolveArc());
     return Stack(
       children: [
         Positioned(
@@ -97,8 +99,8 @@ class _RadialMenu extends StatelessWidget {
         ),
         for (var i = 0; i < menuEntries.length; i++)
           Positioned(
-            left: position.dx + math.cos(angles[i]) * radius * animationValue - kMinInteractiveDimension / 2,
-            top: position.dy + math.sin(angles[i]) * radius * animationValue - kMinInteractiveDimension / 2,
+            left: position.dx + offsets[i].dx * animationValue - kMinInteractiveDimension / 2,
+            top: position.dy + offsets[i].dy * animationValue - kMinInteractiveDimension / 2,
             child: Opacity(
               opacity: animationValue,
               child: _MenuItemIconButton(menuEntries[i]),
@@ -112,35 +114,73 @@ class _RadialMenu extends StatelessWidget {
     const requiredSpace = radius + kMinInteractiveDimension / 2 + ThemeUtils.defaultPadding;
     final hasSpaceAbove = position.dy >= requiredSpace;
     final hasSpaceBelow = availableSize.height - position.dy >= requiredSpace;
-    if (hasSpaceAbove && !hasSpaceBelow) {
-      return _RadialMenuArc.upper;
-    }
-    if (!hasSpaceAbove && hasSpaceBelow) {
-      return _RadialMenuArc.lower;
-    }
-    if (!hasSpaceAbove && !hasSpaceBelow) {
-      return position.dy >= availableSize.height / 2 ? _RadialMenuArc.upper : _RadialMenuArc.lower;
-    }
-    return _RadialMenuArc.full;
+    final hasSpaceLeft = position.dx >= requiredSpace;
+    final hasSpaceRight = availableSize.width - position.dx >= requiredSpace;
+    final verticalArc = switch ((hasSpaceAbove, hasSpaceBelow)) {
+      (true, false) => _RadialMenuArc.upper,
+      (false, true) => _RadialMenuArc.lower,
+      (false, false) => position.dy >= availableSize.height / 2 ? _RadialMenuArc.upper : _RadialMenuArc.lower,
+      _ => null,
+    };
+    final horizontalArc = switch ((hasSpaceLeft, hasSpaceRight)) {
+      (true, false) => _RadialMenuArc.left,
+      (false, true) => _RadialMenuArc.right,
+      (false, false) => position.dx >= availableSize.width / 2 ? _RadialMenuArc.left : _RadialMenuArc.right,
+      _ => null,
+    };
+
+    return switch ((verticalArc, horizontalArc)) {
+      (_RadialMenuArc.upper, _RadialMenuArc.left) => _RadialMenuArc.upperLeft,
+      (_RadialMenuArc.upper, _RadialMenuArc.right) => _RadialMenuArc.upperRight,
+      (_RadialMenuArc.lower, _RadialMenuArc.left) => _RadialMenuArc.lowerLeft,
+      (_RadialMenuArc.lower, _RadialMenuArc.right) => _RadialMenuArc.lowerRight,
+      (final verticalArc?, null) => verticalArc,
+      (null, final horizontalArc?) => horizontalArc,
+      _ => _RadialMenuArc.full,
+    };
   }
 
-  List<double> _angles(int itemCount, _RadialMenuArc arc) {
-    return switch ((itemCount, arc)) {
-      (1, _RadialMenuArc.upper) => [-math.pi / 2],
-      (1, _RadialMenuArc.lower) => [math.pi / 2],
-      (2, _RadialMenuArc.upper) => [-5 * math.pi / 6, -math.pi / 6],
-      (2, _RadialMenuArc.lower) => [5 * math.pi / 6, math.pi / 6],
-      (3, _RadialMenuArc.upper) => [-math.pi / 2, -math.pi / 6, -5 * math.pi / 6],
-      (3, _RadialMenuArc.lower) => [math.pi / 2, math.pi / 6, 5 * math.pi / 6],
-      (1, _RadialMenuArc.full) => [-math.pi / 2],
-      (2, _RadialMenuArc.full) => [-math.pi / 2, math.pi / 2],
-      (3, _RadialMenuArc.full) => [-math.pi / 2, math.pi / 6, 5 * math.pi / 6],
+  List<Offset> _offsets(int itemCount, _RadialMenuArc arc) {
+    if (arc != _RadialMenuArc.full) {
+      return _edgeOffsets(itemCount, arc);
+    }
+    return _fullCircleAngles(itemCount).map((angle) => Offset(math.cos(angle) * radius, math.sin(angle) * radius)).toList();
+  }
+
+  List<Offset> _edgeOffsets(int itemCount, _RadialMenuArc arc) {
+    final horizontalDirection = switch (arc) {
+      _RadialMenuArc.upperLeft || _RadialMenuArc.lowerLeft || _RadialMenuArc.left => -1,
+      _RadialMenuArc.upperRight || _RadialMenuArc.lowerRight || _RadialMenuArc.right => 1,
+      _ => position.dx >= availableSize.width / 2 ? -1 : 1,
+    };
+    final verticalDirection = switch (arc) {
+      _RadialMenuArc.upperLeft || _RadialMenuArc.upperRight || _RadialMenuArc.upper => -1,
+      _RadialMenuArc.lowerLeft || _RadialMenuArc.lowerRight || _RadialMenuArc.lower => 1,
+      _ => position.dy >= availableSize.height / 2 ? -1 : 1,
+    };
+    final isVerticalLayout = availableSize.height >= availableSize.width;
+    var secondaryDistance = 0.0;
+
+    return List.generate(itemCount, (index) {
+      final primaryDistance = radius * (index + initialDistanceFactor);
+      secondaryDistance += radius * (index == 0 ? initialDistanceFactor : 1 / math.pow(2, index));
+      return isVerticalLayout
+          ? Offset(horizontalDirection * secondaryDistance, verticalDirection * primaryDistance)
+          : Offset(horizontalDirection * primaryDistance, verticalDirection * secondaryDistance);
+    });
+  }
+
+  List<double> _fullCircleAngles(int itemCount) {
+    return switch (itemCount) {
+      1 => [-math.pi / 2],
+      2 => [-math.pi / 2, math.pi / 2],
+      3 => [-math.pi / 2, math.pi / 6, 5 * math.pi / 6],
       _ => List.generate(itemCount, (index) => -math.pi / 2 + index * 2 * math.pi / itemCount),
     };
   }
 }
 
-enum _RadialMenuArc { full, upper, lower }
+enum _RadialMenuArc { full, upper, lower, left, right, upperLeft, upperRight, lowerLeft, lowerRight }
 
 class _RadialMenuCenterIndicator extends StatelessWidget {
   const _RadialMenuCenterIndicator();
@@ -155,7 +195,7 @@ class _RadialMenuCenterIndicator extends StatelessWidget {
         width: size,
         height: size,
         decoration: GlowingBorderContainer.createGlowingBoxDecoration(
-          colorScheme.secondary.withValues(alpha: 0.3),
+          colorScheme.primary.withValues(alpha: 0.7),
           backgroundColor: Colors.transparent,
           borderRadius: size / 2,
           borderWidth: 1,
@@ -253,15 +293,20 @@ class _AnimatedMenu extends StatefulWidget {
 
 class _AnimatedMenuState extends State<_AnimatedMenu> with SingleTickerProviderStateMixin {
   late final AnimationController _controller;
-  final int animationDuration = 150;
-
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
       vsync: this,
-      duration: Duration(milliseconds: animationDuration),
-    )..forward();
+      duration: MotionUtils.quick,
+    );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _controller.duration = MotionUtils.resolve(context, MotionUtils.quick);
+    _controller.forward();
   }
 
   @override

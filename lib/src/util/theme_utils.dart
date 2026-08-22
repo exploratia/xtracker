@@ -45,9 +45,6 @@ class ThemeUtils {
 
   static double get iconSizeScaled => (iconSize * MediaQueryUtils.iconScaleFactor).ceilToDouble();
 
-  static const int animationDuration = 300;
-  static const int animationDurationShort = 150;
-
   static final borderRadiusCircular = BorderRadius.circular(borderRadius);
   static final borderRadiusCircularSmall = BorderRadius.circular(borderRadiusSmall);
 

@@ -19,6 +19,7 @@ import '../../store/migration/import_migration.dart';
 import '../../widgets/administration/settings/settings_controller.dart';
 import '../../widgets/controls/layout/single_child_scroll_view_with_scrollbar.dart';
 import '../../widgets/controls/overlay/progress_overlay.dart';
+import '../../widgets/series/auto_backup_runner.dart';
 import '../date_time_utils.dart';
 import '../dialogs.dart';
 import '../ex.dart';
@@ -30,7 +31,7 @@ import '../theme_utils.dart';
 
 class SeriesImportExport {
   static Future<String> _readPickedFileAsString(PlatformFile file) async {
-    final bytes = await file.xFile.readAsBytes();
+    final bytes = await file.readAsBytes();
     return utf8.decode(bytes);
   }
 
@@ -85,6 +86,11 @@ class SeriesImportExport {
     }
 
     return json;
+  }
+
+  /// Builds the complete series export used by manual and automatic backups.
+  static Future<Map<String, dynamic>> buildAllSeriesBackupJson(BuildContext context) {
+    return _buildAllSeriesExportJson(context);
   }
 
   static String _clearSeriesNameForExport(SeriesDef seriesDef) {
@@ -231,21 +237,18 @@ class SeriesImportExport {
 
   /// import series with data
   static Future<void> _importJsonFile(BuildContext context, SeriesProviders seriesProviders) async {
-    FilePickerResult? result;
+    List<PlatformFile> files = const [];
     try {
       // https://pub.dev/packages/file_picker
-      result = await FilePicker.pickFiles(
-        // file_picker 12 beta has no replacement for multiple file selection.
-        // ignore: deprecated_member_use
-        allowMultiple: true,
-        type: FileType.any,
-        // allowedExtensions: ['json'], // not possible // https://github.com/miguelpruivo/flutter_file_picker/issues/1717
+      files = await FilePicker.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: const ['json'],
       );
     } catch (ex, st) {
       SimpleLogging.w(ex.toString(), stackTrace: st);
       if (context.mounted) Dialogs.showSnackBar("Failure while choosing import file.", context);
     }
-    if (result == null) return; // User canceled the picker
+    if (files.isEmpty) return; // User canceled the picker
 
     if (!context.mounted) return;
     // already hide dialog -> the series could be seen while importing
@@ -260,7 +263,6 @@ class SeriesImportExport {
 
     final overlay = ProgressOverlay.createAndShowProgressOverlay(context);
     int successfulImports = 0;
-    final files = result.files;
     int numSelectedFiles = files.length;
 
     List<String> failures = [];
@@ -360,18 +362,18 @@ class SeriesImportExport {
 
   // import series data from csv
   static Future<void> _importCSVFile(BuildContext context, SeriesDef seriesDef, SeriesProviders seriesProviders) async {
-    FilePickerResult? result;
+    PlatformFile? file;
     try {
       // https://pub.dev/packages/file_picker
-      result = await FilePicker.pickFiles(
-        type: FileType.any,
-        // allowedExtensions: ['json'], // not possible // https://github.com/miguelpruivo/flutter_file_picker/issues/1717
+      file = await FilePicker.pickFile(
+        type: FileType.custom,
+        allowedExtensions: const ['csv'],
       );
     } catch (ex, st) {
       SimpleLogging.w(ex.toString(), stackTrace: st);
       if (context.mounted) Dialogs.showSnackBar("Failure while choosing import file.", context);
     }
-    if (result == null) return; // User canceled the picker
+    if (file == null) return; // User canceled the picker
 
     if (!context.mounted) return;
     // already hide dialog -> the series could be seen while importing
@@ -386,73 +388,65 @@ class SeriesImportExport {
 
     final overlay = ProgressOverlay.createAndShowProgressOverlay(context);
     int successfulImports = 0;
-    final files = result.files;
-    int numSelectedFiles = files.length;
 
     List<String> failures = [];
 
-    if (files.length != 1) {
-      throw Ex("Invalid amount of selected files");
-    }
+    try {
+      if (!file.name.endsWith(".csv")) {
+        throw Ex(
+          "Import failed - unexpected file: ${file.name}",
+          localizedMessage: LocaleKeys.seriesManagement_importExport_alert_unexpectedFile.tr(args: [file.name]),
+        );
+      }
 
-    for (var file in files) {
-      try {
-        if (!file.name.endsWith(".csv")) {
-          throw Ex(
-            "Import failed - unexpected file: ${file.name}",
-            localizedMessage: LocaleKeys.seriesManagement_importExport_alert_unexpectedFile.tr(args: [file.name]),
-          );
-        }
+      SimpleLogging.i("importing '${file.name}' for series '${seriesDef.name}' ...");
 
-        SimpleLogging.i("importing '${file.name}' for series '${seriesDef.name}' ...");
+      var fileContent = await _readPickedFileAsString(file);
 
-        var fileContent = await _readPickedFileAsString(file);
-
-        final csv = const CsvDecoder(dynamicTyping: true).convert(fileContent);
-        // remove empty lines
-        csv.removeWhere((line) => line.isEmpty || line.length == 1 && ("" == line[0] || null == line[0]));
-        if (csv.isEmpty) {
-          throw Ex(
-            "Series data import failed - unexpected (empty) data in file: ${file.name}",
-            localizedMessage: LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]),
-          );
-        }
-        if (csv.length < 2) {
-          throw Ex(
-            "Series data import failed - unexpected data (invalid amount of lines) in file: ${file.name}",
-            localizedMessage: LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]),
-          );
-        }
-        // check if first line matches series header
-        var headerList = seriesDef.toCSVHeaderList();
-        var csvHeaderList = csv.removeAt(0);
-        bool headerEquals = csvHeaderList.length == headerList.length;
-        if (headerEquals) {
-          for (var i = 0; i < headerList.length; ++i) {
-            var hVal = headerList[i];
-            var csvVal = csvHeaderList[i];
-            if (hVal != csvVal.toString()) {
-              headerEquals = false;
-              break;
-            }
+      final csv = const CsvDecoder(dynamicTyping: true).convert(fileContent);
+      // remove empty lines
+      csv.removeWhere((line) => line.isEmpty || line.length == 1 && ("" == line[0] || null == line[0]));
+      if (csv.isEmpty) {
+        throw Ex(
+          "Series data import failed - unexpected (empty) data in file: ${file.name}",
+          localizedMessage: LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]),
+        );
+      }
+      if (csv.length < 2) {
+        throw Ex(
+          "Series data import failed - unexpected data (invalid amount of lines) in file: ${file.name}",
+          localizedMessage: LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]),
+        );
+      }
+      // check if first line matches series header
+      var headerList = seriesDef.toCSVHeaderList();
+      var csvHeaderList = csv.removeAt(0);
+      bool headerEquals = csvHeaderList.length == headerList.length;
+      if (headerEquals) {
+        for (var i = 0; i < headerList.length; ++i) {
+          var hVal = headerList[i];
+          var csvVal = csvHeaderList[i];
+          if (hVal != csvVal.toString()) {
+            headerEquals = false;
+            break;
           }
         }
-        if (!headerEquals) {
-          throw Ex(
-            "Series data import failed - unexpected data (header mismatch) in file: ${file.name}",
-            localizedMessage: LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]),
-          );
-        }
+      }
+      if (!headerEquals) {
+        throw Ex(
+          "Series data import failed - unexpected data (header mismatch) in file: ${file.name}",
+          localizedMessage: LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]),
+        );
+      }
 
-        await _importSeriesCSV(csv, file.name, seriesDef, seriesProviders);
-        successfulImports++;
-      } catch (ex, st) {
-        SimpleLogging.w(ex.toString(), stackTrace: st);
-        if (ex is Ex) {
-          failures.add(ex.localizedToString());
-        } else {
-          failures.add(LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]));
-        }
+      await _importSeriesCSV(csv, file.name, seriesDef, seriesProviders);
+      successfulImports++;
+    } catch (ex, st) {
+      SimpleLogging.w(ex.toString(), stackTrace: st);
+      if (ex is Ex) {
+        failures.add(ex.localizedToString());
+      } else {
+        failures.add(LocaleKeys.seriesManagement_importExport_alert_unexpectedDataStructure.tr(args: [file.name]));
       }
     }
 
@@ -470,7 +464,7 @@ class SeriesImportExport {
       SimpleLogging.i('Successfully imported $successfulImports series.');
       if (context.mounted) {
         Dialogs.showSnackBar(
-          LocaleKeys.seriesManagement_importExport_snackbar_importSuccessfulXofY.tr(args: [successfulImports.toString(), numSelectedFiles.toString()]),
+          LocaleKeys.seriesManagement_importExport_snackbar_importSuccessfulXofY.tr(args: [successfulImports.toString(), '1']),
           context,
         );
       }
@@ -494,12 +488,18 @@ class SeriesImportExport {
               listenable: settingsController,
               builder: (context, child) {
                 String lastExport = buildLastExportDateStr(settingsController);
+                String lastBackup = buildLastBackupDateStr(settingsController);
 
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    _LabelMedium(LocaleKeys.seriesManagement_importExport_label_latestSeriesExport.tr(args: [lastExport])),
-                  ],
+                return Align(
+                  alignment: Alignment.centerRight,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      _LabelMedium(LocaleKeys.seriesManagement_importExport_label_latestSeriesExport.tr(args: [lastExport])),
+                      if (settingsController.autoBackupEnabled)
+                        _LabelMedium(LocaleKeys.seriesManagement_importExport_label_latestAutoBackup.tr(args: [lastBackup])),
+                    ],
+                  ),
                 );
               },
             ),
@@ -525,6 +525,23 @@ class SeriesImportExport {
               label: Text(LocaleKeys.seriesManagement_importExport_btn_shareSeries.tr()),
             ),
             _LabelMedium(LocaleKeys.seriesManagement_importExport_label_shareSeries.tr()),
+            if (!kIsWeb && settingsController.autoBackupEnabled) ...[
+              ElevatedButton.icon(
+                onPressed: () async {
+                  Navigator.of(context).pop();
+                  await Future<void>.delayed(Duration.zero);
+                  if (!context.mounted) return;
+                  await AutoBackupRunner.run(
+                    context,
+                    settingsController,
+                    buildBackupJson: () => buildAllSeriesBackupJson(context),
+                  );
+                },
+                icon: Icon(Icons.cloud_upload_outlined, size: ThemeUtils.iconSizeScaled),
+                label: Text(LocaleKeys.seriesManagement_importExport_btn_startAutoBackup.tr()),
+              ),
+              _LabelMedium(LocaleKeys.seriesManagement_importExport_label_startAutoBackup.tr()),
+            ],
           ],
           // single series
           if (seriesDef != null) ...[
@@ -606,6 +623,13 @@ class SeriesImportExport {
       lastExport = DateTimeUtils.formatDate(lastExportDate);
     }
     return lastExport;
+  }
+
+  /// Formats the latest successful Dropbox backup date for display.
+  static String buildLastBackupDateStr(SettingsController settingsController) {
+    DateTime? lastBackupDate = settingsController.autoBackupDate;
+    if (lastBackupDate == null) return '-';
+    return DateTimeUtils.formatDate(lastBackupDate);
   }
 }
 

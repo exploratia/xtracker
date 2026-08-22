@@ -36,6 +36,7 @@ import '../../widgets/series/data/view/series_data_no_data.dart';
 import '../../widgets/series/data/view/series_data_view.dart';
 import '../../widgets/series/data/view/series_data_view_content_builder.dart';
 import '../../widgets/series/data/view/series_data_view_overlays.dart';
+import '../../widgets/series/data/view/series_data_view_transition.dart';
 import '../../widgets/series/data/view/series_title.dart';
 
 class SeriesDataScreen extends StatelessWidget {
@@ -212,20 +213,20 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
   void _toggleShowDateFilter() {
     setState(() {
       widget.seriesViewMetaData.toggleShowDateFilter();
-      if (!widget.seriesViewMetaData.showDateFilter) widget.updateOverlays(bottomHeight: 0);
     });
   }
 
   void _setTableFixColumnProfile(FixColumnProfileType fixColumnProfileType) {
     setState(() {
       widget.seriesViewMetaData.columnProfile = FixColumnProfile.resolveByType(fixColumnProfileType);
-      if (!widget.seriesViewMetaData.showDateFilter) widget.updateOverlays(bottomHeight: 0);
     });
   }
 
   void _addSeriesValueHandler(BuildContext context) async {
     await SeriesData.showSeriesDataInputDlg(context, widget.seriesViewMetaData.seriesDef);
-    setState(() {});
+    if (mounted) {
+      setState(() {});
+    }
   }
 
   void _showSeriesDataAnalytics(BuildContext context) async {
@@ -267,10 +268,10 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
         seriesDataViewContentBuilder: widget.seriesDataViewBuilder,
         filter: widget.filter,
         updateFilter: widget.updateFilter,
-        seriesDataViewOverlays: widget.seriesDataViewOverlays,
         updateOverlays: widget.updateOverlays,
       );
     }
+    view = SeriesDataViewTransition(viewType: viewType, child: view);
 
     List<Widget> actions = [];
     // in case of portrait show actions as own bar in the bottom
@@ -556,6 +557,7 @@ class _SelectColumnProfile extends StatelessWidget {
                   Icon(
                     Icons.check,
                     size: ThemeUtils.iconSizeScaled,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
               ],
             ),

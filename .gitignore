@@ -64,7 +64,7 @@ untranslated.txt
 # own build bat
 build.bat
 build_release.bat
-openHandyFTP.bat
+copy_build_by_ftp.bat
 
 # android release key
 *.jks

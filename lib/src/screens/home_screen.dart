@@ -5,9 +5,11 @@ import '../../generated/assets.gen.dart';
 import '../../generated/locale_keys.g.dart';
 import '../model/navigation/main_navigation_item.dart';
 import '../model/series/series_def.dart';
+import '../util/globals.dart';
+import '../util/pending_app_actions.dart';
 import '../util/theme_utils.dart';
-import '../widgets/changelog/change_log_view.dart';
 import '../widgets/administration/settings/settings_controller.dart';
+import '../widgets/changelog/change_log_view.dart';
 import '../widgets/controls/appbar/gradient_app_bar.dart';
 import '../widgets/controls/navigation/hide_bottom_navigation_bar.dart';
 import '../widgets/controls/responsive/screen_builder.dart';
@@ -81,6 +83,13 @@ class _HomeScreenContent extends StatelessWidget {
             ],
           ),
           actions: [
+            if (Globals.debugShowPendingActionTestButton)
+              IconButton(
+                iconSize: ThemeUtils.iconSizeScaled,
+                tooltip: LocaleKeys.seriesDashboard_pendingActions_action_createTestMessage_tooltip.tr(),
+                onPressed: PendingAppActions.enqueueDebugDummyAction,
+                icon: const Icon(Icons.add_alert_outlined),
+              ),
             PendingAppActionsButton(settingsController: settingsController),
             IconButton(
               iconSize: ThemeUtils.iconSizeScaled,

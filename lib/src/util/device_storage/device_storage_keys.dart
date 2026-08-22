@@ -12,4 +12,9 @@ class DeviceStorageKeys {
   static const seriesExportReminderDate = 'seriesExportReminderDate';
   static const appSupportReminderDate = 'appSupportReminderDate';
   static const quickActionsHideExploratiaUrl = 'quickActionsHideUrl';
+  static const autoBackupEnabled = 'autoBackupEnabled';
+  static const autoBackupIntervalDays = 'autoBackupIntervalDays';
+  static const autoBackupNextDate = 'autoBackupNextDate';
+  static const autoBackupDate = 'autoBackupDate';
+  static const dropboxCredentials = 'dropboxCredentials';
 }

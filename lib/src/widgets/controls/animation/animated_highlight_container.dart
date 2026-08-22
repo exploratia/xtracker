@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../util/theme_utils.dart';
+import '../../../util/motion_utils.dart';
 
 class AnimatedHighlightContainer<T> extends StatefulWidget {
   final T Function(BuildContext) valueSelector;
@@ -13,7 +14,7 @@ class AnimatedHighlightContainer<T> extends StatefulWidget {
     super.key,
     required this.valueSelector,
     required this.builder,
-    this.duration = const Duration(milliseconds: 600),
+    this.duration = MotionUtils.highlight,
     this.highlightColor = const Color(0xFFE0F7FA),
     this.baseColor = Colors.transparent,
   });
@@ -43,6 +44,9 @@ class _AnimatedHighlightState<T> extends State<AnimatedHighlightContainer<T>> {
   }
 
   void _triggerHighlight() {
+    if (MotionUtils.animationsDisabled(context)) {
+      return;
+    }
     setState(() => _highlight = true);
     Future.delayed(widget.duration, () {
       if (mounted) setState(() => _highlight = false);
@@ -53,7 +57,7 @@ class _AnimatedHighlightState<T> extends State<AnimatedHighlightContainer<T>> {
   Widget build(BuildContext context) {
     final value = widget.valueSelector(context);
     return AnimatedContainer(
-      duration: widget.duration,
+      duration: MotionUtils.resolve(context, widget.duration),
       decoration: BoxDecoration(
         borderRadius: ThemeUtils.borderRadiusCircular,
         color: _highlight ? widget.highlightColor : widget.baseColor,

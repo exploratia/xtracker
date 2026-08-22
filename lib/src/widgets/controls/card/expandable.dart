@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../util/theme_utils.dart';
+import '../../../util/motion_utils.dart';
+import '../animation/animated_expansion.dart';
 import '../text/overflow_text.dart';
 
 class Expandable extends StatefulWidget {
@@ -77,10 +79,10 @@ class _ExpandableState extends State<Expandable> {
             ),
           ),
         ),
-        AnimatedCrossFade(
-          duration: Duration(milliseconds: _expanded ? ThemeUtils.animationDuration : ThemeUtils.animationDurationShort),
-          crossFadeState: _expanded ? CrossFadeState.showFirst : CrossFadeState.showSecond,
-          firstChild: Container(
+        AnimatedExpansion(
+          expanded: _expanded,
+          duration: MotionUtils.resolve(context, _expanded ? MotionUtils.complex : MotionUtils.quick),
+          child: Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 begin: const AlignmentDirectional(0, -0.7),
@@ -101,9 +103,6 @@ class _ExpandableState extends State<Expandable> {
                 if (widget.useVerticalSpacingAfterChild) const SizedBox(height: ThemeUtils.verticalSpacing),
               ],
             ),
-          ),
-          secondChild: Container(
-            height: 0,
           ),
         ),
       ],

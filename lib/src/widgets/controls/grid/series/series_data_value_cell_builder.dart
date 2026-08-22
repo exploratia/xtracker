@@ -65,6 +65,10 @@ class SeriesDataValueCellBuilder<T extends SeriesDataValue> {
       );
     }
     child ??= Container();
-    return GridCell(backgroundColor: gridItem.backgroundColor, child: child);
+    return GridCell(
+      backgroundColor: gridItem.backgroundColor,
+      valueUuids: {gridItem.value.uuid},
+      child: child,
+    );
   }
 }

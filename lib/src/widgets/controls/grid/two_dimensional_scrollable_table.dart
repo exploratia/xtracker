@@ -3,6 +3,7 @@ import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:uuid/v4.dart';
 
 import '../../../model/column_profile/column_profile.dart';
+import '../../series/data/view/series_data_mutation_transition.dart';
 import '../navigation/hide_bottom_navigation_bar.dart';
 import 'two_dimensional_grid_view_with_scrollbar.dart';
 
@@ -74,7 +75,7 @@ class TwoDimensionalScrollableTable extends StatelessWidget {
                 color: cellData.backgroundColor,
                 height: lineHeight.toDouble(),
                 width: columnWidth,
-                child: cellData.child,
+                child: cellData._buildChild(),
               );
             },
           );
@@ -99,8 +100,21 @@ class TwoDimensionalScrollableTable extends StatelessWidget {
 class GridCell {
   final Color? backgroundColor;
   final Widget child;
+  final Set<String> valueUuids;
 
-  GridCell({this.backgroundColor, required this.child});
+  GridCell({this.backgroundColor, required this.child, this.valueUuids = const {}});
+
+  Widget _buildChild() {
+    if (valueUuids.isEmpty) {
+      return child;
+    }
+    final sortedValueUuids = valueUuids.toList()..sort();
+    return SeriesDataMutationTransition(
+      key: ValueKey(sortedValueUuids.join('_')),
+      valueUuids: valueUuids,
+      child: child,
+    );
+  }
 }
 
 class _ScrollableGrid extends StatefulWidget {
@@ -221,7 +235,7 @@ class _ScrollableGridState extends State<_ScrollableGrid> {
                       color: cellData.backgroundColor,
                       height: widget.lineHeight.toDouble(),
                       width: firstColumnWidth,
-                      child: cellData.child,
+                      child: cellData._buildChild(),
                     );
                   },
                 ),

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../../util/motion_utils.dart';
+
 class TabToOpenFab extends StatelessWidget {
   const TabToOpenFab({super.key, required this.openFabIconData, required this.open, required this.toggle});
 
@@ -18,12 +20,12 @@ class TabToOpenFab extends StatelessWidget {
           open ? 0.7 : 1.0,
           1.0,
         ),
-        duration: const Duration(milliseconds: 250),
+        duration: MotionUtils.resolve(context, MotionUtils.emphasized),
         curve: const Interval(0.0, 0.5, curve: Curves.easeOut),
         child: AnimatedOpacity(
           opacity: open ? 0.0 : 1.0,
           curve: const Interval(0.25, 1.0, curve: Curves.easeInOut),
-          duration: const Duration(milliseconds: 250),
+          duration: MotionUtils.resolve(context, MotionUtils.emphasized),
           child: FloatingActionButton(
             onPressed: toggle,
             heroTag: null,

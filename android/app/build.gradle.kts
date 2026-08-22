@@ -21,8 +21,9 @@ if (hasReleaseKeystore) {
 
 android {
     namespace = "de.exploratia.xtracker"
-    compileSdk = flutter.compileSdkVersion
-//    ndkVersion = flutter.ndkVersion
+    // compileSdk = flutter.compileSdkVersion
+    compileSdk = 37
+    // ndkVersion = flutter.ndkVersion
     ndkVersion = "28.2.13676358"
 
     compileOptions {

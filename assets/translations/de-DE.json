@@ -371,6 +371,14 @@
       "source": {
         "backupReminder": "Datensicherung",
         "debugDummy": "Testeintrag"
+      },
+      "action": {
+        "createTestMessage": {
+          "tooltip": "Testnachricht erstellen"
+        }
+      },
+      "snackbar": {
+        "testActionExecuted": "Testaktion ausgeführt."
       }
     },
     "btn": {
@@ -905,7 +913,8 @@
         "importSeries": "Messreihen importieren",
         "importSeriesCSV": "Messreihe importieren (CSV)",
         "shareSeries": "Alle Messreihen teilen",
-        "shareSingleSeries": "Messreihe teilen"
+        "shareSingleSeries": "Messreihe teilen",
+        "startAutoBackup": "Dropbox-Backup starten"
       },
       "label": {
         "exportSeries": "Alle Messreihen als eine JSON-Datei speichern.",
@@ -919,8 +928,10 @@
         "importSeriesCSV": "Werte für die Messreihe „{}“ aus einer CSV-Datei importieren. Bereits vorhandene Daten werden überschrieben.\nDie Datei muss exakt folgende Spalten und pro Eintrag eine entsprechende Zeile enthalten:\n{}",
         "importSeriesCSVTip": "Tipp: CSV-Import ist für einzelne Messreihen über das Export-Symbol der jeweiligen Messreihe möglich.",
         "latestSeriesExport": "Zuletzt exportiert: {}",
+        "latestAutoBackup": "Zuletzt gesichert: {}",
         "shareSeries": "Alle Messreihen als eine JSON-Datei teilen.",
-        "shareSingleSeries": "Messreihe (Konfiguration und Werte) als JSON-Datei teilen."
+        "shareSingleSeries": "Messreihe (Konfiguration und Werte) als JSON-Datei teilen.",
+        "startAutoBackup": "Alle Messreihen als eine JSON-Datei in deiner Dropbox sichern."
       },
       "snackbar": {
         "importSuccessfulXofY": "{} Messreihen aus {} Dateien erfolgreich importiert."
@@ -989,6 +1000,18 @@
       }
     }
   },
+  "autoBackup": {
+    "overlay": {
+      "label": "Backup wird in Dropbox gespeichert …"
+    },
+    "snackbar": {
+      "success": "Dropbox-Backup erfolgreich gespeichert",
+      "failure": "Dropbox-Backup fehlgeschlagen",
+      "noInternet": "Keine Internetverbindung. Dropbox-Backup wurde abgebrochen",
+      "timeout": "Dropbox-Backup wegen Zeitüberschreitung abgebrochen",
+      "authFailure": "Dropbox-Anmeldung wurde abgebrochen oder ist fehlgeschlagen"
+    }
+  },
   "settings": {
     "title": "Einstellungen",
     "deviceStorage": {
@@ -1007,8 +1030,15 @@
         "hideWallpaper": "Hintergrundbild ausblenden:",
         "hideExploratiaQuickActionUrl": "Exploratia-URL im App-Icon-Menü ausblenden:",
         "seriesExportDisableReminder": "Erinnerung für Messreihenexport deaktivieren (30 Tage nach letztem Export):",
+        "autoBackupEnabled": "Automatisches Dropbox-Backup:",
+        "autoBackupIntervalDays": "Backup-Intervall in Tagen:",
+        "autoBackupNextDate": "Nächstes Backup: {}",
         "lang": "Sprache:",
         "theme": "Theme:"
+      },
+      "info": {
+        "autoBackupNoAutomaticDeletion": "Dropbox-Backups werden nicht automatisch gelöscht. Bitte lösche nicht mehr benötigte Backups selbst in Dropbox.",
+        "autoBackupAtNextStart": "beim nächsten App-Start"
       },
       "language": {
         "system": "Systemeinstellung",

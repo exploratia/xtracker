@@ -160,6 +160,8 @@ abstract class LocaleKeys {
   static const seriesDashboard_pendingActions_label_debugDummy = 'seriesDashboard.pendingActions.label.debugDummy';
   static const seriesDashboard_pendingActions_source_backupReminder = 'seriesDashboard.pendingActions.source.backupReminder';
   static const seriesDashboard_pendingActions_source_debugDummy = 'seriesDashboard.pendingActions.source.debugDummy';
+  static const seriesDashboard_pendingActions_action_createTestMessage_tooltip = 'seriesDashboard.pendingActions.action.createTestMessage.tooltip';
+  static const seriesDashboard_pendingActions_snackbar_testActionExecuted = 'seriesDashboard.pendingActions.snackbar.testActionExecuted';
   static const seriesDashboard_btn_addSeries_label = 'seriesDashboard.btn.addSeries.label';
   static const seriesDashboard_btn_addSeries_tooltip = 'seriesDashboard.btn.addSeries.tooltip';
   static const seriesData_title = 'seriesData.title';
@@ -400,6 +402,7 @@ abstract class LocaleKeys {
   static const seriesManagement_importExport_btn_importSeriesCSV = 'seriesManagement.importExport.btn.importSeriesCSV';
   static const seriesManagement_importExport_btn_shareSeries = 'seriesManagement.importExport.btn.shareSeries';
   static const seriesManagement_importExport_btn_shareSingleSeries = 'seriesManagement.importExport.btn.shareSingleSeries';
+  static const seriesManagement_importExport_btn_startAutoBackup = 'seriesManagement.importExport.btn.startAutoBackup';
   static const seriesManagement_importExport_label_exportSeries = 'seriesManagement.importExport.label.exportSeries';
   static const seriesManagement_importExport_label_exportSingleSeries = 'seriesManagement.importExport.label.exportSingleSeries';
   static const seriesManagement_importExport_label_exportSingleSeriesCSV = 'seriesManagement.importExport.label.exportSingleSeriesCSV';
@@ -411,8 +414,10 @@ abstract class LocaleKeys {
   static const seriesManagement_importExport_label_importSeriesCSV = 'seriesManagement.importExport.label.importSeriesCSV';
   static const seriesManagement_importExport_label_importSeriesCSVTip = 'seriesManagement.importExport.label.importSeriesCSVTip';
   static const seriesManagement_importExport_label_latestSeriesExport = 'seriesManagement.importExport.label.latestSeriesExport';
+  static const seriesManagement_importExport_label_latestAutoBackup = 'seriesManagement.importExport.label.latestAutoBackup';
   static const seriesManagement_importExport_label_shareSeries = 'seriesManagement.importExport.label.shareSeries';
   static const seriesManagement_importExport_label_shareSingleSeries = 'seriesManagement.importExport.label.shareSingleSeries';
+  static const seriesManagement_importExport_label_startAutoBackup = 'seriesManagement.importExport.label.startAutoBackup';
   static const seriesManagement_importExport_snackbar_importSuccessfulXofY = 'seriesManagement.importExport.snackbar.importSuccessfulXofY';
   static const seriesManagement_importExport_alert_unexpectedDataStructure = 'seriesManagement.importExport.alert.unexpectedDataStructure';
   static const seriesManagement_importExport_alert_unexpectedFile = 'seriesManagement.importExport.alert.unexpectedFile';
@@ -434,6 +439,12 @@ abstract class LocaleKeys {
   static const seriesValue_bloodPressure_validation_systolicTooLow = 'seriesValue.bloodPressure.validation.systolicTooLow';
   static const seriesValue_dailyCheck_btn_toggleCheck_tooltip = 'seriesValue.dailyCheck.btn.toggleCheck.tooltip';
   static const seriesValue_habit_btn_toggleValue_tooltip = 'seriesValue.habit.btn.toggleValue.tooltip';
+  static const autoBackup_overlay_label = 'autoBackup.overlay.label';
+  static const autoBackup_snackbar_success = 'autoBackup.snackbar.success';
+  static const autoBackup_snackbar_failure = 'autoBackup.snackbar.failure';
+  static const autoBackup_snackbar_noInternet = 'autoBackup.snackbar.noInternet';
+  static const autoBackup_snackbar_timeout = 'autoBackup.snackbar.timeout';
+  static const autoBackup_snackbar_authFailure = 'autoBackup.snackbar.authFailure';
   static const settings_title = 'settings.title';
   static const settings_deviceStorage_title = 'settings.deviceStorage.title';
   static const settings_deviceStorage_btn_clearStorage = 'settings.deviceStorage.btn.clearStorage';
@@ -443,8 +454,13 @@ abstract class LocaleKeys {
   static const settings_general_label_hideWallpaper = 'settings.general.label.hideWallpaper';
   static const settings_general_label_hideExploratiaQuickActionUrl = 'settings.general.label.hideExploratiaQuickActionUrl';
   static const settings_general_label_seriesExportDisableReminder = 'settings.general.label.seriesExportDisableReminder';
+  static const settings_general_label_autoBackupEnabled = 'settings.general.label.autoBackupEnabled';
+  static const settings_general_label_autoBackupIntervalDays = 'settings.general.label.autoBackupIntervalDays';
+  static const settings_general_label_autoBackupNextDate = 'settings.general.label.autoBackupNextDate';
   static const settings_general_label_lang = 'settings.general.label.lang';
   static const settings_general_label_theme = 'settings.general.label.theme';
+  static const settings_general_info_autoBackupNoAutomaticDeletion = 'settings.general.info.autoBackupNoAutomaticDeletion';
+  static const settings_general_info_autoBackupAtNextStart = 'settings.general.info.autoBackupAtNextStart';
   static const settings_general_language_system = 'settings.general.language.system';
   static const settings_general_language_english = 'settings.general.language.english';
   static const settings_general_language_german = 'settings.general.language.german';

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../../util/logging/flutter_simple_logging.dart';
+import '../../../util/motion_utils.dart';
 import '../../../util/theme_utils.dart';
 
 class FutureBuilderWithProgressIndicator<T> extends StatelessWidget {
@@ -25,8 +26,11 @@ class FutureBuilderWithProgressIndicator<T> extends StatelessWidget {
     return FutureBuilder(
       future: future,
       builder: (context, snapshot) {
+        Widget content;
+        String stateKey;
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return Column(
+          stateKey = 'waiting';
+          content = Column(
             children: [
               if (marginTop > 0) SizedBox(height: marginTop),
               const LinearProgressIndicator(),
@@ -34,23 +38,41 @@ class FutureBuilderWithProgressIndicator<T> extends StatelessWidget {
             ],
           );
         } else if (snapshot.hasError) {
+          stateKey = 'error';
           SimpleLogging.w('Err result in future: ${snapshot.error}');
           if (errorBuilder != null) {
             var errorBuilderResult = errorBuilder!(snapshot.error!);
-            if (errorBuilderResult == null) return Container();
-            if (errorBuilderResult is Widget) return errorBuilderResult;
-            return _ErrMsg(msg: errorBuilderResult.toString());
+            if (errorBuilderResult == null) {
+              content = Container();
+            } else if (errorBuilderResult is Widget) {
+              content = errorBuilderResult;
+            } else {
+              content = _ErrMsg(msg: errorBuilderResult.toString());
+            }
           } else {
-            return _ErrMsg(msg: snapshot.error!.toString());
+            content = _ErrMsg(msg: snapshot.error!.toString());
           }
         } else {
+          stateKey = 'content';
           T? data = snapshot.data;
           if (data == null) {
             SimpleLogging.w('No data in future - although there was no snapshot error.');
-            return const _ErrMsg(msg: "Future failure - no data.");
+            stateKey = 'error';
+            content = const _ErrMsg(msg: "Future failure - no data.");
+          } else {
+            content = widgetBuilder(data, context);
           }
-          return widgetBuilder(data, context);
         }
+
+        return AnimatedSwitcher(
+          duration: MotionUtils.resolve(context, MotionUtils.quick),
+          switchInCurve: Curves.easeOut,
+          switchOutCurve: Curves.easeIn,
+          child: KeyedSubtree(
+            key: ValueKey(stateKey),
+            child: content,
+          ),
+        );
       },
     );
   }

@@ -371,6 +371,14 @@
       "source": {
         "backupReminder": "Backup",
         "debugDummy": "Test item"
+      },
+      "action": {
+        "createTestMessage": {
+          "tooltip": "Create test message"
+        }
+      },
+      "snackbar": {
+        "testActionExecuted": "Test action executed."
       }
     },
     "btn": {
@@ -905,7 +913,8 @@
         "importSeries": "Import series",
         "importSeriesCSV": "Import series values (CSV)",
         "shareSeries": "Share all series",
-        "shareSingleSeries": "Share series"
+        "shareSingleSeries": "Share series",
+        "startAutoBackup": "Start Dropbox backup"
       },
       "label": {
         "exportSeries": "Export all series as one JSON file.",
@@ -919,8 +928,10 @@
         "importSeriesCSV": "Import values for the series “{}” from a CSV file. Existing data will be overwritten.\nThe file must contain one line per entry in exactly these columns:\n{}",
         "importSeriesCSVTip": "Tip: CSV import is available per series.",
         "latestSeriesExport": "Last exported: {}",
+        "latestAutoBackup": "Last backup: {}",
         "shareSeries": "Share all series as one JSON file.",
-        "shareSingleSeries": "Share series (definition and values) as JSON file."
+        "shareSingleSeries": "Share series (definition and values) as JSON file.",
+        "startAutoBackup": "Back up all series as one JSON file to your Dropbox."
       },
       "snackbar": {
         "importSuccessfulXofY": "Imported {} series from {} files successfully."
@@ -989,6 +1000,18 @@
       }
     }
   },
+  "autoBackup": {
+    "overlay": {
+      "label": "Saving backup to Dropbox …"
+    },
+    "snackbar": {
+      "success": "Dropbox backup saved successfully",
+      "failure": "Dropbox backup failed",
+      "noInternet": "No internet connection. Dropbox backup was cancelled",
+      "timeout": "Dropbox backup cancelled because it timed out",
+      "authFailure": "Dropbox sign-in was cancelled or failed"
+    }
+  },
   "settings": {
     "title": "Settings",
     "deviceStorage": {
@@ -1007,8 +1030,15 @@
         "hideWallpaper": "Hide wallpaper:",
         "hideExploratiaQuickActionUrl": "Hide exploratia URL in app icon menu:",
         "seriesExportDisableReminder": "Disable series export reminder (30 days after last export):",
+        "autoBackupEnabled": "Automatic Dropbox backup:",
+        "autoBackupIntervalDays": "Backup interval in days:",
+        "autoBackupNextDate": "Next backup: {}",
         "lang": "Language:",
         "theme": "Theme:"
+      },
+      "info": {
+        "autoBackupNoAutomaticDeletion": "Dropbox backups are not deleted automatically. Please delete backups you no longer need in Dropbox yourself.",
+        "autoBackupAtNextStart": "at the next app start"
       },
       "language": {
         "system": "System",

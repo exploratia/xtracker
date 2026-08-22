@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
@@ -15,7 +16,40 @@ import '../model/series/series_type.dart';
 import '../store/stores.dart';
 import '../util/ex.dart';
 import '../util/logging/flutter_simple_logging.dart';
+import '../util/motion_utils.dart';
 import 'series_current_value_provider.dart';
+
+/// The kind of change most recently applied to a series value.
+enum SeriesDataMutationType { inserted, updated, deleted }
+
+/// Describes a single series-value change for short-lived UI feedback.
+@immutable
+class SeriesDataMutation {
+  const SeriesDataMutation({
+    required this.seriesUuid,
+    required this.valueUuid,
+    required this.type,
+    required this.version,
+  });
+
+  /// Duration used to visually remove a value before deleting it from the data set.
+  static const deletionDuration = MotionUtils.viewTransition;
+
+  /// Duration of the highlight shown after inserting or updating a value.
+  static const highlightDuration = MotionUtils.highlight;
+
+  /// UUID of the series containing the changed value.
+  final String seriesUuid;
+
+  /// UUID of the changed value.
+  final String valueUuid;
+
+  /// Operation that caused the change.
+  final SeriesDataMutationType type;
+
+  /// Monotonically increasing identifier used to handle each change once.
+  final int version;
+}
 
 class SeriesDataProvider with ChangeNotifier {
   final Map<String, SeriesData<BloodPressureValue>> _uuid2seriesDataBloodPressure = HashMap();
@@ -24,6 +58,12 @@ class SeriesDataProvider with ChangeNotifier {
   final Map<String, SeriesData<HabitValue>> _uuid2seriesDataHabit = HashMap();
   final Map<String, SeriesData<CustomValue>> _uuid2seriesDataCustom = HashMap();
   final Map<String, SeriesData<MonthlyValue>> _uuid2seriesDataMonthly = HashMap();
+  SeriesDataMutation? _latestMutation;
+  Timer? _mutationTimer;
+  int _mutationVersion = 0;
+
+  /// The most recent value change while its visual feedback is still relevant.
+  SeriesDataMutation? get latestMutation => _latestMutation;
 
   Future<void> fetchDataIfNotYetLoaded(SeriesDef seriesDef) async {
     var seriesData = switch (seriesDef.seriesType) {
@@ -270,11 +310,28 @@ class SeriesDataProvider with ChangeNotifier {
     await _handleValue(seriesDef, value, _Action.update, seriesCurrentValueProvider);
   }
 
-  Future<void> deleteValue(SeriesDef seriesDef, SeriesDataValue value, SeriesCurrentValueProvider seriesCurrentValueProvider) async {
-    await _handleValue(seriesDef, value, _Action.delete, seriesCurrentValueProvider);
+  Future<void> deleteValue(
+    SeriesDef seriesDef,
+    SeriesDataValue value,
+    SeriesCurrentValueProvider seriesCurrentValueProvider, {
+    Duration deletionDelay = Duration.zero,
+  }) async {
+    await _handleValue(
+      seriesDef,
+      value,
+      _Action.delete,
+      seriesCurrentValueProvider,
+      deletionDelay: deletionDelay,
+    );
   }
 
-  Future<void> _handleValue(SeriesDef seriesDef, SeriesDataValue value, _Action action, SeriesCurrentValueProvider seriesCurrentValueProvider) async {
+  Future<void> _handleValue(
+    SeriesDef seriesDef,
+    SeriesDataValue value,
+    _Action action,
+    SeriesCurrentValueProvider seriesCurrentValueProvider, {
+    Duration deletionDelay = Duration.zero,
+  }) async {
     await fetchDataIfNotYetLoaded(seriesDef);
     var store = Stores.getOrCreateSeriesDataStore(seriesDef);
 
@@ -301,6 +358,11 @@ class SeriesDataProvider with ChangeNotifier {
         seriesData = requireMonthlyData(seriesDef);
     }
 
+    if (action == _Action.delete) {
+      _publishMutation(seriesDef, value, SeriesDataMutationType.deleted);
+      await Future<void>.delayed(deletionDelay);
+    }
+
     if (action == _Action.insert) {
       seriesData.insert(value);
       await store.save(value);
@@ -320,7 +382,13 @@ class SeriesDataProvider with ChangeNotifier {
       await seriesCurrentValueProvider.save(seriesDef, seriesData.data.last);
     }
 
-    notifyListeners();
+    if (action == _Action.insert) {
+      _publishMutation(seriesDef, value, SeriesDataMutationType.inserted);
+    } else if (action == _Action.update) {
+      _publishMutation(seriesDef, value, SeriesDataMutationType.updated);
+    } else {
+      notifyListeners();
+    }
   }
 
   Future<void> addValues(SeriesDef seriesDef, List<SeriesDataValue> values, SeriesCurrentValueProvider seriesCurrentValueProvider) async {
@@ -358,6 +426,32 @@ class SeriesDataProvider with ChangeNotifier {
       SimpleLogging.w(errMsg);
       throw Ex(errMsg);
     }
+  }
+
+  void _publishMutation(SeriesDef seriesDef, SeriesDataValue value, SeriesDataMutationType type) {
+    _mutationTimer?.cancel();
+    final mutation = SeriesDataMutation(
+      seriesUuid: seriesDef.uuid,
+      valueUuid: value.uuid,
+      type: type,
+      version: ++_mutationVersion,
+    );
+    _latestMutation = mutation;
+    notifyListeners();
+
+    _mutationTimer = Timer(SeriesDataMutation.highlightDuration, () {
+      if (_latestMutation?.version != mutation.version) {
+        return;
+      }
+      _latestMutation = null;
+      notifyListeners();
+    });
+  }
+
+  @override
+  void dispose() {
+    _mutationTimer?.cancel();
+    super.dispose();
   }
 }
 

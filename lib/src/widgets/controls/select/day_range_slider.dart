@@ -8,6 +8,7 @@ import '../../../util/date_time_utils.dart';
 import '../../../util/defer.dart';
 import '../../../util/media_query_utils.dart';
 import '../../../util/theme_utils.dart';
+import '../../../util/motion_utils.dart';
 import '../../../util/tooltip_utils.dart';
 import '../animation/reverse_progress.dart';
 import '../layout/h_centered_scroll_view.dart';
@@ -296,7 +297,7 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
             ignoring: !_sliderVisible,
             child: AnimatedOpacity(
               opacity: _sliderVisible ? 1 : 0,
-              duration: Duration(milliseconds: _sliderVisible ? ThemeUtils.animationDuration : ThemeUtils.animationDurationShort),
+              duration: MotionUtils.resolve(context, _sliderVisible ? MotionUtils.complex : MotionUtils.quick),
               child: RangeSlider(
                 min: 0,
                 max: _sliderRange.toDouble(),
@@ -340,7 +341,7 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
               ignoring: !_sliderVisible,
               child: AnimatedOpacity(
                 opacity: _sliderVisible ? 1 : 0,
-                duration: Duration(milliseconds: _sliderVisible ? ThemeUtils.animationDuration : ThemeUtils.animationDurationShort),
+                duration: MotionUtils.resolve(context, _sliderVisible ? MotionUtils.complex : MotionUtils.quick),
                 child: LayoutBuilder(
                   builder: (context, constraints) {
                     double sliderWidth = constraints.maxWidth - 48; // 48 padding

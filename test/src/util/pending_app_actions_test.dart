@@ -11,7 +11,7 @@ void main() {
         source: PendingSeriesActionSource.notification,
       );
       PendingAppActions.enqueueBackupReminder();
-      PendingAppActions.enqueueDebugDummyActionForTests();
+      PendingAppActions.enqueueDebugDummyAction();
 
       expect(PendingAppActions.count, 3);
       expect(PendingAppActions.hasPendingExternalSeriesAction, false);

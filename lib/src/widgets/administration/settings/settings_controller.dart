@@ -15,6 +15,9 @@ import 'settings_service.dart';
 class SettingsController with ChangeNotifier {
   SettingsController(this._settingsService);
 
+  static const defaultAutoBackupIntervalDays = 3;
+  static const supportedAutoBackupIntervalDays = [1, 2, 3, 5, 7, 10, 14, 31, 90];
+
   // Make SettingsService a private variable so it is not used directly.
   final SettingsService _settingsService;
 
@@ -63,6 +66,22 @@ class SettingsController with ChangeNotifier {
 
   bool get seriesExportDisableReminder => _seriesExportDisableReminder;
 
+  bool _autoBackupEnabled = false;
+
+  bool get autoBackupEnabled => _autoBackupEnabled;
+
+  int _autoBackupIntervalDays = defaultAutoBackupIntervalDays;
+
+  int get autoBackupIntervalDays => _autoBackupIntervalDays;
+
+  DateTime? _autoBackupNextDate;
+
+  DateTime? get autoBackupNextDate => _autoBackupNextDate;
+
+  DateTime? _autoBackupDate;
+
+  DateTime? get autoBackupDate => _autoBackupDate;
+
   DateTime? _seriesExportReminderDate;
 
   DateTime? get seriesExportReminderDate => _seriesExportReminderDate;
@@ -94,6 +113,13 @@ class SettingsController with ChangeNotifier {
     _seriesExportDate = await _settingsService.seriesExportDate();
     _seriesExportDisableReminder = await _settingsService.seriesExportDisableReminder();
     _seriesExportReminderDate = await _settingsService.seriesExportReminderDate();
+    _autoBackupEnabled = await _settingsService.autoBackupEnabled();
+    final storedAutoBackupIntervalDays = await _settingsService.autoBackupIntervalDays();
+    _autoBackupIntervalDays = supportedAutoBackupIntervalDays.contains(storedAutoBackupIntervalDays)
+        ? storedAutoBackupIntervalDays
+        : defaultAutoBackupIntervalDays;
+    _autoBackupNextDate = await _settingsService.autoBackupNextDate();
+    _autoBackupDate = await _settingsService.autoBackupDate();
     _appSupportReminderDate = await _settingsService.appSupportReminderDate();
     // Important! Inform listeners a change has occurred.
     notifyListeners();
@@ -201,6 +227,53 @@ class SettingsController with ChangeNotifier {
     notifyListeners();
 
     await _settingsService.updateSeriesExportDisableReminder(value);
+  }
+
+  /// Enables or disables automatic Dropbox backups.
+  Future<void> updateAutoBackupEnabled(bool value) async {
+    if (value == _autoBackupEnabled) return;
+    _autoBackupEnabled = value;
+
+    if (!value) {
+      _autoBackupIntervalDays = defaultAutoBackupIntervalDays;
+      _autoBackupNextDate = null;
+      _autoBackupDate = null;
+    }
+
+    notifyListeners();
+    if (value) {
+      await _settingsService.updateAutoBackupEnabled(true);
+    } else {
+      await _settingsService.resetAutoBackupSettings();
+    }
+  }
+
+  /// Changes the interval and schedules the next backup from now.
+  Future<void> updateAutoBackupIntervalDays(int value) async {
+    if (!supportedAutoBackupIntervalDays.contains(value) || value == _autoBackupIntervalDays) return;
+    _autoBackupIntervalDays = value;
+    await _settingsService.updateAutoBackupIntervalDays(value);
+    final now = DateTime.now();
+    await updateAutoBackupNextDate(DateTime(now.year, now.month, now.day + value));
+  }
+
+  /// Persists the next backup as a calendar date.
+  Future<void> updateAutoBackupNextDate(DateTime value) async {
+    _autoBackupNextDate = DateTime(value.year, value.month, value.day);
+    notifyListeners();
+    await _settingsService.updateAutoBackupNextDate(_autoBackupNextDate!);
+  }
+
+  /// Schedules a failed automatic backup for another attempt tomorrow.
+  Future<void> scheduleAutoBackupRetry(DateTime now) async {
+    await updateAutoBackupNextDate(DateTime(now.year, now.month, now.day + 1));
+  }
+
+  /// Persists the date of the latest successful automatic backup.
+  Future<void> updateAutoBackupDate(DateTime value) async {
+    _autoBackupDate = value;
+    notifyListeners();
+    await _settingsService.updateAutoBackupDate(value);
   }
 
   /// Update and persist

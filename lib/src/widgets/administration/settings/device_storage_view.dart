@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../../generated/locale_keys.g.dart';
 import '../../../util/device_storage/device_storage.dart';
+import '../../../util/device_storage/device_storage_keys.dart';
 import '../../../util/dialogs.dart';
 import '../../../util/table_utils.dart';
 import '../../controls/future/future_builder_with_progress_indicator.dart';
@@ -28,7 +29,7 @@ class DeviceStorageView extends StatelessWidget {
               widgetBuilder: (storageData, BuildContext ctx) {
                 List<TableRow> rows = TableUtils.buildKeyValueTableRows(context);
 
-                final keys = storageData.keys.toList();
+                final keys = storageData.keys.where((key) => key != DeviceStorageKeys.dropboxCredentials).toList();
                 keys.sort();
                 for (var key in keys) {
                   var value = storageData[key];

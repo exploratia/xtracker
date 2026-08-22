@@ -2,6 +2,8 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../../../util/motion_utils.dart';
+
 import 'btn/fab_action_button.dart';
 import 'btn/tab_to_close_fab.dart';
 import 'btn/tab_to_open_fab.dart';
@@ -41,7 +43,7 @@ class _FabRadialExpandableState extends State<FabRadialExpandable> with SingleTi
     _open = widget.initialOpen;
     _controller = AnimationController(
       value: _open ? 1.0 : 0.0,
-      duration: const Duration(milliseconds: 250),
+      duration: MotionUtils.emphasized,
       vsync: this,
     );
     _expandAnimation = CurvedAnimation(
@@ -49,6 +51,15 @@ class _FabRadialExpandableState extends State<FabRadialExpandable> with SingleTi
       reverseCurve: Curves.easeOutQuad,
       parent: _controller,
     );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _controller.duration = MotionUtils.resolve(context, MotionUtils.emphasized);
+    if (MotionUtils.animationsDisabled(context)) {
+      _controller.value = _open ? 1 : 0;
+    }
   }
 
   @override

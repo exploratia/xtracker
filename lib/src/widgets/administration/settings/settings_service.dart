@@ -71,6 +71,63 @@ class SettingsService {
     await DeviceStorage.writeBool(DeviceStorageKeys.quickActionsHideExploratiaUrl, value);
   }
 
+  /// Loads whether automatic Dropbox backups are enabled.
+  Future<bool> autoBackupEnabled() async {
+    return DeviceStorage.readBool(DeviceStorageKeys.autoBackupEnabled);
+  }
+
+  /// Persists whether automatic Dropbox backups are enabled.
+  Future<void> updateAutoBackupEnabled(bool value) async {
+    await DeviceStorage.writeBool(DeviceStorageKeys.autoBackupEnabled, value);
+  }
+
+  /// Removes all settings that belong to automatic Dropbox backups.
+  Future<void> resetAutoBackupSettings() async {
+    await Future.wait([
+      DeviceStorage.delete(DeviceStorageKeys.autoBackupEnabled),
+      DeviceStorage.delete(DeviceStorageKeys.autoBackupIntervalDays),
+      DeviceStorage.delete(DeviceStorageKeys.autoBackupNextDate),
+      DeviceStorage.delete(DeviceStorageKeys.autoBackupDate),
+    ]);
+  }
+
+  /// Loads the configured automatic backup interval in days.
+  Future<int> autoBackupIntervalDays() async {
+    final storedValue = await DeviceStorage.read(DeviceStorageKeys.autoBackupIntervalDays);
+    return int.tryParse(storedValue ?? '') ?? 3;
+  }
+
+  /// Persists the automatic backup interval in days.
+  Future<void> updateAutoBackupIntervalDays(int value) async {
+    await DeviceStorage.write(DeviceStorageKeys.autoBackupIntervalDays, value.toString());
+  }
+
+  /// Loads the next automatic backup date without a time component.
+  Future<DateTime?> autoBackupNextDate() async {
+    final storedValue = await DeviceStorage.read(DeviceStorageKeys.autoBackupNextDate);
+    if (storedValue == null) return null;
+
+    // Accept the former ISO-8601 value so existing installations migrate
+    // transparently to day-based scheduling.
+    final parsedValue = _parseDate(storedValue) ?? DateTime.tryParse(storedValue);
+    return parsedValue == null ? null : DateTime(parsedValue.year, parsedValue.month, parsedValue.day);
+  }
+
+  /// Persists the next automatic backup as a calendar date.
+  Future<void> updateAutoBackupNextDate(DateTime value) async {
+    await DeviceStorage.write(DeviceStorageKeys.autoBackupNextDate, _toDateStr(value));
+  }
+
+  /// Loads the date of the latest successful automatic backup.
+  Future<DateTime?> autoBackupDate() async {
+    return _parseDate(await DeviceStorage.read(DeviceStorageKeys.autoBackupDate));
+  }
+
+  /// Persists the date of the latest successful automatic backup.
+  Future<void> updateAutoBackupDate(DateTime value) async {
+    await DeviceStorage.write(DeviceStorageKeys.autoBackupDate, _toDateStr(value));
+  }
+
   /// Loads the initial app start and set if not yet exists
   Future<DateTime> initialAppStart() async {
     var strTimestamp = await DeviceStorage.read(DeviceStorageKeys.initialAppStart);

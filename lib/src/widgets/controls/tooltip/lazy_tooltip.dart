@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../../../util/media_query_utils.dart';
+import '../../../util/motion_utils.dart';
 import '../../../util/theme_utils.dart';
 
 class LazyTooltip extends StatefulWidget {
@@ -16,9 +17,9 @@ class LazyTooltip extends StatefulWidget {
     super.key,
     required this.child,
     required this.tooltipBuilder,
-    this.showDelay = const Duration(milliseconds: 300),
+    this.showDelay = MotionUtils.complex,
     this.hideDelay = Duration.zero,
-    this.animationDuration = const Duration(milliseconds: 150),
+    this.animationDuration = MotionUtils.quick,
   });
 
   @override
@@ -47,6 +48,12 @@ class _LazyTooltipState extends State<LazyTooltip> with SingleTickerProviderStat
     _scaleAnimation = Tween<double>(begin: 0.95, end: 1.0).animate(
       CurvedAnimation(parent: _animController, curve: Curves.easeOutBack),
     );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _animController.duration = MotionUtils.resolve(context, widget.animationDuration);
   }
 
   void _showTooltip(BuildContext context, {bool isTouch = false}) {
