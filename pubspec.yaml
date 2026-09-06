@@ -32,20 +32,20 @@ dependencies:
   flutter_secure_storage: ^11.0.0
 
   # AppInfo
-  package_info_plus: ^10.1.0
+  package_info_plus: ^10.2.1
 
   # DeviceInfo
-  device_info_plus: ^13.1.0
+  device_info_plus: ^13.2.0
 
   # SimpleLogging
   # determine paths like tmp or app data
-  path_provider: ^2.1.5
+  path_provider: ^2.1.6
   # zip files
-  archive: ^4.0.9
-  logger: ^2.7.0
+  archive: ^4.2.0
+  logger: ^2.8.0
 
   # call native share dialog
-  share_plus: ^13.1.0
+  share_plus: ^13.3.0
 
   # color picker
   flutter_colorpicker: ^1.1.0
@@ -54,7 +54,7 @@ dependencies:
   month_picker_dialog: ^6.7.2
 
   # UUID generation (ids for model)
-  uuid: ^4.5.3
+  uuid: ^4.6.0
 
   # provider
   provider: ^6.1.5+1
@@ -66,11 +66,11 @@ dependencies:
   fl_chart: ^1.2.0
 
   # data storage
-  sembast: ^3.8.7
-  sembast_web: ^2.4.4+1
+  sembast: ^3.8.9+1
+  sembast_web: ^2.4.5+1
 
   # file picker
-  file_picker: ^12.0.0
+  file_picker: ^12.2.0
 
   # url launcher
   url_launcher: ^6.3.2
@@ -79,7 +79,7 @@ dependencies:
   quick_actions: ^1.1.0
 
   # notifications
-  flutter_local_notifications: ^22.0.1
+  flutter_local_notifications: ^22.3.0
   timezone: ^0.11.1
   flutter_timezone: ^5.1.0
 
@@ -107,7 +107,7 @@ dev_dependencies:
   build_runner: any
 
   # splash
-  flutter_native_splash: ^2.4.7
+  flutter_native_splash: ^2.4.8
 
 flutter:
   uses-material-design: true
