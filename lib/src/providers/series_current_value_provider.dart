@@ -1,6 +1,6 @@
 import 'dart:collection';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../model/series/current_value/series_current_value.dart';
 import '../model/series/data/blood_pressure/blood_pressure_value.dart';

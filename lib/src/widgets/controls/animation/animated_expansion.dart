@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Fades and vertically expands or collapses [child] without measuring its
 /// changing size during render layout.

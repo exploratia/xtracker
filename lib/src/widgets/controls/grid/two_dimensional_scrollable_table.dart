@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:linked_scroll_controller/linked_scroll_controller.dart';
 import 'package:uuid/v4.dart';
 

@@ -1,7 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../model/chart/chart_meta_data.dart';
 import '../../model/series/data/blood_pressure/blood_pressure_value.dart';

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'screens/administration/administration_screen.dart';
 import 'screens/administration/device_info_screen.dart';

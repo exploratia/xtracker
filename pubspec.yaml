@@ -92,6 +92,10 @@ dependencies:
   # csv
   csv: ^8.0.0
 
+  # widgets
+  material_ui: any
+  cupertino_ui: any
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

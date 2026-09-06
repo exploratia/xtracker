@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../util/table_utils.dart';
 import '../../util/theme_utils.dart';

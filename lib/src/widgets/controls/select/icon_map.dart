@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class IconMap {
   static Map<String, IconData> icons = _initIcons();

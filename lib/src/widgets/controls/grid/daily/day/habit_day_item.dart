@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../../../../model/series/data/habit/habit_value.dart';
 import '../../../../../model/series/series_def.dart';

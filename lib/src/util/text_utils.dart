@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class TextUtils {
   static Size determineTextSize(String text, BuildContext context, TextStyle? textStyle) {

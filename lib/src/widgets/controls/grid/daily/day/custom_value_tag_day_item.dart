@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../../../../model/series/tags/tag_resolver.dart';
 import '../../../../../model/series/data/custom/custom_value.dart';
