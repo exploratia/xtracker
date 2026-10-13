@@ -65,6 +65,7 @@ untranslated.txt
 build.bat
 build_release.bat
 copy_build_by_ftp.bat
+ideen.txt
 
 # android release key
 *.jks
