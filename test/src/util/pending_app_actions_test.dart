@@ -65,6 +65,7 @@ void main() {
       PendingAppActions.enqueueSeriesValue(
         seriesUuid: 'notification-series',
         source: PendingSeriesActionSource.notification,
+        notificationId: 123,
       );
       PendingAppActions.enqueueBackupReminder();
       PendingAppActions.enqueueSeriesValue(
@@ -83,6 +84,36 @@ void main() {
       expect(PendingAppActions.hasAutomaticAction, false);
       expect(PendingAppActions.takeNextAutomaticAction(), null);
       expect(PendingAppActions.count, 2);
+      expect(PendingAppActions.items().first.notificationId, 123);
+      expect(PendingAppActions.items().first.executeAutomatically, false);
+    });
+
+    test('keeps active notifications passive when synchronized after a quick action', () {
+      PendingAppActions.enqueueSeriesValue(
+        seriesUuid: 'quick-action-series',
+        source: PendingSeriesActionSource.quickAction,
+        executeAutomatically: true,
+      );
+
+      void synchronizeNotification() {
+        PendingAppActions.retainActiveNotificationActions({123});
+        PendingAppActions.enqueueSeriesValue(
+          seriesUuid: 'notification-series',
+          source: PendingSeriesActionSource.notification,
+          notificationId: 123,
+        );
+      }
+
+      synchronizeNotification();
+      expect(PendingAppActions.takeNextAutomaticAction()?.seriesUuid, 'quick-action-series');
+
+      // Resuming the app or refreshing notifications must keep the untouched
+      // reminder available without scheduling another value dialog.
+      synchronizeNotification();
+      expect(PendingAppActions.takeNextAutomaticAction(), null);
+      expect(PendingAppActions.items().single.seriesUuid, 'notification-series');
+      expect(PendingAppActions.items().single.notificationId, 123);
+      expect(PendingAppActions.items().single.executeAutomatically, false);
     });
 
     test('notification tap consumes matching message and executes directly', () {
