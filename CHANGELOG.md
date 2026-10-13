@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.2] - 2026-10-13
+
+### Fixes
+
+- add intent handling and improve notification launch logic / update dependencies
+
 ## [2.2.1] - 2026-08-22
 
 ### Fixes

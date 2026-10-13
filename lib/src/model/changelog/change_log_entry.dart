@@ -11,6 +11,10 @@ class ChangeLogEntry {
 class ChangeLog {
   static const entries = [
     ChangeLogEntry(
+      version: '2.2.2',
+      messageKey: 'changeLog.entries.v2_2_2',
+    ),
+    ChangeLogEntry(
       version: '2.2.1',
       messageKey: 'changeLog.entries.v2_2_1',
     ),
