@@ -123,9 +123,12 @@ class _DayRangeSliderState extends State<DayRangeSlider> {
       setState(() {
         // save act dates to be able to restore
         var actSelectedValues = _buildDayRange(false);
+        // An open end must follow the latest day instead of becoming a fixed
+        // filter boundary when a newly saved value extends the available range.
+        final followLatestDate = widget._selectedDateRangeTill == null && _values.end.round() == _sliderRange;
         _initVars();
         // restore dates
-        _setValuesFromDayRange(actSelectedValues);
+        _setValuesFromDayRange(DayRange(actSelectedValues.from, followLatestDate ? _dateRangeTill : actSelectedValues.till));
       });
 
       WidgetsBinding.instance.addPostFrameCallback((_) {
