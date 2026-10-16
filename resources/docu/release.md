@@ -33,21 +33,14 @@ Check the latest changelog entries:
 Ensure every released version is registered there and covered by a test in
 `test/src/model/changelog/change_log_entry_test.dart`.
 
+## Language files
+
+Optionally check changes in language files on consistency and if there are any improvements to be made.
+
 ## Version
 
 Adjust version in `changelog.md` and `pubspec.yaml`.  
 In `pubspec.yaml` also increase the build number (after +) by one.
-
-## Check language files
-
-Upload files to AI-Chatbot...
-
-Prompt:
-
-````
-Füge in den translation Dateien einen neuen changelog Eintrag für die neuen Versionen hinzu.
-Prüfe die Änderungen in den Sprachdateien auf Konsistenz und ob noch etwas verbessert werden sollte.
-````
 
 ## Playstore images
 

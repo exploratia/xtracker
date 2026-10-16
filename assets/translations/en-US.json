@@ -32,6 +32,7 @@
       "versionChanged": "The app was updated to version {}."
     },
     "entries": {
+      "v2_2_3": "Open-ended date filters now include new values when the date range expands. Updated dependencies.",
       "v2_2_2": "Fixed duplicate input dialogs in notifications and quick actions issue.",
       "v2_2_1": "Fixed the display of information about new app versions.",
       "v2_2_0": "Automatic Dropbox backups, actions to edit, duplicate and delete series values, plus improved notifications and animations.",
@@ -41,8 +42,14 @@
       "v1_4_0": "First public release version with a unified pixel view.",
       "v1_3_1": "Extended analytics for times of day and monthly distributions.",
       "v1_3_0": "Daily Life as a new series type, default views per series and wallpaper support.",
+      "v1_2_1": "Fixed date calculations in the date filter and an issue that could prevent values from being saved.",
       "v1_2_0": "New analytics for recorded days and trend analysis for blood pressure and habits.",
+      "v1_1_1": "Device information, app support and backup reminders, and the latest export date. Improved layouts for larger text sizes.",
       "v1_1_0": "New habits, more flexible table views and first reminders for backups and app support.",
+      "v1_0_4": "Support for older devices running Android 5 or later.",
+      "v1_0_3": "New date, time and value tooltips, smoother scrolling and an optional count in the dots overview. Improved messages for missing data and support for Android 10 or later.",
+      "v1_0_2": "Fixed an issue that could make the bottom navigation bar unreachable.",
+      "v1_0_1": "Tooltips for all pressable icons, a message when no series exist, an app-specific email address and a higher upper limit for blood pressure values.",
       "v1_0_0": "First tested version with Day Check, blood pressure, import/export, tables, charts and pixel view."
     }
   },

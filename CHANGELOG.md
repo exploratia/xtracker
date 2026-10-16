@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.3] - 2026-10-16
+
+### Fixes
+
+- keep open-ended date filters following the latest day when newly added values extend the date range
+- update dependencies
+
 ## [2.2.2] - 2026-10-13
 
 ### Fixes
