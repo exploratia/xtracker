@@ -11,6 +11,10 @@ class ChangeLogEntry {
 class ChangeLog {
   static const entries = [
     ChangeLogEntry(
+      version: '2.2.3',
+      messageKey: 'changeLog.entries.v2_2_3',
+    ),
+    ChangeLogEntry(
       version: '2.2.2',
       messageKey: 'changeLog.entries.v2_2_2',
     ),
@@ -47,12 +51,36 @@ class ChangeLog {
       messageKey: 'changeLog.entries.v1_3_0',
     ),
     ChangeLogEntry(
+      version: '1.2.1',
+      messageKey: 'changeLog.entries.v1_2_1',
+    ),
+    ChangeLogEntry(
       version: '1.2.0',
       messageKey: 'changeLog.entries.v1_2_0',
     ),
     ChangeLogEntry(
+      version: '1.1.1',
+      messageKey: 'changeLog.entries.v1_1_1',
+    ),
+    ChangeLogEntry(
       version: '1.1.0',
       messageKey: 'changeLog.entries.v1_1_0',
+    ),
+    ChangeLogEntry(
+      version: '1.0.4',
+      messageKey: 'changeLog.entries.v1_0_4',
+    ),
+    ChangeLogEntry(
+      version: '1.0.3',
+      messageKey: 'changeLog.entries.v1_0_3',
+    ),
+    ChangeLogEntry(
+      version: '1.0.2',
+      messageKey: 'changeLog.entries.v1_0_2',
+    ),
+    ChangeLogEntry(
+      version: '1.0.1',
+      messageKey: 'changeLog.entries.v1_0_1',
     ),
     ChangeLogEntry(
       version: '1.0.0',

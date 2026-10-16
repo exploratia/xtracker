@@ -32,6 +32,13 @@
       "versionChanged": "The app was updated to version {}."
     },
     "entries": {
+      "v2_2_3": "Open-ended date filters now include new values when the date range expands. Updated dependencies.",
+      "v1_2_1": "Fixed date calculations in the date filter and an issue that could prevent values from being saved.",
+      "v1_1_1": "Device information, app support and backup reminders, and the latest export date. Improved layouts for larger text sizes.",
+      "v1_0_4": "Support for older devices running Android 5 or later.",
+      "v1_0_3": "New date, time and value tooltips, smoother scrolling and an optional count in the dots overview. Improved messages for missing data and support for Android 10 or later.",
+      "v1_0_2": "Fixed an issue that could make the bottom navigation bar unreachable.",
+      "v1_0_1": "Tooltips for all pressable icons, a message when no series exist, an app-specific email address and a higher upper limit for blood pressure values.",
       "v2_2_2": "Fixed duplicate input dialogs in notifications and quick actions issue.",
       "v2_2_1": "Fixed the display of information about new app versions.",
       "v2_2_0": "Automatic Dropbox backups, actions to edit, duplicate and delete series values, plus improved notifications and animations.",

@@ -9,7 +9,7 @@ funding:
 # Prevent accidental publishing to pub.dev.
 publish_to: 'none'
 
-version: 2.2.2+18
+version: 2.2.3+19
 
 environment:
   sdk: ^3.10.0
@@ -66,8 +66,8 @@ dependencies:
   fl_chart: ^1.2.0
 
   # data storage
-  sembast: ^3.8.7
-  sembast_web: ^2.4.4+1
+  sembast: ^3.9.0
+  sembast_web: ^2.4.6+1
 
   # file picker
   file_picker: ^13.1.0
