@@ -33,12 +33,6 @@
     },
     "entries": {
       "v2_2_3": "Datumsfilter mit offenem Ende berücksichtigen neue Werte auch dann, wenn sich der Datumsbereich erweitert. Abhängigkeiten wurden aktualisiert.",
-      "v1_2_1": "Fehler bei der Datumsberechnung im Datumsfilter und beim Speichern von Werten wurden behoben.",
-      "v1_1_1": "Geräteinformationen, Erinnerungen an App-Unterstützung und Backups sowie die Anzeige des letzten Exports. Verbesserte Darstellung bei größerer Schrift.",
-      "v1_0_4": "Unterstützung für ältere Geräte ab Android 5.",
-      "v1_0_3": "Neue Hinweise zu Datum, Uhrzeit und Werten, flüssigeres Scrollen und eine optionale Anzahl in der Punktübersicht. Verbesserte Meldungen bei fehlenden Daten und Unterstützung ab Android 10.",
-      "v1_0_2": "Die untere Navigationsleiste bleibt erreichbar.",
-      "v1_0_1": "Hinweise für alle anklickbaren Symbole, eine Meldung bei fehlenden Messreihen, eine App-spezifische E-Mail-Adresse und eine höhere Obergrenze für Blutdruckwerte.",
       "v2_2_2": "Doppelte Eingabedialoge bei Notifications und Quickaction-Überschneidung korrigiert.",
       "v2_2_1": "Die Anzeige der Informationen zu neuen App-Versionen wurde korrigiert.",
       "v2_2_0": "Automatische Dropbox-Backups, Aktionen zum Bearbeiten, Duplizieren und Löschen von Messreihenwerten sowie optimierte Benachrichtigungen und Animationen.",
@@ -48,8 +42,14 @@
       "v1_4_0": "Erste öffentliche Release-Version mit vereinheitlichter Pixelansicht.",
       "v1_3_1": "Erweiterte Auswertungen für Tageszeiten und Monatsverteilungen.",
       "v1_3_0": "Tägliches Leben als neue Messreihe, Standardansichten pro Messreihe und Hintergrundbild-Unterstützung.",
+      "v1_2_1": "Fehler bei der Datumsberechnung im Datumsfilter und beim Speichern von Werten wurden behoben.",
       "v1_2_0": "Neue Analysen für aufgezeichnete Tage sowie Trend-Analysen für Blutdruck und Gewohnheiten.",
+      "v1_1_1": "Geräteinformationen, Erinnerungen an App-Unterstützung und Backups sowie die Anzeige des letzten Exports. Verbesserte Darstellung bei größerer Schrift.",
       "v1_1_0": "Neue Gewohnheiten, flexiblere Tabellenansichten und erste Erinnerungen für Backup und App-Unterstützung.",
+      "v1_0_4": "Unterstützung für ältere Geräte ab Android 5.",
+      "v1_0_3": "Neue Hinweise zu Datum, Uhrzeit und Werten, flüssigeres Scrollen und eine optionale Anzahl in der Punktübersicht. Verbesserte Meldungen bei fehlenden Daten und Unterstützung ab Android 10.",
+      "v1_0_2": "Die untere Navigationsleiste bleibt erreichbar.",
+      "v1_0_1": "Hinweise für alle anklickbaren Symbole, eine Meldung bei fehlenden Messreihen, eine App-spezifische E-Mail-Adresse und eine höhere Obergrenze für Blutdruckwerte.",
       "v1_0_0": "Erste getestete Version mit Tages-Check, Blutdruck, Import/Export, Tabellen, Diagrammen und Pixelansicht."
     }
   },
