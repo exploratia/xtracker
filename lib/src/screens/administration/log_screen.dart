@@ -101,8 +101,6 @@ class LogScreen extends StatelessWidget {
           var selectedFile = await FilePicker.saveFile(
             dialogTitle: 'Please select an output file:',
             fileName: logFile.name ?? 'log.txt',
-            type: FileType.custom,
-            allowedExtensions: ["txt"],
             bytes: fileBytes,
           );
           bool exported = selectedFile != null || kIsWeb; // in web no file select - just download

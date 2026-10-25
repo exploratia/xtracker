@@ -32,6 +32,7 @@
       "versionChanged": "Die App wurde auf Version {} aktualisiert."
     },
     "entries": {
+      "v2_2_4": "Doppelte Erinnerungen und verschobene Benachrichtigungszeiten bei der Umstellung zwischen Sommer- und Winterzeit wurden behoben. Abhängigkeiten wurden aktualisiert.",
       "v2_2_3": "Datumsfilter mit offenem Ende berücksichtigen neue Werte auch dann, wenn sich der Datumsbereich erweitert. Abhängigkeiten wurden aktualisiert.",
       "v2_2_2": "Doppelte Eingabedialoge bei Notifications und Quickaction-Überschneidung korrigiert.",
       "v2_2_1": "Die Anzeige der Informationen zu neuen App-Versionen wurde korrigiert.",

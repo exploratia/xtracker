@@ -124,8 +124,6 @@ class SeriesImportExport {
       var selectedFile = await FilePicker.saveFile(
         dialogTitle: 'Please select an output file:',
         fileName: 'xtracker_${_clearSeriesNameForExport(seriesDef)}_${DateTimeUtils.formatExportDateTime()}.csv',
-        type: FileType.custom,
-        allowedExtensions: ["csv"],
         bytes: bytes,
       );
       var exported = selectedFile != null || kIsWeb; // in web no file select - just download

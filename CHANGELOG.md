@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.2.4] - 2026-10-25
+
+### Fixes
+
+- prevent duplicate reminders and shifted notification times across daylight saving time changes
+- update dependencies
+
 ## [2.2.3] - 2026-10-16
 
 ### Fixes
