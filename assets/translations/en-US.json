@@ -32,6 +32,7 @@
       "versionChanged": "The app was updated to version {}."
     },
     "entries": {
+      "v2_2_4": "Fixed duplicate reminders and shifted notification times when switching between daylight saving time and standard time. Updated dependencies.",
       "v2_2_3": "Open-ended date filters now include new values when the date range expands. Updated dependencies.",
       "v2_2_2": "Fixed duplicate input dialogs in notifications and quick actions issue.",
       "v2_2_1": "Fixed the display of information about new app versions.",

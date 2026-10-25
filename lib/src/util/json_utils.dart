@@ -13,8 +13,6 @@ class JsonUtils {
     var selectedFile = await FilePicker.saveFile(
       dialogTitle: 'Please select an output file:',
       fileName: fileName,
-      type: FileType.custom,
-      allowedExtensions: ["json"],
       bytes: bytes,
     );
     return selectedFile != null || kIsWeb; // in web no file select - just download

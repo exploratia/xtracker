@@ -585,13 +585,13 @@ class AppSeriesNotifications {
     }
 
     var result = <DateTime>[];
-    var date = DateTime(now.year, now.month, now.day);
+    var date = _calendarDate(now, now.year, now.month, now.day);
     var intervalCount = 0;
     while (intervalCount < _scheduledIntervalCount) {
       var addedForDate = false;
       for (var time in times) {
         var hm = _parseTime(time);
-        var candidate = DateTime(date.year, date.month, date.day, hm.$1, hm.$2);
+        var candidate = _calendarDate(date, date.year, date.month, date.day, hm.$1, hm.$2);
         if (candidate.isAfter(now)) {
           result.add(candidate);
           addedForDate = true;
@@ -600,7 +600,8 @@ class AppSeriesNotifications {
       if (addedForDate) {
         intervalCount++;
       }
-      date = date.add(const Duration(days: 1));
+      // A local calendar day can have 23 or 25 hours at a clock change.
+      date = _calendarDate(date, date.year, date.month, date.day + 1);
     }
     return result;
   }
@@ -608,18 +609,22 @@ class AppSeriesNotifications {
   static List<DateTime> _buildEveryXDaysSchedule(NotificationSettings settings, DateTime now) {
     var interval = settings.everyXDaysInterval;
     var anchorUtc = settings.everyXDaysAnchorUtcMs;
-    var anchorLocal = anchorUtc != null ? DateTime.fromMillisecondsSinceEpoch(anchorUtc, isUtc: true).toLocal() : DateTime(now.year, now.month, now.day);
-    anchorLocal = DateTime(anchorLocal.year, anchorLocal.month, anchorLocal.day);
+    var anchorLocal = anchorUtc == null
+        ? now
+        : now is tz.TZDateTime
+        ? tz.TZDateTime.fromMillisecondsSinceEpoch(now.location, anchorUtc)
+        : DateTime.fromMillisecondsSinceEpoch(anchorUtc);
+    var date = _calendarDate(now, anchorLocal.year, anchorLocal.month, anchorLocal.day);
     var hm = _parseTime(settings.time);
 
     var result = <DateTime>[];
-    var candidate = DateTime(anchorLocal.year, anchorLocal.month, anchorLocal.day, hm.$1, hm.$2);
-    while (!candidate.isAfter(now)) {
-      candidate = candidate.add(Duration(days: interval));
-    }
     while (result.length < _scheduledIntervalCount) {
-      result.add(candidate);
-      candidate = candidate.add(Duration(days: interval));
+      // Reapply the requested time on each date, including after a DST gap.
+      var candidate = _calendarDate(date, date.year, date.month, date.day, hm.$1, hm.$2);
+      if (candidate.isAfter(now)) {
+        result.add(candidate);
+      }
+      date = _calendarDate(date, date.year, date.month, date.day + interval);
     }
     return result;
   }
@@ -632,16 +637,16 @@ class AppSeriesNotifications {
     var hm = _parseTime(settings.time);
 
     var result = <DateTime>[];
-    var date = DateTime(now.year, now.month, now.day);
+    var date = _calendarDate(now, now.year, now.month, now.day);
     var intervalCount = 0;
     while (intervalCount < _scheduledIntervalCount) {
       var addedForWeek = false;
       for (var i = 0; i < DateTime.daysPerWeek; i++) {
-        var candidateDate = date.add(Duration(days: i));
+        var candidateDate = _calendarDate(date, date.year, date.month, date.day + i);
         if (!weekdays.contains(candidateDate.weekday)) {
           continue;
         }
-        var candidate = DateTime(candidateDate.year, candidateDate.month, candidateDate.day, hm.$1, hm.$2);
+        var candidate = _calendarDate(candidateDate, candidateDate.year, candidateDate.month, candidateDate.day, hm.$1, hm.$2);
         if (candidate.isAfter(now)) {
           result.add(candidate);
           addedForWeek = true;
@@ -650,7 +655,7 @@ class AppSeriesNotifications {
       if (addedForWeek) {
         intervalCount++;
       }
-      date = date.add(const Duration(days: DateTime.daysPerWeek));
+      date = _calendarDate(date, date.year, date.month, date.day + DateTime.daysPerWeek);
     }
     return result;
   }
@@ -659,45 +664,57 @@ class AppSeriesNotifications {
     var hm = _parseTime(settings.time);
     var result = <DateTime>[];
 
-    var monthCursor = DateTime(now.year, now.month);
+    var monthCursor = _calendarDate(now, now.year, now.month);
     while (result.length < _scheduledIntervalCount) {
       var year = monthCursor.year;
       var month = monthCursor.month;
-      var date = _resolveMonthlyDate(settings, year, month);
-      var candidate = DateTime(date.year, date.month, date.day, hm.$1, hm.$2);
+      var date = _resolveMonthlyDate(settings, monthCursor);
+      var candidate = _calendarDate(date, date.year, date.month, date.day, hm.$1, hm.$2);
       if (candidate.isAfter(now)) {
         result.add(candidate);
       }
-      monthCursor = DateTime(year, month + 1);
+      monthCursor = _calendarDate(monthCursor, year, month + 1);
     }
     return result;
   }
 
-  static DateTime _resolveMonthlyDate(NotificationSettings settings, int year, int month) {
-    var lastDay = DateTime(year, month + 1, 0).day;
+  static DateTime _resolveMonthlyDate(NotificationSettings settings, DateTime monthCursor) {
+    var year = monthCursor.year;
+    var month = monthCursor.month;
+    var lastDay = _calendarDate(monthCursor, year, month + 1, 0).day;
     return switch (settings.monthlyRule) {
-      NotificationMonthlyRule.lastDay => DateTime(year, month, lastDay),
-      NotificationMonthlyRule.dayOfMonth => DateTime(year, month, math.min(lastDay, settings.monthlyDay)),
+      NotificationMonthlyRule.lastDay => _calendarDate(monthCursor, year, month, lastDay),
+      NotificationMonthlyRule.dayOfMonth => _calendarDate(monthCursor, year, month, math.min(lastDay, settings.monthlyDay)),
       NotificationMonthlyRule.weekdayOfMonth => _resolveWeekdayOfMonth(
-        year,
-        month,
+        monthCursor,
         settings.monthlyWeekdayOrdinal,
         settings.monthlyWeekday,
       ),
     };
   }
 
-  static DateTime _resolveWeekdayOfMonth(int year, int month, int ordinal, int weekday) {
+  static DateTime _resolveWeekdayOfMonth(DateTime monthCursor, int ordinal, int weekday) {
+    var year = monthCursor.year;
+    var month = monthCursor.month;
     if (ordinal == -1) {
-      var lastDayOfMonth = DateTime(year, month + 1, 0);
+      var lastDayOfMonth = _calendarDate(monthCursor, year, month + 1, 0);
       var daysBack = (lastDayOfMonth.weekday - weekday) % DateTime.daysPerWeek;
-      return lastDayOfMonth.subtract(Duration(days: daysBack));
+      return _calendarDate(monthCursor, year, month, lastDayOfMonth.day - daysBack);
     }
 
-    var firstDayOfMonth = DateTime(year, month);
+    var firstDayOfMonth = _calendarDate(monthCursor, year, month);
     var daysToWeekday = (weekday - firstDayOfMonth.weekday) % DateTime.daysPerWeek;
     var day = 1 + daysToWeekday + ((ordinal - 1) * DateTime.daysPerWeek);
-    return DateTime(year, month, day);
+    return _calendarDate(monthCursor, year, month, day);
+  }
+
+  // Construct calendar dates in the reference timezone without adding elapsed
+  // hours. Ordinary DateTime values use the device's local timezone.
+  static DateTime _calendarDate(DateTime reference, int year, int month, [int day = 1, int hour = 0, int minute = 0]) {
+    if (reference is tz.TZDateTime) {
+      return tz.TZDateTime(reference.location, year, month, day, hour, minute);
+    }
+    return DateTime(year, month, day, hour, minute);
   }
 
   static (int, int) _parseTime(String value) {

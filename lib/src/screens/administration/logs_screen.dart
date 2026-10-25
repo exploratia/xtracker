@@ -128,8 +128,6 @@ class _LogsScreenState extends State<LogsScreen> {
             var selectedFile = await FilePicker.saveFile(
               dialogTitle: 'Please select an output file:',
               fileName: zipAllLogs.name ?? 'logs.zip',
-              type: FileType.custom,
-              allowedExtensions: ["zip"],
               bytes: fileBytes,
             );
             bool exported = selectedFile != null || kIsWeb; // in web no file select - just download
