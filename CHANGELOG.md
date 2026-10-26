@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+### Features
+
+- adjust input dates and times by holding and dragging, with a floating preview and changes applied on release
+
 ## [2.2.4] - 2026-10-25
 
 ### Fixes

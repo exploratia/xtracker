@@ -87,6 +87,13 @@
       "date": "Date",
       "dateTime": "Date  /  Time",
       "time": "Time",
+      "scrub": {
+        "days": "days",
+        "hours": "h",
+        "minutes": "min",
+        "dateGesture": "Hold and slide up or down to adjust the date by up to 12 days. Release to apply.",
+        "timeGesture": "Hold and slide up or down to adjust hours, left or right to adjust minutes. Release to apply."
+      },
       "morning": "Morning",
       "midday": "Midday",
       "evening": "Evening"

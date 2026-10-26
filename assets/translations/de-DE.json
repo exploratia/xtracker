@@ -87,6 +87,13 @@
       "date": "Datum",
       "dateTime": "Datum  /  Uhrzeit",
       "time": "Uhrzeit",
+      "scrub": {
+        "days": "Tage",
+        "hours": "Std.",
+        "minutes": "Min.",
+        "dateGesture": "Gedrückt halten und nach oben oder unten bewegen, um das Datum um bis zu 12 Tage zu ändern. Zum Übernehmen loslassen.",
+        "timeGesture": "Gedrückt halten und nach oben oder unten bewegen, um Stunden zu ändern, nach links oder rechts für Minuten. Zum Übernehmen loslassen."
+      },
       "morning": "Morgens",
       "midday": "Mittags",
       "evening": "Abends"
