@@ -37,7 +37,10 @@ class HomeScreen extends StatelessWidget {
         listenable: settingsController,
         builder: (context, _) {
           if (settingsController.showChangeLog) {
-            return ChangeLogView(settingsController: settingsController);
+            return ChangeLogView(
+              entries: settingsController.changeLogEntries,
+              onDismiss: settingsController.dismissChangeLog,
+            );
           }
           return _HomeScreenContent(settingsController: settingsController);
         },

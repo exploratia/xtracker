@@ -3,26 +3,31 @@ import 'package:flutter/material.dart';
 
 import '../../../generated/assets.gen.dart';
 import '../../../generated/locale_keys.g.dart';
+import '../../model/changelog/change_log_entry.dart';
 import '../../util/app_info.dart';
 import '../../util/theme_utils.dart';
-import '../administration/settings/settings_controller.dart';
 import '../controls/appbar/gradient_app_bar.dart';
 import '../controls/card/settings_card.dart';
 import '../controls/layout/scroll_footer.dart';
 import '../controls/layout/single_child_scroll_view_with_scrollbar.dart';
+import 'change_log_entries_view.dart';
 
+/// Displays release notes and delegates closing to the caller.
 class ChangeLogView extends StatelessWidget {
   const ChangeLogView({
     super.key,
-    required this.settingsController,
+    required this.entries,
+    required this.onDismiss,
   });
 
-  final SettingsController settingsController;
+  /// Release notes to display, ordered from newest to oldest.
+  final List<ChangeLogEntry> entries;
+
+  /// Called when either confirmation button is pressed.
+  final VoidCallback onDismiss;
 
   @override
   Widget build(BuildContext context) {
-    final entries = settingsController.changeLogEntries;
-
     return Scaffold(
       appBar: GradientAppBar.build(
         context,
@@ -38,7 +43,7 @@ class ChangeLogView extends StatelessWidget {
           IconButton(
             iconSize: ThemeUtils.iconSizeScaled,
             tooltip: LocaleKeys.commons_dialog_btn_okay.tr(),
-            onPressed: settingsController.dismissChangeLog,
+            onPressed: onDismiss,
             icon: const Icon(Icons.check),
           ),
           const SizedBox(width: ThemeUtils.defaultPadding),
@@ -67,12 +72,12 @@ class ChangeLogView extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: ThemeUtils.verticalSpacingSmall),
-                      ...entries.map((entry) => _ChangeLogEntryView(version: entry.version, messageKey: entry.messageKey)),
+                      ChangeLogEntriesView(entries: entries),
                       const SizedBox(height: ThemeUtils.verticalSpacingSmall),
                       Align(
                         alignment: Alignment.centerRight,
                         child: ElevatedButton(
-                          onPressed: settingsController.dismissChangeLog,
+                          onPressed: onDismiss,
                           child: Text(LocaleKeys.commons_dialog_btn_okay.tr()),
                         ),
                       ),
@@ -84,36 +89,6 @@ class ChangeLogView extends StatelessWidget {
             ),
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _ChangeLogEntryView extends StatelessWidget {
-  const _ChangeLogEntryView({
-    required this.version,
-    required this.messageKey,
-  });
-
-  final String version;
-  final String messageKey;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: EdgeInsets.zero,
-      leading: CircleAvatar(
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        foregroundColor: Theme.of(context).colorScheme.onPrimary,
-        child: const Icon(Icons.new_releases_outlined),
-      ),
-      title: Text(
-        LocaleKeys.changeLog_label_version.tr(args: [version]),
-        style: Theme.of(context).textTheme.titleMedium,
-      ),
-      subtitle: Padding(
-        padding: const EdgeInsets.only(top: ThemeUtils.verticalSpacingSmall),
-        child: Text(messageKey.tr()),
       ),
     );
   }

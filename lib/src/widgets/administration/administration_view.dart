@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../../generated/assets.gen.dart';
 import '../../../generated/locale_keys.g.dart';
+import '../../screens/administration/change_log_screen.dart';
 import '../../screens/administration/device_info_screen.dart';
 import '../../screens/administration/info_screen.dart';
 import '../../screens/administration/logs_screen.dart';
@@ -147,6 +148,11 @@ class _AppInfoCard extends StatelessWidget {
                     onPressed: () => AboutDlg.showAboutDlg(context),
                     icon: const Icon(Icons.info_outline),
                     label: Text(LocaleKeys.administration_infoAndLegals_btn_version.tr()),
+                  ),
+                  OutlinedButton.icon(
+                    onPressed: () => Navigator.restorablePushNamed(context, ChangeLogScreen.navItem.routeName),
+                    icon: ChangeLogScreen.navItem.icon(),
+                    label: Text(ChangeLogScreen.navItem.titleBuilder()),
                   ),
                   OutlinedButton.icon(
                     onPressed: () =>
