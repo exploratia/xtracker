@@ -2,11 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
-## Unreleased
+## [2.3.0] - 2026-10-26
 
 ### Features
 
 - adjust input dates and times by holding and dragging, with a floating preview and changes applied on release
+- make the complete release history accessible from administration through a dedicated changelog screen
+
+### Fixes
+
+- correct relative import paths for localized strings
+- update dependencies
 
 ## [2.2.4] - 2026-10-25
 

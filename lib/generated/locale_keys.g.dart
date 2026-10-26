@@ -18,6 +18,7 @@ abstract class  LocaleKeys {
   static const changeLog_title = 'changeLog.title';
   static const changeLog_label_version = 'changeLog.label.version';
   static const changeLog_label_versionChanged = 'changeLog.label.versionChanged';
+  static const changeLog_entries_v2_3_0 = 'changeLog.entries.v2_3_0';
   static const changeLog_entries_v2_2_4 = 'changeLog.entries.v2_2_4';
   static const changeLog_entries_v2_2_3 = 'changeLog.entries.v2_2_3';
   static const changeLog_entries_v2_2_2 = 'changeLog.entries.v2_2_2';
