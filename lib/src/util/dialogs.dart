@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-import '../../../generated/locale_keys.g.dart';
+import '../../generated/locale_keys.g.dart';
 import '../widgets/controls/layout/single_child_scroll_view_with_scrollbar.dart';
 import '../widgets/controls/responsive/device_dependent_constrained_box.dart';
 import 'theme_utils.dart';

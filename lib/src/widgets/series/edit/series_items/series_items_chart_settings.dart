@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../../generated/locale_keys.g.dart';
+import '../../../../../generated/locale_keys.g.dart';
 import '../../../../model/series/seriesItem/series_item.dart';
 import '../../../../util/theme_utils.dart';
 import '../../../controls/card/glowing_border_container.dart';

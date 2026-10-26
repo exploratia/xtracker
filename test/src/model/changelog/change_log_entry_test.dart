@@ -55,6 +55,15 @@ void main() {
       expect(entries.map((entry) => entry.version), ['2.2.4']);
     });
 
+    test('returns the 2.3.0 release entry after 2.2.4', () {
+      final entries = ChangeLog.entriesBetween(
+        previousVersion: '2.2.4',
+        currentVersion: '2.3.0',
+      );
+
+      expect(entries.map((entry) => entry.version), ['2.3.0']);
+    });
+
     test('returns entries between previous and current version', () {
       final entries = ChangeLog.entriesBetween(
         previousVersion: '1.2.0',

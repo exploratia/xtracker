@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'screens/administration/administration_screen.dart';
+import 'screens/administration/change_log_screen.dart';
 import 'screens/administration/device_info_screen.dart';
 import 'screens/administration/info_screen.dart';
 import 'screens/administration/log_screen.dart';
@@ -47,6 +48,7 @@ class Routing {
         }
         // administration >>
         if (routeName == AdministrationScreen.navItem.routeName) return AdministrationScreen(settingsController: settingsController);
+        if (routeName == ChangeLogScreen.navItem.routeName) return ChangeLogScreen(settingsController: settingsController);
         if (routeName == LogsScreen.navItem.routeName) return LogsScreen(settingsController: settingsController);
         if (routeName == LogScreen.navItem.routeName) return const LogScreen();
         if (routeName == LogSettingsScreen.navItem.routeName) return LogSettingsScreen(settingsController: settingsController);

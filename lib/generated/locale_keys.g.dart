@@ -18,6 +18,7 @@ abstract class  LocaleKeys {
   static const changeLog_title = 'changeLog.title';
   static const changeLog_label_version = 'changeLog.label.version';
   static const changeLog_label_versionChanged = 'changeLog.label.versionChanged';
+  static const changeLog_entries_v2_3_0 = 'changeLog.entries.v2_3_0';
   static const changeLog_entries_v2_2_4 = 'changeLog.entries.v2_2_4';
   static const changeLog_entries_v2_2_3 = 'changeLog.entries.v2_2_3';
   static const changeLog_entries_v2_2_2 = 'changeLog.entries.v2_2_2';
@@ -59,6 +60,11 @@ abstract class  LocaleKeys {
   static const commons_date_date = 'commons.date.date';
   static const commons_date_dateTime = 'commons.date.dateTime';
   static const commons_date_time = 'commons.date.time';
+  static const commons_date_scrub_days = 'commons.date.scrub.days';
+  static const commons_date_scrub_hours = 'commons.date.scrub.hours';
+  static const commons_date_scrub_minutes = 'commons.date.scrub.minutes';
+  static const commons_date_scrub_dateGesture = 'commons.date.scrub.dateGesture';
+  static const commons_date_scrub_timeGesture = 'commons.date.scrub.timeGesture';
   static const commons_date_morning = 'commons.date.morning';
   static const commons_date_midday = 'commons.date.midday';
   static const commons_date_evening = 'commons.date.evening';

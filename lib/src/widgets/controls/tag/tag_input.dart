@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../generated/locale_keys.g.dart';
+import '../../../../generated/locale_keys.g.dart';
 import '../../../model/series/tags/tag.dart';
 import '../../../util/theme_utils.dart';
 import '../layout/single_child_scroll_view_with_scrollbar.dart';

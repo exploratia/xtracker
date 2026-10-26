@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 import '../../../../util/date_time_utils.dart';
-import '../../../../util/theme_utils.dart';
 import '../../../controls/select/month_switcher.dart';
+import 'date_time_scrub_field.dart';
 
 class InputHeader extends StatelessWidget {
   final DateTime dateTime;
@@ -11,12 +11,15 @@ class InputHeader extends StatelessWidget {
 
   const InputHeader({super.key, required this.dateTime, required this.setDateTime, this.monthly = false});
 
+  DateTime get _firstDate => DateTime(2000);
+  DateTime get _lastDate => DateUtils.dateOnly(DateTime.now().add(const Duration(days: 366 * 10)));
+
   Future<void> _selectDate(BuildContext context, DateTime dateTime) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: dateTime,
-      firstDate: DateTime(2000),
-      lastDate: DateTime.now().add(const Duration(days: 366 * 10)),
+      firstDate: _firstDate,
+      lastDate: _lastDate,
     );
 
     if (pickedDate != null) setDateTime(pickedDate.copyWith(hour: dateTime.hour, minute: dateTime.minute));
@@ -48,26 +51,28 @@ class InputHeader extends StatelessWidget {
       runAlignment: WrapAlignment.center,
       spacing: 20,
       children: [
-        InkWell(
-          borderRadius: ThemeUtils.borderRadiusCircularSmall,
+        DateTimeScrubField(
+          value: dateTime,
+          isTime: false,
+          firstDate: _firstDate,
+          lastDate: _lastDate,
+          onChanged: setDateTime,
           onTap: () => _selectDate(context, dateTime),
-          child: Padding(
-            padding: const EdgeInsets.all(2.0),
-            child: Text(
-              DateTimeUtils.formatDate(dateTime),
-              style: textStyle,
-            ),
+          child: Text(
+            DateTimeUtils.formatDate(dateTime),
+            style: textStyle,
           ),
         ),
-        InkWell(
-          borderRadius: ThemeUtils.borderRadiusCircularSmall,
+        DateTimeScrubField(
+          value: dateTime,
+          isTime: true,
+          firstDate: _firstDate,
+          lastDate: _lastDate,
+          onChanged: setDateTime,
           onTap: () => _selectTime(context, dateTime),
-          child: Padding(
-            padding: const EdgeInsets.all(2.0),
-            child: Text(
-              DateTimeUtils.formatTime(dateTime),
-              style: textStyle,
-            ),
+          child: Text(
+            DateTimeUtils.formatTime(dateTime),
+            style: textStyle,
           ),
         ),
       ],
