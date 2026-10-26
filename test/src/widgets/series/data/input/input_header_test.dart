@@ -7,6 +7,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:xtracker/src/util/date_time_utils.dart';
+import 'package:xtracker/src/util/theme_utils.dart';
 import 'package:xtracker/src/widgets/series/data/input/date_time_scrub_overlay.dart';
 import 'package:xtracker/src/widgets/series/data/input/input_header.dart';
 
@@ -19,9 +20,10 @@ void main() {
     Localization.load(const Locale('en', 'US'), translations: Translations(translations));
   });
 
-  Future<void> pumpHeader(WidgetTester tester, ValueChanged<DateTime> onChanged, {bool dialog = false}) async {
+  Future<void> pumpHeader(WidgetTester tester, ValueChanged<DateTime> onChanged, {bool dialog = false, ThemeData? theme}) async {
     await tester.pumpWidget(
       MaterialApp(
+        theme: theme,
         home: Scaffold(
           body: Builder(
             builder: (context) {
@@ -131,6 +133,45 @@ void main() {
     await gesture.cancel();
     await tester.pumpAndSettle();
   });
+
+  for (final dark in [false, true]) {
+    testWidgets('preview uses readable card surfaces in the ${dark ? 'dark' : 'light'} theme', (tester) async {
+      await pumpHeader(tester, (_) {});
+      final theme = ThemeUtils.buildThemeData(tester.element(find.byType(InputHeader)), dark);
+      await pumpHeader(tester, (_) {}, theme: theme);
+      final gesture = await hold(tester, time: true);
+      await tester.pumpAndSettle();
+      final scheme = theme.colorScheme;
+      final previewMaterial = tester.widget<Material>(find.ancestor(of: preview, matching: find.byType(Material)).first);
+      expect(previewMaterial.color, theme.cardTheme.color);
+      expect(tester.widget<Text>(preview).style?.color, scheme.onSurface);
+
+      final hintMaterial = tester.widget<Material>(
+        find.ancestor(of: find.byIcon(Icons.arrow_upward), matching: find.byType(Material)).first,
+      );
+      expect(hintMaterial.color, scheme.surfaceContainerHighest);
+      final surfaces = [
+        scheme.surfaceContainerLowest,
+        scheme.surface,
+        scheme.surfaceContainerLow,
+        scheme.surfaceContainer,
+        scheme.surfaceContainerHigh,
+        scheme.surfaceContainerHighest,
+      ];
+      for (var i = 0; i < surfaces.length; ++i) {
+        final luminance = surfaces[i].computeLuminance();
+        final textLuminance = scheme.onSurface.computeLuminance();
+        final contrast = dark ? (textLuminance + 0.05) / (luminance + 0.05) : (luminance + 0.05) / (textLuminance + 0.05);
+        expect(contrast, greaterThanOrEqualTo(4.5));
+        if (i > 0) {
+          final previous = surfaces[i - 1].computeLuminance();
+          expect(luminance, dark ? greaterThan(previous) : lessThan(previous));
+        }
+      }
+      await gesture.cancel();
+      await tester.pumpAndSettle();
+    });
+  }
 
   testWidgets('cancellation and returning to the origin discard the change', (tester) async {
     final changes = <DateTime>[];

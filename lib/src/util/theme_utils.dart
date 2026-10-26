@@ -22,6 +22,7 @@ class ThemeUtils {
   static const double cardPadding = 16;
   static const double defaultPadding = 8;
   static const double paddingSmall = 4;
+  static const double paddingLarge = 12;
   static const double horizontalSpacing = 8;
   static const double horizontalSpacingSmall = 4;
   static const double horizontalSpacingLarge = 16;
@@ -47,6 +48,7 @@ class ThemeUtils {
 
   static final borderRadiusCircular = BorderRadius.circular(borderRadius);
   static final borderRadiusCircularSmall = BorderRadius.circular(borderRadiusSmall);
+  static final borderRadiusCircularLarge = BorderRadius.circular(borderRadiusLarge);
 
   static const screenPaddingAll = EdgeInsets.all(screenPadding); // .all(screenPaddingValue);
   static final cardBorderRadius = BorderRadius.circular(20);
@@ -73,6 +75,11 @@ class ThemeUtils {
 
     final shadowColor = dark ? backgroundColor : Colors.black45;
     final textColor = textColorByBrightness(dark);
+
+    // Keep surface levels in the existing neutral palette instead of using
+    // the pink-tinted surfaces generated from the primary seed color.
+    Color surfaceTone(double opacity) => Color.alphaBlend(textColor.withValues(alpha: opacity), cardBackgroundColor);
+    final lowestSurface = Color.lerp(cardBackgroundColor, dark ? backgroundColor : Colors.white, 0.5)!;
 
     var themeData = ThemeData(
       useMaterial3: false,
@@ -124,6 +131,21 @@ class ThemeUtils {
         secondary: secondary,
         onSecondary: onPrimary,
         tertiary: tertiary,
+        surface: cardBackgroundColor,
+        onSurface: textColor,
+        onSurfaceVariant: surfaceTone(0.75),
+        surfaceDim: dark ? lowestSurface : surfaceTone(0.10),
+        surfaceBright: dark ? surfaceTone(0.10) : cardBackgroundColor,
+        surfaceContainerLowest: lowestSurface,
+        surfaceContainerLow: surfaceTone(0.02),
+        surfaceContainer: surfaceTone(0.04),
+        surfaceContainerHigh: surfaceTone(0.07),
+        surfaceContainerHighest: surfaceTone(0.10),
+        inverseSurface: surfaceTone(0.90),
+        onInverseSurface: cardBackgroundColor,
+        outline: surfaceTone(0.50),
+        outlineVariant: surfaceTone(0.20),
+        surfaceTint: primary,
       ),
       datePickerTheme: DatePickerThemeData(
         headerBackgroundColor: cardBackgroundColor,

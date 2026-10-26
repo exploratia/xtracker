@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../../../../generated/locale_keys.g.dart';
 import '../../../../util/date_time_utils.dart';
 import '../../../../util/motion_utils.dart';
+import '../../../../util/theme_utils.dart';
 
 /// Displays gesture directions and a preview without dimming the input dialog.
 class DateTimeScrubOverlay extends StatefulWidget {
@@ -82,17 +83,17 @@ class _DateTimeScrubOverlayState extends State<DateTimeScrubOverlay> {
                 child: Center(
                   child: Material(
                     elevation: 6,
-                    borderRadius: BorderRadius.circular(20),
-                    color: theme.colorScheme.primaryContainer,
+                    borderRadius: ThemeUtils.borderRadiusCircularLarge,
+                    color: theme.colorScheme.surface,
                     child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                      padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.cardPadding, vertical: ThemeUtils.defaultPadding),
                       child: Text(
                         widget.isTime
                             ? '${DateTimeUtils.formatDate(widget.value)}\n${DateTimeUtils.formatTime(widget.value)}'
                             : DateTimeUtils.formatDateWithDay(widget.value),
                         key: const ValueKey('dateTimeScrubPreview'),
                         textAlign: TextAlign.center,
-                        style: theme.textTheme.headlineSmall?.copyWith(color: theme.colorScheme.onPrimaryContainer),
+                        style: theme.textTheme.headlineSmall?.copyWith(color: theme.colorScheme.onSurface),
                       ),
                     ),
                   ),
@@ -110,14 +111,14 @@ class _DateTimeScrubOverlayState extends State<DateTimeScrubOverlay> {
     return Material(
       elevation: 2,
       color: theme.colorScheme.surfaceContainerHighest,
-      borderRadius: BorderRadius.circular(24),
+      borderRadius: ThemeUtils.borderRadiusCircularLarge,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: ThemeUtils.paddingLarge, vertical: ThemeUtils.defaultPadding),
         child: Row(
           mainAxisSize: MainAxisSize.min,
-          spacing: 4,
+          spacing: ThemeUtils.horizontalSpacingSmall,
           children: [
-            Icon(icon, size: 18, color: theme.colorScheme.onSurface),
+            Icon(icon, size: ThemeUtils.fontSizeTitleM, color: theme.colorScheme.onSurface),
             Text(label, style: theme.textTheme.labelLarge?.copyWith(color: theme.colorScheme.onSurface)),
           ],
         ),
