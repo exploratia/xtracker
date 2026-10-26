@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../generated/locale_keys.g.dart';
+import '../../../../generated/locale_keys.g.dart';
 import '../../../model/column_profile/fix_column_profile_type.dart';
 import '../../../model/series/series_def.dart';
 import '../../../model/series/view_type.dart';
