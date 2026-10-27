@@ -39,16 +39,18 @@ class CustomValue extends SeriesDataValue {
   @override
   List<dynamic> toCSVList(SeriesDef seriesDef) {
     List<dynamic> list = [dateTime.millisecondsSinceEpoch];
-    for (var seriesItem in seriesDef.seriesItems) {
+    for (var seriesItem in seriesDef.csvSeriesItems) {
       list.add(values[seriesItem.siid]);
     }
 
-    String tagName = Globals.invalid;
     var tags = seriesDef.customTagsSettingsReadonly().tags;
-    for (var tag in tags) {
-      if (tag.tagId == tagId) tagName = tag.name;
+    if (tags.isNotEmpty) {
+      String tagName = Globals.invalid;
+      for (var tag in tags) {
+        if (tag.tagId == tagId) tagName = tag.name;
+      }
+      list.add(tagName);
     }
-    list.add(tagName);
 
     return list;
   }
@@ -56,7 +58,7 @@ class CustomValue extends SeriesDataValue {
   factory CustomValue.fromCSVList(List<dynamic> csv, SeriesDef seriesDef) {
     Map<String, double> values = {};
     int idx = 0;
-    for (var seriesItem in seriesDef.seriesItems) {
+    for (var seriesItem in seriesDef.csvSeriesItems) {
       idx++;
       if (csv.length > idx) {
         var val = csv[idx];
@@ -69,14 +71,14 @@ class CustomValue extends SeriesDataValue {
     }
 
     String? tagId;
-    {
+    var tags = seriesDef.customTagsSettingsReadonly().tags;
+    idx++;
+    if (tags.isNotEmpty && csv.length > idx) {
       // build resolver map
-      var tags = seriesDef.customTagsSettingsReadonly().tags;
       Map<String, String> tagName2TagId = {};
       for (var tag in tags) {
         tagName2TagId[tag.name] = tag.tagId;
       }
-      idx++;
       tagId = tagName2TagId[csv[idx]];
     }
 

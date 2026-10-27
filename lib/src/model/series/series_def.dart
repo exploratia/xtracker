@@ -174,6 +174,9 @@ class SeriesDef {
     'version': DbMigration.latestVersion,
   };
 
+  /// The stored items included in CSV imports, exports and column examples.
+  Iterable<SeriesItem> get csvSeriesItems => seriesItems.where((item) => !item.isCalculated);
+
   List<dynamic> toCSVHeaderList() {
     List<dynamic> headers = ["utc(ms)"];
     switch (seriesType) {
@@ -191,7 +194,7 @@ class SeriesDef {
         headers.add("tag");
       case SeriesType.custom:
       case SeriesType.monthly:
-        headers.addAll(seriesItems.map((e) => e.name));
+        headers.addAll(csvSeriesItems.map((e) => e.name));
         if (customTagsSettingsReadonly().tags.isNotEmpty) {
           headers.add("tag");
         }
