@@ -51,7 +51,7 @@ class ChartUtilsMonthly {
         double resetValue = 0;
         for (final dataItem in seriesData) {
           final v = dataItem.values[siid];
-          if (v != null) {
+          if (v != null && v.isFinite) {
             var ts = DateTimeUtils.firstDayOfYear(dataItem.dateTime);
             if (actValue == null) {
               actValue = TimedValue.value(ts, v);
@@ -114,7 +114,7 @@ class ChartUtilsMonthly {
           }
           prevTimestamp = dataItem.dateTime;
           final v = dataItem.values[siid];
-          if (v != null) {
+          if (v != null && v.isFinite) {
             var val = v;
             if (siid2useDelta[siid] ?? false) {
               val = v - prevValue;
@@ -187,6 +187,7 @@ class ChartUtilsMonthly {
     Function(FlTouchEvent, LineTouchResponse?)? touchCallback,
   ) {
     List<LineChartBarData> lineBarsData = [];
+    final lineYears = <int>[];
 
     ChartMetaData chartMetaData = ChartMetaData();
     chartMetaData.showDots = false;
@@ -200,6 +201,7 @@ class ChartUtilsMonthly {
     List<FlSpot> values = [];
 
     buildLineChartData(int year) {
+      lineYears.add(year);
       var hueSteps = latestValueYear - year;
       var lineColor = ColorUtils.hue(seriesItem.color, hueSteps * hueStep);
       lineBarsData.add(
@@ -256,9 +258,8 @@ class ChartUtilsMonthly {
         showToucheLine: true,
         themeData: themeData,
         touchCallback: touchCallback,
-        // provideTooltipTextColor: (x, y, barIdx) => seriesItem.color,
-        provideTooltipTextColor: (x, y, barIdx) => ColorUtils.hue(seriesItem.color, ((latestValueYear - earliestValueYear) - barIdx) * hueStep),
-        provideTooltipExt: (x, y, barIndex) => [TextSpan(text: "   (${earliestValueYear + barIndex})", style: themeData.textTheme.labelSmall)],
+        provideTooltipTextColor: (x, y, barIdx) => lineBarsData[barIdx].color!,
+        provideTooltipExt: (x, y, barIndex) => [TextSpan(text: "   (${lineYears[barIndex]})", style: themeData.textTheme.labelSmall)],
       ),
       titlesData: FlTitlesData(
         rightTitles: ChartUtils.axisTitlesNoTitles,
