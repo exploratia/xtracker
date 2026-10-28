@@ -62,6 +62,9 @@ class _LazyTooltipState extends State<LazyTooltip> with SingleTickerProviderStat
       final overlay = Overlay.of(context);
 
       final theme = TooltipTheme.of(context);
+      final mediaQuery = MediaQuery.of(context);
+      final availableWidth = (mediaQuery.size.width - mediaQuery.padding.horizontal - 2 * ThemeUtils.defaultPadding).clamp(0.0, double.infinity);
+      final constraints = (theme.constraints ?? const BoxConstraints(maxWidth: 300)).enforce(BoxConstraints(maxWidth: availableWidth));
 
       // Measure the target widget position
       final renderBox = context.findRenderObject() as RenderBox?;
@@ -78,6 +81,7 @@ class _LazyTooltipState extends State<LazyTooltip> with SingleTickerProviderStat
         color: Colors.transparent,
         child: Container(
           key: tooltipKey,
+          constraints: constraints,
           padding: theme.padding ?? const EdgeInsets.symmetric(horizontal: ThemeUtils.defaultPadding, vertical: ThemeUtils.defaultPadding / 2),
           decoration:
               theme.decoration ??
@@ -120,22 +124,21 @@ class _LazyTooltipState extends State<LazyTooltip> with SingleTickerProviderStat
         );
 
         _overlayEntry = OverlayEntry(
-          builder: (_) => SafeArea(
-            child: Stack(
-              children: [
-                Positioned(
-                  left: pos.dx,
-                  top: pos.dy,
-                  child: FadeTransition(
-                    opacity: _fadeAnimation,
-                    child: ScaleTransition(
-                      scale: _scaleAnimation,
-                      child: tooltipContent,
-                    ),
+          // The calculated position already includes the safe-area insets.
+          builder: (_) => Stack(
+            children: [
+              Positioned(
+                left: pos.dx,
+                top: pos.dy,
+                child: FadeTransition(
+                  opacity: _fadeAnimation,
+                  child: ScaleTransition(
+                    scale: _scaleAnimation,
+                    child: tooltipContent,
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         );
         overlay.insert(_overlayEntry!);

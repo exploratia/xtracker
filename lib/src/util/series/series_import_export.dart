@@ -559,7 +559,13 @@ class SeriesImportExport {
               icon: Icon(Icons.download_outlined, size: ThemeUtils.iconSizeScaled),
               label: Text(LocaleKeys.seriesManagement_importExport_btn_exportSingleSeriesCSV.tr()),
             ),
-            _LabelMedium(LocaleKeys.seriesManagement_importExport_label_exportSingleSeriesCSV.tr()),
+            _LabelMedium(
+              LocaleKeys.seriesManagement_importExport_label_exportSingleSeriesCSV.tr(
+                args: [
+                  const CsvEncoder().convert([seriesDef.toCSVHeaderList()]),
+                ],
+              ),
+            ),
             ElevatedButton.icon(
               onPressed: () async {
                 await _shareSeriesDef(seriesDef, context);

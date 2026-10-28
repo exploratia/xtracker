@@ -25,38 +25,8 @@ class MonthlyValue extends CustomValue {
   }
 
   factory MonthlyValue.fromCSVList(List<dynamic> csv, SeriesDef seriesDef) {
-    Map<String, double> values = {};
-    int idx = 0;
-    for (var seriesItem in seriesDef.seriesItems) {
-      idx++;
-      if (csv.length > idx) {
-        var val = csv[idx];
-        if (val is double) {
-          values[seriesItem.siid] = val;
-        } else if (val is int) {
-          values[seriesItem.siid] = val.toDouble();
-        }
-      }
-    }
-
-    String? tagId;
-    {
-      // build resolver map
-      var tags = seriesDef.customTagsSettingsReadonly().tags;
-      Map<String, String> tagName2TagId = {};
-      for (var tag in tags) {
-        tagName2TagId[tag.name] = tag.tagId;
-      }
-      idx++;
-      tagId = tagName2TagId[csv[idx]];
-    }
-
-    return MonthlyValue(
-      const Uuid().v4().toString(),
-      DateTime.fromMillisecondsSinceEpoch(csv[0] as int),
-      values,
-      tagId,
-    );
+    final value = CustomValue.fromCSVList(csv, seriesDef);
+    return MonthlyValue(value.uuid, value.dateTime, value.values, value.tagId);
   }
 
   @override

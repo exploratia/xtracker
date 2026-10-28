@@ -58,7 +58,7 @@ class _SeriesItemsChartSettingsState extends State<SeriesItemsChartSettings> {
   void _saveHandler() {
     _validate();
     if (!_isValid) return;
-    var result = _seriesItemsData.map((e) => e.seriesItem.withChartSettings(e.hide, e.useDelta)).toList();
+    var result = _seriesItemsData.map((e) => e.seriesItem.withChartSettings(e.hide, e.useDelta, filterDeltaOutliersInChart: e.filterOutliers)).toList();
     Navigator.pop<List<SeriesItem>>(context, result);
   }
 
@@ -119,6 +119,19 @@ class _SeriesItemsChartSettingsState extends State<SeriesItemsChartSettings> {
                       title: Text(LocaleKeys.seriesEdit_seriesSettings_seriesItems_chartSettingsDlg_label_useDelta.tr()),
                     ),
                   ),
+                  LazyTooltip(
+                    tooltipBuilder: (BuildContext p1) => Text(
+                      e.filterOutliers
+                          ? LocaleKeys.seriesEdit_seriesSettings_seriesItems_chartSettingsDlg_tooltip_showDeltaOutliers.tr()
+                          : LocaleKeys.seriesEdit_seriesSettings_seriesItems_chartSettingsDlg_tooltip_filterDeltaOutliers.tr(),
+                    ),
+                    child: SwitchListTile(
+                      contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: ThemeUtils.defaultPadding),
+                      value: e.filterOutliers,
+                      onChanged: e.useDelta ? (value) => setState(() => e.filterOutliers = value) : null,
+                      title: Text(LocaleKeys.seriesEdit_seriesSettings_seriesItems_chartSettingsDlg_label_filterDeltaOutliers.tr()),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -163,9 +176,11 @@ class _SeriesItemData {
   final SeriesItem seriesItem;
   late bool hide;
   late bool useDelta;
+  late bool filterOutliers;
 
   _SeriesItemData(this.seriesItem) {
     hide = seriesItem.hideInChart;
     useDelta = seriesItem.useDeltaInChart;
+    filterOutliers = seriesItem.filterDeltaOutliersInChart;
   }
 }

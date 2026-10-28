@@ -42,6 +42,17 @@ Format:
 dart fix --apply
 ```
 
+## Chart deltas and outliers
+
+Monthly and custom charts calculate signed deltas per column. In chart settings,
+each column can optionally hide extreme deltas as line gaps; this is off by default.
+The filter requires at least five finite deltas and compares deviations from the
+median with `max(6 * 1.4826 * MAD, 5 * median(abs(delta)))`. A zero reference scale
+disables filtering. It runs once per column in O(n log n) time and O(n) memory.
+Original readings remain unchanged, including the baseline for the next delta.
+Annual totals are calculated after filtering; a year containing a filtered
+transition is shown as a gap because its complete total is unknown.
+
 ## Assets
 
 The `assets` directory houses images, translations, fonts, and any other files you want to

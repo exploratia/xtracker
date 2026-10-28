@@ -27,6 +27,11 @@ class ChartMetaData {
   }
 
   void calcPadding() {
+    // A compressed series can contain only gaps after filtering resets.
+    if (yMin > yMax) {
+      yMin = 0;
+      yMax = 0;
+    }
     if ((xMax - xMin).abs() == 0) {
       _xPadding = 1;
     } else {

@@ -18,6 +18,7 @@ abstract class  LocaleKeys {
   static const changeLog_title = 'changeLog.title';
   static const changeLog_label_version = 'changeLog.label.version';
   static const changeLog_label_versionChanged = 'changeLog.label.versionChanged';
+  static const changeLog_entries_v2_4_0 = 'changeLog.entries.v2_4_0';
   static const changeLog_entries_v2_3_0 = 'changeLog.entries.v2_3_0';
   static const changeLog_entries_v2_2_4 = 'changeLog.entries.v2_2_4';
   static const changeLog_entries_v2_2_3 = 'changeLog.entries.v2_2_3';
@@ -337,10 +338,13 @@ abstract class  LocaleKeys {
   static const seriesEdit_seriesSettings_seriesItems_dlg_title = 'seriesEdit.seriesSettings.seriesItems.dlg.title';
   static const seriesEdit_seriesSettings_seriesItems_chartSettingsDlg_title = 'seriesEdit.seriesSettings.seriesItems.chartSettingsDlg.title';
   static const seriesEdit_seriesSettings_seriesItems_chartSettingsDlg_label_useDelta = 'seriesEdit.seriesSettings.seriesItems.chartSettingsDlg.label.useDelta';
+  static const seriesEdit_seriesSettings_seriesItems_chartSettingsDlg_label_filterDeltaOutliers = 'seriesEdit.seriesSettings.seriesItems.chartSettingsDlg.label.filterDeltaOutliers';
   static const seriesEdit_seriesSettings_seriesItems_chartSettingsDlg_tooltip_showChart = 'seriesEdit.seriesSettings.seriesItems.chartSettingsDlg.tooltip.showChart';
   static const seriesEdit_seriesSettings_seriesItems_chartSettingsDlg_tooltip_hideChart = 'seriesEdit.seriesSettings.seriesItems.chartSettingsDlg.tooltip.hideChart';
   static const seriesEdit_seriesSettings_seriesItems_chartSettingsDlg_tooltip_useDelta = 'seriesEdit.seriesSettings.seriesItems.chartSettingsDlg.tooltip.useDelta';
   static const seriesEdit_seriesSettings_seriesItems_chartSettingsDlg_tooltip_disuseDelta = 'seriesEdit.seriesSettings.seriesItems.chartSettingsDlg.tooltip.disuseDelta';
+  static const seriesEdit_seriesSettings_seriesItems_chartSettingsDlg_tooltip_filterDeltaOutliers = 'seriesEdit.seriesSettings.seriesItems.chartSettingsDlg.tooltip.filterDeltaOutliers';
+  static const seriesEdit_seriesSettings_seriesItems_chartSettingsDlg_tooltip_showDeltaOutliers = 'seriesEdit.seriesSettings.seriesItems.chartSettingsDlg.tooltip.showDeltaOutliers';
   static const seriesEdit_seriesSettings_seriesItems_tableSettingsDlg_title = 'seriesEdit.seriesSettings.seriesItems.tableSettingsDlg.title';
   static const seriesEdit_seriesSettings_seriesItems_tableSettingsDlg_label_columnWidth = 'seriesEdit.seriesSettings.seriesItems.tableSettingsDlg.label.columnWidth';
   static const seriesEdit_seriesSettings_seriesItems_tableSettingsDlg_tooltip_showColumn = 'seriesEdit.seriesSettings.seriesItems.tableSettingsDlg.tooltip.showColumn';

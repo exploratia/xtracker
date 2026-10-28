@@ -32,9 +32,10 @@
       "versionChanged": "The app was updated to version {}."
     },
     "entries": {
-      "v2_3_0": "Adjust dates and times by holding and dragging with a live preview. Changes are applied on release. The complete release history is now accessible through a dedicated screen in administration. Updated dependencies.",
-      "v2_2_4": "Fixed duplicate reminders and shifted notification times when switching between daylight saving time and standard time. Updated dependencies.",
-      "v2_2_3": "Open-ended date filters now include new values when the date range expands. Updated dependencies.",
+      "v2_4_0": "Extreme deltas can now optionally be hidden as gaps in chart settings.\nTags are preserved during CSV import and export.\nImproved chart data handling and tooltip display on small screens.\nUpdated dependencies.",
+      "v2_3_0": "Adjust dates and times by holding and dragging with a live preview. Changes are applied on release.\nThe complete release history is now accessible through a dedicated screen in administration.\nUpdated dependencies.",
+      "v2_2_4": "Fixed duplicate reminders and shifted notification times when switching between daylight saving time and standard time.\nUpdated dependencies.",
+      "v2_2_3": "Open-ended date filters now include new values when the date range expands.\nUpdated dependencies.",
       "v2_2_2": "Fixed duplicate input dialogs in notifications and quick actions issue.",
       "v2_2_1": "Fixed the display of information about new app versions.",
       "v2_2_0": "Automatic Dropbox backups, actions to edit, duplicate and delete series values, plus improved notifications and animations.",
@@ -46,10 +47,10 @@
       "v1_3_0": "Daily Life as a new series type, default views per series and wallpaper support.",
       "v1_2_1": "Fixed date calculations in the date filter and an issue that could prevent values from being saved.",
       "v1_2_0": "New analytics for recorded days and trend analysis for blood pressure and habits.",
-      "v1_1_1": "Device information, app support and backup reminders, and the latest export date. Improved layouts for larger text sizes.",
+      "v1_1_1": "Device information, app support and backup reminders, and the latest export date.\nImproved layouts for larger text sizes.",
       "v1_1_0": "New habits, more flexible table views and first reminders for backups and app support.",
       "v1_0_4": "Support for older devices running Android 5 or later.",
-      "v1_0_3": "New date, time and value tooltips, smoother scrolling and an optional count in the dots overview. Improved messages for missing data and support for Android 10 or later.",
+      "v1_0_3": "New date, time and value tooltips, smoother scrolling and an optional count in the dots overview.\nImproved messages for missing data and support for Android 10 or later.",
       "v1_0_2": "Fixed an issue that could make the bottom navigation bar unreachable.",
       "v1_0_1": "Tooltips for all pressable icons, a message when no series exist, an app-specific email address and a higher upper limit for blood pressure values.",
       "v1_0_0": "First tested version with Day Check, blood pressure, import/export, tables, charts and pixel view."
@@ -817,13 +818,16 @@
         "chartSettingsDlg": {
           "title": "Chart settings",
           "label": {
-            "useDelta": "Delta"
+            "useDelta": "Delta",
+            "filterDeltaOutliers": "Delta filter"
           },
           "tooltip": {
             "showChart": "Show chart",
             "hideChart": "Hide chart",
-            "useDelta": "Use delta to the previous value. Useful when values keep rising and the change is more relevant than the current value.",
-            "disuseDelta": "Use absolute value"
+            "useDelta": "Use the delta from the previous value. Shows positive and negative changes instead of the absolute value.",
+            "disuseDelta": "Use absolute value",
+            "filterDeltaOutliers": "Show very large positive and negative changes as gaps once five deltas are available. Genuine large changes may also be hidden.",
+            "showDeltaOutliers": "Show all deltas including outliers"
           }
         },
         "tableSettingsDlg": {
@@ -938,13 +942,13 @@
       "label": {
         "exportSeries": "Export all series as one JSON file.",
         "exportSingleSeries": "Export series (definition and values) as JSON file.",
-        "exportSingleSeriesCSV": "Export series (values only) as CSV file",
+        "exportSingleSeriesCSV": "Export series (values only) as a CSV file. Calculated parameters are not exported.\nThe file contains the following columns and one line per entry:\n{}",
         "exportSeriesTip": "Tip: To save separate measurement series, use the export icon of the respective series.",
         "exportSeriesCSVTip": "Tip: CSV export is available per series.",
         "exportSingleSeriesTip": "Tip: To save all measurement series in one file, use the export icon of the management view.",
         "importSeries": "Select series JSON files to import.\nExisting series (and their data) will be overwritten (identified by their unique id). New series will be created if they don't already exist.",
         "importSeriesTip": "Tip: Create and export a matching series first. Then insert your data into the exported file and re-import it. That way the format will be correct.",
-        "importSeriesCSV": "Import values for the series “{}” from a CSV file. Existing data will be overwritten.\nThe file must contain one line per entry in exactly these columns:\n{}",
+        "importSeriesCSV": "Import values for the series “{}” from a CSV file. Existing data will be overwritten. Calculated parameters are not imported and must not be included as columns.\nThe file must contain one line per entry in exactly these columns:\n{}",
         "importSeriesCSVTip": "Tip: CSV import is available per series.",
         "latestSeriesExport": "Last exported: {}",
         "latestAutoBackup": "Last backup: {}",

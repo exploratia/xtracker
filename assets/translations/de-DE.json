@@ -32,9 +32,10 @@
       "versionChanged": "Die App wurde auf Version {} aktualisiert."
     },
     "entries": {
-      "v2_3_0": "Datum und Uhrzeit lassen sich durch Gedrückthalten und Ziehen mit einer Vorschau anpassen. Änderungen werden beim Loslassen übernommen. Die vollständige Änderungshistorie ist jetzt über einen eigenen Bildschirm in der Administration erreichbar. Abhängigkeiten wurden aktualisiert.",
-      "v2_2_4": "Doppelte Erinnerungen und verschobene Benachrichtigungszeiten bei der Umstellung zwischen Sommer- und Winterzeit wurden behoben. Abhängigkeiten wurden aktualisiert.",
-      "v2_2_3": "Datumsfilter mit offenem Ende berücksichtigen neue Werte auch dann, wenn sich der Datumsbereich erweitert. Abhängigkeiten wurden aktualisiert.",
+      "v2_4_0": "Extreme Differenzen lassen sich in den Diagrammeinstellungen optional als Lücken ausblenden.\nTags bleiben beim CSV-Import und -Export erhalten.\nDiagrammdaten und die Anzeige von Tooltips auf kleinen Bildschirmen wurden verbessert.\nAbhängigkeiten wurden aktualisiert.",
+      "v2_3_0": "Datum und Uhrzeit lassen sich durch Gedrückthalten und Ziehen mit einer Vorschau anpassen. Änderungen werden beim Loslassen übernommen.\nDie vollständige Änderungshistorie ist jetzt über einen eigenen Bildschirm in der Administration erreichbar.\nAbhängigkeiten wurden aktualisiert.",
+      "v2_2_4": "Doppelte Erinnerungen und verschobene Benachrichtigungszeiten bei der Umstellung zwischen Sommer- und Winterzeit wurden behoben.\nAbhängigkeiten wurden aktualisiert.",
+      "v2_2_3": "Datumsfilter mit offenem Ende berücksichtigen neue Werte auch dann, wenn sich der Datumsbereich erweitert.\nAbhängigkeiten wurden aktualisiert.",
       "v2_2_2": "Doppelte Eingabedialoge bei Notifications und Quickaction-Überschneidung korrigiert.",
       "v2_2_1": "Die Anzeige der Informationen zu neuen App-Versionen wurde korrigiert.",
       "v2_2_0": "Automatische Dropbox-Backups, Aktionen zum Bearbeiten, Duplizieren und Löschen von Messreihenwerten sowie optimierte Benachrichtigungen und Animationen.",
@@ -46,10 +47,10 @@
       "v1_3_0": "Tägliches Leben als neue Messreihe, Standardansichten pro Messreihe und Hintergrundbild-Unterstützung.",
       "v1_2_1": "Fehler bei der Datumsberechnung im Datumsfilter und beim Speichern von Werten wurden behoben.",
       "v1_2_0": "Neue Analysen für aufgezeichnete Tage sowie Trend-Analysen für Blutdruck und Gewohnheiten.",
-      "v1_1_1": "Geräteinformationen, Erinnerungen an App-Unterstützung und Backups sowie die Anzeige des letzten Exports. Verbesserte Darstellung bei größerer Schrift.",
+      "v1_1_1": "Geräteinformationen, Erinnerungen an App-Unterstützung und Backups sowie die Anzeige des letzten Exports.\nVerbesserte Darstellung bei größerer Schrift.",
       "v1_1_0": "Neue Gewohnheiten, flexiblere Tabellenansichten und erste Erinnerungen für Backup und App-Unterstützung.",
       "v1_0_4": "Unterstützung für ältere Geräte ab Android 5.",
-      "v1_0_3": "Neue Hinweise zu Datum, Uhrzeit und Werten, flüssigeres Scrollen und eine optionale Anzahl in der Punktübersicht. Verbesserte Meldungen bei fehlenden Daten und Unterstützung ab Android 10.",
+      "v1_0_3": "Neue Hinweise zu Datum, Uhrzeit und Werten, flüssigeres Scrollen und eine optionale Anzahl in der Punktübersicht.\nVerbesserte Meldungen bei fehlenden Daten und Unterstützung ab Android 10.",
       "v1_0_2": "Die untere Navigationsleiste bleibt erreichbar.",
       "v1_0_1": "Hinweise für alle anklickbaren Symbole, eine Meldung bei fehlenden Messreihen, eine App-spezifische E-Mail-Adresse und eine höhere Obergrenze für Blutdruckwerte.",
       "v1_0_0": "Erste getestete Version mit Tages-Check, Blutdruck, Import/Export, Tabellen, Diagrammen und Pixelansicht."
@@ -817,13 +818,16 @@
         "chartSettingsDlg": {
           "title": "Diagrammeinstellungen",
           "label": {
-            "useDelta": "Delta"
+            "useDelta": "Delta",
+            "filterDeltaOutliers": "Delta Filter"
           },
           "tooltip": {
             "showChart": "Diagramm anzeigen",
             "hideChart": "Diagramm ausblenden",
-            "useDelta": "Delta zum vorherigen Wert verwenden. Nützlich, wenn die Messwerte steigen und die Veränderung interessanter ist als der aktuelle Wert.",
-            "disuseDelta": "Absoluten Wert verwenden"
+            "useDelta": "Delta zum vorherigen Wert verwenden. Zeigt positive und negative Änderungen statt des absoluten Werts.",
+            "disuseDelta": "Absoluten Wert verwenden",
+            "filterDeltaOutliers": "Sehr große positive und negative Änderungen ab fünf Deltas als Lücken darstellen. Echte große Änderungen können ebenfalls ausgeblendet werden.",
+            "showDeltaOutliers": "Alle Deltas einschließlich Ausreißern anzeigen"
           }
         },
         "tableSettingsDlg": {
@@ -938,13 +942,13 @@
       "label": {
         "exportSeries": "Alle Messreihen als eine JSON-Datei speichern.",
         "exportSingleSeries": "Messreihe (Konfiguration und Werte) als JSON-Datei speichern.",
-        "exportSingleSeriesCSV": "Messreihe (nur Werte) als CSV-Datei speichern.",
+        "exportSingleSeriesCSV": "Messreihe (nur Werte) als CSV-Datei speichern. Berechnete Parameter werden nicht exportiert.\nDie Datei enthält folgende Spalten und pro Eintrag eine entsprechende Zeile:\n{}",
         "exportSeriesTip": "Tipp: Einzelne Messreihen über das Export-Symbol der jeweiligen Messreihe speichern.",
         "exportSeriesCSVTip": "Tipp: CSV-Export ist für einzelne Messreihen über das Export-Symbol der jeweiligen Messreihe möglich.",
         "exportSingleSeriesTip": "Tipp: Alle Messreihen gemeinsam über das Export-Symbol der Messreihenverwaltung speichern.",
         "importSeries": "JSON-Dateien mit Messreihen zum Import auswählen.\nVorhandene Messreihen (inklusive Daten) werden anhand ihrer ID überschrieben. Neue Messreihen werden automatisch erstellt.",
         "importSeriesTip": "Tipp: Zuerst eine passende Messreihe erstellen und exportieren. Danach Daten in die Datei einfügen und erneut importieren – so passt das Format sicher.",
-        "importSeriesCSV": "Werte für die Messreihe „{}“ aus einer CSV-Datei importieren. Bereits vorhandene Daten werden überschrieben.\nDie Datei muss exakt folgende Spalten und pro Eintrag eine entsprechende Zeile enthalten:\n{}",
+        "importSeriesCSV": "Werte für die Messreihe „{}“ aus einer CSV-Datei importieren. Bereits vorhandene Daten werden überschrieben. Berechnete Parameter werden nicht importiert und dürfen nicht als Spalten enthalten sein.\nDie Datei muss exakt folgende Spalten und pro Eintrag eine entsprechende Zeile enthalten:\n{}",
         "importSeriesCSVTip": "Tipp: CSV-Import ist für einzelne Messreihen über das Export-Symbol der jeweiligen Messreihe möglich.",
         "latestSeriesExport": "Zuletzt exportiert: {}",
         "latestAutoBackup": "Zuletzt gesichert: {}",

@@ -78,6 +78,9 @@ class SeriesDataMonthlyChartView extends StatelessWidget {
                 maxVisibleHeight: constraints.maxHeight - seriesDataViewOverlays.height - subtractAdditionalHeights,
                 dateFormatter: dateFormatter,
                 chartWidgetBuilder: (touchCallback) {
+                  if (parameterChartData.data.isEmpty) {
+                    return Center(child: Text(LocaleKeys.seriesData_label_noData.tr()));
+                  }
                   return LineChart(
                     ChartUtilsMonthly.buildLineChartDataYearly(
                       seriesViewMetaData,

@@ -24,7 +24,7 @@ flutter pub get
 Run automatic changelog generation:
 
 ```shell
-node ../../update_changelog.js
+node update_changelog.js
 ```
 
 Check the latest changelog entries:

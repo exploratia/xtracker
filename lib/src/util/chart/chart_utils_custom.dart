@@ -7,6 +7,7 @@ import '../../model/series/series_def.dart';
 import '../../model/series/series_view_meta_data.dart';
 import '../date_time_utils.dart';
 import '../ex.dart';
+import 'chart_delta_filter.dart';
 import 'chart_utils_simple_value.dart';
 
 class ChartUtilsCustom {
@@ -27,7 +28,6 @@ class ChartUtilsCustom {
 
     for (final siid in siids) {
       DateTime? prevTimestamp;
-      double prevValue = 0;
       for (final dataItem in seriesData) {
         // check duplicate timestamps
         if (dataItem.dateTime == prevTimestamp) {
@@ -43,16 +43,8 @@ class ChartUtilsCustom {
         if (v == null || v.isNaN || v.isInfinite) {
           continue;
         }
-        var val = v;
-        if (siid2useDelta[siid] ?? false) {
-          val = v - prevValue;
-          // if val < 0 we had a reset...
-          if (val < 0) val = v;
-          prevValue = v;
-        }
-
         siid2values[siid]!.add(
-          TimedValue.value(dataItem.dateTime, val),
+          TimedValue.value(dataItem.dateTime, v),
         );
       }
     }
@@ -60,12 +52,9 @@ class ChartUtilsCustom {
     List<ParameterChartData> result = [];
     for (var seriesItem in seriesViewMetaData.seriesDef.seriesItems.where((si) => !si.hideInChart)) {
       var data = siid2values[seriesItem.siid]!;
-      // in case of delta ignore the first value (because it's absolute - there is no delta yet)
-      // except there is only one value (if we hide it we see nothing...)
       if (data.length > 1 && (siid2useDelta[seriesItem.siid] ?? false)) {
-        data.removeAt(0);
+        data = ChartDeltaFilter.buildDeltas(data, filterOutliers: seriesItem.filterDeltaOutliersInChart);
       }
-      // if (data.isEmpty) continue; // would be: no data - no chart but also no info -> check on empty later
       result.add(ParameterChartData(seriesDef: seriesViewMetaData.seriesDef, seriesItem: seriesItem, data: data));
     }
     return result;
