@@ -32,6 +32,7 @@
       "versionChanged": "The app was updated to version {}."
     },
     "entries": {
+      "v2_4_0": "Extreme deltas can now optionally be hidden as gaps in chart settings.\nTags are preserved during CSV import and export.\nImproved chart data handling and tooltip display on small screens.\nUpdated dependencies.",
       "v2_3_0": "Adjust dates and times by holding and dragging with a live preview. Changes are applied on release.\nThe complete release history is now accessible through a dedicated screen in administration.\nUpdated dependencies.",
       "v2_2_4": "Fixed duplicate reminders and shifted notification times when switching between daylight saving time and standard time.\nUpdated dependencies.",
       "v2_2_3": "Open-ended date filters now include new values when the date range expands.\nUpdated dependencies.",

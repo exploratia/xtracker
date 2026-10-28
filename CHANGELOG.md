@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.4.0] - 2026-10-28
+
+### Features
+
+- add filtering of extreme chart deltas as gaps
+
+### Fixes
+
+- validate finite values in chart data and improve tooltip logic
+- preserve tags in CSV import and export
+- improve tooltip sizing and positioning on small screens
+- update dependencies
+
 ## [2.3.0] - 2026-10-26
 
 ### Features
