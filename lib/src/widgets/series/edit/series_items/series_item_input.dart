@@ -150,6 +150,7 @@ class _SeriesItemInputState extends State<SeriesItemInput> {
       tableColumnWidth,
       useDeltaInChart,
       _calculationContainer,
+      filterDeltaOutliersInChart: source?.filterDeltaOutliersInChart ?? false,
     );
 
     Navigator.pop(context, val);

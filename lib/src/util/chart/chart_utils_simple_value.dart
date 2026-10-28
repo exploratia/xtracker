@@ -38,9 +38,9 @@ class ChartUtilsSimpleValue {
       var value = item.value;
       var t = item.dateTime.millisecondsSinceEpoch;
 
-      chartMetaData.evaluateMetaData(t, [value]);
+      chartMetaData.evaluateMetaData(t, item.isGap ? [] : [value]);
 
-      values.add(FlSpot(t.toDouble(), value.toDouble()));
+      values.add(item.isGap ? FlSpot.nullSpot : FlSpot(t.toDouble(), value.toDouble()));
     }
 
     lineBarsData.add(
@@ -121,7 +121,7 @@ class ChartUtilsSimpleValue {
             minIncluded: true,
             // https://www.reddit.com/r/flutterhelp/comments/rhb7iu/fl_chart_set_time_series_interval_in_linechart/?rdt=36768
             // interval: (chartMetaData.xMax - chartMetaData.xMin),
-            interval: math.max(1, values.last.x - values.first.x),
+            interval: math.max(1, chartMetaData.xMax - chartMetaData.xMin),
             getTitlesWidget: (value, meta) {
               if (value == meta.min) {
                 // use chartMetaData min/max - not the value which has padding!
@@ -158,6 +158,12 @@ class TimedValue {
 
   TimedValue.value(this.dateTime, this.value);
 
+  /// An explicitly missing chart value that breaks the rendered line.
+  TimedValue.gap(this.dateTime) : value = double.nan;
+
+  /// Whether this point should break the line and be excluded from its scale.
+  bool get isGap => !value.isFinite;
+
   void increment() {
     value++;
   }
@@ -166,12 +172,9 @@ class TimedValue {
 
   void set(double? val) => value = (val ?? 0);
 
-  /// only calculates delta if value is bigger then prevValue.
-  /// otherwise it's counted as a reset (e.g. exchange of water meter)
+  /// Calculates the signed change from the previous value.
   void buildDelta(double prevValue) {
-    if (value > prevValue) {
-      value = value - prevValue;
-    }
+    value -= prevValue;
   }
 
   @override

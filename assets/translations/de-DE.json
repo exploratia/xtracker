@@ -817,13 +817,15 @@
         "chartSettingsDlg": {
           "title": "Diagrammeinstellungen",
           "label": {
-            "useDelta": "Delta"
+            "useDelta": "Delta",
+            "filterDeltaOutliers": "Ausreißer ausblenden"
           },
           "tooltip": {
             "showChart": "Diagramm anzeigen",
             "hideChart": "Diagramm ausblenden",
-            "useDelta": "Delta zum vorherigen Wert verwenden. Nützlich, wenn die Messwerte steigen und die Veränderung interessanter ist als der aktuelle Wert.",
-            "disuseDelta": "Absoluten Wert verwenden"
+            "useDelta": "Delta zum vorherigen Wert verwenden. Zeigt positive und negative Änderungen statt des absoluten Werts.",
+            "disuseDelta": "Absoluten Wert verwenden",
+            "filterDeltaOutliers": "Sehr große positive und negative Änderungen werden ab fünf Deltas als Lücken dargestellt. Echte große Änderungen können ebenfalls ausgeblendet werden."
           }
         },
         "tableSettingsDlg": {

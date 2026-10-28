@@ -18,6 +18,9 @@ class SeriesItem {
   final bool hideInChart;
   final int? tableColumnWidth;
   final bool useDeltaInChart;
+
+  /// Whether extreme chart deltas are displayed as gaps.
+  final bool filterDeltaOutliersInChart;
   final CalculationContainer? calculationContainer;
 
   SeriesItem(
@@ -30,8 +33,9 @@ class SeriesItem {
     this.hideInChart,
     this.tableColumnWidth,
     this.useDeltaInChart,
-    this.calculationContainer,
-  );
+    this.calculationContainer, {
+    this.filterDeltaOutliersInChart = false,
+  });
 
   bool get isCalculated => calculationContainer != null;
 
@@ -57,12 +61,34 @@ class SeriesItem {
 
   /// copy with given table settings
   SeriesItem withTableSettings(bool hideInTable, int? tableColumnWidth) {
-    return SeriesItem(siid, name, unit, color, hideInTable, hideInChart, tableColumnWidth ?? this.tableColumnWidth, useDeltaInChart, calculationContainer);
+    return SeriesItem(
+      siid,
+      name,
+      unit,
+      color,
+      hideInTable,
+      hideInChart,
+      tableColumnWidth ?? this.tableColumnWidth,
+      useDeltaInChart,
+      calculationContainer,
+      filterDeltaOutliersInChart: filterDeltaOutliersInChart,
+    );
   }
 
   /// copy with given chart settings
-  SeriesItem withChartSettings(bool hideInChart, bool useDeltaInChart) {
-    return SeriesItem(siid, name, unit, color, hideInTable, hideInChart, tableColumnWidth, useDeltaInChart, calculationContainer);
+  SeriesItem withChartSettings(bool hideInChart, bool useDeltaInChart, {bool? filterDeltaOutliersInChart}) {
+    return SeriesItem(
+      siid,
+      name,
+      unit,
+      color,
+      hideInTable,
+      hideInChart,
+      tableColumnWidth,
+      useDeltaInChart,
+      calculationContainer,
+      filterDeltaOutliersInChart: filterDeltaOutliersInChart ?? this.filterDeltaOutliersInChart,
+    );
   }
 
   /// check if this series item is a calculated one and references the given siid.
@@ -91,6 +117,7 @@ class SeriesItem {
       json.asIntOrNull('tableColumnWidth'),
       json.asBoolOr('useDeltaInChart', false),
       jCalculation != null ? CalculationContainer.fromJson(jCalculation) : null,
+      filterDeltaOutliersInChart: json.asBoolOr('filterDeltaOutliersInChart', false),
     );
   }
 
@@ -106,6 +133,7 @@ class SeriesItem {
     if (hideInChart) json['hideInChart'] = true;
     if (tableColumnWidth != null) json['tableColumnWidth'] = tableColumnWidth;
     if (useDeltaInChart) json['useDeltaInChart'] = true;
+    if (filterDeltaOutliersInChart) json['filterDeltaOutliersInChart'] = true;
     if (calculationContainer != null) json['calculation'] = calculationContainer!.toJson();
 
     return json;

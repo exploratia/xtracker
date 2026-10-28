@@ -73,13 +73,13 @@ void main() {
         expect(data, isEmpty);
       });
 
-      test('ignores invalid values before calculating deltas and resets', () {
+      test('ignores invalid values before calculating signed deltas', () {
         final meta = _meta([_item('value', useDelta: true)], compressed: compressed);
         final rows = compressed
             ? [_row(2022, 12, 100), _row(2023, 1, double.nan), _row(2023, 6, 140), _row(2023, 12, double.infinity), _row(2024, 1, 5), _row(2024, 12, 15)]
             : [_row(2026, 1, 100), _row(2026, 2, double.nan), _row(2026, 3, 140), _row(2026, 4, double.infinity), _row(2026, 5, 5), _row(2026, 6, 15)];
         final data = ChartUtilsMonthly.buildDataProviderPerParameter(meta, rows).single.data;
-        expect(data.map((value) => value.value), compressed ? [40, 15] : [40, 5, 10]);
+        expect(data.map((value) => value.value), compressed ? [40, -125] : [40, -135, 10]);
       });
     });
   }
