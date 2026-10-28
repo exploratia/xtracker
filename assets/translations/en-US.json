@@ -818,14 +818,15 @@
           "title": "Chart settings",
           "label": {
             "useDelta": "Delta",
-            "filterDeltaOutliers": "Hide outliers"
+            "filterDeltaOutliers": "Delta filter"
           },
           "tooltip": {
             "showChart": "Show chart",
             "hideChart": "Hide chart",
             "useDelta": "Use the delta from the previous value. Shows positive and negative changes instead of the absolute value.",
             "disuseDelta": "Use absolute value",
-            "filterDeltaOutliers": "Very large positive and negative changes are shown as gaps once five deltas are available. Genuine large changes may also be hidden."
+            "filterDeltaOutliers": "Show very large positive and negative changes as gaps once five deltas are available. Genuine large changes may also be hidden.",
+            "showDeltaOutliers": "Show all deltas including outliers"
           }
         },
         "tableSettingsDlg": {

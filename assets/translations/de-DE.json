@@ -818,14 +818,15 @@
           "title": "Diagrammeinstellungen",
           "label": {
             "useDelta": "Delta",
-            "filterDeltaOutliers": "Ausreißer ausblenden"
+            "filterDeltaOutliers": "Delta Filter"
           },
           "tooltip": {
             "showChart": "Diagramm anzeigen",
             "hideChart": "Diagramm ausblenden",
             "useDelta": "Delta zum vorherigen Wert verwenden. Zeigt positive und negative Änderungen statt des absoluten Werts.",
             "disuseDelta": "Absoluten Wert verwenden",
-            "filterDeltaOutliers": "Sehr große positive und negative Änderungen werden ab fünf Deltas als Lücken dargestellt. Echte große Änderungen können ebenfalls ausgeblendet werden."
+            "filterDeltaOutliers": "Sehr große positive und negative Änderungen ab fünf Deltas als Lücken darstellen. Echte große Änderungen können ebenfalls ausgeblendet werden.",
+            "showDeltaOutliers": "Alle Deltas einschließlich Ausreißern anzeigen"
           }
         },
         "tableSettingsDlg": {

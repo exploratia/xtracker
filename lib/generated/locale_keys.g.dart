@@ -343,6 +343,7 @@ abstract class  LocaleKeys {
   static const seriesEdit_seriesSettings_seriesItems_chartSettingsDlg_tooltip_useDelta = 'seriesEdit.seriesSettings.seriesItems.chartSettingsDlg.tooltip.useDelta';
   static const seriesEdit_seriesSettings_seriesItems_chartSettingsDlg_tooltip_disuseDelta = 'seriesEdit.seriesSettings.seriesItems.chartSettingsDlg.tooltip.disuseDelta';
   static const seriesEdit_seriesSettings_seriesItems_chartSettingsDlg_tooltip_filterDeltaOutliers = 'seriesEdit.seriesSettings.seriesItems.chartSettingsDlg.tooltip.filterDeltaOutliers';
+  static const seriesEdit_seriesSettings_seriesItems_chartSettingsDlg_tooltip_showDeltaOutliers = 'seriesEdit.seriesSettings.seriesItems.chartSettingsDlg.tooltip.showDeltaOutliers';
   static const seriesEdit_seriesSettings_seriesItems_tableSettingsDlg_title = 'seriesEdit.seriesSettings.seriesItems.tableSettingsDlg.title';
   static const seriesEdit_seriesSettings_seriesItems_tableSettingsDlg_label_columnWidth = 'seriesEdit.seriesSettings.seriesItems.tableSettingsDlg.label.columnWidth';
   static const seriesEdit_seriesSettings_seriesItems_tableSettingsDlg_tooltip_showColumn = 'seriesEdit.seriesSettings.seriesItems.tableSettingsDlg.tooltip.showColumn';
