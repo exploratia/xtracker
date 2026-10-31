@@ -23,16 +23,17 @@ class Wallpaper extends StatelessWidget {
     final style = context.select<SettingsController?, WallpaperStyle>((settings) => settings?.wallpaperStyle ?? WallpaperStyle.hills);
     return LayoutBuilder(
       builder: (context, constraints) {
-        double wallpaperHeight = min(300, constraints.maxHeight);
+        final centered = style == WallpaperStyle.hills;
+        final wallpaperHeight = min(300.0, constraints.maxHeight);
         double wallpaperTop = constraints.maxHeight / 2 - wallpaperHeight / 2;
         return Stack(
           children: [
             if (showWallpaper) Positioned.fill(child: Container(color: themeData.scaffoldBackgroundColor)),
             if (showWallpaper)
               Positioned(
-                top: style == WallpaperStyle.hills ? wallpaperTop : 0,
-                bottom: style == WallpaperStyle.hills ? null : 0,
-                height: style == WallpaperStyle.hills ? wallpaperHeight : null,
+                top: centered ? wallpaperTop : 0,
+                bottom: centered ? null : 0,
+                height: centered ? wallpaperHeight : null,
                 left: 0,
                 right: 0,
                 child: LiveWallpaperRefresh(style: style),

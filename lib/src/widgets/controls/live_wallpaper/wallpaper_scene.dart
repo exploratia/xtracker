@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../../model/wallpaper_style.dart';
 import 'live_wallpaper.dart';
 import 'mountain_lake_wallpaper.dart';
+import 'moonlit_horizon_wallpaper.dart';
 import 'river_valley_wallpaper.dart';
 
 /// Renders a motif at a specific time without scheduling animations or updates.
@@ -19,6 +20,7 @@ class WallpaperScene extends StatelessWidget {
         WallpaperStyle.hills => RepaintBoundary(child: LiveWallpaper(percentOfDay: percentOfDay)),
         WallpaperStyle.mountainLake => MountainLakeWallpaper(percentOfDay: percentOfDay),
         WallpaperStyle.riverValley => RiverValleyWallpaper(percentOfDay: percentOfDay),
+        WallpaperStyle.moonlitHorizon => MoonlitHorizonWallpaper(percentOfDay: percentOfDay),
       },
     ),
   );

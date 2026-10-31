@@ -77,6 +77,7 @@ class _WallpaperSettingsState extends State<WallpaperSettings> {
                               WallpaperStyle.hills => LocaleKeys.settings_general_wallpaper_hills.tr(),
                               WallpaperStyle.mountainLake => LocaleKeys.settings_general_wallpaper_mountainLake.tr(),
                               WallpaperStyle.riverValley => LocaleKeys.settings_general_wallpaper_riverValley.tr(),
+                              WallpaperStyle.moonlitHorizon => LocaleKeys.settings_general_wallpaper_moonlitHorizon.tr(),
                             }, overflow: TextOverflow.ellipsis),
                           ),
                         ),

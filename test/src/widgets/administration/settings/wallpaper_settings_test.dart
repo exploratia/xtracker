@@ -18,6 +18,7 @@ void main() {
     for (final (style, labelKey) in [
       (WallpaperStyle.mountainLake, LocaleKeys.settings_general_wallpaper_mountainLake),
       (WallpaperStyle.riverValley, LocaleKeys.settings_general_wallpaper_riverValley),
+      (WallpaperStyle.moonlitHorizon, LocaleKeys.settings_general_wallpaper_moonlitHorizon),
     ]) {
       testWidgets('selects and previews $style in $locale on a small screen', (tester) async {
         FlutterSecureStorage.setMockInitialValues({});

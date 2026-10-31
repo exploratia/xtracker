@@ -2,7 +2,8 @@
 enum WallpaperStyle {
   hills,
   mountainLake,
-  riverValley;
+  riverValley,
+  moonlitHorizon;
 
   /// Keeps existing installations and unknown future values on the original motif.
   static WallpaperStyle fromStorage(String? value) => values.firstWhere(

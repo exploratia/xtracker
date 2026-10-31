@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 
 import '../widgets/controls/card/glowing_border_container.dart';
 import '../widgets/controls/live_wallpaper/mountain_lake_theme.dart';
+import '../widgets/controls/live_wallpaper/moonlit_horizon_theme.dart';
 import '../widgets/controls/live_wallpaper/river_valley_theme.dart';
 import 'color_utils.dart';
 import 'media_query_utils.dart';
@@ -84,7 +85,7 @@ class ThemeUtils {
     final lowestSurface = Color.lerp(cardBackgroundColor, dark ? backgroundColor : Colors.white, 0.5)!;
 
     var themeData = ThemeData(
-      extensions: const [MountainLakeTheme(), RiverValleyTheme()],
+      extensions: const [MountainLakeTheme(), RiverValleyTheme(), MoonlitHorizonTheme()],
       useMaterial3: false,
       brightness: brightness,
       canvasColor: canvasColor /* canvas e.g. DropdownButton-Menu in settings */,
