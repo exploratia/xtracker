@@ -51,8 +51,8 @@ class LiveWallpaper extends StatelessWidget {
             Positioned(
               top: 0,
               bottom: height / 3,
-              left: 1,
-              right: 1,
+              left: 0,
+              right: 0,
               child: Container(
                 decoration: BoxDecoration(gradient: ChartUtils.createBottomToTopGradient([skyColor, themeData.scaffoldBackgroundColor])),
               ),
@@ -60,8 +60,8 @@ class LiveWallpaper extends StatelessWidget {
             Positioned(
               top: 0,
               bottom: (height / 3).truncateToDouble() - 1,
-              left: 1,
-              right: 1,
+              left: 0,
+              right: 0,
               child: Opacity(
                 opacity: 1 - t2,
                 child: LiveWallpaperStarrySky(
@@ -75,7 +75,7 @@ class LiveWallpaper extends StatelessWidget {
             // ground
             Positioned(
               top: (height * 2 / 3).truncateToDouble() - 1,
-              left: 1,
+              left: 0,
               right: 0,
               bottom: -1,
               child: Container(
