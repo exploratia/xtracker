@@ -1048,6 +1048,7 @@
     },
     "general": {
       "wallpaper": {
+        "title": "Wallpaper",
         "label": "Wallpaper motif:",
         "hills": "Rolling hills",
         "mountainLake": "Mountain lake",
@@ -1060,6 +1061,7 @@
       "label": {
         "hideNavigationLabels": "Hide navigation labels (menu & bottom navigation):",
         "hideWallpaper": "Hide wallpaper:",
+        "showWallpaperOnDataScreens": "Show wallpaper in data views too:",
         "hideExploratiaQuickActionUrl": "Hide exploratia URL in app icon menu:",
         "seriesExportDisableReminder": "Disable series export reminder (30 days after last export):",
         "autoBackupEnabled": "Automatic Dropbox backup:",

@@ -22,6 +22,7 @@ import '../../util/globals.dart';
 import '../../util/media_query_utils.dart';
 import '../../util/theme_utils.dart';
 import '../../util/tooltip_utils.dart';
+import '../../widgets/administration/settings/settings_controller.dart';
 import '../../widgets/controls/appbar/app_bar_actions_divider.dart';
 import '../../widgets/controls/appbar/gradient_app_bar.dart';
 import '../../widgets/controls/layout/centered_message.dart';
@@ -467,6 +468,7 @@ class _ScreenBuilderState extends State<_ScreenBuilder> {
 
     return ScreenBuilder.withStandardNavBuilders(
       navItem: navItem,
+      showWallpaper: context.select<SettingsController, bool>((settings) => settings.showDataScreenWallpaper),
       appBarBuilder: (context) => GradientAppBar.build(context, addLeadingBackBtn: true, title: title, actions: actions),
       bodyBuilder: (context) => view,
       hideBottomNavigationBar: true,

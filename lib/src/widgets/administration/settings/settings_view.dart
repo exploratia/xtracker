@@ -12,6 +12,7 @@ import '../../controls/text/overflow_text.dart';
 import './settings_controller.dart';
 import 'device_storage_view.dart';
 import 'general_settings_view.dart';
+import 'wallpaper_settings.dart';
 
 /// Displays the various settings that can be customized by the user.
 ///
@@ -35,6 +36,10 @@ class SettingsView extends StatelessWidget {
             ExpandableSettingsCard(
               title: OverflowText(LocaleKeys.settings_general_title.tr(), style: Theme.of(context).textTheme.titleLarge),
               content: GeneralSettingsView(controller: settingsController),
+            ),
+            ExpandableSettingsCard(
+              title: OverflowText(LocaleKeys.settings_general_wallpaper_title.tr(), style: Theme.of(context).textTheme.titleLarge),
+              content: WallpaperSettings(controller: settingsController),
             ),
             ExpandableSettingsCard(
               title: OverflowText(LocaleKeys.settings_deviceStorage_title.tr(), style: Theme.of(context).textTheme.titleLarge),

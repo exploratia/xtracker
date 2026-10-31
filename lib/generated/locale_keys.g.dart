@@ -438,7 +438,9 @@ abstract class  LocaleKeys {
   static const settings_general_title = 'settings.general.title';
   static const settings_general_label_hideNavigationLabels = 'settings.general.label.hideNavigationLabels';
   static const settings_general_label_hideWallpaper = 'settings.general.label.hideWallpaper';
+  static const settings_general_label_showWallpaperOnDataScreens = 'settings.general.label.showWallpaperOnDataScreens';
   static const settings_general_wallpaper_label = 'settings.general.wallpaper.label';
+  static const settings_general_wallpaper_title = 'settings.general.wallpaper.title';
   static const settings_general_wallpaper_hills = 'settings.general.wallpaper.hills';
   static const settings_general_wallpaper_mountainLake = 'settings.general.wallpaper.mountainLake';
   static const settings_general_wallpaper_riverValley = 'settings.general.wallpaper.riverValley';

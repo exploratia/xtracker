@@ -55,6 +55,14 @@ class SettingsController with ChangeNotifier {
 
   bool get showWallpaper => !_hideWallpaper;
 
+  bool _showWallpaperOnDataScreens = false;
+
+  /// Whether the user opted into wallpapers on data and analysis screens.
+  bool get showWallpaperOnDataScreens => _showWallpaperOnDataScreens;
+
+  /// Applies the global visibility setting to the data screen preference.
+  bool get showDataScreenWallpaper => showWallpaper && _showWallpaperOnDataScreens;
+
   WallpaperStyle _wallpaperStyle = WallpaperStyle.hills;
 
   /// The selected motif, including while wallpapers are hidden.
@@ -115,6 +123,7 @@ class SettingsController with ChangeNotifier {
     _hideNavigationLabels = await _settingsService.hideNavigationLabels();
     HideNavigationLabels.setVisible(!_hideNavigationLabels);
     _hideWallpaper = await _settingsService.hideWallpaper();
+    _showWallpaperOnDataScreens = await _settingsService.showWallpaperOnDataScreens();
     _wallpaperStyle = await _settingsService.wallpaperStyle();
     _hideExploratiaQuickActionUrl = await _settingsService.hideExploratiaQuickActionUrl();
     _seriesExportDate = await _settingsService.seriesExportDate();
@@ -209,6 +218,14 @@ class SettingsController with ChangeNotifier {
     _hideWallpaper = value;
     notifyListeners();
     await _settingsService.updateHideWallpaper(value);
+  }
+
+  /// Persists the data screen preference before notifying listeners.
+  Future<void> updateShowWallpaperOnDataScreens(bool value) async {
+    if (value == _showWallpaperOnDataScreens) return;
+    await _settingsService.updateShowWallpaperOnDataScreens(value);
+    _showWallpaperOnDataScreens = value;
+    notifyListeners();
   }
 
   /// Persists the new motif before publishing it so a failed write keeps the selection.

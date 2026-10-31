@@ -10,7 +10,6 @@ import '../../controls/layout/drop_down_menu_item_child.dart';
 import 'dropbox_auto_backup_settings.dart';
 import './settings_controller.dart';
 import 'settings_service.dart';
-import 'wallpaper_settings.dart';
 
 /// Displays the various settings that can be customized by the user.
 ///
@@ -117,7 +116,6 @@ class GeneralSettingsView extends StatelessWidget {
             title: Text(LocaleKeys.settings_general_label_hideNavigationLabels.tr()),
           ),
         ),
-        WallpaperSettings(controller: controller),
         SwitchListTile(
           contentPadding: const EdgeInsets.symmetric(vertical: 0, horizontal: ThemeUtils.defaultPadding),
           value: controller.hideExploratiaQuickActionUrl,

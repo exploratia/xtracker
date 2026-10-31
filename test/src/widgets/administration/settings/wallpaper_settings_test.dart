@@ -53,6 +53,19 @@ void main() {
         );
         await tester.pumpAndSettle();
         final dropdown = find.byType(DropdownButton<WallpaperStyle>);
+        final hideWallpaperSwitch = find.widgetWithText(SwitchListTile, LocaleKeys.settings_general_label_hideWallpaper.tr());
+        final dataWallpaperSwitch = find.byKey(const Key('settingsShowWallpaperOnDataScreens'));
+        expect(tester.widget<SwitchListTile>(dataWallpaperSwitch).value, isFalse);
+        expect(
+          tester.getRect(dataWallpaperSwitch).top,
+          tester.getRect(hideWallpaperSwitch).bottom,
+        );
+        expect(find.text(LocaleKeys.settings_general_label_showWallpaperOnDataScreens.tr()), findsOneWidget);
+        await tester.tap(dataWallpaperSwitch);
+        await tester.pumpAndSettle();
+        expect(controller.showWallpaperOnDataScreens, isTrue);
+        expect(await SettingsService().showWallpaperOnDataScreens(), isTrue);
+        expect(controller.showDataScreenWallpaper, isTrue);
         final label = find.text(LocaleKeys.settings_general_wallpaper_label.tr());
         expect(tester.getRect(label).right, lessThanOrEqualTo(tester.getRect(dropdown).left));
         expect(tester.getCenter(label).dy, closeTo(tester.getCenter(dropdown).dy, 1));
@@ -79,10 +92,27 @@ void main() {
         await tester.pump();
         expect(tester.widget<WallpaperScene>(find.byType(WallpaperScene)).percentOfDay, inInclusiveRange(0.7, 0.85));
         expect(controller.wallpaperStyle, style);
-        await tester.tap(find.byType(Switch));
+        await tester.ensureVisible(hideWallpaperSwitch);
+        await tester.tap(hideWallpaperSwitch);
         await tester.pumpAndSettle();
         expect(controller.hideWallpaper, isTrue);
+        expect(controller.showWallpaperOnDataScreens, isTrue);
+        expect(controller.showDataScreenWallpaper, isFalse);
         expect(controller.wallpaperStyle, style);
+        expect(tester.widget<SwitchListTile>(hideWallpaperSwitch).onChanged, isNotNull);
+        expect(tester.widget<SwitchListTile>(dataWallpaperSwitch).onChanged, isNull);
+        expect(tester.widget<DropdownButton<WallpaperStyle>>(dropdown).onChanged, isNull);
+        expect(tester.widget<Slider>(find.byType(Slider)).onChanged, isNull);
+        final previewTime = tester.widget<WallpaperScene>(find.byType(WallpaperScene)).percentOfDay;
+
+        await tester.tap(hideWallpaperSwitch);
+        await tester.pumpAndSettle();
+        expect(tester.widget<SwitchListTile>(dataWallpaperSwitch).onChanged, isNotNull);
+        expect(tester.widget<DropdownButton<WallpaperStyle>>(dropdown).onChanged, isNotNull);
+        expect(tester.widget<Slider>(find.byType(Slider)).onChanged, isNotNull);
+        expect(controller.showDataScreenWallpaper, isTrue);
+        expect(controller.wallpaperStyle, style);
+        expect(tester.widget<WallpaperScene>(find.byType(WallpaperScene)).percentOfDay, previewTime);
         expect(tester.takeException(), isNull);
         await tester.pumpWidget(const SizedBox());
       });

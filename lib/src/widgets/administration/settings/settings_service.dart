@@ -64,6 +64,16 @@ class SettingsService {
     await DeviceStorage.writeBool(DeviceStorageKeys.layoutHideWallpaper, value);
   }
 
+  /// Loads whether data and analysis screens may display the wallpaper (off by default).
+  Future<bool> showWallpaperOnDataScreens() async {
+    return DeviceStorage.readBool(DeviceStorageKeys.layoutShowWallpaperOnDataScreens);
+  }
+
+  /// Persists wallpaper visibility on data and analysis screens.
+  Future<void> updateShowWallpaperOnDataScreens(bool value) async {
+    await DeviceStorage.writeBool(DeviceStorageKeys.layoutShowWallpaperOnDataScreens, value);
+  }
+
   /// Loads the motif, falling back to the original wallpaper for older installs.
   Future<WallpaperStyle> wallpaperStyle() async {
     return WallpaperStyle.fromStorage(await DeviceStorage.read(DeviceStorageKeys.wallpaperStyle));
