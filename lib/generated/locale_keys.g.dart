@@ -438,6 +438,12 @@ abstract class  LocaleKeys {
   static const settings_general_title = 'settings.general.title';
   static const settings_general_label_hideNavigationLabels = 'settings.general.label.hideNavigationLabels';
   static const settings_general_label_hideWallpaper = 'settings.general.label.hideWallpaper';
+  static const settings_general_wallpaper_label = 'settings.general.wallpaper.label';
+  static const settings_general_wallpaper_hills = 'settings.general.wallpaper.hills';
+  static const settings_general_wallpaper_mountainLake = 'settings.general.wallpaper.mountainLake';
+  static const settings_general_wallpaper_riverValley = 'settings.general.wallpaper.riverValley';
+  static const settings_general_wallpaper_previewTime = 'settings.general.wallpaper.previewTime';
+  static const settings_general_wallpaper_saveFailure = 'settings.general.wallpaper.saveFailure';
   static const settings_general_label_hideExploratiaQuickActionUrl = 'settings.general.label.hideExploratiaQuickActionUrl';
   static const settings_general_label_seriesExportDisableReminder = 'settings.general.label.seriesExportDisableReminder';
   static const settings_general_label_autoBackupEnabled = 'settings.general.label.autoBackupEnabled';

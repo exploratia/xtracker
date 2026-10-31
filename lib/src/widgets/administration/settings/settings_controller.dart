@@ -2,6 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 import '../../../model/changelog/change_log_entry.dart';
+import '../../../model/wallpaper_style.dart';
 import '../../../util/app_info.dart';
 import '../../../util/app_icon_quick_actions.dart';
 import '../../../util/navigation/hide_navigation_labels.dart';
@@ -53,6 +54,11 @@ class SettingsController with ChangeNotifier {
   bool get hideWallpaper => _hideWallpaper;
 
   bool get showWallpaper => !_hideWallpaper;
+
+  WallpaperStyle _wallpaperStyle = WallpaperStyle.hills;
+
+  /// The selected motif, including while wallpapers are hidden.
+  WallpaperStyle get wallpaperStyle => _wallpaperStyle;
 
   bool _hideExploratiaQuickActionUrl = false;
 
@@ -109,6 +115,7 @@ class SettingsController with ChangeNotifier {
     _hideNavigationLabels = await _settingsService.hideNavigationLabels();
     HideNavigationLabels.setVisible(!_hideNavigationLabels);
     _hideWallpaper = await _settingsService.hideWallpaper();
+    _wallpaperStyle = await _settingsService.wallpaperStyle();
     _hideExploratiaQuickActionUrl = await _settingsService.hideExploratiaQuickActionUrl();
     _seriesExportDate = await _settingsService.seriesExportDate();
     _seriesExportDisableReminder = await _settingsService.seriesExportDisableReminder();
@@ -202,6 +209,14 @@ class SettingsController with ChangeNotifier {
     _hideWallpaper = value;
     notifyListeners();
     await _settingsService.updateHideWallpaper(value);
+  }
+
+  /// Persists the new motif before publishing it so a failed write keeps the selection.
+  Future<void> updateWallpaperStyle(WallpaperStyle value) async {
+    if (value == _wallpaperStyle) return;
+    await _settingsService.updateWallpaperStyle(value);
+    _wallpaperStyle = value;
+    notifyListeners();
   }
 
   Future<void> updateHideExploratiaQuickActionUrl(bool value) async {

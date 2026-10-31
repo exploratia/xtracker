@@ -1047,6 +1047,14 @@
       }
     },
     "general": {
+      "wallpaper": {
+        "label": "Hintergrundmotiv:",
+        "hills": "Hügellandschaft",
+        "mountainLake": "Bergsee",
+        "riverValley": "Flusstal",
+        "previewTime": "Vorschau der Tageszeit: {}",
+        "saveFailure": "Das Hintergrundmotiv konnte nicht gespeichert werden. Bitte erneut versuchen."
+      },
       "title": "Allgemeine Einstellungen",
       "label": {
         "hideNavigationLabels": "Navigationslabels ausblenden (Menü & Navigationsleiste):",

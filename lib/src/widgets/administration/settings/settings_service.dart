@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../../model/wallpaper_style.dart';
 import '../../../util/app_info.dart';
 import '../../../util/device_storage/device_storage.dart';
 import '../../../util/device_storage/device_storage_keys.dart';
@@ -61,6 +62,16 @@ class SettingsService {
 
   Future<void> updateHideWallpaper(bool value) async {
     await DeviceStorage.writeBool(DeviceStorageKeys.layoutHideWallpaper, value);
+  }
+
+  /// Loads the motif, falling back to the original wallpaper for older installs.
+  Future<WallpaperStyle> wallpaperStyle() async {
+    return WallpaperStyle.fromStorage(await DeviceStorage.read(DeviceStorageKeys.wallpaperStyle));
+  }
+
+  /// Persists the selected wallpaper independently of its visibility.
+  Future<void> updateWallpaperStyle(WallpaperStyle value) async {
+    await DeviceStorage.write(DeviceStorageKeys.wallpaperStyle, value.name);
   }
 
   Future<bool> hideExploratiaQuickActionUrl() async {

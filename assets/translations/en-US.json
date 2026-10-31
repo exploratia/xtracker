@@ -1047,6 +1047,14 @@
       }
     },
     "general": {
+      "wallpaper": {
+        "label": "Wallpaper motif:",
+        "hills": "Rolling hills",
+        "mountainLake": "Mountain lake",
+        "riverValley": "River valley",
+        "previewTime": "Time of day preview: {}",
+        "saveFailure": "The wallpaper selection could not be saved. Please try again."
+      },
       "title": "General settings",
       "label": {
         "hideNavigationLabels": "Hide navigation labels (menu & bottom navigation):",

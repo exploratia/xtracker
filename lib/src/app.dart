@@ -104,6 +104,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       builder: (BuildContext context, Widget? child) {
         return MultiProvider(
           providers: [
+            ChangeNotifierProvider<SettingsController>.value(value: widget.settingsController),
             ChangeNotifierProvider(create: (context) => SeriesProvider()),
             ChangeNotifierProvider(create: (context) => SeriesDataProvider()),
             ChangeNotifierProvider(create: (context) => SeriesCurrentValueProvider()),
