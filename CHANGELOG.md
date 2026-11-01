@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.5.0] - 2026-11-01
+
+### Features
+
+- add adaptive wallpaper lighting based on image brightness and time of day
+- add consistent wallpaper previews in settings
+- improve changelog UI with bullet points
+- support custom wallpaper upload and storage
+- enable wallpaper display toggle for data screens
+- add "Moonlit Horizon" live wallpaper with dynamic themes
+- add customizable live wallpapers with integrated motif themes
+- improve wallpaper style selection on small and large screens
+
+### Fixes
+
+- improve wallpaper stability in settings
+- improve scroll behavior when loading content
+- ensure live wallpaper gradient and ground edges align with screen boundaries
+
 ## [2.4.0] - 2026-10-28
 
 ### Features
