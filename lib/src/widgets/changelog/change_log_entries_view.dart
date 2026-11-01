@@ -42,7 +42,21 @@ class _ChangeLogEntryView extends StatelessWidget {
       ),
       subtitle: Padding(
         padding: const EdgeInsets.only(top: ThemeUtils.verticalSpacingSmall),
-        child: Text(entry.messageKey.tr()),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          spacing: ThemeUtils.verticalSpacingSmall,
+          children: [
+            for (final topic in entry.messageKey.tr().split('\n').map((line) => line.trim()).where((line) => line.isNotEmpty))
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const ExcludeSemantics(child: Text('•')),
+                  const SizedBox(width: ThemeUtils.horizontalSpacingSmall),
+                  Expanded(child: Text(topic)),
+                ],
+              ),
+          ],
+        ),
       ),
     );
   }
