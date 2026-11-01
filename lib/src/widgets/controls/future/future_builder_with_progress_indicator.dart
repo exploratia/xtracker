@@ -78,21 +78,16 @@ class FutureBuilderWithProgressIndicator<T> extends StatelessWidget {
   }
 }
 
-class VoidFutureBuilderWithProgressIndicator extends StatelessWidget {
+class VoidFutureBuilderWithProgressIndicator extends StatefulWidget {
   /// [waitingWidget] optional Widget which is shown while waiting additional to progress indicator
-  VoidFutureBuilderWithProgressIndicator({
+  const VoidFutureBuilderWithProgressIndicator({
     super.key,
     required this.future,
     this.errorBuilder,
     required this.widgetBuilder,
     this.marginTop = 0,
     this.waitingWidget,
-  }) {
-    futureWrapper = Future(() async {
-      await future;
-      return true;
-    });
-  }
+  });
 
   final Future<void> future;
   final dynamic Function(Object error)? errorBuilder;
@@ -100,16 +95,42 @@ class VoidFutureBuilderWithProgressIndicator extends StatelessWidget {
   final double marginTop;
   final Widget? waitingWidget;
 
-  late final Future<bool> futureWrapper;
+  @override
+  State<VoidFutureBuilderWithProgressIndicator> createState() => _VoidFutureBuilderWithProgressIndicatorState();
+}
+
+class _VoidFutureBuilderWithProgressIndicatorState extends State<VoidFutureBuilderWithProgressIndicator> {
+  late Future<bool> _futureWrapper;
+
+  @override
+  void initState() {
+    super.initState();
+    _futureWrapper = _wrapFuture();
+  }
+
+  @override
+  void didUpdateWidget(covariant VoidFutureBuilderWithProgressIndicator oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.future != widget.future) {
+      _futureWrapper = _wrapFuture();
+    }
+  }
+
+  // Keep the future stable across layout and route rebuilds. Restarting the
+  // loading transition would replace loaded content and its scroll state.
+  Future<bool> _wrapFuture() async {
+    await widget.future;
+    return true;
+  }
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilderWithProgressIndicator(
-      future: futureWrapper,
-      errorBuilder: errorBuilder,
-      marginTop: marginTop,
-      widgetBuilder: (_, context) => widgetBuilder(context),
-      waitingWidget: waitingWidget,
+      future: _futureWrapper,
+      errorBuilder: widget.errorBuilder,
+      marginTop: widget.marginTop,
+      widgetBuilder: (_, context) => widget.widgetBuilder(context),
+      waitingWidget: widget.waitingWidget,
     );
   }
 }

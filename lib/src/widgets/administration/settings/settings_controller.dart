@@ -1,10 +1,14 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../../model/changelog/change_log_entry.dart';
+import '../../../model/wallpaper_style.dart';
 import '../../../util/app_info.dart';
 import '../../../util/app_icon_quick_actions.dart';
 import '../../../util/navigation/hide_navigation_labels.dart';
+import '../../../util/logging/flutter_simple_logging.dart';
+import '../../../util/wallpaper/wallpaper_image_lighting.dart';
 import 'settings_service.dart';
 
 /// A class that many Widgets can interact with to read user settings, update
@@ -53,6 +57,34 @@ class SettingsController with ChangeNotifier {
   bool get hideWallpaper => _hideWallpaper;
 
   bool get showWallpaper => !_hideWallpaper;
+
+  bool _showWallpaperOnDataScreens = false;
+
+  /// Whether the user opted into wallpapers on data and analysis screens.
+  bool get showWallpaperOnDataScreens => _showWallpaperOnDataScreens;
+
+  /// Applies the global visibility setting to the data screen preference.
+  bool get showDataScreenWallpaper => showWallpaper && _showWallpaperOnDataScreens;
+
+  WallpaperStyle _wallpaperStyle = WallpaperStyle.hills;
+
+  /// The selected motif, including while wallpapers are hidden.
+  WallpaperStyle get wallpaperStyle => _wallpaperStyle;
+
+  Uint8List? _wallpaperImage;
+
+  /// The immutable custom image, retained when a live motif is selected.
+  Uint8List? get wallpaperImage => _wallpaperImage;
+
+  WallpaperImageLighting _wallpaperImageLighting = const WallpaperImageLighting(luminance: 0);
+
+  /// Shared image analysis, retained across screens, previews and motif changes.
+  WallpaperImageLighting get wallpaperImageLighting => _wallpaperImageLighting;
+
+  bool _wallpaperImageLoadFailed = false;
+
+  /// Allows settings to explain a fallback after an unreadable saved image.
+  bool get wallpaperImageLoadFailed => _wallpaperImageLoadFailed;
 
   bool _hideExploratiaQuickActionUrl = false;
 
@@ -109,6 +141,23 @@ class SettingsController with ChangeNotifier {
     _hideNavigationLabels = await _settingsService.hideNavigationLabels();
     HideNavigationLabels.setVisible(!_hideNavigationLabels);
     _hideWallpaper = await _settingsService.hideWallpaper();
+    _showWallpaperOnDataScreens = await _settingsService.showWallpaperOnDataScreens();
+    _wallpaperStyle = await _settingsService.wallpaperStyle();
+    if (!kIsWeb) {
+      _wallpaperImage = null;
+      _wallpaperImageLighting = const WallpaperImageLighting(luminance: 0);
+      _wallpaperImageLoadFailed = false;
+      try {
+        _wallpaperImage = await _settingsService.wallpaperImage();
+        _wallpaperImageLighting = _settingsService.wallpaperImageService.lighting;
+      } catch (error, stackTrace) {
+        SimpleLogging.e('Loading the custom wallpaper failed.', error: error, stackTrace: stackTrace);
+        _wallpaperImageLoadFailed = true;
+      }
+    }
+    if (_wallpaperStyle == WallpaperStyle.customImage && _wallpaperImage == null) {
+      _wallpaperStyle = WallpaperStyle.hills;
+    }
     _hideExploratiaQuickActionUrl = await _settingsService.hideExploratiaQuickActionUrl();
     _seriesExportDate = await _settingsService.seriesExportDate();
     _seriesExportDisableReminder = await _settingsService.seriesExportDisableReminder();
@@ -202,6 +251,40 @@ class SettingsController with ChangeNotifier {
     _hideWallpaper = value;
     notifyListeners();
     await _settingsService.updateHideWallpaper(value);
+  }
+
+  /// Persists the data screen preference before notifying listeners.
+  Future<void> updateShowWallpaperOnDataScreens(bool value) async {
+    if (value == _showWallpaperOnDataScreens) return;
+    await _settingsService.updateShowWallpaperOnDataScreens(value);
+    _showWallpaperOnDataScreens = value;
+    notifyListeners();
+  }
+
+  /// Persists the new motif before publishing it so a failed write keeps the selection.
+  Future<void> updateWallpaperStyle(WallpaperStyle value) async {
+    if (value == _wallpaperStyle) return;
+    if (value == WallpaperStyle.customImage && _wallpaperImage == null) {
+      throw StateError('Select an image before enabling the custom wallpaper.');
+    }
+    await _settingsService.updateWallpaperStyle(value);
+    _wallpaperStyle = value;
+    notifyListeners();
+  }
+
+  /// Selects and saves an image, publishing changes only after successful storage.
+  Future<void> selectWallpaperImage() async {
+    final bytes = await _settingsService.wallpaperImageService.pick();
+    if (bytes == null) return;
+    final image = await _settingsService.updateWallpaperImage(bytes);
+    if (_wallpaperStyle != WallpaperStyle.customImage) {
+      await _settingsService.updateWallpaperStyle(WallpaperStyle.customImage);
+    }
+    _wallpaperImage = image;
+    _wallpaperImageLighting = _settingsService.wallpaperImageService.lighting;
+    _wallpaperStyle = WallpaperStyle.customImage;
+    _wallpaperImageLoadFailed = false;
+    notifyListeners();
   }
 
   Future<void> updateHideExploratiaQuickActionUrl(bool value) async {

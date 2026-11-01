@@ -43,7 +43,9 @@ void main() {
     expect(ModalRoute.of(tester.element(find.byType(ChangeLogScreen)))!.settings.name, ChangeLogScreen.navItem.routeName);
     expect(find.byType(Dialog), findsNothing);
     for (final entry in ChangeLog.entries) {
-      expect(find.text(entry.messageKey.tr()), findsOneWidget);
+      for (final topic in entry.messageKey.tr().split('\n').map((line) => line.trim()).where((line) => line.isNotEmpty)) {
+        expect(find.text(topic), findsWidgets);
+      }
     }
     expect(find.text(LocaleKeys.changeLog_label_versionChanged.tr(args: [AppInfo.version])), findsNothing);
 
@@ -58,6 +60,8 @@ void main() {
   });
 
   testWidgets('update changelog shows only supplied entries and confirms through the callback', (tester) async {
+    await tester.binding.setSurfaceSize(const Size(360, 800));
+    addTearDown(() => tester.binding.setSurfaceSize(null));
     var dismissed = false;
     final entry = ChangeLog.entries.first;
     await tester.pumpWidget(
@@ -70,7 +74,12 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    expect(find.text(entry.messageKey.tr()), findsOneWidget);
+    final topics = entry.messageKey.tr().split('\n').map((line) => line.trim()).where((line) => line.isNotEmpty).toList();
+    for (final topic in topics) {
+      expect(find.text(topic), findsOneWidget);
+    }
+    expect(find.text('•'), findsNWidgets(topics.length));
+    expect(tester.takeException(), isNull);
     expect(find.text(ChangeLog.entries.last.messageKey.tr()), findsNothing);
     expect(find.text(LocaleKeys.changeLog_label_versionChanged.tr(args: [AppInfo.version])), findsOneWidget);
 
