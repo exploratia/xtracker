@@ -1054,6 +1054,9 @@
         "mountainLake": "Bergsee",
         "riverValley": "Flusstal",
         "moonlitHorizon": "Mondhorizont",
+        "customImage": "Eigenes Bild",
+        "changeImage": "Bild ändern",
+        "imageFailure": "Das Hintergrundbild konnte nicht geladen oder gespeichert werden. Bitte wähle ein anderes Bild aus.",
         "previewTime": "Vorschau der Tageszeit: {}",
         "saveFailure": "Das Hintergrundmotiv konnte nicht gespeichert werden. Bitte erneut versuchen."
       },

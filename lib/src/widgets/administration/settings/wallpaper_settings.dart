@@ -5,12 +5,12 @@ import '../../../../generated/locale_keys.g.dart';
 import '../../../model/wallpaper_style.dart';
 import '../../../util/dialogs.dart';
 import '../../../util/logging/flutter_simple_logging.dart';
-import '../../../util/table_utils.dart';
 import '../../../util/theme_utils.dart';
-import '../../controls/layout/drop_down_menu_item_child.dart';
+import '../../controls/layout/wallpaper_image.dart';
 import '../../controls/live_wallpaper/wallpaper_day_cycle.dart';
 import '../../controls/live_wallpaper/wallpaper_scene.dart';
 import 'settings_controller.dart';
+import 'wallpaper_style_select.dart';
 
 /// Motif selection and an on-demand preview of every time of day.
 class WallpaperSettings extends StatefulWidget {
@@ -44,10 +44,32 @@ class _WallpaperSettingsState extends State<WallpaperSettings> {
     if (style == null || _saving) return;
     setState(() => _saving = true);
     try {
-      await widget.controller.updateWallpaperStyle(style);
+      if (style == WallpaperStyle.customImage && widget.controller.wallpaperImage == null) {
+        await widget.controller.selectWallpaperImage();
+      } else {
+        await widget.controller.updateWallpaperStyle(style);
+      }
     } catch (error, stackTrace) {
       SimpleLogging.e('Saving wallpaper selection failed.', error: error, stackTrace: stackTrace);
-      if (mounted) Dialogs.showSnackBarWarning(LocaleKeys.settings_general_wallpaper_saveFailure.tr(), context);
+      if (mounted) {
+        final message = style == WallpaperStyle.customImage
+            ? LocaleKeys.settings_general_wallpaper_imageFailure
+            : LocaleKeys.settings_general_wallpaper_saveFailure;
+        Dialogs.showSnackBarWarning(message.tr(), context);
+      }
+    } finally {
+      if (mounted) setState(() => _saving = false);
+    }
+  }
+
+  Future<void> _selectImage() async {
+    if (_saving) return;
+    setState(() => _saving = true);
+    try {
+      await widget.controller.selectWallpaperImage();
+    } catch (error, stackTrace) {
+      SimpleLogging.e('Selecting a custom wallpaper failed.', error: error, stackTrace: stackTrace);
+      if (mounted) Dialogs.showSnackBarWarning(LocaleKeys.settings_general_wallpaper_imageFailure.tr(), context);
     } finally {
       if (mounted) setState(() => _saving = false);
     }
@@ -56,6 +78,7 @@ class _WallpaperSettingsState extends State<WallpaperSettings> {
   @override
   Widget build(BuildContext context) {
     final enabled = widget.controller.showWallpaper;
+    final customImage = widget.controller.wallpaperStyle == WallpaperStyle.customImage;
     final timeLabel = DateFormat.Hm(context.locale.toString()).format(DateTime(2026, 1, 1, 0, (_previewTime * 1440).round()));
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -78,62 +101,45 @@ class _WallpaperSettingsState extends State<WallpaperSettings> {
                 onChanged: !enabled || _savingDataVisibility ? null : _updateDataVisibility,
                 title: Text(LocaleKeys.settings_general_label_showWallpaperOnDataScreens.tr()),
               ),
-              LayoutBuilder(
-                builder: (context, constraints) => Table(
-                  defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-                  columnWidths: const {0: IntrinsicColumnWidth(), 1: FlexColumnWidth()},
-                  children: [
-                    TableUtils.tableRow([
-                      ConstrainedBox(
-                        constraints: BoxConstraints(maxWidth: constraints.maxWidth * 0.45),
-                        child: Text(LocaleKeys.settings_general_wallpaper_label.tr()),
-                      ),
-                      DropdownButton<WallpaperStyle>(
-                        key: const Key('settingsWallpaperSelect'),
-                        value: widget.controller.wallpaperStyle,
-                        isExpanded: true,
-                        borderRadius: ThemeUtils.cardBorderRadius,
-                        onChanged: !enabled || _saving ? null : _selectStyle,
-                        items: WallpaperStyle.values
-                            .map(
-                              (style) => DropdownMenuItem(
-                                value: style,
-                                child: DropDownMenuItemChild(
-                                  selected: widget.controller.wallpaperStyle == style,
-                                  child: Text(switch (style) {
-                                    WallpaperStyle.hills => LocaleKeys.settings_general_wallpaper_hills.tr(),
-                                    WallpaperStyle.mountainLake => LocaleKeys.settings_general_wallpaper_mountainLake.tr(),
-                                    WallpaperStyle.riverValley => LocaleKeys.settings_general_wallpaper_riverValley.tr(),
-                                    WallpaperStyle.moonlitHorizon => LocaleKeys.settings_general_wallpaper_moonlitHorizon.tr(),
-                                  }, overflow: TextOverflow.ellipsis),
-                                ),
-                              ),
-                            )
-                            .toList(),
-                      ),
-                    ]),
-                  ],
-                ),
+              WallpaperStyleSelect(
+                value: widget.controller.wallpaperStyle,
+                onChanged: !enabled || _saving ? null : _selectStyle,
               ),
               const SizedBox(height: ThemeUtils.verticalSpacing),
+              if (widget.controller.wallpaperImageLoadFailed)
+                Text(LocaleKeys.settings_general_wallpaper_imageFailure.tr(), style: TextStyle(color: Theme.of(context).colorScheme.error)),
               ClipRRect(
                 borderRadius: ThemeUtils.borderRadiusCircularLarge,
                 child: SizedBox(
                   height: 220,
-                  child: WallpaperScene(style: widget.controller.wallpaperStyle, percentOfDay: _previewTime),
+                  child: customImage && widget.controller.wallpaperImage != null
+                      ? WallpaperImage(bytes: widget.controller.wallpaperImage!)
+                      : WallpaperScene(style: widget.controller.wallpaperStyle, percentOfDay: _previewTime),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: ThemeUtils.verticalSpacingSmall, left: ThemeUtils.defaultPadding),
-                child: Text(LocaleKeys.settings_general_wallpaper_previewTime.tr(args: [timeLabel])),
-              ),
-              Slider(
-                value: _previewTime,
-                divisions: 96,
-                label: timeLabel,
-                semanticFormatterCallback: (_) => timeLabel,
-                onChanged: enabled ? (value) => setState(() => _previewTime = value) : null,
-              ),
+              if (customImage)
+                Padding(
+                  padding: const EdgeInsets.only(top: ThemeUtils.verticalSpacingSmall),
+                  child: OutlinedButton.icon(
+                    key: const Key('settingsWallpaperChangeImage'),
+                    onPressed: enabled && !_saving ? _selectImage : null,
+                    icon: const Icon(Icons.photo_library_outlined),
+                    label: Text(LocaleKeys.settings_general_wallpaper_changeImage.tr()),
+                  ),
+                ),
+              if (!customImage)
+                Padding(
+                  padding: const EdgeInsets.only(top: ThemeUtils.verticalSpacingSmall, left: ThemeUtils.defaultPadding),
+                  child: Text(LocaleKeys.settings_general_wallpaper_previewTime.tr(args: [timeLabel])),
+                ),
+              if (!customImage)
+                Slider(
+                  value: _previewTime,
+                  divisions: 96,
+                  label: timeLabel,
+                  semanticFormatterCallback: (_) => timeLabel,
+                  onChanged: enabled ? (value) => setState(() => _previewTime = value) : null,
+                ),
             ],
           ),
         ),

@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import '../../../model/changelog/change_log_entry.dart';
@@ -6,6 +7,7 @@ import '../../../model/wallpaper_style.dart';
 import '../../../util/app_info.dart';
 import '../../../util/app_icon_quick_actions.dart';
 import '../../../util/navigation/hide_navigation_labels.dart';
+import '../../../util/logging/flutter_simple_logging.dart';
 import 'settings_service.dart';
 
 /// A class that many Widgets can interact with to read user settings, update
@@ -68,6 +70,16 @@ class SettingsController with ChangeNotifier {
   /// The selected motif, including while wallpapers are hidden.
   WallpaperStyle get wallpaperStyle => _wallpaperStyle;
 
+  Uint8List? _wallpaperImage;
+
+  /// The immutable custom image, retained when a live motif is selected.
+  Uint8List? get wallpaperImage => _wallpaperImage;
+
+  bool _wallpaperImageLoadFailed = false;
+
+  /// Allows settings to explain a fallback after an unreadable saved image.
+  bool get wallpaperImageLoadFailed => _wallpaperImageLoadFailed;
+
   bool _hideExploratiaQuickActionUrl = false;
 
   bool get hideExploratiaQuickActionUrl => _hideExploratiaQuickActionUrl;
@@ -125,6 +137,19 @@ class SettingsController with ChangeNotifier {
     _hideWallpaper = await _settingsService.hideWallpaper();
     _showWallpaperOnDataScreens = await _settingsService.showWallpaperOnDataScreens();
     _wallpaperStyle = await _settingsService.wallpaperStyle();
+    if (!kIsWeb) {
+      _wallpaperImage = null;
+      _wallpaperImageLoadFailed = false;
+      try {
+        _wallpaperImage = await _settingsService.wallpaperImage();
+      } catch (error, stackTrace) {
+        SimpleLogging.e('Loading the custom wallpaper failed.', error: error, stackTrace: stackTrace);
+        _wallpaperImageLoadFailed = true;
+      }
+    }
+    if (_wallpaperStyle == WallpaperStyle.customImage && _wallpaperImage == null) {
+      _wallpaperStyle = WallpaperStyle.hills;
+    }
     _hideExploratiaQuickActionUrl = await _settingsService.hideExploratiaQuickActionUrl();
     _seriesExportDate = await _settingsService.seriesExportDate();
     _seriesExportDisableReminder = await _settingsService.seriesExportDisableReminder();
@@ -231,8 +256,25 @@ class SettingsController with ChangeNotifier {
   /// Persists the new motif before publishing it so a failed write keeps the selection.
   Future<void> updateWallpaperStyle(WallpaperStyle value) async {
     if (value == _wallpaperStyle) return;
+    if (value == WallpaperStyle.customImage && _wallpaperImage == null) {
+      throw StateError('Select an image before enabling the custom wallpaper.');
+    }
     await _settingsService.updateWallpaperStyle(value);
     _wallpaperStyle = value;
+    notifyListeners();
+  }
+
+  /// Selects and saves an image, publishing changes only after successful storage.
+  Future<void> selectWallpaperImage() async {
+    final bytes = await _settingsService.wallpaperImageService.pick();
+    if (bytes == null) return;
+    final image = await _settingsService.updateWallpaperImage(bytes);
+    if (_wallpaperStyle != WallpaperStyle.customImage) {
+      await _settingsService.updateWallpaperStyle(WallpaperStyle.customImage);
+    }
+    _wallpaperImage = image;
+    _wallpaperStyle = WallpaperStyle.customImage;
+    _wallpaperImageLoadFailed = false;
     notifyListeners();
   }
 

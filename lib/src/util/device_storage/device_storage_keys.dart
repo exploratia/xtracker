@@ -3,8 +3,9 @@ class DeviceStorageKeys {
   static const theme = 'theme';
   static const layoutHideNavLabels = 'layoutHideNavLabels';
   static const layoutHideWallpaper = 'layoutHideWallpaper';
-  static const layoutShowWallpaperOnDataScreens = 'layoutShowWallpaperOnDataScreens';
+  static const wallpaperOnDataScreens = 'wallpaperOnDataScreens';
   static const wallpaperStyle = 'wallpaperStyle';
+  static const wallpaperImageSelected = 'wallpaperImageSelected';
   static const logLevel = 'logLevel';
   static const logStack = 'logStack';
   static const initialAppStart = 'initialAppStart';

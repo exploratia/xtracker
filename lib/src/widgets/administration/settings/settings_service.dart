@@ -1,9 +1,12 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 
 import '../../../model/wallpaper_style.dart';
 import '../../../util/app_info.dart';
 import '../../../util/device_storage/device_storage.dart';
 import '../../../util/device_storage/device_storage_keys.dart';
+import '../../../util/wallpaper/wallpaper_image_service.dart';
 
 /// A service that stores and retrieves user settings.
 ///
@@ -11,6 +14,11 @@ import '../../../util/device_storage/device_storage_keys.dart';
 /// persist the user settings locally, use the shared_preferences package. If
 /// you'd like to store settings on a web server, use the http package.
 class SettingsService {
+  SettingsService({WallpaperImageService? wallpaperImageService}) : wallpaperImageService = wallpaperImageService ?? WallpaperImageService();
+
+  /// Handles gallery selection and native image persistence.
+  final WallpaperImageService wallpaperImageService;
+
   static const supportedLocales = [Locale('en', 'US'), Locale('de', 'DE')];
 
   /// Loads the User's preferred ThemeMode from local or remote storage.
@@ -66,12 +74,12 @@ class SettingsService {
 
   /// Loads whether data and analysis screens may display the wallpaper (off by default).
   Future<bool> showWallpaperOnDataScreens() async {
-    return DeviceStorage.readBool(DeviceStorageKeys.layoutShowWallpaperOnDataScreens);
+    return DeviceStorage.readBool(DeviceStorageKeys.wallpaperOnDataScreens);
   }
 
   /// Persists wallpaper visibility on data and analysis screens.
   Future<void> updateShowWallpaperOnDataScreens(bool value) async {
-    await DeviceStorage.writeBool(DeviceStorageKeys.layoutShowWallpaperOnDataScreens, value);
+    await DeviceStorage.writeBool(DeviceStorageKeys.wallpaperOnDataScreens, value);
   }
 
   /// Loads the motif, falling back to the original wallpaper for older installs.
@@ -82,6 +90,22 @@ class SettingsService {
   /// Persists the selected wallpaper independently of its visibility.
   Future<void> updateWallpaperStyle(WallpaperStyle value) async {
     await DeviceStorage.write(DeviceStorageKeys.wallpaperStyle, value.name);
+  }
+
+  /// Reads a saved image only when the user previously selected one.
+  Future<Uint8List?> wallpaperImage() async {
+    if (!await DeviceStorage.readBool(DeviceStorageKeys.wallpaperImageSelected)) return null;
+    final image = await wallpaperImageService.load();
+    if (image == null) throw StateError('The saved wallpaper image is missing.');
+    return image;
+  }
+
+  /// Copies the image to app storage and remembers it independently of its visibility.
+  Future<Uint8List> updateWallpaperImage(Uint8List bytes) async {
+    final previouslySelected = await DeviceStorage.readBool(DeviceStorageKeys.wallpaperImageSelected);
+    final image = await wallpaperImageService.save(bytes);
+    if (!previouslySelected) await DeviceStorage.writeBool(DeviceStorageKeys.wallpaperImageSelected, true);
+    return image;
   }
 
   Future<bool> hideExploratiaQuickActionUrl() async {

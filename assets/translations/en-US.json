@@ -1054,6 +1054,9 @@
         "mountainLake": "Mountain lake",
         "riverValley": "River valley",
         "moonlitHorizon": "Moonlit horizon",
+        "customImage": "Custom image",
+        "changeImage": "Change image",
+        "imageFailure": "The wallpaper image could not be loaded or saved. Please select another image.",
         "previewTime": "Time of day preview: {}",
         "saveFailure": "The wallpaper selection could not be saved. Please try again."
       },

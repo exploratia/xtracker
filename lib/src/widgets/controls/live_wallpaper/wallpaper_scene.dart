@@ -17,7 +17,7 @@ class WallpaperScene extends StatelessWidget {
   Widget build(BuildContext context) => IgnorePointer(
     child: ExcludeSemantics(
       child: switch (style) {
-        WallpaperStyle.hills => RepaintBoundary(child: LiveWallpaper(percentOfDay: percentOfDay)),
+        WallpaperStyle.hills || WallpaperStyle.customImage => RepaintBoundary(child: LiveWallpaper(percentOfDay: percentOfDay)),
         WallpaperStyle.mountainLake => MountainLakeWallpaper(percentOfDay: percentOfDay),
         WallpaperStyle.riverValley => RiverValleyWallpaper(percentOfDay: percentOfDay),
         WallpaperStyle.moonlitHorizon => MoonlitHorizonWallpaper(percentOfDay: percentOfDay),
