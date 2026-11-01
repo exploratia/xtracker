@@ -43,7 +43,7 @@ void main() {
     expect(ModalRoute.of(tester.element(find.byType(ChangeLogScreen)))!.settings.name, ChangeLogScreen.navItem.routeName);
     expect(find.byType(Dialog), findsNothing);
     for (final entry in ChangeLog.entries) {
-      for (final topic in entry.messageKey.tr().split('\n')) {
+      for (final topic in entry.messageKey.tr().split('\n').map((line) => line.trim()).where((line) => line.isNotEmpty)) {
         expect(find.text(topic), findsWidgets);
       }
     }
@@ -74,7 +74,7 @@ void main() {
     );
     await tester.pumpAndSettle();
 
-    final topics = entry.messageKey.tr().split('\n');
+    final topics = entry.messageKey.tr().split('\n').map((line) => line.trim()).where((line) => line.isNotEmpty).toList();
     for (final topic in topics) {
       expect(find.text(topic), findsOneWidget);
     }

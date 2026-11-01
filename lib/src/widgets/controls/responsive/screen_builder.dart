@@ -30,6 +30,9 @@ class ScreenBuilder extends StatelessWidget {
 
   final bool showWallpaper;
 
+  /// Keeps the scaffold subtree mounted when wallpaper visibility changes.
+  final bool keepWallpaperMounted;
+
   const ScreenBuilder({
     super.key,
     required this.bodyBuilder,
@@ -41,6 +44,7 @@ class ScreenBuilder extends StatelessWidget {
     required this.isHome,
     required this.isMainNavigation,
     this.showWallpaper = false,
+    this.keepWallpaperMounted = false,
   });
 
   /// ShortHand constructor for standard navigation
@@ -53,6 +57,7 @@ class ScreenBuilder extends StatelessWidget {
     required NavigationItem navItem,
     bool hideBottomNavigationBar = false,
     bool showWallpaper = false,
+    bool keepWallpaperMounted = false,
   }) : this(
          key: key,
          appBarBuilder: appBarBuilder,
@@ -64,6 +69,7 @@ class ScreenBuilder extends StatelessWidget {
          navigationRailBuilder: (context) => const AppNavigationRail(),
          bottomNavigationBarBuilder: hideBottomNavigationBar ? null : (context) => const AppBottomNavigationBar(),
          showWallpaper: showWallpaper,
+         keepWallpaperMounted: keepWallpaperMounted,
        );
 
   @override
@@ -110,7 +116,7 @@ class ScreenBuilder extends StatelessWidget {
       backgroundColor: showWallpaper ? Colors.transparent : null,
     );
 
-    if (showWallpaper) return Wallpaper(child: scaffold);
+    if (showWallpaper || keepWallpaperMounted) return Wallpaper(showWallpaper: showWallpaper, child: scaffold);
     return scaffold;
   }
 }
