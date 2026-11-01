@@ -58,7 +58,7 @@ class GeneralSettingsView extends StatelessWidget {
           // ),
           children: [
             TableUtils.tableRow([
-              Text(LocaleKeys.settings_general_label_theme.tr()),
+              Text(LocaleKeys.settings_general_label_theme.tr(), style: ThemeUtils.settingsLabelStyle(context)),
               DropdownButton<ThemeMode>(
                 key: const Key('settingsThemeSelect'),
                 borderRadius: ThemeUtils.cardBorderRadius,
@@ -82,7 +82,7 @@ class GeneralSettingsView extends StatelessWidget {
               ),
             ]),
             TableUtils.tableRow([
-              Text(LocaleKeys.settings_general_label_lang.tr()),
+              Text(LocaleKeys.settings_general_label_lang.tr(), style: ThemeUtils.settingsLabelStyle(context)),
               DropdownButton<Locale?>(
                 key: const Key('settingsLocaleSelect'),
                 borderRadius: ThemeUtils.cardBorderRadius,

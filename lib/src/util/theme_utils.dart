@@ -291,6 +291,12 @@ class ThemeUtils {
     return themeData;
   }
 
+  /// Matches dropdown labels to the titles used by settings toggles.
+  static TextStyle? settingsLabelStyle(BuildContext context) {
+    final theme = Theme.of(context);
+    return ListTileTheme.of(context).titleTextStyle ?? (theme.useMaterial3 ? theme.textTheme.bodyLarge : theme.textTheme.titleMedium);
+  }
+
   static bool isDarkMode(dynamic contextOrThemeData) {
     ThemeData themeData;
     if (contextOrThemeData is ThemeData) {

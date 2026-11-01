@@ -1,24 +1,38 @@
 import 'dart:async';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 
 import '../../../model/wallpaper_style.dart';
+import '../../../util/wallpaper/wallpaper_image_lighting.dart';
 import 'wallpaper_day_cycle.dart';
 import 'wallpaper_scene.dart';
 
-/// Refreshes clock-based scenery only while the route and app are active.
+/// Refreshes wallpaper lighting only while the route and app are active.
 class LiveWallpaperRefresh extends StatefulWidget {
   const LiveWallpaperRefresh({
     super.key,
-    this.intervalInSeconds = 60,
+    int? intervalInSeconds,
     this.speedFactor = 1,
     this.style = WallpaperStyle.hills,
-  }) : assert(intervalInSeconds > 0),
+    this.image,
+    this.imageLighting = const WallpaperImageLighting(luminance: 0),
+  }) : _intervalInSeconds = intervalInSeconds,
+       assert(intervalInSeconds == null || intervalInSeconds > 0),
        assert(speedFactor > 0);
 
-  final int intervalInSeconds;
+  final int? _intervalInSeconds;
+
+  /// Refreshes photos every five minutes and live motifs every minute by default.
+  int get intervalInSeconds => _intervalInSeconds ?? (style == WallpaperStyle.customImage ? 300 : 60);
   final int speedFactor;
   final WallpaperStyle style;
+
+  /// Selected photo when [style] is [WallpaperStyle.customImage].
+  final Uint8List? image;
+
+  /// Previously sampled lighting, reused on every timer tick.
+  final WallpaperImageLighting imageLighting;
 
   @override
   State<LiveWallpaperRefresh> createState() => _LiveWallpaperRefreshState();
@@ -77,6 +91,8 @@ class _LiveWallpaperRefreshState extends State<LiveWallpaperRefresh> with Widget
   @override
   Widget build(BuildContext context) => WallpaperScene(
     style: widget.style,
+    image: widget.image,
+    imageLighting: widget.imageLighting,
     percentOfDay: WallpaperDayCycle.fractionAt(_now, speedFactor: widget.speedFactor),
   );
 }

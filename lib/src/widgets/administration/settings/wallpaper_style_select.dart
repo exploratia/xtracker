@@ -23,7 +23,7 @@ class WallpaperStyleSelect extends StatelessWidget {
         TableUtils.tableRow([
           ConstrainedBox(
             constraints: BoxConstraints(maxWidth: constraints.maxWidth * 0.45),
-            child: Text(LocaleKeys.settings_general_wallpaper_label.tr()),
+            child: Text(LocaleKeys.settings_general_wallpaper_label.tr(), style: ThemeUtils.settingsLabelStyle(context)),
           ),
           DropdownButton<WallpaperStyle>(
             key: const Key('settingsWallpaperSelect'),

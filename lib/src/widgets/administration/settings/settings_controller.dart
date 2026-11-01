@@ -8,6 +8,7 @@ import '../../../util/app_info.dart';
 import '../../../util/app_icon_quick_actions.dart';
 import '../../../util/navigation/hide_navigation_labels.dart';
 import '../../../util/logging/flutter_simple_logging.dart';
+import '../../../util/wallpaper/wallpaper_image_lighting.dart';
 import 'settings_service.dart';
 
 /// A class that many Widgets can interact with to read user settings, update
@@ -75,6 +76,11 @@ class SettingsController with ChangeNotifier {
   /// The immutable custom image, retained when a live motif is selected.
   Uint8List? get wallpaperImage => _wallpaperImage;
 
+  WallpaperImageLighting _wallpaperImageLighting = const WallpaperImageLighting(luminance: 0);
+
+  /// Shared image analysis, retained across screens, previews and motif changes.
+  WallpaperImageLighting get wallpaperImageLighting => _wallpaperImageLighting;
+
   bool _wallpaperImageLoadFailed = false;
 
   /// Allows settings to explain a fallback after an unreadable saved image.
@@ -139,9 +145,11 @@ class SettingsController with ChangeNotifier {
     _wallpaperStyle = await _settingsService.wallpaperStyle();
     if (!kIsWeb) {
       _wallpaperImage = null;
+      _wallpaperImageLighting = const WallpaperImageLighting(luminance: 0);
       _wallpaperImageLoadFailed = false;
       try {
         _wallpaperImage = await _settingsService.wallpaperImage();
+        _wallpaperImageLighting = _settingsService.wallpaperImageService.lighting;
       } catch (error, stackTrace) {
         SimpleLogging.e('Loading the custom wallpaper failed.', error: error, stackTrace: stackTrace);
         _wallpaperImageLoadFailed = true;
@@ -273,6 +281,7 @@ class SettingsController with ChangeNotifier {
       await _settingsService.updateWallpaperStyle(WallpaperStyle.customImage);
     }
     _wallpaperImage = image;
+    _wallpaperImageLighting = _settingsService.wallpaperImageService.lighting;
     _wallpaperStyle = WallpaperStyle.customImage;
     _wallpaperImageLoadFailed = false;
     notifyListeners();

@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../model/wallpaper_style.dart';
+import '../../../util/wallpaper/wallpaper_image_lighting.dart';
 import '../../administration/settings/settings_controller.dart';
 import '../live_wallpaper/live_wallpaper_refresh.dart';
-import 'wallpaper_image.dart';
 
 class Wallpaper extends StatelessWidget {
   final Widget child;
@@ -23,6 +23,7 @@ class Wallpaper extends StatelessWidget {
     final themeData = Theme.of(context);
     final style = context.select<SettingsController?, WallpaperStyle>((settings) => settings?.wallpaperStyle ?? WallpaperStyle.hills);
     final image = context.select((SettingsController? settings) => settings?.wallpaperImage);
+    final imageLighting = context.select((SettingsController? settings) => settings?.wallpaperImageLighting ?? const WallpaperImageLighting(luminance: 0));
     return LayoutBuilder(
       builder: (context, constraints) {
         final centered = style == WallpaperStyle.hills;
@@ -38,7 +39,11 @@ class Wallpaper extends StatelessWidget {
                 height: centered ? wallpaperHeight : null,
                 left: 0,
                 right: 0,
-                child: style == WallpaperStyle.customImage && image != null ? WallpaperImage(bytes: image) : LiveWallpaperRefresh(style: style),
+                child: LiveWallpaperRefresh(
+                  style: style,
+                  image: image,
+                  imageLighting: imageLighting,
+                ),
               ),
             child,
           ],

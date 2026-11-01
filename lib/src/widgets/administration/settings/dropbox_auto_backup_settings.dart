@@ -135,7 +135,7 @@ class _DropboxAutoBackupSettingsState extends State<DropboxAutoBackupSettings> w
               children: [
                 Row(
                   children: [
-                    Expanded(child: Text(LocaleKeys.settings_general_label_autoBackupIntervalDays.tr())),
+                    Expanded(child: Text(LocaleKeys.settings_general_label_autoBackupIntervalDays.tr(), style: ThemeUtils.settingsLabelStyle(context))),
                     DropdownButton<int>(
                       key: const Key('settingsAutoBackupIntervalSelect'),
                       borderRadius: ThemeUtils.cardBorderRadius,

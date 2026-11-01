@@ -5,15 +5,27 @@ import 'package:flutter/material.dart';
 
 import '../../../../generated/locale_keys.g.dart';
 import '../../../util/logging/flutter_simple_logging.dart';
+import '../../../util/wallpaper/wallpaper_image_lighting.dart';
 
-/// Fills its available space without distorting the selected image.
+/// Fills its space with the selected image and adapts its lighting to the day.
 class WallpaperImage extends StatelessWidget {
-  const WallpaperImage({super.key, required this.bytes});
+  const WallpaperImage({super.key, required this.bytes, required this.percentOfDay, required this.lighting});
 
   final Uint8List bytes;
 
+  /// Fraction of the local day, shared by the clock and settings preview.
+  final double percentOfDay;
+
+  /// Analysis shared by all views of this image; rendering never samples pixels.
+  final WallpaperImageLighting lighting;
+
   @override
-  Widget build(BuildContext context) => Image(
+  Widget build(BuildContext context) => ColorFiltered(
+    colorFilter: lighting.filterAt(percentOfDay),
+    child: _buildImage(),
+  );
+
+  Widget _buildImage() => Image(
     // Limit decoded memory for large gallery photos; keep the source unchanged.
     image: ResizeImage(MemoryImage(bytes), width: 2560, height: 2560, policy: ResizeImagePolicy.fit),
     width: double.infinity,

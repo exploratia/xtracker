@@ -6,7 +6,6 @@ import '../../../model/wallpaper_style.dart';
 import '../../../util/dialogs.dart';
 import '../../../util/logging/flutter_simple_logging.dart';
 import '../../../util/theme_utils.dart';
-import '../../controls/layout/wallpaper_image.dart';
 import '../../controls/live_wallpaper/wallpaper_day_cycle.dart';
 import '../../controls/live_wallpaper/wallpaper_scene.dart';
 import 'settings_controller.dart';
@@ -111,9 +110,23 @@ class _WallpaperSettingsState extends State<WallpaperSettings> {
                 Text(LocaleKeys.settings_general_wallpaper_imageFailure.tr(), style: TextStyle(color: Theme.of(context).colorScheme.error)),
               WallpaperPreview(
                 showFrame: customImage && widget.controller.wallpaperImage != null,
-                child: customImage && widget.controller.wallpaperImage != null
-                    ? WallpaperImage(bytes: widget.controller.wallpaperImage!)
-                    : WallpaperScene(style: widget.controller.wallpaperStyle, percentOfDay: _previewTime),
+                child: WallpaperScene(
+                  style: widget.controller.wallpaperStyle,
+                  percentOfDay: _previewTime,
+                  image: widget.controller.wallpaperImage,
+                  imageLighting: widget.controller.wallpaperImageLighting,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: ThemeUtils.verticalSpacingSmall, left: ThemeUtils.defaultPadding),
+                child: Text(LocaleKeys.settings_general_wallpaper_previewTime.tr(args: [timeLabel])),
+              ),
+              Slider(
+                value: _previewTime,
+                divisions: 96,
+                label: timeLabel,
+                semanticFormatterCallback: (_) => timeLabel,
+                onChanged: enabled ? (value) => setState(() => _previewTime = value) : null,
               ),
               if (customImage)
                 Padding(
@@ -124,19 +137,6 @@ class _WallpaperSettingsState extends State<WallpaperSettings> {
                     icon: const Icon(Icons.photo_library_outlined),
                     label: Text(LocaleKeys.settings_general_wallpaper_changeImage.tr()),
                   ),
-                ),
-              if (!customImage)
-                Padding(
-                  padding: const EdgeInsets.only(top: ThemeUtils.verticalSpacingSmall, left: ThemeUtils.defaultPadding),
-                  child: Text(LocaleKeys.settings_general_wallpaper_previewTime.tr(args: [timeLabel])),
-                ),
-              if (!customImage)
-                Slider(
-                  value: _previewTime,
-                  divisions: 96,
-                  label: timeLabel,
-                  semanticFormatterCallback: (_) => timeLabel,
-                  onChanged: enabled ? (value) => setState(() => _previewTime = value) : null,
                 ),
             ],
           ),
