@@ -10,6 +10,7 @@ import 'package:provider/provider.dart';
 import 'package:xtracker/generated/locale_keys.g.dart';
 import 'package:xtracker/src/model/wallpaper_style.dart';
 import 'package:xtracker/src/util/wallpaper/wallpaper_image_service.dart';
+import 'package:xtracker/src/util/wallpaper/wallpaper_image_lighting.dart';
 import 'package:xtracker/src/widgets/administration/settings/settings_controller.dart';
 import 'package:xtracker/src/widgets/administration/settings/settings_service.dart';
 import 'package:xtracker/src/widgets/administration/settings/wallpaper_settings.dart';
@@ -93,26 +94,50 @@ void main() {
       }
       tester.view.physicalSize = const Size(800, 600);
       await tester.pumpAndSettle();
-      expect(find.byType(LiveWallpaperRefresh), findsNothing);
-      expect(find.byType(Slider), findsNothing);
+      expect(find.byType(LiveWallpaperRefresh), findsOneWidget);
+      expect(find.byType(Slider), findsOneWidget);
+      final sampledLighting = controller.wallpaperImageLighting;
+      for (final image in tester.widgetList<WallpaperImage>(find.byType(WallpaperImage))) {
+        expect(image.lighting, same(sampledLighting));
+      }
+      final liveImage = find.descendant(of: find.byType(LiveWallpaperRefresh), matching: find.byType(WallpaperImage));
+      final liveTime = tester.widget<WallpaperImage>(liveImage).percentOfDay;
+      await tester.ensureVisible(find.byType(Slider));
+      tester.widget<Slider>(find.byType(Slider)).onChanged!(0.5);
+      await tester.pump();
+      expect(tester.widget<WallpaperImage>(preview).percentOfDay, 0.5);
+      final dayFilter = tester.widget<ColorFiltered>(find.descendant(of: preview, matching: find.byType(ColorFiltered))).colorFilter;
+      tester.widget<Slider>(find.byType(Slider)).onChanged!(0);
+      await tester.pump();
+      expect(tester.widget<WallpaperImage>(preview).percentOfDay, 0);
+      expect(tester.widget<WallpaperImage>(preview).lighting, same(sampledLighting));
+      expect(tester.widget<ColorFiltered>(find.descendant(of: preview, matching: find.byType(ColorFiltered))).colorFilter, isNot(dayFilter));
+      expect(tester.widget<WallpaperImage>(liveImage).percentOfDay, liveTime);
       for (final image in tester.widgetList<Image>(find.byType(Image))) {
         expect(image.fit, BoxFit.cover);
       }
 
       final changeImage = find.byKey(const Key('settingsWallpaperChangeImage'));
+      expect(tester.getTopLeft(changeImage).dy, greaterThan(tester.getBottomLeft(find.byType(Slider)).dy));
       expect(find.text(LocaleKeys.settings_general_wallpaper_changeImage.tr()), findsOneWidget);
       images.selection = File('assets/images/logos/app_logo_white.png').readAsBytesSync();
+      await tester.ensureVisible(changeImage);
       await tester.tap(changeImage);
       await tester.pumpAndSettle();
       expect(controller.wallpaperImage, images.selection);
+      expect(controller.wallpaperImageLighting, isNot(same(sampledLighting)));
       for (final image in tester.widgetList<WallpaperImage>(find.byType(WallpaperImage))) {
         expect(image.bytes, controller.wallpaperImage);
+        expect(image.lighting, same(controller.wallpaperImageLighting));
       }
 
-      await tester.tap(find.widgetWithText(SwitchListTile, LocaleKeys.settings_general_label_hideWallpaper.tr()));
+      final hideWallpaper = find.widgetWithText(SwitchListTile, LocaleKeys.settings_general_label_hideWallpaper.tr());
+      await tester.ensureVisible(hideWallpaper);
+      await tester.tap(hideWallpaper);
       await tester.pumpAndSettle();
       expect(find.byType(WallpaperImage), findsOneWidget); // Only the settings preview remains.
       expect(tester.widget<OutlinedButton>(changeImage).onPressed, isNull);
+      expect(tester.widget<Slider>(find.byType(Slider)).onChanged, isNull);
       expect(tester.takeException(), isNull);
       await tester.pumpWidget(const SizedBox());
     });
@@ -240,12 +265,24 @@ void main() {
 class _WidgetWallpaperImageService extends WallpaperImageService {
   Uint8List? selection;
 
+  // Keep distinct sample instances so tests detect accidental per-widget defaults.
+  // ignore: prefer_const_constructors
+  WallpaperImageLighting _selectedLighting = WallpaperImageLighting(luminance: 0.5);
+
+  @override
+  WallpaperImageLighting get lighting => _selectedLighting;
+
   @override
   Future<Uint8List?> pick() async => selection;
 
   // Codec validation and filesystem persistence are covered in the service tests.
   @override
-  Future<Uint8List> save(Uint8List bytes) async => bytes.asUnmodifiableView();
+  Future<Uint8List> save(Uint8List bytes) async {
+    // A replacement must publish a new sample even when luminance is unchanged.
+    // ignore: prefer_const_constructors
+    _selectedLighting = WallpaperImageLighting(luminance: 0.5);
+    return bytes.asUnmodifiableView();
+  }
 }
 
 class _TranslationLoader extends AssetLoader {

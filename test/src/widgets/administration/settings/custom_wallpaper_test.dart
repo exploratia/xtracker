@@ -31,13 +31,21 @@ void main() {
     await controller.selectWallpaperImage();
     expect(controller.wallpaperStyle, WallpaperStyle.customImage);
     expect(controller.wallpaperImage, images.selection);
+    final lighting = controller.wallpaperImageLighting;
+    expect(lighting.luminance, inExclusiveRange(0.0, 1.0));
     await controller.updateHideWallpaper(true);
+    expect(controller.wallpaperImageLighting, same(lighting));
+    await controller.updateWallpaperStyle(WallpaperStyle.riverValley);
+    expect(controller.wallpaperImageLighting, same(lighting));
+    await controller.updateWallpaperStyle(WallpaperStyle.customImage);
+    expect(controller.wallpaperImageLighting, same(lighting));
 
     final reloaded = SettingsController(SettingsService(wallpaperImageService: images));
     addTearDown(reloaded.dispose);
     await reloaded.loadSettings();
     expect(reloaded.wallpaperStyle, WallpaperStyle.customImage);
     expect(reloaded.wallpaperImage, images.selection);
+    expect(reloaded.wallpaperImageLighting.luminance, closeTo(lighting.luminance, 0.00001));
     expect(reloaded.hideWallpaper, isTrue);
     await reloaded.updateWallpaperStyle(WallpaperStyle.riverValley);
 
@@ -54,11 +62,13 @@ void main() {
     images.selection = wallpaperImageFixture();
     await controller.selectWallpaperImage();
     final previous = controller.wallpaperImage;
+    final lighting = controller.wallpaperImageLighting;
     var notifications = 0;
     controller.addListener(() => notifications++);
     images.selection = null;
     await controller.selectWallpaperImage();
     expect(controller.wallpaperImage, same(previous));
+    expect(controller.wallpaperImageLighting, same(lighting));
     expect(controller.wallpaperStyle, WallpaperStyle.customImage);
     expect(notifications, 0);
   });

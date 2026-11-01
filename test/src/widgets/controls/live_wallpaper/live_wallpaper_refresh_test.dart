@@ -5,6 +5,44 @@ import 'package:xtracker/src/widgets/controls/live_wallpaper/live_wallpaper_refr
 import 'package:xtracker/src/widgets/controls/live_wallpaper/wallpaper_scene.dart';
 
 void main() {
+  testWidgets('custom images refresh every five minutes and motif changes reset the interval', (tester) async {
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    final style = ValueNotifier(WallpaperStyle.customImage);
+    addTearDown(style.dispose);
+    await tester.pumpWidget(
+      MaterialApp(
+        home: ValueListenableBuilder(
+          valueListenable: style,
+          builder: (context, value, child) => LiveWallpaperRefresh(style: value),
+        ),
+      ),
+    );
+    final initial = tester.widget<WallpaperScene>(find.byType(WallpaperScene));
+    await tester.pump(const Duration(minutes: 4, seconds: 59));
+    expect(tester.widget<WallpaperScene>(find.byType(WallpaperScene)), same(initial));
+    await tester.pump(const Duration(seconds: 1));
+    expect(tester.widget<WallpaperScene>(find.byType(WallpaperScene)), isNot(same(initial)));
+
+    style.value = WallpaperStyle.hills;
+    await tester.pump();
+    final live = tester.widget<WallpaperScene>(find.byType(WallpaperScene));
+    await tester.pump(const Duration(minutes: 1));
+    expect(tester.widget<WallpaperScene>(find.byType(WallpaperScene)), isNot(same(live)));
+
+    style.value = WallpaperStyle.customImage;
+    await tester.pump();
+    final custom = tester.widget<WallpaperScene>(find.byType(WallpaperScene));
+    await tester.pump(const Duration(minutes: 1));
+    expect(tester.widget<WallpaperScene>(find.byType(WallpaperScene)), same(custom));
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.paused);
+    await tester.pump(const Duration(minutes: 10));
+    expect(tester.widget<WallpaperScene>(find.byType(WallpaperScene)), same(custom));
+    tester.binding.handleAppLifecycleStateChanged(AppLifecycleState.resumed);
+    await tester.pump();
+    expect(tester.widget<WallpaperScene>(find.byType(WallpaperScene)), isNot(same(custom)));
+    await tester.pumpWidget(const SizedBox());
+  });
+
   testWidgets('does not refresh every frame or restart its timer on parent rebuilds', (tester) async {
     final rebuild = ValueNotifier(0);
     addTearDown(rebuild.dispose);
