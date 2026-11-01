@@ -10,6 +10,7 @@ import '../../controls/layout/wallpaper_image.dart';
 import '../../controls/live_wallpaper/wallpaper_day_cycle.dart';
 import '../../controls/live_wallpaper/wallpaper_scene.dart';
 import 'settings_controller.dart';
+import 'wallpaper_preview.dart';
 import 'wallpaper_style_select.dart';
 
 /// Motif selection and an on-demand preview of every time of day.
@@ -108,14 +109,11 @@ class _WallpaperSettingsState extends State<WallpaperSettings> {
               const SizedBox(height: ThemeUtils.verticalSpacing),
               if (widget.controller.wallpaperImageLoadFailed)
                 Text(LocaleKeys.settings_general_wallpaper_imageFailure.tr(), style: TextStyle(color: Theme.of(context).colorScheme.error)),
-              ClipRRect(
-                borderRadius: ThemeUtils.borderRadiusCircularLarge,
-                child: SizedBox(
-                  height: 220,
-                  child: customImage && widget.controller.wallpaperImage != null
-                      ? WallpaperImage(bytes: widget.controller.wallpaperImage!)
-                      : WallpaperScene(style: widget.controller.wallpaperStyle, percentOfDay: _previewTime),
-                ),
+              WallpaperPreview(
+                showFrame: customImage && widget.controller.wallpaperImage != null,
+                child: customImage && widget.controller.wallpaperImage != null
+                    ? WallpaperImage(bytes: widget.controller.wallpaperImage!)
+                    : WallpaperScene(style: widget.controller.wallpaperStyle, percentOfDay: _previewTime),
               ),
               if (customImage)
                 Padding(

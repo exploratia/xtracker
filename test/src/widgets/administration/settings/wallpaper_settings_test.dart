@@ -22,6 +22,10 @@ import 'package:xtracker/src/widgets/controls/live_wallpaper/wallpaper_scene.dar
 void main() {
   for (final locale in SettingsService.supportedLocales) {
     testWidgets('selects, changes and hides a custom image in $locale', (tester) async {
+      tester.view.physicalSize = const Size(800, 600);
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
       FlutterSecureStorage.setMockInitialValues({});
       final images = _WidgetWallpaperImageService();
       final controller = SettingsController(SettingsService(wallpaperImageService: images));
@@ -56,6 +60,8 @@ void main() {
         ),
       );
       await tester.pumpAndSettle();
+      final frame = find.byKey(const Key('settingsWallpaperPreviewFrame'));
+      expect(frame, findsNothing);
       final dropdown = find.byKey(const Key('settingsWallpaperSelect'));
       final customLabel = LocaleKeys.settings_general_wallpaper_customImage.tr();
       // Cancellation on first selection must keep the previous motif.
@@ -72,6 +78,21 @@ void main() {
       await tester.pumpAndSettle();
       expect(controller.wallpaperStyle, WallpaperStyle.customImage);
       expect(find.byType(WallpaperImage), findsNWidgets(2));
+      expect(frame, findsOneWidget);
+      final decoration = tester.widget<DecoratedBox>(frame).decoration as BoxDecoration;
+      expect(decoration.color, isNull);
+      expect(decoration.boxShadow, isNull);
+      final preview = find.descendant(of: find.byType(WallpaperSettings), matching: find.byType(WallpaperImage));
+      for (final size in [const Size(360, 780), const Size(780, 360)]) {
+        tester.view.physicalSize = size;
+        await tester.pumpAndSettle();
+        expect(tester.getSize(preview).height, 220);
+        expect(tester.getSize(preview).width, tester.getSize(find.byType(WallpaperSettings)).width);
+        expect(tester.getSize(frame).aspectRatio, closeTo(size.aspectRatio, 0.001));
+        expect(tester.getCenter(frame), tester.getCenter(preview));
+      }
+      tester.view.physicalSize = const Size(800, 600);
+      await tester.pumpAndSettle();
       expect(find.byType(LiveWallpaperRefresh), findsNothing);
       expect(find.byType(Slider), findsNothing);
       for (final image in tester.widgetList<Image>(find.byType(Image))) {
@@ -133,6 +154,20 @@ void main() {
           ),
         );
         await tester.pumpAndSettle();
+        final preview = find.byType(WallpaperScene);
+        final frame = find.byKey(const Key('settingsWallpaperPreviewFrame'));
+        expect(tester.getSize(preview).height, 220);
+        expect(tester.getSize(preview).width, tester.getSize(find.byType(WallpaperSettings)).width);
+        expect(frame, findsNothing);
+
+        tester.view.physicalSize = const Size(780, 360);
+        await tester.pumpAndSettle();
+        expect(tester.getSize(preview).height, 220);
+        expect(tester.getSize(preview).width, tester.getSize(find.byType(WallpaperSettings)).width);
+        expect(frame, findsNothing);
+
+        tester.view.physicalSize = const Size(360, 780);
+        await tester.pumpAndSettle();
         final dropdown = find.byType(DropdownButton<WallpaperStyle>);
         final hideWallpaperSwitch = find.widgetWithText(SwitchListTile, LocaleKeys.settings_general_label_hideWallpaper.tr());
         final dataWallpaperSwitch = find.byKey(const Key('settingsShowWallpaperOnDataScreens'));
@@ -155,6 +190,7 @@ void main() {
         await tester.tap(find.text(labelKey.tr()).last);
         await tester.pumpAndSettle();
         expect(controller.wallpaperStyle, style);
+        expect(frame, findsNothing);
         expect(await SettingsService().wallpaperStyle(), style);
         expect(tester.widget<WallpaperScene>(find.byType(WallpaperScene)).style, style);
         final selectedItems = tester
