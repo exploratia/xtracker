@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:provider/provider.dart';
@@ -14,6 +15,7 @@ import 'package:xtracker/src/util/wallpaper/wallpaper_image_lighting.dart';
 import 'package:xtracker/src/widgets/administration/settings/settings_controller.dart';
 import 'package:xtracker/src/widgets/administration/settings/settings_service.dart';
 import 'package:xtracker/src/widgets/administration/settings/wallpaper_settings.dart';
+import 'package:xtracker/src/widgets/administration/settings/wallpaper_style_select.dart';
 import 'package:xtracker/src/widgets/controls/layout/drop_down_menu_item_child.dart';
 import 'package:xtracker/src/widgets/controls/layout/wallpaper.dart';
 import 'package:xtracker/src/widgets/controls/layout/wallpaper_image.dart';
@@ -22,6 +24,55 @@ import 'package:xtracker/src/widgets/controls/live_wallpaper/wallpaper_scene.dar
 
 void main() {
   for (final locale in SettingsService.supportedLocales) {
+    testWidgets('keeps the motif label together on narrow screens in $locale', (tester) async {
+      tester.view.devicePixelRatio = 1;
+      addTearDown(tester.view.resetPhysicalSize);
+      addTearDown(tester.view.resetDevicePixelRatio);
+      for (final width in [280.0, 320.0, 360.0, 800.0]) {
+        tester.view.physicalSize = Size(width, 600);
+        for (final scale in [1.0, 1.5]) {
+          await tester.pumpWidget(
+            EasyLocalization(
+              supportedLocales: SettingsService.supportedLocales,
+              startLocale: locale,
+              saveLocale: false,
+              path: 'assets/translations',
+              assetLoader: const _TranslationLoader(),
+              child: Builder(
+                builder: (context) => MaterialApp(
+                  locale: context.locale,
+                  supportedLocales: context.supportedLocales,
+                  localizationsDelegates: context.localizationDelegates,
+                  builder: (context, child) => MediaQuery(
+                    data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(scale)),
+                    child: child!,
+                  ),
+                  home: Scaffold(
+                    body: WallpaperStyleSelect(value: WallpaperStyle.hills, onChanged: (_) {}),
+                  ),
+                ),
+              ),
+            ),
+          );
+          await tester.pumpAndSettle();
+          final label = LocaleKeys.settings_general_wallpaper_label.tr();
+          final paragraph = tester.renderObject<RenderParagraph>(find.text(label));
+          expect(paragraph.getBoxesForSelection(TextSelection(baseOffset: 0, extentOffset: label.length)), hasLength(1));
+          if (width >= 320 && scale == 1) {
+            expect(paragraph.didExceedMaxLines, isFalse);
+          }
+          final dropdown = tester.getRect(find.byKey(const Key('settingsWallpaperSelect')));
+          if (width <= 320) {
+            expect(dropdown.top, greaterThanOrEqualTo(tester.getRect(find.text(label)).bottom));
+          }
+          expect(dropdown.left, greaterThanOrEqualTo(0));
+          expect(dropdown.right, lessThanOrEqualTo(width));
+          expect(tester.takeException(), isNull);
+        }
+      }
+      await tester.pumpWidget(const SizedBox());
+    });
+
     testWidgets('selects, changes and hides a custom image in $locale', (tester) async {
       tester.view.physicalSize = const Size(800, 600);
       tester.view.devicePixelRatio = 1;
@@ -208,8 +259,14 @@ void main() {
         expect(await SettingsService().showWallpaperOnDataScreens(), isTrue);
         expect(controller.showDataScreenWallpaper, isTrue);
         final label = find.text(LocaleKeys.settings_general_wallpaper_label.tr());
-        expect(tester.getRect(label).right, lessThanOrEqualTo(tester.getRect(dropdown).left));
-        expect(tester.getCenter(label).dy, closeTo(tester.getCenter(dropdown).dy, 1));
+        final labelRect = tester.getRect(label);
+        final dropdownRect = tester.getRect(dropdown);
+        if (labelRect.bottom <= dropdownRect.top) {
+          expect(labelRect.left, dropdownRect.left);
+        } else {
+          expect(labelRect.right, lessThanOrEqualTo(dropdownRect.left));
+          expect(labelRect.center.dy, closeTo(dropdownRect.center.dy, 1));
+        }
         await tester.tap(find.byType(DropdownButton<WallpaperStyle>));
         await tester.pumpAndSettle();
         await tester.tap(find.text(labelKey.tr()).last);
