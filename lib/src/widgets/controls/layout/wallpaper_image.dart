@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../../../generated/locale_keys.g.dart';
 import '../../../util/logging/flutter_simple_logging.dart';

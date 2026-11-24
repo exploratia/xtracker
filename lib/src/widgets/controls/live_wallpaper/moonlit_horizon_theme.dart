@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Atmosphere colors, including the opacity of the moon and stars.
 @immutable

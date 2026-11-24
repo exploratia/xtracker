@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../../../../../model/series/data/daily_check/daily_check_value.dart';
 import '../../../../../../model/series/data/series_data.dart';

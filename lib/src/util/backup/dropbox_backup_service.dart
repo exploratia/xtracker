@@ -19,12 +19,11 @@ abstract interface class BackupUploader {
 class DropboxBackupService implements BackupUploader {
   DropboxBackupService({
     DropboxClientAdapter? client,
-    String appKey = '1zm0mwzq0j3bgz4',
+    this._appKey = '1zm0mwzq0j3bgz4',
     InternetAvailabilityChecker? internetAvailabilityChecker,
     this.connectionTimeout = const Duration(seconds: 5),
     this.operationTimeout = const Duration(seconds: 30),
   }) : _client = client ?? createDropboxClientAdapter(),
-       _appKey = appKey,
        _internetAvailabilityChecker = internetAvailabilityChecker ?? isDropboxInternetAvailable;
 
   static final instance = DropboxBackupService();

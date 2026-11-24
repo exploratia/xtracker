@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:xtracker/src/model/series/view_type.dart';
 import 'package:xtracker/src/widgets/series/data/view/series_data_view_transition.dart';

@@ -3,7 +3,7 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -42,7 +42,7 @@ void main() {
                 builder: (context) => MaterialApp(
                   locale: context.locale,
                   supportedLocales: context.supportedLocales,
-                  localizationsDelegates: context.localizationDelegates,
+                  localizationsDelegates: [...context.localizationDelegates, ...GlobalMaterialLocalizations.delegates],
                   builder: (context, child) => MediaQuery(
                     data: MediaQuery.of(context).copyWith(textScaler: TextScaler.linear(scale)),
                     child: child!,
@@ -96,7 +96,7 @@ void main() {
               child: MaterialApp(
                 locale: context.locale,
                 supportedLocales: context.supportedLocales,
-                localizationsDelegates: context.localizationDelegates,
+                localizationsDelegates: [...context.localizationDelegates, ...GlobalMaterialLocalizations.delegates],
                 home: Scaffold(
                   body: ListenableBuilder(
                     listenable: controller,
@@ -218,7 +218,7 @@ void main() {
               builder: (context) => MaterialApp(
                 locale: context.locale,
                 supportedLocales: context.supportedLocales,
-                localizationsDelegates: context.localizationDelegates,
+                localizationsDelegates: [...context.localizationDelegates, ...GlobalMaterialLocalizations.delegates],
                 home: Scaffold(
                   body: ListenableBuilder(
                     listenable: controller,

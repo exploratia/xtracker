@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:easy_localization/easy_localization.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 
 import '../generated/locale_keys.g.dart';
@@ -111,6 +111,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           ],
           child: MaterialApp(
             navigatorKey: _navigatorKey,
+            builder: (context, child) {
+              // Keep Material support for dependencies that still use flutter/material.dart.
+              // ignore: deprecated_member_use
+              return MaterialUiCompatibilityBridge(child: child!);
+            },
             // Providing a restorationScopeId allows the Navigator built by the
             // MaterialApp to restore the navigation stack when a user leaves and
             // returns to the app after it has been killed while running in the
@@ -118,7 +123,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             restorationScopeId: 'app',
 
             // locale
-            localizationsDelegates: context.localizationDelegates,
+            localizationsDelegates: [
+              ...context.localizationDelegates,
+              ...GlobalMaterialLocalizations.delegates,
+            ],
             supportedLocales: context.supportedLocales,
             // locale: settingsController.locale,
             locale: context.locale,

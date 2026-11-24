@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../../../../model/series/data/daily_life/daily_life_value.dart';
 import '../../../../../model/series/data/series_data_filter.dart';

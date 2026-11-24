@@ -3,7 +3,7 @@ import 'dart:io';
 
 import 'package:easy_localization/src/localization.dart';
 import 'package:easy_localization/src/translations.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:xtracker/src/model/series/data/daily_check/daily_check_value.dart';
 import 'package:xtracker/src/model/series/data/series_data_filter.dart';

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class HideNavigationLabels {
   static final ValueNotifier<bool> visible = ValueNotifier<bool>(true);

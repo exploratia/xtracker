@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:xtracker/src/model/wallpaper_style.dart';
 import 'package:xtracker/src/widgets/controls/live_wallpaper/live_wallpaper_refresh.dart';

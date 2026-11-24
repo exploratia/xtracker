@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import 'fade_transition_builder.dart';
 import 'no_transition_builder.dart';

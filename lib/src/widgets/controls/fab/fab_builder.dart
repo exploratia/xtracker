@@ -1,4 +1,4 @@
-import 'package:flutter/cupertino.dart';
+import 'package:cupertino_ui/cupertino_ui.dart';
 
 import '../../../util/media_query_utils.dart';
 import 'fab_action_button_data.dart';
