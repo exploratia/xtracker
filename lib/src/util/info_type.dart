@@ -1,5 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
-import 'package:cupertino_ui/cupertino_ui.dart';
+import 'package:flutter/widgets.dart';
 
 import '../../generated/assets.gen.dart';
 import '../../generated/locale_keys.g.dart';

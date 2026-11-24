@@ -1,4 +1,4 @@
-import 'package:cupertino_ui/cupertino_ui.dart';
+import 'package:flutter/widgets.dart';
 import 'package:provider/provider.dart';
 
 import 'series_current_value_provider.dart';
