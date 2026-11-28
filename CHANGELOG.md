@@ -2,6 +2,14 @@
 
 All notable changes to this project will be documented in this file.
 
+## [2.5.1] - 2026-11-28
+
+### Fixes
+
+- migrate design widgets to `material_ui`
+- remove unused Cupertino dependencies
+- update dependencies
+
 ## [2.5.0] - 2026-11-01
 
 ### Features
