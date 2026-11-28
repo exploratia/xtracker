@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../../../model/column_profile/fix_column_profile.dart';
 import '../../../../model/series/data/series_data_value.dart';

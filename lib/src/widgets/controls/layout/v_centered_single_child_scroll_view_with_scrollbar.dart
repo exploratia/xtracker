@@ -1,6 +1,6 @@
 import 'dart:math' as math;
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../../util/theme_utils.dart';
 import 'single_child_scroll_view_with_scrollbar.dart';

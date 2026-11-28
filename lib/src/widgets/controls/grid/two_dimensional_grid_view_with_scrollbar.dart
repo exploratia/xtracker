@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 import '../../../model/column_profile/column_profile.dart';
 import 'two_dimensional_grid_view.dart';

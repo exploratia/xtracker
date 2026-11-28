@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Widget, das einen Container mit zufälligen 1- oder 2-Pixel-Sprenkeln füllt.
 /// - [density]: Anzahl Sterne pro Pixelfläche (z.B. 0.0006). Höher => mehr Sterne.

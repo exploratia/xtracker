@@ -22,9 +22,8 @@ class BackupResult {
 
 /// Orchestrates backup serialization and upload without UI dependencies.
 class AutoBackupManager {
-  AutoBackupManager({required BackupUploader uploader, TemporaryDirectoryProvider? temporaryDirectoryProvider})
-    : _uploader = uploader,
-      _temporaryDirectoryProvider = temporaryDirectoryProvider ?? getTemporaryDirectory;
+  AutoBackupManager({required this._uploader, TemporaryDirectoryProvider? temporaryDirectoryProvider})
+    : _temporaryDirectoryProvider = temporaryDirectoryProvider ?? getTemporaryDirectory;
 
   final BackupUploader _uploader;
   final TemporaryDirectoryProvider _temporaryDirectoryProvider;

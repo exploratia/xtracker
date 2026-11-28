@@ -82,6 +82,15 @@ void main() {
       expect(entries.map((entry) => entry.version), ['2.5.0']);
     });
 
+    test('returns the 2.5.1 patch entry after 2.5.0', () {
+      final entries = ChangeLog.entriesBetween(
+        previousVersion: '2.5.0',
+        currentVersion: '2.5.1',
+      );
+
+      expect(entries.map((entry) => entry.version), ['2.5.1']);
+    });
+
     test('returns entries between previous and current version', () {
       final entries = ChangeLog.entriesBetween(
         previousVersion: '1.2.0',

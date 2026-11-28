@@ -62,9 +62,7 @@ class CustomValue extends SeriesDataValue {
       idx++;
       if (csv.length > idx) {
         var val = csv[idx];
-        if (val is double) {
-          values[seriesItem.siid] = val;
-        } else if (val is int) {
+        if (val is num) {
           values[seriesItem.siid] = val.toDouble();
         }
       }
